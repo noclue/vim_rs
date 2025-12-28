@@ -21,6 +21,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+### Changed
+
+### Deprecated
+
+### Removed
+
+### Fixed
+
+### Security
+
+## [0.3.0] - 2025-12-28
+
+### Added
+
 - **`TaskTracker`**: High-level API for awaiting vSphere `Task` completion using PropertyCollector.
   - Efficient background monitoring with shared `ListView` and incremental updates.
   - Two APIs: `wait::<T>()` for convenient deserialization and `wait_any()` for zero-allocation path.

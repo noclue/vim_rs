@@ -7,4 +7,4 @@ edition = "2024"
 anyhow = "1.0"
 dotenvy = "0.15"
 log = "0.4"
-vim_rs = { version = "0.2", path = "../../vim_rs" }
+vim_rs = { version = "0.3", path = "../../vim_rs" }
