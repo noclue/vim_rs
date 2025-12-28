@@ -22,8 +22,8 @@ pub fn collect_examples(examples_dir: &Path) -> Result<Vec<CodeExample>> {
 
     // Dependency template for new projects
     let dependencies_template = r#"[dependencies]
-vim_rs = "0.2"
-vim_macros = "0.2"
+vim_rs = "0.3"
+vim_macros = "0.3"
 tokio = { version = "1.44", features = ["macros"] }
 anyhow = "1.0"
 log = "0.4"

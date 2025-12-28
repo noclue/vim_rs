@@ -77,7 +77,7 @@ async fn main() -> Result<()> {
 **Dependencies needed:**
 ```toml
 [dependencies]
-vim_rs = "0.2"
+vim_rs = "0.3"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
@@ -188,7 +188,7 @@ async fn main() -> Result<()> {
 
 **Additional dependency:**
 ```toml
-vim_macros = "0.2"
+vim_macros = "0.3"
 ```
 
 **Key Points:**
@@ -1042,8 +1042,8 @@ async fn main() -> Result<()> {
 **Cargo.toml dependencies:**
 ```toml
 [dependencies]
-vim_rs = "0.2"
-vim_macros = "0.2"
+vim_rs = "0.3"
+vim_macros = "0.3"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
