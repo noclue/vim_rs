@@ -11,16 +11,6 @@ use std::ops::DerefMut;
 use log::{debug, warn};
 use crate::event::{AppEvent, EventHandler};
 use crate::prop_browser::prop_browser::{PropertyBrowser, PropertyBrowserState};
-use crossterm::event::{KeyCode, KeyEvent};
-use log::{debug, warn};
-use ratatui::Frame;
-use ratatui::layout::Rect;
-use std::cell::RefCell;
-use std::ops::DerefMut;
-use std::rc::Rc;
-use tui_tree_widget::TreeState;
-use vim_rs::core::pc_cache::{CacheManager, SharedRefCacheProxy};
-use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec};
 
 pub struct PropertyBrowserManager {
     /// Cache manager for managing object caches.
@@ -119,11 +109,7 @@ impl PropertyBrowserManager {
         );
     }
 
-    pub async fn handle_key(
-        &mut self,
-        key: &KeyEvent,
-        events: &mut EventHandler,
-    ) -> anyhow::Result<bool> {
+    pub async fn handle_key(&mut self, key: &KeyEvent, events: &mut EventHandler) -> anyhow::Result<bool> {
         match key.code {
             KeyCode::Char('w') | KeyCode::Up => {
                 self.browser_state
@@ -165,11 +151,7 @@ impl PropertyBrowserManager {
         Ok(true)
     }
 
-    pub async fn load(
-        &mut self,
-        obj: ManagedObjectReference,
-        events: &mut EventHandler,
-    ) -> anyhow::Result<bool> {
+    pub async fn load(&mut self, obj: ManagedObjectReference, events: &mut EventHandler) -> anyhow::Result<bool> {
         // Check if the object is already loaded
         if self.obj.value == obj.value {
             return Ok(false);
@@ -180,7 +162,10 @@ impl PropertyBrowserManager {
         Ok(true)
     }
     pub fn get_hints(&self) -> (&'static [&'static str], &'static [&'static str]) {
-        (&[], &["q quit", "r resource", "j dump json", "Enter open"])
+        (
+            &[],
+            &["q quit", "r resource", "j dump json", "Enter open"],
+        )
     }
 
     async fn load_int(
@@ -252,16 +237,9 @@ impl Drop for PropertyBrowserManager {
         tokio::task::block_in_place(|| {
             tokio::runtime::Handle::current().block_on(async move {
                 debug!("Terminating PropertyBrowserManager. Releasing filter");
-                cache_mgr
-                    .borrow_mut()
-                    .remove_cache(&filter)
-                    .await
-                    .unwrap_or_else(|e| {
-                        warn!(
-                            "Failed to remove PropertyBrowserManager filter: {:?}, {}",
-                            filter, e
-                        );
-                    });
+                cache_mgr.borrow_mut().remove_cache(&filter).await.unwrap_or_else(|e| {
+                    warn!("Failed to remove PropertyBrowserManager filter: {:?}, {}", filter, e);
+                });
             });
         });
     }

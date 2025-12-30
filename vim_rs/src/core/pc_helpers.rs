@@ -1,10 +1,7 @@
 use super::super::types::vim_any::VimAny;
-use super::client;
 use crate::types::structs::{
     ManagedObjectReference, ObjectSpec, PropertySpec, SelectionSpec, TraversalSpec,
 };
-use log::error;
-use thiserror::Error;
 
 /// Trait for errors that can be properly boxed and sent across threads
 pub trait BoxableError: std::error::Error + Send + Sync + 'static {}

@@ -114,6 +114,7 @@
 
 use anyhow::{Context, Result};
 use log::info;
+use vim_rs::types::convert::CastInto as _;
 use std::env;
 use std::sync::Arc;
 use utils::connect;
@@ -121,13 +122,10 @@ use vim_macros::vim_retrievable;
 use vim_rs::core::Client;
 use vim_rs::mo::{SearchIndex, Task, VirtualMachine};
 use vim_rs::types::enums::{TaskInfoStateEnum, VirtualDeviceConfigSpecOperationEnum};
-use vim_rs::types::struct_enum::StructType;
 use vim_rs::types::structs::{
-    ManagedObjectReference, VirtualDeviceConfigSpec, VirtualE1000, VirtualE1000E,
-    VirtualEthernetCard, VirtualMachineConfigSpec, VirtualPcNet32, VirtualSriovEthernetCard,
-    VirtualVmxnet, VirtualVmxnet2, VirtualVmxnet3, VirtualVmxnet3Vrdma,
+    ManagedObjectReference, VirtualDeviceConfigSpec, VirtualMachineConfigSpec,
 };
-use vim_rs::types::traits::VirtualDeviceTrait;
+use vim_rs::types::traits::{VirtualDeviceTrait, VirtualEthernetCardTrait};
 
 vim_retrievable!(
     struct Vm: VirtualMachine {
@@ -226,91 +224,20 @@ async fn main() -> Result<()> {
 
     // Drain the devices vector to take ownership of each device
     for device in devices.drain(..) {
-        let obj_type = device.data_type();
-        if !obj_type.child_of(StructType::VirtualEthernetCard) {
+        let Ok(mut eth) : Result<Box<dyn VirtualEthernetCardTrait>,_> = device.into_box() else{
             continue;
-        }
-        // Try downcasting to each concrete VirtualEthernetCard type
-        // We use as_any_box() to convert Box<dyn Trait> to Box<dyn Any>, then try downcasting
-        // We chain the downcasts because each consumes the Box on failure
-        let any_device = device.as_any_box();
-
-        let current_wol;
-
-        let device: Box<dyn VirtualDeviceTrait> = match obj_type {
-            StructType::VirtualEthernetCard => {
-                let mut dev = any_device.downcast::<VirtualEthernetCard>().unwrap();
-                current_wol = dev.wake_on_lan_enabled.unwrap_or(false);
-                dev.wake_on_lan_enabled = Some(!current_wol);
-                dev
-            }
-            StructType::VirtualE1000 => {
-                let mut dev = any_device.downcast::<VirtualE1000>().unwrap();
-                current_wol = dev.wake_on_lan_enabled.unwrap_or(false);
-                dev.wake_on_lan_enabled = Some(!current_wol);
-                dev
-            }
-            StructType::VirtualE1000E => {
-                let mut dev = any_device.downcast::<VirtualE1000E>().unwrap();
-                current_wol = dev.wake_on_lan_enabled.unwrap_or(false);
-                dev.wake_on_lan_enabled = Some(!current_wol);
-                dev
-            }
-            StructType::VirtualPcNet32 => {
-                let mut dev = any_device.downcast::<VirtualPcNet32>().unwrap();
-                current_wol = dev.wake_on_lan_enabled.unwrap_or(false);
-                dev.wake_on_lan_enabled = Some(!current_wol);
-                dev
-            }
-            StructType::VirtualSriovEthernetCard => {
-                let mut dev = any_device.downcast::<VirtualSriovEthernetCard>().unwrap();
-                current_wol = dev.wake_on_lan_enabled.unwrap_or(false);
-                dev.wake_on_lan_enabled = Some(!current_wol);
-                dev
-            }
-            StructType::VirtualVmxnet => {
-                let mut dev = any_device.downcast::<VirtualVmxnet>().unwrap();
-                current_wol = dev.wake_on_lan_enabled.unwrap_or(false);
-                dev.wake_on_lan_enabled = Some(!current_wol);
-                dev
-            }
-            StructType::VirtualVmxnet2 => {
-                let mut dev = any_device.downcast::<VirtualVmxnet2>().unwrap();
-                current_wol = dev.wake_on_lan_enabled.unwrap_or(false);
-                dev.wake_on_lan_enabled = Some(!current_wol);
-                dev
-            }
-            StructType::VirtualVmxnet3 => {
-                let mut dev = any_device.downcast::<VirtualVmxnet3>().unwrap();
-                current_wol = dev.wake_on_lan_enabled.unwrap_or(false);
-                dev.wake_on_lan_enabled = Some(!current_wol);
-                dev
-            }
-            StructType::VirtualVmxnet3Vrdma => {
-                let mut dev = any_device.downcast::<VirtualVmxnet3Vrdma>().unwrap();
-                current_wol = dev.wake_on_lan_enabled.unwrap_or(false);
-                dev.wake_on_lan_enabled = Some(!current_wol);
-                dev
-            }
-            _ => {
-                continue;
-            }
         };
 
-        let adapter_class: &'static str = obj_type.into();
+        let current_wol = eth.wake_on_lan_enabled.unwrap_or(false);
+        eth.wake_on_lan_enabled = Some(!current_wol);
 
+        let device: Box<dyn VirtualDeviceTrait> = eth.into_box().expect("trait cast should work");
+
+        let type_: &'static str = device.data_type().into();
         if current_wol {
-            info!(
-                "Wake-on-LAN will be disabled for the {} adapter with key {}",
-                adapter_class,
-                device.get_key()
-            );
+            info!("Wake-on-LAN will be disabled for the {} adapter with key {}", type_, device.key);
         } else {
-            info!(
-                "Wake-on-LAN will be enabled for the {} adapter with key {}",
-                adapter_class,
-                device.get_key()
-            );
+            info!("Wake-on-LAN will be enabled for the {} adapter with key {}", type_, device.key);
         }
 
         device_changes.push(VirtualDeviceConfigSpec {

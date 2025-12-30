@@ -11,12 +11,6 @@ use crate::types::structs::{
     ManagedObjectReference, ObjectSpec, ObjectUpdate, PropertyFilterSpec, PropertyFilterUpdate,
     PropertySpec, WaitOptions,
 };
-use indexmap::IndexMap;
-use log::{debug, error, warn};
-use std::cell::RefCell;
-use std::ops::Index;
-use std::rc::Rc;
-use std::sync::{Arc, RwLock};
 
 /// A trait for objects that can be retrieved and continuously updated using the `PropertyCollector`
 /// API.

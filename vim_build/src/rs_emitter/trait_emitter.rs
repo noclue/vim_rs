@@ -1,5 +1,5 @@
 use crate::printer::Printer;
-use crate::rs_emitter::common::{emit_description, emit_description_with_paths};
+use crate::rs_emitter::common::emit_description_with_paths;
 use crate::rs_emitter::errors::{Error, Result};
 use crate::rs_emitter::{
     parent_field_name, to_field_name, to_type_name,
