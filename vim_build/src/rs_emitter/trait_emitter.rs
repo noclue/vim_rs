@@ -2,15 +2,14 @@ use crate::printer::Printer;
 use crate::rs_emitter::common::{emit_description, emit_description_with_paths};
 use crate::rs_emitter::errors::{Error, Result};
 use crate::rs_emitter::{
-    get_by_ref, getter_name, parent_field_name, to_field_name, to_type_name, TypeDefResolver,
+    parent_field_name, to_field_name, to_type_name,
 };
-use crate::vim_model::{EmitMode, Field, Model, Struct};
+use crate::vim_model::{EmitMode, Model, Struct};
 use std::ops::Deref;
 pub struct TraitEmitter<'a> {
     type_name: String,
     model: &'a Model,
     printer: &'a mut dyn Printer,
-    tdf: TypeDefResolver<'a>,
 }
 
 impl<'a> TraitEmitter<'a> {
@@ -19,7 +18,6 @@ impl<'a> TraitEmitter<'a> {
             type_name,
             model,
             printer,
-            tdf: TypeDefResolver::new(model),
         }
     }
 
@@ -111,11 +109,6 @@ impl<'a> TraitEmitter<'a> {
                 to_field_name(&self.type_name),
                 struct_name
             ))?;
-
-            // Add field getters for this type's own fields
-            for (prop_name, property) in &vim_type.fields {
-                self.emit_trait_field(prop_name, property)?;
-            }
         }
         self.printer.dedent();
         self.printer.println("}")?;
@@ -296,11 +289,6 @@ impl<'a> TraitEmitter<'a> {
                 "fn {}(&mut self) -> &mut super::structs::{} {{ {} }}",
                 getter_mut_method, base_name, mut_access
             ))?;
-
-            // Implement field getters
-            for (prop_name, property) in &trait_type.fields {
-                self.emit_field_getter(trait_type, prop_name, property, type_name)?;
-            }
         }
         self.printer.dedent();
         self.printer.println("}")?;
@@ -350,55 +338,6 @@ impl<'a> TraitEmitter<'a> {
 
         // Could not find parent in chain - might be accessing via Deref
         Ok("&self".to_string())
-    }
-
-    fn emit_field_getter(
-        &mut self,
-        trait_type: &Struct,
-        prop_name: &str,
-        property: &Field,
-        implementing_type: &str,
-    ) -> Result<()> {
-        let getter_name = getter_name(prop_name);
-        let field_name = to_field_name(prop_name);
-        let field_type = self.getter_return_type(property)?;
-
-        // Build path from implementing type to the struct that owns this field
-        let field_owner = &trait_type.name;
-        let parent_path = self.build_parent_access_path(implementing_type, field_owner)?;
-
-        // Access field through parent chain
-        let field_access = if parent_path == "&self" {
-            // Field belongs to current struct
-            format!("self.{}", field_name)
-        } else {
-            // Field belongs to parent - navigate through composition
-            format!("{}.{}", parent_path.trim_start_matches("&"), field_name)
-        };
-
-        let field_access = if get_by_ref(&property.vim_type) {
-            format!("&{field_access}")
-        } else {
-            field_access
-        };
-
-        self.printer.println(&format!(
-            "fn {getter_name}(&self) -> {field_type} {{ {field_access} }}"
-        ))?;
-        Ok(())
-    }
-
-    fn emit_trait_field(&mut self, prop_name: &str, property: &Field) -> Result<()> {
-        {
-            let this = &mut *self;
-            let doc_string: &Option<String> = &property.description;
-            emit_description(this.printer, doc_string)
-        }?;
-        let field_name = getter_name(prop_name);
-        let field_type = self.getter_return_type(property)?;
-        self.printer
-            .println(&format!("fn {field_name}(&self) -> {field_type};"))?;
-        Ok(())
     }
 
     fn generate_cast_from_trait(&mut self) -> Result<()> {
@@ -455,16 +394,5 @@ impl<'a> TraitEmitter<'a> {
         self.printer.println("}")?;
 
         Ok(())
-    }
-
-    fn getter_return_type(&mut self, property: &Field) -> Result<String> {
-        let mut field_type = self.tdf.field_type(property)?;
-        if crate::rs_emitter::structs::get_by_ref(&property.vim_type) {
-            field_type = format!("&{field_type}");
-        }
-        if "&String" == field_type {
-            field_type = "&str".to_string();
-        }
-        Ok(field_type)
     }
 }

@@ -66,8 +66,8 @@ async fn main() -> Result<()> {
         let rollup: &'static str = counter.rollup_type.into();
         let counter_name = format!(
             "{}.{}.{}",
-            counter.group_info.get_key(),
-            counter.name_info.get_key(),
+            counter.group_info.key,
+            counter.name_info.key,
             rollup
         );
         counter_info.insert(counter.key, counter_name);
@@ -144,7 +144,7 @@ async fn main() -> Result<()> {
             let Some(stat) = stat.deref().as_any_ref().downcast_ref::<PerfEntityMetric>() else {
                 debug!(
                     "Stat not in expected format found for: {}",
-                    stat.get_entity().value
+                    stat.entity.value
                 );
                 continue;
             };

@@ -40,10 +40,10 @@ fn test_ethernet_box() {
     let s = serde_json::to_string(&e1000).unwrap();
     debug!("{}", s);
     let vd: Box<dyn VirtualDeviceTrait> = serde_json::from_str(&s).unwrap();
-    assert_eq!(vd.get_key(), 1000);
+    assert_eq!(vd.key, 1000);
     let eth: Box<dyn VirtualEthernetCardTrait> = vd.into_box().unwrap();
     assert_eq!(
-        *eth.get_mac_address(),
+        eth.mac_address,
         Some("00:50:56:aa:bb:cc".to_string())
     );
     info!("{:?}", eth);
@@ -54,10 +54,10 @@ fn test_ethernet_ref() {
     init();
     let e1000 = &create_virtual_e1000();
     let vd: &dyn VirtualDeviceTrait = e1000;
-    assert_eq!(vd.get_key(), 1000);
+    assert_eq!(vd.key, 1000);
     let eth: &dyn VirtualEthernetCardTrait = vd.into_ref().unwrap();
     assert_eq!(
-        *eth.get_mac_address(),
+        eth.mac_address,
         Some("00:50:56:aa:bb:cc".to_string())
     );
     info!("{:?}", eth);
@@ -97,7 +97,7 @@ fn consume_vim_any_as_trait_box() {
     };
     let eth: Box<dyn VirtualEthernetCardTrait> = vim_obj.into_box().unwrap();
 
-    assert_eq!(eth.get_key(), 1000);
+    assert_eq!(eth.key, 1000);
     info!("{:?}", eth);
 }
 
@@ -110,7 +110,7 @@ fn consume_vim_any_as_trait_ref() {
     };
     let eth: &dyn VirtualEthernetCardTrait = vim_obj.as_ref().into_ref().unwrap();
 
-    assert_eq!(eth.get_key(), 1000);
+    assert_eq!(eth.key, 1000);
     info!("{:?}", eth);
 }
 
@@ -166,7 +166,6 @@ fn create_virtual_e1000() -> VirtualE1000 {
     VirtualE1000 {
         virtual_ethernet_card_: VirtualEthernetCard {
             virtual_device_: VirtualDevice {
-                data_object_: DataObject {},
                 backing: None,
                 controller_key: None,
                 slot_info: None,

@@ -228,12 +228,12 @@ fn vm_vm_change(vm: &VirtualMachine) -> VmChange {
     let mut vnic_map: HashMap<i64, String> = HashMap::new();
     if let Some(ref vnic) = vm.device {
         for device in vnic {
-            let key = device.get_key();
+            let key = device.key;
             let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref()
             else {
                 continue;
             };
-            if let Some(mac) = eth.get_mac_address() {
+            if let Some(mac) = &eth.mac_address {
                 vnic_map.insert(key.into(), mac.clone());
             }
         }
@@ -241,9 +241,9 @@ fn vm_vm_change(vm: &VirtualMachine) -> VmChange {
     let mut guest_net_map: HashMap<String, Vec<String>> = HashMap::new();
     if let Some(ref guest_net) = vm.guest_net {
         for net in guest_net {
-            if let Some(mac_address) = net.mac_address.clone() {
-                if let Some(ip) = net.ip_address.clone() {
-                    guest_net_map.insert(mac_address.clone(), ip);
+            if let Some(mac_address) = &net.mac_address {
+                if let Some(ip) = &net.ip_address {
+                    guest_net_map.insert(mac_address.clone(), ip.clone());
                 }
             }
         }

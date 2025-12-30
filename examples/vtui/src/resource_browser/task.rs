@@ -283,7 +283,7 @@ pub async fn ensure_task_descriptions_initialized(client: Arc<Client>) -> anyhow
     // Transform the response into a HashMap
     let methods = descriptions.method_info;
     let description_map = methods.iter()
-        .map(|desc| (desc.get_key().to_string(), desc.get_label().to_string()))
+        .map(|desc| (desc.key.clone(), desc.label.clone()))
         .collect::<HashMap<String, String>>();
 
     // Set the global map (will only work once)
