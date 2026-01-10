@@ -74,8 +74,6 @@ vim_retrievable!(
     }
 );
 
-type StaticStr = &'static str;
-
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
     env_logger::init();
@@ -90,7 +88,7 @@ async fn main() -> anyhow::Result<()> {
             selection_spec_: SelectionSpec {
                 name: Some("expandProperty".to_string()),
             },
-            r#type: StaticStr::from(task_manager_ref.r#type).to_string(),
+            r#type: task_manager_ref.r#type.as_str().to_string(),
             path: "recentTask".to_string(),
             skip: Some(false),
             select_set: None,

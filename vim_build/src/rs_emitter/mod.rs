@@ -2,6 +2,7 @@ pub(crate) mod boxed_types;
 mod common;
 pub mod deser;
 pub mod enums;
+pub mod enum_impls;
 pub mod errors;
 pub mod library;
 mod mo;

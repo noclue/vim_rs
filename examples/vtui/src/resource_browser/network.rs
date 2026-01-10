@@ -30,7 +30,7 @@ impl From<&NetworkDetails> for Row<'_> {
         } else {
             Cell::default()
         };
-        let r#type : &'static str = network.id.r#type.clone().into();
+        let r#type = network.id.r#type.as_str().to_string();
         Row::new(vec![
             Cell::from(network.id.value.clone()),
             Cell::from(Span::from(STATUS).style(status_color)),
@@ -83,7 +83,7 @@ impl TabularData for NetworkDetails {
 
     fn matches_filter(&self, filter: &str) -> bool {
         let filter = filter.to_lowercase();
-        let r#type : &'static str = self.id.r#type.clone().into();
+        let r#type = self.id.r#type.as_str().to_string();
         self.id.value.to_lowercase().contains(&filter)
             || self.name.to_lowercase().contains(&filter)
             || r#type.contains(&filter)

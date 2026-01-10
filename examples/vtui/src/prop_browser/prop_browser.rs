@@ -260,7 +260,7 @@ impl PropertyBrowserState {
             .unwrap_or_default();
 
         // Get object type and ID
-        let object_type: &'static str = From::from(&self.obj.r#type);
+        let object_type: &str = self.obj.r#type.as_str();
         let object_id = &self.obj.value;
 
         // Get current datetime in RFC 3339 format
@@ -293,7 +293,7 @@ impl PropertyBrowserState {
 
 impl Cache for PropertyBrowserState {
     fn prop_spec(&self) -> vim_rs::core::pc_helpers::Result<PropertySpec> {
-        let s: &'static str = From::from(&self.obj.r#type);
+        let s = self.obj.r#type.as_str();
         Ok(PropertySpec {
             r#type: s.to_string(),
             all: Some(true),
@@ -369,7 +369,7 @@ impl StatefulWidget for PropertyBrowser<'_> {
     type State = PropertyBrowserState;
 
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
-        let object_type: &'static str = From::from(&state.obj.r#type);
+        let object_type = state.obj.r#type.as_str();
         let object_id = &state.obj.value;
 
         let mut spans = Vec::new();

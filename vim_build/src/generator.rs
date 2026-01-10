@@ -215,6 +215,8 @@ fn emit_enums(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
         .expect("Could not create enums.rs file");
     let mut printer = printer::FilePrinter::new(file, None, None);
     rs_emitter::enums::emit_enums(vim_model, &mut printer)?;
+    printer.newline()?;
+    rs_emitter::enum_impls::generate_enum_impls(vim_model, &mut printer)?;
     Ok(())
 }
 

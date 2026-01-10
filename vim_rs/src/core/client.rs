@@ -321,7 +321,7 @@ impl Client {
     where
         T: serde::de::DeserializeOwned
     {
-        let type_name: &str = obj.r#type.into();
+        let type_name: &str = obj.r#type.as_str();
         let id = &obj.value;
         let path = format!("/{type_name}/{id}/{property}");
         let req = self.get_request(&path);

@@ -3,7 +3,7 @@ use std::convert::AsRef;
 use vim_rs::types::boxed_types::ValueElements;
 use vim_rs::types::convert::CastInto;
 use vim_rs::types::enums::MoTypesEnum;
-use vim_rs::types::structs::{DataObject, VirtualDevice, VirtualE1000, VirtualEthernetCard};
+use vim_rs::types::structs::{VirtualDevice, VirtualE1000, VirtualEthernetCard};
 use vim_rs::types::traits::VirtualDeviceTrait;
 use vim_rs::types::traits::VirtualEthernetCardTrait;
 use vim_rs::types::vim_any::VimAny;
@@ -129,27 +129,21 @@ fn consume_vim_any_array() {
 #[test]
 fn enum_as_string() {
     init();
-    let e = MoTypesEnum::VirtualMachine;
-    // Below is the declared conversion and Rust is somehow ok if no lifetime is specified
-    // I gather 'static fits all....
-    // let s: &'static str = e.as_ref();
-    let s: &str = e.into();
-    assert_eq!(s, "VirtualMachine");
+    assert_eq!(MoTypesEnum::VirtualMachine.as_str(), "VirtualMachine");
 }
 
 #[test]
 fn enum_unknown_as_string() {
     init();
     let e = MoTypesEnum::Other_(String::from("Container"));
-    assert_eq!(Into::<&'static str>::into(e), "__OTHER__");
+    assert_eq!(e.as_str(), "Container");
 }
 
 #[test]
 fn type_name() {
     init();
     let e1000 = create_virtual_e1000();
-    let e1000_type: &'static str = e1000.data_type().into();
-    assert_eq!(e1000_type, "VirtualE1000");
+    assert_eq!(e1000.data_type().as_str(), "VirtualE1000");
 }
 
 fn create_virtual_device_array() -> VimAny {

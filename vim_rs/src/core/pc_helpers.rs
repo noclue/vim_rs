@@ -33,8 +33,6 @@ pub trait Queriable {
     fn prop_spec() -> PropertySpec;
 }
 
-type StaticStr = &'static str;
-
 /// Create an ObjectSpec for a view. This is used to specify objects to be monitored from a view.
 pub(crate) fn obj_spec_for_view(view_moref: ManagedObjectReference) -> Vec<ObjectSpec> {
     let r#type = view_moref.r#type.clone();
@@ -45,7 +43,7 @@ pub(crate) fn obj_spec_for_view(view_moref: ManagedObjectReference) -> Vec<Objec
             selection_spec_: SelectionSpec {
                 name: Some("traverseEntities".to_string()),
             },
-            r#type: StaticStr::from(r#type).to_string(),
+            r#type: r#type.as_str().to_string(),
             path: "view".to_string(),
             skip: Some(false),
             select_set: None,

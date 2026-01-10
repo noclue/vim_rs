@@ -63,7 +63,7 @@ async fn main() -> Result<()> {
         return Err(Error::msg("No performance counters found."));
     };
     for counter in counters {
-        let rollup: &'static str = counter.rollup_type.into();
+        let rollup = counter.rollup_type.as_str();
         let counter_name = format!(
             "{}.{}.{}",
             counter.group_info.key,
@@ -81,7 +81,7 @@ async fn main() -> Result<()> {
     let view_manager = ViewManager::new(client.clone(), &view_manager_moref.value.clone());
 
     let root_fld = client.service_content().root_folder.clone();
-    let vm_type = Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string();
+    let vm_type = MoTypesEnum::VirtualMachine.as_str().to_string();
     let view_moref = view_manager
         .create_container_view(&root_fld, Some(&[vm_type]), true)
         .await?;

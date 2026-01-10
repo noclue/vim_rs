@@ -423,7 +423,7 @@ fn prop_spec(managed_object_type: &Ident, fields: &Vec<FieldInfo>) -> proc_macro
                 path_set: Some(vec![
                     #(#prop_paths_quoted),*
                 ]),
-                r#type: Into::<&str>::into(vim_rs::types::enums::MoTypesEnum::#managed_object_type).to_string(),
+                r#type: vim_rs::types::enums::MoTypesEnum::#managed_object_type.as_str().to_string(),
             }
         }
     }
@@ -719,7 +719,7 @@ fn generate_enum_field_apply(field: &FieldInfo, enum_field_name: &str) -> proc_m
 //                "<property path>" => {
 //                     <field name with ordinal> = match prop.val {
 //                         VimAny::Object(obj) => {
-//                             let name: &'static str = obj.data_type().into();
+//                             let name = obj.data_type().as_str();
 //                             match obj.as_any_box().downcast() {
 //                                 Ok(val) => Some(*val),
 //                                 Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<struct type name>".to_string(), name.to_string())),
@@ -739,7 +739,7 @@ fn generate_struct_field_from_content(
         #path => {
             #field_alias = match prop.val {
                 vim_rs::types::vim_any::VimAny::Object(obj) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match obj.as_any_box().downcast() {
                         Ok(val) => Some(*val),
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), name.to_string())),
@@ -761,7 +761,7 @@ fn generate_struct_field_from_update(
         #path => {
             #field_alias = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Object(obj)) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match obj.as_any_box().downcast() {
                         Ok(val) => Some(*val),
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), name.to_string())),
@@ -790,7 +790,7 @@ fn generate_struct_field_apply(field: &FieldInfo, struct_type: &str) -> proc_mac
         #path => {
             self.#field_name = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Object(obj)) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match obj.as_any_box().downcast() {
                         Ok(val) => #value_code,
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), name.to_string())),
@@ -807,7 +807,7 @@ fn generate_struct_field_apply(field: &FieldInfo, struct_type: &str) -> proc_mac
 //                "<property path>" => {
 //                     <field name with ordinal> = match prop.val {
 //                         vim_rs::types::vim_any::VimAny::Object(obj) => {
-//                             let name: &'static str = obj.data_type().into();
+//                             let name = obj.data_type().as_str();
 //                             match obj.into_box() {
 //                                 Ok(val) => Some(val),
 //                                 Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<trait type name>".to_string(), name.to_string())),
@@ -826,7 +826,7 @@ fn generate_trait_field_from_content(
         #path => {
             #field_alias = match prop.val {
                 vim_rs::types::vim_any::VimAny::Object(obj) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => Some(val),
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), name.to_string())),
@@ -848,7 +848,7 @@ fn generate_trait_field_from_update(
         #path => {
             #field_alias = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Object(obj)) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => Some(val),
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), name.to_string())),
@@ -878,7 +878,7 @@ fn generate_trait_field_apply(field: &FieldInfo, trait_type: &str) -> proc_macro
         #path => {
             self.#field_name = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Object(obj)) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => #value_code,
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), name.to_string())),

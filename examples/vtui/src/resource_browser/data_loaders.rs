@@ -28,8 +28,6 @@ where
     Ok((Box::new(indexed_cache), filter))
 }
 
-type StaticStr = &'static str;
-
 pub(crate) async fn load_from_property<T: TabularData + Cacheable + Send + Sync + 'static>(
     cache_mgr: Rc<RefCell<CacheManager>>,
     object: &ManagedObjectReference,
@@ -47,7 +45,7 @@ where
                 selection_spec_: SelectionSpec {
                     name: Some("expandProperty".to_string()),
                 },
-                r#type: StaticStr::from(object.r#type.clone()).to_string(),
+                r#type: object.r#type.as_str().to_string(),
                 path: property.to_string(),
                 skip: Some(false),
                 select_set: None,

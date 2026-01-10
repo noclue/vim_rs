@@ -46,7 +46,7 @@ async fn main() -> Result<()> {
     let view_moref = view_manager
         .create_container_view(
             &content.root_folder,
-            Some(&[Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string()]),
+            Some(&[MoTypesEnum::VirtualMachine.as_str().to_string()]),
             true,
         )
         .await?;
@@ -64,7 +64,7 @@ async fn main() -> Result<()> {
                 selection_spec_: SelectionSpec {
                     name: Some("traverseEntities".to_string()),
                 },
-                r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(),
+                r#type: MoTypesEnum::ContainerView.as_str().to_string(),
                 path: "view".to_string(),
                 skip: Some(false),
                 select_set: None,
@@ -73,7 +73,7 @@ async fn main() -> Result<()> {
         prop_set: vec![structs::PropertySpec {
             all: Some(false),
             path_set: Some(vec!["name".to_string()]),
-            r#type: Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string(),
+            r#type: MoTypesEnum::VirtualMachine.as_str().to_string(),
         }],
         report_missing_objects_in_results: Some(true),
     }];
