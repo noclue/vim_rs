@@ -15,7 +15,6 @@ use serde_json::Value;
 use std::io::Write;
 use std::mem;
 use std::path::PathBuf;
-use chrono::{Local, SecondsFormat};
 use tui_tree_widget::{Scrollbar, Tree, TreeItem, TreeState};
 use vim_rs::core::pc_cache::Cache;
 use vim_rs::core::pc_helpers::Error;
