@@ -249,7 +249,7 @@ fn task_desc(task: &TaskInfo) -> String {
             let name = name.trim_end_matches("_Task");
             if name == "Destroy" || name == "Remove" {
                 if let Some(ref entity) = task.entity {
-                    let s: &str = entity.clone().r#type.into();
+                    let s = entity.r#type.as_str();
                     return format!("{}.{}", name, s)
                 }
             }
@@ -283,7 +283,7 @@ pub async fn ensure_task_descriptions_initialized(client: Arc<Client>) -> anyhow
     // Transform the response into a HashMap
     let methods = descriptions.method_info;
     let description_map = methods.iter()
-        .map(|desc| (desc.get_key().to_string(), desc.get_label().to_string()))
+        .map(|desc| (desc.key.clone(), desc.label.clone()))
         .collect::<HashMap<String, String>>();
 
     // Set the global map (will only work once)

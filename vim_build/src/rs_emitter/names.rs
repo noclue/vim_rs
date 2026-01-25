@@ -28,6 +28,10 @@ pub fn getter_name(name: &str) -> String {
     format!("get_{}", name.to_case(Case::Snake))
 }
 
+pub fn parent_field_name(parent_type: &str) -> String {
+    format!("{}_", to_field_name(parent_type))
+}
+
 pub fn any_into_name(name: &str) -> String {
     format!("any_into_{}", name.to_case(Case::Snake))
 }
@@ -185,7 +189,10 @@ fn param_reference(lifecycle: Option<String>, root_package: String) -> StructRef
                 lifecycle.clone(),
             )
         } else {
-            ref_type_declaration(&format!("{root_package}::structs::{rust_name}"), lifecycle.clone())
+            ref_type_declaration(
+                &format!("{root_package}::structs::{rust_name}"),
+                lifecycle.clone(),
+            )
         }
     })
 }

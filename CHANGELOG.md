@@ -21,11 +21,65 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **Serde benchmarks**: Added `vim_rs/benches/serde_bench.rs` to measure serialization/deserialization performance.
+- **Serde tests**: Added `vim_rs/tests/serde_test.rs` to verify enum serialization round-trips.
+- **`ValueElements::as_str()`**: Returns the VIM API type name as it appears in the OpenAPI specification.
+  - Useful for type discrimination, logging, and debugging when working with `VimAny` and dynamic property values.
+  - Example: `ValueElements::PrimitiveString(_)` returns `"string"`, `ValueElements::ArrayOfManagedObjectReference(_)` returns `"ArrayOfManagedObjectReference"`.
+
 ### Changed
+
+- **BREAKING: Compositional inheritance using Deref/DerefMut**.
+  - Child structs no longer have parent fields expanded inline. Instead, they contain a single parent field (e.g., `virtual_ethernet_card_: VirtualEthernetCard`).
+  - Child structs implement `Deref` and `DerefMut` to their parent, providing seamless field access.
+  - Access parent fields directly: `device.key` instead of the old expanded field pattern.
+  - This change significantly reduces generated code size while maintaining ergonomic field access.
+  - **Migration**: Field access patterns remain the same due to Deref coercion. No code changes needed for read access.
+
+- **BREAKING: Removed trait getter methods (`get_*`)**.
+  - Trait getter methods like `get_key()`, `get_mac_address()`, `get_backing()` are removed.
+  - Use direct field access via Deref instead: `device.key`, `eth.mac_address`, `device.backing`.
+  - **Migration**: Replace `obj.get_field()` with `obj.field` or `&obj.field` for references.
+  - Example: `eth.get_mac_address()` → `&eth.mac_address`
+
+- **BREAKING: Removed DataObject trait methods**.
+  - The `DataObjectTrait` no longer has getter methods.
+  - Empty descendant types (those with no additional fields beyond their parent) are pruned from the hierarchy.
+  - This simplifies the type hierarchy and reduces code size.
+
+- **BREAKING: Enum `as_str()` now returns `&str` with instance lifetime** instead of `&'static str`.
+  - This enables `as_str()` to return the actual string value held in `Other_` variants.
+  - Previously, `Other_` variants would return the placeholder string `__OTHER__`.
+  - Now, `as_str()` returns the actual runtime value, providing much better debugging and error messages.
+
+- **BREAKING: Removed `From<EnumType> for &'static str` implementations**.
+  - Use `.as_str()` method instead of `.into()` or `From::from()` for string conversion.
+  - Example: `my_enum.as_str()` instead of `my_enum.into()`.
+  - this applies to the `ValueElements` enum too.
+
+- **Performance: Replaced macro-based enum derives with PHF (Perfect Hash Function) maps**.
+  - Removed `serde::Deserialize`, `serde::Serialize`, and `strum_macros::IntoStaticStr` derives from all ~300+ enums.
+  - Manual implementations use PHF maps for O(1) string-to-enum lookups.
+  - PHF maps are generated at code-generation time using `phf_codegen`, eliminating compile-time macro expansion overhead.
+  - Expected compile time improvements: 5-10% for incremental builds, 3-5% for clean builds.
+  - Expected LLVM lines reduction: 20,000-40,000 lines from enum deserialize implementations.
+
+- **Code generation: New `enum_impls.rs` module**.
+  - Generates individual PHF maps for each enum (e.g., `MO_TYPES_ENUM_MAP`, `ENTITY_REFERENCE_ENTITY_TYPE_ENUM_MAP`).
+  - Generates manual `Serialize`, `Deserialize`, `Display`, and `Debug` implementations.
+  - Each enum's PHF map provides constant-time lookups for string-to-variant conversion.
+
+- **Examples updated** to use direct field access instead of trait getter methods and `.as_str()` API.
 
 ### Deprecated
 
 ### Removed
+
+- **BREAKING: `strum_macros` derive removed from all enums**.
+  - `#[strum(serialize = "...")]` attributes no longer used.
+  - String conversions now handled by generated PHF maps and manual implementations.
+
+- **BREAKING: Trait getter methods removed** (see Changed section for migration).
 
 ### Fixed
 

@@ -2,7 +2,7 @@ use vim_rs::core::pc_cache::{CacheManager, Cacheable, ObjectCache, ReadWriteCach
 use std::cell::RefCell;
 use std::rc::Rc;
 use std::sync::{Arc, RwLock};
-use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec, TraversalSpec};
+use vim_rs::types::structs::{ManagedObjectReference, ObjectSpec, SelectionSpec, TraversalSpec};
 use vim_rs::core::pc_helpers::BoxableError;
 use ratatui::widgets::Row;
 use crate::resource_browser::indexed_cache::IndexedCache;
@@ -28,8 +28,6 @@ where
     Ok((Box::new(indexed_cache), filter))
 }
 
-type StaticStr = &'static str;
-
 pub(crate) async fn load_from_property<T: TabularData + Cacheable + Send + Sync + 'static>(
     cache_mgr: Rc<RefCell<CacheManager>>,
     object: &ManagedObjectReference,
@@ -44,8 +42,10 @@ where
             obj: object.clone(),
             skip: Some(false),
             select_set: Some(vec![Box::new(TraversalSpec {
-                name: Some("expandProperty".to_string()),
-                r#type: StaticStr::from(object.r#type.clone()).to_string(),
+                selection_spec_: SelectionSpec {
+                    name: Some("expandProperty".to_string()),
+                },
+                r#type: object.r#type.as_str().to_string(),
                 path: property.to_string(),
                 skip: Some(false),
                 select_set: None,

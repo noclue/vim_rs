@@ -8,6 +8,9 @@ pub fn generate_struct_enum(
     vim_model: &Model,
     printer: &mut dyn Printer,
 ) -> rs_emitter::errors::Result<()> {
+    printer.println("use serde::de;")?;
+    printer.newline()?;
+    
     printer.println("/// List of all VIM structure types used in serialization and type casts.")?;
     printer.println("///")?;
     printer.println("/// Values are sorted such that a parent type and all its children always form a contiguous sequence.")?;
@@ -21,7 +24,7 @@ pub fn generate_struct_enum(
     printer.println("/// 1. Parent child relationship can be checked with range check.")?;
     printer.println("/// 1. Values are 32-bit integers that can be efficiently compared.")?;
     printer.println(
-        "#[derive(Debug, Copy, Clone, PartialEq, Eq, Hash, PartialOrd, serde::Serialize, serde::Deserialize, strum_macros::IntoStaticStr)]",
+        "#[derive(Copy, Clone, PartialEq, Eq, Hash, PartialOrd)]",
     )?;
     printer.println("#[repr(u32)]")?;
     printer.println("pub enum StructType {")?;
@@ -32,18 +35,182 @@ pub fn generate_struct_enum(
         if rust_type_name == rs_emitter::structs::ANY {
             continue;
         }
-        if rust_type_name != struct_ref.name {
-            printer.println(&format!("#[serde(rename = \"{}\")]", struct_ref.name))?;
-            printer.println(&format!("#[strum(serialize = \"{}\")]", struct_ref.name))?;
-        }
         printer.println(&format!("{},", rust_type_name))?;
     }
     printer.dedent();
     printer.println("}")?;
+    printer.newline()?;
+    
+    generate_phf_map(vim_model, printer)?;
+    printer.newline()?;
+    
+    generate_struct_type_impl(vim_model, printer)?;
+    printer.newline()?;
+    
+    generate_serialize_impl(printer)?;
+    printer.newline()?;
+    
+    generate_deserialize_impl(printer)?;
+    printer.newline()?;
+    
+    generate_display_impl(printer)?;
+    printer.newline()?;
+    
+    generate_debug_impl(printer)?;
+    printer.newline()?;
+    
+    generate_from_impl(printer)?;
+    printer.newline()?;
+    
     generate_child_of_impl(vim_model, printer)?;
     Ok(())
 }
 
+
+fn generate_phf_map(
+    vim_model: &Model,
+    printer: &mut dyn Printer,
+) -> rs_emitter::errors::Result<()> {
+    let mut map_builder = phf_codegen::Map::new();
+    
+    for (_, data_type) in &vim_model.structs {
+        let struct_ref = data_type.borrow();
+        let rust_type_name = struct_ref.rust_name();
+        if rust_type_name == rs_emitter::structs::ANY {
+            continue;
+        }
+        let vim_name = struct_ref.name.clone();
+        map_builder.entry(vim_name, &format!("StructType::{}", rust_type_name));
+    }
+    
+    printer.println(&format!(
+        "static STRUCT_TYPE_MAP: phf::Map<&'static str, StructType> = {};",
+        map_builder.build()
+    ))?;
+    Ok(())
+}
+
+fn generate_struct_type_impl(
+    vim_model: &Model,
+    printer: &mut dyn Printer,
+) -> rs_emitter::errors::Result<()> {
+    printer.println("impl StructType {")?;
+    printer.indent();
+    
+    // Generate as_str() method
+    printer.println("pub fn as_str(self) -> &'static str {")?;
+    printer.indent();
+    printer.println("match self {")?;
+    printer.indent();
+    for (_, data_type) in &vim_model.structs {
+        let struct_ref = data_type.borrow();
+        let rust_type_name = struct_ref.rust_name();
+        if rust_type_name == rs_emitter::structs::ANY {
+            continue;
+        }
+        let vim_name = &struct_ref.name;
+        printer.println(&format!("StructType::{} => \"{}\",", rust_type_name, vim_name))?;
+    }
+    printer.dedent();
+    printer.println("}")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.newline()?;
+    
+    // Generate from_str() method
+    printer.println("pub fn from_str(s: &str) -> Option<StructType> {")?;
+    printer.indent();
+    printer.println("STRUCT_TYPE_MAP.get(s).copied()")?;
+    printer.dedent();
+    printer.println("}")?;
+    
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
+}
+
+fn generate_serialize_impl(
+    printer: &mut dyn Printer,
+) -> rs_emitter::errors::Result<()> {
+    printer.println("impl serde::Serialize for StructType {")?;
+    printer.indent();
+    printer.println("fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>")?;
+    printer.indent();
+    printer.println("where")?;
+    printer.indent();
+    printer.println("S: serde::Serializer,")?;
+    printer.dedent();
+    printer.dedent();
+    printer.println("{")?;
+    printer.indent();
+    printer.println("serializer.serialize_str(self.as_str())")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
+}
+
+fn generate_deserialize_impl(
+    printer: &mut dyn Printer,
+) -> rs_emitter::errors::Result<()> {
+    printer.println("impl<'de> de::Deserialize<'de> for StructType {")?;
+    printer.indent();
+    printer.println("fn deserialize<D: de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {")?;
+    printer.indent();
+    printer.println("let s = String::deserialize(deserializer)?;")?;
+    printer.println("StructType::from_str(&s).ok_or_else(|| de::Error::custom(\"Invalid struct type name\"))")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
+}
+
+fn generate_display_impl(
+    printer: &mut dyn Printer,
+) -> rs_emitter::errors::Result<()> {
+    printer.println("impl std::fmt::Display for StructType {")?;
+    printer.indent();
+    printer.println("fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {")?;
+    printer.indent();
+    printer.println("write!(f, \"{}\", self.as_str())")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
+}
+
+fn generate_debug_impl(
+    printer: &mut dyn Printer,
+) -> rs_emitter::errors::Result<()> {
+    printer.println("impl std::fmt::Debug for StructType {")?;
+    printer.indent();
+    printer.println("fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {")?;
+    printer.indent();
+    printer.println("write!(f, \"{}\", self.as_str())")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
+}
+
+fn generate_from_impl(
+    printer: &mut dyn Printer,
+) -> rs_emitter::errors::Result<()> {
+    printer.println("impl From<StructType> for &'static str {")?;
+    printer.indent();
+    printer.println("fn from(value: StructType) -> Self {")?;
+    printer.indent();
+    printer.println("value.as_str()")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.dedent();
+    printer.println("}")?;
+    Ok(())
+}
 
 pub fn generate_child_of_impl(
     vim_model: &Model,

@@ -23,12 +23,13 @@ impl<'a> BoxedTypesEmitter<'a> {
     pub fn emit_boxed_types(&mut self) -> Result<()> {
         self.emit_imports()?;
         self.emit_enum()?;
+        self.emit_as_str()?;
         self.emit_serialize()?;
         self.emit_deserialize()?;
         Ok(())
     }
     fn emit_enum(&mut self) -> Result<()> {
-        self.printer.println("#[derive(Debug, strum_macros::IntoStaticStr)]")?;
+        self.printer.println("#[derive(Debug)]")?;
         self.printer.println("pub enum ValueElements {")?;
         self.printer.indent();
         for (_, box_type) in &self.vim_model.any_value_types {
@@ -52,6 +53,33 @@ impl<'a> BoxedTypesEmitter<'a> {
         self.printer.println("use serde::ser::SerializeStruct;")?;
         self.printer
             .println("use super::deserialize::get_value_deserializer;")?;
+        self.printer.newline()?;
+        Ok(())
+    }
+
+    fn emit_as_str(&mut self) -> Result<()> {
+        self.printer.println("impl ValueElements {")?;
+        self.printer.indent();
+        self.printer.println("/// Returns the VIM API type name as it appears in the OpenAPI specification.")?;
+        self.printer.println("pub fn as_str(&self) -> &'static str {")?;
+        self.printer.indent();
+        self.printer.println("match self {")?;
+        self.printer.indent();
+        for (_, box_type) in &self.vim_model.any_value_types {
+            let type_name = to_type_name(&box_type.name);
+            let str_name = box_type
+                .discriminator_value
+                .as_ref()
+                .unwrap_or(&box_type.name);
+            self.printer
+                .println(&format!("ValueElements::{type_name}(_) => \"{str_name}\","))?;
+        }
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
         self.printer.newline()?;
         Ok(())
     }

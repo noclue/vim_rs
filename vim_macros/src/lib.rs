@@ -44,7 +44,7 @@
 //!    Ok(())
 //! }
 //! ```
-//! 
+//!
 //! The `ObjectRetriever` utility class is used to retrieve properties from the vSphere API. It
 //! allows you to retrieve properties from a container (e.g., a datacenter or cluster) or a specific
 //! list of managed objects. The `retrieve_objects_from_container` method retrieves all objects
@@ -112,7 +112,7 @@
 //! ```
 //! Note that `CacheManager` also supports `add_list_cache` method to monitor predefined list of
 //! objects.
-//! 
+//!
 //! ### How the Macros Work
 //!
 //! Both macros:
@@ -134,23 +134,26 @@
 //!     }
 //! );
 //! ```
-//! 
+//!
 //! Property paths use dot delimited rust field name starting from the managed object property
 //! accessor and going deeper inside the structure. Property paths only support the properties of
-//! the declared field types i.e. properties from child types are not supported. 
-//! 
-//! Array properties support special `length` property to retrieve their length e.g. 
+//! the declared field types i.e. properties from child types are not supported.
+//!
+//! Array properties support special `length` property to retrieve their length e.g.
 //! "datastore.length"to obtain the count of datastores attached to a host.
-//! 
+//!
 //! The same syntax applies to the `vim_updatable!` macro.
-mod resolver;
 mod field_data;
+mod resolver;
 
 use proc_macro::TokenStream;
-use quote::{quote};
-use syn::{parse_macro_input, Token, braced, punctuated::Punctuated, parse::Parse, parse::ParseStream, Result, Ident, LitStr, token};
-use syn::token::Comma;
+use quote::quote;
 use resolver::get_default_field_data;
+use syn::token::Comma;
+use syn::{
+    braced, parse::Parse, parse::ParseStream, parse_macro_input, punctuated::Punctuated, token,
+    Ident, LitStr, Result, Token,
+};
 
 #[allow(dead_code)]
 struct PropertyField {
@@ -198,8 +201,6 @@ struct FieldInfo<'a> {
     field_data: resolver::FieldData,
 }
 
-
-
 /// A macro to generate a struct and implementation necessary to work with
 /// PropertyCollector::RetrievePropertiesEx API. Developers need to select the managed object type
 /// of interest and the properties they need retrieved. For example to retrieve properties of a
@@ -226,14 +227,21 @@ struct FieldInfo<'a> {
 /// into vector of objects from the generated struct.
 #[proc_macro]
 pub fn vim_retrievable(input: TokenStream) -> TokenStream {
-    let VimObjectMacro { struct_token: _, struct_name, colon_token: _, object_type: managed_object_type, brace_token: _, fields } =
-        parse_macro_input!(input as VimObjectMacro);
+    let VimObjectMacro {
+        struct_token: _,
+        struct_name,
+        colon_token: _,
+        object_type: managed_object_type,
+        brace_token: _,
+        fields,
+    } = parse_macro_input!(input as VimObjectMacro);
 
     let (field_infos, errors) = resolve_fields(&managed_object_type, &fields);
 
     let struct_tokens = generate_struct_decl(&struct_name, &field_infos);
 
-    let struct_impl_tokens = generate_retrieve_struct_impl(&struct_name, &managed_object_type, &field_infos);
+    let struct_impl_tokens =
+        generate_retrieve_struct_impl(&struct_name, &managed_object_type, &field_infos);
 
     let try_from_object_content = generate_try_from_object_content(&struct_name, &field_infos);
 
@@ -279,14 +287,21 @@ pub fn vim_retrievable(input: TokenStream) -> TokenStream {
 /// The generated struct is usable with the `ObjectCache` and `CacheManager` utility objects.
 #[proc_macro]
 pub fn vim_updatable(input: TokenStream) -> TokenStream {
-    let VimObjectMacro { struct_token: _, struct_name, colon_token: _, object_type: managed_object_type, brace_token: _, fields } =
-        parse_macro_input!(input as VimObjectMacro);
+    let VimObjectMacro {
+        struct_token: _,
+        struct_name,
+        colon_token: _,
+        object_type: managed_object_type,
+        brace_token: _,
+        fields,
+    } = parse_macro_input!(input as VimObjectMacro);
 
     let (field_infos, errors) = resolve_fields(&managed_object_type, &fields);
 
     let struct_tokens = generate_struct_decl(&struct_name, &field_infos);
 
-    let struct_impl_tokens = generate_updateable_struct_impl(&struct_name, &managed_object_type, &field_infos);
+    let struct_impl_tokens =
+        generate_updateable_struct_impl(&struct_name, &managed_object_type, &field_infos);
 
     let try_from_object_content = generate_try_from_object_update(&struct_name, &field_infos);
 
@@ -301,7 +316,10 @@ pub fn vim_updatable(input: TokenStream) -> TokenStream {
     output.into()
 }
 
-fn resolve_fields<'a>(managed_object_type: &Ident, fields: &'a Punctuated<PropertyField, Comma>) -> (Vec<FieldInfo<'a>>, Vec<proc_macro2::TokenStream>) {
+fn resolve_fields<'a>(
+    managed_object_type: &Ident,
+    fields: &'a Punctuated<PropertyField, Comma>,
+) -> (Vec<FieldInfo<'a>>, Vec<proc_macro2::TokenStream>) {
     let mut field_infos = Vec::new();
     let mut errors: Vec<proc_macro2::TokenStream> = Vec::new();
     for property_field in fields {
@@ -315,11 +333,13 @@ fn resolve_fields<'a>(managed_object_type: &Ident, fields: &'a Punctuated<Proper
                 get_default_field_data()
             }
         };
-        field_infos.push(FieldInfo { property_field, field_data });
-    };
+        field_infos.push(FieldInfo {
+            property_field,
+            field_data,
+        });
+    }
     (field_infos, errors)
 }
-
 
 /// Generates a struct declaration based on the provided struct name and fields.
 fn generate_struct_decl(struct_name: &Ident, fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
@@ -348,7 +368,11 @@ fn generate_struct_decl(struct_name: &Ident, fields: &Vec<FieldInfo>) -> proc_ma
     struct_tokens
 }
 
-fn generate_retrieve_struct_impl(struct_name: &Ident, managed_object_type: &Ident, fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
+fn generate_retrieve_struct_impl(
+    struct_name: &Ident,
+    managed_object_type: &Ident,
+    fields: &Vec<FieldInfo>,
+) -> proc_macro2::TokenStream {
     let prop_spec = prop_spec(managed_object_type, fields);
     let id = id();
     quote! {
@@ -362,7 +386,11 @@ fn generate_retrieve_struct_impl(struct_name: &Ident, managed_object_type: &Iden
     }
 }
 
-fn generate_updateable_struct_impl(struct_name: &Ident, managed_object_type: &Ident, fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
+fn generate_updateable_struct_impl(
+    struct_name: &Ident,
+    managed_object_type: &Ident,
+    fields: &Vec<FieldInfo>,
+) -> proc_macro2::TokenStream {
     let prop_spec = prop_spec(managed_object_type, fields);
     let id = id();
     let apply_update = generate_apply_update(fields);
@@ -379,7 +407,10 @@ fn generate_updateable_struct_impl(struct_name: &Ident, managed_object_type: &Id
 }
 
 fn prop_spec(managed_object_type: &Ident, fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
-    let field_paths: Vec<&str> = fields.iter().map(|f| f.field_data.vim_path.as_str()).collect();
+    let field_paths: Vec<&str> = fields
+        .iter()
+        .map(|f| f.field_data.vim_path.as_str())
+        .collect();
     let prop_paths_quoted: Vec<proc_macro2::TokenStream> = field_paths
         .iter()
         .map(|path| quote! { #path.into() })
@@ -392,7 +423,7 @@ fn prop_spec(managed_object_type: &Ident, fields: &Vec<FieldInfo>) -> proc_macro
                 path_set: Some(vec![
                     #(#prop_paths_quoted),*
                 ]),
-                r#type: Into::<&str>::into(vim_rs::types::enums::MoTypesEnum::#managed_object_type).to_string(),
+                r#type: vim_rs::types::enums::MoTypesEnum::#managed_object_type.as_str().to_string(),
             }
         }
     }
@@ -406,8 +437,10 @@ fn id() -> proc_macro2::TokenStream {
     }
 }
 
-fn generate_try_from_object_content(struct_name: &Ident, fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
-
+fn generate_try_from_object_content(
+    struct_name: &Ident,
+    fields: &Vec<FieldInfo>,
+) -> proc_macro2::TokenStream {
     let mut field_declarations: Vec<proc_macro2::TokenStream> = Vec::with_capacity(fields.len());
     let mut field_conversions: Vec<proc_macro2::TokenStream> = Vec::with_capacity(fields.len());
     let mut field_assignments: Vec<proc_macro2::TokenStream> = Vec::with_capacity(fields.len());
@@ -418,14 +451,26 @@ fn generate_try_from_object_content(struct_name: &Ident, fields: &Vec<FieldInfo>
         field_declarations.push(quote! { let mut #field_alias = None; });
         match field.field_data.processing_type {
             resolver::FieldProcessingType::Enum(enum_field_name) => {
-                field_conversions.push(generate_enum_field_from_content(field, &field_alias, &enum_field_name));
-            },
+                field_conversions.push(generate_enum_field_from_content(
+                    field,
+                    &field_alias,
+                    &enum_field_name,
+                ));
+            }
             resolver::FieldProcessingType::Struct => {
-                field_conversions.push(generate_struct_field_from_content(field, &field_alias, &field.field_data.data_type));
-            },
+                field_conversions.push(generate_struct_field_from_content(
+                    field,
+                    &field_alias,
+                    &field.field_data.data_type,
+                ));
+            }
             resolver::FieldProcessingType::Trait => {
-                field_conversions.push(generate_trait_field_from_content(field, &field_alias, &field.field_data.data_type));
-            },
+                field_conversions.push(generate_trait_field_from_content(
+                    field,
+                    &field_alias,
+                    &field.field_data.data_type,
+                ));
+            }
         }
         if field.field_data.is_optional {
             field_assignments.push(quote! { #field_name: #field_alias });
@@ -466,8 +511,10 @@ fn generate_try_from_object_content(struct_name: &Ident, fields: &Vec<FieldInfo>
     }
 }
 
-fn generate_try_from_object_update(struct_name: &Ident, fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
-
+fn generate_try_from_object_update(
+    struct_name: &Ident,
+    fields: &Vec<FieldInfo>,
+) -> proc_macro2::TokenStream {
     let mut field_declarations: Vec<proc_macro2::TokenStream> = Vec::with_capacity(fields.len());
     let mut field_conversions: Vec<proc_macro2::TokenStream> = Vec::with_capacity(fields.len());
     let mut field_assignments: Vec<proc_macro2::TokenStream> = Vec::with_capacity(fields.len());
@@ -478,14 +525,26 @@ fn generate_try_from_object_update(struct_name: &Ident, fields: &Vec<FieldInfo>)
         field_declarations.push(quote! { let mut #field_alias = None; });
         match field.field_data.processing_type {
             resolver::FieldProcessingType::Enum(enum_field_name) => {
-                field_conversions.push(generate_enum_field_from_update(field, &field_alias, &enum_field_name));
-            },
+                field_conversions.push(generate_enum_field_from_update(
+                    field,
+                    &field_alias,
+                    &enum_field_name,
+                ));
+            }
             resolver::FieldProcessingType::Struct => {
-                field_conversions.push(generate_struct_field_from_update(field, &field_alias, &field.field_data.data_type));
-            },
+                field_conversions.push(generate_struct_field_from_update(
+                    field,
+                    &field_alias,
+                    &field.field_data.data_type,
+                ));
+            }
             resolver::FieldProcessingType::Trait => {
-                field_conversions.push(generate_trait_field_from_update(field, &field_alias, &field.field_data.data_type));
-            },
+                field_conversions.push(generate_trait_field_from_update(
+                    field,
+                    &field_alias,
+                    &field.field_data.data_type,
+                ));
+            }
         }
         if field.field_data.is_optional {
             field_assignments.push(quote! { #field_name: #field_alias });
@@ -536,22 +595,25 @@ fn generate_try_from_object_update(struct_name: &Ident, fields: &Vec<FieldInfo>)
     }
 }
 
-
 fn generate_apply_update(fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
-
     let mut field_conversions: Vec<proc_macro2::TokenStream> = Vec::with_capacity(fields.len());
     for field in fields {
-
         match field.field_data.processing_type {
             resolver::FieldProcessingType::Enum(enum_field_name) => {
                 field_conversions.push(generate_enum_field_apply(field, &enum_field_name));
-            },
+            }
             resolver::FieldProcessingType::Struct => {
-                field_conversions.push(generate_struct_field_apply(field, &field.field_data.data_type));
-            },
+                field_conversions.push(generate_struct_field_apply(
+                    field,
+                    &field.field_data.data_type,
+                ));
+            }
             resolver::FieldProcessingType::Trait => {
-                field_conversions.push(generate_trait_field_apply(field, &field.field_data.data_type));
-            },
+                field_conversions.push(generate_trait_field_apply(
+                    field,
+                    &field.field_data.data_type,
+                ));
+            }
         }
     }
 
@@ -593,7 +655,11 @@ fn generate_apply_update(fields: &Vec<FieldInfo>) -> proc_macro2::TokenStream {
 //                         ref val => return Err(pc_helpers::Error::InvalidPropertyType { property: "<property path>".to_string(), "<enum field name>".to_string(), got: pc_helpers::type_name(val)}),
 //                     };
 //                 }
-fn generate_enum_field_from_content(field: &FieldInfo, field_alias: &Ident, enum_field_name: &str) -> proc_macro2::TokenStream {
+fn generate_enum_field_from_content(
+    field: &FieldInfo,
+    field_alias: &Ident,
+    enum_field_name: &str,
+) -> proc_macro2::TokenStream {
     let path = &field.field_data.vim_path;
     let enum_field = Ident::new(enum_field_name, field.property_field.path.span());
     quote! {
@@ -606,7 +672,11 @@ fn generate_enum_field_from_content(field: &FieldInfo, field_alias: &Ident, enum
     }
 }
 
-fn generate_enum_field_from_update(field: &FieldInfo, field_alias: &Ident, enum_field_name: &str) -> proc_macro2::TokenStream {
+fn generate_enum_field_from_update(
+    field: &FieldInfo,
+    field_alias: &Ident,
+    enum_field_name: &str,
+) -> proc_macro2::TokenStream {
     let path = &field.field_data.vim_path;
     let enum_field = Ident::new(enum_field_name, field.property_field.path.span());
     quote! {
@@ -645,12 +715,11 @@ fn generate_enum_field_apply(field: &FieldInfo, enum_field_name: &str) -> proc_m
     }
 }
 
-
 // 2. Generate struct type deserialize code ofr structs without children
 //                "<property path>" => {
 //                     <field name with ordinal> = match prop.val {
 //                         VimAny::Object(obj) => {
-//                             let name: &'static str = obj.data_type().into();
+//                             let name = obj.data_type().as_str();
 //                             match obj.as_any_box().downcast() {
 //                                 Ok(val) => Some(*val),
 //                                 Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<struct type name>".to_string(), name.to_string())),
@@ -659,14 +728,18 @@ fn generate_enum_field_apply(field: &FieldInfo, enum_field_name: &str) -> proc_m
 //                         ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<struct type name>".to_string(), got: pc_helpers::type_name(val)}),
 //                     };
 //                 }
-fn generate_struct_field_from_content(field: &FieldInfo, field_alias: &Ident, struct_type: &str) -> proc_macro2::TokenStream {
+fn generate_struct_field_from_content(
+    field: &FieldInfo,
+    field_alias: &Ident,
+    struct_type: &str,
+) -> proc_macro2::TokenStream {
     let path = &field.field_data.vim_path;
 
     quote! {
         #path => {
             #field_alias = match prop.val {
                 vim_rs::types::vim_any::VimAny::Object(obj) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match obj.as_any_box().downcast() {
                         Ok(val) => Some(*val),
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), name.to_string())),
@@ -678,13 +751,17 @@ fn generate_struct_field_from_content(field: &FieldInfo, field_alias: &Ident, st
     }
 }
 
-fn generate_struct_field_from_update(field: &FieldInfo, field_alias: &Ident, struct_type: &str) -> proc_macro2::TokenStream {
+fn generate_struct_field_from_update(
+    field: &FieldInfo,
+    field_alias: &Ident,
+    struct_type: &str,
+) -> proc_macro2::TokenStream {
     let path = &field.field_data.vim_path;
     quote! {
         #path => {
             #field_alias = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Object(obj)) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match obj.as_any_box().downcast() {
                         Ok(val) => Some(*val),
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), name.to_string())),
@@ -713,7 +790,7 @@ fn generate_struct_field_apply(field: &FieldInfo, struct_type: &str) -> proc_mac
         #path => {
             self.#field_name = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Object(obj)) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match obj.as_any_box().downcast() {
                         Ok(val) => #value_code,
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #struct_type.to_string(), name.to_string())),
@@ -730,7 +807,7 @@ fn generate_struct_field_apply(field: &FieldInfo, struct_type: &str) -> proc_mac
 //                "<property path>" => {
 //                     <field name with ordinal> = match prop.val {
 //                         vim_rs::types::vim_any::VimAny::Object(obj) => {
-//                             let name: &'static str = obj.data_type().into();
+//                             let name = obj.data_type().as_str();
 //                             match obj.into_box() {
 //                                 Ok(val) => Some(val),
 //                                 Err(_) => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<trait type name>".to_string(), name.to_string())),
@@ -739,13 +816,17 @@ fn generate_struct_field_apply(field: &FieldInfo, struct_type: &str) -> proc_mac
 //                         ref val => return Err(pc_helpers::Error::InvalidPropertyType {property: "<property path>".to_string(), "<trait type name>".to_string(), got: pc_helpers::type_name(val)}),
 //                     };
 //                 }
-fn generate_trait_field_from_content(field: &FieldInfo, field_alias: &Ident, trait_type: &str) -> proc_macro2::TokenStream {
+fn generate_trait_field_from_content(
+    field: &FieldInfo,
+    field_alias: &Ident,
+    trait_type: &str,
+) -> proc_macro2::TokenStream {
     let path = &field.field_data.vim_path;
     quote! {
         #path => {
             #field_alias = match prop.val {
                 vim_rs::types::vim_any::VimAny::Object(obj) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => Some(val),
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), name.to_string())),
@@ -757,13 +838,17 @@ fn generate_trait_field_from_content(field: &FieldInfo, field_alias: &Ident, tra
     }
 }
 
-fn generate_trait_field_from_update(field: &FieldInfo, field_alias: &Ident, trait_type: &str) -> proc_macro2::TokenStream {
+fn generate_trait_field_from_update(
+    field: &FieldInfo,
+    field_alias: &Ident,
+    trait_type: &str,
+) -> proc_macro2::TokenStream {
     let path = &field.field_data.vim_path;
     quote! {
         #path => {
             #field_alias = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Object(obj)) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => Some(val),
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), name.to_string())),
@@ -793,7 +878,7 @@ fn generate_trait_field_apply(field: &FieldInfo, trait_type: &str) -> proc_macro
         #path => {
             self.#field_name = match prop.val {
                 Some(vim_rs::types::vim_any::VimAny::Object(obj)) => {
-                    let name: &'static str = obj.data_type().into();
+                    let name = obj.data_type().as_str();
                     match vim_rs::types::convert::CastInto::into_box(obj) {
                         Ok(val) => #value_code,
                         Err(_) => return Err(vim_rs::core::error::Error::invalid_property_type( #path.to_string(), #trait_type.to_string(), name.to_string())),
@@ -805,4 +890,3 @@ fn generate_trait_field_apply(field: &FieldInfo, trait_type: &str) -> proc_macro
         }
     }
 }
-

@@ -1,5 +1,7 @@
 use super::super::types::vim_any::VimAny;
-use crate::types::structs::{ManagedObjectReference, ObjectSpec, PropertySpec, TraversalSpec};
+use crate::types::structs::{
+    ManagedObjectReference, ObjectSpec, PropertySpec, SelectionSpec, TraversalSpec,
+};
 
 /// Trait for errors that can be properly boxed and sent across threads
 pub trait BoxableError: std::error::Error + Send + Sync + 'static {}
@@ -10,16 +12,15 @@ impl<E: std::error::Error + Send + Sync + 'static> BoxableError for E {}
 // Re-export the unified error types for backwards compatibility within this module
 pub use super::error::{Error, Result};
 
-
 /// Get the type name from a VimAny value. This is used for error reporting.
-pub fn type_name(value :&VimAny) -> String {
+pub fn type_name(value: &VimAny) -> String {
     match value {
         VimAny::Value(value) => {
-            let type_name : &'static str = value.into();
+            let type_name = value.as_str();
             type_name.to_string()
-        },
+        }
         VimAny::Object(obj) => {
-            let type_name : &'static str = obj.data_type().into();
+            let type_name = obj.data_type().as_str();
             type_name.to_string()
         }
     }
@@ -32,9 +33,6 @@ pub trait Queriable {
     fn prop_spec() -> PropertySpec;
 }
 
-
-type StaticStr = &'static str;
-
 /// Create an ObjectSpec for a view. This is used to specify objects to be monitored from a view.
 pub(crate) fn obj_spec_for_view(view_moref: ManagedObjectReference) -> Vec<ObjectSpec> {
     let r#type = view_moref.r#type.clone();
@@ -42,12 +40,13 @@ pub(crate) fn obj_spec_for_view(view_moref: ManagedObjectReference) -> Vec<Objec
         obj: view_moref,
         skip: Some(false),
         select_set: Some(vec![Box::new(TraversalSpec {
-            name: Some("traverseEntities".to_string()),
-            r#type: StaticStr::from(r#type).to_string(),
+            selection_spec_: SelectionSpec {
+                name: Some("traverseEntities".to_string()),
+            },
+            r#type: r#type.as_str().to_string(),
             path: "view".to_string(),
             skip: Some(false),
             select_set: None,
         })]),
     }]
 }
-

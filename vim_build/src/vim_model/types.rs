@@ -236,7 +236,7 @@ pub struct Enum {
 }
 
 /// Indication if a type is to be emitted or not. Types marked enum are always emitted.
-/// Types marked prune are emitted but their children are not. The children of pruned types are 
+/// Types marked prune are emitted but their children are not. The children of pruned types are
 /// marked as skip. The skip types are not emitted.
 /// To simplify code generation, the name of the pruned parent type is kept in the skipped children
 /// types.
@@ -266,7 +266,7 @@ impl EmitMode {
 ///   deviceProtocol:
 ///     description: |2
 ///       VRDMA Device protocol.
-///   
+///
 ///       See
 ///       *VirtualVmxnet3VrdmaOptionDeviceProtocols_enum* for more information.
 ///     type: string
@@ -306,6 +306,11 @@ impl Struct {
 
     pub fn has_children(&self) -> bool {
         !self.children.is_empty()
+    }
+
+    /// Returns true if this struct has no fields of its own
+    pub fn is_empty(&self) -> bool {
+        self.fields.is_empty()
     }
 }
 
@@ -438,8 +443,8 @@ impl TryFrom<&RefOr<Schema>> for DataType {
                 } => {
                     let array_type = DataType::try_from(items)?;
                     Ok(DataType::Array(Box::new(array_type)))
-                },
-                Schema{
+                }
+                Schema {
                     schema_type: None,
                     all_of: Some(all_of),
                     ..
@@ -460,7 +465,7 @@ impl TryFrom<&RefOr<Schema>> for DataType {
                         "{:?}",
                         inline_schema
                     )))
-                },
+                }
                 _ => Err(super::Error::UnsupportedType(format!(
                     "{:?}",
                     inline_schema
@@ -605,6 +610,33 @@ impl Model {
             }
         }
         false
+    }
+
+    /// Returns true if any type in the inheritance chain (including the given type) has fields
+    pub fn has_any_fields_in_chain(&self, struct_name: &str) -> Result<bool> {
+        let chain = self.inheritance_chain(&struct_name.to_string())?;
+        for struct_ref in chain {
+            if !struct_ref.borrow().is_empty() {
+                return Ok(true);
+            }
+        }
+        Ok(false)
+    }
+
+    /// Returns true if the type has a parent with fields (i.e., parent is not just a marker)
+    pub fn has_useful_parent(&self, struct_name: &str) -> Result<bool> {
+        let struct_type = self
+            .structs
+            .get(struct_name)
+            .ok_or_else(|| super::Error::InvalidReference(struct_name.to_string()))?;
+
+        if let Some(parent_name) = &struct_type.borrow().parent {
+            if parent_name == "Any" {
+                return Ok(false);
+            }
+            return self.has_any_fields_in_chain(parent_name);
+        }
+        Ok(false)
     }
 }
 

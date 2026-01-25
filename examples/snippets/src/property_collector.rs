@@ -23,7 +23,7 @@
 
 use std::env;
 use vim_rs::mo::{AlarmManager, ContainerView, PropertyCollector, ViewManager};
-use vim_rs::types::structs;
+use vim_rs::types::structs::{self, SelectionSpec};
 
 use anyhow::Result;
 use log::{debug, info};
@@ -46,7 +46,7 @@ async fn main() -> Result<()> {
     let view_moref = view_manager
         .create_container_view(
             &content.root_folder,
-            Some(&[Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string()]),
+            Some(&[MoTypesEnum::VirtualMachine.as_str().to_string()]),
             true,
         )
         .await?;
@@ -61,8 +61,10 @@ async fn main() -> Result<()> {
             obj: view_moref.clone(),
             skip: Some(false),
             select_set: Some(vec![Box::new(structs::TraversalSpec {
-                name: Some("traverseEntities".to_string()),
-                r#type: Into::<&str>::into(MoTypesEnum::ContainerView).to_string(),
+                selection_spec_: SelectionSpec {
+                    name: Some("traverseEntities".to_string()),
+                },
+                r#type: MoTypesEnum::ContainerView.as_str().to_string(),
                 path: "view".to_string(),
                 skip: Some(false),
                 select_set: None,
@@ -71,7 +73,7 @@ async fn main() -> Result<()> {
         prop_set: vec![structs::PropertySpec {
             all: Some(false),
             path_set: Some(vec!["name".to_string()]),
-            r#type: Into::<&str>::into(MoTypesEnum::VirtualMachine).to_string(),
+            r#type: MoTypesEnum::VirtualMachine.as_str().to_string(),
         }],
         report_missing_objects_in_results: Some(true),
     }];

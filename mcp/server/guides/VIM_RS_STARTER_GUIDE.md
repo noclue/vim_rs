@@ -221,7 +221,7 @@ match device {
 
 vim_rs provides **three ways** to work with polymorphic trait types:
 
-#### Option 1: Cast to a More Different Trait (MOST COMMON)
+#### Option 1: Cast to a More Specific Trait (MOST COMMON)
 
 Use `CastInto` trait to convert between trait types:
 
@@ -244,8 +244,8 @@ if let Some(devices) = vm.devices {
             continue;  // Not an ethernet card, skip
         };
         
-        // Now we can use VirtualEthernetCardTrait methods
-        if let Some(mac) = eth.get_mac_address() {
+        // Access fields directly via Deref coercion
+        if let Some(mac) = &eth.mac_address {
             println!("MAC: {}", mac);
         }
     }
@@ -257,6 +257,7 @@ if let Some(devices) = vm.devices {
 - Import the target trait (e.g., `VirtualEthernetCardTrait`)
 - Use `.as_ref().into_ref()` to get `Option<&dyn TargetTrait>`
 - Use `let Some(...) = ... else { continue }` pattern to handle failed trait cast
+- Access fields directly (e.g., `eth.mac_address`) - no getter methods needed
 
 #### Method 2: Downcast to Concrete Struct Type
 
@@ -275,18 +276,16 @@ if let Some(devices) = vm.devices {
 }
 ```
 
-#### Method 3: Use Trait Getter Methods
+#### Method 3: Use Direct Field Access via Deref
 
-All traits provide `get_*()` methods to access fields from the struct type:
+Structs use compositional inheritance with Deref, allowing direct field access through the inheritance chain:
 
 ```rust
-use vim_rs::types::traits::VirtualDeviceTrait;
-
 if let Some(devices) = vm.devices {
     for device in devices {
-        // VirtualDeviceTrait provides get_key(), get_backing(), etc.
-        let key = device.get_key();
-        let controller_key = device.get_controller_key();
+        // Access fields directly - Deref provides access to parent fields
+        let key = device.key;
+        let controller_key = device.controller_key;
         println!("Device {} on controller {:?}", key, controller_key);
     }
 }
@@ -323,8 +322,8 @@ async fn get_vm_macs(client: Arc<Client>) -> Result<Vec<(String, String)>> {
                     continue;
                 };
                 
-                // Use trait getter method
-                if let Some(mac) = eth.get_mac_address() {
+                // Access mac_address field directly via Deref
+                if let Some(mac) = &eth.mac_address {
                     results.push((vm.name.clone(), mac.clone()));
                 }
             }
@@ -341,13 +340,14 @@ async fn get_vm_macs(client: Arc<Client>) -> Result<Vec<(String, String)>> {
 |----------|--------|---------|
 | Filter by category | Cast to trait | Get all ethernet cards from devices |
 | Check specific type | Downcast to struct | Find VirtualE1000 specifically |
-| Access base fields | Use trait getters | Get device key from any device |
+| Access base fields | Direct field access | Get device key from any device via `device.key` |
 
 **🔑 Key Takeaway:**
 - Polymorphic types are `Box<dyn SomeTrait>`, not enums
 - Use `.as_ref().into_ref()` to cast between traits
 - Use `.as_any_ref().downcast_ref::<Type>()` to get concrete types
 - Always import `vim_rs::types::convert::CastInto`
+- Access fields directly via Deref (e.g., `device.key`, `eth.mac_address`)
 
 
 ---
@@ -384,8 +384,8 @@ for device in devices {
         continue;  // Not an ethernet card (disk, controller, etc.)
     };
     
-    // Use the trait method - works for E1000, E1000e, Vmxnet3, etc.
-    if let Some(mac) = eth.get_mac_address() {
+    // Access mac_address field directly - works for E1000, E1000e, Vmxnet3, etc.
+    if let Some(mac) = &eth.mac_address {
         println!("MAC: {}", mac);
     }
 }
@@ -395,7 +395,7 @@ for device in devices {
 - Import `vim_rs::types::convert::CastInto`
 - Import target trait `vim_rs::types::traits::VirtualEthernetCardTrait`
 - Use `device.as_ref().into_ref()` to cast
-- Use `eth.get_mac_address()` to get the MAC
+- Access `&eth.mac_address` directly (fields available via Deref)
 
 ---
 
@@ -626,7 +626,7 @@ use vim_rs::types::traits::VirtualEthernetCardTrait;
 let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
     continue;
 };
-// Now use eth.get_mac_address(), etc.
+// Access fields directly via Deref: eth.mac_address, eth.key, etc.
 ```
 
 
@@ -653,8 +653,8 @@ use vim_rs::types::traits::VirtualEthernetCardTrait;
 let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
     continue;
 };
-// Get MAC using trait method
-if let Some(mac) = eth.get_mac_address() {
+// Access mac_address field directly via Deref
+if let Some(mac) = &eth.mac_address {
     println!("MAC: {}", mac);
 }
 ```
@@ -721,6 +721,35 @@ let name: String = vm.name().await?;
 let task_tracker = TaskTracker::new(client.clone());
 let task_ref = vm.rename_task("NewName").await?;
 task_tracker.wait::<()>(task_ref).await?;  // ✅ Correct!
+```
+
+---
+
+❌ **DON'T** use `.into()` or `From::from()` to convert enums to strings:
+```rust
+// WRONG - these implementations have been removed
+let type_str: &'static str = mo_type.into();
+let type_str: &'static str = From::from(&mo_type);
+let type_str = Into::<&str>::into(MoTypesEnum::VirtualMachine);
+```
+
+✅ **DO** use `.as_str()` for enum-to-string conversion:
+```rust
+// Convert enum to string
+let type_str = mo_type.as_str();
+
+// If you need an owned String
+let type_string = mo_type.as_str().to_string();
+
+// Works for all vim_rs enums
+let vm_type = MoTypesEnum::VirtualMachine.as_str();  // "VirtualMachine"
+let status = ManagedEntityStatus::Green.as_str();    // "green"
+
+// ValueElements also has as_str() for VIM API type names
+let value = ValueElements::PrimitiveString("hello".to_string());
+let type_name = value.as_str();  // "string"
+let arr_value = ValueElements::ArrayOfManagedObjectReference(vec![]);
+let arr_type = arr_value.as_str();  // "ArrayOfManagedObjectReference"
 ```
 
 ## Understanding API Navigation Paths

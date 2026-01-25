@@ -1,7 +1,8 @@
-use std::fs::File;
 use super::json_to_tree::{get_type_name, property_to_tree_item};
 use super::prop_utils::to_json_value;
+use std::fs::File;
 
+use chrono::{Local, SecondsFormat};
 use indexmap::IndexMap;
 use log::{debug, warn};
 use ratatui::buffer::Buffer;
@@ -14,14 +15,11 @@ use serde_json::Value;
 use std::io::Write;
 use std::mem;
 use std::path::PathBuf;
-use chrono::{Local, SecondsFormat};
 use tui_tree_widget::{Scrollbar, Tree, TreeItem, TreeState};
 use vim_rs::core::pc_cache::Cache;
 use vim_rs::core::pc_helpers::Error;
 use vim_rs::types::enums::{ObjectUpdateKindEnum, PropertyChangeOpEnum};
-use vim_rs::types::structs::{
-    ManagedObjectReference, ObjectUpdate, PropertyChange, PropertySpec,
-};
+use vim_rs::types::structs::{ManagedObjectReference, ObjectUpdate, PropertyChange, PropertySpec};
 
 pub struct PropertyBrowserState {
     /// PropertyCollector filter for the current view
@@ -35,7 +33,10 @@ pub struct PropertyBrowserState {
 }
 
 impl PropertyBrowserState {
-    pub async fn new(obj: ManagedObjectReference, tree_state: Option<TreeState<String>>) -> anyhow::Result<Self> {
+    pub async fn new(
+        obj: ManagedObjectReference,
+        tree_state: Option<TreeState<String>>,
+    ) -> anyhow::Result<Self> {
         let res = Self {
             obj,
             properties: IndexMap::new(),
@@ -56,7 +57,10 @@ impl PropertyBrowserState {
         Ok(self.replace_tree_state(new_tree_state))
     }
 
-    pub fn replace_tree_state(&mut self, new_tree_state: Option<TreeState<String>>) -> TreeState<String> {
+    pub fn replace_tree_state(
+        &mut self,
+        new_tree_state: Option<TreeState<String>>,
+    ) -> TreeState<String> {
         let tree_state = new_tree_state.unwrap_or_else(|| TreeState::default());
         mem::replace(&mut self.state, tree_state)
     }
@@ -255,11 +259,12 @@ impl PropertyBrowserState {
             .unwrap_or_default();
 
         // Get object type and ID
-        let object_type: &'static str = From::from(&self.obj.r#type);
+        let object_type: &str = self.obj.r#type.as_str();
         let object_id = &self.obj.value;
 
         // Get current datetime in RFC 3339 format
-        let timestamp = Local::now().to_rfc3339_opts(SecondsFormat::Secs, true)
+        let timestamp = Local::now()
+            .to_rfc3339_opts(SecondsFormat::Secs, true)
             .replace([':', '-'], ""); // Remove characters not suitable for filenames
 
         // Build filename
@@ -283,12 +288,11 @@ impl PropertyBrowserState {
 
         Ok(filename)
     }
-
 }
 
 impl Cache for PropertyBrowserState {
     fn prop_spec(&self) -> vim_rs::core::pc_helpers::Result<PropertySpec> {
-        let s: &'static str = From::from(&self.obj.r#type);
+        let s = self.obj.r#type.as_str();
         Ok(PropertySpec {
             r#type: s.to_string(),
             all: Some(true),
@@ -364,7 +368,7 @@ impl StatefulWidget for PropertyBrowser<'_> {
     type State = PropertyBrowserState;
 
     fn render(self, area: Rect, buf: &mut Buffer, state: &mut Self::State) {
-        let object_type: &'static str = From::from(&state.obj.r#type);
+        let object_type = state.obj.r#type.as_str();
         let object_id = &state.obj.value;
 
         let mut spans = Vec::new();
@@ -392,8 +396,13 @@ impl StatefulWidget for PropertyBrowser<'_> {
                 Block::bordered()
                     .title(title)
                     .title_alignment(Alignment::Center)
-                    .title_bottom(Line::styled("→ - expand, ← - collapse, ↑↓ - scroll", Style::default().fg(Color::Cyan)).alignment(Alignment::Right)),
-
+                    .title_bottom(
+                        Line::styled(
+                            "→ - expand, ← - collapse, ↑↓ - scroll",
+                            Style::default().fg(Color::Cyan),
+                        )
+                        .alignment(Alignment::Right),
+                    ),
             )
             .highlight_style(self.highlight_style)
             .highlight_symbol(self.highlight_symbol);

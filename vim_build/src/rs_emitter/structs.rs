@@ -1,6 +1,5 @@
 // Generator for Rust data models from vim
 
-use std::borrow::Borrow;
 use crate::vim_model::Model;
 
 use super::super::printer::Printer;
@@ -68,20 +67,71 @@ impl<'a> TypesEmitter<'a> {
         let struct_name = to_type_name(name);
         if name == "ManagedObjectReference" {
             // Add Clone, PartialEq in addition for ManagedObjectReference
-            self.printer.println("#[derive(Clone, PartialEq, Eq, Hash)]")?;
+            self.printer
+                .println("#[derive(Clone, PartialEq, Eq, Hash)]")?;
         }
         self.printer
             .println(&format!("pub struct {struct_name} {{"))?;
         self.printer.indent();
         self.emit_struct_all_fields(vim_type)?;
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println(&format!(r#"/// Discriminator value. If `None` during serialization "{}" will be used."#, vim_type.discriminator()))?;
-            self.printer.println("pub type_: Option<struct_enum::StructType>,")?;
-            self.printer.println("/// Extra fields not part of the base type schema")?;
-            self.printer.println("pub extra_fields_: std::collections::HashMap<String, serde_json::Value>,")?;
+            self.printer.println(&format!(
+                r#"/// Discriminator value. If `None` during serialization "{}" will be used."#,
+                vim_type.discriminator()
+            ))?;
+            self.printer
+                .println("pub type_: Option<struct_enum::StructType>,")?;
+            self.printer
+                .println("/// Extra fields not part of the base type schema")?;
+            self.printer.println(
+                "pub extra_fields_: std::collections::HashMap<String, serde_json::Value>,",
+            )?;
         }
         self.printer.dedent();
         self.printer.println("}")?;
+        self.emit_deref_implementations(vim_type)?;
+        Ok(())
+    }
+
+    fn emit_deref_implementations(&mut self, vim_type: &Struct) -> Result<()> {
+        // Only emit Deref if there's a parent with fields (not a marker trait)
+        if let Some(parent) = vim_type.parent.as_ref() {
+            if parent != "Any" && self.vim_model.has_any_fields_in_chain(parent)? {
+                let struct_name = to_type_name(&vim_type.name);
+                let parent_type = to_type_name(parent);
+                let parent_field = parent_field_name(parent);
+
+                // Emit Deref implementation
+                self.printer
+                    .println(&format!("impl std::ops::Deref for {struct_name} {{"))?;
+                self.printer.indent();
+                self.printer
+                    .println(&format!("type Target = super::structs::{parent_type};"))?;
+                self.printer.newline()?;
+                self.printer.println("fn deref(&self) -> &Self::Target {")?;
+                self.printer.indent();
+                self.printer.println(&format!("&self.{parent_field}"))?;
+                self.printer.dedent();
+                self.printer.println("}")?;
+                self.printer.dedent();
+                self.printer.println("}")?;
+                self.printer.newline()?;
+
+                // Emit DerefMut implementation
+                self.printer
+                    .println(&format!("impl std::ops::DerefMut for {struct_name} {{"))?;
+                self.printer.indent();
+                self.printer
+                    .println("fn deref_mut(&mut self) -> &mut Self::Target {")?;
+                self.printer.indent();
+                self.printer.println(&format!("&mut self.{parent_field}"))?;
+                self.printer.dedent();
+                self.printer.println("}")?;
+                self.printer.dedent();
+                self.printer.println("}")?;
+                self.printer.newline()?;
+            }
+        }
         Ok(())
     }
 
@@ -93,7 +143,9 @@ impl<'a> TypesEmitter<'a> {
         prn.println("fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {")?;
         prn.indent();
         prn.println("let mut writer = crate::core::helpers::FmtWriter { formatter: f };")?;
-        prn.println("serde_json::to_writer_pretty(&mut writer, self).map_err(|_| std::fmt::Error)")?;
+        prn.println(
+            "serde_json::to_writer_pretty(&mut writer, self).map_err(|_| std::fmt::Error)",
+        )?;
         prn.dedent();
         prn.println("}")?;
         prn.dedent();
@@ -103,19 +155,20 @@ impl<'a> TypesEmitter<'a> {
     }
 
     fn emit_struct_all_fields(&mut self, vim_type: &Struct) -> Result<()> {
+        // Emit a single parent field instead of flattening all parent fields
+        // Skip parent field if parent has no fields (it's just a marker trait)
         if let Some(parent) = vim_type.parent.as_ref() {
-            if parent != "Any" {
-                // WE do not need to emit fields for the Any type
-                let parent_model_ref = self
-                    .vim_model
-                    .structs
-                    .get(parent)
-                    .ok_or_else(|| Error::TypeNotFound(parent.clone()))?
-                    .borrow();
-                let parent_model: &Struct = parent_model_ref.borrow();
-                self.emit_struct_all_fields(parent_model)?;
+            if parent != "Any" && self.vim_model.has_any_fields_in_chain(parent)? {
+                // Emit parent field for composition
+                let parent_field = parent_field_name(parent);
+                let parent_type = to_type_name(parent);
+                self.printer.println(&format!("// Parent field"))?;
+                self.printer.println(&format!(
+                    "pub {parent_field}: super::structs::{parent_type},"
+                ))?;
             }
         }
+        // Emit only this type's own fields
         self.emit_struct_fields(vim_type)
     }
     fn emit_struct_fields(&mut self, vim_type: &Struct) -> Result<()> {
@@ -143,6 +196,61 @@ impl<'a> TypesEmitter<'a> {
         Ok(())
     }
 
+    /// Build field access path for serialization. With composition, fields from parent types
+    /// are accessed through parent fields. E.g., for VirtualVmxnet accessing VirtualDevice.key:
+    /// "self.virtual_ethernet_card_.virtual_device_.key"
+    /// Skip empty parent types (marker traits) that have no fields.
+    fn build_field_access_path(
+        &self,
+        vim_type: &Struct,
+        target_struct_name: &str,
+        field_name: &str,
+    ) -> Result<String> {
+        if vim_type.name == target_struct_name {
+            // Field belongs to current struct
+            return Ok(format!("self.{}", field_name));
+        }
+
+        // Need to navigate through parent chain, skipping empty parents
+        let mut path = String::from("self");
+        let mut current_type_name = vim_type.name.clone();
+
+        loop {
+            let current_struct = self
+                .vim_model
+                .structs
+                .get(&current_type_name)
+                .ok_or_else(|| Error::TypeNotFound(current_type_name.clone()))?
+                .borrow();
+
+            if let Some(parent) = current_struct.parent.as_ref() {
+                if parent == "Any" {
+                    break;
+                }
+
+                // Only add parent field to path if parent has fields (not a marker trait)
+                if self.vim_model.has_any_fields_in_chain(parent)? {
+                    let parent_field = parent_field_name(parent);
+                    path.push_str(&format!(".{}", parent_field));
+                }
+
+                if parent == target_struct_name {
+                    // Found the parent that owns the field
+                    path.push_str(&format!(".{}", field_name));
+                    return Ok(path);
+                }
+
+                // Continue up the chain
+                current_type_name = parent.clone();
+            } else {
+                break;
+            }
+        }
+
+        // Fallback: use Deref (Rust will resolve automatically)
+        Ok(format!("self.{}", field_name))
+    }
+
     fn emit_serialize(&mut self, vim_type: &Struct) -> Result<()> {
         let struct_name = to_type_name(&vim_type.name);
         let discriminant = vim_type.discriminator();
@@ -158,10 +266,12 @@ impl<'a> TypesEmitter<'a> {
         self.printer.dedent();
         self.printer.println("{")?;
         self.printer.indent();
-        self.printer.println("let mut state = serializer.serialize_map(None)?;")?;
+        self.printer
+            .println("let mut state = serializer.serialize_map(None)?;")?;
         if vim_type.emit_mode == EmitMode::Prune {
             self.printer.println(&format!(r#"let type_ = self.type_.as_ref().unwrap_or(&struct_enum::StructType::{struct_name});"#))?;
-            self.printer.println(r#"state.serialize_entry("_typeName", type_)?;"#)?;
+            self.printer
+                .println(r#"state.serialize_entry("_typeName", type_)?;"#)?;
         } else {
             self.printer.println(&format!(
                 "state.serialize_entry(\"_typeName\", \"{discriminant}\")?;"
@@ -171,11 +281,19 @@ impl<'a> TypesEmitter<'a> {
             for (_, field) in &struct_type.borrow().fields {
                 let field_name = to_field_name(&field.name);
                 let serialization_name = &field.name;
+                let field_access = self.build_field_access_path(
+                    vim_type,
+                    &struct_type.borrow().name,
+                    &field_name,
+                )?;
+
                 if !field.optional {
                     let field_value = if field.vim_type == DataType::Binary {
-                        format!("&crate::core::helpers::SerializeBinary {{ value: &self.{field_name} }}")
+                        format!(
+                            "&crate::core::helpers::SerializeBinary {{ value: &{field_access} }}"
+                        )
                     } else {
-                        format!("&self.{field_name}")
+                        format!("&{field_access}")
                     };
                     self.printer.println(&format!(
                         "state.serialize_entry(\"{serialization_name}\", {field_value})?;"
@@ -187,7 +305,7 @@ impl<'a> TypesEmitter<'a> {
                         "field_value"
                     };
                     self.printer
-                        .println(&format!("if let Some(field_value) = &self.{field_name} {{"))?;
+                        .println(&format!("if let Some(field_value) = &{field_access} {{"))?;
                     self.printer.indent();
                     self.printer.println(&format!(
                         "state.serialize_entry(\"{serialization_name}\", {field_value})?;"
@@ -198,9 +316,11 @@ impl<'a> TypesEmitter<'a> {
             }
         }
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println("for (key, value) in &self.extra_fields_ {")?;
+            self.printer
+                .println("for (key, value) in &self.extra_fields_ {")?;
             self.printer.indent();
-            self.printer.println("state.serialize_entry(key, value)?;")?;
+            self.printer
+                .println("state.serialize_entry(key, value)?;")?;
             self.printer.dedent();
             self.printer.println("}")?;
         }
@@ -240,8 +360,9 @@ impl<'a> TypesEmitter<'a> {
         self.printer.println("}")?;
         self.printer.newline()?;
         if vim_type.emit_mode == EmitMode::Prune {
-            self.printer
-                .println(&format!("pub struct __{struct_name}Visitor(pub Option<struct_enum::StructType>);"))?;
+            self.printer.println(&format!(
+                "pub struct __{struct_name}Visitor(pub Option<struct_enum::StructType>);"
+            ))?;
         } else {
             self.printer
                 .println(&format!("struct __{struct_name}Visitor;"))?;
@@ -302,8 +423,9 @@ impl<'a> TypesEmitter<'a> {
         self.printer.indent();
         self.printer
             .println("let discriminator: struct_enum::StructType = map.next_value()?;")?;
-        self.printer
-            .println(&format!(r#"if discriminator != struct_enum::StructType::{struct_name} {{"#))?;
+        self.printer.println(&format!(
+            r#"if discriminator != struct_enum::StructType::{struct_name} {{"#
+        ))?;
         self.printer.indent();
         if vim_type.emit_mode == EmitMode::Prune {
             self.printer.println("type_ = Some(discriminator);")?;
@@ -334,7 +456,8 @@ impl<'a> TypesEmitter<'a> {
         if vim_type.emit_mode == EmitMode::Prune {
             self.printer.println(r#"_ => {"#)?;
             self.printer.indent();
-            self.printer.println("let value: serde_json::Value = map.next_value()?;")?;
+            self.printer
+                .println("let value: serde_json::Value = map.next_value()?;")?;
             self.printer.println("extra_fields_.insert(key, value);")?;
             self.printer.dedent();
             self.printer.println("},")?;
@@ -347,11 +470,70 @@ impl<'a> TypesEmitter<'a> {
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.newline()?;
-        self.printer.println(&format!("Ok({struct_name} {{"))?;
-        self.printer.indent();
+
+        // Build nested struct construction from innermost parent to current type
         field_count = 1;
-        for struct_type in &inheritance_chain {
-            for (_, field) in &(*struct_type).borrow().fields {
+
+        // Build from root to leaf - construct parent objects first, skipping empty parents
+        // Track which parent temp vars were actually created (non-empty types only)
+        for (idx, struct_type_ref) in inheritance_chain.iter().enumerate() {
+            let struct_ref = (**struct_type_ref).borrow();
+            let current_struct_name = to_type_name(&struct_ref.name);
+            let is_last = idx == inheritance_chain.len() - 1;
+
+            // Skip empty parent types (marker traits) - don't generate temp vars for them
+            // Only skip if this type AND all its ancestors have no fields
+            if !is_last && !self.vim_model.has_any_fields_in_chain(&struct_ref.name)? {
+                continue;
+            }
+
+            if is_last {
+                // This is the current type we're deserializing
+                self.printer
+                    .println(&format!("Ok({current_struct_name} {{"))?;
+            } else {
+                // This is a parent type, construct it inline
+                self.printer.println(&format!(
+                    "let {}_temp = {current_struct_name} {{",
+                    to_field_name(&struct_ref.name)
+                ))?;
+            }
+
+            self.printer.indent();
+
+            // If this struct has a parent (and not Any), it needs a parent field
+            // Find the nearest non-empty ancestor that has a temp var
+            if let Some(parent_name) = &struct_ref.parent {
+                if parent_name != "Any" && !is_last {
+                    // Find nearest non-empty ancestor
+                    let mut ancestor_name = parent_name.clone();
+                    loop {
+                        if self.vim_model.has_any_fields_in_chain(&ancestor_name)? {
+                            let parent_field = parent_field_name(&ancestor_name);
+                            let parent_temp_var = to_field_name(&ancestor_name);
+                            self.printer
+                                .println(&format!("{parent_field}: {parent_temp_var}_temp,"))?;
+                            break;
+                        }
+                        // Move up to next ancestor
+                        if let Some(next_parent) = &self.vim_model.structs.get(&ancestor_name) {
+                            if let Some(next) = &next_parent.borrow().parent {
+                                if next == "Any" {
+                                    break;
+                                }
+                                ancestor_name = next.clone();
+                            } else {
+                                break;
+                            }
+                        } else {
+                            break;
+                        }
+                    }
+                }
+            }
+
+            // Add this struct's own fields
+            for (_, field) in &struct_ref.fields {
                 let field_name = to_field_name(&field.name);
                 let field_value = if !field.optional {
                     format!("field{field_count}.ok_or(de::Error::missing_field(\"{field_name}\"))?")
@@ -362,13 +544,51 @@ impl<'a> TypesEmitter<'a> {
                     .println(&format!("{field_name}: {field_value},"))?;
                 field_count += 1;
             }
+
+            // Handle the current (last) struct specially
+            if is_last {
+                // Add parent field if exists and has fields (not a marker trait)
+                // Find the nearest non-empty ancestor
+                if let Some(parent_name) = &vim_type.parent {
+                    if parent_name != "Any" {
+                        let mut ancestor_name = parent_name.clone();
+                        loop {
+                            if self.vim_model.has_any_fields_in_chain(&ancestor_name)? {
+                                let parent_field = parent_field_name(&ancestor_name);
+                                let parent_temp_var = to_field_name(&ancestor_name);
+                                self.printer
+                                    .println(&format!("{parent_field}: {parent_temp_var}_temp,"))?;
+                                break;
+                            }
+                            // Move up to next ancestor
+                            if let Some(next_parent) = &self.vim_model.structs.get(&ancestor_name) {
+                                if let Some(next) = &next_parent.borrow().parent {
+                                    if next == "Any" {
+                                        break;
+                                    }
+                                    ancestor_name = next.clone();
+                                } else {
+                                    break;
+                                }
+                            } else {
+                                break;
+                            }
+                        }
+                    }
+                }
+
+                if vim_type.emit_mode == EmitMode::Prune {
+                    self.printer.println("type_,")?;
+                    self.printer.println("extra_fields_,")?;
+                }
+                self.printer.dedent();
+                self.printer.println("})")?;
+            } else {
+                self.printer.dedent();
+                self.printer.println("};")?;
+                self.printer.newline()?;
+            }
         }
-        if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println("type_,")?;
-            self.printer.println("extra_fields_,")?;
-        }
-        self.printer.dedent();
-        self.printer.println("})")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();

@@ -281,7 +281,7 @@ impl ResourceManager {
                         Ok(data_loaders::load_from_container::<VmData>(cache_mgr, &parent_id).await?)
                     }
                     _ => {
-                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        let r#type = parent_id.r#type.as_str();
                         Err(ResourceError::UnsupportedExpansion {
                             resource_type,
                             parent_type: r#type.to_string(),
@@ -301,7 +301,7 @@ impl ResourceManager {
                         Ok(data_loaders::load_from_list::<Host>(cache_mgr, &hosts).await?)
                     }
                     _ => {
-                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        let r#type = parent_id.r#type.as_str();
                         Err(ResourceError::UnsupportedExpansion {
                             resource_type,
                             parent_type: r#type.to_string(),
@@ -315,7 +315,7 @@ impl ResourceManager {
                         Ok(data_loaders::load_from_property::<DatastoreDetails>(cache_mgr, &parent_id, "datastore").await?)
                     }
                     _ => {
-                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        let r#type = parent_id.r#type.as_str();
                         Err(ResourceError::UnsupportedExpansion {
                             resource_type,
                             parent_type: r#type.to_string(),
@@ -324,7 +324,7 @@ impl ResourceManager {
                 }
             }
             ResourceType::Cluster => {
-                let r#type: &'static str = From::from(&parent_id.r#type);
+                let r#type = parent_id.r#type.as_str();
                 Err(ResourceError::UnsupportedExpansion {
                     resource_type,
                     parent_type: r#type.to_string(),
@@ -336,7 +336,7 @@ impl ResourceManager {
                         Ok(data_loaders::load_from_property::<NetworkDetails>(cache_mgr, &parent_id, "network").await?)
                     }
                     _ => {
-                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        let r#type = parent_id.r#type.as_str();
                         Err(ResourceError::UnsupportedExpansion {
                             resource_type,
                             parent_type: r#type.to_string(),
@@ -354,7 +354,7 @@ impl ResourceManager {
                         Ok(data_loaders::load_from_property::<TaskInfo>(cache_mgr, &parent_id, "recentTask").await?)
                     }
                     _ => {
-                        let r#type: &'static str = From::from(&parent_id.r#type);
+                        let r#type = parent_id.r#type.as_str();
                         Err(ResourceError::UnsupportedExpansion {
                             resource_type,
                             parent_type: r#type.to_string(),

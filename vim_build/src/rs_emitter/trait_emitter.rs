@@ -1,14 +1,15 @@
 use crate::printer::Printer;
-use crate::rs_emitter::common::{emit_description, emit_description_with_paths};
+use crate::rs_emitter::common::emit_description_with_paths;
 use crate::rs_emitter::errors::{Error, Result};
-use crate::rs_emitter::{get_by_ref, getter_name, to_field_name, to_type_name, TypeDefResolver};
-use crate::vim_model::{EmitMode, Field, Model, Struct};
+use crate::rs_emitter::{
+    parent_field_name, to_field_name, to_type_name,
+};
+use crate::vim_model::{EmitMode, Model, Struct};
 use std::ops::Deref;
 pub struct TraitEmitter<'a> {
     type_name: String,
     model: &'a Model,
     printer: &'a mut dyn Printer,
-    tdf: TypeDefResolver<'a>,
 }
 
 impl<'a> TraitEmitter<'a> {
@@ -17,7 +18,6 @@ impl<'a> TraitEmitter<'a> {
             type_name,
             model,
             printer,
-            tdf: TypeDefResolver::new(model),
         }
     }
 
@@ -86,11 +86,81 @@ impl<'a> TraitEmitter<'a> {
             struct_name, base_trait
         ))?;
         self.printer.indent();
-        for (prop_name, property) in &vim_type.fields {
-            self.emit_trait_field(prop_name, property)?;
+
+        // Only add accessor methods if type has any fields in its chain
+        let has_fields = self.model.has_any_fields_in_chain(&self.type_name)?;
+        if has_fields {
+            // Add parent struct accessor methods
+            self.printer.println(&format!(
+                "/// Get a reference to the {} parent struct",
+                struct_name
+            ))?;
+            self.printer.println(&format!(
+                "fn get_{}(&self) -> &super::structs::{};",
+                to_field_name(&self.type_name),
+                struct_name
+            ))?;
+            self.printer.println(&format!(
+                "/// Get a mutable reference to the {} parent struct",
+                struct_name
+            ))?;
+            self.printer.println(&format!(
+                "fn get_{}_mut(&mut self) -> &mut super::structs::{};",
+                to_field_name(&self.type_name),
+                struct_name
+            ))?;
         }
         self.printer.dedent();
         self.printer.println("}")?;
+
+        // Add Deref implementations for the trait (only if has fields)
+        if has_fields {
+            self.emit_trait_deref_implementations(vim_type)?;
+        }
+
+        Ok(())
+    }
+
+    fn emit_trait_deref_implementations(&mut self, _vim_type: &Struct) -> Result<()> {
+        let struct_name = to_type_name(&self.type_name);
+        let getter_method = format!("get_{}", to_field_name(&self.type_name));
+        let getter_mut_method = format!("get_{}_mut", to_field_name(&self.type_name));
+
+        // Emit Deref for trait object
+        self.printer.println(&format!(
+            "impl std::ops::Deref for dyn {}Trait {{",
+            struct_name
+        ))?;
+        self.printer.indent();
+        self.printer
+            .println(&format!("type Target = super::structs::{};", struct_name))?;
+        self.printer.newline()?;
+        self.printer.println("fn deref(&self) -> &Self::Target {")?;
+        self.printer.indent();
+        self.printer.println(&format!("self.{}()", getter_method))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // Emit DerefMut for trait object
+        self.printer.println(&format!(
+            "impl std::ops::DerefMut for dyn {}Trait {{",
+            struct_name
+        ))?;
+        self.printer.indent();
+        self.printer
+            .println("fn deref_mut(&mut self) -> &mut Self::Target {")?;
+        self.printer.indent();
+        self.printer
+            .println(&format!("self.{}()", getter_mut_method))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
         Ok(())
     }
 
@@ -192,38 +262,82 @@ impl<'a> TraitEmitter<'a> {
         self.printer
             .println(&format!("impl {}Trait for {} {{", base_name, struct_name))?;
         self.printer.indent();
-        for (prop_name, property) in &trait_type.fields {
-            self.emit_field_getter(prop_name, property)?;
+
+        // Only implement accessor methods if trait type has fields
+        let has_fields = self.model.has_any_fields_in_chain(&trait_type.name)?;
+        if has_fields {
+            // Implement parent accessor methods
+            let trait_struct_name = &trait_type.name;
+            let getter_method = format!("get_{}", to_field_name(trait_struct_name));
+            let getter_mut_method = format!("get_{}_mut", to_field_name(trait_struct_name));
+
+            // Build the access path from type_name to trait_type
+            let access_path = self.build_parent_access_path(type_name, trait_struct_name)?;
+
+            self.printer.println(&format!(
+                "fn {}(&self) -> &super::structs::{} {{ {} }}",
+                getter_method, base_name, access_path
+            ))?;
+
+            // For mutable getter, we need to return without the leading & if it's self
+            let mut_access = if access_path == "&self" {
+                "self".to_string()
+            } else {
+                access_path.replace("&self", "&mut self")
+            };
+            self.printer.println(&format!(
+                "fn {}(&mut self) -> &mut super::structs::{} {{ {} }}",
+                getter_mut_method, base_name, mut_access
+            ))?;
         }
         self.printer.dedent();
         self.printer.println("}")?;
         Ok(())
     }
 
-    fn emit_field_getter(&mut self, prop_name: &str, property: &Field) -> Result<()> {
-        let getter_name = getter_name(prop_name);
-        let mut field_access = format!("self.{}", to_field_name(prop_name));
-        let field_type = self.getter_return_type(property)?;
-        if get_by_ref(&property.vim_type) {
-            field_access = format!("&{field_access}");
+    /// Build access path from child type to parent type through composition chain
+    /// Skip empty parents (marker traits) that have no fields
+    fn build_parent_access_path(&self, from_type: &str, to_type: &str) -> Result<String> {
+        if from_type == to_type {
+            return Ok("&self".to_string());
         }
-        self.printer.println(&format!(
-            "fn {getter_name}(&self) -> {field_type} {{ {field_access} }}"
-        ))?;
-        Ok(())
-    }
 
-    fn emit_trait_field(&mut self, prop_name: &str, property: &Field) -> Result<()> {
-        {
-            let this = &mut *self;
-            let doc_string: &Option<String> = &property.description;
-            emit_description(this.printer, doc_string)
-        }?;
-        let field_name = getter_name(prop_name);
-        let field_type = self.getter_return_type(property)?;
-        self.printer
-            .println(&format!("fn {field_name}(&self) -> {field_type};"))?;
-        Ok(())
+        // Navigate parent chain from from_type until we find to_type, skipping empty parents
+        let mut path = String::from("&self");
+        let mut current_type_name = from_type.to_string();
+
+        loop {
+            let current_struct = self
+                .model
+                .structs
+                .get(&current_type_name)
+                .ok_or_else(|| Error::TypeNotFound(current_type_name.clone()))?
+                .borrow();
+
+            if let Some(parent) = current_struct.parent.as_ref() {
+                if parent == "Any" {
+                    break;
+                }
+
+                // Only add parent field to path if parent has fields (not a marker trait)
+                if self.model.has_any_fields_in_chain(parent)? {
+                    let parent_field = parent_field_name(parent);
+                    path.push_str(&format!(".{}", parent_field));
+                }
+
+                if parent == to_type {
+                    return Ok(path);
+                }
+
+                // Continue up the chain
+                current_type_name = parent.clone();
+            } else {
+                break;
+            }
+        }
+
+        // Could not find parent in chain - might be accessing via Deref
+        Ok("&self".to_string())
     }
 
     fn generate_cast_from_trait(&mut self) -> Result<()> {
@@ -280,16 +394,5 @@ impl<'a> TraitEmitter<'a> {
         self.printer.println("}")?;
 
         Ok(())
-    }
-
-    fn getter_return_type(&mut self, property: &Field) -> Result<String> {
-        let mut field_type = self.tdf.field_type(property)?;
-        if crate::rs_emitter::structs::get_by_ref(&property.vim_type) {
-            field_type = format!("&{field_type}");
-        }
-        if "&String" == field_type {
-            field_type = "&str".to_string();
-        }
-        Ok(field_type)
     }
 }

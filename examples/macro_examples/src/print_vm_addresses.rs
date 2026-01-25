@@ -93,13 +93,8 @@ async fn main() -> anyhow::Result<()> {
                 else {
                     continue;
                 };
-                let mac_addr = eth.get_mac_address().as_ref().unwrap_or(&dash);
-                info!(
-                    "VM: {:25}, MAC: {:18}, Device: {:6}",
-                    vm.name,
-                    mac_addr,
-                    eth.get_key()
-                );
+                let mac_addr = eth.mac_address.as_ref().unwrap_or(&dash);
+                info!("VM: {:25}, MAC: {:18}, Device: {:6}", vm.name, mac_addr, eth.key);
                 has_eth = true;
             }
             if has_eth {

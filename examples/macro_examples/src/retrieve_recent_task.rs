@@ -65,7 +65,7 @@ use std::env;
 use utils::connect;
 use vim_macros::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
-use vim_rs::types::structs::{ObjectSpec, TraversalSpec};
+use vim_rs::types::structs::{ObjectSpec, SelectionSpec, TraversalSpec};
 
 vim_retrievable!(
     struct TaskInfo: Task {
@@ -73,8 +73,6 @@ vim_retrievable!(
         fault = "info.error",
     }
 );
-
-type StaticStr = &'static str;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
@@ -87,8 +85,10 @@ async fn main() -> anyhow::Result<()> {
         obj: task_manager_ref.clone(),
         skip: Some(false),
         select_set: Some(vec![Box::new(TraversalSpec {
-            name: Some("expandProperty".to_string()),
-            r#type: StaticStr::from(task_manager_ref.r#type).to_string(),
+            selection_spec_: SelectionSpec {
+                name: Some("expandProperty".to_string()),
+            },
+            r#type: task_manager_ref.r#type.as_str().to_string(),
             path: "recentTask".to_string(),
             skip: Some(false),
             select_set: None,
