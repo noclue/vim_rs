@@ -275,30 +275,47 @@ Let's look into the details.
 
 ### Data Structs
 
-Firstly, for every structure type from the VIM API, we have a corresponding Rust struct type. For example, a network card could be described with the `VirtualE1000` structure. It looks roughly as follows:
+Firstly, for every structure type from the VIM API, we have a corresponding Rust struct type. The library uses **compositional inheritance** where child types contain their parent as a field and implement `Deref`/`DerefMut` for seamless field access.
+
+For example, a network card could be described with the `VirtualE1000` structure:
 
 ```rust
 pub struct VirtualE1000 {
-    pub key: i32,
-    pub device_info: Option<Box<dyn super::traits::DescriptionTrait>>,
-    pub backing: Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>>,
-    pub connectable: Option<VirtualDeviceConnectInfo>,
-    pub slot_info: Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>>,
-    pub controller_key: Option<i32>,
-    pub unit_number: Option<i32>,
-    pub numa_node: Option<i32>,
-    pub device_group_info: Option<VirtualDeviceDeviceGroupInfo>,
-    pub dynamic_property: Option<Vec<DynamicProperty>>,
-    pub address_type: Option<String>,
-    pub mac_address: Option<String>,
-    pub wake_on_lan_enabled: Option<bool>,
-    pub resource_allocation: Option<VirtualEthernetCardResourceAllocation>,
-    pub external_id: Option<String>,
-    pub upt_compatibility_enabled: Option<bool>,
+    // Parent field - contains all VirtualEthernetCard fields (which contains VirtualDevice fields)
+    pub virtual_ethernet_card_: VirtualEthernetCard,
+}
+
+impl Deref for VirtualE1000 {
+    type Target = VirtualEthernetCard;
+    fn deref(&self) -> &Self::Target { &self.virtual_ethernet_card_ }
+}
+
+impl DerefMut for VirtualE1000 {
+    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.virtual_ethernet_card_ }
 }
 ```
 
-Let's look at some details. First, we see that fields optional to the API use Rust `Option` (e.g., `Option<i32>`) while required fields require a valid value (e.g., `i32`). Next, we see that arrays of elements are expressed as Rust `Vec`. For fields that have children or can form a cycle, `Box` indirection is used. For fields of polymorphic types, i.e., those that have children, a `dyn *Trait` type is used, which refers to a trait type implemented by all alternative structures (`Option<Box<dyn DescriptionTrait>>`).
+Thanks to Deref coercion, you can access fields from the entire inheritance chain directly:
+
+```rust
+let e1000: &VirtualE1000 = /* ... */;
+let key: i32 = e1000.key;                    // From VirtualDevice (grandparent)
+let mac: &Option<String> = &e1000.mac_address; // From VirtualEthernetCard (parent)
+```
+
+For reference, the parent `VirtualEthernetCard` structure looks like:
+
+```rust
+pub struct VirtualEthernetCard {
+    pub virtual_device_: VirtualDevice,      // Parent field
+    pub address_type: Option<String>,
+    pub mac_address: Option<String>,
+    pub wake_on_lan_enabled: Option<bool>,
+    // ... other fields
+}
+```
+
+Let's look at some details. Fields optional in the API use Rust `Option` (e.g., `Option<i32>`) while required fields require a valid value (e.g., `i32`). Arrays are expressed as Rust `Vec`. For fields that have children or can form a cycle, `Box` indirection is used. For fields of polymorphic types, i.e., those that have children, a `dyn *Trait` type is used, which refers to a trait type implemented by all alternative structures (`Option<Box<dyn DescriptionTrait>>`).
 
 Structure types support `serde` JSON serialization and deserialization as well as debug print.
 
@@ -326,23 +343,18 @@ let eth: Box<dyn VirtualEthernetCardTrait> = vd.into_box().unwrap();
 
 As Rust `TryInto` mirrors the `TryFrom` trait, `CastInto` has a mirror `CastFrom` trait.
 
-Last but not least, the VIM trait provides read-only accessors to the fields of the type they represent. For example, the `VirtualDeviceTrait` looks as follows:
+Child structs access parent fields through Deref coercion. For example, `VirtualE1000` contains a `virtual_ethernet_card_` field and implements `Deref<Target = VirtualEthernetCard>`, which in turn derefs to `VirtualDevice`. This allows direct field access:
 
 ```rust
-pub trait VirtualDeviceTrait : super::traits::DataObjectTrait {
-    fn get_key(&self) -> i32;
-    fn get_device_info(&self) -> &Option<Box<dyn super::traits::DescriptionTrait>>;
-    fn get_backing(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBackingInfoTrait>>;
-    fn get_connectable(&self) -> &Option<VirtualDeviceConnectInfo>;
-    fn get_slot_info(&self) -> &Option<Box<dyn super::traits::VirtualDeviceBusSlotInfoTrait>>;
-    fn get_controller_key(&self) -> Option<i32>;
-    fn get_unit_number(&self) -> Option<i32>;
-    fn get_numa_node(&self) -> Option<i32>;
-    fn get_device_group_info(&self) -> &Option<VirtualDeviceDeviceGroupInfo>;
-}
+// Direct field access through Deref chain
+let key: i32 = device.key;                           // From VirtualDevice
+let mac: &Option<String> = &eth_card.mac_address;    // From VirtualEthernetCard
+let backing = &device.backing;                        // From VirtualDevice
 ```
 
-As we see, the same types are used as in the struct types. The `get_*` methods return borrowed references to complex types.
+This compositional model provides the same ergonomic access as the previous expanded-fields approach while significantly reducing generated code size.
+The new model supports both read and mutation operations and is thus much
+easier when an update is required.
 
 For more details on design decisions and performance considerations, please see the FAQ section below.
 
@@ -371,8 +383,7 @@ fn get_event_type_id(event: &Event) -> String {
             return event_type_id.to_string();
         }
     }
-    let s: &'static str = type_.into();
-    s.to_string()
+    type_.as_str().to_string()
 }
 ```
 

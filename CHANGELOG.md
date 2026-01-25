@@ -26,6 +26,24 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Changed
 
+- **BREAKING: Compositional inheritance using Deref/DerefMut**.
+  - Child structs no longer have parent fields expanded inline. Instead, they contain a single parent field (e.g., `virtual_ethernet_card_: VirtualEthernetCard`).
+  - Child structs implement `Deref` and `DerefMut` to their parent, providing seamless field access.
+  - Access parent fields directly: `device.key` instead of the old expanded field pattern.
+  - This change significantly reduces generated code size while maintaining ergonomic field access.
+  - **Migration**: Field access patterns remain the same due to Deref coercion. No code changes needed for read access.
+
+- **BREAKING: Removed trait getter methods (`get_*`)**.
+  - Trait getter methods like `get_key()`, `get_mac_address()`, `get_backing()` are removed.
+  - Use direct field access via Deref instead: `device.key`, `eth.mac_address`, `device.backing`.
+  - **Migration**: Replace `obj.get_field()` with `obj.field` or `&obj.field` for references.
+  - Example: `eth.get_mac_address()` → `&eth.mac_address`
+
+- **BREAKING: Removed DataObject trait methods**.
+  - The `DataObjectTrait` no longer has getter methods.
+  - Empty descendant types (those with no additional fields beyond their parent) are pruned from the hierarchy.
+  - This simplifies the type hierarchy and reduces code size.
+
 - **BREAKING: Enum `as_str()` now returns `&str` with instance lifetime** instead of `&'static str`.
   - This enables `as_str()` to return the actual string value held in `Other_` variants.
   - Previously, `Other_` variants would return the placeholder string `__OTHER__`.
@@ -47,7 +65,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Generates manual `Serialize`, `Deserialize`, `Display`, and `Debug` implementations.
   - Each enum's PHF map provides constant-time lookups for string-to-variant conversion.
 
-- **Examples updated** to use new `.as_str()` API instead of `.into()`.
+- **Examples updated** to use direct field access instead of trait getter methods and `.as_str()` API.
 
 ### Deprecated
 
@@ -56,6 +74,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **BREAKING: `strum_macros` derive removed from all enums**.
   - `#[strum(serialize = "...")]` attributes no longer used.
   - String conversions now handled by generated PHF maps and manual implementations.
+
+- **BREAKING: Trait getter methods removed** (see Changed section for migration).
 
 ### Fixed
 
