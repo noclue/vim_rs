@@ -2607,8 +2607,6 @@ dependencies = [
  "rustc_version",
  "serde",
  "serde_json",
- "strum",
- "strum_macros",
  "thiserror 2.0.18",
  "tokio",
  "vim_macros",

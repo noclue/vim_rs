@@ -16,11 +16,11 @@ pub use super::error::{Error, Result};
 pub fn type_name(value: &VimAny) -> String {
     match value {
         VimAny::Value(value) => {
-            let type_name: &'static str = value.into();
+            let type_name = value.as_str();
             type_name.to_string()
         }
         VimAny::Object(obj) => {
-            let type_name: &'static str = obj.data_type().into();
+            let type_name = obj.data_type().as_str();
             type_name.to_string()
         }
     }

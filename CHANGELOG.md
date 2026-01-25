@@ -23,6 +23,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **Serde benchmarks**: Added `vim_rs/benches/serde_bench.rs` to measure serialization/deserialization performance.
 - **Serde tests**: Added `vim_rs/tests/serde_test.rs` to verify enum serialization round-trips.
+- **`ValueElements::as_str()`**: Returns the VIM API type name as it appears in the OpenAPI specification.
+  - Useful for type discrimination, logging, and debugging when working with `VimAny` and dynamic property values.
+  - Example: `ValueElements::PrimitiveString(_)` returns `"string"`, `ValueElements::ArrayOfManagedObjectReference(_)` returns `"ArrayOfManagedObjectReference"`.
 
 ### Changed
 
@@ -52,6 +55,7 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 - **BREAKING: Removed `From<EnumType> for &'static str` implementations**.
   - Use `.as_str()` method instead of `.into()` or `From::from()` for string conversion.
   - Example: `my_enum.as_str()` instead of `my_enum.into()`.
+  - this applies to the `ValueElements` enum too.
 
 - **Performance: Replaced macro-based enum derives with PHF (Perfect Hash Function) maps**.
   - Removed `serde::Deserialize`, `serde::Serialize`, and `strum_macros::IntoStaticStr` derives from all ~300+ enums.

@@ -744,6 +744,12 @@ let type_string = mo_type.as_str().to_string();
 // Works for all vim_rs enums
 let vm_type = MoTypesEnum::VirtualMachine.as_str();  // "VirtualMachine"
 let status = ManagedEntityStatus::Green.as_str();    // "green"
+
+// ValueElements also has as_str() for VIM API type names
+let value = ValueElements::PrimitiveString("hello".to_string());
+let type_name = value.as_str();  // "string"
+let arr_value = ValueElements::ArrayOfManagedObjectReference(vec![]);
+let arr_type = arr_value.as_str();  // "ArrayOfManagedObjectReference"
 ```
 
 ## Understanding API Navigation Paths
