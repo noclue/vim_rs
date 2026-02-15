@@ -52,7 +52,10 @@ impl VsanSpaceReportSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanEntitySpaceUsage>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanEntitySpaceUsage>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -101,7 +104,8 @@ impl VsanSpaceReportSystem {
         let path = format!("/vsan/VsanSpaceReportSystem/{moId}/VsanQuerySpaceUsage", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanSpaceUsage = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanSpaceUsage = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query the space usage including the space usage overview and the space usage
@@ -136,32 +140,102 @@ impl VsanSpaceReportSystem {
         let path = format!("/vsan/VsanSpaceReportSystem/{moId}/QueryVsanManagedStorageSpaceUsage", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::VsanSpaceUsageWithDatastoreType> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::VsanSpaceUsageWithDatastoreType> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanQueryEntitySpaceUsageRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "querySpec")]
     query_spec: &'a crate::types::structs::VsanSpaceQuerySpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanQueryEntitySpaceUsageRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanQueryEntitySpaceUsageRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanQueryEntitySpaceUsageRequestTypeSer<'b, 'a> {
+    data: &'b VsanQueryEntitySpaceUsageRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanQueryEntitySpaceUsageRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanQueryEntitySpaceUsageRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("querySpec"), &self.data.query_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanQuerySpaceUsageRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "storagePolicies")]
     storage_policies: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "whatifCapacityOnly")]
     whatif_capacity_only: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanQuerySpaceUsageRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanQuerySpaceUsageRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanQuerySpaceUsageRequestTypeSer<'b, 'a> {
+    data: &'b VsanQuerySpaceUsageRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanQuerySpaceUsageRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanQuerySpaceUsageRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.storage_policies else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("storagePolicies"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.whatif_capacity_only else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("whatifCapacityOnly"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryVsanManagedStorageSpaceUsageRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "querySpec")]
     query_spec: &'a crate::types::structs::QueryVsanManagedStorageSpaceUsageSpec,
+}
+
+impl<'a> miniserde::Serialize for QueryVsanManagedStorageSpaceUsageRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVsanManagedStorageSpaceUsageRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVsanManagedStorageSpaceUsageRequestTypeSer<'b, 'a> {
+    data: &'b QueryVsanManagedStorageSpaceUsageRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryVsanManagedStorageSpaceUsageRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVsanManagedStorageSpaceUsageRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("querySpec"), &self.data.query_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

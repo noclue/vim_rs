@@ -17,9 +17,9 @@ fn init() {
 fn test_vim_any_box() {
     init();
     let e1000 = create_virtual_e1000();
-    let s = serde_json::to_string(&e1000).unwrap();
+    let s = miniserde::json::to_string(&e1000);
     debug!("{}", s);
-    let any: VimAny = serde_json::from_str(&s).unwrap();
+    let any: VimAny = miniserde::json::from_str(&s).unwrap();
     info!("{:?}", any);
 }
 
@@ -27,9 +27,9 @@ fn test_vim_any_box() {
 fn test_eth_json() {
     init();
     let e1000 = create_virtual_e1000();
-    let s = serde_json::to_string(&e1000).unwrap();
+    let s = miniserde::json::to_string(&e1000);
     debug!("{}", s);
-    let eth: VirtualE1000 = serde_json::from_str(&s).unwrap();
+    let eth: VirtualE1000 = miniserde::json::from_str(&s).unwrap();
     info!("{:?}", eth);
 }
 
@@ -37,9 +37,9 @@ fn test_eth_json() {
 fn test_ethernet_box() {
     init();
     let e1000 = create_virtual_e1000();
-    let s = serde_json::to_string(&e1000).unwrap();
+    let s = miniserde::json::to_string(&e1000);
     debug!("{}", s);
-    let vd: Box<dyn VirtualDeviceTrait> = serde_json::from_str(&s).unwrap();
+    let vd: Box<dyn VirtualDeviceTrait> = miniserde::json::from_str(&s).unwrap();
     assert_eq!(vd.key, 1000);
     let eth: Box<dyn VirtualEthernetCardTrait> = vd.into_box().unwrap();
     assert_eq!(

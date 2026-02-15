@@ -51,7 +51,8 @@ impl IoFilterManager {
         let path = format!("/IoFilterManager/{moId}/InitiateTransitionToVLCM_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Install an IO Filter on a compute resource.
@@ -101,7 +102,8 @@ impl IoFilterManager {
         let path = format!("/IoFilterManager/{moId}/InstallIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Return the list of virtual disks that use an IO Filter installed on
@@ -134,7 +136,8 @@ impl IoFilterManager {
         let path = format!("/IoFilterManager/{moId}/QueryDisksUsingFilter", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::VirtualDiskId> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::VirtualDiskId> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Return the information for the IO Filters that are installed on the cluster.
@@ -160,7 +163,10 @@ impl IoFilterManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ClusterIoFilterInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ClusterIoFilterInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -193,7 +199,8 @@ impl IoFilterManager {
         let path = format!("/IoFilterManager/{moId}/QueryIoFilterIssues", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::IoFilterQueryIssueResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::IoFilterQueryIssueResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Resolve the errors occurred during an installation/uninstallation/upgrade
@@ -238,7 +245,8 @@ impl IoFilterManager {
         let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnCluster_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Resolve the errors occurred during an installation/uninstallation/upgrade
@@ -283,7 +291,8 @@ impl IoFilterManager {
         let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnHost_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Uninstall an IO Filter from a compute resource.
@@ -330,7 +339,8 @@ impl IoFilterManager {
         let path = format!("/IoFilterManager/{moId}/UninstallIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Upgrade an IO Filter on a compute resource.
@@ -387,80 +397,272 @@ impl IoFilterManager {
         let path = format!("/IoFilterManager/{moId}/UpgradeIoFilter_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "InitiateTransitionToVLCMRequestType", tag = "_typeName")]
 struct InitiateTransitionToVlcmRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InitiateTransitionToVlcmRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InitiateTransitionToVlcmRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InitiateTransitionToVlcmRequestTypeSer<'b, 'a> {
+    data: &'b InitiateTransitionToVlcmRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InitiateTransitionToVlcmRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InitiateTransitionToVLCMRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct InstallIoFilterRequestType<'a> {
-    #[serde(rename = "vibUrl")]
     vib_url: &'a str,
-    #[serde(rename = "compRes")]
     comp_res: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vibSslTrust")]
     vib_ssl_trust: Option<&'a dyn crate::types::traits::IoFilterManagerSslTrustTrait>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InstallIoFilterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InstallIoFilterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InstallIoFilterRequestTypeSer<'b, 'a> {
+    data: &'b InstallIoFilterRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InstallIoFilterRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InstallIoFilterRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vibUrl"), &self.data.vib_url as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("compRes"), &self.data.comp_res as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.vib_ssl_trust else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vibSslTrust"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryDisksUsingFilterRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
-    #[serde(rename = "compRes")]
     comp_res: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDisksUsingFilterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDisksUsingFilterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDisksUsingFilterRequestTypeSer<'b, 'a> {
+    data: &'b QueryDisksUsingFilterRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryDisksUsingFilterRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDisksUsingFilterRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("compRes"), &self.data.comp_res as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryIoFilterInfoRequestType<'a> {
-    #[serde(rename = "compRes")]
     comp_res: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryIoFilterInfoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryIoFilterInfoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryIoFilterInfoRequestTypeSer<'b, 'a> {
+    data: &'b QueryIoFilterInfoRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryIoFilterInfoRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryIoFilterInfoRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("compRes"), &self.data.comp_res as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryIoFilterIssuesRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
-    #[serde(rename = "compRes")]
     comp_res: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryIoFilterIssuesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryIoFilterIssuesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryIoFilterIssuesRequestTypeSer<'b, 'a> {
+    data: &'b QueryIoFilterIssuesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryIoFilterIssuesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryIoFilterIssuesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("compRes"), &self.data.comp_res as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ResolveInstallationErrorsOnClusterRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ResolveInstallationErrorsOnClusterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ResolveInstallationErrorsOnClusterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ResolveInstallationErrorsOnClusterRequestTypeSer<'b, 'a> {
+    data: &'b ResolveInstallationErrorsOnClusterRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ResolveInstallationErrorsOnClusterRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ResolveInstallationErrorsOnClusterRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ResolveInstallationErrorsOnHostRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
     host: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ResolveInstallationErrorsOnHostRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ResolveInstallationErrorsOnHostRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ResolveInstallationErrorsOnHostRequestTypeSer<'b, 'a> {
+    data: &'b ResolveInstallationErrorsOnHostRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ResolveInstallationErrorsOnHostRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ResolveInstallationErrorsOnHostRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UninstallIoFilterRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
-    #[serde(rename = "compRes")]
     comp_res: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UninstallIoFilterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UninstallIoFilterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UninstallIoFilterRequestTypeSer<'b, 'a> {
+    data: &'b UninstallIoFilterRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UninstallIoFilterRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UninstallIoFilterRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("compRes"), &self.data.comp_res as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpgradeIoFilterRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
-    #[serde(rename = "compRes")]
     comp_res: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "vibUrl")]
     vib_url: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vibSslTrust")]
     vib_ssl_trust: Option<&'a dyn crate::types::traits::IoFilterManagerSslTrustTrait>,
+}
+
+impl<'a> miniserde::Serialize for UpgradeIoFilterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpgradeIoFilterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpgradeIoFilterRequestTypeSer<'b, 'a> {
+    data: &'b UpgradeIoFilterRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpgradeIoFilterRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpgradeIoFilterRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("compRes"), &self.data.comp_res as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("vibUrl"), &self.data.vib_url as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.vib_ssl_trust else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vibSslTrust"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

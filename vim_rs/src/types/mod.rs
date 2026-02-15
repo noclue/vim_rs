@@ -9,4 +9,6 @@ pub mod vim_any;
 pub mod as_any;
 pub mod convert;
 pub mod vim_object_trait;
+pub mod mini_de_static;
+pub mod mini_helpers;
 

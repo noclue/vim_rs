@@ -1,50 +1,47 @@
 use super::vim_object_trait::VimObjectTrait;
-use super::dyn_serialize;
 use super::convert::CastFrom;
 use super::struct_enum::StructType;
 use super::structs::*;
-use serde::de;
-use super::vim_any::VimAny;
+use super::mini_de_static::{VimObjectHolder, VimObjectHolderBuilder};
+
+miniserde::make_place!(Place);
 
 /// This is the built-in base interface implemented by all
 /// data objects.
 pub trait DataObjectTrait : super::traits::VimObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DataObjectTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DataObjectTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DataObjectVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DataObjectTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DataObjectVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DataObjectTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DataObjectTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DataObjectVisitor {
-    type Value = Box<dyn DataObjectTrait>;
+struct DataObjectTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DataObjectTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DataObjectTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DataObjectTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DataObjectTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -10729,41 +10726,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
 /// - `EsxAgentManager::create_agency(agency_config_info).scope?`
 pub trait AgencyScopeTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn AgencyScopeTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn AgencyScopeTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(AgencyScopeVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn AgencyScopeTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct AgencyScopeVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn AgencyScopeTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(AgencyScopeTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for AgencyScopeVisitor {
-    type Value = Box<dyn AgencyScopeTrait>;
+struct AgencyScopeTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn AgencyScopeTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid AgencyScopeTrait JSON object with a _typeName field")
+impl miniserde::de::Map for AgencyScopeTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn AgencyScopeTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -10814,41 +10808,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgencyScope
 /// *(10 of 12 paths)*
 pub trait AgentSslTrustTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn AgentSslTrustTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn AgentSslTrustTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(AgentSslTrustVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn AgentSslTrustTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct AgentSslTrustVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn AgentSslTrustTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(AgentSslTrustTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for AgentSslTrustVisitor {
-    type Value = Box<dyn AgentSslTrustTrait>;
+struct AgentSslTrustTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn AgentSslTrustTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid AgentSslTrustTrait JSON object with a _typeName field")
+impl miniserde::de::Map for AgentSslTrustTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn AgentSslTrustTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -10895,41 +10886,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AgentSslTru
 /// - `EsxAgentManager::create_agency(agency_config_info).agent_config?[*].vm_storage_policies?[*]`
 pub trait AgentStoragePolicyTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn AgentStoragePolicyTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn AgentStoragePolicyTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(AgentStoragePolicyVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn AgentStoragePolicyTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct AgentStoragePolicyVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn AgentStoragePolicyTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(AgentStoragePolicyTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for AgentStoragePolicyVisitor {
-    type Value = Box<dyn AgentStoragePolicyTrait>;
+struct AgentStoragePolicyTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn AgentStoragePolicyTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid AgentStoragePolicyTrait JSON object with a _typeName field")
+impl miniserde::de::Map for AgentStoragePolicyTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn AgentStoragePolicyTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -10993,41 +10981,38 @@ impl std::ops::DerefMut for dyn EamObjectRuntimeInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn EamObjectRuntimeInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn EamObjectRuntimeInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(EamObjectRuntimeInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn EamObjectRuntimeInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct EamObjectRuntimeInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn EamObjectRuntimeInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(EamObjectRuntimeInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for EamObjectRuntimeInfoVisitor {
-    type Value = Box<dyn EamObjectRuntimeInfoTrait>;
+struct EamObjectRuntimeInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn EamObjectRuntimeInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid EamObjectRuntimeInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for EamObjectRuntimeInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn EamObjectRuntimeInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -11178,41 +11163,38 @@ impl std::ops::DerefMut for dyn IssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn IssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn IssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(IssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn IssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct IssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn IssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(IssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for IssueVisitor {
-    type Value = Box<dyn IssueTrait>;
+struct IssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn IssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid IssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for IssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn IssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -11831,41 +11813,38 @@ impl std::ops::DerefMut for dyn AgencyIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn AgencyIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn AgencyIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(AgencyIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn AgencyIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct AgencyIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn AgencyIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(AgencyIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for AgencyIssueVisitor {
-    type Value = Box<dyn AgencyIssueTrait>;
+struct AgencyIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn AgencyIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid AgencyIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for AgencyIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn AgencyIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -12454,41 +12433,38 @@ impl std::ops::DerefMut for dyn AgentIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn AgentIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn AgentIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(AgentIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn AgentIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct AgentIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn AgentIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(AgentIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for AgentIssueVisitor {
-    type Value = Box<dyn AgentIssueTrait>;
+struct AgentIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn AgentIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid AgentIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for AgentIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn AgentIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -12869,41 +12845,38 @@ impl std::ops::DerefMut for dyn VibIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VibIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VibIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VibIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VibIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VibIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VibIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VibIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VibIssueVisitor {
-    type Value = Box<dyn VibIssueTrait>;
+struct VibIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VibIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VibIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VibIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VibIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -13035,41 +13008,38 @@ impl std::ops::DerefMut for dyn VibNotInstalledTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VibNotInstalledTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VibNotInstalledTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VibNotInstalledVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VibNotInstalledTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VibNotInstalledVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VibNotInstalledTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VibNotInstalledTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VibNotInstalledVisitor {
-    type Value = Box<dyn VibNotInstalledTrait>;
+struct VibNotInstalledTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VibNotInstalledTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VibNotInstalledTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VibNotInstalledTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VibNotInstalledTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -13143,41 +13113,38 @@ impl std::ops::DerefMut for dyn VmIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmIssueVisitor {
-    type Value = Box<dyn VmIssueTrait>;
+struct VmIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -13348,41 +13315,38 @@ impl std::ops::DerefMut for dyn VmDeployedTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmDeployedTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmDeployedTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmDeployedVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmDeployedTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmDeployedVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmDeployedTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmDeployedTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmDeployedVisitor {
-    type Value = Box<dyn VmDeployedTrait>;
+struct VmDeployedTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmDeployedTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmDeployedTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmDeployedTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmDeployedTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -13452,41 +13416,38 @@ impl std::ops::DerefMut for dyn VmPoweredOffTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmPoweredOffTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmPoweredOffTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmPoweredOffVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmPoweredOffTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmPoweredOffVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmPoweredOffTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmPoweredOffTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmPoweredOffVisitor {
-    type Value = Box<dyn VmPoweredOffTrait>;
+struct VmPoweredOffTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmPoweredOffTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmPoweredOffTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmPoweredOffTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmPoweredOffTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -13556,41 +13517,38 @@ impl std::ops::DerefMut for dyn VmNotDeployedTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmNotDeployedTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmNotDeployedTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmNotDeployedVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmNotDeployedTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmNotDeployedVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmNotDeployedTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmNotDeployedTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmNotDeployedVisitor {
-    type Value = Box<dyn VmNotDeployedTrait>;
+struct VmNotDeployedTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmNotDeployedTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmNotDeployedTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmNotDeployedTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmNotDeployedTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -13715,41 +13673,38 @@ impl std::ops::DerefMut for dyn NoAgentVmDatastoreTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn NoAgentVmDatastoreTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn NoAgentVmDatastoreTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(NoAgentVmDatastoreVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn NoAgentVmDatastoreTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct NoAgentVmDatastoreVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn NoAgentVmDatastoreTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(NoAgentVmDatastoreTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for NoAgentVmDatastoreVisitor {
-    type Value = Box<dyn NoAgentVmDatastoreTrait>;
+struct NoAgentVmDatastoreTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn NoAgentVmDatastoreTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid NoAgentVmDatastoreTrait JSON object with a _typeName field")
+impl miniserde::de::Map for NoAgentVmDatastoreTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn NoAgentVmDatastoreTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -13808,41 +13763,38 @@ impl std::ops::DerefMut for dyn NoAgentVmNetworkTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn NoAgentVmNetworkTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn NoAgentVmNetworkTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(NoAgentVmNetworkVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn NoAgentVmNetworkTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct NoAgentVmNetworkVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn NoAgentVmNetworkTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(NoAgentVmNetworkTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for NoAgentVmNetworkVisitor {
-    type Value = Box<dyn NoAgentVmNetworkTrait>;
+struct NoAgentVmNetworkTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn NoAgentVmNetworkTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid NoAgentVmNetworkTrait JSON object with a _typeName field")
+impl miniserde::de::Map for NoAgentVmNetworkTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn NoAgentVmNetworkTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -13900,41 +13852,38 @@ impl std::ops::DerefMut for dyn PersonalityAgentPmIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PersonalityAgentPmIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PersonalityAgentPmIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PersonalityAgentPmIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PersonalityAgentPmIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PersonalityAgentPmIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PersonalityAgentPmIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PersonalityAgentPmIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PersonalityAgentPmIssueVisitor {
-    type Value = Box<dyn PersonalityAgentPmIssueTrait>;
+struct PersonalityAgentPmIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PersonalityAgentPmIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PersonalityAgentPmIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PersonalityAgentPmIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PersonalityAgentPmIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -13995,41 +13944,38 @@ impl std::ops::DerefMut for dyn ClusterAgentAgentIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterAgentAgentIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterAgentAgentIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterAgentAgentIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterAgentAgentIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterAgentAgentIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterAgentAgentIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterAgentAgentIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterAgentAgentIssueVisitor {
-    type Value = Box<dyn ClusterAgentAgentIssueTrait>;
+struct ClusterAgentAgentIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterAgentAgentIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterAgentAgentIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterAgentAgentIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterAgentAgentIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -14198,41 +14144,38 @@ impl std::ops::DerefMut for dyn ClusterAgentVmIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterAgentVmIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterAgentVmIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterAgentVmIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterAgentVmIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterAgentVmIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterAgentVmIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterAgentVmIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterAgentVmIssueVisitor {
-    type Value = Box<dyn ClusterAgentVmIssueTrait>;
+struct ClusterAgentVmIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterAgentVmIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterAgentVmIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterAgentVmIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterAgentVmIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -14361,41 +14304,38 @@ impl std::ops::DerefMut for dyn ClusterAgentVmPoweredOffTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterAgentVmPoweredOffTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterAgentVmPoweredOffTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterAgentVmPoweredOffVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterAgentVmPoweredOffTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterAgentVmPoweredOffVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterAgentVmPoweredOffTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterAgentVmPoweredOffTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterAgentVmPoweredOffVisitor {
-    type Value = Box<dyn ClusterAgentVmPoweredOffTrait>;
+struct ClusterAgentVmPoweredOffTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterAgentVmPoweredOffTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterAgentVmPoweredOffTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterAgentVmPoweredOffTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterAgentVmPoweredOffTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -14459,41 +14399,38 @@ impl std::ops::DerefMut for dyn ClusterAgentVmNotDeployedTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterAgentVmNotDeployedTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterAgentVmNotDeployedTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterAgentVmNotDeployedVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterAgentVmNotDeployedTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterAgentVmNotDeployedVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterAgentVmNotDeployedTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterAgentVmNotDeployedTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterAgentVmNotDeployedVisitor {
-    type Value = Box<dyn ClusterAgentVmNotDeployedTrait>;
+struct ClusterAgentVmNotDeployedTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterAgentVmNotDeployedTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterAgentVmNotDeployedTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterAgentVmNotDeployedTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterAgentVmNotDeployedTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -14569,41 +14506,38 @@ impl std::ops::DerefMut for dyn IntegrityAgencyVumIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn IntegrityAgencyVumIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn IntegrityAgencyVumIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(IntegrityAgencyVumIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn IntegrityAgencyVumIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct IntegrityAgencyVumIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn IntegrityAgencyVumIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(IntegrityAgencyVumIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for IntegrityAgencyVumIssueVisitor {
-    type Value = Box<dyn IntegrityAgencyVumIssueTrait>;
+struct IntegrityAgencyVumIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn IntegrityAgencyVumIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid IntegrityAgencyVumIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for IntegrityAgencyVumIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn IntegrityAgencyVumIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -14673,41 +14607,38 @@ impl std::ops::DerefMut for dyn PersonalityAgencyPmIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PersonalityAgencyPmIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PersonalityAgencyPmIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PersonalityAgencyPmIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PersonalityAgencyPmIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PersonalityAgencyPmIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PersonalityAgencyPmIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PersonalityAgencyPmIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PersonalityAgencyPmIssueVisitor {
-    type Value = Box<dyn PersonalityAgencyPmIssueTrait>;
+struct PersonalityAgencyPmIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PersonalityAgencyPmIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PersonalityAgencyPmIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PersonalityAgencyPmIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PersonalityAgencyPmIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -14795,41 +14726,38 @@ impl std::ops::DerefMut for dyn PersonalityAgencyDepotIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PersonalityAgencyDepotIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PersonalityAgencyDepotIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PersonalityAgencyDepotIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PersonalityAgencyDepotIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PersonalityAgencyDepotIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PersonalityAgencyDepotIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PersonalityAgencyDepotIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PersonalityAgencyDepotIssueVisitor {
-    type Value = Box<dyn PersonalityAgencyDepotIssueTrait>;
+struct PersonalityAgencyDepotIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PersonalityAgencyDepotIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PersonalityAgencyDepotIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PersonalityAgencyDepotIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PersonalityAgencyDepotIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -14898,41 +14826,38 @@ impl std::ops::DerefMut for dyn HostIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostIssueVisitor {
-    type Value = Box<dyn HostIssueTrait>;
+struct HostIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -14976,41 +14901,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostIssueTr
 /// This structure may be used only with operations rendered under `/eam`.
 pub trait SolutionsHookAcknowledgeConfigTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn SolutionsHookAcknowledgeConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SolutionsHookAcknowledgeConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SolutionsHookAcknowledgeConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SolutionsHookAcknowledgeConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SolutionsHookAcknowledgeConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SolutionsHookAcknowledgeConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SolutionsHookAcknowledgeConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SolutionsHookAcknowledgeConfigVisitor {
-    type Value = Box<dyn SolutionsHookAcknowledgeConfigTrait>;
+struct SolutionsHookAcknowledgeConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SolutionsHookAcknowledgeConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SolutionsHookAcknowledgeConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SolutionsHookAcknowledgeConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SolutionsHookAcknowledgeConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15043,41 +14965,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsHo
 /// This structure may be used only with operations rendered under `/eam`.
 pub trait SolutionsStoragePolicyTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn SolutionsStoragePolicyTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SolutionsStoragePolicyTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SolutionsStoragePolicyVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SolutionsStoragePolicyTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SolutionsStoragePolicyVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SolutionsStoragePolicyTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SolutionsStoragePolicyTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SolutionsStoragePolicyVisitor {
-    type Value = Box<dyn SolutionsStoragePolicyTrait>;
+struct SolutionsStoragePolicyTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SolutionsStoragePolicyTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SolutionsStoragePolicyTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SolutionsStoragePolicyTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SolutionsStoragePolicyTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15110,41 +15029,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsSt
 /// This structure may be used only with operations rendered under `/eam`.
 pub trait SolutionsTypeSpecificSolutionConfigTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn SolutionsTypeSpecificSolutionConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SolutionsTypeSpecificSolutionConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SolutionsTypeSpecificSolutionConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SolutionsTypeSpecificSolutionConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SolutionsTypeSpecificSolutionConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SolutionsTypeSpecificSolutionConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SolutionsTypeSpecificSolutionConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SolutionsTypeSpecificSolutionConfigVisitor {
-    type Value = Box<dyn SolutionsTypeSpecificSolutionConfigTrait>;
+struct SolutionsTypeSpecificSolutionConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SolutionsTypeSpecificSolutionConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SolutionsTypeSpecificSolutionConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SolutionsTypeSpecificSolutionConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SolutionsTypeSpecificSolutionConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15182,41 +15098,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsTy
 /// This structure may be used only with operations rendered under `/eam`.
 pub trait SolutionsVmSourceTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn SolutionsVmSourceTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SolutionsVmSourceTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SolutionsVmSourceVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SolutionsVmSourceTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SolutionsVmSourceVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SolutionsVmSourceTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SolutionsVmSourceTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SolutionsVmSourceVisitor {
-    type Value = Box<dyn SolutionsVmSourceTrait>;
+struct SolutionsVmSourceTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SolutionsVmSourceTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SolutionsVmSourceTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SolutionsVmSourceTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SolutionsVmSourceTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15249,41 +15162,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SolutionsVm
 /// ***Since:*** vEAM API 8.2
 pub trait VibVibServicesSslTrustTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VibVibServicesSslTrustTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VibVibServicesSslTrustTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VibVibServicesSslTrustVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VibVibServicesSslTrustTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VibVibServicesSslTrustVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VibVibServicesSslTrustTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VibVibServicesSslTrustTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VibVibServicesSslTrustVisitor {
-    type Value = Box<dyn VibVibServicesSslTrustTrait>;
+struct VibVibServicesSslTrustTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VibVibServicesSslTrustTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VibVibServicesSslTrustTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VibVibServicesSslTrustTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VibVibServicesSslTrustTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15345,41 +15255,38 @@ impl std::ops::DerefMut for dyn PbmCapabilityTypeInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PbmCapabilityTypeInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PbmCapabilityTypeInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PbmCapabilityTypeInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PbmCapabilityTypeInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PbmCapabilityTypeInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PbmCapabilityTypeInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PbmCapabilityTypeInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PbmCapabilityTypeInfoVisitor {
-    type Value = Box<dyn PbmCapabilityTypeInfoTrait>;
+struct PbmCapabilityTypeInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PbmCapabilityTypeInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PbmCapabilityTypeInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PbmCapabilityTypeInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PbmCapabilityTypeInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15437,41 +15344,38 @@ impl std::ops::DerefMut for dyn PbmLineOfServiceInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PbmLineOfServiceInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PbmLineOfServiceInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PbmLineOfServiceInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PbmLineOfServiceInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PbmLineOfServiceInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PbmLineOfServiceInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PbmLineOfServiceInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PbmLineOfServiceInfoVisitor {
-    type Value = Box<dyn PbmLineOfServiceInfoTrait>;
+struct PbmLineOfServiceInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PbmLineOfServiceInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PbmLineOfServiceInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PbmLineOfServiceInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PbmLineOfServiceInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15520,41 +15424,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmLineOfSe
 /// - `PbmPlacementSolver::pbm_check_requirements().matching_resources?[*]`
 pub trait PbmPlacementMatchingResourcesTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn PbmPlacementMatchingResourcesTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PbmPlacementMatchingResourcesTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PbmPlacementMatchingResourcesVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PbmPlacementMatchingResourcesTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PbmPlacementMatchingResourcesVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PbmPlacementMatchingResourcesTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PbmPlacementMatchingResourcesTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PbmPlacementMatchingResourcesVisitor {
-    type Value = Box<dyn PbmPlacementMatchingResourcesTrait>;
+struct PbmPlacementMatchingResourcesTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PbmPlacementMatchingResourcesTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PbmPlacementMatchingResourcesTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PbmPlacementMatchingResourcesTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PbmPlacementMatchingResourcesTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15590,41 +15491,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacemen
 /// - `PbmPlacementSolver::pbm_check_requirements(placement_subject_requirement)`
 pub trait PbmPlacementRequirementTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn PbmPlacementRequirementTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PbmPlacementRequirementTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PbmPlacementRequirementVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PbmPlacementRequirementTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PbmPlacementRequirementVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PbmPlacementRequirementTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PbmPlacementRequirementTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PbmPlacementRequirementVisitor {
-    type Value = Box<dyn PbmPlacementRequirementTrait>;
+struct PbmPlacementRequirementTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PbmPlacementRequirementTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PbmPlacementRequirementTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PbmPlacementRequirementTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PbmPlacementRequirementTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15672,41 +15570,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacemen
 /// - `PbmProfileProfileManager::pbm_query_default_requirement_profiles().default_profile?⇒PbmCapabilityProfileTrait.constraints`
 pub trait PbmCapabilityConstraintsTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn PbmCapabilityConstraintsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PbmCapabilityConstraintsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PbmCapabilityConstraintsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PbmCapabilityConstraintsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PbmCapabilityConstraintsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PbmCapabilityConstraintsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PbmCapabilityConstraintsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PbmCapabilityConstraintsVisitor {
-    type Value = Box<dyn PbmCapabilityConstraintsTrait>;
+struct PbmCapabilityConstraintsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PbmCapabilityConstraintsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PbmCapabilityConstraintsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PbmCapabilityConstraintsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PbmCapabilityConstraintsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15769,41 +15664,38 @@ impl std::ops::DerefMut for dyn PbmProfileTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PbmProfileTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PbmProfileTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PbmProfileVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PbmProfileTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PbmProfileVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PbmProfileTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PbmProfileTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PbmProfileVisitor {
-    type Value = Box<dyn PbmProfileTrait>;
+struct PbmProfileTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PbmProfileTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PbmProfileTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PbmProfileTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PbmProfileTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15873,41 +15765,38 @@ impl std::ops::DerefMut for dyn PbmCapabilityProfileTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PbmCapabilityProfileTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PbmCapabilityProfileTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PbmCapabilityProfileVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PbmCapabilityProfileTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PbmCapabilityProfileVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PbmCapabilityProfileTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PbmCapabilityProfileTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PbmCapabilityProfileVisitor {
-    type Value = Box<dyn PbmCapabilityProfileTrait>;
+struct PbmCapabilityProfileTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PbmCapabilityProfileTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PbmCapabilityProfileTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PbmCapabilityProfileTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PbmCapabilityProfileTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -15968,41 +15857,38 @@ impl std::ops::DerefMut for dyn SmsProviderInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn SmsProviderInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SmsProviderInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SmsProviderInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SmsProviderInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SmsProviderInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SmsProviderInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SmsProviderInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SmsProviderInfoVisitor {
-    type Value = Box<dyn SmsProviderInfoTrait>;
+struct SmsProviderInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SmsProviderInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SmsProviderInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SmsProviderInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SmsProviderInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16061,41 +15947,38 @@ impl std::ops::DerefMut for dyn SmsProviderSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn SmsProviderSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SmsProviderSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SmsProviderSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SmsProviderSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SmsProviderSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SmsProviderSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SmsProviderSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SmsProviderSpecVisitor {
-    type Value = Box<dyn SmsProviderSpecTrait>;
+struct SmsProviderSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SmsProviderSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SmsProviderSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SmsProviderSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SmsProviderSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16155,41 +16038,38 @@ impl std::ops::DerefMut for dyn StoragePortTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn StoragePortTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn StoragePortTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(StoragePortVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn StoragePortTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct StoragePortVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn StoragePortTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(StoragePortTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for StoragePortVisitor {
-    type Value = Box<dyn StoragePortTrait>;
+struct StoragePortTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn StoragePortTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid StoragePortTrait JSON object with a _typeName field")
+impl miniserde::de::Map for StoragePortTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn StoragePortTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16252,41 +16132,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn StoragePort
 /// *(10 of 16 paths)*
 pub trait DeviceIdTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DeviceIdTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DeviceIdTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DeviceIdVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DeviceIdTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DeviceIdVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DeviceIdTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DeviceIdTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DeviceIdVisitor {
-    type Value = Box<dyn DeviceIdTrait>;
+struct DeviceIdTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DeviceIdTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DeviceIdTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DeviceIdTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DeviceIdTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16361,41 +16238,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DeviceIdTra
 /// *(10 of 16 paths)*
 pub trait VirtualMachineIdTrait : super::traits::DeviceIdTrait {
 }
-impl<'s> serde::Serialize for dyn VirtualMachineIdTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineIdTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineIdVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineIdTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineIdVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineIdTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineIdTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineIdVisitor {
-    type Value = Box<dyn VirtualMachineIdTrait>;
+struct VirtualMachineIdTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineIdTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineIdTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineIdTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineIdTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16457,41 +16331,38 @@ impl std::ops::DerefMut for dyn FailoverParamTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn FailoverParamTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn FailoverParamTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(FailoverParamVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn FailoverParamTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct FailoverParamVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn FailoverParamTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(FailoverParamTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for FailoverParamVisitor {
-    type Value = Box<dyn FailoverParamTrait>;
+struct FailoverParamTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn FailoverParamTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid FailoverParamTrait JSON object with a _typeName field")
+impl miniserde::de::Map for FailoverParamTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn FailoverParamTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16554,41 +16425,38 @@ impl std::ops::DerefMut for dyn GroupInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn GroupInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn GroupInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(GroupInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn GroupInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct GroupInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn GroupInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(GroupInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for GroupInfoVisitor {
-    type Value = Box<dyn GroupInfoTrait>;
+struct GroupInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn GroupInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid GroupInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for GroupInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn GroupInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16657,41 +16525,38 @@ impl std::ops::DerefMut for dyn GroupOperationResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn GroupOperationResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn GroupOperationResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(GroupOperationResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn GroupOperationResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct GroupOperationResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn GroupOperationResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(GroupOperationResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for GroupOperationResultVisitor {
-    type Value = Box<dyn GroupOperationResultTrait>;
+struct GroupOperationResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn GroupOperationResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid GroupOperationResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for GroupOperationResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn GroupOperationResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16791,41 +16656,38 @@ impl std::ops::DerefMut for dyn TargetGroupMemberInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn TargetGroupMemberInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn TargetGroupMemberInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(TargetGroupMemberInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn TargetGroupMemberInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct TargetGroupMemberInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn TargetGroupMemberInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(TargetGroupMemberInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for TargetGroupMemberInfoVisitor {
-    type Value = Box<dyn TargetGroupMemberInfoTrait>;
+struct TargetGroupMemberInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn TargetGroupMemberInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid TargetGroupMemberInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for TargetGroupMemberInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn TargetGroupMemberInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16882,41 +16744,38 @@ impl std::ops::DerefMut for dyn ClusterComputeResourceValidationResultBaseTrait 
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterComputeResourceValidationResultBaseTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterComputeResourceValidationResultBaseTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterComputeResourceValidationResultBaseVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterComputeResourceValidationResultBaseTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterComputeResourceValidationResultBaseVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterComputeResourceValidationResultBaseTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterComputeResourceValidationResultBaseTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterComputeResourceValidationResultBaseVisitor {
-    type Value = Box<dyn ClusterComputeResourceValidationResultBaseTrait>;
+struct ClusterComputeResourceValidationResultBaseTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterComputeResourceValidationResultBaseTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterComputeResourceValidationResultBaseTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterComputeResourceValidationResultBaseTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterComputeResourceValidationResultBaseTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -16986,41 +16845,38 @@ impl std::ops::DerefMut for dyn ComputeResourceConfigInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ComputeResourceConfigInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ComputeResourceConfigInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ComputeResourceConfigInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ComputeResourceConfigInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ComputeResourceConfigInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ComputeResourceConfigInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ComputeResourceConfigInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ComputeResourceConfigInfoVisitor {
-    type Value = Box<dyn ComputeResourceConfigInfoTrait>;
+struct ComputeResourceConfigInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ComputeResourceConfigInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ComputeResourceConfigInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ComputeResourceConfigInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ComputeResourceConfigInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -17083,41 +16939,38 @@ impl std::ops::DerefMut for dyn ComputeResourceConfigSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ComputeResourceConfigSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ComputeResourceConfigSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ComputeResourceConfigSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ComputeResourceConfigSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ComputeResourceConfigSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ComputeResourceConfigSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ComputeResourceConfigSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ComputeResourceConfigSpecVisitor {
-    type Value = Box<dyn ComputeResourceConfigSpecTrait>;
+struct ComputeResourceConfigSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ComputeResourceConfigSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ComputeResourceConfigSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ComputeResourceConfigSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ComputeResourceConfigSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -17175,41 +17028,38 @@ impl std::ops::DerefMut for dyn ComputeResourceSummaryTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ComputeResourceSummaryTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ComputeResourceSummaryTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ComputeResourceSummaryVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ComputeResourceSummaryTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ComputeResourceSummaryVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ComputeResourceSummaryTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ComputeResourceSummaryTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ComputeResourceSummaryVisitor {
-    type Value = Box<dyn ComputeResourceSummaryTrait>;
+struct ComputeResourceSummaryTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ComputeResourceSummaryTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ComputeResourceSummaryTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ComputeResourceSummaryTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ComputeResourceSummaryTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -17276,41 +17126,38 @@ impl std::ops::DerefMut for dyn CustomFieldValueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn CustomFieldValueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CustomFieldValueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CustomFieldValueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CustomFieldValueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CustomFieldValueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CustomFieldValueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CustomFieldValueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CustomFieldValueVisitor {
-    type Value = Box<dyn CustomFieldValueTrait>;
+struct CustomFieldValueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CustomFieldValueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CustomFieldValueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CustomFieldValueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CustomFieldValueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -17371,41 +17218,38 @@ impl std::ops::DerefMut for dyn DatastoreInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DatastoreInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DatastoreInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DatastoreInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DatastoreInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DatastoreInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DatastoreInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DatastoreInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DatastoreInfoVisitor {
-    type Value = Box<dyn DatastoreInfoTrait>;
+struct DatastoreInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DatastoreInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DatastoreInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DatastoreInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DatastoreInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -17502,41 +17346,38 @@ impl std::ops::DerefMut for dyn DescriptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DescriptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DescriptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DescriptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DescriptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DescriptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DescriptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DescriptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DescriptionVisitor {
-    type Value = Box<dyn DescriptionTrait>;
+struct DescriptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DescriptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DescriptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DescriptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DescriptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -17651,41 +17492,38 @@ impl std::ops::DerefMut for dyn ElementDescriptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ElementDescriptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ElementDescriptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ElementDescriptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ElementDescriptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ElementDescriptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ElementDescriptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ElementDescriptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ElementDescriptionVisitor {
-    type Value = Box<dyn ElementDescriptionTrait>;
+struct ElementDescriptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ElementDescriptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ElementDescriptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ElementDescriptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ElementDescriptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -17770,41 +17608,38 @@ impl std::ops::DerefMut for dyn TypeDescriptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn TypeDescriptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn TypeDescriptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(TypeDescriptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn TypeDescriptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct TypeDescriptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn TypeDescriptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(TypeDescriptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for TypeDescriptionVisitor {
-    type Value = Box<dyn TypeDescriptionTrait>;
+struct TypeDescriptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn TypeDescriptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid TypeDescriptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for TypeDescriptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn TypeDescriptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -17847,41 +17682,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TypeDescrip
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()→DirectPathProfileManagerCapacityUnknown.query_spec`
 pub trait DirectPathProfileManagerCapacityQuerySpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DirectPathProfileManagerCapacityQuerySpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DirectPathProfileManagerCapacityQuerySpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DirectPathProfileManagerCapacityQuerySpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DirectPathProfileManagerCapacityQuerySpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DirectPathProfileManagerCapacityQuerySpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DirectPathProfileManagerCapacityQuerySpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DirectPathProfileManagerCapacityQuerySpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DirectPathProfileManagerCapacityQuerySpecVisitor {
-    type Value = Box<dyn DirectPathProfileManagerCapacityQuerySpecTrait>;
+struct DirectPathProfileManagerCapacityQuerySpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DirectPathProfileManagerCapacityQuerySpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DirectPathProfileManagerCapacityQuerySpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DirectPathProfileManagerCapacityQuerySpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DirectPathProfileManagerCapacityQuerySpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -17930,41 +17762,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()`
 pub trait DirectPathProfileManagerCapacityResultTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DirectPathProfileManagerCapacityResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DirectPathProfileManagerCapacityResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DirectPathProfileManagerCapacityResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DirectPathProfileManagerCapacityResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DirectPathProfileManagerCapacityResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DirectPathProfileManagerCapacityResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DirectPathProfileManagerCapacityResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DirectPathProfileManagerCapacityResultVisitor {
-    type Value = Box<dyn DirectPathProfileManagerCapacityResultTrait>;
+struct DirectPathProfileManagerCapacityResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DirectPathProfileManagerCapacityResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DirectPathProfileManagerCapacityResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DirectPathProfileManagerCapacityResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DirectPathProfileManagerCapacityResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18014,41 +17843,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity()→DirectPathProfileManagerCapacityUnknown.query_spec→DirectPathProfileManagerCapacityQueryByDeviceConfig.device_config`
 pub trait DirectPathProfileManagerDirectPathConfigTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DirectPathProfileManagerDirectPathConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DirectPathProfileManagerDirectPathConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DirectPathProfileManagerDirectPathConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DirectPathProfileManagerDirectPathConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DirectPathProfileManagerDirectPathConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DirectPathProfileManagerDirectPathConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DirectPathProfileManagerDirectPathConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DirectPathProfileManagerDirectPathConfigVisitor {
-    type Value = Box<dyn DirectPathProfileManagerDirectPathConfigTrait>;
+struct DirectPathProfileManagerDirectPathConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DirectPathProfileManagerDirectPathConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DirectPathProfileManagerDirectPathConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DirectPathProfileManagerDirectPathConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DirectPathProfileManagerDirectPathConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18098,41 +17924,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DirectPathP
 /// - `DirectPathProfileManager::direct_path_profile_manager_query_capacity(target)`
 pub trait DirectPathProfileManagerTargetEntityTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DirectPathProfileManagerTargetEntityTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DirectPathProfileManagerTargetEntityTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DirectPathProfileManagerTargetEntityVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DirectPathProfileManagerTargetEntityTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DirectPathProfileManagerTargetEntityVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DirectPathProfileManagerTargetEntityTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DirectPathProfileManagerTargetEntityTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DirectPathProfileManagerTargetEntityVisitor {
-    type Value = Box<dyn DirectPathProfileManagerTargetEntityTrait>;
+struct DirectPathProfileManagerTargetEntityTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DirectPathProfileManagerTargetEntityTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DirectPathProfileManagerTargetEntityTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DirectPathProfileManagerTargetEntityTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DirectPathProfileManagerTargetEntityTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18189,41 +18012,38 @@ impl std::ops::DerefMut for dyn DvsConfigInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvsConfigInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsConfigInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsConfigInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsConfigInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsConfigInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsConfigInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsConfigInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsConfigInfoVisitor {
-    type Value = Box<dyn DvsConfigInfoTrait>;
+struct DvsConfigInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsConfigInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsConfigInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsConfigInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsConfigInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18290,41 +18110,38 @@ impl std::ops::DerefMut for dyn DvsConfigSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvsConfigSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsConfigSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsConfigSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsConfigSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsConfigSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsConfigSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsConfigSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsConfigSpecVisitor {
-    type Value = Box<dyn DvsConfigSpecTrait>;
+struct DvsConfigSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsConfigSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsConfigSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsConfigSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsConfigSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18394,41 +18211,38 @@ impl std::ops::DerefMut for dyn DvsFeatureCapabilityTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvsFeatureCapabilityTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsFeatureCapabilityTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsFeatureCapabilityVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsFeatureCapabilityTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsFeatureCapabilityVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsFeatureCapabilityTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsFeatureCapabilityTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsFeatureCapabilityVisitor {
-    type Value = Box<dyn DvsFeatureCapabilityTrait>;
+struct DvsFeatureCapabilityTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsFeatureCapabilityTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsFeatureCapabilityTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsFeatureCapabilityTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsFeatureCapabilityTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18488,41 +18302,38 @@ impl std::ops::DerefMut for dyn DvsHealthCheckConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvsHealthCheckConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsHealthCheckConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsHealthCheckConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsHealthCheckConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsHealthCheckConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsHealthCheckConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsHealthCheckConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsHealthCheckConfigVisitor {
-    type Value = Box<dyn DvsHealthCheckConfigTrait>;
+struct DvsHealthCheckConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsHealthCheckConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsHealthCheckConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsHealthCheckConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsHealthCheckConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18594,41 +18405,38 @@ impl std::ops::DerefMut for dyn VMwareDvsHealthCheckConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VMwareDvsHealthCheckConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VMwareDvsHealthCheckConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VMwareDvsHealthCheckConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VMwareDvsHealthCheckConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VMwareDvsHealthCheckConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VMwareDvsHealthCheckConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VMwareDvsHealthCheckConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VMwareDvsHealthCheckConfigVisitor {
-    type Value = Box<dyn VMwareDvsHealthCheckConfigTrait>;
+struct VMwareDvsHealthCheckConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VMwareDvsHealthCheckConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VMwareDvsHealthCheckConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VMwareDvsHealthCheckConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VMwareDvsHealthCheckConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18681,41 +18489,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VMwareDvsHe
 /// - `VsanVdsSystem::vsan_vds_migrate_vss(migration_plan).vds_spec.capability?.features_supported?.health_check_capability?`
 pub trait DvsHealthCheckCapabilityTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DvsHealthCheckCapabilityTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsHealthCheckCapabilityTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsHealthCheckCapabilityVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsHealthCheckCapabilityTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsHealthCheckCapabilityVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsHealthCheckCapabilityTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsHealthCheckCapabilityTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsHealthCheckCapabilityVisitor {
-    type Value = Box<dyn DvsHealthCheckCapabilityTrait>;
+struct DvsHealthCheckCapabilityTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsHealthCheckCapabilityTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsHealthCheckCapabilityTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsHealthCheckCapabilityTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsHealthCheckCapabilityTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18756,41 +18561,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsHealthCh
 /// - `VsanVdsSystem::vsan_vds_migrate_vss(migration_plan).vds_spec.config_spec.uplink_port_policy?`
 pub trait DvsUplinkPortPolicyTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DvsUplinkPortPolicyTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsUplinkPortPolicyTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsUplinkPortPolicyVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsUplinkPortPolicyTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsUplinkPortPolicyVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsUplinkPortPolicyTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsUplinkPortPolicyTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsUplinkPortPolicyVisitor {
-    type Value = Box<dyn DvsUplinkPortPolicyTrait>;
+struct DvsUplinkPortPolicyTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsUplinkPortPolicyTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsUplinkPortPolicyTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsUplinkPortPolicyTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsUplinkPortPolicyTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18823,41 +18625,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsUplinkPo
 /// ***Since:*** vSphere API Release 9.0.0.0
 pub trait HbrReplicationTargetSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn HbrReplicationTargetSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HbrReplicationTargetSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HbrReplicationTargetSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HbrReplicationTargetSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HbrReplicationTargetSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HbrReplicationTargetSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HbrReplicationTargetSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HbrReplicationTargetSpecVisitor {
-    type Value = Box<dyn HbrReplicationTargetSpecTrait>;
+struct HbrReplicationTargetSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HbrReplicationTargetSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HbrReplicationTargetSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HbrReplicationTargetSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HbrReplicationTargetSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -18918,41 +18717,38 @@ impl std::ops::DerefMut for dyn ImportSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ImportSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ImportSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ImportSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ImportSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ImportSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ImportSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ImportSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ImportSpecVisitor {
-    type Value = Box<dyn ImportSpecTrait>;
+struct ImportSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ImportSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ImportSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ImportSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ImportSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -19025,41 +18821,38 @@ impl std::ops::DerefMut for dyn InheritablePolicyTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn InheritablePolicyTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn InheritablePolicyTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(InheritablePolicyVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn InheritablePolicyTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct InheritablePolicyVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn InheritablePolicyTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(InheritablePolicyTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for InheritablePolicyVisitor {
-    type Value = Box<dyn InheritablePolicyTrait>;
+struct InheritablePolicyTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn InheritablePolicyTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid InheritablePolicyTrait JSON object with a _typeName field")
+impl miniserde::de::Map for InheritablePolicyTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn InheritablePolicyTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -19280,41 +19073,38 @@ impl std::ops::DerefMut for dyn DvsFilterConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvsFilterConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsFilterConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsFilterConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsFilterConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsFilterConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsFilterConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsFilterConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsFilterConfigVisitor {
-    type Value = Box<dyn DvsFilterConfigTrait>;
+struct DvsFilterConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsFilterConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsFilterConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsFilterConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsFilterConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -19421,41 +19211,38 @@ impl std::ops::DerefMut for dyn DvsTrafficFilterConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvsTrafficFilterConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsTrafficFilterConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsTrafficFilterConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsTrafficFilterConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsTrafficFilterConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsTrafficFilterConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsTrafficFilterConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsTrafficFilterConfigVisitor {
-    type Value = Box<dyn DvsTrafficFilterConfigTrait>;
+struct DvsTrafficFilterConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsTrafficFilterConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsTrafficFilterConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsTrafficFilterConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsTrafficFilterConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -19522,41 +19309,38 @@ impl std::ops::DerefMut for dyn VmwareDistributedVirtualSwitchVlanSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmwareDistributedVirtualSwitchVlanSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmwareDistributedVirtualSwitchVlanSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmwareDistributedVirtualSwitchVlanSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmwareDistributedVirtualSwitchVlanSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmwareDistributedVirtualSwitchVlanSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmwareDistributedVirtualSwitchVlanSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmwareDistributedVirtualSwitchVlanSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmwareDistributedVirtualSwitchVlanSpecVisitor {
-    type Value = Box<dyn VmwareDistributedVirtualSwitchVlanSpecTrait>;
+struct VmwareDistributedVirtualSwitchVlanSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmwareDistributedVirtualSwitchVlanSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmwareDistributedVirtualSwitchVlanSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmwareDistributedVirtualSwitchVlanSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmwareDistributedVirtualSwitchVlanSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -19621,41 +19405,38 @@ impl std::ops::DerefMut for dyn IoFilterInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn IoFilterInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn IoFilterInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(IoFilterInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn IoFilterInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct IoFilterInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn IoFilterInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(IoFilterInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for IoFilterInfoVisitor {
-    type Value = Box<dyn IoFilterInfoTrait>;
+struct IoFilterInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn IoFilterInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid IoFilterInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for IoFilterInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn IoFilterInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -19702,41 +19483,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn IoFilterInf
 /// - `IoFilterManager::upgrade_io_filter_task(vib_ssl_trust)`
 pub trait IoFilterManagerSslTrustTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn IoFilterManagerSslTrustTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn IoFilterManagerSslTrustTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(IoFilterManagerSslTrustVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn IoFilterManagerSslTrustTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct IoFilterManagerSslTrustVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn IoFilterManagerSslTrustTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(IoFilterManagerSslTrustTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for IoFilterManagerSslTrustVisitor {
-    type Value = Box<dyn IoFilterManagerSslTrustTrait>;
+struct IoFilterManagerSslTrustTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn IoFilterManagerSslTrustTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid IoFilterManagerSslTrustTrait JSON object with a _typeName field")
+impl miniserde::de::Map for IoFilterManagerSslTrustTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn IoFilterManagerSslTrustTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -19784,41 +19562,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn IoFilterMan
 /// - `HostProfileManager::generate_config_task_list().config_spec?.license?.source?`
 pub trait LicenseSourceTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn LicenseSourceTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn LicenseSourceTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(LicenseSourceVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn LicenseSourceTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct LicenseSourceVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn LicenseSourceTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(LicenseSourceTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for LicenseSourceVisitor {
-    type Value = Box<dyn LicenseSourceTrait>;
+struct LicenseSourceTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn LicenseSourceTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid LicenseSourceTrait JSON object with a _typeName field")
+impl miniserde::de::Map for LicenseSourceTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn LicenseSourceTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -19880,41 +19655,38 @@ impl std::ops::DerefMut for dyn NegatableExpressionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn NegatableExpressionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn NegatableExpressionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(NegatableExpressionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn NegatableExpressionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct NegatableExpressionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn NegatableExpressionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(NegatableExpressionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for NegatableExpressionVisitor {
-    type Value = Box<dyn NegatableExpressionTrait>;
+struct NegatableExpressionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn NegatableExpressionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid NegatableExpressionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for NegatableExpressionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn NegatableExpressionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20041,41 +19813,38 @@ impl std::ops::DerefMut for dyn IpAddressTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn IpAddressTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn IpAddressTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(IpAddressVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn IpAddressTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct IpAddressVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn IpAddressTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(IpAddressTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for IpAddressVisitor {
-    type Value = Box<dyn IpAddressTrait>;
+struct IpAddressTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn IpAddressTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid IpAddressTrait JSON object with a _typeName field")
+impl miniserde::de::Map for IpAddressTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn IpAddressTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20148,41 +19917,38 @@ impl std::ops::DerefMut for dyn MacAddressTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn MacAddressTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn MacAddressTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(MacAddressVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn MacAddressTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct MacAddressVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn MacAddressTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(MacAddressTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for MacAddressVisitor {
-    type Value = Box<dyn MacAddressTrait>;
+struct MacAddressTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn MacAddressTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid MacAddressTrait JSON object with a _typeName field")
+impl miniserde::de::Map for MacAddressTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn MacAddressTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20257,41 +20023,38 @@ impl std::ops::DerefMut for dyn DvsIpPortTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvsIpPortTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsIpPortTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsIpPortVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsIpPortTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsIpPortVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsIpPortTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsIpPortTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsIpPortVisitor {
-    type Value = Box<dyn DvsIpPortTrait>;
+struct DvsIpPortTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsIpPortTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsIpPortTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsIpPortTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsIpPortTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20359,41 +20122,38 @@ impl std::ops::DerefMut for dyn NetworkSummaryTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn NetworkSummaryTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn NetworkSummaryTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(NetworkSummaryVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn NetworkSummaryTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct NetworkSummaryVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn NetworkSummaryTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(NetworkSummaryTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for NetworkSummaryVisitor {
-    type Value = Box<dyn NetworkSummaryTrait>;
+struct NetworkSummaryTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn NetworkSummaryTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid NetworkSummaryTrait JSON object with a _typeName field")
+impl miniserde::de::Map for NetworkSummaryTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn NetworkSummaryTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20446,41 +20206,38 @@ impl std::ops::DerefMut for dyn OvfManagerCommonParamsTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn OvfManagerCommonParamsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn OvfManagerCommonParamsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(OvfManagerCommonParamsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn OvfManagerCommonParamsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct OvfManagerCommonParamsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn OvfManagerCommonParamsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(OvfManagerCommonParamsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for OvfManagerCommonParamsVisitor {
-    type Value = Box<dyn OvfManagerCommonParamsTrait>;
+struct OvfManagerCommonParamsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn OvfManagerCommonParamsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid OvfManagerCommonParamsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for OvfManagerCommonParamsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn OvfManagerCommonParamsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20554,41 +20311,38 @@ impl std::ops::DerefMut for dyn OvfCreateImportSpecParamsTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn OvfCreateImportSpecParamsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn OvfCreateImportSpecParamsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(OvfCreateImportSpecParamsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn OvfCreateImportSpecParamsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct OvfCreateImportSpecParamsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn OvfCreateImportSpecParamsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(OvfCreateImportSpecParamsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for OvfCreateImportSpecParamsVisitor {
-    type Value = Box<dyn OvfCreateImportSpecParamsTrait>;
+struct OvfCreateImportSpecParamsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn OvfCreateImportSpecParamsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid OvfCreateImportSpecParamsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for OvfCreateImportSpecParamsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn OvfCreateImportSpecParamsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20647,41 +20401,38 @@ impl std::ops::DerefMut for dyn PerfEntityMetricBaseTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PerfEntityMetricBaseTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PerfEntityMetricBaseTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PerfEntityMetricBaseVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PerfEntityMetricBaseTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PerfEntityMetricBaseVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PerfEntityMetricBaseTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PerfEntityMetricBaseTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PerfEntityMetricBaseVisitor {
-    type Value = Box<dyn PerfEntityMetricBaseTrait>;
+struct PerfEntityMetricBaseTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PerfEntityMetricBaseTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PerfEntityMetricBaseTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PerfEntityMetricBaseTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PerfEntityMetricBaseTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20749,41 +20500,38 @@ impl std::ops::DerefMut for dyn PerfMetricSeriesTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PerfMetricSeriesTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PerfMetricSeriesTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PerfMetricSeriesVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PerfMetricSeriesTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PerfMetricSeriesVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PerfMetricSeriesTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PerfMetricSeriesTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PerfMetricSeriesVisitor {
-    type Value = Box<dyn PerfMetricSeriesTrait>;
+struct PerfMetricSeriesTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PerfMetricSeriesTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PerfMetricSeriesTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PerfMetricSeriesTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PerfMetricSeriesTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20847,41 +20595,38 @@ impl std::ops::DerefMut for dyn ResourcePoolSummaryTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ResourcePoolSummaryTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ResourcePoolSummaryTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ResourcePoolSummaryVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ResourcePoolSummaryTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ResourcePoolSummaryVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ResourcePoolSummaryTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ResourcePoolSummaryTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ResourcePoolSummaryVisitor {
-    type Value = Box<dyn ResourcePoolSummaryTrait>;
+struct ResourcePoolSummaryTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ResourcePoolSummaryTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ResourcePoolSummaryTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ResourcePoolSummaryTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ResourcePoolSummaryTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20925,41 +20670,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ResourcePoo
 /// - `ClusterComputeResource::validate_hci_configuration(hci_config_spec).v_san_config_spec?`
 pub trait SddcBaseTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn SddcBaseTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SddcBaseTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SddcBaseVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SddcBaseTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SddcBaseVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SddcBaseTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SddcBaseTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SddcBaseVisitor {
-    type Value = Box<dyn SddcBaseTrait>;
+struct SddcBaseTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SddcBaseTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SddcBaseTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SddcBaseTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SddcBaseTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -20993,41 +20735,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SddcBaseTra
 /// - `DistributedVirtualSwitchManager::dvs_manager_export_entity_task(selection_set)`
 pub trait SelectionSetTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn SelectionSetTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SelectionSetTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SelectionSetVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SelectionSetTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SelectionSetVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SelectionSetTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SelectionSetTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SelectionSetVisitor {
-    type Value = Box<dyn SelectionSetTrait>;
+struct SelectionSetTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SelectionSetTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SelectionSetTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SelectionSetTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SelectionSetTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21077,41 +20816,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SelectionSe
 /// *(10 of 39 paths)*
 pub trait ServiceLocatorCredentialTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn ServiceLocatorCredentialTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ServiceLocatorCredentialTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ServiceLocatorCredentialVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ServiceLocatorCredentialTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ServiceLocatorCredentialVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ServiceLocatorCredentialTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ServiceLocatorCredentialTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ServiceLocatorCredentialVisitor {
-    type Value = Box<dyn ServiceLocatorCredentialTrait>;
+struct ServiceLocatorCredentialTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ServiceLocatorCredentialTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ServiceLocatorCredentialTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ServiceLocatorCredentialTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ServiceLocatorCredentialTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21154,41 +20890,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ServiceLoca
 /// - `SessionManager::acquire_generic_service_ticket(spec)`
 pub trait SessionManagerServiceRequestSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn SessionManagerServiceRequestSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SessionManagerServiceRequestSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SessionManagerServiceRequestSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SessionManagerServiceRequestSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SessionManagerServiceRequestSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SessionManagerServiceRequestSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SessionManagerServiceRequestSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SessionManagerServiceRequestSpecVisitor {
-    type Value = Box<dyn SessionManagerServiceRequestSpecTrait>;
+struct SessionManagerServiceRequestSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SessionManagerServiceRequestSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SessionManagerServiceRequestSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SessionManagerServiceRequestSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SessionManagerServiceRequestSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21230,41 +20963,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SessionMana
 /// - `TaskManager::read_next_tasks_by_view_spec(view_spec)`
 pub trait TaskManagerTaskViewSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn TaskManagerTaskViewSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn TaskManagerTaskViewSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(TaskManagerTaskViewSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn TaskManagerTaskViewSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct TaskManagerTaskViewSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn TaskManagerTaskViewSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(TaskManagerTaskViewSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for TaskManagerTaskViewSpecVisitor {
-    type Value = Box<dyn TaskManagerTaskViewSpecTrait>;
+struct TaskManagerTaskViewSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn TaskManagerTaskViewSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid TaskManagerTaskViewSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for TaskManagerTaskViewSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn TaskManagerTaskViewSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21306,41 +21036,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn TaskManager
 /// - `TaskManager::create_task().reason`
 pub trait TaskReasonTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn TaskReasonTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn TaskReasonTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(TaskReasonVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn TaskReasonTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct TaskReasonVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn TaskReasonTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(TaskReasonTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for TaskReasonVisitor {
-    type Value = Box<dyn TaskReasonTrait>;
+struct TaskReasonTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn TaskReasonTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid TaskReasonTrait JSON object with a _typeName field")
+impl miniserde::de::Map for TaskReasonTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn TaskReasonTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21408,41 +21135,38 @@ impl std::ops::DerefMut for dyn UserSearchResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn UserSearchResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn UserSearchResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(UserSearchResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn UserSearchResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct UserSearchResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn UserSearchResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(UserSearchResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for UserSearchResultVisitor {
-    type Value = Box<dyn UserSearchResultTrait>;
+struct UserSearchResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn UserSearchResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid UserSearchResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for UserSearchResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn UserSearchResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21499,41 +21223,38 @@ impl std::ops::DerefMut for dyn VirtualDiskSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDiskSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDiskSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDiskSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDiskSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDiskSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDiskSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDiskSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDiskSpecVisitor {
-    type Value = Box<dyn VirtualDiskSpecTrait>;
+struct VirtualDiskSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDiskSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDiskSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDiskSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDiskSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21609,41 +21330,38 @@ impl std::ops::DerefMut for dyn FileBackedVirtualDiskSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn FileBackedVirtualDiskSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn FileBackedVirtualDiskSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(FileBackedVirtualDiskSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn FileBackedVirtualDiskSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct FileBackedVirtualDiskSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn FileBackedVirtualDiskSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(FileBackedVirtualDiskSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for FileBackedVirtualDiskSpecVisitor {
-    type Value = Box<dyn FileBackedVirtualDiskSpecTrait>;
+struct FileBackedVirtualDiskSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn FileBackedVirtualDiskSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid FileBackedVirtualDiskSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for FileBackedVirtualDiskSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn FileBackedVirtualDiskSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21703,41 +21421,38 @@ impl std::ops::DerefMut for dyn VirtualMachineConnectionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualMachineConnectionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineConnectionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineConnectionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineConnectionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineConnectionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineConnectionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineConnectionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineConnectionVisitor {
-    type Value = Box<dyn VirtualMachineConnectionTrait>;
+struct VirtualMachineConnectionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineConnectionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineConnectionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineConnectionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineConnectionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21774,41 +21489,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// This structure may be used only with operations rendered under `/vsan`.
 pub trait VsanComparatorTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VsanComparatorTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanComparatorTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanComparatorVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanComparatorTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanComparatorVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanComparatorTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanComparatorTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanComparatorVisitor {
-    type Value = Box<dyn VsanComparatorTrait>;
+struct VsanComparatorTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanComparatorTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanComparatorTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanComparatorTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanComparatorTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21866,41 +21578,38 @@ impl std::ops::DerefMut for dyn VsanResourceConstraintTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanResourceConstraintTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanResourceConstraintTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanResourceConstraintVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanResourceConstraintTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanResourceConstraintVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanResourceConstraintTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanResourceConstraintTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanResourceConstraintVisitor {
-    type Value = Box<dyn VsanResourceConstraintTrait>;
+struct VsanResourceConstraintTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanResourceConstraintTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanResourceConstraintTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanResourceConstraintTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanResourceConstraintTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -21966,41 +21675,38 @@ impl std::ops::DerefMut for dyn VsanUpgradeSystemPreflightCheckIssueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanUpgradeSystemPreflightCheckIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanUpgradeSystemPreflightCheckIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanUpgradeSystemPreflightCheckIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanUpgradeSystemPreflightCheckIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanUpgradeSystemPreflightCheckIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanUpgradeSystemPreflightCheckIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanUpgradeSystemPreflightCheckIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanUpgradeSystemPreflightCheckIssueVisitor {
-    type Value = Box<dyn VsanUpgradeSystemPreflightCheckIssueTrait>;
+struct VsanUpgradeSystemPreflightCheckIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanUpgradeSystemPreflightCheckIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanUpgradeSystemPreflightCheckIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanUpgradeSystemPreflightCheckIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanUpgradeSystemPreflightCheckIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -22195,41 +21901,38 @@ impl std::ops::DerefMut for dyn VsanUpgradeSystemPreflightCheckResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanUpgradeSystemPreflightCheckResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanUpgradeSystemPreflightCheckResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanUpgradeSystemPreflightCheckResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanUpgradeSystemPreflightCheckResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanUpgradeSystemPreflightCheckResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanUpgradeSystemPreflightCheckResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanUpgradeSystemPreflightCheckResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanUpgradeSystemPreflightCheckResultVisitor {
-    type Value = Box<dyn VsanUpgradeSystemPreflightCheckResultTrait>;
+struct VsanUpgradeSystemPreflightCheckResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanUpgradeSystemPreflightCheckResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanUpgradeSystemPreflightCheckResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanUpgradeSystemPreflightCheckResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanUpgradeSystemPreflightCheckResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -22285,41 +21988,38 @@ impl std::ops::DerefMut for dyn VsanUpgradeSystemUpgradeHistoryItemTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanUpgradeSystemUpgradeHistoryItemTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanUpgradeSystemUpgradeHistoryItemTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanUpgradeSystemUpgradeHistoryItemVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanUpgradeSystemUpgradeHistoryItemTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanUpgradeSystemUpgradeHistoryItemVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanUpgradeSystemUpgradeHistoryItemTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanUpgradeSystemUpgradeHistoryItemTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanUpgradeSystemUpgradeHistoryItemVisitor {
-    type Value = Box<dyn VsanUpgradeSystemUpgradeHistoryItemTrait>;
+struct VsanUpgradeSystemUpgradeHistoryItemTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanUpgradeSystemUpgradeHistoryItemTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanUpgradeSystemUpgradeHistoryItemTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanUpgradeSystemUpgradeHistoryItemTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanUpgradeSystemUpgradeHistoryItemTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -22390,41 +22090,38 @@ impl std::ops::DerefMut for dyn VsanUpgradeSystemUpgradeStatusTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanUpgradeSystemUpgradeStatusTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanUpgradeSystemUpgradeStatusTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanUpgradeSystemUpgradeStatusVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanUpgradeSystemUpgradeStatusTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanUpgradeSystemUpgradeStatusVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanUpgradeSystemUpgradeStatusTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanUpgradeSystemUpgradeStatusTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanUpgradeSystemUpgradeStatusVisitor {
-    type Value = Box<dyn VsanUpgradeSystemUpgradeStatusTrait>;
+struct VsanUpgradeSystemUpgradeStatusTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanUpgradeSystemUpgradeStatusTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanUpgradeSystemUpgradeStatusTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanUpgradeSystemUpgradeStatusTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanUpgradeSystemUpgradeStatusTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -22470,41 +22167,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanUpgrade
 /// - `AlarmManager::create_alarm(spec).action?→AlarmTriggeringAction.action`
 pub trait ActionTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn ActionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ActionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ActionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ActionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ActionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ActionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ActionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ActionVisitor {
-    type Value = Box<dyn ActionTrait>;
+struct ActionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ActionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ActionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ActionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ActionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -22557,41 +22251,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ActionTrait
 /// - `AlarmManager::create_alarm(spec).action?`
 pub trait AlarmActionTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn AlarmActionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn AlarmActionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(AlarmActionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn AlarmActionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct AlarmActionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn AlarmActionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(AlarmActionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for AlarmActionVisitor {
-    type Value = Box<dyn AlarmActionTrait>;
+struct AlarmActionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn AlarmActionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid AlarmActionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for AlarmActionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn AlarmActionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -22632,41 +22323,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AlarmAction
 /// - `AlarmManager::create_alarm(spec).expression`
 pub trait AlarmExpressionTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn AlarmExpressionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn AlarmExpressionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(AlarmExpressionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn AlarmExpressionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct AlarmExpressionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn AlarmExpressionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(AlarmExpressionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for AlarmExpressionVisitor {
-    type Value = Box<dyn AlarmExpressionTrait>;
+struct AlarmExpressionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn AlarmExpressionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid AlarmExpressionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for AlarmExpressionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn AlarmExpressionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -22735,41 +22423,38 @@ impl std::ops::DerefMut for dyn AlarmSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn AlarmSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn AlarmSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(AlarmSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn AlarmSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct AlarmSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn AlarmSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(AlarmSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for AlarmSpecVisitor {
-    type Value = Box<dyn AlarmSpecTrait>;
+struct AlarmSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn AlarmSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid AlarmSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for AlarmSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn AlarmSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -22832,41 +22517,38 @@ impl std::ops::DerefMut for dyn ClusterActionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterActionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterActionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterActionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterActionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterActionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterActionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterActionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterActionVisitor {
-    type Value = Box<dyn ClusterActionTrait>;
+struct ClusterActionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterActionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterActionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterActionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterActionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -22954,41 +22636,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterActi
 /// - `ClusterComputeResource::summary→ClusterComputeResourceSummary.admission_control_info?`
 pub trait ClusterDasAdmissionControlInfoTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn ClusterDasAdmissionControlInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterDasAdmissionControlInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterDasAdmissionControlInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterDasAdmissionControlInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterDasAdmissionControlInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterDasAdmissionControlInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterDasAdmissionControlInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterDasAdmissionControlInfoVisitor {
-    type Value = Box<dyn ClusterDasAdmissionControlInfoTrait>;
+struct ClusterDasAdmissionControlInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterDasAdmissionControlInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterDasAdmissionControlInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterDasAdmissionControlInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterDasAdmissionControlInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23059,41 +22738,38 @@ impl std::ops::DerefMut for dyn ClusterDasAdmissionControlPolicyTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterDasAdmissionControlPolicyTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterDasAdmissionControlPolicyTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterDasAdmissionControlPolicyVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterDasAdmissionControlPolicyTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterDasAdmissionControlPolicyVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterDasAdmissionControlPolicyTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterDasAdmissionControlPolicyTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterDasAdmissionControlPolicyVisitor {
-    type Value = Box<dyn ClusterDasAdmissionControlPolicyTrait>;
+struct ClusterDasAdmissionControlPolicyTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterDasAdmissionControlPolicyTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterDasAdmissionControlPolicyTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterDasAdmissionControlPolicyTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterDasAdmissionControlPolicyTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23162,41 +22838,38 @@ impl std::ops::DerefMut for dyn ClusterDasAdvancedRuntimeInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterDasAdvancedRuntimeInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterDasAdvancedRuntimeInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterDasAdvancedRuntimeInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterDasAdvancedRuntimeInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterDasAdvancedRuntimeInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterDasAdvancedRuntimeInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterDasAdvancedRuntimeInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterDasAdvancedRuntimeInfoVisitor {
-    type Value = Box<dyn ClusterDasAdvancedRuntimeInfoTrait>;
+struct ClusterDasAdvancedRuntimeInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterDasAdvancedRuntimeInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterDasAdvancedRuntimeInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterDasAdvancedRuntimeInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterDasAdvancedRuntimeInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23236,41 +22909,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasA
 /// - `ClusterComputeResource::summary→ClusterComputeResourceSummary.das_data?`
 pub trait ClusterDasDataTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn ClusterDasDataTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterDasDataTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterDasDataVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterDasDataTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterDasDataVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterDasDataTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterDasDataTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterDasDataVisitor {
-    type Value = Box<dyn ClusterDasDataTrait>;
+struct ClusterDasDataTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterDasDataTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterDasDataTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterDasDataTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterDasDataTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23304,41 +22974,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterDasD
 /// - `ClusterComputeResource::retrieve_das_advanced_runtime_info().das_host_info?`
 pub trait ClusterDasHostInfoTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn ClusterDasHostInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterDasHostInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterDasHostInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterDasHostInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterDasHostInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterDasHostInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterDasHostInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterDasHostInfoVisitor {
-    type Value = Box<dyn ClusterDasHostInfoTrait>;
+struct ClusterDasHostInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterDasHostInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterDasHostInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterDasHostInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterDasHostInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23396,41 +23063,38 @@ impl std::ops::DerefMut for dyn ClusterDrsFaultsFaultsByVmTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterDrsFaultsFaultsByVmTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterDrsFaultsFaultsByVmTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterDrsFaultsFaultsByVmVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterDrsFaultsFaultsByVmTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterDrsFaultsFaultsByVmVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterDrsFaultsFaultsByVmTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterDrsFaultsFaultsByVmTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterDrsFaultsFaultsByVmVisitor {
-    type Value = Box<dyn ClusterDrsFaultsFaultsByVmTrait>;
+struct ClusterDrsFaultsFaultsByVmTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterDrsFaultsFaultsByVmTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterDrsFaultsFaultsByVmTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterDrsFaultsFaultsByVmTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterDrsFaultsFaultsByVmTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23501,41 +23165,38 @@ impl std::ops::DerefMut for dyn ClusterGroupInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterGroupInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterGroupInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterGroupInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterGroupInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterGroupInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterGroupInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterGroupInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterGroupInfoVisitor {
-    type Value = Box<dyn ClusterGroupInfoTrait>;
+struct ClusterGroupInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterGroupInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterGroupInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterGroupInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterGroupInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23670,41 +23331,38 @@ impl std::ops::DerefMut for dyn ClusterRuleInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterRuleInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterRuleInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterRuleInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterRuleInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterRuleInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterRuleInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterRuleInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterRuleInfoVisitor {
-    type Value = Box<dyn ClusterRuleInfoTrait>;
+struct ClusterRuleInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterRuleInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterRuleInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterRuleInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterRuleInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23800,41 +23458,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterRule
 /// *(10 of 18 paths)*
 pub trait ClusterSlotPolicyTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn ClusterSlotPolicyTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterSlotPolicyTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterSlotPolicyVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterSlotPolicyTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterSlotPolicyVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterSlotPolicyTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterSlotPolicyTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterSlotPolicyVisitor {
-    type Value = Box<dyn ClusterSlotPolicyTrait>;
+struct ClusterSlotPolicyTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterSlotPolicyTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterSlotPolicyTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterSlotPolicyTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterSlotPolicyTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23886,41 +23541,38 @@ impl std::ops::DerefMut for dyn VsanClusterHealthLinkBaseTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanClusterHealthLinkBaseTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanClusterHealthLinkBaseTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanClusterHealthLinkBaseVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanClusterHealthLinkBaseTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanClusterHealthLinkBaseVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanClusterHealthLinkBaseTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanClusterHealthLinkBaseTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanClusterHealthLinkBaseVisitor {
-    type Value = Box<dyn VsanClusterHealthLinkBaseTrait>;
+struct VsanClusterHealthLinkBaseTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanClusterHealthLinkBaseTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanClusterHealthLinkBaseTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanClusterHealthLinkBaseTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanClusterHealthLinkBaseTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -23987,41 +23639,38 @@ impl std::ops::DerefMut for dyn VsanClusterHealthResultBaseTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanClusterHealthResultBaseTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanClusterHealthResultBaseTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanClusterHealthResultBaseVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanClusterHealthResultBaseTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanClusterHealthResultBaseVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanClusterHealthResultBaseTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanClusterHealthResultBaseTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanClusterHealthResultBaseVisitor {
-    type Value = Box<dyn VsanClusterHealthResultBaseTrait>;
+struct VsanClusterHealthResultBaseTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanClusterHealthResultBaseTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanClusterHealthResultBaseTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanClusterHealthResultBaseTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanClusterHealthResultBaseTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24087,41 +23736,38 @@ impl std::ops::DerefMut for dyn VimClusterVsanFaultDomainSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VimClusterVsanFaultDomainSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VimClusterVsanFaultDomainSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VimClusterVsanFaultDomainSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VimClusterVsanFaultDomainSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VimClusterVsanFaultDomainSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VimClusterVsanFaultDomainSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VimClusterVsanFaultDomainSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VimClusterVsanFaultDomainSpecVisitor {
-    type Value = Box<dyn VimClusterVsanFaultDomainSpecTrait>;
+struct VimClusterVsanFaultDomainSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VimClusterVsanFaultDomainSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VimClusterVsanFaultDomainSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VimClusterVsanFaultDomainSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VimClusterVsanFaultDomainSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24196,41 +23842,38 @@ impl std::ops::DerefMut for dyn VsanHealthActionBaseTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanHealthActionBaseTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanHealthActionBaseTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanHealthActionBaseVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanHealthActionBaseTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanHealthActionBaseVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanHealthActionBaseTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanHealthActionBaseTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanHealthActionBaseVisitor {
-    type Value = Box<dyn VsanHealthActionBaseTrait>;
+struct VsanHealthActionBaseTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanHealthActionBaseTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanHealthActionBaseTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanHealthActionBaseTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanHealthActionBaseTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24307,41 +23950,38 @@ impl std::ops::DerefMut for dyn VsanIscsiLunCommonInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanIscsiLunCommonInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanIscsiLunCommonInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanIscsiLunCommonInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanIscsiLunCommonInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanIscsiLunCommonInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiLunCommonInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanIscsiLunCommonInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanIscsiLunCommonInfoVisitor {
-    type Value = Box<dyn VsanIscsiLunCommonInfoTrait>;
+struct VsanIscsiLunCommonInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanIscsiLunCommonInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanIscsiLunCommonInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanIscsiLunCommonInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanIscsiLunCommonInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24404,41 +24044,38 @@ impl std::ops::DerefMut for dyn VsanIscsiTargetBasicInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanIscsiTargetBasicInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanIscsiTargetBasicInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanIscsiTargetBasicInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanIscsiTargetBasicInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanIscsiTargetBasicInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiTargetBasicInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanIscsiTargetBasicInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanIscsiTargetBasicInfoVisitor {
-    type Value = Box<dyn VsanIscsiTargetBasicInfoTrait>;
+struct VsanIscsiTargetBasicInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanIscsiTargetBasicInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanIscsiTargetBasicInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanIscsiTargetBasicInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanIscsiTargetBasicInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24507,41 +24144,38 @@ impl std::ops::DerefMut for dyn VsanIscsiTargetCommonInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanIscsiTargetCommonInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanIscsiTargetCommonInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanIscsiTargetCommonInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanIscsiTargetCommonInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanIscsiTargetCommonInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiTargetCommonInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanIscsiTargetCommonInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanIscsiTargetCommonInfoVisitor {
-    type Value = Box<dyn VsanIscsiTargetCommonInfoTrait>;
+struct VsanIscsiTargetCommonInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanIscsiTargetCommonInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanIscsiTargetCommonInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanIscsiTargetCommonInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanIscsiTargetCommonInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24614,41 +24248,38 @@ impl std::ops::DerefMut for dyn VsanIscsiTargetServiceConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanIscsiTargetServiceConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanIscsiTargetServiceConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanIscsiTargetServiceConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanIscsiTargetServiceConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanIscsiTargetServiceConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiTargetServiceConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanIscsiTargetServiceConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanIscsiTargetServiceConfigVisitor {
-    type Value = Box<dyn VsanIscsiTargetServiceConfigTrait>;
+struct VsanIscsiTargetServiceConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanIscsiTargetServiceConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanIscsiTargetServiceConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanIscsiTargetServiceConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanIscsiTargetServiceConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24688,41 +24319,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiTa
 /// - `CnsVolumeManager::cns_configure_volume_ac_ls(acl_config_specs).access_control_spec_list[*]`
 pub trait CnsAccessControlSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn CnsAccessControlSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsAccessControlSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsAccessControlSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsAccessControlSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsAccessControlSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsAccessControlSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsAccessControlSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsAccessControlSpecVisitor {
-    type Value = Box<dyn CnsAccessControlSpecTrait>;
+struct CnsAccessControlSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsAccessControlSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsAccessControlSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsAccessControlSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsAccessControlSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24791,41 +24419,38 @@ impl std::ops::DerefMut for dyn CnsBackingObjectDetailsTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn CnsBackingObjectDetailsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsBackingObjectDetailsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsBackingObjectDetailsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsBackingObjectDetailsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsBackingObjectDetailsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsBackingObjectDetailsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsBackingObjectDetailsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsBackingObjectDetailsVisitor {
-    type Value = Box<dyn CnsBackingObjectDetailsTrait>;
+struct CnsBackingObjectDetailsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsBackingObjectDetailsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsBackingObjectDetailsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsBackingObjectDetailsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsBackingObjectDetailsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24901,41 +24526,38 @@ impl std::ops::DerefMut for dyn CnsFileBackingDetailsTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn CnsFileBackingDetailsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsFileBackingDetailsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsFileBackingDetailsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsFileBackingDetailsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsFileBackingDetailsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsFileBackingDetailsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsFileBackingDetailsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsFileBackingDetailsVisitor {
-    type Value = Box<dyn CnsFileBackingDetailsTrait>;
+struct CnsFileBackingDetailsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsFileBackingDetailsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsFileBackingDetailsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsFileBackingDetailsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsFileBackingDetailsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -24975,41 +24597,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsFileBack
 /// - `CnsVolumeManager::cns_create_volume(create_specs).create_spec?`
 pub trait CnsBaseCreateSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn CnsBaseCreateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsBaseCreateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsBaseCreateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsBaseCreateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsBaseCreateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsBaseCreateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsBaseCreateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsBaseCreateSpecVisitor {
-    type Value = Box<dyn CnsBaseCreateSpecTrait>;
+struct CnsBaseCreateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsBaseCreateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsBaseCreateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsBaseCreateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsBaseCreateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25054,41 +24673,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsBaseCrea
 /// - `CnsVolumeManager::cns_create_volume(create_specs).create_spec?⇒CnsFileCreateSpecTrait`
 pub trait CnsFileCreateSpecTrait : super::traits::CnsBaseCreateSpecTrait {
 }
-impl<'s> serde::Serialize for dyn CnsFileCreateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsFileCreateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsFileCreateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsFileCreateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsFileCreateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsFileCreateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsFileCreateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsFileCreateSpecVisitor {
-    type Value = Box<dyn CnsFileCreateSpecTrait>;
+struct CnsFileCreateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsFileCreateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsFileCreateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsFileCreateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsFileCreateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25145,41 +24761,38 @@ impl std::ops::DerefMut for dyn CnsEntityMetadataTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn CnsEntityMetadataTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsEntityMetadataTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsEntityMetadataVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsEntityMetadataTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsEntityMetadataVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsEntityMetadataTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsEntityMetadataTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsEntityMetadataVisitor {
-    type Value = Box<dyn CnsEntityMetadataTrait>;
+struct CnsEntityMetadataTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsEntityMetadataTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsEntityMetadataTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsEntityMetadataTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsEntityMetadataTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25245,41 +24858,38 @@ impl std::ops::DerefMut for dyn CnsQueryFilterTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn CnsQueryFilterTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsQueryFilterTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsQueryFilterVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsQueryFilterTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsQueryFilterVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsQueryFilterTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsQueryFilterTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsQueryFilterVisitor {
-    type Value = Box<dyn CnsQueryFilterTrait>;
+struct CnsQueryFilterTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsQueryFilterTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsQueryFilterTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsQueryFilterTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsQueryFilterTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25345,41 +24955,38 @@ impl std::ops::DerefMut for dyn CnsVolumeOperationResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn CnsVolumeOperationResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsVolumeOperationResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsVolumeOperationResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsVolumeOperationResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsVolumeOperationResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsVolumeOperationResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsVolumeOperationResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsVolumeOperationResultVisitor {
-    type Value = Box<dyn CnsVolumeOperationResultTrait>;
+struct CnsVolumeOperationResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsVolumeOperationResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsVolumeOperationResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsVolumeOperationResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsVolumeOperationResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25449,41 +25056,38 @@ impl std::ops::DerefMut for dyn CnsVolumeRelocateSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn CnsVolumeRelocateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsVolumeRelocateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsVolumeRelocateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsVolumeRelocateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsVolumeRelocateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsVolumeRelocateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsVolumeRelocateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsVolumeRelocateSpecVisitor {
-    type Value = Box<dyn CnsVolumeRelocateSpecTrait>;
+struct CnsVolumeRelocateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsVolumeRelocateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsVolumeRelocateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsVolumeRelocateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsVolumeRelocateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25525,41 +25129,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsVolumeRe
 /// - `CnsVolumeManager::cns_create_volume(create_specs).volume_source?`
 pub trait CnsVolumeSourceTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn CnsVolumeSourceTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CnsVolumeSourceTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CnsVolumeSourceVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CnsVolumeSourceTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CnsVolumeSourceVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CnsVolumeSourceTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CnsVolumeSourceTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CnsVolumeSourceVisitor {
-    type Value = Box<dyn CnsVolumeSourceTrait>;
+struct CnsVolumeSourceTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CnsVolumeSourceTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CnsVolumeSourceTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CnsVolumeSourceTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CnsVolumeSourceTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25623,41 +25224,38 @@ impl std::ops::DerefMut for dyn DvPortSettingTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvPortSettingTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvPortSettingTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvPortSettingVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvPortSettingTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvPortSettingVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvPortSettingTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvPortSettingTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvPortSettingVisitor {
-    type Value = Box<dyn DvPortSettingTrait>;
+struct DvPortSettingTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvPortSettingTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvPortSettingTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvPortSettingTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvPortSettingTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25723,41 +25321,38 @@ impl std::ops::DerefMut for dyn DvPortgroupPolicyTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvPortgroupPolicyTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvPortgroupPolicyTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvPortgroupPolicyVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvPortgroupPolicyTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvPortgroupPolicyVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvPortgroupPolicyTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvPortgroupPolicyTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvPortgroupPolicyVisitor {
-    type Value = Box<dyn DvPortgroupPolicyTrait>;
+struct DvPortgroupPolicyTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvPortgroupPolicyTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvPortgroupPolicyTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvPortgroupPolicyTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvPortgroupPolicyTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25813,41 +25408,38 @@ impl std::ops::DerefMut for dyn DistributedVirtualSwitchManagerHostDvsFilterSpec
     }
 }
 
-impl<'s> serde::Serialize for dyn DistributedVirtualSwitchManagerHostDvsFilterSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DistributedVirtualSwitchManagerHostDvsFilterSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DistributedVirtualSwitchManagerHostDvsFilterSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DistributedVirtualSwitchManagerHostDvsFilterSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DistributedVirtualSwitchManagerHostDvsFilterSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DistributedVirtualSwitchManagerHostDvsFilterSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DistributedVirtualSwitchManagerHostDvsFilterSpecVisitor {
-    type Value = Box<dyn DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>;
+struct DistributedVirtualSwitchManagerHostDvsFilterSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DistributedVirtualSwitchManagerHostDvsFilterSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DistributedVirtualSwitchManagerHostDvsFilterSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25899,41 +25491,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Distributed
 /// ***Since:*** vSphere API Release 8.0.3.0
 pub trait DvsFilterSpecConnecteeSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DvsFilterSpecConnecteeSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsFilterSpecConnecteeSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsFilterSpecConnecteeSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsFilterSpecConnecteeSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsFilterSpecConnecteeSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsFilterSpecConnecteeSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsFilterSpecConnecteeSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsFilterSpecConnecteeSpecVisitor {
-    type Value = Box<dyn DvsFilterSpecConnecteeSpecTrait>;
+struct DvsFilterSpecConnecteeSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsFilterSpecConnecteeSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsFilterSpecConnecteeSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsFilterSpecConnecteeSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsFilterSpecConnecteeSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -25977,41 +25566,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterSp
 /// ***Since:*** vSphere API Release 8.0.3.0
 pub trait DvsFilterSpecVlanSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DvsFilterSpecVlanSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsFilterSpecVlanSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsFilterSpecVlanSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsFilterSpecVlanSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsFilterSpecVlanSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsFilterSpecVlanSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsFilterSpecVlanSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsFilterSpecVlanSpecVisitor {
-    type Value = Box<dyn DvsFilterSpecVlanSpecTrait>;
+struct DvsFilterSpecVlanSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsFilterSpecVlanSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsFilterSpecVlanSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsFilterSpecVlanSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsFilterSpecVlanSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26064,41 +25650,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsFilterSp
 /// *(10 of 17 paths)*
 pub trait DistributedVirtualSwitchHostMemberBackingTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DistributedVirtualSwitchHostMemberBackingTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DistributedVirtualSwitchHostMemberBackingTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DistributedVirtualSwitchHostMemberBackingVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DistributedVirtualSwitchHostMemberBackingTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DistributedVirtualSwitchHostMemberBackingVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DistributedVirtualSwitchHostMemberBackingTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DistributedVirtualSwitchHostMemberBackingTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DistributedVirtualSwitchHostMemberBackingVisitor {
-    type Value = Box<dyn DistributedVirtualSwitchHostMemberBackingTrait>;
+struct DistributedVirtualSwitchHostMemberBackingTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DistributedVirtualSwitchHostMemberBackingTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DistributedVirtualSwitchHostMemberBackingTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DistributedVirtualSwitchHostMemberBackingTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DistributedVirtualSwitchHostMemberBackingTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26151,41 +25734,38 @@ impl std::ops::DerefMut for dyn HostMemberHealthCheckResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostMemberHealthCheckResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostMemberHealthCheckResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostMemberHealthCheckResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostMemberHealthCheckResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostMemberHealthCheckResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostMemberHealthCheckResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostMemberHealthCheckResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostMemberHealthCheckResultVisitor {
-    type Value = Box<dyn HostMemberHealthCheckResultTrait>;
+struct HostMemberHealthCheckResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostMemberHealthCheckResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostMemberHealthCheckResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostMemberHealthCheckResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostMemberHealthCheckResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26261,41 +25841,38 @@ impl std::ops::DerefMut for dyn HostMemberUplinkHealthCheckResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostMemberUplinkHealthCheckResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostMemberUplinkHealthCheckResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostMemberUplinkHealthCheckResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostMemberUplinkHealthCheckResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostMemberUplinkHealthCheckResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostMemberUplinkHealthCheckResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostMemberUplinkHealthCheckResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostMemberUplinkHealthCheckResultVisitor {
-    type Value = Box<dyn HostMemberUplinkHealthCheckResultTrait>;
+struct HostMemberUplinkHealthCheckResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostMemberUplinkHealthCheckResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostMemberUplinkHealthCheckResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostMemberUplinkHealthCheckResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostMemberUplinkHealthCheckResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26350,41 +25927,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostMemberU
 /// *(10 of 20 paths)*
 pub trait DvsNetworkRuleActionTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn DvsNetworkRuleActionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsNetworkRuleActionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsNetworkRuleActionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsNetworkRuleActionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsNetworkRuleActionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsNetworkRuleActionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsNetworkRuleActionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsNetworkRuleActionVisitor {
-    type Value = Box<dyn DvsNetworkRuleActionTrait>;
+struct DvsNetworkRuleActionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsNetworkRuleActionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsNetworkRuleActionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsNetworkRuleActionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsNetworkRuleActionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26479,41 +26053,38 @@ impl std::ops::DerefMut for dyn DvsNetworkRuleQualifierTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvsNetworkRuleQualifierTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsNetworkRuleQualifierTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsNetworkRuleQualifierVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsNetworkRuleQualifierTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsNetworkRuleQualifierVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsNetworkRuleQualifierTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsNetworkRuleQualifierTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsNetworkRuleQualifierVisitor {
-    type Value = Box<dyn DvsNetworkRuleQualifierTrait>;
+struct DvsNetworkRuleQualifierTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsNetworkRuleQualifierTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsNetworkRuleQualifierTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsNetworkRuleQualifierTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsNetworkRuleQualifierTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26583,41 +26154,38 @@ impl std::ops::DerefMut for dyn CryptoManagerKmipCryptoKeyStatusKeyInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn CryptoManagerKmipCryptoKeyStatusKeyInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CryptoManagerKmipCryptoKeyStatusKeyInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CryptoManagerKmipCryptoKeyStatusKeyInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CryptoManagerKmipCryptoKeyStatusKeyInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CryptoManagerKmipCryptoKeyStatusKeyInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CryptoManagerKmipCryptoKeyStatusKeyInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CryptoManagerKmipCryptoKeyStatusKeyInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CryptoManagerKmipCryptoKeyStatusKeyInfoVisitor {
-    type Value = Box<dyn CryptoManagerKmipCryptoKeyStatusKeyInfoTrait>;
+struct CryptoManagerKmipCryptoKeyStatusKeyInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CryptoManagerKmipCryptoKeyStatusKeyInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CryptoManagerKmipCryptoKeyStatusKeyInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CryptoManagerKmipCryptoKeyStatusKeyInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CryptoManagerKmipCryptoKeyStatusKeyInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26673,41 +26241,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoManag
 /// *(10 of 100 paths)*
 pub trait CryptoSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn CryptoSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CryptoSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CryptoSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CryptoSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CryptoSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CryptoSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CryptoSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CryptoSpecVisitor {
-    type Value = Box<dyn CryptoSpecTrait>;
+struct CryptoSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CryptoSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CryptoSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CryptoSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CryptoSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26773,41 +26338,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoSpecT
 /// *(10 of 100 paths)*
 pub trait CryptoSpecNoOpTrait : super::traits::CryptoSpecTrait {
 }
-impl<'s> serde::Serialize for dyn CryptoSpecNoOpTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CryptoSpecNoOpTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CryptoSpecNoOpVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CryptoSpecNoOpTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CryptoSpecNoOpVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CryptoSpecNoOpTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CryptoSpecNoOpTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CryptoSpecNoOpVisitor {
-    type Value = Box<dyn CryptoSpecNoOpTrait>;
+struct CryptoSpecNoOpTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CryptoSpecNoOpTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CryptoSpecNoOpTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CryptoSpecNoOpTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CryptoSpecNoOpTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26846,41 +26408,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CryptoSpecN
 /// - `CryptoManagerKmip::retrieve_kmip_servers_status_task(clusters).key_info?`
 pub trait KmipClusterInfoKeyInfoTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn KmipClusterInfoKeyInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn KmipClusterInfoKeyInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(KmipClusterInfoKeyInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn KmipClusterInfoKeyInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct KmipClusterInfoKeyInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn KmipClusterInfoKeyInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(KmipClusterInfoKeyInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for KmipClusterInfoKeyInfoVisitor {
-    type Value = Box<dyn KmipClusterInfoKeyInfoTrait>;
+struct KmipClusterInfoKeyInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn KmipClusterInfoKeyInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid KmipClusterInfoKeyInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for KmipClusterInfoKeyInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn KmipClusterInfoKeyInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -26931,41 +26490,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn KmipCluster
 /// *(10 of 25 paths)*
 pub trait KmipServerSpecKeySpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn KmipServerSpecKeySpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn KmipServerSpecKeySpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(KmipServerSpecKeySpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn KmipServerSpecKeySpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct KmipServerSpecKeySpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn KmipServerSpecKeySpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(KmipServerSpecKeySpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for KmipServerSpecKeySpecVisitor {
-    type Value = Box<dyn KmipServerSpecKeySpecTrait>;
+struct KmipServerSpecKeySpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn KmipServerSpecKeySpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid KmipServerSpecKeySpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for KmipServerSpecKeySpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn KmipServerSpecKeySpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27004,41 +26560,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn KmipServerS
 /// of event objects.
 pub trait EventArgumentTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn EventArgumentTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn EventArgumentTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(EventArgumentVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn EventArgumentTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct EventArgumentVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn EventArgumentTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(EventArgumentTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for EventArgumentVisitor {
-    type Value = Box<dyn EventArgumentTrait>;
+struct EventArgumentTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn EventArgumentTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid EventArgumentTrait JSON object with a _typeName field")
+impl miniserde::de::Map for EventArgumentTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn EventArgumentTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27146,41 +26699,38 @@ impl std::ops::DerefMut for dyn EntityEventArgumentTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn EntityEventArgumentTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn EntityEventArgumentTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(EntityEventArgumentVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn EntityEventArgumentTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct EntityEventArgumentVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn EntityEventArgumentTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(EntityEventArgumentTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for EntityEventArgumentVisitor {
-    type Value = Box<dyn EntityEventArgumentTrait>;
+struct EntityEventArgumentTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn EntityEventArgumentTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid EntityEventArgumentTrait JSON object with a _typeName field")
+impl miniserde::de::Map for EntityEventArgumentTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn EntityEventArgumentTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27286,41 +26836,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EntityEvent
 /// - `EventManager::query_events(event_view_spec)`
 pub trait EventManagerEventViewSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn EventManagerEventViewSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn EventManagerEventViewSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(EventManagerEventViewSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn EventManagerEventViewSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct EventManagerEventViewSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn EventManagerEventViewSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(EventManagerEventViewSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for EventManagerEventViewSpecVisitor {
-    type Value = Box<dyn EventManagerEventViewSpecTrait>;
+struct EventManagerEventViewSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn EventManagerEventViewSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid EventManagerEventViewSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for EventManagerEventViewSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn EventManagerEventViewSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27378,41 +26925,38 @@ impl std::ops::DerefMut for dyn HostAuthenticationStoreInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostAuthenticationStoreInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostAuthenticationStoreInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostAuthenticationStoreInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostAuthenticationStoreInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostAuthenticationStoreInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostAuthenticationStoreInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostAuthenticationStoreInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostAuthenticationStoreInfoVisitor {
-    type Value = Box<dyn HostAuthenticationStoreInfoTrait>;
+struct HostAuthenticationStoreInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostAuthenticationStoreInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostAuthenticationStoreInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostAuthenticationStoreInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostAuthenticationStoreInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27486,41 +27030,38 @@ impl std::ops::DerefMut for dyn HostDirectoryStoreInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostDirectoryStoreInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostDirectoryStoreInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostDirectoryStoreInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostDirectoryStoreInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostDirectoryStoreInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostDirectoryStoreInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostDirectoryStoreInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostDirectoryStoreInfoVisitor {
-    type Value = Box<dyn HostDirectoryStoreInfoTrait>;
+struct HostDirectoryStoreInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostDirectoryStoreInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostDirectoryStoreInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostDirectoryStoreInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostDirectoryStoreInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27578,41 +27119,38 @@ impl std::ops::DerefMut for dyn HostDatastoreConnectInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostDatastoreConnectInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostDatastoreConnectInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostDatastoreConnectInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostDatastoreConnectInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostDatastoreConnectInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostDatastoreConnectInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostDatastoreConnectInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostDatastoreConnectInfoVisitor {
-    type Value = Box<dyn HostDatastoreConnectInfoTrait>;
+struct HostDatastoreConnectInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostDatastoreConnectInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostDatastoreConnectInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostDatastoreConnectInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostDatastoreConnectInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27676,41 +27214,38 @@ impl std::ops::DerefMut for dyn HostConnectInfoNetworkInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostConnectInfoNetworkInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostConnectInfoNetworkInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostConnectInfoNetworkInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostConnectInfoNetworkInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostConnectInfoNetworkInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostConnectInfoNetworkInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostConnectInfoNetworkInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostConnectInfoNetworkInfoVisitor {
-    type Value = Box<dyn HostConnectInfoNetworkInfoTrait>;
+struct HostConnectInfoNetworkInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostConnectInfoNetworkInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostConnectInfoNetworkInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostConnectInfoNetworkInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostConnectInfoNetworkInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27766,41 +27301,38 @@ impl std::ops::DerefMut for dyn HostDataTransportConnectionInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostDataTransportConnectionInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostDataTransportConnectionInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostDataTransportConnectionInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostDataTransportConnectionInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostDataTransportConnectionInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostDataTransportConnectionInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostDataTransportConnectionInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostDataTransportConnectionInfoVisitor {
-    type Value = Box<dyn HostDataTransportConnectionInfoTrait>;
+struct HostDataTransportConnectionInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostDataTransportConnectionInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostDataTransportConnectionInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostDataTransportConnectionInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostDataTransportConnectionInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27859,41 +27391,38 @@ impl std::ops::DerefMut for dyn FileInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn FileInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn FileInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(FileInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn FileInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct FileInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn FileInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(FileInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for FileInfoVisitor {
-    type Value = Box<dyn FileInfoTrait>;
+struct FileInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn FileInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid FileInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for FileInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn FileInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -27994,41 +27523,38 @@ impl std::ops::DerefMut for dyn VmConfigFileInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmConfigFileInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmConfigFileInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmConfigFileInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmConfigFileInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmConfigFileInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmConfigFileInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmConfigFileInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmConfigFileInfoVisitor {
-    type Value = Box<dyn VmConfigFileInfoTrait>;
+struct VmConfigFileInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmConfigFileInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmConfigFileInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmConfigFileInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmConfigFileInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -28073,41 +27599,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmConfigFil
 /// - `HostDatastoreBrowser::search_datastore_sub_folders_task(search_spec).query?[*]`
 pub trait FileQueryTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn FileQueryTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn FileQueryTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(FileQueryVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn FileQueryTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct FileQueryVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn FileQueryTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(FileQueryTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for FileQueryVisitor {
-    type Value = Box<dyn FileQueryTrait>;
+struct FileQueryTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn FileQueryTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid FileQueryTrait JSON object with a _typeName field")
+impl miniserde::de::Map for FileQueryTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn FileQueryTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -28194,41 +27717,38 @@ impl std::ops::DerefMut for dyn VmConfigFileQueryTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmConfigFileQueryTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmConfigFileQueryTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmConfigFileQueryVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmConfigFileQueryTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmConfigFileQueryVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmConfigFileQueryTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmConfigFileQueryTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmConfigFileQueryVisitor {
-    type Value = Box<dyn VmConfigFileQueryTrait>;
+struct VmConfigFileQueryTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmConfigFileQueryTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmConfigFileQueryTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmConfigFileQueryTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmConfigFileQueryTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -28281,41 +27801,38 @@ impl std::ops::DerefMut for dyn HostDeviceTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostDeviceTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostDeviceTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostDeviceVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostDeviceTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostDeviceVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostDeviceTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostDeviceTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostDeviceVisitor {
-    type Value = Box<dyn HostDeviceTrait>;
+struct HostDeviceTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostDeviceTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostDeviceTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostDeviceTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostDeviceTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -28415,41 +27932,38 @@ impl std::ops::DerefMut for dyn ScsiLunTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ScsiLunTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ScsiLunTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ScsiLunVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ScsiLunTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ScsiLunVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ScsiLunTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ScsiLunTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ScsiLunVisitor {
-    type Value = Box<dyn ScsiLunTrait>;
+struct ScsiLunTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ScsiLunTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ScsiLunTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ScsiLunTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ScsiLunTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -28502,41 +28016,38 @@ impl std::ops::DerefMut for dyn HostDigestInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostDigestInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostDigestInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostDigestInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostDigestInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostDigestInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostDigestInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostDigestInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostDigestInfoVisitor {
-    type Value = Box<dyn HostDigestInfoTrait>;
+struct HostDigestInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostDigestInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostDigestInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostDigestInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostDigestInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -28612,41 +28123,38 @@ impl std::ops::DerefMut for dyn HostDnsConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostDnsConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostDnsConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostDnsConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostDnsConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostDnsConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostDnsConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostDnsConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostDnsConfigVisitor {
-    type Value = Box<dyn HostDnsConfigTrait>;
+struct HostDnsConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostDnsConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostDnsConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostDnsConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostDnsConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -28712,41 +28220,38 @@ impl std::ops::DerefMut for dyn HostFileSystemVolumeTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostFileSystemVolumeTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostFileSystemVolumeTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostFileSystemVolumeVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostFileSystemVolumeTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostFileSystemVolumeVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostFileSystemVolumeTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostFileSystemVolumeTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostFileSystemVolumeVisitor {
-    type Value = Box<dyn HostFileSystemVolumeTrait>;
+struct HostFileSystemVolumeTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostFileSystemVolumeTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostFileSystemVolumeTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostFileSystemVolumeTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostFileSystemVolumeTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -28850,41 +28355,38 @@ impl std::ops::DerefMut for dyn HostHardwareElementInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostHardwareElementInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostHardwareElementInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostHardwareElementInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostHardwareElementInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostHardwareElementInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostHardwareElementInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostHardwareElementInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostHardwareElementInfoVisitor {
-    type Value = Box<dyn HostHardwareElementInfoTrait>;
+struct HostHardwareElementInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostHardwareElementInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostHardwareElementInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostHardwareElementInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostHardwareElementInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -28931,41 +28433,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostHardwar
 /// - `HostStorageSystem::create_software_adapter(spec)`
 pub trait HostHbaCreateSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn HostHbaCreateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostHbaCreateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostHbaCreateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostHbaCreateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostHbaCreateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostHbaCreateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostHbaCreateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostHbaCreateSpecVisitor {
-    type Value = Box<dyn HostHbaCreateSpecTrait>;
+struct HostHbaCreateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostHbaCreateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostHbaCreateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostHbaCreateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostHbaCreateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29027,41 +28526,38 @@ impl std::ops::DerefMut for dyn HostHostBusAdapterTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostHostBusAdapterTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostHostBusAdapterTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostHostBusAdapterVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostHostBusAdapterTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostHostBusAdapterVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostHostBusAdapterTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostHostBusAdapterTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostHostBusAdapterVisitor {
-    type Value = Box<dyn HostHostBusAdapterTrait>;
+struct HostHostBusAdapterTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostHostBusAdapterTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostHostBusAdapterTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostHostBusAdapterTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostHostBusAdapterTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29171,41 +28667,38 @@ impl std::ops::DerefMut for dyn HostFibreChannelHbaTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostFibreChannelHbaTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostFibreChannelHbaTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostFibreChannelHbaVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostFibreChannelHbaTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostFibreChannelHbaVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostFibreChannelHbaTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostFibreChannelHbaTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostFibreChannelHbaVisitor {
-    type Value = Box<dyn HostFibreChannelHbaTrait>;
+struct HostFibreChannelHbaTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostFibreChannelHbaTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostFibreChannelHbaTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostFibreChannelHbaTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostFibreChannelHbaTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29272,41 +28765,38 @@ impl std::ops::DerefMut for dyn HostIpConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostIpConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostIpConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostIpConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostIpConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostIpConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostIpConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostIpConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostIpConfigVisitor {
-    type Value = Box<dyn HostIpConfigTrait>;
+struct HostIpConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostIpConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostIpConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostIpConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostIpConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29382,41 +28872,38 @@ impl std::ops::DerefMut for dyn HostIpRouteConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostIpRouteConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostIpRouteConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostIpRouteConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostIpRouteConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostIpRouteConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostIpRouteConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostIpRouteConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostIpRouteConfigVisitor {
-    type Value = Box<dyn HostIpRouteConfigTrait>;
+struct HostIpRouteConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostIpRouteConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostIpRouteConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostIpRouteConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostIpRouteConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29487,41 +28974,38 @@ impl std::ops::DerefMut for dyn HostAccountSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostAccountSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostAccountSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostAccountSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostAccountSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostAccountSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostAccountSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostAccountSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostAccountSpecVisitor {
-    type Value = Box<dyn HostAccountSpecTrait>;
+struct HostAccountSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostAccountSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostAccountSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostAccountSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostAccountSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29588,41 +29072,38 @@ impl std::ops::DerefMut for dyn HostMultipathInfoLogicalUnitPolicyTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostMultipathInfoLogicalUnitPolicyTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostMultipathInfoLogicalUnitPolicyTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostMultipathInfoLogicalUnitPolicyVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostMultipathInfoLogicalUnitPolicyTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostMultipathInfoLogicalUnitPolicyVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostMultipathInfoLogicalUnitPolicyTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostMultipathInfoLogicalUnitPolicyTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostMultipathInfoLogicalUnitPolicyVisitor {
-    type Value = Box<dyn HostMultipathInfoLogicalUnitPolicyTrait>;
+struct HostMultipathInfoLogicalUnitPolicyTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostMultipathInfoLogicalUnitPolicyTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostMultipathInfoLogicalUnitPolicyTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostMultipathInfoLogicalUnitPolicyTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostMultipathInfoLogicalUnitPolicyTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29682,41 +29163,38 @@ impl std::ops::DerefMut for dyn HostNvmeSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostNvmeSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostNvmeSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostNvmeSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostNvmeSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostNvmeSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostNvmeSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostNvmeSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostNvmeSpecVisitor {
-    type Value = Box<dyn HostNvmeSpecTrait>;
+struct HostNvmeSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostNvmeSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostNvmeSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostNvmeSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostNvmeSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29764,41 +29242,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostNvmeSpe
 /// - `HostStorageSystem::discover_nvme_controllers().entry?[*].transport_parameters`
 pub trait HostNvmeTransportParametersTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn HostNvmeTransportParametersTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostNvmeTransportParametersTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostNvmeTransportParametersVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostNvmeTransportParametersTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostNvmeTransportParametersVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostNvmeTransportParametersTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostNvmeTransportParametersTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostNvmeTransportParametersVisitor {
-    type Value = Box<dyn HostNvmeTransportParametersTrait>;
+struct HostNvmeTransportParametersTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostNvmeTransportParametersTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostNvmeTransportParametersTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostNvmeTransportParametersTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostNvmeTransportParametersTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29863,41 +29338,38 @@ impl std::ops::DerefMut for dyn HostPciPassthruConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostPciPassthruConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostPciPassthruConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostPciPassthruConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostPciPassthruConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostPciPassthruConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostPciPassthruConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostPciPassthruConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostPciPassthruConfigVisitor {
-    type Value = Box<dyn HostPciPassthruConfigTrait>;
+struct HostPciPassthruConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostPciPassthruConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostPciPassthruConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostPciPassthruConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostPciPassthruConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -29955,41 +29427,38 @@ impl std::ops::DerefMut for dyn HostPciPassthruInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostPciPassthruInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostPciPassthruInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostPciPassthruInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostPciPassthruInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostPciPassthruInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostPciPassthruInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostPciPassthruInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostPciPassthruInfoVisitor {
-    type Value = Box<dyn HostPciPassthruInfoTrait>;
+struct HostPciPassthruInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostPciPassthruInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostPciPassthruInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostPciPassthruInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostPciPassthruInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30043,41 +29512,38 @@ impl std::ops::DerefMut for dyn PhysicalNicHintTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PhysicalNicHintTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PhysicalNicHintTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PhysicalNicHintVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PhysicalNicHintTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PhysicalNicHintVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PhysicalNicHintTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PhysicalNicHintTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PhysicalNicHintVisitor {
-    type Value = Box<dyn PhysicalNicHintTrait>;
+struct PhysicalNicHintTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PhysicalNicHintTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PhysicalNicHintTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PhysicalNicHintTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PhysicalNicHintTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30123,41 +29589,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PhysicalNic
 /// - `HostNetworkSystem::network_info.rdma_device?[*].backing?`
 pub trait HostRdmaDeviceBackingTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn HostRdmaDeviceBackingTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostRdmaDeviceBackingTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostRdmaDeviceBackingVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostRdmaDeviceBackingTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostRdmaDeviceBackingVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostRdmaDeviceBackingTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostRdmaDeviceBackingTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostRdmaDeviceBackingVisitor {
-    type Value = Box<dyn HostRdmaDeviceBackingTrait>;
+struct HostRdmaDeviceBackingTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostRdmaDeviceBackingTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostRdmaDeviceBackingTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostRdmaDeviceBackingTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostRdmaDeviceBackingTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30208,41 +29671,38 @@ impl std::ops::DerefMut for dyn HostSriovDevicePoolInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostSriovDevicePoolInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostSriovDevicePoolInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostSriovDevicePoolInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostSriovDevicePoolInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostSriovDevicePoolInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostSriovDevicePoolInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostSriovDevicePoolInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostSriovDevicePoolInfoVisitor {
-    type Value = Box<dyn HostSriovDevicePoolInfoTrait>;
+struct HostSriovDevicePoolInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostSriovDevicePoolInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostSriovDevicePoolInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostSriovDevicePoolInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostSriovDevicePoolInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30303,41 +29763,38 @@ impl std::ops::DerefMut for dyn HostSystemSwapConfigurationSystemSwapOptionTrait
     }
 }
 
-impl<'s> serde::Serialize for dyn HostSystemSwapConfigurationSystemSwapOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostSystemSwapConfigurationSystemSwapOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostSystemSwapConfigurationSystemSwapOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostSystemSwapConfigurationSystemSwapOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostSystemSwapConfigurationSystemSwapOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostSystemSwapConfigurationSystemSwapOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostSystemSwapConfigurationSystemSwapOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostSystemSwapConfigurationSystemSwapOptionVisitor {
-    type Value = Box<dyn HostSystemSwapConfigurationSystemSwapOptionTrait>;
+struct HostSystemSwapConfigurationSystemSwapOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostSystemSwapConfigurationSystemSwapOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostSystemSwapConfigurationSystemSwapOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostSystemSwapConfigurationSystemSwapOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostSystemSwapConfigurationSystemSwapOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30404,41 +29861,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostSystemS
 /// *(10 of 21 paths)*
 pub trait HostTargetTransportTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn HostTargetTransportTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostTargetTransportTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostTargetTransportVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostTargetTransportTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostTargetTransportVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostTargetTransportTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostTargetTransportTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostTargetTransportVisitor {
-    type Value = Box<dyn HostTargetTransportTrait>;
+struct HostTargetTransportTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostTargetTransportTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostTargetTransportTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostTargetTransportTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostTargetTransportTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30533,41 +29987,38 @@ impl std::ops::DerefMut for dyn HostFibreChannelTargetTransportTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostFibreChannelTargetTransportTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostFibreChannelTargetTransportTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostFibreChannelTargetTransportVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostFibreChannelTargetTransportTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostFibreChannelTargetTransportVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostFibreChannelTargetTransportTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostFibreChannelTargetTransportTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostFibreChannelTargetTransportVisitor {
-    type Value = Box<dyn HostFibreChannelTargetTransportTrait>;
+struct HostFibreChannelTargetTransportTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostFibreChannelTargetTransportTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostFibreChannelTargetTransportTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostFibreChannelTargetTransportTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostFibreChannelTargetTransportTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30627,41 +30078,38 @@ impl std::ops::DerefMut for dyn HostTpmEventDetailsTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostTpmEventDetailsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostTpmEventDetailsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostTpmEventDetailsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostTpmEventDetailsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostTpmEventDetailsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostTpmEventDetailsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostTpmEventDetailsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostTpmEventDetailsVisitor {
-    type Value = Box<dyn HostTpmEventDetailsTrait>;
+struct HostTpmEventDetailsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostTpmEventDetailsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostTpmEventDetailsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostTpmEventDetailsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostTpmEventDetailsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30768,41 +30216,38 @@ impl std::ops::DerefMut for dyn HostTpmBootSecurityOptionEventDetailsTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostTpmBootSecurityOptionEventDetailsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostTpmBootSecurityOptionEventDetailsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostTpmBootSecurityOptionEventDetailsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostTpmBootSecurityOptionEventDetailsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostTpmBootSecurityOptionEventDetailsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostTpmBootSecurityOptionEventDetailsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostTpmBootSecurityOptionEventDetailsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostTpmBootSecurityOptionEventDetailsVisitor {
-    type Value = Box<dyn HostTpmBootSecurityOptionEventDetailsTrait>;
+struct HostTpmBootSecurityOptionEventDetailsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostTpmBootSecurityOptionEventDetailsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostTpmBootSecurityOptionEventDetailsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostTpmBootSecurityOptionEventDetailsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostTpmBootSecurityOptionEventDetailsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30859,41 +30304,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostTpmBoot
 /// *(10 of 11 paths)*
 pub trait HostVirtualSwitchBridgeTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn HostVirtualSwitchBridgeTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostVirtualSwitchBridgeTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostVirtualSwitchBridgeVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostVirtualSwitchBridgeTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostVirtualSwitchBridgeVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostVirtualSwitchBridgeTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostVirtualSwitchBridgeTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostVirtualSwitchBridgeVisitor {
-    type Value = Box<dyn HostVirtualSwitchBridgeTrait>;
+struct HostVirtualSwitchBridgeTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostVirtualSwitchBridgeTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostVirtualSwitchBridgeTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostVirtualSwitchBridgeTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostVirtualSwitchBridgeTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -30955,41 +30397,38 @@ impl std::ops::DerefMut for dyn VmfsDatastoreBaseOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmfsDatastoreBaseOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmfsDatastoreBaseOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmfsDatastoreBaseOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmfsDatastoreBaseOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmfsDatastoreBaseOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmfsDatastoreBaseOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmfsDatastoreBaseOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmfsDatastoreBaseOptionVisitor {
-    type Value = Box<dyn VmfsDatastoreBaseOptionTrait>;
+struct VmfsDatastoreBaseOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmfsDatastoreBaseOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmfsDatastoreBaseOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmfsDatastoreBaseOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmfsDatastoreBaseOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -31063,41 +30502,38 @@ impl std::ops::DerefMut for dyn VmfsDatastoreSingleExtentOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmfsDatastoreSingleExtentOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmfsDatastoreSingleExtentOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmfsDatastoreSingleExtentOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmfsDatastoreSingleExtentOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmfsDatastoreSingleExtentOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmfsDatastoreSingleExtentOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmfsDatastoreSingleExtentOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmfsDatastoreSingleExtentOptionVisitor {
-    type Value = Box<dyn VmfsDatastoreSingleExtentOptionTrait>;
+struct VmfsDatastoreSingleExtentOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmfsDatastoreSingleExtentOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmfsDatastoreSingleExtentOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmfsDatastoreSingleExtentOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmfsDatastoreSingleExtentOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -31160,41 +30596,38 @@ impl std::ops::DerefMut for dyn VmfsDatastoreSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmfsDatastoreSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmfsDatastoreSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmfsDatastoreSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmfsDatastoreSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmfsDatastoreSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmfsDatastoreSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmfsDatastoreSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmfsDatastoreSpecVisitor {
-    type Value = Box<dyn VmfsDatastoreSpecTrait>;
+struct VmfsDatastoreSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmfsDatastoreSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmfsDatastoreSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmfsDatastoreSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmfsDatastoreSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -31261,41 +30694,38 @@ impl std::ops::DerefMut for dyn VsanHclCommonDeviceInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanHclCommonDeviceInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanHclCommonDeviceInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanHclCommonDeviceInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanHclCommonDeviceInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanHclCommonDeviceInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanHclCommonDeviceInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanHclCommonDeviceInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanHclCommonDeviceInfoVisitor {
-    type Value = Box<dyn VsanHclCommonDeviceInfoTrait>;
+struct VsanHclCommonDeviceInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanHclCommonDeviceInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanHclCommonDeviceInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanHclCommonDeviceInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanHclCommonDeviceInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -31352,41 +30782,38 @@ impl std::ops::DerefMut for dyn NetBiosConfigInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn NetBiosConfigInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn NetBiosConfigInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(NetBiosConfigInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn NetBiosConfigInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct NetBiosConfigInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn NetBiosConfigInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(NetBiosConfigInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for NetBiosConfigInfoVisitor {
-    type Value = Box<dyn NetBiosConfigInfoTrait>;
+struct NetBiosConfigInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn NetBiosConfigInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid NetBiosConfigInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for NetBiosConfigInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn NetBiosConfigInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -31450,41 +30877,38 @@ impl std::ops::DerefMut for dyn ArrayUpdateSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ArrayUpdateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ArrayUpdateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ArrayUpdateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ArrayUpdateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ArrayUpdateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ArrayUpdateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ArrayUpdateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ArrayUpdateSpecVisitor {
-    type Value = Box<dyn ArrayUpdateSpecTrait>;
+struct ArrayUpdateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ArrayUpdateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ArrayUpdateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ArrayUpdateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ArrayUpdateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -31635,41 +31059,38 @@ impl std::ops::DerefMut for dyn OptionTypeTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn OptionTypeTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn OptionTypeTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(OptionTypeVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn OptionTypeTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct OptionTypeVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn OptionTypeTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(OptionTypeTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for OptionTypeVisitor {
-    type Value = Box<dyn OptionTypeTrait>;
+struct OptionTypeTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn OptionTypeTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid OptionTypeTrait JSON object with a _typeName field")
+impl miniserde::de::Map for OptionTypeTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn OptionTypeTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -31766,41 +31187,38 @@ impl std::ops::DerefMut for dyn OptionValueTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn OptionValueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn OptionValueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(OptionValueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn OptionValueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct OptionValueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn OptionValueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(OptionValueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for OptionValueVisitor {
-    type Value = Box<dyn OptionValueTrait>;
+struct OptionValueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn OptionValueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid OptionValueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for OptionValueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn OptionValueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -31860,41 +31278,38 @@ impl std::ops::DerefMut for dyn ApplyProfileTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ApplyProfileTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ApplyProfileTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ApplyProfileVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ApplyProfileTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ApplyProfileVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ApplyProfileTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ApplyProfileTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ApplyProfileVisitor {
-    type Value = Box<dyn ApplyProfileTrait>;
+struct ApplyProfileTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ApplyProfileTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ApplyProfileTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ApplyProfileTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ApplyProfileTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -32189,41 +31604,38 @@ impl std::ops::DerefMut for dyn DvsVNicProfileTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DvsVNicProfileTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DvsVNicProfileTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DvsVNicProfileVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DvsVNicProfileTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DvsVNicProfileVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DvsVNicProfileTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DvsVNicProfileTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DvsVNicProfileVisitor {
-    type Value = Box<dyn DvsVNicProfileTrait>;
+struct DvsVNicProfileTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DvsVNicProfileTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DvsVNicProfileTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DvsVNicProfileTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DvsVNicProfileTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -32286,41 +31698,38 @@ impl std::ops::DerefMut for dyn PortGroupProfileTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PortGroupProfileTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PortGroupProfileTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PortGroupProfileVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PortGroupProfileTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PortGroupProfileVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PortGroupProfileTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PortGroupProfileTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PortGroupProfileVisitor {
-    type Value = Box<dyn PortGroupProfileTrait>;
+struct PortGroupProfileTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PortGroupProfileTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PortGroupProfileTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PortGroupProfileTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PortGroupProfileTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -32397,41 +31806,38 @@ impl std::ops::DerefMut for dyn ProfileExpressionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ProfileExpressionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ProfileExpressionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ProfileExpressionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ProfileExpressionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ProfileExpressionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ProfileExpressionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ProfileExpressionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ProfileExpressionVisitor {
-    type Value = Box<dyn ProfileExpressionTrait>;
+struct ProfileExpressionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ProfileExpressionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ProfileExpressionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ProfileExpressionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ProfileExpressionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -32498,41 +31904,38 @@ impl std::ops::DerefMut for dyn PolicyOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn PolicyOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn PolicyOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(PolicyOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn PolicyOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct PolicyOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn PolicyOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PolicyOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for PolicyOptionVisitor {
-    type Value = Box<dyn PolicyOptionTrait>;
+struct PolicyOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PolicyOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid PolicyOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for PolicyOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PolicyOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -32591,41 +31994,38 @@ impl std::ops::DerefMut for dyn ProfilePolicyOptionMetadataTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ProfilePolicyOptionMetadataTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ProfilePolicyOptionMetadataTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ProfilePolicyOptionMetadataVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ProfilePolicyOptionMetadataTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ProfilePolicyOptionMetadataVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ProfilePolicyOptionMetadataTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ProfilePolicyOptionMetadataTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ProfilePolicyOptionMetadataVisitor {
-    type Value = Box<dyn ProfilePolicyOptionMetadataTrait>;
+struct ProfilePolicyOptionMetadataTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ProfilePolicyOptionMetadataTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ProfilePolicyOptionMetadataTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ProfilePolicyOptionMetadataTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ProfilePolicyOptionMetadataTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -32687,41 +32087,38 @@ impl std::ops::DerefMut for dyn ProfileConfigInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ProfileConfigInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ProfileConfigInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ProfileConfigInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ProfileConfigInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ProfileConfigInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ProfileConfigInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ProfileConfigInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ProfileConfigInfoVisitor {
-    type Value = Box<dyn ProfileConfigInfoTrait>;
+struct ProfileConfigInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ProfileConfigInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ProfileConfigInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ProfileConfigInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ProfileConfigInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -32785,41 +32182,38 @@ impl std::ops::DerefMut for dyn ProfileCreateSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ProfileCreateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ProfileCreateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ProfileCreateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ProfileCreateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ProfileCreateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ProfileCreateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ProfileCreateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ProfileCreateSpecVisitor {
-    type Value = Box<dyn ProfileCreateSpecTrait>;
+struct ProfileCreateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ProfileCreateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ProfileCreateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ProfileCreateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ProfileCreateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -32926,41 +32320,38 @@ impl std::ops::DerefMut for dyn ProfileSerializedCreateSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ProfileSerializedCreateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ProfileSerializedCreateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ProfileSerializedCreateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ProfileSerializedCreateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ProfileSerializedCreateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ProfileSerializedCreateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ProfileSerializedCreateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ProfileSerializedCreateSpecVisitor {
-    type Value = Box<dyn ProfileSerializedCreateSpecTrait>;
+struct ProfileSerializedCreateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ProfileSerializedCreateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ProfileSerializedCreateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ProfileSerializedCreateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ProfileSerializedCreateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33018,41 +32409,38 @@ impl std::ops::DerefMut for dyn ClusterProfileCreateSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterProfileCreateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterProfileCreateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterProfileCreateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterProfileCreateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterProfileCreateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterProfileCreateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterProfileCreateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterProfileCreateSpecVisitor {
-    type Value = Box<dyn ClusterProfileCreateSpecTrait>;
+struct ClusterProfileCreateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterProfileCreateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterProfileCreateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterProfileCreateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterProfileCreateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33124,41 +32512,38 @@ impl std::ops::DerefMut for dyn ClusterProfileConfigSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ClusterProfileConfigSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ClusterProfileConfigSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ClusterProfileConfigSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ClusterProfileConfigSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ClusterProfileConfigSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ClusterProfileConfigSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ClusterProfileConfigSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ClusterProfileConfigSpecVisitor {
-    type Value = Box<dyn ClusterProfileConfigSpecTrait>;
+struct ClusterProfileConfigSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ClusterProfileConfigSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ClusterProfileConfigSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ClusterProfileConfigSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ClusterProfileConfigSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33224,41 +32609,38 @@ impl std::ops::DerefMut for dyn HostProfileConfigSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HostProfileConfigSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostProfileConfigSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostProfileConfigSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostProfileConfigSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostProfileConfigSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostProfileConfigSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostProfileConfigSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostProfileConfigSpecVisitor {
-    type Value = Box<dyn HostProfileConfigSpecTrait>;
+struct HostProfileConfigSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostProfileConfigSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostProfileConfigSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostProfileConfigSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostProfileConfigSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33322,41 +32704,38 @@ impl std::ops::DerefMut for dyn ProfileExecuteResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ProfileExecuteResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ProfileExecuteResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ProfileExecuteResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ProfileExecuteResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ProfileExecuteResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ProfileExecuteResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ProfileExecuteResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ProfileExecuteResultVisitor {
-    type Value = Box<dyn ProfileExecuteResultTrait>;
+struct ProfileExecuteResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ProfileExecuteResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ProfileExecuteResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ProfileExecuteResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ProfileExecuteResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33412,41 +32791,38 @@ impl std::ops::DerefMut for dyn AnswerFileCreateSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn AnswerFileCreateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn AnswerFileCreateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(AnswerFileCreateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn AnswerFileCreateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct AnswerFileCreateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn AnswerFileCreateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(AnswerFileCreateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for AnswerFileCreateSpecVisitor {
-    type Value = Box<dyn AnswerFileCreateSpecTrait>;
+struct AnswerFileCreateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn AnswerFileCreateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid AnswerFileCreateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for AnswerFileCreateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn AnswerFileCreateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33491,41 +32867,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn AnswerFileC
 /// data in specific formats.
 pub trait HostProfilesEntityCustomizationsTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn HostProfilesEntityCustomizationsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HostProfilesEntityCustomizationsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HostProfilesEntityCustomizationsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HostProfilesEntityCustomizationsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HostProfilesEntityCustomizationsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HostProfilesEntityCustomizationsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HostProfilesEntityCustomizationsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HostProfilesEntityCustomizationsVisitor {
-    type Value = Box<dyn HostProfilesEntityCustomizationsTrait>;
+struct HostProfilesEntityCustomizationsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HostProfilesEntityCustomizationsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HostProfilesEntityCustomizationsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HostProfilesEntityCustomizationsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HostProfilesEntityCustomizationsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33579,41 +32952,38 @@ impl std::ops::DerefMut for dyn ScheduledTaskSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn ScheduledTaskSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn ScheduledTaskSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(ScheduledTaskSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn ScheduledTaskSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct ScheduledTaskSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn ScheduledTaskSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(ScheduledTaskSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for ScheduledTaskSpecVisitor {
-    type Value = Box<dyn ScheduledTaskSpecTrait>;
+struct ScheduledTaskSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn ScheduledTaskSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid ScheduledTaskSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for ScheduledTaskSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn ScheduledTaskSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33696,41 +33066,38 @@ impl std::ops::DerefMut for dyn TaskSchedulerTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn TaskSchedulerTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn TaskSchedulerTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(TaskSchedulerVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn TaskSchedulerTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct TaskSchedulerVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn TaskSchedulerTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(TaskSchedulerTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for TaskSchedulerVisitor {
-    type Value = Box<dyn TaskSchedulerTrait>;
+struct TaskSchedulerTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn TaskSchedulerTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid TaskSchedulerTrait JSON object with a _typeName field")
+impl miniserde::de::Map for TaskSchedulerTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn TaskSchedulerTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33837,41 +33204,38 @@ impl std::ops::DerefMut for dyn RecurrentTaskSchedulerTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn RecurrentTaskSchedulerTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn RecurrentTaskSchedulerTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(RecurrentTaskSchedulerVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn RecurrentTaskSchedulerTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct RecurrentTaskSchedulerVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn RecurrentTaskSchedulerTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(RecurrentTaskSchedulerTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for RecurrentTaskSchedulerVisitor {
-    type Value = Box<dyn RecurrentTaskSchedulerTrait>;
+struct RecurrentTaskSchedulerTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn RecurrentTaskSchedulerTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid RecurrentTaskSchedulerTrait JSON object with a _typeName field")
+impl miniserde::de::Map for RecurrentTaskSchedulerTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn RecurrentTaskSchedulerTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -33967,41 +33331,38 @@ impl std::ops::DerefMut for dyn HourlyTaskSchedulerTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn HourlyTaskSchedulerTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn HourlyTaskSchedulerTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(HourlyTaskSchedulerVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn HourlyTaskSchedulerTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct HourlyTaskSchedulerVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn HourlyTaskSchedulerTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HourlyTaskSchedulerTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for HourlyTaskSchedulerVisitor {
-    type Value = Box<dyn HourlyTaskSchedulerTrait>;
+struct HourlyTaskSchedulerTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn HourlyTaskSchedulerTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid HourlyTaskSchedulerTrait JSON object with a _typeName field")
+impl miniserde::de::Map for HourlyTaskSchedulerTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn HourlyTaskSchedulerTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34093,41 +33454,38 @@ impl std::ops::DerefMut for dyn DailyTaskSchedulerTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn DailyTaskSchedulerTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn DailyTaskSchedulerTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(DailyTaskSchedulerVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn DailyTaskSchedulerTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct DailyTaskSchedulerVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn DailyTaskSchedulerTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(DailyTaskSchedulerTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for DailyTaskSchedulerVisitor {
-    type Value = Box<dyn DailyTaskSchedulerTrait>;
+struct DailyTaskSchedulerTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn DailyTaskSchedulerTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid DailyTaskSchedulerTrait JSON object with a _typeName field")
+impl miniserde::de::Map for DailyTaskSchedulerTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn DailyTaskSchedulerTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34205,41 +33563,38 @@ impl std::ops::DerefMut for dyn MonthlyTaskSchedulerTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn MonthlyTaskSchedulerTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn MonthlyTaskSchedulerTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(MonthlyTaskSchedulerVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn MonthlyTaskSchedulerTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct MonthlyTaskSchedulerVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn MonthlyTaskSchedulerTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(MonthlyTaskSchedulerTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for MonthlyTaskSchedulerVisitor {
-    type Value = Box<dyn MonthlyTaskSchedulerTrait>;
+struct MonthlyTaskSchedulerTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn MonthlyTaskSchedulerTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid MonthlyTaskSchedulerTrait JSON object with a _typeName field")
+impl miniserde::de::Map for MonthlyTaskSchedulerTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn MonthlyTaskSchedulerTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34303,41 +33658,38 @@ impl std::ops::DerefMut for dyn VmConfigInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmConfigInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmConfigInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmConfigInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmConfigInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmConfigInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmConfigInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmConfigInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmConfigInfoVisitor {
-    type Value = Box<dyn VmConfigInfoTrait>;
+struct VmConfigInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmConfigInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmConfigInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmConfigInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmConfigInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34404,41 +33756,38 @@ impl std::ops::DerefMut for dyn VmConfigSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VmConfigSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VmConfigSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VmConfigSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VmConfigSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VmConfigSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VmConfigSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmConfigSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VmConfigSpecVisitor {
-    type Value = Box<dyn VmConfigSpecTrait>;
+struct VmConfigSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmConfigSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VmConfigSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VmConfigSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmConfigSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34497,41 +33846,38 @@ impl std::ops::DerefMut for dyn NodeDeploymentSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn NodeDeploymentSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn NodeDeploymentSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(NodeDeploymentSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn NodeDeploymentSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct NodeDeploymentSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn NodeDeploymentSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(NodeDeploymentSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for NodeDeploymentSpecVisitor {
-    type Value = Box<dyn NodeDeploymentSpecTrait>;
+struct NodeDeploymentSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn NodeDeploymentSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid NodeDeploymentSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for NodeDeploymentSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn NodeDeploymentSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34588,41 +33934,38 @@ impl std::ops::DerefMut for dyn NodeNetworkSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn NodeNetworkSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn NodeNetworkSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(NodeNetworkSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn NodeNetworkSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct NodeNetworkSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn NodeNetworkSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(NodeNetworkSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for NodeNetworkSpecVisitor {
-    type Value = Box<dyn NodeNetworkSpecTrait>;
+struct NodeNetworkSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn NodeNetworkSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid NodeNetworkSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for NodeNetworkSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn NodeNetworkSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34676,41 +34019,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn NodeNetwork
 /// *(10 of 100 paths)*
 pub trait VirtualMachineBaseIndependentFilterSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VirtualMachineBaseIndependentFilterSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineBaseIndependentFilterSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineBaseIndependentFilterSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineBaseIndependentFilterSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineBaseIndependentFilterSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineBaseIndependentFilterSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineBaseIndependentFilterSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineBaseIndependentFilterSpecVisitor {
-    type Value = Box<dyn VirtualMachineBaseIndependentFilterSpecTrait>;
+struct VirtualMachineBaseIndependentFilterSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineBaseIndependentFilterSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineBaseIndependentFilterSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineBaseIndependentFilterSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineBaseIndependentFilterSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34759,41 +34099,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// *(10 of 26 paths)*
 pub trait VirtualMachineBootOptionsBootableDeviceTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VirtualMachineBootOptionsBootableDeviceTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineBootOptionsBootableDeviceTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineBootOptionsBootableDeviceVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineBootOptionsBootableDeviceTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineBootOptionsBootableDeviceVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineBootOptionsBootableDeviceTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineBootOptionsBootableDeviceTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineBootOptionsBootableDeviceVisitor {
-    type Value = Box<dyn VirtualMachineBootOptionsBootableDeviceTrait>;
+struct VirtualMachineBootOptionsBootableDeviceTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineBootOptionsBootableDeviceTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineBootOptionsBootableDeviceTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineBootOptionsBootableDeviceTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineBootOptionsBootableDeviceTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34847,41 +34184,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// - `EnvironmentBrowser::query_config_target().usb?[*].summary?.runtime.device?[*].runtime_state`
 pub trait VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateVisitor {
-    type Value = Box<dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>;
+struct VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -34948,41 +34282,38 @@ impl std::ops::DerefMut for dyn FaultToleranceConfigInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn FaultToleranceConfigInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn FaultToleranceConfigInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(FaultToleranceConfigInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn FaultToleranceConfigInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct FaultToleranceConfigInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn FaultToleranceConfigInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(FaultToleranceConfigInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for FaultToleranceConfigInfoVisitor {
-    type Value = Box<dyn FaultToleranceConfigInfoTrait>;
+struct FaultToleranceConfigInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn FaultToleranceConfigInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid FaultToleranceConfigInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for FaultToleranceConfigInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn FaultToleranceConfigInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -35045,41 +34376,38 @@ impl std::ops::DerefMut for dyn VirtualMachineGuestQuiesceSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualMachineGuestQuiesceSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineGuestQuiesceSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineGuestQuiesceSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineGuestQuiesceSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineGuestQuiesceSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineGuestQuiesceSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineGuestQuiesceSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineGuestQuiesceSpecVisitor {
-    type Value = Box<dyn VirtualMachineGuestQuiesceSpecTrait>;
+struct VirtualMachineGuestQuiesceSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineGuestQuiesceSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineGuestQuiesceSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineGuestQuiesceSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineGuestQuiesceSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -35129,41 +34457,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// *(10 of 100 paths)*
 pub trait VirtualMachineProfileSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VirtualMachineProfileSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineProfileSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineProfileSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineProfileSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineProfileSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineProfileSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineProfileSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineProfileSpecVisitor {
-    type Value = Box<dyn VirtualMachineProfileSpecTrait>;
+struct VirtualMachineProfileSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineProfileSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineProfileSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineProfileSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineProfileSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -35222,41 +34547,38 @@ impl std::ops::DerefMut for dyn VirtualMachineSriovDevicePoolInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualMachineSriovDevicePoolInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineSriovDevicePoolInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineSriovDevicePoolInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineSriovDevicePoolInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineSriovDevicePoolInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineSriovDevicePoolInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineSriovDevicePoolInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineSriovDevicePoolInfoVisitor {
-    type Value = Box<dyn VirtualMachineSriovDevicePoolInfoTrait>;
+struct VirtualMachineSriovDevicePoolInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineSriovDevicePoolInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineSriovDevicePoolInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineSriovDevicePoolInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineSriovDevicePoolInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -35310,41 +34632,38 @@ impl std::ops::DerefMut for dyn VirtualMachineTargetInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualMachineTargetInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineTargetInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineTargetInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineTargetInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineTargetInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineTargetInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineTargetInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineTargetInfoVisitor {
-    type Value = Box<dyn VirtualMachineTargetInfoTrait>;
+struct VirtualMachineTargetInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineTargetInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineTargetInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineTargetInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineTargetInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -35542,41 +34861,38 @@ impl std::ops::DerefMut for dyn VirtualMachineDiskDeviceInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualMachineDiskDeviceInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineDiskDeviceInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineDiskDeviceInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineDiskDeviceInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineDiskDeviceInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineDiskDeviceInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineDiskDeviceInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineDiskDeviceInfoVisitor {
-    type Value = Box<dyn VirtualMachineDiskDeviceInfoTrait>;
+struct VirtualMachineDiskDeviceInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineDiskDeviceInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineDiskDeviceInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineDiskDeviceInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineDiskDeviceInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -35638,41 +34954,38 @@ impl std::ops::DerefMut for dyn VirtualMachinePciPassthroughInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualMachinePciPassthroughInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachinePciPassthroughInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachinePciPassthroughInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachinePciPassthroughInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachinePciPassthroughInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachinePciPassthroughInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachinePciPassthroughInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachinePciPassthroughInfoVisitor {
-    type Value = Box<dyn VirtualMachinePciPassthroughInfoTrait>;
+struct VirtualMachinePciPassthroughInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachinePciPassthroughInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachinePciPassthroughInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachinePciPassthroughInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachinePciPassthroughInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -35739,41 +35052,38 @@ impl std::ops::DerefMut for dyn VirtualMachineVirtualDeviceGroupsDeviceGroupTrai
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualMachineVirtualDeviceGroupsDeviceGroupTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualMachineVirtualDeviceGroupsDeviceGroupTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualMachineVirtualDeviceGroupsDeviceGroupVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualMachineVirtualDeviceGroupsDeviceGroupTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualMachineVirtualDeviceGroupsDeviceGroupVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualMachineVirtualDeviceGroupsDeviceGroupTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualMachineVirtualDeviceGroupsDeviceGroupVisitor {
-    type Value = Box<dyn VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>;
+struct VirtualMachineVirtualDeviceGroupsDeviceGroupTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualMachineVirtualDeviceGroupsDeviceGroupTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualMachineVirtualDeviceGroupsDeviceGroupTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -35822,41 +35132,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
 /// *(10 of 12 paths)*
 pub trait CustomizationIdentitySettingsTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn CustomizationIdentitySettingsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CustomizationIdentitySettingsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CustomizationIdentitySettingsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CustomizationIdentitySettingsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CustomizationIdentitySettingsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CustomizationIdentitySettingsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CustomizationIdentitySettingsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CustomizationIdentitySettingsVisitor {
-    type Value = Box<dyn CustomizationIdentitySettingsTrait>;
+struct CustomizationIdentitySettingsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CustomizationIdentitySettingsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CustomizationIdentitySettingsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CustomizationIdentitySettingsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CustomizationIdentitySettingsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -35913,41 +35220,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 /// *(10 of 27 paths)*
 pub trait CustomizationIpGeneratorTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn CustomizationIpGeneratorTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CustomizationIpGeneratorTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CustomizationIpGeneratorVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CustomizationIpGeneratorTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CustomizationIpGeneratorVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CustomizationIpGeneratorTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CustomizationIpGeneratorTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CustomizationIpGeneratorVisitor {
-    type Value = Box<dyn CustomizationIpGeneratorTrait>;
+struct CustomizationIpGeneratorTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CustomizationIpGeneratorTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CustomizationIpGeneratorTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CustomizationIpGeneratorTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CustomizationIpGeneratorTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -36004,41 +35308,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 /// *(10 of 27 paths)*
 pub trait CustomizationIpV6GeneratorTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn CustomizationIpV6GeneratorTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CustomizationIpV6GeneratorTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CustomizationIpV6GeneratorVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CustomizationIpV6GeneratorTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CustomizationIpV6GeneratorVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CustomizationIpV6GeneratorTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CustomizationIpV6GeneratorTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CustomizationIpV6GeneratorVisitor {
-    type Value = Box<dyn CustomizationIpV6GeneratorTrait>;
+struct CustomizationIpV6GeneratorTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CustomizationIpV6GeneratorTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CustomizationIpV6GeneratorTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CustomizationIpV6GeneratorTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CustomizationIpV6GeneratorTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -36104,41 +35405,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 /// *(10 of 24 paths)*
 pub trait CustomizationNameTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn CustomizationNameTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CustomizationNameTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CustomizationNameVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CustomizationNameTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CustomizationNameVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CustomizationNameTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CustomizationNameTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CustomizationNameVisitor {
-    type Value = Box<dyn CustomizationNameTrait>;
+struct CustomizationNameTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CustomizationNameTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CustomizationNameTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CustomizationNameTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CustomizationNameTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -36199,41 +35497,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
 /// *(10 of 12 paths)*
 pub trait CustomizationOptionsTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn CustomizationOptionsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn CustomizationOptionsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(CustomizationOptionsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn CustomizationOptionsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct CustomizationOptionsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn CustomizationOptionsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(CustomizationOptionsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for CustomizationOptionsVisitor {
-    type Value = Box<dyn CustomizationOptionsTrait>;
+struct CustomizationOptionsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn CustomizationOptionsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid CustomizationOptionsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for CustomizationOptionsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn CustomizationOptionsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -36305,41 +35600,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceVisitor {
-    type Value = Box<dyn VirtualDeviceTrait>;
+struct VirtualDeviceTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -36682,41 +35974,38 @@ impl std::ops::DerefMut for dyn VirtualControllerTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualControllerTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualControllerTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualControllerVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualControllerTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualControllerVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualControllerTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualControllerTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualControllerVisitor {
-    type Value = Box<dyn VirtualControllerTrait>;
+struct VirtualControllerTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualControllerTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualControllerTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualControllerTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualControllerTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -36868,41 +36157,38 @@ impl std::ops::DerefMut for dyn VirtualSataControllerTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualSataControllerTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualSataControllerTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualSataControllerVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualSataControllerTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualSataControllerVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualSataControllerTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualSataControllerTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualSataControllerVisitor {
-    type Value = Box<dyn VirtualSataControllerTrait>;
+struct VirtualSataControllerTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualSataControllerTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualSataControllerTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualSataControllerTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualSataControllerTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -36970,41 +36256,38 @@ impl std::ops::DerefMut for dyn VirtualScsiControllerTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualScsiControllerTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualScsiControllerTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualScsiControllerVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualScsiControllerTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualScsiControllerVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualScsiControllerTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualScsiControllerTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualScsiControllerVisitor {
-    type Value = Box<dyn VirtualScsiControllerTrait>;
+struct VirtualScsiControllerTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualScsiControllerTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualScsiControllerTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualScsiControllerTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualScsiControllerTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -37090,41 +36373,38 @@ impl std::ops::DerefMut for dyn VirtualEthernetCardTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualEthernetCardTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualEthernetCardTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualEthernetCardVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualEthernetCardTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualEthernetCardVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualEthernetCardTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualEthernetCardTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualEthernetCardVisitor {
-    type Value = Box<dyn VirtualEthernetCardTrait>;
+struct VirtualEthernetCardTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualEthernetCardTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualEthernetCardTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualEthernetCardTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualEthernetCardTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -37234,41 +36514,38 @@ impl std::ops::DerefMut for dyn VirtualVmxnetTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualVmxnetTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualVmxnetTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualVmxnetVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualVmxnetTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualVmxnetVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualVmxnetTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualVmxnetTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualVmxnetVisitor {
-    type Value = Box<dyn VirtualVmxnetTrait>;
+struct VirtualVmxnetTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualVmxnetTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualVmxnetTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualVmxnetTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualVmxnetTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -37348,41 +36625,38 @@ impl std::ops::DerefMut for dyn VirtualVmxnet3Trait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualVmxnet3Trait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualVmxnet3Trait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualVmxnet3Visitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualVmxnet3Trait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualVmxnet3Visitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualVmxnet3Trait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualVmxnet3TraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualVmxnet3Visitor {
-    type Value = Box<dyn VirtualVmxnet3Trait>;
+struct VirtualVmxnet3TraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualVmxnet3Trait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualVmxnet3Trait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualVmxnet3TraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualVmxnet3Trait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -37450,41 +36724,38 @@ impl std::ops::DerefMut for dyn VirtualSoundCardTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualSoundCardTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualSoundCardTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualSoundCardVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualSoundCardTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualSoundCardVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualSoundCardTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualSoundCardTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualSoundCardVisitor {
-    type Value = Box<dyn VirtualSoundCardTrait>;
+struct VirtualSoundCardTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualSoundCardTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualSoundCardTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualSoundCardTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualSoundCardTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -37550,41 +36821,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualSoun
 /// *(10 of 100 paths)*
 pub trait VirtualDeviceBackingInfoTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VirtualDeviceBackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceBackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceBackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceBackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceBackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceBackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceBackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceBackingInfoVisitor {
-    type Value = Box<dyn VirtualDeviceBackingInfoTrait>;
+struct VirtualDeviceBackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceBackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceBackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceBackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceBackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -37833,41 +37101,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceDeviceBackingInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceDeviceBackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceDeviceBackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceDeviceBackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceDeviceBackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceDeviceBackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceDeviceBackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceDeviceBackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceDeviceBackingInfoVisitor {
-    type Value = Box<dyn VirtualDeviceDeviceBackingInfoTrait>;
+struct VirtualDeviceDeviceBackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceDeviceBackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceDeviceBackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceDeviceBackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceDeviceBackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -38025,41 +37290,38 @@ impl std::ops::DerefMut for dyn VirtualDiskRawDiskVer2BackingInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDiskRawDiskVer2BackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDiskRawDiskVer2BackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDiskRawDiskVer2BackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDiskRawDiskVer2BackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDiskRawDiskVer2BackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDiskRawDiskVer2BackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDiskRawDiskVer2BackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDiskRawDiskVer2BackingInfoVisitor {
-    type Value = Box<dyn VirtualDiskRawDiskVer2BackingInfoTrait>;
+struct VirtualDiskRawDiskVer2BackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDiskRawDiskVer2BackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDiskRawDiskVer2BackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDiskRawDiskVer2BackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDiskRawDiskVer2BackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -38127,41 +37389,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceFileBackingInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceFileBackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceFileBackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceFileBackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceFileBackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceFileBackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceFileBackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceFileBackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceFileBackingInfoVisitor {
-    type Value = Box<dyn VirtualDeviceFileBackingInfoTrait>;
+struct VirtualDeviceFileBackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceFileBackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceFileBackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceFileBackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceFileBackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -38296,41 +37555,38 @@ impl std::ops::DerefMut for dyn VirtualDevicePipeBackingInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDevicePipeBackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDevicePipeBackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDevicePipeBackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDevicePipeBackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDevicePipeBackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDevicePipeBackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDevicePipeBackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDevicePipeBackingInfoVisitor {
-    type Value = Box<dyn VirtualDevicePipeBackingInfoTrait>;
+struct VirtualDevicePipeBackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDevicePipeBackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDevicePipeBackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDevicePipeBackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDevicePipeBackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -38403,41 +37659,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceRemoteDeviceBackingInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceRemoteDeviceBackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceRemoteDeviceBackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceRemoteDeviceBackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceRemoteDeviceBackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceRemoteDeviceBackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceRemoteDeviceBackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceRemoteDeviceBackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceRemoteDeviceBackingInfoVisitor {
-    type Value = Box<dyn VirtualDeviceRemoteDeviceBackingInfoTrait>;
+struct VirtualDeviceRemoteDeviceBackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceRemoteDeviceBackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceRemoteDeviceBackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceRemoteDeviceBackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceRemoteDeviceBackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -38523,41 +37776,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceUriBackingInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceUriBackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceUriBackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceUriBackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceUriBackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceUriBackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceUriBackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceUriBackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceUriBackingInfoVisitor {
-    type Value = Box<dyn VirtualDeviceUriBackingInfoTrait>;
+struct VirtualDeviceUriBackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceUriBackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceUriBackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceUriBackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceUriBackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -38611,41 +37861,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// *(10 of 100 paths)*
 pub trait VirtualPciPassthroughPluginBackingInfoTrait : super::traits::VirtualDeviceBackingInfoTrait {
 }
-impl<'s> serde::Serialize for dyn VirtualPciPassthroughPluginBackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualPciPassthroughPluginBackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualPciPassthroughPluginBackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualPciPassthroughPluginBackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualPciPassthroughPluginBackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualPciPassthroughPluginBackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualPciPassthroughPluginBackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualPciPassthroughPluginBackingInfoVisitor {
-    type Value = Box<dyn VirtualPciPassthroughPluginBackingInfoTrait>;
+struct VirtualPciPassthroughPluginBackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualPciPassthroughPluginBackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualPciPassthroughPluginBackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualPciPassthroughPluginBackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualPciPassthroughPluginBackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -38696,41 +37943,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualPciP
 /// *(10 of 65 paths)*
 pub trait VirtualDeviceBusSlotInfoTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VirtualDeviceBusSlotInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceBusSlotInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceBusSlotInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceBusSlotInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceBusSlotInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceBusSlotInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceBusSlotInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceBusSlotInfoVisitor {
-    type Value = Box<dyn VirtualDeviceBusSlotInfoTrait>;
+struct VirtualDeviceBusSlotInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceBusSlotInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceBusSlotInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceBusSlotInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceBusSlotInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -38798,41 +38042,38 @@ impl std::ops::DerefMut for dyn VirtualDevicePciBusSlotInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDevicePciBusSlotInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDevicePciBusSlotInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDevicePciBusSlotInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDevicePciBusSlotInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDevicePciBusSlotInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDevicePciBusSlotInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDevicePciBusSlotInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDevicePciBusSlotInfoVisitor {
-    type Value = Box<dyn VirtualDevicePciBusSlotInfoTrait>;
+struct VirtualDevicePciBusSlotInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDevicePciBusSlotInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDevicePciBusSlotInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDevicePciBusSlotInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDevicePciBusSlotInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -38898,41 +38139,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceOptionVisitor {
-    type Value = Box<dyn VirtualDeviceOptionTrait>;
+struct VirtualDeviceOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -39260,41 +38498,38 @@ impl std::ops::DerefMut for dyn VirtualControllerOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualControllerOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualControllerOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualControllerOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualControllerOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualControllerOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualControllerOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualControllerOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualControllerOptionVisitor {
-    type Value = Box<dyn VirtualControllerOptionTrait>;
+struct VirtualControllerOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualControllerOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualControllerOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualControllerOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualControllerOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -39438,41 +38673,38 @@ impl std::ops::DerefMut for dyn VirtualSataControllerOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualSataControllerOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualSataControllerOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualSataControllerOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualSataControllerOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualSataControllerOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualSataControllerOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualSataControllerOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualSataControllerOptionVisitor {
-    type Value = Box<dyn VirtualSataControllerOptionTrait>;
+struct VirtualSataControllerOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualSataControllerOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualSataControllerOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualSataControllerOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualSataControllerOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -39532,41 +38764,38 @@ impl std::ops::DerefMut for dyn VirtualScsiControllerOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualScsiControllerOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualScsiControllerOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualScsiControllerOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualScsiControllerOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualScsiControllerOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualScsiControllerOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualScsiControllerOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualScsiControllerOptionVisitor {
-    type Value = Box<dyn VirtualScsiControllerOptionTrait>;
+struct VirtualScsiControllerOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualScsiControllerOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualScsiControllerOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualScsiControllerOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualScsiControllerOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -39642,41 +38871,38 @@ impl std::ops::DerefMut for dyn VirtualEthernetCardOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualEthernetCardOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualEthernetCardOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualEthernetCardOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualEthernetCardOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualEthernetCardOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualEthernetCardOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualEthernetCardOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualEthernetCardOptionVisitor {
-    type Value = Box<dyn VirtualEthernetCardOptionTrait>;
+struct VirtualEthernetCardOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualEthernetCardOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualEthernetCardOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualEthernetCardOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualEthernetCardOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -39776,41 +39002,38 @@ impl std::ops::DerefMut for dyn VirtualVmxnetOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualVmxnetOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualVmxnetOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualVmxnetOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualVmxnetOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualVmxnetOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualVmxnetOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualVmxnetOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualVmxnetOptionVisitor {
-    type Value = Box<dyn VirtualVmxnetOptionTrait>;
+struct VirtualVmxnetOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualVmxnetOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualVmxnetOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualVmxnetOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualVmxnetOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -39880,41 +39103,38 @@ impl std::ops::DerefMut for dyn VirtualVmxnet3OptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualVmxnet3OptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualVmxnet3OptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualVmxnet3OptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualVmxnet3OptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualVmxnet3OptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualVmxnet3OptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualVmxnet3OptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualVmxnet3OptionVisitor {
-    type Value = Box<dyn VirtualVmxnet3OptionTrait>;
+struct VirtualVmxnet3OptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualVmxnet3OptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualVmxnet3OptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualVmxnet3OptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualVmxnet3OptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -39972,41 +39192,38 @@ impl std::ops::DerefMut for dyn VirtualSoundCardOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualSoundCardOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualSoundCardOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualSoundCardOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualSoundCardOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualSoundCardOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualSoundCardOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualSoundCardOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualSoundCardOptionVisitor {
-    type Value = Box<dyn VirtualSoundCardOptionTrait>;
+struct VirtualSoundCardOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualSoundCardOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualSoundCardOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualSoundCardOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualSoundCardOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -40076,41 +39293,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceBackingOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceBackingOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceBackingOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceBackingOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceBackingOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceBackingOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceBackingOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceBackingOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceBackingOptionVisitor {
-    type Value = Box<dyn VirtualDeviceBackingOptionTrait>;
+struct VirtualDeviceBackingOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceBackingOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceBackingOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceBackingOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceBackingOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -40437,41 +39651,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceDeviceBackingOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceDeviceBackingOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceDeviceBackingOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceDeviceBackingOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceDeviceBackingOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceDeviceBackingOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceDeviceBackingOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceDeviceBackingOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceDeviceBackingOptionVisitor {
-    type Value = Box<dyn VirtualDeviceDeviceBackingOptionTrait>;
+struct VirtualDeviceDeviceBackingOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceDeviceBackingOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceDeviceBackingOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceDeviceBackingOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceDeviceBackingOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -40632,41 +39843,38 @@ impl std::ops::DerefMut for dyn VirtualDiskRawDiskVer2BackingOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDiskRawDiskVer2BackingOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDiskRawDiskVer2BackingOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDiskRawDiskVer2BackingOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDiskRawDiskVer2BackingOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDiskRawDiskVer2BackingOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDiskRawDiskVer2BackingOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDiskRawDiskVer2BackingOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDiskRawDiskVer2BackingOptionVisitor {
-    type Value = Box<dyn VirtualDiskRawDiskVer2BackingOptionTrait>;
+struct VirtualDiskRawDiskVer2BackingOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDiskRawDiskVer2BackingOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDiskRawDiskVer2BackingOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDiskRawDiskVer2BackingOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDiskRawDiskVer2BackingOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -40723,41 +39931,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceFileBackingOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceFileBackingOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceFileBackingOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceFileBackingOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceFileBackingOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceFileBackingOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceFileBackingOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceFileBackingOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceFileBackingOptionVisitor {
-    type Value = Box<dyn VirtualDeviceFileBackingOptionTrait>;
+struct VirtualDeviceFileBackingOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceFileBackingOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceFileBackingOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceFileBackingOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceFileBackingOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -40869,41 +40074,38 @@ impl std::ops::DerefMut for dyn VirtualDevicePipeBackingOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDevicePipeBackingOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDevicePipeBackingOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDevicePipeBackingOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDevicePipeBackingOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDevicePipeBackingOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDevicePipeBackingOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDevicePipeBackingOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDevicePipeBackingOptionVisitor {
-    type Value = Box<dyn VirtualDevicePipeBackingOptionTrait>;
+struct VirtualDevicePipeBackingOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDevicePipeBackingOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDevicePipeBackingOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDevicePipeBackingOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDevicePipeBackingOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -40966,41 +40168,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceRemoteDeviceBackingOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceRemoteDeviceBackingOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceRemoteDeviceBackingOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceRemoteDeviceBackingOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceRemoteDeviceBackingOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceRemoteDeviceBackingOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceRemoteDeviceBackingOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceRemoteDeviceBackingOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceRemoteDeviceBackingOptionVisitor {
-    type Value = Box<dyn VirtualDeviceRemoteDeviceBackingOptionTrait>;
+struct VirtualDeviceRemoteDeviceBackingOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceRemoteDeviceBackingOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceRemoteDeviceBackingOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceRemoteDeviceBackingOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceRemoteDeviceBackingOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -41075,41 +40274,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceUriBackingOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceUriBackingOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceUriBackingOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceUriBackingOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceUriBackingOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceUriBackingOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceUriBackingOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceUriBackingOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceUriBackingOptionVisitor {
-    type Value = Box<dyn VirtualDeviceUriBackingOptionTrait>;
+struct VirtualDeviceUriBackingOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceUriBackingOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceUriBackingOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceUriBackingOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceUriBackingOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -41167,41 +40363,38 @@ impl std::ops::DerefMut for dyn VirtualPciPassthroughPluginBackingOptionTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualPciPassthroughPluginBackingOptionTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualPciPassthroughPluginBackingOptionTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualPciPassthroughPluginBackingOptionVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualPciPassthroughPluginBackingOptionTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualPciPassthroughPluginBackingOptionVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualPciPassthroughPluginBackingOptionTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualPciPassthroughPluginBackingOptionTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualPciPassthroughPluginBackingOptionVisitor {
-    type Value = Box<dyn VirtualPciPassthroughPluginBackingOptionTrait>;
+struct VirtualPciPassthroughPluginBackingOptionTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualPciPassthroughPluginBackingOptionTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualPciPassthroughPluginBackingOptionTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualPciPassthroughPluginBackingOptionTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualPciPassthroughPluginBackingOptionTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -41272,41 +40465,38 @@ impl std::ops::DerefMut for dyn VirtualDeviceConfigSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VirtualDeviceConfigSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VirtualDeviceConfigSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VirtualDeviceConfigSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VirtualDeviceConfigSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VirtualDeviceConfigSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceConfigSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VirtualDeviceConfigSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VirtualDeviceConfigSpecVisitor {
-    type Value = Box<dyn VirtualDeviceConfigSpecTrait>;
+struct VirtualDeviceConfigSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VirtualDeviceConfigSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VirtualDeviceConfigSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VirtualDeviceConfigSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VirtualDeviceConfigSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -41347,41 +40537,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualDevi
 /// - `GuestAliasManager::list_guest_aliases().aliases[*].subject`
 pub trait GuestAuthSubjectTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn GuestAuthSubjectTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn GuestAuthSubjectTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(GuestAuthSubjectVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn GuestAuthSubjectTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct GuestAuthSubjectVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn GuestAuthSubjectTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(GuestAuthSubjectTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for GuestAuthSubjectVisitor {
-    type Value = Box<dyn GuestAuthSubjectTrait>;
+struct GuestAuthSubjectTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn GuestAuthSubjectTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid GuestAuthSubjectTrait JSON object with a _typeName field")
+impl miniserde::de::Map for GuestAuthSubjectTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn GuestAuthSubjectTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -41444,41 +40631,38 @@ impl std::ops::DerefMut for dyn GuestFileAttributesTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn GuestFileAttributesTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn GuestFileAttributesTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(GuestFileAttributesVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn GuestFileAttributesTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct GuestFileAttributesVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn GuestFileAttributesTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(GuestFileAttributesTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for GuestFileAttributesVisitor {
-    type Value = Box<dyn GuestFileAttributesTrait>;
+struct GuestFileAttributesTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn GuestFileAttributesTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid GuestFileAttributesTrait JSON object with a _typeName field")
+impl miniserde::de::Map for GuestFileAttributesTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn GuestFileAttributesTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -41552,41 +40736,38 @@ impl std::ops::DerefMut for dyn GuestAuthenticationTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn GuestAuthenticationTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn GuestAuthenticationTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(GuestAuthenticationVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn GuestAuthenticationTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct GuestAuthenticationVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn GuestAuthenticationTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(GuestAuthenticationTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for GuestAuthenticationVisitor {
-    type Value = Box<dyn GuestAuthenticationTrait>;
+struct GuestAuthenticationTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn GuestAuthenticationTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid GuestAuthenticationTrait JSON object with a _typeName field")
+impl miniserde::de::Map for GuestAuthenticationTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn GuestAuthenticationTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -41660,41 +40841,38 @@ impl std::ops::DerefMut for dyn GuestProgramSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn GuestProgramSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn GuestProgramSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(GuestProgramSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn GuestProgramSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct GuestProgramSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn GuestProgramSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(GuestProgramSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for GuestProgramSpecVisitor {
-    type Value = Box<dyn GuestProgramSpecTrait>;
+struct GuestProgramSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn GuestProgramSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid GuestProgramSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for GuestProgramSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn GuestProgramSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -41733,41 +40911,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn GuestProgra
 /// - `GuestWindowsRegistryManager::set_registry_value_in_guest(value).data`
 pub trait GuestRegValueDataSpecTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn GuestRegValueDataSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn GuestRegValueDataSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(GuestRegValueDataSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn GuestRegValueDataSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct GuestRegValueDataSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn GuestRegValueDataSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(GuestRegValueDataSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for GuestRegValueDataSpecVisitor {
-    type Value = Box<dyn GuestRegValueDataSpecTrait>;
+struct GuestRegValueDataSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn GuestRegValueDataSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid GuestRegValueDataSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for GuestRegValueDataSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn GuestRegValueDataSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -41853,41 +41028,38 @@ impl std::ops::DerefMut for dyn FaultDomainIdTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn FaultDomainIdTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn FaultDomainIdTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(FaultDomainIdVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn FaultDomainIdTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct FaultDomainIdVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn FaultDomainIdTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(FaultDomainIdTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for FaultDomainIdVisitor {
-    type Value = Box<dyn FaultDomainIdTrait>;
+struct FaultDomainIdTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn FaultDomainIdTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid FaultDomainIdTrait JSON object with a _typeName field")
+impl miniserde::de::Map for FaultDomainIdTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn FaultDomainIdTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -42076,41 +41248,38 @@ impl std::ops::DerefMut for dyn VsanDataEfficiencyConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanDataEfficiencyConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanDataEfficiencyConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanDataEfficiencyConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanDataEfficiencyConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanDataEfficiencyConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanDataEfficiencyConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanDataEfficiencyConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanDataEfficiencyConfigVisitor {
-    type Value = Box<dyn VsanDataEfficiencyConfigTrait>;
+struct VsanDataEfficiencyConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanDataEfficiencyConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanDataEfficiencyConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanDataEfficiencyConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanDataEfficiencyConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -42179,41 +41348,38 @@ impl std::ops::DerefMut for dyn VsanDatastoreConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanDatastoreConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanDatastoreConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanDatastoreConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanDatastoreConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanDatastoreConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanDatastoreConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanDatastoreConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanDatastoreConfigVisitor {
-    type Value = Box<dyn VsanDatastoreConfigTrait>;
+struct VsanDatastoreConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanDatastoreConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanDatastoreConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanDatastoreConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanDatastoreConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -42282,41 +41448,38 @@ impl std::ops::DerefMut for dyn VsanDatastoreSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanDatastoreSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanDatastoreSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanDatastoreSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanDatastoreSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanDatastoreSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanDatastoreSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanDatastoreSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanDatastoreSpecVisitor {
-    type Value = Box<dyn VsanDatastoreSpecTrait>;
+struct VsanDatastoreSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanDatastoreSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanDatastoreSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanDatastoreSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanDatastoreSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -42374,41 +41537,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanDatasto
 /// *(10 of 29 paths)*
 pub trait VsanDirectoryServerConfigTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VsanDirectoryServerConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanDirectoryServerConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanDirectoryServerConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanDirectoryServerConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanDirectoryServerConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanDirectoryServerConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanDirectoryServerConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanDirectoryServerConfigVisitor {
-    type Value = Box<dyn VsanDirectoryServerConfigTrait>;
+struct VsanDirectoryServerConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanDirectoryServerConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanDirectoryServerConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanDirectoryServerConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanDirectoryServerConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -42464,41 +41624,38 @@ impl std::ops::DerefMut for dyn EntityResourceCheckDetailsTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn EntityResourceCheckDetailsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn EntityResourceCheckDetailsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(EntityResourceCheckDetailsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn EntityResourceCheckDetailsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct EntityResourceCheckDetailsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn EntityResourceCheckDetailsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(EntityResourceCheckDetailsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for EntityResourceCheckDetailsVisitor {
-    type Value = Box<dyn EntityResourceCheckDetailsTrait>;
+struct EntityResourceCheckDetailsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn EntityResourceCheckDetailsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid EntityResourceCheckDetailsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for EntityResourceCheckDetailsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn EntityResourceCheckDetailsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -42628,41 +41785,38 @@ impl std::ops::DerefMut for dyn VsanDiskResourceCheckResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanDiskResourceCheckResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanDiskResourceCheckResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanDiskResourceCheckResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanDiskResourceCheckResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanDiskResourceCheckResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanDiskResourceCheckResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanDiskResourceCheckResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanDiskResourceCheckResultVisitor {
-    type Value = Box<dyn VsanDiskResourceCheckResultTrait>;
+struct VsanDiskResourceCheckResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanDiskResourceCheckResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanDiskResourceCheckResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanDiskResourceCheckResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanDiskResourceCheckResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -42721,41 +41875,38 @@ impl std::ops::DerefMut for dyn VsanResourceCheckResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanResourceCheckResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanResourceCheckResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanResourceCheckResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanResourceCheckResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanResourceCheckResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanResourceCheckResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanResourceCheckResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanResourceCheckResultVisitor {
-    type Value = Box<dyn VsanResourceCheckResultTrait>;
+struct VsanResourceCheckResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanResourceCheckResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanResourceCheckResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanResourceCheckResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanResourceCheckResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -42827,41 +41978,38 @@ impl std::ops::DerefMut for dyn VsanResourceCheckComponentResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanResourceCheckComponentResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanResourceCheckComponentResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanResourceCheckComponentResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanResourceCheckComponentResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanResourceCheckComponentResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanResourceCheckComponentResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanResourceCheckComponentResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanResourceCheckComponentResultVisitor {
-    type Value = Box<dyn VsanResourceCheckComponentResultTrait>;
+struct VsanResourceCheckComponentResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanResourceCheckComponentResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanResourceCheckComponentResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanResourceCheckComponentResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanResourceCheckComponentResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -42929,41 +42077,38 @@ impl std::ops::DerefMut for dyn VsanMountPrecheckItemTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanMountPrecheckItemTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanMountPrecheckItemTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanMountPrecheckItemVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanMountPrecheckItemTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanMountPrecheckItemVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanMountPrecheckItemTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanMountPrecheckItemTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanMountPrecheckItemVisitor {
-    type Value = Box<dyn VsanMountPrecheckItemTrait>;
+struct VsanMountPrecheckItemTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanMountPrecheckItemTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanMountPrecheckItemTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanMountPrecheckItemTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanMountPrecheckItemTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43034,41 +42179,38 @@ impl std::ops::DerefMut for dyn VsanMountPrecheckResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanMountPrecheckResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanMountPrecheckResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanMountPrecheckResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanMountPrecheckResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanMountPrecheckResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanMountPrecheckResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanMountPrecheckResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanMountPrecheckResultVisitor {
-    type Value = Box<dyn VsanMountPrecheckResultTrait>;
+struct VsanMountPrecheckResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanMountPrecheckResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanMountPrecheckResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanMountPrecheckResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanMountPrecheckResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43134,41 +42276,38 @@ impl std::ops::DerefMut for dyn VsanRemoteVcInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanRemoteVcInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanRemoteVcInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanRemoteVcInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanRemoteVcInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanRemoteVcInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanRemoteVcInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanRemoteVcInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanRemoteVcInfoVisitor {
-    type Value = Box<dyn VsanRemoteVcInfoTrait>;
+struct VsanRemoteVcInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanRemoteVcInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanRemoteVcInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanRemoteVcInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanRemoteVcInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43230,41 +42369,38 @@ impl std::ops::DerefMut for dyn VsanResourceCheckTaskDetailsTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanResourceCheckTaskDetailsTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanResourceCheckTaskDetailsTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanResourceCheckTaskDetailsVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanResourceCheckTaskDetailsTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanResourceCheckTaskDetailsVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanResourceCheckTaskDetailsTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanResourceCheckTaskDetailsTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanResourceCheckTaskDetailsVisitor {
-    type Value = Box<dyn VsanResourceCheckTaskDetailsTrait>;
+struct VsanResourceCheckTaskDetailsTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanResourceCheckTaskDetailsTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanResourceCheckTaskDetailsTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanResourceCheckTaskDetailsTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanResourceCheckTaskDetailsTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43333,41 +42469,38 @@ impl std::ops::DerefMut for dyn VsanIscsiVipConfigSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanIscsiVipConfigSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanIscsiVipConfigSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanIscsiVipConfigSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanIscsiVipConfigSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanIscsiVipConfigSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiVipConfigSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanIscsiVipConfigSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanIscsiVipConfigSpecVisitor {
-    type Value = Box<dyn VsanIscsiVipConfigSpecTrait>;
+struct VsanIscsiVipConfigSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanIscsiVipConfigSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanIscsiVipConfigSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanIscsiVipConfigSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanIscsiVipConfigSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43409,41 +42542,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiVi
 /// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.health?.vsan_config?.issues?[*]`
 pub trait VsanConfigBaseIssueTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VsanConfigBaseIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanConfigBaseIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanConfigBaseIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanConfigBaseIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanConfigBaseIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanConfigBaseIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanConfigBaseIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanConfigBaseIssueVisitor {
-    type Value = Box<dyn VsanConfigBaseIssueTrait>;
+struct VsanConfigBaseIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanConfigBaseIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanConfigBaseIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanConfigBaseIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanConfigBaseIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43481,41 +42611,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanConfigB
 /// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.health?.network_config?.issues?[*]`
 pub trait VsanNetworkConfigBaseIssueTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VsanNetworkConfigBaseIssueTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanNetworkConfigBaseIssueTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanNetworkConfigBaseIssueVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanNetworkConfigBaseIssueTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanNetworkConfigBaseIssueVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanNetworkConfigBaseIssueTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanNetworkConfigBaseIssueTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanNetworkConfigBaseIssueVisitor {
-    type Value = Box<dyn VsanNetworkConfigBaseIssueTrait>;
+struct VsanNetworkConfigBaseIssueTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanNetworkConfigBaseIssueTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanNetworkConfigBaseIssueTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanNetworkConfigBaseIssueTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanNetworkConfigBaseIssueTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43605,41 +42732,38 @@ impl std::ops::DerefMut for dyn VsanClusterConfigInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanClusterConfigInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanClusterConfigInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanClusterConfigInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanClusterConfigInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanClusterConfigInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanClusterConfigInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanClusterConfigInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanClusterConfigInfoVisitor {
-    type Value = Box<dyn VsanClusterConfigInfoTrait>;
+struct VsanClusterConfigInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanClusterConfigInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanClusterConfigInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanClusterConfigInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanClusterConfigInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43711,41 +42835,38 @@ impl std::ops::DerefMut for dyn VsanHostConfigInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanHostConfigInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanHostConfigInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanHostConfigInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanHostConfigInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanHostConfigInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanHostConfigInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanHostConfigInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanHostConfigInfoVisitor {
-    type Value = Box<dyn VsanHostConfigInfoTrait>;
+struct VsanHostConfigInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanHostConfigInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanHostConfigInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanHostConfigInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanHostConfigInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43815,41 +42936,38 @@ impl std::ops::DerefMut for dyn VsanHostConfigInfoNetworkInfoPortConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanHostConfigInfoNetworkInfoPortConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanHostConfigInfoNetworkInfoPortConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanHostConfigInfoNetworkInfoPortConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanHostConfigInfoNetworkInfoPortConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanHostConfigInfoNetworkInfoPortConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanHostConfigInfoNetworkInfoPortConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanHostConfigInfoNetworkInfoPortConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanHostConfigInfoNetworkInfoPortConfigVisitor {
-    type Value = Box<dyn VsanHostConfigInfoNetworkInfoPortConfigTrait>;
+struct VsanHostConfigInfoNetworkInfoPortConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanHostConfigInfoNetworkInfoPortConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanHostConfigInfoNetworkInfoPortConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanHostConfigInfoNetworkInfoPortConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanHostConfigInfoNetworkInfoPortConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -43909,41 +43027,38 @@ impl std::ops::DerefMut for dyn VsanHostDiskResultTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanHostDiskResultTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanHostDiskResultTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanHostDiskResultVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanHostDiskResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanHostDiskResultVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanHostDiskResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanHostDiskResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanHostDiskResultVisitor {
-    type Value = Box<dyn VsanHostDiskResultTrait>;
+struct VsanHostDiskResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanHostDiskResultTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanHostDiskResultTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanHostDiskResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanHostDiskResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -44016,41 +43131,38 @@ impl std::ops::DerefMut for dyn VsanHostIpConfigTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VsanHostIpConfigTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VsanHostIpConfigTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VsanHostIpConfigVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VsanHostIpConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VsanHostIpConfigVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VsanHostIpConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanHostIpConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VsanHostIpConfigVisitor {
-    type Value = Box<dyn VsanHostIpConfigTrait>;
+struct VsanHostIpConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanHostIpConfigTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VsanHostIpConfigTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VsanHostIpConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanHostIpConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -44104,41 +43216,38 @@ impl std::ops::DerefMut for dyn BaseConfigInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn BaseConfigInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn BaseConfigInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(BaseConfigInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn BaseConfigInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct BaseConfigInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn BaseConfigInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(BaseConfigInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for BaseConfigInfoVisitor {
-    type Value = Box<dyn BaseConfigInfoTrait>;
+struct BaseConfigInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn BaseConfigInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid BaseConfigInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for BaseConfigInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn BaseConfigInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -44192,41 +43301,38 @@ impl std::ops::DerefMut for dyn BaseConfigInfoBackingInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn BaseConfigInfoBackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn BaseConfigInfoBackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(BaseConfigInfoBackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn BaseConfigInfoBackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct BaseConfigInfoBackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn BaseConfigInfoBackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(BaseConfigInfoBackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for BaseConfigInfoBackingInfoVisitor {
-    type Value = Box<dyn BaseConfigInfoBackingInfoTrait>;
+struct BaseConfigInfoBackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn BaseConfigInfoBackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid BaseConfigInfoBackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for BaseConfigInfoBackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn BaseConfigInfoBackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -44294,41 +43400,38 @@ impl std::ops::DerefMut for dyn BaseConfigInfoFileBackingInfoTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn BaseConfigInfoFileBackingInfoTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn BaseConfigInfoFileBackingInfoTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(BaseConfigInfoFileBackingInfoVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn BaseConfigInfoFileBackingInfoTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct BaseConfigInfoFileBackingInfoVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn BaseConfigInfoFileBackingInfoTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(BaseConfigInfoFileBackingInfoTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for BaseConfigInfoFileBackingInfoVisitor {
-    type Value = Box<dyn BaseConfigInfoFileBackingInfoTrait>;
+struct BaseConfigInfoFileBackingInfoTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn BaseConfigInfoFileBackingInfoTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid BaseConfigInfoFileBackingInfoTrait JSON object with a _typeName field")
+impl miniserde::de::Map for BaseConfigInfoFileBackingInfoTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn BaseConfigInfoFileBackingInfoTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -44393,41 +43496,38 @@ impl std::ops::DerefMut for dyn VslmCreateSpecBackingSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VslmCreateSpecBackingSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VslmCreateSpecBackingSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VslmCreateSpecBackingSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VslmCreateSpecBackingSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VslmCreateSpecBackingSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VslmCreateSpecBackingSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VslmCreateSpecBackingSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VslmCreateSpecBackingSpecVisitor {
-    type Value = Box<dyn VslmCreateSpecBackingSpecTrait>;
+struct VslmCreateSpecBackingSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VslmCreateSpecBackingSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VslmCreateSpecBackingSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VslmCreateSpecBackingSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VslmCreateSpecBackingSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -44486,41 +43586,38 @@ impl std::ops::DerefMut for dyn VslmMigrateSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn VslmMigrateSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VslmMigrateSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VslmMigrateSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VslmMigrateSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VslmMigrateSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VslmMigrateSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VslmMigrateSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VslmMigrateSpecVisitor {
-    type Value = Box<dyn VslmMigrateSpecTrait>;
+struct VslmMigrateSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VslmMigrateSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VslmMigrateSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VslmMigrateSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VslmMigrateSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -44599,41 +43696,38 @@ impl std::ops::DerefMut for dyn SelectionSpecTrait {
     }
 }
 
-impl<'s> serde::Serialize for dyn SelectionSpecTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn SelectionSpecTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(SelectionSpecVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn SelectionSpecTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct SelectionSpecVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn SelectionSpecTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(SelectionSpecTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for SelectionSpecVisitor {
-    type Value = Box<dyn SelectionSpecTrait>;
+struct SelectionSpecTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn SelectionSpecTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid SelectionSpecTrait JSON object with a _typeName field")
+impl miniserde::de::Map for SelectionSpecTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn SelectionSpecTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }
@@ -44675,41 +43769,38 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn SelectionSp
 /// - `VslmTask::vslm_query_info().reason`
 pub trait VslmTaskReasonTrait : super::traits::DataObjectTrait {
 }
-impl<'s> serde::Serialize for dyn VslmTaskReasonTrait + 's {
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }
-        }
-impl<'de> serde::Deserialize<'de> for Box<dyn VslmTaskReasonTrait> {
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-                deserializer.deserialize_map(VslmTaskReasonVisitor)
-            }
-        }
+impl miniserde::Deserialize for Box<dyn VslmTaskReasonTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
 
-struct VslmTaskReasonVisitor;
+impl miniserde::de::Visitor for Place<Box<dyn VslmTaskReasonTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VslmTaskReasonTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::new(),
+            __out: &mut self.out,
+        }))
+    }
+}
 
-impl<'de> de::Visitor<'de> for VslmTaskReasonVisitor {
-    type Value = Box<dyn VslmTaskReasonTrait>;
+struct VslmTaskReasonTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VslmTaskReasonTrait>>,
+}
 
-    fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {
-        formatter.write_str("a valid VslmTaskReasonTrait JSON object with a _typeName field")
+impl miniserde::de::Map for VslmTaskReasonTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
     }
 
-    fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>
-    where
-        A: de::MapAccess<'de>,
-    {
-        let deserializer = de::value::MapAccessDeserializer::new(&mut map);
-        let any: VimAny = de::Deserialize::deserialize(deserializer)?;
-        match any {
-            VimAny::Object(obj) => Ok(CastFrom::from_box(obj)
-                .map_err(|_| de::Error::custom("Internal error converting to trait type"))?),
-            VimAny::Value(value) => Err(de::Error::custom(format!(
-                "expected object not wrapped value: {:?}",
-                value))),
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VslmTaskReasonTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
         }
     }
 }

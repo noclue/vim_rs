@@ -53,7 +53,8 @@ impl FailoverClusterManager {
         let path = format!("/FailoverClusterManager/{moId}/GetVchaClusterHealth", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VchaClusterHealth = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VchaClusterHealth = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns current mode of a VCHA Cluster.
@@ -63,7 +64,8 @@ impl FailoverClusterManager {
         let path = format!("/FailoverClusterManager/{moId}/getClusterMode", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Allows a caller to initiate a failover from Active vCenter Server node
@@ -99,7 +101,8 @@ impl FailoverClusterManager {
         let path = format!("/FailoverClusterManager/{moId}/initiateFailover_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// setClusterMode method allows caller to manipulate the mode of a
@@ -134,7 +137,8 @@ impl FailoverClusterManager {
         let path = format!("/FailoverClusterManager/{moId}/setClusterMode_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// A list of method names that must not be called and will throw
@@ -157,18 +161,63 @@ impl FailoverClusterManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "initiateFailoverRequestType", tag = "_typeName")]
 struct InitiateFailoverRequestType {
     planned: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "setClusterModeRequestType", tag = "_typeName")]
+
+impl miniserde::Serialize for InitiateFailoverRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InitiateFailoverRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InitiateFailoverRequestTypeSer<'b> {
+    data: &'b InitiateFailoverRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InitiateFailoverRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"initiateFailoverRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("planned"), &self.data.planned as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetClusterModeRequestType<'a> {
     mode: &'a str,
+}
+
+impl<'a> miniserde::Serialize for SetClusterModeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetClusterModeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetClusterModeRequestTypeSer<'b, 'a> {
+    data: &'b SetClusterModeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SetClusterModeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"setClusterModeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("mode"), &self.data.mode as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

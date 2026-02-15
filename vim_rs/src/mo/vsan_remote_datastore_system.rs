@@ -52,7 +52,8 @@ impl VsanRemoteDatastoreSystem {
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanCreateDatastoreSource", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Destroy an existing Datastore Source configuration.
@@ -90,7 +91,8 @@ impl VsanRemoteDatastoreSystem {
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanDestroyDatastoreSource", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Checks mount compatibility of a vSAN datastore with given vSAN cluster.
@@ -127,7 +129,8 @@ impl VsanRemoteDatastoreSystem {
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/MountPrecheck", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Run prechecks for a Datastore Source.
@@ -164,7 +167,8 @@ impl VsanRemoteDatastoreSystem {
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanPrecheckDatastoreSource", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanDatastoreSourcePrecheckResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanDatastoreSourcePrecheckResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query Datastore Source information for specified remote vCenters.
@@ -194,7 +198,10 @@ impl VsanRemoteDatastoreSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanHciMeshDatastoreSource>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanHciMeshDatastoreSource>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -242,7 +249,10 @@ impl VsanRemoteDatastoreSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanXvcQueryResultSet>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanXvcQueryResultSet>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -277,7 +287,8 @@ impl VsanRemoteDatastoreSystem {
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/RemoteVcMountPrecheck", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Update the configuration of an existing Datastore Source.
@@ -317,66 +328,249 @@ impl VsanRemoteDatastoreSystem {
         let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanUpdateDatastoreSource", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanCreateDatastoreSourceRequestType<'a> {
-    #[serde(rename = "datastoreSource")]
     datastore_source: &'a crate::types::structs::VsanHciMeshDatastoreSource,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanCreateDatastoreSourceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanCreateDatastoreSourceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanCreateDatastoreSourceRequestTypeSer<'b, 'a> {
+    data: &'b VsanCreateDatastoreSourceRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanCreateDatastoreSourceRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanCreateDatastoreSourceRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastoreSource"), &self.data.datastore_source as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanDestroyDatastoreSourceRequestType<'a> {
-    #[serde(rename = "datastoreSource")]
     datastore_source: &'a crate::types::structs::VsanHciMeshDatastoreSource,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanDestroyDatastoreSourceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanDestroyDatastoreSourceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanDestroyDatastoreSourceRequestTypeSer<'b, 'a> {
+    data: &'b VsanDestroyDatastoreSourceRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanDestroyDatastoreSourceRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanDestroyDatastoreSourceRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastoreSource"), &self.data.datastore_source as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct MountPrecheckRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
     datastore: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "serverClusterInfo")]
     server_cluster_info: Option<&'a crate::types::structs::VcRemoteVsanServerClusterInfo>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for MountPrecheckRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MountPrecheckRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MountPrecheckRequestTypeSer<'b, 'a> {
+    data: &'b MountPrecheckRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for MountPrecheckRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MountPrecheckRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.server_cluster_info else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("serverClusterInfo"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanPrecheckDatastoreSourceRequestType<'a> {
-    #[serde(rename = "datastoreSource")]
     datastore_source: &'a crate::types::structs::VsanHciMeshDatastoreSource,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     operation: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanPrecheckDatastoreSourceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanPrecheckDatastoreSourceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanPrecheckDatastoreSourceRequestTypeSer<'b, 'a> {
+    data: &'b VsanPrecheckDatastoreSourceRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanPrecheckDatastoreSourceRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanPrecheckDatastoreSourceRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("datastoreSource"), &self.data.datastore_source as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.operation else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("operation"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanQueryDatastoreSourceRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vcHosts")]
     vc_hosts: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanQueryDatastoreSourceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanQueryDatastoreSourceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanQueryDatastoreSourceRequestTypeSer<'b, 'a> {
+    data: &'b VsanQueryDatastoreSourceRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanQueryDatastoreSourceRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanQueryDatastoreSourceRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.vc_hosts else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vcHosts"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanQueryHciMeshDatastoresRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "querySpecs")]
     query_specs: Option<&'a [crate::types::structs::VsanXvcQuerySpec]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "extraVcInfos")]
     extra_vc_infos: Option<&'a [Box<dyn crate::types::traits::VsanRemoteVcInfoTrait>]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanQueryHciMeshDatastoresRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanQueryHciMeshDatastoresRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanQueryHciMeshDatastoresRequestTypeSer<'b, 'a> {
+    data: &'b VsanQueryHciMeshDatastoresRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanQueryHciMeshDatastoresRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanQueryHciMeshDatastoresRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.query_specs else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("querySpecs"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.extra_vc_infos else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("extraVcInfos"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoteVcMountPrecheckRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "xvcDatastore")]
     xvc_datastore: &'a crate::types::structs::VsanXvcDatastoreInfo,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoteVcMountPrecheckRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoteVcMountPrecheckRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoteVcMountPrecheckRequestTypeSer<'b, 'a> {
+    data: &'b RemoteVcMountPrecheckRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoteVcMountPrecheckRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoteVcMountPrecheckRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("xvcDatastore"), &self.data.xvc_datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanUpdateDatastoreSourceRequestType<'a> {
-    #[serde(rename = "datastoreSource")]
     datastore_source: &'a crate::types::structs::VsanHciMeshDatastoreSource,
+}
+
+impl<'a> miniserde::Serialize for VsanUpdateDatastoreSourceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanUpdateDatastoreSourceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanUpdateDatastoreSourceRequestTypeSer<'b, 'a> {
+    data: &'b VsanUpdateDatastoreSourceRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanUpdateDatastoreSourceRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanUpdateDatastoreSourceRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastoreSource"), &self.data.datastore_source as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

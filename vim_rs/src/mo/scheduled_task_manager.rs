@@ -53,7 +53,8 @@ impl ScheduledTaskManager {
         let path = format!("/ScheduledTaskManager/{moId}/CreateScheduledTask", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a scheduled task.
@@ -88,7 +89,8 @@ impl ScheduledTaskManager {
         let path = format!("/ScheduledTaskManager/{moId}/CreateObjectScheduledTask", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Available scheduled tasks defined on the entity.
@@ -114,7 +116,10 @@ impl ScheduledTaskManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -139,7 +144,10 @@ impl ScheduledTaskManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -150,7 +158,8 @@ impl ScheduledTaskManager {
         let path = format!("/ScheduledTaskManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ScheduledTaskDescription = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ScheduledTaskDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// All available scheduled tasks.
@@ -165,32 +174,129 @@ impl ScheduledTaskManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CreateScheduledTaskRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a dyn crate::types::traits::ScheduledTaskSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateScheduledTaskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateScheduledTaskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateScheduledTaskRequestTypeSer<'b, 'a> {
+    data: &'b CreateScheduledTaskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateScheduledTaskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateScheduledTaskRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateObjectScheduledTaskRequestType<'a> {
     obj: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a dyn crate::types::traits::ScheduledTaskSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateObjectScheduledTaskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateObjectScheduledTaskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateObjectScheduledTaskRequestTypeSer<'b, 'a> {
+    data: &'b CreateObjectScheduledTaskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateObjectScheduledTaskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateObjectScheduledTaskRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("obj"), &self.data.obj as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrieveEntityScheduledTaskRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entity: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveEntityScheduledTaskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveEntityScheduledTaskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveEntityScheduledTaskRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveEntityScheduledTaskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RetrieveEntityScheduledTaskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveEntityScheduledTaskRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.entity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entity"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RetrieveObjectScheduledTaskRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     obj: Option<&'a crate::types::structs::ManagedObjectReference>,
+}
+
+impl<'a> miniserde::Serialize for RetrieveObjectScheduledTaskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveObjectScheduledTaskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveObjectScheduledTaskRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveObjectScheduledTaskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RetrieveObjectScheduledTaskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveObjectScheduledTaskRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.obj else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("obj"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

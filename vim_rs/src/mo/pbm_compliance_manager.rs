@@ -83,7 +83,10 @@ impl PbmComplianceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmComplianceResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -133,7 +136,10 @@ impl PbmComplianceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmRollupComplianceResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmRollupComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -180,7 +186,10 @@ impl PbmComplianceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmComplianceResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -221,7 +230,10 @@ impl PbmComplianceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmRollupComplianceResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmRollupComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -249,37 +261,155 @@ impl PbmComplianceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmServerObjectRef>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmServerObjectRef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct PbmCheckComplianceRequestType<'a> {
     entities: &'a [crate::types::structs::PbmServerObjectRef],
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a crate::types::structs::PbmProfileId>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmCheckComplianceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmCheckComplianceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmCheckComplianceRequestTypeSer<'b, 'a> {
+    data: &'b PbmCheckComplianceRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmCheckComplianceRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmCheckComplianceRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("entities"), &self.data.entities as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmCheckRollupComplianceRequestType<'a> {
     entity: &'a [crate::types::structs::PbmServerObjectRef],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmCheckRollupComplianceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmCheckRollupComplianceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmCheckRollupComplianceRequestTypeSer<'b, 'a> {
+    data: &'b PbmCheckRollupComplianceRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmCheckRollupComplianceRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmCheckRollupComplianceRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmFetchComplianceResultRequestType<'a> {
     entities: &'a [crate::types::structs::PbmServerObjectRef],
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a crate::types::structs::PbmProfileId>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmFetchComplianceResultRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmFetchComplianceResultRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmFetchComplianceResultRequestTypeSer<'b, 'a> {
+    data: &'b PbmFetchComplianceResultRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmFetchComplianceResultRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmFetchComplianceResultRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("entities"), &self.data.entities as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmFetchRollupComplianceResultRequestType<'a> {
     entity: &'a [crate::types::structs::PbmServerObjectRef],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmFetchRollupComplianceResultRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmFetchRollupComplianceResultRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmFetchRollupComplianceResultRequestTypeSer<'b, 'a> {
+    data: &'b PbmFetchRollupComplianceResultRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmFetchRollupComplianceResultRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmFetchRollupComplianceResultRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmQueryByRollupComplianceStatusRequestType<'a> {
     status: &'a str,
+}
+
+impl<'a> miniserde::Serialize for PbmQueryByRollupComplianceStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryByRollupComplianceStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryByRollupComplianceStatusRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryByRollupComplianceStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryByRollupComplianceStatusRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryByRollupComplianceStatusRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("status"), &self.data.status as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

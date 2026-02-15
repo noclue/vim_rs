@@ -117,7 +117,8 @@ impl CustomizationSpecManager {
         let path = format!("/CustomizationSpecManager/{moId}/DoesCustomizationSpecExist", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Obtains a specification for the given name.
@@ -137,7 +138,8 @@ impl CustomizationSpecManager {
         let path = format!("/CustomizationSpecManager/{moId}/GetCustomizationSpec", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::CustomizationSpecItem = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::CustomizationSpecItem = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Whether or not the guest OS is customizable.
@@ -156,7 +158,8 @@ impl CustomizationSpecManager {
         let path = format!("/CustomizationSpecManager/{moId}/IsGuestOsCustomizable", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Overwrites an existing specification, possibly after retrieving
@@ -223,7 +226,8 @@ impl CustomizationSpecManager {
         let path = format!("/CustomizationSpecManager/{moId}/CustomizationSpecItemToXml", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Converts an XML string to a specification item
@@ -243,7 +247,8 @@ impl CustomizationSpecManager {
         let path = format!("/CustomizationSpecManager/{moId}/XmlToCustomizationSpecItem", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::CustomizationSpecItem = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::CustomizationSpecItem = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Gets a binary public encryption key that can be used to encrypt
@@ -255,7 +260,10 @@ impl CustomizationSpecManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<i8>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<i8>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -267,70 +275,301 @@ impl CustomizationSpecManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomizationSpecInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomizationSpecInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CheckCustomizationResourcesRequestType<'a> {
-    #[serde(rename = "guestOs")]
     guest_os: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckCustomizationResourcesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckCustomizationResourcesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckCustomizationResourcesRequestTypeSer<'b, 'a> {
+    data: &'b CheckCustomizationResourcesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CheckCustomizationResourcesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckCustomizationResourcesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("guestOs"), &self.data.guest_os as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateCustomizationSpecRequestType<'a> {
     item: &'a crate::types::structs::CustomizationSpecItem,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateCustomizationSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateCustomizationSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateCustomizationSpecRequestTypeSer<'b, 'a> {
+    data: &'b CreateCustomizationSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateCustomizationSpecRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateCustomizationSpecRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("item"), &self.data.item as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DeleteCustomizationSpecRequestType<'a> {
     name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteCustomizationSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteCustomizationSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteCustomizationSpecRequestTypeSer<'b, 'a> {
+    data: &'b DeleteCustomizationSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DeleteCustomizationSpecRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteCustomizationSpecRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DuplicateCustomizationSpecRequestType<'a> {
     name: &'a str,
-    #[serde(rename = "newName")]
     new_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DuplicateCustomizationSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DuplicateCustomizationSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DuplicateCustomizationSpecRequestTypeSer<'b, 'a> {
+    data: &'b DuplicateCustomizationSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DuplicateCustomizationSpecRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DuplicateCustomizationSpecRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("newName"), &self.data.new_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DoesCustomizationSpecExistRequestType<'a> {
     name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DoesCustomizationSpecExistRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DoesCustomizationSpecExistRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DoesCustomizationSpecExistRequestTypeSer<'b, 'a> {
+    data: &'b DoesCustomizationSpecExistRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DoesCustomizationSpecExistRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DoesCustomizationSpecExistRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct GetCustomizationSpecRequestType<'a> {
     name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GetCustomizationSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GetCustomizationSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GetCustomizationSpecRequestTypeSer<'b, 'a> {
+    data: &'b GetCustomizationSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for GetCustomizationSpecRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GetCustomizationSpecRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct IsGuestOsCustomizableRequestType<'a> {
-    #[serde(rename = "guestId")]
     guest_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for IsGuestOsCustomizableRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(IsGuestOsCustomizableRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct IsGuestOsCustomizableRequestTypeSer<'b, 'a> {
+    data: &'b IsGuestOsCustomizableRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for IsGuestOsCustomizableRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"IsGuestOsCustomizableRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("guestId"), &self.data.guest_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct OverwriteCustomizationSpecRequestType<'a> {
     item: &'a crate::types::structs::CustomizationSpecItem,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for OverwriteCustomizationSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(OverwriteCustomizationSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct OverwriteCustomizationSpecRequestTypeSer<'b, 'a> {
+    data: &'b OverwriteCustomizationSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for OverwriteCustomizationSpecRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"OverwriteCustomizationSpecRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("item"), &self.data.item as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RenameCustomizationSpecRequestType<'a> {
     name: &'a str,
-    #[serde(rename = "newName")]
     new_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RenameCustomizationSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RenameCustomizationSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RenameCustomizationSpecRequestTypeSer<'b, 'a> {
+    data: &'b RenameCustomizationSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RenameCustomizationSpecRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RenameCustomizationSpecRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("newName"), &self.data.new_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CustomizationSpecItemToXmlRequestType<'a> {
     item: &'a crate::types::structs::CustomizationSpecItem,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CustomizationSpecItemToXmlRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CustomizationSpecItemToXmlRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CustomizationSpecItemToXmlRequestTypeSer<'b, 'a> {
+    data: &'b CustomizationSpecItemToXmlRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CustomizationSpecItemToXmlRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CustomizationSpecItemToXmlRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("item"), &self.data.item as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct XmlToCustomizationSpecItemRequestType<'a> {
-    #[serde(rename = "specItemXml")]
     spec_item_xml: &'a str,
+}
+
+impl<'a> miniserde::Serialize for XmlToCustomizationSpecItemRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(XmlToCustomizationSpecItemRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct XmlToCustomizationSpecItemRequestTypeSer<'b, 'a> {
+    data: &'b XmlToCustomizationSpecItemRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for XmlToCustomizationSpecItemRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"XmlToCustomizationSpecItemRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("specItemXml"), &self.data.spec_item_xml as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

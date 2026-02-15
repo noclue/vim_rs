@@ -165,7 +165,8 @@ impl PbmProfileProfileManager {
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmCreate", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::PbmProfileId = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::PbmProfileId = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deletes one or more profiles.
@@ -200,7 +201,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmProfileOperationOutcome>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmProfileOperationOutcome>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -244,7 +248,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmCapabilityMetadataPerCategory>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmCapabilityMetadataPerCategory>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -282,7 +289,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmCapabilitySchema>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmCapabilitySchema>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -298,7 +308,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmProfileResourceType>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmProfileResourceType>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -324,7 +337,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmCapabilityVendorResourceTypeInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmCapabilityVendorResourceTypeInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -363,7 +379,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::PbmProfileTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::PbmProfileTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -394,7 +413,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmQueryProfileResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmQueryProfileResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -426,7 +448,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmServerObjectRef>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmServerObjectRef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -453,7 +478,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmProfileId>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmProfileId>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -483,7 +511,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmQueryProfileResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmQueryProfileResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -517,7 +548,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::PbmProfileId>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::PbmProfileId>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -554,7 +588,8 @@ impl PbmProfileProfileManager {
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryDefaultRequirementProfiles", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::PbmDefaultProfileInfo> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::PbmDefaultProfileInfo> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns requirement profile ids or resource profile ids, or both.
@@ -586,7 +621,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmProfileId>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmProfileId>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -621,7 +659,10 @@ impl PbmProfileProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmDatastoreSpaceStatistics>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmDatastoreSpaceStatistics>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -670,7 +711,8 @@ impl PbmProfileProfileManager {
         let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmRetrieveContent", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<Box<dyn crate::types::traits::PbmProfileTrait>> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<Box<dyn crate::types::traits::PbmProfileTrait>> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Updates a storage profile.
@@ -697,124 +739,531 @@ impl PbmProfileProfileManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct PbmAssignDefaultRequirementProfileRequestType<'a> {
     profile: &'a crate::types::structs::PbmProfileId,
     datastores: &'a [crate::types::structs::PbmPlacementHub],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmAssignDefaultRequirementProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmAssignDefaultRequirementProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmAssignDefaultRequirementProfileRequestTypeSer<'b, 'a> {
+    data: &'b PbmAssignDefaultRequirementProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmAssignDefaultRequirementProfileRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmAssignDefaultRequirementProfileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("profile"), &self.data.profile as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastores"), &self.data.datastores as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmCreateRequestType<'a> {
-    #[serde(rename = "createSpec")]
     create_spec: &'a crate::types::structs::PbmCapabilityProfileCreateSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmCreateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmCreateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmCreateRequestTypeSer<'b, 'a> {
+    data: &'b PbmCreateRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmCreateRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmCreateRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("createSpec"), &self.data.create_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmDeleteRequestType<'a> {
-    #[serde(rename = "profileId")]
     profile_id: &'a [crate::types::structs::PbmProfileId],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmDeleteRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmDeleteRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmDeleteRequestTypeSer<'b, 'a> {
+    data: &'b PbmDeleteRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmDeleteRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmDeleteRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("profileId"), &self.data.profile_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmFetchCapabilityMetadataRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "resourceType")]
     resource_type: Option<&'a crate::types::structs::PbmProfileResourceType>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vendorUuid")]
     vendor_uuid: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmFetchCapabilityMetadataRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmFetchCapabilityMetadataRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmFetchCapabilityMetadataRequestTypeSer<'b, 'a> {
+    data: &'b PbmFetchCapabilityMetadataRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmFetchCapabilityMetadataRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmFetchCapabilityMetadataRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.resource_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("resourceType"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.vendor_uuid else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vendorUuid"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmFetchCapabilitySchemaRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vendorUuid")]
     vendor_uuid: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "lineOfService")]
     line_of_service: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmFetchCapabilitySchemaRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmFetchCapabilitySchemaRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmFetchCapabilitySchemaRequestTypeSer<'b, 'a> {
+    data: &'b PbmFetchCapabilitySchemaRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmFetchCapabilitySchemaRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmFetchCapabilitySchemaRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.vendor_uuid else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vendorUuid"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.line_of_service else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("lineOfService"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmFetchVendorInfoRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "resourceType")]
     resource_type: Option<&'a crate::types::structs::PbmProfileResourceType>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmFetchVendorInfoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmFetchVendorInfoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmFetchVendorInfoRequestTypeSer<'b, 'a> {
+    data: &'b PbmFetchVendorInfoRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmFetchVendorInfoRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmFetchVendorInfoRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.resource_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("resourceType"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmFindApplicableDefaultProfileRequestType<'a> {
     datastores: &'a [crate::types::structs::PbmPlacementHub],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmFindApplicableDefaultProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmFindApplicableDefaultProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmFindApplicableDefaultProfileRequestTypeSer<'b, 'a> {
+    data: &'b PbmFindApplicableDefaultProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmFindApplicableDefaultProfileRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmFindApplicableDefaultProfileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastores"), &self.data.datastores as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmQueryAssociatedEntitiesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profiles: Option<&'a [crate::types::structs::PbmProfileId]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmQueryAssociatedEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryAssociatedEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryAssociatedEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryAssociatedEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryAssociatedEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryAssociatedEntitiesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.profiles else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profiles"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmQueryAssociatedEntityRequestType<'a> {
     profile: &'a crate::types::structs::PbmProfileId,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "entityType")]
     entity_type: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmQueryAssociatedEntityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryAssociatedEntityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryAssociatedEntityRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryAssociatedEntityRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryAssociatedEntityRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryAssociatedEntityRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("profile"), &self.data.profile as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.entity_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entityType"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmQueryAssociatedProfileRequestType<'a> {
     entity: &'a crate::types::structs::PbmServerObjectRef,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmQueryAssociatedProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryAssociatedProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryAssociatedProfileRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryAssociatedProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryAssociatedProfileRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryAssociatedProfileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmQueryAssociatedProfilesRequestType<'a> {
     entities: &'a [crate::types::structs::PbmServerObjectRef],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmQueryAssociatedProfilesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryAssociatedProfilesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryAssociatedProfilesRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryAssociatedProfilesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryAssociatedProfilesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryAssociatedProfilesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entities"), &self.data.entities as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmQueryDefaultRequirementProfileRequestType<'a> {
     hub: &'a crate::types::structs::PbmPlacementHub,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmQueryDefaultRequirementProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryDefaultRequirementProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryDefaultRequirementProfileRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryDefaultRequirementProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryDefaultRequirementProfileRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryDefaultRequirementProfileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("hub"), &self.data.hub as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmQueryDefaultRequirementProfilesRequestType<'a> {
     datastores: &'a [crate::types::structs::PbmPlacementHub],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmQueryDefaultRequirementProfilesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryDefaultRequirementProfilesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryDefaultRequirementProfilesRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryDefaultRequirementProfilesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryDefaultRequirementProfilesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryDefaultRequirementProfilesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastores"), &self.data.datastores as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmQueryProfileRequestType<'a> {
-    #[serde(rename = "resourceType")]
     resource_type: &'a crate::types::structs::PbmProfileResourceType,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "profileCategory")]
     profile_category: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmQueryProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryProfileRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryProfileRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryProfileRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("resourceType"), &self.data.resource_type as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.profile_category else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profileCategory"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmQuerySpaceStatsForStorageContainerRequestType<'a> {
     datastore: &'a crate::types::structs::PbmServerObjectRef,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "capabilityProfileId")]
     capability_profile_id: Option<&'a [crate::types::structs::PbmProfileId]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmQuerySpaceStatsForStorageContainerRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQuerySpaceStatsForStorageContainerRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQuerySpaceStatsForStorageContainerRequestTypeSer<'b, 'a> {
+    data: &'b PbmQuerySpaceStatsForStorageContainerRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQuerySpaceStatsForStorageContainerRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQuerySpaceStatsForStorageContainerRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.capability_profile_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("capabilityProfileId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmResetDefaultRequirementProfileRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a crate::types::structs::PbmProfileId>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmResetDefaultRequirementProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmResetDefaultRequirementProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmResetDefaultRequirementProfileRequestTypeSer<'b, 'a> {
+    data: &'b PbmResetDefaultRequirementProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmResetDefaultRequirementProfileRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmResetDefaultRequirementProfileRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmRetrieveContentRequestType<'a> {
-    #[serde(rename = "profileIds")]
     profile_ids: &'a [crate::types::structs::PbmProfileId],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmRetrieveContentRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmRetrieveContentRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmRetrieveContentRequestTypeSer<'b, 'a> {
+    data: &'b PbmRetrieveContentRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmRetrieveContentRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmRetrieveContentRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("profileIds"), &self.data.profile_ids as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PbmUpdateRequestType<'a> {
-    #[serde(rename = "profileId")]
     profile_id: &'a crate::types::structs::PbmProfileId,
-    #[serde(rename = "updateSpec")]
     update_spec: &'a crate::types::structs::PbmCapabilityProfileUpdateSpec,
+}
+
+impl<'a> miniserde::Serialize for PbmUpdateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmUpdateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmUpdateRequestTypeSer<'b, 'a> {
+    data: &'b PbmUpdateRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmUpdateRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmUpdateRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("profileId"), &self.data.profile_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("updateSpec"), &self.data.update_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

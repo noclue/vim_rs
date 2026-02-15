@@ -51,7 +51,10 @@ impl TaskManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::TaskInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::TaskInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -88,7 +91,8 @@ impl TaskManager {
         let path = format!("/TaskManager/{moId}/CreateCollectorForTasks", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a *TaskHistoryCollector*, a
@@ -129,7 +133,8 @@ impl TaskManager {
         let path = format!("/TaskManager/{moId}/CreateCollectorWithInfoFilterForTasks", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a new *Task*, specifying the object with which
@@ -174,7 +179,8 @@ impl TaskManager {
         let path = format!("/TaskManager/{moId}/CreateTask", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::TaskInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::TaskInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Locale-specific, static strings that describe *Task*
@@ -185,7 +191,8 @@ impl TaskManager {
         let path = format!("/TaskManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::TaskDescription = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::TaskDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Maximum number of *TaskHistoryCollector*
@@ -196,7 +203,8 @@ impl TaskManager {
         let path = format!("/TaskManager/{moId}/maxCollector", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// A list of *Task* managed objects that completed recently,
@@ -233,49 +241,152 @@ impl TaskManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ReadNextTasksByViewSpecRequestType<'a> {
-    #[serde(rename = "viewSpec")]
     view_spec: &'a dyn crate::types::traits::TaskManagerTaskViewSpecTrait,
-    #[serde(rename = "filterSpec")]
     filter_spec: &'a crate::types::structs::TaskFilterSpec,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "infoFilterSpec")]
     info_filter_spec: Option<&'a crate::types::structs::TaskInfoFilterSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ReadNextTasksByViewSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReadNextTasksByViewSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReadNextTasksByViewSpecRequestTypeSer<'b, 'a> {
+    data: &'b ReadNextTasksByViewSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ReadNextTasksByViewSpecRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReadNextTasksByViewSpecRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("viewSpec"), &self.data.view_spec as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("filterSpec"), &self.data.filter_spec as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.info_filter_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("infoFilterSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateCollectorForTasksRequestType<'a> {
     filter: &'a crate::types::structs::TaskFilterSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateCollectorForTasksRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateCollectorForTasksRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateCollectorForTasksRequestTypeSer<'b, 'a> {
+    data: &'b CreateCollectorForTasksRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateCollectorForTasksRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateCollectorForTasksRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filter"), &self.data.filter as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateCollectorWithInfoFilterForTasksRequestType<'a> {
     filter: &'a crate::types::structs::TaskFilterSpec,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "infoFilter")]
     info_filter: Option<&'a crate::types::structs::TaskInfoFilterSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateCollectorWithInfoFilterForTasksRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateCollectorWithInfoFilterForTasksRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateCollectorWithInfoFilterForTasksRequestTypeSer<'b, 'a> {
+    data: &'b CreateCollectorWithInfoFilterForTasksRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateCollectorWithInfoFilterForTasksRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateCollectorWithInfoFilterForTasksRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("filter"), &self.data.filter as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.info_filter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("infoFilter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateTaskRequestType<'a> {
     obj: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "taskTypeId")]
     task_type_id: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "initiatedBy")]
     initiated_by: Option<&'a str>,
     cancelable: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "parentTaskKey")]
     parent_task_key: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "activationId")]
     activation_id: Option<&'a str>,
+}
+
+impl<'a> miniserde::Serialize for CreateTaskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateTaskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateTaskRequestTypeSer<'b, 'a> {
+    data: &'b CreateTaskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateTaskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateTaskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("obj"), &self.data.obj as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("taskTypeId"), &self.data.task_type_id as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.initiated_by else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("initiatedBy"), val as &dyn miniserde::Serialize));
+                }
+                4 => return Some((std::borrow::Cow::Borrowed("cancelable"), &self.data.cancelable as &dyn miniserde::Serialize)),
+                5 => {
+                    let Some(ref val) = self.data.parent_task_key else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("parentTaskKey"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.activation_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("activationId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

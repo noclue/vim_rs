@@ -5,7 +5,6 @@ use super::super::types::structs;
 use log::{warn, debug, trace};
 
 use bytes::Bytes;
-use erased_serde as eserde;
 use std::future::Future;
 use std::pin::Pin;
 use std::ffi::OsStr;
@@ -34,8 +33,8 @@ pub enum Error {
     MethodFault(structs::MethodFault),
     #[error("Reqwest error: {0}")]
     ReqwestError(#[from] reqwest::Error),
-    #[error("Serde error: {0}")]
-    SerdeError(#[from] serde_json::Error),
+    #[error("Parse error: {0}")]
+    ParseError(String),
     #[error("Missing or Invalid session key")]
     MissingOrInvalidSessionKey,
     #[error("Invalid object type {0} expected: {1}")]
@@ -44,25 +43,13 @@ pub enum Error {
     CannotNegotiateAPIRelease(Vec<String>),
 }
 
+/// Convenience alias used in generated MO stubs for error construction.
+pub type VimError = Error;
+
 pub type Result<T> = std::result::Result<T, Error>;
 
 /// A boxed future used by the object-safe `VimClient` trait.
 pub type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
-
-/// Wrap an erased-serde payload so it can be passed into APIs expecting `serde::Serialize`.
-///
-/// This enables object-safe JSON request bodies in `VimClient` without forcing callers to build
-/// intermediate `serde_json::Value` trees.
-struct ErasedJson<'a>(&'a dyn eserde::Serialize);
-
-impl serde::Serialize for ErasedJson<'_> {
-    fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
-    where
-        S: serde::Serializer,
-    {
-        eserde::serialize(self.0, serializer)
-    }
-}
 
 /// Object-safe client abstraction for generated managed-object stubs (`crate::mo::*`).
 ///
@@ -77,7 +64,7 @@ pub trait VimClient: Send + Sync {
     fn get_request(&self, path: &str) -> reqwest::RequestBuilder;
 
     /// Prepare POST request with a JSON payload.
-    fn post_json(&self, path: &str, payload: &dyn eserde::Serialize) -> reqwest::RequestBuilder;
+    fn post_json(&self, path: &str, payload: &dyn miniserde::Serialize) -> reqwest::RequestBuilder;
 
     /// Prepare POST request without a body.
     fn post_bare(&self, path: &str) -> reqwest::RequestBuilder;
@@ -229,13 +216,16 @@ impl ClientBuilder {
                     api_releases: &releases,
                 };
                 let path = format!("https://{}/api/vcenter/system?action=hello", self.server_address);
+                let json_body = miniserde::json::to_string(&spec);
                 let req = http_client.post(&path)
                     .header("Content-Type", "application/json")
                     .header("User-Agent", &user_agent)
-                    .json(&spec);
+                    .body(json_body);
                 let res = req.send().await?;
                 let res = res.error_for_status()?;
-                let result: HelloResult = res.json().await?;
+                let body = res.text().await?;
+                let result: HelloResult = miniserde::json::from_str(&body)
+                    .map_err(|_| Error::ParseError("Failed to parse HelloResult".to_string()))?;
                 let api_release = result.api_release;
                 // Throw error if api_release is empty string indicating no compatible API release
                 // was found.
@@ -315,11 +305,11 @@ impl Client {
     }
 
     /// Fetch a managed object property by name into user provided type. This method can be used
-    /// with ['serde_json::Value'] to fetch the property as a dynamic JSON value. This enables
+    /// with [`miniserde::json::Value`] to fetch the property as a dynamic JSON value. This enables
     /// lightweight albeit unsafe approach to explore the API and extract relevant pieces of data.
     pub async fn fetch_property<T>(&self, obj: ManagedObjectReference, property: &str) -> Result<T>
     where
-        T: serde::de::DeserializeOwned
+        T: miniserde::Deserialize
     {
         let type_name: &str = obj.r#type.as_str();
         let id = &obj.value;
@@ -346,12 +336,14 @@ impl Client {
 
     /// Execute a request that returns a response body
     pub(crate) async fn execute<T>(&self, mut req: reqwest::RequestBuilder) -> Result<T>
-    where T: serde::de::DeserializeOwned 
+    where T: miniserde::Deserialize
     {
         req = self.prepare(req).await;
         let res = req.send().await?;
         let res = self.process_response(res).await?;
-        let content: T = res.json().await?;
+        let body = res.text().await?;
+        let content: T = miniserde::json::from_str(&body)
+            .map_err(|_| Error::ParseError(format!("Failed to parse {}", std::any::type_name::<T>())))?;
         Ok(content)
     }
 
@@ -385,7 +377,9 @@ impl Client {
         }
         if !res.status().is_success() {
             warn!("HTTP error: {}", res.status());
-            let fault: structs::MethodFault = res.json().await?;
+            let body = res.text().await?;
+            let fault: structs::MethodFault = miniserde::json::from_str(&body)
+                .map_err(|_| Error::ParseError(format!("Failed to parse MethodFault from error response: {}", &body[..body.len().min(200)])))?;
             return Err(Error::MethodFault(fault));
         }
         Ok(res)
@@ -401,20 +395,18 @@ impl VimClient for Client {
         Client::get_request(self, path)
     }
 
-    fn post_json(&self, path: &str, payload: &dyn eserde::Serialize) -> reqwest::RequestBuilder {
+    fn post_json(&self, path: &str, payload: &dyn miniserde::Serialize) -> reqwest::RequestBuilder {
         debug!("POST request: {}", path);
-        let erased_json = ErasedJson(payload);
-        // Avoid serializing the payload for logging (can be huge and allocates).
+        let json_body = miniserde::json::to_string(payload);
+        // Avoid logging the payload unless TRACE is enabled (can be huge).
         if log::log_enabled!(log::Level::Trace) {
-            if let Ok(serialized) = serde_json::to_string_pretty(&erased_json) {
-                trace!("POST payload: {}", serialized);
-            }
+            trace!("POST payload: {}", json_body);
         };
         let url = format!("{}{}", self.base_url, path);
         self.http_client
             .post(&url)
             .header("Content-Type", "application/json")
-            .json(&erased_json)
+            .body(json_body)
     }
 
     fn post_bare(&self, path: &str) -> reqwest::RequestBuilder {
@@ -497,11 +489,15 @@ impl Drop for Client {
                         if status.is_success() {
                             debug!("Session logged out successfully");
                         } else {
-                            resp.json::<structs::MethodFault>().await.map(|fault| {
-                                warn!("Failed to logout session(HTTP code: {}). MethodFault: {:?}", status, fault);
-                            }).unwrap_or_else(|e| {
-                                warn!("Failed to logout session(HTTP code: {}). Cannot parse MethodFault: {}", status, e);
-                            });
+                            match resp.text().await {
+                                Ok(body) => {
+                                    match miniserde::json::from_str::<structs::MethodFault>(&body) {
+                                        Ok(fault) => warn!("Failed to logout session(HTTP code: {}). MethodFault: {:?}", status, fault),
+                                        Err(_) => warn!("Failed to logout session(HTTP code: {}). Cannot parse MethodFault: {}", status, &body[..body.len().min(200)]),
+                                    }
+                                },
+                                Err(e) => warn!("Failed to logout session(HTTP code: {}). Cannot read response: {}", status, e),
+                            }
                         }
                     },
                     Err(e) => warn!("Failed to logout session. Cannot execute logout request: {}", e),
@@ -553,19 +549,93 @@ fn get_executable_name() -> Option<String> {
 /// The Hello System API request. This is not full-fledged binding but a simple request to
 /// negotiate the API release version.
 /// See [Hello System](https://developer.broadcom.com/xapis/vsphere-automation-api/latest/vcenter/api/vcenter/system__action=hello/post/index)
-#[derive(serde::Serialize, Debug)]
 struct HelloSpec<'a> {
     /// List of API release IDs that the client can work with in order of preference. The server will select the first mutually supported release ID.
     api_releases: &'a Vec<String>,
 }
 
+impl miniserde::Serialize for HelloSpec<'_> {
+    fn begin(&self) -> miniserde::ser::Fragment {
+        use miniserde::ser::Fragment;
+        Fragment::Map(Box::new(HelloSpecSerializer { data: self, seq: 0 }))
+    }
+}
+
+struct HelloSpecSerializer<'a> {
+    data: &'a HelloSpec<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HelloSpecSerializer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<str>, &dyn miniserde::Serialize)> {
+        let result = match self.seq {
+            0 => Some((std::borrow::Cow::Borrowed("api_releases"), &self.data.api_releases as &dyn miniserde::Serialize)),
+            _ => None,
+        };
+        self.seq += 1;
+        result
+    }
+}
+
+impl std::fmt::Debug for HelloSpec<'_> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("HelloSpec")
+            .field("api_releases", &self.api_releases)
+            .finish()
+    }
+}
+
 /// The Hello System API response. This is not full-fledged binding but a simple response to
 /// negotiate the API release version.
-#[derive(serde::Deserialize, Debug)]
 struct HelloResult {
     /// The ID of a mutually-supported API release. This ID should be used in subsequent API calls
     /// to the current vCenter system. If there is no mutually-supported API release, the value will
     /// be an empty string, e.g. "". Typically, this is a case where one of the parties is much
     /// older than the other party.
     api_release: String,
+}
+
+miniserde::make_place!(Place);
+
+impl miniserde::Deserialize for HelloResult {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HelloResult> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(HelloResultFields {
+            api_release: None,
+            __out: &mut self.out,
+        }))
+    }
+}
+
+struct HelloResultFields<'a> {
+    api_release: Option<String>,
+    __out: &'a mut Option<HelloResult>,
+}
+
+impl miniserde::de::Map for HelloResultFields<'_> {
+    fn key(&mut self, k: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        match k {
+            "api_release" => Ok(miniserde::Deserialize::begin(&mut self.api_release)),
+            _ => Ok(<dyn miniserde::de::Visitor>::ignore()),
+        }
+    }
+
+    fn finish(&mut self) -> miniserde::Result<()> {
+        let api_release = self.api_release.take().ok_or(miniserde::Error)?;
+        *self.__out = Some(HelloResult { api_release });
+        Ok(())
+    }
+}
+
+impl std::fmt::Debug for HelloResult {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        f.debug_struct("HelloResult")
+            .field("api_release", &self.api_release)
+            .finish()
+    }
 }

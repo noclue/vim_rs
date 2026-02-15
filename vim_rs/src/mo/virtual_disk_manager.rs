@@ -113,7 +113,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/CopyVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -162,7 +163,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/CreateVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -212,7 +214,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/DefragmentVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -263,7 +266,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/DeleteVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Explicitly zero out unaccessed parts zeroedthick disk.
@@ -310,7 +314,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/EagerZeroVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -373,7 +378,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/ExtendVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Import an unmanaged-snapshot from Virtual-Volume(VVol) enabled
@@ -468,7 +474,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/InflateVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Move a virtual disk and all related files from the source location specified
@@ -536,7 +543,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/MoveVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Return the percentage of fragmentation of the sparse virtual disk.
@@ -582,7 +590,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskFragmentation", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the disk geometry information for the virtual disk.
@@ -622,7 +631,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskGeometry", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostDiskDimensionsChs = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostDiskDimensionsChs = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -667,7 +677,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskUuid", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Release a snapshot previously imported with importUnmanagedSnapshot
@@ -796,7 +807,8 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/ShrinkVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Overwrite all blocks of the virtual disk with zeros.
@@ -842,153 +854,588 @@ impl VirtualDiskManager {
         let path = format!("/VirtualDiskManager/{moId}/ZeroFillVirtualDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CopyVirtualDiskRequestType<'a> {
-    #[serde(rename = "sourceName")]
     source_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "sourceDatacenter")]
     source_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "destName")]
     dest_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "destDatacenter")]
     dest_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "destSpec")]
     dest_spec: Option<&'a dyn crate::types::traits::VirtualDiskSpecTrait>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CopyVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CopyVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CopyVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b CopyVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CopyVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CopyVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("sourceName"), &self.data.source_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.source_datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("sourceDatacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("destName"), &self.data.dest_name as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.dest_datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("destDatacenter"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.dest_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("destSpec"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.force else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("force"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateVirtualDiskRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     spec: &'a dyn crate::types::traits::VirtualDiskSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b CreateVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct DefragmentVirtualDiskRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DefragmentVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DefragmentVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DefragmentVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b DefragmentVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DefragmentVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DefragmentVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct DeleteVirtualDiskRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b DeleteVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DeleteVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct EagerZeroVirtualDiskRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for EagerZeroVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(EagerZeroVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct EagerZeroVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b EagerZeroVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for EagerZeroVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"EagerZeroVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ExtendVirtualDiskRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "newCapacityKb")]
     new_capacity_kb: i64,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "eagerZero")]
     eager_zero: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ExtendVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ExtendVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ExtendVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b ExtendVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ExtendVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ExtendVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("newCapacityKb"), &self.data.new_capacity_kb as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.eager_zero else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("eagerZero"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ImportUnmanagedSnapshotRequestType<'a> {
     vdisk: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "vvolId")]
     vvol_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ImportUnmanagedSnapshotRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ImportUnmanagedSnapshotRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ImportUnmanagedSnapshotRequestTypeSer<'b, 'a> {
+    data: &'b ImportUnmanagedSnapshotRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ImportUnmanagedSnapshotRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ImportUnmanagedSnapshotRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vdisk"), &self.data.vdisk as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("vvolId"), &self.data.vvol_id as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct InflateVirtualDiskRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InflateVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InflateVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InflateVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b InflateVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InflateVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InflateVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct MoveVirtualDiskRequestType<'a> {
-    #[serde(rename = "sourceName")]
     source_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "sourceDatacenter")]
     source_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "destName")]
     dest_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "destDatacenter")]
     dest_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for MoveVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MoveVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MoveVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b MoveVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for MoveVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MoveVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("sourceName"), &self.data.source_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.source_datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("sourceDatacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("destName"), &self.data.dest_name as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.dest_datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("destDatacenter"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.force else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("force"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryVirtualDiskFragmentationRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryVirtualDiskFragmentationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVirtualDiskFragmentationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVirtualDiskFragmentationRequestTypeSer<'b, 'a> {
+    data: &'b QueryVirtualDiskFragmentationRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryVirtualDiskFragmentationRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVirtualDiskFragmentationRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryVirtualDiskGeometryRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryVirtualDiskGeometryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVirtualDiskGeometryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVirtualDiskGeometryRequestTypeSer<'b, 'a> {
+    data: &'b QueryVirtualDiskGeometryRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryVirtualDiskGeometryRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVirtualDiskGeometryRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryVirtualDiskUuidRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryVirtualDiskUuidRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVirtualDiskUuidRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVirtualDiskUuidRequestTypeSer<'b, 'a> {
+    data: &'b QueryVirtualDiskUuidRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryVirtualDiskUuidRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVirtualDiskUuidRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ReleaseManagedSnapshotRequestType<'a> {
     vdisk: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ReleaseManagedSnapshotRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReleaseManagedSnapshotRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReleaseManagedSnapshotRequestTypeSer<'b, 'a> {
+    data: &'b ReleaseManagedSnapshotRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ReleaseManagedSnapshotRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReleaseManagedSnapshotRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vdisk"), &self.data.vdisk as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct SetVirtualDiskUuidRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     uuid: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetVirtualDiskUuidRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetVirtualDiskUuidRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetVirtualDiskUuidRequestTypeSer<'b, 'a> {
+    data: &'b SetVirtualDiskUuidRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SetVirtualDiskUuidRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetVirtualDiskUuidRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("uuid"), &self.data.uuid as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct ShrinkVirtualDiskRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     copy: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ShrinkVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ShrinkVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ShrinkVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b ShrinkVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ShrinkVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ShrinkVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.copy else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("copy"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ZeroFillVirtualDiskRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
+}
+
+impl<'a> miniserde::Serialize for ZeroFillVirtualDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ZeroFillVirtualDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ZeroFillVirtualDiskRequestTypeSer<'b, 'a> {
+    data: &'b ZeroFillVirtualDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ZeroFillVirtualDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ZeroFillVirtualDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

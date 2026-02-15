@@ -54,7 +54,8 @@ impl CustomFieldsManager {
         let path = format!("/CustomFieldsManager/{moId}/AddCustomFieldDef", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::CustomFieldDef = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::CustomFieldDef = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Removes a custom field.
@@ -128,40 +129,138 @@ impl CustomFieldsManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AddCustomFieldDefRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "moType")]
     mo_type: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "fieldDefPolicy")]
     field_def_policy: Option<&'a crate::types::structs::PrivilegePolicyDef>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "fieldPolicy")]
     field_policy: Option<&'a crate::types::structs::PrivilegePolicyDef>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddCustomFieldDefRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddCustomFieldDefRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddCustomFieldDefRequestTypeSer<'b, 'a> {
+    data: &'b AddCustomFieldDefRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddCustomFieldDefRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddCustomFieldDefRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.mo_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("moType"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.field_def_policy else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("fieldDefPolicy"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.field_policy else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("fieldPolicy"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveCustomFieldDefRequestType {
     key: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for RemoveCustomFieldDefRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveCustomFieldDefRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveCustomFieldDefRequestTypeSer<'b> {
+    data: &'b RemoveCustomFieldDefRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveCustomFieldDefRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveCustomFieldDefRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RenameCustomFieldDefRequestType<'a> {
     key: i32,
     name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RenameCustomFieldDefRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RenameCustomFieldDefRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RenameCustomFieldDefRequestTypeSer<'b, 'a> {
+    data: &'b RenameCustomFieldDefRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RenameCustomFieldDefRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RenameCustomFieldDefRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetFieldRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
     key: i32,
     value: &'a str,
+}
+
+impl<'a> miniserde::Serialize for SetFieldRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetFieldRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetFieldRequestTypeSer<'b, 'a> {
+    data: &'b SetFieldRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SetFieldRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetFieldRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("value"), &self.data.value as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

@@ -257,9 +257,9 @@ impl From<Box<dyn std::error::Error + Send + Sync>> for Error {
     }
 }
 
-impl From<serde_json::Error> for Error {
-    fn from(e: serde_json::Error) -> Self {
-        Error::new(ErrorKind::Internal, ErrorSource::Other(Box::new(e)))
+impl From<miniserde::Error> for Error {
+    fn from(_e: miniserde::Error) -> Self {
+        Error::new(ErrorKind::Internal, ErrorSource::Internal("miniserde deserialization error".to_string()))
     }
 }
 

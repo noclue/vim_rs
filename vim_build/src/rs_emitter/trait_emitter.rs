@@ -38,7 +38,8 @@ impl<'a> TraitEmitter<'a> {
         };
 
         self.emit_trait_type(type_ref)?;
-        self.emit_serialize()?;
+        // No need to emit_serialize() -- miniserde::Serialize is inherited via
+        // VimObjectTrait supertrait, so `dyn XxxTrait` auto-implements Serialize.
         self.emit_trait_deserialization()?;
         self.generate_implementations(type_ref)?;
         self.generate_cast_from_trait()?;
@@ -48,12 +49,12 @@ impl<'a> TraitEmitter<'a> {
 
     pub fn emit_imports(printer: &mut dyn Printer) -> super::Result<()> {
         printer.println("use super::vim_object_trait::VimObjectTrait;")?;
-        printer.println("use super::dyn_serialize;")?;
         printer.println("use super::convert::CastFrom;")?;
         printer.println("use super::struct_enum::StructType;")?;
         printer.println("use super::structs::*;")?;
-        printer.println("use serde::de;")?;
-        printer.println("use super::vim_any::VimAny;")?;
+        printer.println("use super::mini_de_static::{VimObjectHolder, VimObjectHolderBuilder};")?;
+        printer.newline()?;
+        printer.println("miniserde::make_place!(Place);")?;
 
         printer.println("")?;
         Ok(())
@@ -167,72 +168,107 @@ impl<'a> TraitEmitter<'a> {
     fn emit_serialize(&mut self) -> Result<()> {
         let struct_name = to_type_name(&self.type_name);
         self.printer.println(&format!(
-            r#"impl<'s> serde::Serialize for dyn {struct_name}Trait + 's {{
-            fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {{
-                dyn_serialize::serialize_polymorphic(self.as_vim_object_ref(), serializer)
-            }}
-        }}"#
+            "impl miniserde::Serialize for dyn {struct_name}Trait + '_ {{"
         ))?;
+        self.printer.indent();
+        self.printer.println("fn begin(&self) -> miniserde::ser::Fragment<'_> {")?;
+        self.printer.indent();
+        self.printer.println("self.as_vim_object_ref().begin()")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
         Ok(())
     }
 
     fn emit_trait_deserialization(&mut self) -> Result<()> {
         let struct_name = to_type_name(&self.type_name);
-        self.printer.println(&format!(r#"impl<'de> serde::Deserialize<'de> for Box<dyn {struct_name}Trait> {{
-            fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {{
-                deserializer.deserialize_map({struct_name}Visitor)
-            }}
-        }}"#))?;
-        self.printer.newline()?;
-        self.printer
-            .println(&format!("struct {struct_name}Visitor;"))?;
-        self.printer.newline()?;
+
+        // impl Deserialize for Box<dyn XxxTrait>
         self.printer.println(&format!(
-            "impl<'de> de::Visitor<'de> for {struct_name}Visitor {{"
+            "impl miniserde::Deserialize for Box<dyn {struct_name}Trait> {{"
         ))?;
         self.printer.indent();
-        self.printer
-            .println(&format!("type Value = Box<dyn {struct_name}Trait>;"))?;
-        self.printer.newline()?;
         self.printer.println(
-            "fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {",
+            "fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {"
         )?;
         self.printer.indent();
-        self.printer.println(&format!(r#"formatter.write_str("a valid {struct_name}Trait JSON object with a _typeName field")"#))?;
+        self.printer.println("Place::new(out)")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.newline()?;
-        self.printer
-            .println("fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>")?;
-        self.printer.println("where")?;
-        self.printer.indent();
-        self.printer.println("A: de::MapAccess<'de>,")?;
-        self.printer.dedent();
-        self.printer.println("{")?;
-        self.printer.indent();
-        self.printer
-            .println("let deserializer = de::value::MapAccessDeserializer::new(&mut map);")?;
-        self.printer
-            .println("let any: VimAny = de::Deserialize::deserialize(deserializer)?;")?;
-        self.printer.println("match any {")?;
-        self.printer.indent();
-        self.printer
-            .println("VimAny::Object(obj) => Ok(CastFrom::from_box(obj)")?;
+
+        // impl Visitor for Place<Box<dyn XxxTrait>>
+        self.printer.println(&format!(
+            "impl miniserde::de::Visitor for Place<Box<dyn {struct_name}Trait>> {{"
+        ))?;
         self.printer.indent();
         self.printer.println(
-            ".map_err(|_| de::Error::custom(\"Internal error converting to trait type\"))?),",
+            "fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {"
         )?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "Ok(Box::new({struct_name}TraitBoxBuilder {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println("core: super::mini_de_static::PolyCore::new(),")?;
+        self.printer.println("__out: &mut self.out,")?;
         self.printer.dedent();
-        self.printer
-            .println("VimAny::Value(value) => Err(de::Error::custom(format!(")?;
+        self.printer.println("}))")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // TraitBoxBuilder struct -- uses PolyCore directly to avoid self-referential issues
+        self.printer.println(&format!(
+            "struct {struct_name}TraitBoxBuilder<'a> {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println("core: super::mini_de_static::PolyCore,")?;
+        self.printer.println(&format!(
+            "__out: &'a mut Option<Box<dyn {struct_name}Trait>>,"
+        ))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // Map impl for TraitBoxBuilder
+        self.printer.println(&format!(
+            "impl miniserde::de::Map for {struct_name}TraitBoxBuilder<'_> {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(
+            "fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {",
+        )?;
         self.printer.indent();
         self.printer
-            .println(r#""expected object not wrapped value: {:?}","#)?;
-        self.printer.println("value))),")?;
+            .println("self.core.key(key, super::deserialize::lookup_type)")?;
         self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        self.printer
+            .println("fn finish(&mut self) -> miniserde::Result<()> {")?;
+        self.printer.indent();
+        self.printer.println(
+            "match self.core.finish(super::deserialize::lookup_type)? {"
+        )?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "super::vim_any::VimAny::Object(obj) => {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "*self.__out = Some(<dyn {struct_name}Trait>::from_box(obj).map_err(|_| miniserde::Error)?);"
+        ))?;
+        self.printer.println("Ok(())")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer
+            .println("_ => Err(miniserde::Error),")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
@@ -240,6 +276,7 @@ impl<'a> TraitEmitter<'a> {
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.newline()?;
+
         Ok(())
     }
 

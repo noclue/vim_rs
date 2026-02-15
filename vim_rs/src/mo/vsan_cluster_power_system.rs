@@ -62,7 +62,8 @@ impl VsanClusterPowerSystem {
         let path = format!("/vsan/VsanClusterPowerSystem/{moId}/PerformClusterPowerAction", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query the ClusterPowerContext.
@@ -84,7 +85,8 @@ impl VsanClusterPowerSystem {
         let path = format!("/vsan/VsanClusterPowerSystem/{moId}/QueryClusterPowerContext", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ClusterPowerContext = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ClusterPowerContext = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Update the current cluster power status.
@@ -117,24 +119,90 @@ impl VsanClusterPowerSystem {
         let path = format!("/vsan/VsanClusterPowerSystem/{moId}/UpdateClusterPowerStatus", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct PerformClusterPowerActionRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::PerformClusterPowerActionSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PerformClusterPowerActionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PerformClusterPowerActionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PerformClusterPowerActionRequestTypeSer<'b, 'a> {
+    data: &'b PerformClusterPowerActionRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PerformClusterPowerActionRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PerformClusterPowerActionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryClusterPowerContextRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryClusterPowerContextRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryClusterPowerContextRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryClusterPowerContextRequestTypeSer<'b, 'a> {
+    data: &'b QueryClusterPowerContextRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryClusterPowerContextRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryClusterPowerContextRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateClusterPowerStatusRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
     status: &'a str,
+}
+
+impl<'a> miniserde::Serialize for UpdateClusterPowerStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateClusterPowerStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateClusterPowerStatusRequestTypeSer<'b, 'a> {
+    data: &'b UpdateClusterPowerStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateClusterPowerStatusRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateClusterPowerStatusRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("status"), &self.data.status as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

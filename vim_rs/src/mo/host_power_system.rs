@@ -42,7 +42,8 @@ impl HostPowerSystem {
         let path = format!("/HostPowerSystem/{moId}/capability", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::PowerSystemCapability = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::PowerSystemCapability = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Power system state info object.
@@ -52,12 +53,34 @@ impl HostPowerSystem {
         let path = format!("/HostPowerSystem/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::PowerSystemInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::PowerSystemInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ConfigurePowerPolicyRequestType {
     key: i32,
+}
+
+impl miniserde::Serialize for ConfigurePowerPolicyRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ConfigurePowerPolicyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ConfigurePowerPolicyRequestTypeSer<'b> {
+    data: &'b ConfigurePowerPolicyRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ConfigurePowerPolicyRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ConfigurePowerPolicyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

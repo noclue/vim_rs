@@ -76,7 +76,10 @@ impl HostDiagnosticSystem {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostDiagnosticPartition>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostDiagnosticPartition>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -115,7 +118,8 @@ impl HostDiagnosticSystem {
         let path = format!("/HostDiagnosticSystem/{moId}/QueryPartitionCreateDesc", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostDiagnosticPartitionCreateDescription = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostDiagnosticPartitionCreateDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieves a list of disks that can be used to contain a diagnostic
@@ -151,7 +155,10 @@ impl HostDiagnosticSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostDiagnosticPartitionCreateOption>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostDiagnosticPartitionCreateOption>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -189,35 +196,124 @@ impl HostDiagnosticSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostDiagnosticPartition>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostDiagnosticPartition>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CreateDiagnosticPartitionRequestType<'a> {
     spec: &'a crate::types::structs::HostDiagnosticPartitionCreateSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateDiagnosticPartitionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateDiagnosticPartitionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateDiagnosticPartitionRequestTypeSer<'b, 'a> {
+    data: &'b CreateDiagnosticPartitionRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateDiagnosticPartitionRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateDiagnosticPartitionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPartitionCreateDescRequestType<'a> {
-    #[serde(rename = "diskUuid")]
     disk_uuid: &'a str,
-    #[serde(rename = "diagnosticType")]
     diagnostic_type: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPartitionCreateDescRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPartitionCreateDescRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPartitionCreateDescRequestTypeSer<'b, 'a> {
+    data: &'b QueryPartitionCreateDescRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryPartitionCreateDescRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPartitionCreateDescRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("diskUuid"), &self.data.disk_uuid as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("diagnosticType"), &self.data.diagnostic_type as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPartitionCreateOptionsRequestType<'a> {
-    #[serde(rename = "storageType")]
     storage_type: &'a str,
-    #[serde(rename = "diagnosticType")]
     diagnostic_type: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPartitionCreateOptionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPartitionCreateOptionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPartitionCreateOptionsRequestTypeSer<'b, 'a> {
+    data: &'b QueryPartitionCreateOptionsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryPartitionCreateOptionsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPartitionCreateOptionsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("storageType"), &self.data.storage_type as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("diagnosticType"), &self.data.diagnostic_type as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SelectActivePartitionRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     partition: Option<&'a crate::types::structs::HostScsiDiskPartition>,
+}
+
+impl<'a> miniserde::Serialize for SelectActivePartitionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SelectActivePartitionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SelectActivePartitionRequestTypeSer<'b, 'a> {
+    data: &'b SelectActivePartitionRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SelectActivePartitionRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SelectActivePartitionRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.partition else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("partition"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

@@ -38,13 +38,34 @@ impl ResourcePlanningManager {
         let path = format!("/ResourcePlanningManager/{moId}/EstimateDatabaseSize", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::DatabaseSizeEstimate = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::DatabaseSizeEstimate = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct EstimateDatabaseSizeRequestType<'a> {
-    #[serde(rename = "dbSizeParam")]
     db_size_param: &'a crate::types::structs::DatabaseSizeParam,
+}
+
+impl<'a> miniserde::Serialize for EstimateDatabaseSizeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(EstimateDatabaseSizeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct EstimateDatabaseSizeRequestTypeSer<'b, 'a> {
+    data: &'b EstimateDatabaseSizeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for EstimateDatabaseSizeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"EstimateDatabaseSizeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dbSizeParam"), &self.data.db_size_param as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

@@ -42,7 +42,8 @@ impl VsanClusterMgmtInternalSystem {
         let path = format!("/vsan/VsanClusterMgmtInternalSystem/{moId}/VsanRemediateVsanCluster", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Remediate a single standalone host.
@@ -75,17 +76,60 @@ impl VsanClusterMgmtInternalSystem {
         let path = format!("/vsan/VsanClusterMgmtInternalSystem/{moId}/VsanRemediateVsanHost", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanRemediateVsanClusterRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanRemediateVsanClusterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanRemediateVsanClusterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanRemediateVsanClusterRequestTypeSer<'b, 'a> {
+    data: &'b VsanRemediateVsanClusterRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanRemediateVsanClusterRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanRemediateVsanClusterRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanRemediateVsanHostRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
+}
+
+impl<'a> miniserde::Serialize for VsanRemediateVsanHostRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanRemediateVsanHostRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanRemediateVsanHostRequestTypeSer<'b, 'a> {
+    data: &'b VsanRemediateVsanHostRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanRemediateVsanHostRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanRemediateVsanHostRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

@@ -28,7 +28,10 @@ impl HostImageConfigManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::SoftwarePackage>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::SoftwarePackage>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -42,7 +45,8 @@ impl HostImageConfigManager {
         let path = format!("/HostImageConfigManager/{moId}/installDate", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Queries the current host acceptance level setting.
@@ -59,7 +63,8 @@ impl HostImageConfigManager {
         let path = format!("/HostImageConfigManager/{moId}/HostImageConfigGetAcceptance", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Queries the current host image profile information.
@@ -72,7 +77,8 @@ impl HostImageConfigManager {
         let path = format!("/HostImageConfigManager/{moId}/HostImageConfigGetProfile", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostImageProfileSummary = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostImageProfileSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Sets the acceptance level of the host image profile.
@@ -98,9 +104,29 @@ impl HostImageConfigManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct UpdateHostImageAcceptanceLevelRequestType<'a> {
-    #[serde(rename = "newAcceptanceLevel")]
     new_acceptance_level: &'a str,
+}
+
+impl<'a> miniserde::Serialize for UpdateHostImageAcceptanceLevelRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateHostImageAcceptanceLevelRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateHostImageAcceptanceLevelRequestTypeSer<'b, 'a> {
+    data: &'b UpdateHostImageAcceptanceLevelRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateHostImageAcceptanceLevelRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateHostImageAcceptanceLevelRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("newAcceptanceLevel"), &self.data.new_acceptance_level as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

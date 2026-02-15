@@ -102,7 +102,10 @@ impl PropertyCollector {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::UpdateSet>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::UpdateSet>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -130,7 +133,8 @@ impl PropertyCollector {
         let path = format!("/PropertyCollector/{moId}/ContinueRetrievePropertiesEx", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::RetrieveResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::RetrieveResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a new filter for the given set of managed objects.
@@ -173,7 +177,8 @@ impl PropertyCollector {
         let path = format!("/PropertyCollector/{moId}/CreateFilter", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a new session-specific *PropertyCollector* that can
@@ -228,7 +233,8 @@ impl PropertyCollector {
         let path = format!("/PropertyCollector/{moId}/CreatePropertyCollector", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Destroys this *PropertyCollector*.
@@ -290,7 +296,10 @@ impl PropertyCollector {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ObjectContent>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ObjectContent>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -340,7 +349,10 @@ impl PropertyCollector {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::RetrieveResult>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::RetrieveResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -378,7 +390,8 @@ impl PropertyCollector {
         let path = format!("/PropertyCollector/{moId}/WaitForUpdates", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::UpdateSet = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::UpdateSet = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Calculate the set of updates for each existing filter in the session.
@@ -429,7 +442,10 @@ impl PropertyCollector {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::UpdateSet>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::UpdateSet>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -446,58 +462,243 @@ impl PropertyCollector {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CancelRetrievePropertiesExRequestType<'a> {
     token: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CancelRetrievePropertiesExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CancelRetrievePropertiesExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CancelRetrievePropertiesExRequestTypeSer<'b, 'a> {
+    data: &'b CancelRetrievePropertiesExRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CancelRetrievePropertiesExRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CancelRetrievePropertiesExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("token"), &self.data.token as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CheckForUpdatesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     version: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckForUpdatesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckForUpdatesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckForUpdatesRequestTypeSer<'b, 'a> {
+    data: &'b CheckForUpdatesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CheckForUpdatesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckForUpdatesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.version else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("version"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ContinueRetrievePropertiesExRequestType<'a> {
     token: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ContinueRetrievePropertiesExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ContinueRetrievePropertiesExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ContinueRetrievePropertiesExRequestTypeSer<'b, 'a> {
+    data: &'b ContinueRetrievePropertiesExRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ContinueRetrievePropertiesExRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ContinueRetrievePropertiesExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("token"), &self.data.token as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateFilterRequestType<'a> {
     spec: &'a crate::types::structs::PropertyFilterSpec,
-    #[serde(rename = "partialUpdates")]
     partial_updates: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateFilterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateFilterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateFilterRequestTypeSer<'b, 'a> {
+    data: &'b CreateFilterRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateFilterRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateFilterRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("partialUpdates"), &self.data.partial_updates as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrievePropertiesRequestType<'a> {
-    #[serde(rename = "specSet")]
     spec_set: &'a [crate::types::structs::PropertyFilterSpec],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrievePropertiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrievePropertiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrievePropertiesRequestTypeSer<'b, 'a> {
+    data: &'b RetrievePropertiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RetrievePropertiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrievePropertiesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("specSet"), &self.data.spec_set as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrievePropertiesExRequestType<'a> {
-    #[serde(rename = "specSet")]
     spec_set: &'a [crate::types::structs::PropertyFilterSpec],
     options: &'a crate::types::structs::RetrieveOptions,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrievePropertiesExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrievePropertiesExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrievePropertiesExRequestTypeSer<'b, 'a> {
+    data: &'b RetrievePropertiesExRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RetrievePropertiesExRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrievePropertiesExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("specSet"), &self.data.spec_set as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("options"), &self.data.options as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct WaitForUpdatesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     version: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for WaitForUpdatesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(WaitForUpdatesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct WaitForUpdatesRequestTypeSer<'b, 'a> {
+    data: &'b WaitForUpdatesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for WaitForUpdatesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"WaitForUpdatesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.version else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("version"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct WaitForUpdatesExRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     version: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     options: Option<&'a crate::types::structs::WaitOptions>,
+}
+
+impl<'a> miniserde::Serialize for WaitForUpdatesExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(WaitForUpdatesExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct WaitForUpdatesExRequestTypeSer<'b, 'a> {
+    data: &'b WaitForUpdatesExRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for WaitForUpdatesExRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"WaitForUpdatesExRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.version else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("version"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.options else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("options"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

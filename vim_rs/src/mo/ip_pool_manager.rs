@@ -51,7 +51,8 @@ impl IpPoolManager {
         let path = format!("/IpPoolManager/{moId}/AllocateIpv4Address", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Allocates an IPv6 address from an IP pool.
@@ -90,7 +91,8 @@ impl IpPoolManager {
         let path = format!("/IpPoolManager/{moId}/AllocateIpv6Address", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create a new IP pool.
@@ -121,7 +123,8 @@ impl IpPoolManager {
         let path = format!("/IpPoolManager/{moId}/CreateIpPool", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Destroys an IP pool on the given datacenter.
@@ -178,7 +181,8 @@ impl IpPoolManager {
         let path = format!("/IpPoolManager/{moId}/QueryIPAllocations", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::IpPoolManagerIpAllocation> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::IpPoolManagerIpAllocation> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Return the list of IP pools for a datacenter.
@@ -201,7 +205,10 @@ impl IpPoolManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::IpPool>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::IpPool>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -259,63 +266,235 @@ impl IpPoolManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AllocateIpv4AddressRequestType<'a> {
     dc: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "poolId")]
     pool_id: i32,
-    #[serde(rename = "allocationId")]
     allocation_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AllocateIpv4AddressRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AllocateIpv4AddressRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AllocateIpv4AddressRequestTypeSer<'b, 'a> {
+    data: &'b AllocateIpv4AddressRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AllocateIpv4AddressRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AllocateIpv4AddressRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dc"), &self.data.dc as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("poolId"), &self.data.pool_id as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("allocationId"), &self.data.allocation_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct AllocateIpv6AddressRequestType<'a> {
     dc: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "poolId")]
     pool_id: i32,
-    #[serde(rename = "allocationId")]
     allocation_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AllocateIpv6AddressRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AllocateIpv6AddressRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AllocateIpv6AddressRequestTypeSer<'b, 'a> {
+    data: &'b AllocateIpv6AddressRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AllocateIpv6AddressRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AllocateIpv6AddressRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dc"), &self.data.dc as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("poolId"), &self.data.pool_id as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("allocationId"), &self.data.allocation_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateIpPoolRequestType<'a> {
     dc: &'a crate::types::structs::ManagedObjectReference,
     pool: &'a crate::types::structs::IpPool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateIpPoolRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateIpPoolRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateIpPoolRequestTypeSer<'b, 'a> {
+    data: &'b CreateIpPoolRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateIpPoolRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateIpPoolRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dc"), &self.data.dc as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("pool"), &self.data.pool as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DestroyIpPoolRequestType<'a> {
     dc: &'a crate::types::structs::ManagedObjectReference,
     id: i32,
     force: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "QueryIPAllocationsRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for DestroyIpPoolRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DestroyIpPoolRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DestroyIpPoolRequestTypeSer<'b, 'a> {
+    data: &'b DestroyIpPoolRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DestroyIpPoolRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DestroyIpPoolRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dc"), &self.data.dc as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("force"), &self.data.force as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryIpAllocationsRequestType<'a> {
     dc: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "poolId")]
     pool_id: i32,
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryIpAllocationsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryIpAllocationsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryIpAllocationsRequestTypeSer<'b, 'a> {
+    data: &'b QueryIpAllocationsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryIpAllocationsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryIPAllocationsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dc"), &self.data.dc as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("poolId"), &self.data.pool_id as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryIpPoolsRequestType<'a> {
     dc: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryIpPoolsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryIpPoolsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryIpPoolsRequestTypeSer<'b, 'a> {
+    data: &'b QueryIpPoolsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryIpPoolsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryIpPoolsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dc"), &self.data.dc as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ReleaseIpAllocationRequestType<'a> {
     dc: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "poolId")]
     pool_id: i32,
-    #[serde(rename = "allocationId")]
     allocation_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ReleaseIpAllocationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReleaseIpAllocationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReleaseIpAllocationRequestTypeSer<'b, 'a> {
+    data: &'b ReleaseIpAllocationRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ReleaseIpAllocationRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReleaseIpAllocationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dc"), &self.data.dc as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("poolId"), &self.data.pool_id as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("allocationId"), &self.data.allocation_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateIpPoolRequestType<'a> {
     dc: &'a crate::types::structs::ManagedObjectReference,
     pool: &'a crate::types::structs::IpPool,
+}
+
+impl<'a> miniserde::Serialize for UpdateIpPoolRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateIpPoolRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateIpPoolRequestTypeSer<'b, 'a> {
+    data: &'b UpdateIpPoolRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateIpPoolRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateIpPoolRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dc"), &self.data.dc as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("pool"), &self.data.pool as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

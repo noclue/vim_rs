@@ -66,7 +66,8 @@ impl HostPatchManager {
         let path = format!("/HostPatchManager/{moId}/CheckHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated method is deprecated, use *HostPatchManager.InstallHostPatchV2_Task* instead.
@@ -144,7 +145,8 @@ impl HostPatchManager {
         let path = format!("/HostPatchManager/{moId}/InstallHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -196,7 +198,8 @@ impl HostPatchManager {
         let path = format!("/HostPatchManager/{moId}/InstallHostPatchV2_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -233,7 +236,8 @@ impl HostPatchManager {
         let path = format!("/HostPatchManager/{moId}/QueryHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of VI API 4.0, use *HostPatchManager.ScanHostPatchV2_Task*.
@@ -291,7 +295,8 @@ impl HostPatchManager {
         let path = format!("/HostPatchManager/{moId}/ScanHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -343,7 +348,8 @@ impl HostPatchManager {
         let path = format!("/HostPatchManager/{moId}/ScanHostPatchV2_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -393,7 +399,8 @@ impl HostPatchManager {
         let path = format!("/HostPatchManager/{moId}/StageHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -434,93 +441,317 @@ impl HostPatchManager {
         let path = format!("/HostPatchManager/{moId}/UninstallHostPatch_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CheckHostPatchRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "metaUrls")]
     meta_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "bundleUrls")]
     bundle_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckHostPatchRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckHostPatchRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckHostPatchRequestTypeSer<'b, 'a> {
+    data: &'b CheckHostPatchRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CheckHostPatchRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckHostPatchRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.meta_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("metaUrls"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.bundle_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("bundleUrls"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct InstallHostPatchRequestType<'a> {
     repository: &'a crate::types::structs::HostPatchManagerLocator,
-    #[serde(rename = "updateID")]
     update_id: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InstallHostPatchRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InstallHostPatchRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InstallHostPatchRequestTypeSer<'b, 'a> {
+    data: &'b InstallHostPatchRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InstallHostPatchRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InstallHostPatchRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("repository"), &self.data.repository as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("updateID"), &self.data.update_id as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.force else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("force"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct InstallHostPatchV2RequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "metaUrls")]
     meta_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "bundleUrls")]
     bundle_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vibUrls")]
     vib_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InstallHostPatchV2RequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InstallHostPatchV2RequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InstallHostPatchV2RequestTypeSer<'b, 'a> {
+    data: &'b InstallHostPatchV2RequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InstallHostPatchV2RequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InstallHostPatchV2RequestType")),
+                1 => {
+                    let Some(ref val) = self.data.meta_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("metaUrls"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.bundle_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("bundleUrls"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.vib_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vibUrls"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryHostPatchRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryHostPatchRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryHostPatchRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryHostPatchRequestTypeSer<'b, 'a> {
+    data: &'b QueryHostPatchRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryHostPatchRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryHostPatchRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ScanHostPatchRequestType<'a> {
     repository: &'a crate::types::structs::HostPatchManagerLocator,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "updateID")]
     update_id: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ScanHostPatchRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ScanHostPatchRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ScanHostPatchRequestTypeSer<'b, 'a> {
+    data: &'b ScanHostPatchRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ScanHostPatchRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ScanHostPatchRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("repository"), &self.data.repository as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.update_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("updateID"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ScanHostPatchV2RequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "metaUrls")]
     meta_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "bundleUrls")]
     bundle_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ScanHostPatchV2RequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ScanHostPatchV2RequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ScanHostPatchV2RequestTypeSer<'b, 'a> {
+    data: &'b ScanHostPatchV2RequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ScanHostPatchV2RequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ScanHostPatchV2RequestType")),
+                1 => {
+                    let Some(ref val) = self.data.meta_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("metaUrls"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.bundle_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("bundleUrls"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct StageHostPatchRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "metaUrls")]
     meta_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "bundleUrls")]
     bundle_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vibUrls")]
     vib_urls: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for StageHostPatchRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(StageHostPatchRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct StageHostPatchRequestTypeSer<'b, 'a> {
+    data: &'b StageHostPatchRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for StageHostPatchRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"StageHostPatchRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.meta_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("metaUrls"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.bundle_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("bundleUrls"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.vib_urls else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vibUrls"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct UninstallHostPatchRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "bulletinIds")]
     bulletin_ids: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::HostPatchManagerPatchManagerOperationSpec>,
+}
+
+impl<'a> miniserde::Serialize for UninstallHostPatchRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UninstallHostPatchRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UninstallHostPatchRequestTypeSer<'b, 'a> {
+    data: &'b UninstallHostPatchRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UninstallHostPatchRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UninstallHostPatchRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.bulletin_ids else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("bulletinIds"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

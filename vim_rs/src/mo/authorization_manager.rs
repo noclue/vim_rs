@@ -100,7 +100,8 @@ impl AuthorizationManager {
         let path = format!("/AuthorizationManager/{moId}/AddAuthorizationRole", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the list of effective privileges for a user,
@@ -129,7 +130,10 @@ impl AuthorizationManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::UserPrivilegeResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::UserPrivilegeResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -167,7 +171,10 @@ impl AuthorizationManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::EntityPrivilege>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::EntityPrivilege>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -205,7 +212,10 @@ impl AuthorizationManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<bool>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<bool>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -244,7 +254,10 @@ impl AuthorizationManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::EntityPrivilege>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::EntityPrivilege>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -443,7 +456,10 @@ impl AuthorizationManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -477,7 +493,10 @@ impl AuthorizationManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -502,7 +521,10 @@ impl AuthorizationManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Permission>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -618,7 +640,8 @@ impl AuthorizationManager {
         let path = format!("/AuthorizationManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::AuthorizationDescription = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::AuthorizationDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// The list of system-defined privileges.
@@ -629,7 +652,10 @@ impl AuthorizationManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AuthorizationPrivilege>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AuthorizationPrivilege>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -642,114 +668,418 @@ impl AuthorizationManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AuthorizationRole>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AuthorizationRole>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AddAuthorizationRoleRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "privIds")]
     priv_ids: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddAuthorizationRoleRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddAuthorizationRoleRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddAuthorizationRoleRequestTypeSer<'b, 'a> {
+    data: &'b AddAuthorizationRoleRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddAuthorizationRoleRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddAuthorizationRoleRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.priv_ids else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("privIds"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct FetchUserPrivilegeOnEntitiesRequestType<'a> {
     entities: &'a [crate::types::structs::ManagedObjectReference],
-    #[serde(rename = "userName")]
     user_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FetchUserPrivilegeOnEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FetchUserPrivilegeOnEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FetchUserPrivilegeOnEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b FetchUserPrivilegeOnEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for FetchUserPrivilegeOnEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FetchUserPrivilegeOnEntitiesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entities"), &self.data.entities as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("userName"), &self.data.user_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct HasPrivilegeOnEntitiesRequestType<'a> {
     entity: &'a [crate::types::structs::ManagedObjectReference],
-    #[serde(rename = "sessionId")]
     session_id: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "privId")]
     priv_id: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HasPrivilegeOnEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HasPrivilegeOnEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HasPrivilegeOnEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b HasPrivilegeOnEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HasPrivilegeOnEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HasPrivilegeOnEntitiesRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("sessionId"), &self.data.session_id as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.priv_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("privId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct HasPrivilegeOnEntityRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "sessionId")]
     session_id: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "privId")]
     priv_id: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HasPrivilegeOnEntityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HasPrivilegeOnEntityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HasPrivilegeOnEntityRequestTypeSer<'b, 'a> {
+    data: &'b HasPrivilegeOnEntityRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HasPrivilegeOnEntityRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HasPrivilegeOnEntityRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("sessionId"), &self.data.session_id as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.priv_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("privId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct HasUserPrivilegeOnEntitiesRequestType<'a> {
     entities: &'a [crate::types::structs::ManagedObjectReference],
-    #[serde(rename = "userName")]
     user_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "privId")]
     priv_id: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HasUserPrivilegeOnEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HasUserPrivilegeOnEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HasUserPrivilegeOnEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b HasUserPrivilegeOnEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HasUserPrivilegeOnEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HasUserPrivilegeOnEntitiesRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("entities"), &self.data.entities as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("userName"), &self.data.user_name as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.priv_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("privId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct MergePermissionsRequestType {
-    #[serde(rename = "srcRoleId")]
     src_role_id: i32,
-    #[serde(rename = "dstRoleId")]
     dst_role_id: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for MergePermissionsRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MergePermissionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MergePermissionsRequestTypeSer<'b> {
+    data: &'b MergePermissionsRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for MergePermissionsRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MergePermissionsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("srcRoleId"), &self.data.src_role_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("dstRoleId"), &self.data.dst_role_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveEntityPermissionRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
     user: &'a str,
-    #[serde(rename = "isGroup")]
     is_group: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveEntityPermissionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveEntityPermissionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveEntityPermissionRequestTypeSer<'b, 'a> {
+    data: &'b RemoveEntityPermissionRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveEntityPermissionRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveEntityPermissionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("user"), &self.data.user as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("isGroup"), &self.data.is_group as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveAuthorizationRoleRequestType {
-    #[serde(rename = "roleId")]
     role_id: i32,
-    #[serde(rename = "failIfUsed")]
     fail_if_used: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for RemoveAuthorizationRoleRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveAuthorizationRoleRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveAuthorizationRoleRequestTypeSer<'b> {
+    data: &'b RemoveAuthorizationRoleRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveAuthorizationRoleRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveAuthorizationRoleRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("roleId"), &self.data.role_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("failIfUsed"), &self.data.fail_if_used as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ResetEntityPermissionsRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     permission: Option<&'a [crate::types::structs::Permission]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ResetEntityPermissionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ResetEntityPermissionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ResetEntityPermissionsRequestTypeSer<'b, 'a> {
+    data: &'b ResetEntityPermissionsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ResetEntityPermissionsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ResetEntityPermissionsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.permission else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("permission"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RetrieveEntityPermissionsRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
     inherited: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveEntityPermissionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveEntityPermissionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveEntityPermissionsRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveEntityPermissionsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RetrieveEntityPermissionsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveEntityPermissionsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("inherited"), &self.data.inherited as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrieveRolePermissionsRequestType {
-    #[serde(rename = "roleId")]
     role_id: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for RetrieveRolePermissionsRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveRolePermissionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveRolePermissionsRequestTypeSer<'b> {
+    data: &'b RetrieveRolePermissionsRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RetrieveRolePermissionsRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveRolePermissionsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("roleId"), &self.data.role_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetEntityPermissionsRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     permission: Option<&'a [crate::types::structs::Permission]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetEntityPermissionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetEntityPermissionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetEntityPermissionsRequestTypeSer<'b, 'a> {
+    data: &'b SetEntityPermissionsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SetEntityPermissionsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetEntityPermissionsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.permission else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("permission"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct UpdateAuthorizationRoleRequestType<'a> {
-    #[serde(rename = "roleId")]
     role_id: i32,
-    #[serde(rename = "newName")]
     new_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "privIds")]
     priv_ids: Option<&'a [String]>,
+}
+
+impl<'a> miniserde::Serialize for UpdateAuthorizationRoleRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateAuthorizationRoleRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateAuthorizationRoleRequestTypeSer<'b, 'a> {
+    data: &'b UpdateAuthorizationRoleRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateAuthorizationRoleRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateAuthorizationRoleRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("roleId"), &self.data.role_id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("newName"), &self.data.new_name as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.priv_ids else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("privIds"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

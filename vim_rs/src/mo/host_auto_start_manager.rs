@@ -75,12 +75,34 @@ impl HostAutoStartManager {
         let path = format!("/HostAutoStartManager/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostAutoStartManagerConfig = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostAutoStartManagerConfig = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ReconfigureAutostartRequestType<'a> {
     spec: &'a crate::types::structs::HostAutoStartManagerConfig,
+}
+
+impl<'a> miniserde::Serialize for ReconfigureAutostartRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReconfigureAutostartRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReconfigureAutostartRequestTypeSer<'b, 'a> {
+    data: &'b ReconfigureAutostartRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ReconfigureAutostartRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReconfigureAutostartRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

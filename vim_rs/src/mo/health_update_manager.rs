@@ -50,7 +50,8 @@ impl HealthUpdateManager {
         let path = format!("/HealthUpdateManager/{moId}/AddFilter", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Add entities on which this filter is configured.
@@ -154,7 +155,8 @@ impl HealthUpdateManager {
         let path = format!("/HealthUpdateManager/{moId}/HasMonitoredEntity", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Verifies if the given provider is registered.
@@ -174,7 +176,8 @@ impl HealthUpdateManager {
         let path = format!("/HealthUpdateManager/{moId}/HasProvider", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Report a change in health status.
@@ -238,7 +241,10 @@ impl HealthUpdateManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -265,7 +271,10 @@ impl HealthUpdateManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -291,7 +300,10 @@ impl HealthUpdateManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -316,7 +328,8 @@ impl HealthUpdateManager {
         let path = format!("/HealthUpdateManager/{moId}/QueryFilterName", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns the list of HealthUpdateInfo configured for the given provider.
@@ -341,7 +354,10 @@ impl HealthUpdateManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HealthUpdateInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HealthUpdateInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -367,7 +383,10 @@ impl HealthUpdateManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HealthUpdate>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HealthUpdate>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -395,7 +414,10 @@ impl HealthUpdateManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -411,7 +433,10 @@ impl HealthUpdateManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -436,7 +461,8 @@ impl HealthUpdateManager {
         let path = format!("/HealthUpdateManager/{moId}/QueryProviderName", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// The set of hosts that are in the cluster, but not monitored by
@@ -470,7 +496,10 @@ impl HealthUpdateManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -498,7 +527,8 @@ impl HealthUpdateManager {
         let path = format!("/HealthUpdateManager/{moId}/RegisterHealthUpdateProvider", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Removes the specified filter.
@@ -613,140 +643,578 @@ impl HealthUpdateManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AddFilterRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
-    #[serde(rename = "filterName")]
     filter_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "infoIds")]
     info_ids: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddFilterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddFilterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddFilterRequestTypeSer<'b, 'a> {
+    data: &'b AddFilterRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddFilterRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddFilterRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("filterName"), &self.data.filter_name as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.info_ids else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("infoIds"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct AddFilterEntitiesRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entities: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddFilterEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddFilterEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddFilterEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b AddFilterEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddFilterEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddFilterEntitiesRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.entities else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entities"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct AddMonitoredEntitiesRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entities: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddMonitoredEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddMonitoredEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddMonitoredEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b AddMonitoredEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddMonitoredEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddMonitoredEntitiesRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.entities else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entities"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct HasMonitoredEntityRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
     entity: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HasMonitoredEntityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HasMonitoredEntityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HasMonitoredEntityRequestTypeSer<'b, 'a> {
+    data: &'b HasMonitoredEntityRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HasMonitoredEntityRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HasMonitoredEntityRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct HasProviderRequestType<'a> {
     id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HasProviderRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HasProviderRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HasProviderRequestTypeSer<'b, 'a> {
+    data: &'b HasProviderRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HasProviderRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HasProviderRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PostHealthUpdatesRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     updates: Option<&'a [crate::types::structs::HealthUpdate]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PostHealthUpdatesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PostHealthUpdatesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PostHealthUpdatesRequestTypeSer<'b, 'a> {
+    data: &'b PostHealthUpdatesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PostHealthUpdatesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PostHealthUpdatesRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.updates else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("updates"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryFilterEntitiesRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryFilterEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryFilterEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryFilterEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b QueryFilterEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryFilterEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryFilterEntitiesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryFilterInfoIdsRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryFilterInfoIdsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryFilterInfoIdsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryFilterInfoIdsRequestTypeSer<'b, 'a> {
+    data: &'b QueryFilterInfoIdsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryFilterInfoIdsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryFilterInfoIdsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryFilterListRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryFilterListRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryFilterListRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryFilterListRequestTypeSer<'b, 'a> {
+    data: &'b QueryFilterListRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryFilterListRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryFilterListRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryFilterNameRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryFilterNameRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryFilterNameRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryFilterNameRequestTypeSer<'b, 'a> {
+    data: &'b QueryFilterNameRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryFilterNameRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryFilterNameRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryHealthUpdateInfosRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryHealthUpdateInfosRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryHealthUpdateInfosRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryHealthUpdateInfosRequestTypeSer<'b, 'a> {
+    data: &'b QueryHealthUpdateInfosRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryHealthUpdateInfosRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryHealthUpdateInfosRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryHealthUpdatesRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryHealthUpdatesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryHealthUpdatesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryHealthUpdatesRequestTypeSer<'b, 'a> {
+    data: &'b QueryHealthUpdatesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryHealthUpdatesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryHealthUpdatesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryMonitoredEntitiesRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryMonitoredEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryMonitoredEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryMonitoredEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b QueryMonitoredEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryMonitoredEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryMonitoredEntitiesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryProviderNameRequestType<'a> {
     id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryProviderNameRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryProviderNameRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryProviderNameRequestTypeSer<'b, 'a> {
+    data: &'b QueryProviderNameRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryProviderNameRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryProviderNameRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryUnmonitoredHostsRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryUnmonitoredHostsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryUnmonitoredHostsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryUnmonitoredHostsRequestTypeSer<'b, 'a> {
+    data: &'b QueryUnmonitoredHostsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryUnmonitoredHostsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryUnmonitoredHostsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RegisterHealthUpdateProviderRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "healthUpdateInfo")]
     health_update_info: Option<&'a [crate::types::structs::HealthUpdateInfo]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RegisterHealthUpdateProviderRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RegisterHealthUpdateProviderRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RegisterHealthUpdateProviderRequestTypeSer<'b, 'a> {
+    data: &'b RegisterHealthUpdateProviderRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RegisterHealthUpdateProviderRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RegisterHealthUpdateProviderRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.health_update_info else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("healthUpdateInfo"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveFilterRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveFilterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveFilterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveFilterRequestTypeSer<'b, 'a> {
+    data: &'b RemoveFilterRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveFilterRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveFilterRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveFilterEntitiesRequestType<'a> {
-    #[serde(rename = "filterId")]
     filter_id: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entities: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveFilterEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveFilterEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveFilterEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b RemoveFilterEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveFilterEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveFilterEntitiesRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("filterId"), &self.data.filter_id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.entities else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entities"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveMonitoredEntitiesRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entities: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveMonitoredEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveMonitoredEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveMonitoredEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b RemoveMonitoredEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveMonitoredEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveMonitoredEntitiesRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.entities else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entities"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct UnregisterHealthUpdateProviderRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
+}
+
+impl<'a> miniserde::Serialize for UnregisterHealthUpdateProviderRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnregisterHealthUpdateProviderRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnregisterHealthUpdateProviderRequestTypeSer<'b, 'a> {
+    data: &'b UnregisterHealthUpdateProviderRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UnregisterHealthUpdateProviderRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnregisterHealthUpdateProviderRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

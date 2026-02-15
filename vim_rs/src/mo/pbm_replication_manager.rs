@@ -50,14 +50,42 @@ impl PbmReplicationManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmQueryReplicationGroupResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmQueryReplicationGroupResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct PbmQueryReplicationGroupsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entities: Option<&'a [crate::types::structs::PbmServerObjectRef]>,
+}
+
+impl<'a> miniserde::Serialize for PbmQueryReplicationGroupsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryReplicationGroupsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryReplicationGroupsRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryReplicationGroupsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryReplicationGroupsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryReplicationGroupsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.entities else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entities"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

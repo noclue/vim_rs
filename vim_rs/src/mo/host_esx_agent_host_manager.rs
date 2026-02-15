@@ -43,13 +43,34 @@ impl HostEsxAgentHostManager {
         let path = format!("/HostEsxAgentHostManager/{moId}/configInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostEsxAgentHostManagerConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostEsxAgentHostManagerConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct EsxAgentHostManagerUpdateConfigRequestType<'a> {
-    #[serde(rename = "configInfo")]
     config_info: &'a crate::types::structs::HostEsxAgentHostManagerConfigInfo,
+}
+
+impl<'a> miniserde::Serialize for EsxAgentHostManagerUpdateConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(EsxAgentHostManagerUpdateConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct EsxAgentHostManagerUpdateConfigRequestTypeSer<'b, 'a> {
+    data: &'b EsxAgentHostManagerUpdateConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for EsxAgentHostManagerUpdateConfigRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"EsxAgentHostManagerUpdateConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("configInfo"), &self.data.config_info as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

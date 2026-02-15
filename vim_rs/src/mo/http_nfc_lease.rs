@@ -110,7 +110,10 @@ impl HttpNfcLease {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HttpNfcLeaseManifestEntry>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HttpNfcLeaseManifestEntry>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -141,7 +144,10 @@ impl HttpNfcLease {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HttpNfcLeaseProbeResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HttpNfcLeaseProbeResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -190,7 +196,8 @@ impl HttpNfcLease {
         let path = format!("/HttpNfcLease/{moId}/HttpNfcLeasePullFromUrls_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Sets desired checksum algorithm per each file that will be returned in
@@ -220,7 +227,8 @@ impl HttpNfcLease {
         let path = format!("/HttpNfcLease/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HttpNfcLeaseCapabilities = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HttpNfcLeaseCapabilities = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// If the lease is in the error state, this property contains the
@@ -230,7 +238,10 @@ impl HttpNfcLease {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::MethodFault>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::MethodFault>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -243,7 +254,10 @@ impl HttpNfcLease {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HttpNfcLeaseInfo>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::HttpNfcLeaseInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -255,7 +269,8 @@ impl HttpNfcLease {
         let path = format!("/HttpNfcLease/{moId}/initializeProgress", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Current mode of the lease.
@@ -265,7 +280,8 @@ impl HttpNfcLease {
         let path = format!("/HttpNfcLease/{moId}/mode", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// The current state of the lease.
@@ -273,7 +289,8 @@ impl HttpNfcLease {
         let path = format!("/HttpNfcLease/{moId}/state", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::enums::HttpNfcLeaseStateEnum = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::enums::HttpNfcLeaseStateEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Provides progress information (0-100 percent) for current transfer.
@@ -284,39 +301,163 @@ impl HttpNfcLease {
         let path = format!("/HttpNfcLease/{moId}/transferProgress", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct HttpNfcLeaseAbortRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     fault: Option<&'a crate::types::structs::MethodFault>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HttpNfcLeaseAbortRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HttpNfcLeaseAbortRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HttpNfcLeaseAbortRequestTypeSer<'b, 'a> {
+    data: &'b HttpNfcLeaseAbortRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HttpNfcLeaseAbortRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HttpNfcLeaseAbortRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.fault else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("fault"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct HttpNfcLeaseProbeUrlsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     files: Option<&'a [crate::types::structs::HttpNfcLeaseSourceFile]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     timeout: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HttpNfcLeaseProbeUrlsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HttpNfcLeaseProbeUrlsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HttpNfcLeaseProbeUrlsRequestTypeSer<'b, 'a> {
+    data: &'b HttpNfcLeaseProbeUrlsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HttpNfcLeaseProbeUrlsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HttpNfcLeaseProbeUrlsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.files else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("files"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.timeout else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("timeout"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct HttpNfcLeaseProgressRequestType {
     percent: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for HttpNfcLeaseProgressRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HttpNfcLeaseProgressRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HttpNfcLeaseProgressRequestTypeSer<'b> {
+    data: &'b HttpNfcLeaseProgressRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HttpNfcLeaseProgressRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HttpNfcLeaseProgressRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("percent"), &self.data.percent as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct HttpNfcLeasePullFromUrlsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     files: Option<&'a [crate::types::structs::HttpNfcLeaseSourceFile]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HttpNfcLeasePullFromUrlsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HttpNfcLeasePullFromUrlsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HttpNfcLeasePullFromUrlsRequestTypeSer<'b, 'a> {
+    data: &'b HttpNfcLeasePullFromUrlsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HttpNfcLeasePullFromUrlsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HttpNfcLeasePullFromUrlsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.files else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("files"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct HttpNfcLeaseSetManifestChecksumTypeRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "deviceUrlsToChecksumTypes")]
     device_urls_to_checksum_types: Option<&'a [crate::types::structs::KeyValue]>,
+}
+
+impl<'a> miniserde::Serialize for HttpNfcLeaseSetManifestChecksumTypeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HttpNfcLeaseSetManifestChecksumTypeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HttpNfcLeaseSetManifestChecksumTypeRequestTypeSer<'b, 'a> {
+    data: &'b HttpNfcLeaseSetManifestChecksumTypeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for HttpNfcLeaseSetManifestChecksumTypeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HttpNfcLeaseSetManifestChecksumTypeRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.device_urls_to_checksum_types else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("deviceUrlsToChecksumTypes"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

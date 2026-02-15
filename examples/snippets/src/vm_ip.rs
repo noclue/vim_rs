@@ -23,7 +23,7 @@ vim_retrievable! {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    // ----- 1️⃣  Connection ----------------------------------------------------
+    dotenvy::dotenv().ok();
     env_logger::init();
 
     let client = connect("vm_ip_example", env!("CARGO_PKG_VERSION")).await?;
@@ -69,7 +69,6 @@ async fn main() -> Result<()> {
         .retrieve_objects_from_list::<VmIpInfo>(&[vm_moref])
         .await?;
 
-    // ----- 4️⃣  Display the IP address --------------------------------------
     if let Some(vm_info) = vm_ip.first() {
         match &vm_info.ip_address {
             Some(ip) => println!("IP address of '{}' is {}", inv_path, ip),

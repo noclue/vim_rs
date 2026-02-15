@@ -73,7 +73,8 @@ impl DiagnosticManager {
         let path = format!("/DiagnosticManager/{moId}/FetchAuditRecords", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::DiagnosticManagerAuditRecordResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::DiagnosticManagerAuditRecordResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns part of a log file.
@@ -129,7 +130,8 @@ impl DiagnosticManager {
         let path = format!("/DiagnosticManager/{moId}/BrowseDiagnosticLog", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::DiagnosticManagerLogHeader = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::DiagnosticManagerLogHeader = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated since version 5.0 M/N it is recommended to use the CGI
@@ -191,7 +193,8 @@ impl DiagnosticManager {
         let path = format!("/DiagnosticManager/{moId}/GenerateLogBundles_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns a list of diagnostic files for a given system.
@@ -214,44 +217,175 @@ impl DiagnosticManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DiagnosticManagerLogDescriptor>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DiagnosticManagerLogDescriptor>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct EmitSyslogMarkRequestType<'a> {
     message: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for EmitSyslogMarkRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(EmitSyslogMarkRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct EmitSyslogMarkRequestTypeSer<'b, 'a> {
+    data: &'b EmitSyslogMarkRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for EmitSyslogMarkRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"EmitSyslogMarkRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("message"), &self.data.message as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct FetchAuditRecordsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     token: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FetchAuditRecordsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FetchAuditRecordsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FetchAuditRecordsRequestTypeSer<'b, 'a> {
+    data: &'b FetchAuditRecordsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for FetchAuditRecordsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FetchAuditRecordsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.token else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("token"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct BrowseDiagnosticLogRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
     key: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     start: Option<i32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     lines: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for BrowseDiagnosticLogRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(BrowseDiagnosticLogRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct BrowseDiagnosticLogRequestTypeSer<'b, 'a> {
+    data: &'b BrowseDiagnosticLogRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for BrowseDiagnosticLogRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"BrowseDiagnosticLogRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.start else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("start"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.lines else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("lines"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct GenerateLogBundlesRequestType<'a> {
-    #[serde(rename = "includeDefault")]
     include_default: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GenerateLogBundlesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GenerateLogBundlesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GenerateLogBundlesRequestTypeSer<'b, 'a> {
+    data: &'b GenerateLogBundlesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for GenerateLogBundlesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GenerateLogBundlesRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("includeDefault"), &self.data.include_default as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryDescriptionsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
+}
+
+impl<'a> miniserde::Serialize for QueryDescriptionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDescriptionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDescriptionsRequestTypeSer<'b, 'a> {
+    data: &'b QueryDescriptionsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryDescriptionsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDescriptionsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

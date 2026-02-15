@@ -1,7 +1,6 @@
 use std::sync::Arc;
 
 use bytes::Bytes;
-use serde_json::json;
 use tokio::sync::mpsc;
 use tokio::time::{timeout, Duration};
 
@@ -22,7 +21,7 @@ use support::mock_vim_client::{MockVimClient, PcEvent};
 
 fn dummy_service_content() -> vim_rs::types::structs::ServiceContent {
     // Construct via JSON so we don't have to manually populate the (very large) struct.
-    serde_json::from_value(json!({
+    let json = r#"{
         "_typeName": "ServiceContent",
         "rootFolder": {"_typeName":"ManagedObjectReference","type":"Folder","value":"root-1"},
         "propertyCollector": {"_typeName":"ManagedObjectReference","type":"PropertyCollector","value":"pc-1"},
@@ -39,8 +38,8 @@ fn dummy_service_content() -> vim_rs::types::structs::ServiceContent {
             "apiType":"VirtualCenter",
             "apiVersion":"1"
         }
-    }))
-    .expect("test ServiceContent should deserialize")
+    }"#;
+    miniserde::json::from_str(json).expect("test ServiceContent should deserialize")
 }
 
 fn task_mor(id: &str) -> ManagedObjectReference {
@@ -161,7 +160,7 @@ async fn success_single_task() {
 
     let info = make_task_info("task-1", TaskInfoStateEnum::Success, false, None, None);
     let us = update_set_for_task("filter-1", "task-1", ObjectUpdateKindEnum::Enter, info);
-    let bytes = Bytes::from(serde_json::to_vec(&us).unwrap());
+    let bytes = Bytes::from(miniserde::json::to_string(&us).into_bytes());
     pc_tx.send(PcEvent::Bytes(bytes)).unwrap();
 
     let res = waiter.await.unwrap().unwrap();
@@ -190,7 +189,7 @@ async fn success_task_with_result() {
         None,
     );
     let us = update_set_for_task("filter-1", "task-1", ObjectUpdateKindEnum::Enter, info);
-    let bytes = Bytes::from(serde_json::to_vec(&us).unwrap());
+    let bytes = Bytes::from(miniserde::json::to_string(&us).into_bytes());
     pc_tx.send(PcEvent::Bytes(bytes)).unwrap();
 
     let res = waiter.await.unwrap().unwrap();
@@ -224,7 +223,7 @@ async fn error_single_task() {
     };
     let info = make_task_info("task-1", TaskInfoStateEnum::Error, false, None, Some(fault));
     let us = update_set_for_task("filter-1", "task-1", ObjectUpdateKindEnum::Modify, info);
-    let bytes = Bytes::from(serde_json::to_vec(&us).unwrap());
+    let bytes = Bytes::from(miniserde::json::to_string(&us).into_bytes());
     pc_tx.send(PcEvent::Bytes(bytes)).unwrap();
 
     let err = waiter.await.unwrap().unwrap_err();
@@ -232,8 +231,8 @@ async fn error_single_task() {
         ErrorKind::TaskFailed => {
             // Access the underlying MethodFault
             let fault = err.task_fault().expect("TaskFailed should have a fault");
-            // Verify we can access the fault details
-            assert!(fault.type_.is_some());
+            // type_ is None for the base MethodFault type (only set for descendants)
+            assert!(fault.type_.is_none());
         }
         other => panic!("expected TaskFailed, got {other:?}"),
     }
@@ -277,7 +276,7 @@ async fn multiple_tasks_interleaved() {
             (ObjectUpdateKindEnum::Enter, "task-2", make_task_info("task-2", TaskInfoStateEnum::Success, false, None, None)),
         ],
     );
-    pc_tx.send(PcEvent::Bytes(Bytes::from(serde_json::to_vec(&us).unwrap())))
+    pc_tx.send(PcEvent::Bytes(Bytes::from(miniserde::json::to_string(&us).into_bytes())))
         .unwrap();
 
     assert!(w1.await.unwrap().unwrap().is_none());
@@ -301,7 +300,7 @@ async fn loop_stops_when_drained_and_restarts() {
         ObjectUpdateKindEnum::Enter,
         make_task_info("task-1", TaskInfoStateEnum::Success, false, None, None),
     );
-    pc_tx.send(PcEvent::Bytes(Bytes::from(serde_json::to_vec(&us1).unwrap())))
+    pc_tx.send(PcEvent::Bytes(Bytes::from(miniserde::json::to_string(&us1).into_bytes())))
         .unwrap();
     assert!(w1.await.unwrap().unwrap().is_none());
 
@@ -323,7 +322,7 @@ async fn loop_stops_when_drained_and_restarts() {
         ObjectUpdateKindEnum::Enter,
         make_task_info("task-2", TaskInfoStateEnum::Success, false, None, None),
     );
-    pc_tx.send(PcEvent::Bytes(Bytes::from(serde_json::to_vec(&us2).unwrap())))
+    pc_tx.send(PcEvent::Bytes(Bytes::from(miniserde::json::to_string(&us2).into_bytes())))
         .unwrap();
     assert!(w2.await.unwrap().unwrap().is_none());
 
@@ -363,7 +362,7 @@ async fn race_add_task_during_drain_does_not_drop_loop() {
         ObjectUpdateKindEnum::Modify,
         make_task_info("task-1", TaskInfoStateEnum::Success, false, None, None),
     );
-    pc_tx.send(PcEvent::Bytes(Bytes::from(serde_json::to_vec(&us1).unwrap())))
+    pc_tx.send(PcEvent::Bytes(Bytes::from(miniserde::json::to_string(&us1).into_bytes())))
         .unwrap();
 
     // Wait until the remove call is in-flight (ModifyListView count reaches 2).
@@ -389,7 +388,7 @@ async fn race_add_task_during_drain_does_not_drop_loop() {
         ObjectUpdateKindEnum::Modify,
         make_task_info("task-2", TaskInfoStateEnum::Success, false, None, None),
     );
-    pc_tx.send(PcEvent::Bytes(Bytes::from(serde_json::to_vec(&us2).unwrap())))
+    pc_tx.send(PcEvent::Bytes(Bytes::from(miniserde::json::to_string(&us2).into_bytes())))
         .unwrap();
 
     assert!(w1.await.unwrap().unwrap().is_none());
@@ -470,7 +469,7 @@ async fn shutdown_and_restart() {
         ObjectUpdateKindEnum::Enter,
         make_task_info("task-2", TaskInfoStateEnum::Success, false, None, None),
     );
-    pc_tx.send(PcEvent::Bytes(Bytes::from(serde_json::to_vec(&us2).unwrap())))
+    pc_tx.send(PcEvent::Bytes(Bytes::from(miniserde::json::to_string(&us2).into_bytes())))
         .unwrap();
     
     assert!(w2.await.unwrap().unwrap().is_none());
@@ -521,7 +520,7 @@ async fn recover_from_create_list_view_failure() {
     // Complete the task
     let info2 = make_task_info("task-2", TaskInfoStateEnum::Success, false, None, None);
     let us2 = update_set_for_task("filter-1", "task-2", ObjectUpdateKindEnum::Enter, info2);
-    pc_tx.send(PcEvent::Bytes(Bytes::from(serde_json::to_vec(&us2).unwrap()))).unwrap();
+    pc_tx.send(PcEvent::Bytes(Bytes::from(miniserde::json::to_string(&us2).into_bytes()))).unwrap();
 
     // Task should complete successfully
     let result2 = waiter2.await.unwrap();
@@ -567,7 +566,7 @@ async fn cancelled_task_completes_successfully() {
         None,
     );
     let us = update_set_for_task("filter-1", "task-1", ObjectUpdateKindEnum::Enter, info);
-    let bytes = Bytes::from(serde_json::to_vec(&us).unwrap());
+    let bytes = Bytes::from(miniserde::json::to_string(&us).into_bytes());
     pc_tx.send(PcEvent::Bytes(bytes)).unwrap();
 
     // The waiter should receive success, not a cancellation error
@@ -610,7 +609,7 @@ async fn cancelled_task_with_error_state() {
         Some(fault),
     );
     let us = update_set_for_task("filter-1", "task-2", ObjectUpdateKindEnum::Modify, info);
-    let bytes = Bytes::from(serde_json::to_vec(&us).unwrap());
+    let bytes = Bytes::from(miniserde::json::to_string(&us).into_bytes());
     pc_tx.send(PcEvent::Bytes(bytes)).unwrap();
 
     // The waiter should receive a task cancelled error

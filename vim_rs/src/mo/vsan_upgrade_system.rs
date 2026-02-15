@@ -100,7 +100,8 @@ impl VsanUpgradeSystem {
         let path = format!("/vsan/VsanUpgradeSystem/{moId}/PerformVsanUpgrade_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Perform an upgrade pre-flight check on a cluster.
@@ -130,7 +131,8 @@ impl VsanUpgradeSystem {
         let path = format!("/vsan/VsanUpgradeSystem/{moId}/PerformVsanUpgradePreflightCheck", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::VsanUpgradeSystemPreflightCheckResultTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::VsanUpgradeSystemPreflightCheckResultTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieve the latest status of a running, or the previously completed,
@@ -160,37 +162,115 @@ impl VsanUpgradeSystem {
         let path = format!("/vsan/VsanUpgradeSystem/{moId}/QueryVsanUpgradeStatus", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::VsanUpgradeSystemUpgradeStatusTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::VsanUpgradeSystemUpgradeStatusTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct PerformVsanUpgradeRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "performObjectUpgrade")]
     perform_object_upgrade: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "downgradeFormat")]
     downgrade_format: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "allowReducedRedundancy")]
     allow_reduced_redundancy: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "excludeHosts")]
     exclude_hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PerformVsanUpgradeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PerformVsanUpgradeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PerformVsanUpgradeRequestTypeSer<'b, 'a> {
+    data: &'b PerformVsanUpgradeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PerformVsanUpgradeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PerformVsanUpgradeRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.perform_object_upgrade else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("performObjectUpgrade"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.downgrade_format else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("downgradeFormat"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.allow_reduced_redundancy else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("allowReducedRedundancy"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.exclude_hosts else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("excludeHosts"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PerformVsanUpgradePreflightCheckRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "downgradeFormat")]
     downgrade_format: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PerformVsanUpgradePreflightCheckRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PerformVsanUpgradePreflightCheckRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PerformVsanUpgradePreflightCheckRequestTypeSer<'b, 'a> {
+    data: &'b PerformVsanUpgradePreflightCheckRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PerformVsanUpgradePreflightCheckRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PerformVsanUpgradePreflightCheckRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.downgrade_format else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("downgradeFormat"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryVsanUpgradeStatusRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
+}
+
+impl<'a> miniserde::Serialize for QueryVsanUpgradeStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVsanUpgradeStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVsanUpgradeStatusRequestTypeSer<'b, 'a> {
+    data: &'b QueryVsanUpgradeStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryVsanUpgradeStatusRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVsanUpgradeStatusRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

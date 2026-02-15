@@ -119,7 +119,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsAttachVolume", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Modify the ACL configurations for existing volumes.
@@ -167,7 +168,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsConfigureVolumeACLs", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates container volume with given specifications.
@@ -234,7 +236,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsCreateVolume", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create snapshots of given volumes
@@ -284,7 +287,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsCreateSnapshots", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deletes given container volumes.
@@ -354,7 +358,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDeleteVolume", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Delete snapshots with given volumeIds and snapshotIds.
@@ -398,7 +403,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDeleteSnapshots", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Detaches volumes(block volumes only) and makes those volumes unavailable
@@ -458,7 +464,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDetachVolume", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Extend the capacity for the container volumes.
@@ -510,7 +517,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsExtendVolume", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns container volumes matching criteria set in the filter.
@@ -558,7 +566,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsQueryVolume", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::CnsQueryResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::CnsQueryResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns container volumes matching criteria set in the filter.
@@ -609,7 +618,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsQueryAsync", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Reconfigures the volume with the storage policy.
@@ -651,7 +661,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsReconfigVolumePolicy", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Relocate container volume from the current source datastore to another
@@ -723,7 +734,8 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsRelocateVolume", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Updates volume metadata, namely labels and container cluster information for the
@@ -779,90 +791,367 @@ impl CnsVolumeManager {
         let path = format!("/vsan/CnsVolumeManager/{moId}/CnsUpdateVolumeMetadata", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CnsAttachVolumeRequestType<'a> {
-    #[serde(rename = "attachSpecs")]
     attach_specs: &'a [crate::types::structs::CnsVolumeAttachDetachSpec],
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "CnsConfigureVolumeACLsRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for CnsAttachVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsAttachVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsAttachVolumeRequestTypeSer<'b, 'a> {
+    data: &'b CnsAttachVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsAttachVolumeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsAttachVolumeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("attachSpecs"), &self.data.attach_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CnsConfigureVolumeAcLsRequestType<'a> {
-    #[serde(rename = "ACLConfigSpecs")]
     acl_config_specs: &'a [crate::types::structs::CnsVolumeAclConfigureSpec],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsConfigureVolumeAcLsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsConfigureVolumeAcLsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsConfigureVolumeAcLsRequestTypeSer<'b, 'a> {
+    data: &'b CnsConfigureVolumeAcLsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsConfigureVolumeAcLsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsConfigureVolumeACLsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("ACLConfigSpecs"), &self.data.acl_config_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CnsCreateVolumeRequestType<'a> {
-    #[serde(rename = "createSpecs")]
     create_specs: &'a [crate::types::structs::CnsVolumeCreateSpec],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsCreateVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsCreateVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsCreateVolumeRequestTypeSer<'b, 'a> {
+    data: &'b CnsCreateVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsCreateVolumeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsCreateVolumeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("createSpecs"), &self.data.create_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CnsCreateSnapshotsRequestType<'a> {
-    #[serde(rename = "snapshotSpecs")]
     snapshot_specs: &'a [crate::types::structs::CnsSnapshotCreateSpec],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsCreateSnapshotsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsCreateSnapshotsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsCreateSnapshotsRequestTypeSer<'b, 'a> {
+    data: &'b CnsCreateSnapshotsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsCreateSnapshotsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsCreateSnapshotsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("snapshotSpecs"), &self.data.snapshot_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CnsDeleteVolumeRequestType<'a> {
-    #[serde(rename = "volumeIds")]
     volume_ids: &'a [crate::types::structs::CnsVolumeId],
-    #[serde(rename = "deleteDisk")]
     delete_disk: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsDeleteVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsDeleteVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsDeleteVolumeRequestTypeSer<'b, 'a> {
+    data: &'b CnsDeleteVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsDeleteVolumeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsDeleteVolumeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("volumeIds"), &self.data.volume_ids as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("deleteDisk"), &self.data.delete_disk as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CnsDeleteSnapshotsRequestType<'a> {
-    #[serde(rename = "snapshotDeleteSpecs")]
     snapshot_delete_specs: &'a [crate::types::structs::CnsSnapshotDeleteSpec],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsDeleteSnapshotsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsDeleteSnapshotsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsDeleteSnapshotsRequestTypeSer<'b, 'a> {
+    data: &'b CnsDeleteSnapshotsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsDeleteSnapshotsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsDeleteSnapshotsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("snapshotDeleteSpecs"), &self.data.snapshot_delete_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CnsDetachVolumeRequestType<'a> {
-    #[serde(rename = "detachSpecs")]
     detach_specs: &'a [crate::types::structs::CnsVolumeAttachDetachSpec],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsDetachVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsDetachVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsDetachVolumeRequestTypeSer<'b, 'a> {
+    data: &'b CnsDetachVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsDetachVolumeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsDetachVolumeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("detachSpecs"), &self.data.detach_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CnsExtendVolumeRequestType<'a> {
-    #[serde(rename = "extendSpecs")]
     extend_specs: &'a [crate::types::structs::CnsVolumeExtendSpec],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsExtendVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsExtendVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsExtendVolumeRequestTypeSer<'b, 'a> {
+    data: &'b CnsExtendVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsExtendVolumeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsExtendVolumeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("extendSpecs"), &self.data.extend_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CnsQueryVolumeRequestType<'a> {
     filter: &'a dyn crate::types::traits::CnsQueryFilterTrait,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     selection: Option<&'a crate::types::structs::CnsQuerySelection>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsQueryVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsQueryVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsQueryVolumeRequestTypeSer<'b, 'a> {
+    data: &'b CnsQueryVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsQueryVolumeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsQueryVolumeRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("filter"), &self.data.filter as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.selection else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("selection"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CnsQueryAsyncRequestType<'a> {
     filter: &'a dyn crate::types::traits::CnsQueryFilterTrait,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     selection: Option<&'a crate::types::structs::CnsQuerySelection>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsQueryAsyncRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsQueryAsyncRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsQueryAsyncRequestTypeSer<'b, 'a> {
+    data: &'b CnsQueryAsyncRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsQueryAsyncRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsQueryAsyncRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("filter"), &self.data.filter as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.selection else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("selection"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CnsReconfigVolumePolicyRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "volumePolicyReconfigSpecs")]
     volume_policy_reconfig_specs: Option<&'a [crate::types::structs::CnsVolumePolicyReconfigSpec]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsReconfigVolumePolicyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsReconfigVolumePolicyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsReconfigVolumePolicyRequestTypeSer<'b, 'a> {
+    data: &'b CnsReconfigVolumePolicyRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsReconfigVolumePolicyRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsReconfigVolumePolicyRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.volume_policy_reconfig_specs else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("volumePolicyReconfigSpecs"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CnsRelocateVolumeRequestType<'a> {
-    #[serde(rename = "relocateSpecs")]
     relocate_specs: &'a [Box<dyn crate::types::traits::CnsVolumeRelocateSpecTrait>],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CnsRelocateVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsRelocateVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsRelocateVolumeRequestTypeSer<'b, 'a> {
+    data: &'b CnsRelocateVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsRelocateVolumeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsRelocateVolumeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("relocateSpecs"), &self.data.relocate_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CnsUpdateVolumeMetadataRequestType<'a> {
-    #[serde(rename = "updateSpecs")]
     update_specs: &'a [crate::types::structs::CnsVolumeMetadataUpdateSpec],
+}
+
+impl<'a> miniserde::Serialize for CnsUpdateVolumeMetadataRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsUpdateVolumeMetadataRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsUpdateVolumeMetadataRequestTypeSer<'b, 'a> {
+    data: &'b CnsUpdateVolumeMetadataRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CnsUpdateVolumeMetadataRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsUpdateVolumeMetadataRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("updateSpecs"), &self.data.update_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

@@ -67,7 +67,8 @@ impl VimClusterVsanVcDiskManagementSystem {
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/VsanAddStoragePoolDisk", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// This API can be used to delete a single or multiple disks from storage pool.
@@ -99,7 +100,8 @@ impl VimClusterVsanVcDiskManagementSystem {
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/VsanDeleteStoragePoolDisk", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// This API is used to create new vSAN disk groups or attach
@@ -149,7 +151,8 @@ impl VimClusterVsanVcDiskManagementSystem {
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/InitializeDiskMappings", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieve logical capacity, logical capacity used, physical capacity, physical
@@ -173,7 +176,8 @@ impl VimClusterVsanVcDiskManagementSystem {
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/QueryClusterDataEfficiencyCapacityState", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VimVsanDataEfficiencyCapacityState = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VimVsanDataEfficiencyCapacityState = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get detailed information of vSAN disk groups managed by specified host,
@@ -209,7 +213,10 @@ impl VimClusterVsanVcDiskManagementSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VimVsanHostDiskMapInfoEx>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VimVsanHostDiskMapInfoEx>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -259,7 +266,10 @@ impl VimClusterVsanVcDiskManagementSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VimVsanHostVsanManagedDisksInfo>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::VimVsanHostVsanManagedDisksInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -311,7 +321,8 @@ impl VimClusterVsanVcDiskManagementSystem {
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RebuildDiskMapping", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Remove vSAN capacity-tier disk(s) from use in a vSAN cluster with the
@@ -378,7 +389,8 @@ impl VimClusterVsanVcDiskManagementSystem {
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RemoveDiskEx", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Remove vSAN disk mapping(s) from use in a vSAN cluster with the
@@ -425,7 +437,8 @@ impl VimClusterVsanVcDiskManagementSystem {
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RemoveDiskMappingEx", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieve capabilities for hosts reside in specified cluster,
@@ -455,7 +468,10 @@ impl VimClusterVsanVcDiskManagementSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VimVsanHostVsanHostCapability>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VimVsanHostVsanHostCapability>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -503,7 +519,8 @@ impl VimClusterVsanVcDiskManagementSystem {
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/UnmountDiskMappingEx", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// This API can be used to unmount a single or multiple disks from the storage
@@ -543,85 +560,352 @@ impl VimClusterVsanVcDiskManagementSystem {
         let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/VsanUnmountStoragePoolDisks", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanAddStoragePoolDiskRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     specs: Option<&'a [crate::types::structs::VsanAddStoragePoolDiskSpec]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanAddStoragePoolDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanAddStoragePoolDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanAddStoragePoolDiskRequestTypeSer<'b, 'a> {
+    data: &'b VsanAddStoragePoolDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanAddStoragePoolDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanAddStoragePoolDiskRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.specs else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("specs"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanDeleteStoragePoolDiskRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::VsanDeleteStoragePoolDiskSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanDeleteStoragePoolDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanDeleteStoragePoolDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanDeleteStoragePoolDiskRequestTypeSer<'b, 'a> {
+    data: &'b VsanDeleteStoragePoolDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanDeleteStoragePoolDiskRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanDeleteStoragePoolDiskRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct InitializeDiskMappingsRequestType<'a> {
     spec: &'a crate::types::structs::VimVsanHostDiskMappingCreationSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InitializeDiskMappingsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InitializeDiskMappingsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InitializeDiskMappingsRequestTypeSer<'b, 'a> {
+    data: &'b InitializeDiskMappingsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InitializeDiskMappingsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InitializeDiskMappingsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryClusterDataEfficiencyCapacityStateRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryClusterDataEfficiencyCapacityStateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryClusterDataEfficiencyCapacityStateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryClusterDataEfficiencyCapacityStateRequestTypeSer<'b, 'a> {
+    data: &'b QueryClusterDataEfficiencyCapacityStateRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryClusterDataEfficiencyCapacityStateRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryClusterDataEfficiencyCapacityStateRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryDiskMappingsRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDiskMappingsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDiskMappingsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDiskMappingsRequestTypeSer<'b, 'a> {
+    data: &'b QueryDiskMappingsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryDiskMappingsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDiskMappingsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryVsanManagedDisksRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "filterSpec")]
     filter_spec: Option<&'a crate::types::structs::VimVsanHostQueryVsanDisksSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryVsanManagedDisksRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVsanManagedDisksRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVsanManagedDisksRequestTypeSer<'b, 'a> {
+    data: &'b QueryVsanManagedDisksRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryVsanManagedDisksRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVsanManagedDisksRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.filter_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("filterSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RebuildDiskMappingRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
     mapping: &'a crate::types::structs::VsanHostDiskMapping,
-    #[serde(rename = "maintenanceSpec")]
     maintenance_spec: &'a crate::types::structs::HostMaintenanceSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RebuildDiskMappingRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RebuildDiskMappingRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RebuildDiskMappingRequestTypeSer<'b, 'a> {
+    data: &'b RebuildDiskMappingRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RebuildDiskMappingRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RebuildDiskMappingRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("mapping"), &self.data.mapping as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("maintenanceSpec"), &self.data.maintenance_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveDiskExRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
     disks: &'a [crate::types::structs::HostScsiDisk],
-    #[serde(rename = "maintenanceSpec")]
     maintenance_spec: &'a crate::types::structs::HostMaintenanceSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveDiskExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveDiskExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveDiskExRequestTypeSer<'b, 'a> {
+    data: &'b RemoveDiskExRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveDiskExRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveDiskExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("disks"), &self.data.disks as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("maintenanceSpec"), &self.data.maintenance_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveDiskMappingExRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
     mappings: &'a [crate::types::structs::VsanHostDiskMapping],
-    #[serde(rename = "maintenanceSpec")]
     maintenance_spec: &'a crate::types::structs::HostMaintenanceSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveDiskMappingExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveDiskMappingExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveDiskMappingExRequestTypeSer<'b, 'a> {
+    data: &'b RemoveDiskMappingExRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveDiskMappingExRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveDiskMappingExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("mappings"), &self.data.mappings as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("maintenanceSpec"), &self.data.maintenance_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrieveAllFlashCapabilitiesRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveAllFlashCapabilitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveAllFlashCapabilitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveAllFlashCapabilitiesRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveAllFlashCapabilitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RetrieveAllFlashCapabilitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveAllFlashCapabilitiesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UnmountDiskMappingExRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
     mappings: &'a [crate::types::structs::VsanHostDiskMapping],
-    #[serde(rename = "maintenanceSpec")]
     maintenance_spec: &'a crate::types::structs::HostMaintenanceSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UnmountDiskMappingExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnmountDiskMappingExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnmountDiskMappingExRequestTypeSer<'b, 'a> {
+    data: &'b UnmountDiskMappingExRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UnmountDiskMappingExRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnmountDiskMappingExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("mappings"), &self.data.mappings as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("maintenanceSpec"), &self.data.maintenance_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanUnmountStoragePoolDisksRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::VsanDeleteStoragePoolDiskSpec,
+}
+
+impl<'a> miniserde::Serialize for VsanUnmountStoragePoolDisksRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanUnmountStoragePoolDisksRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanUnmountStoragePoolDisksRequestTypeSer<'b, 'a> {
+    data: &'b VsanUnmountStoragePoolDisksRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanUnmountStoragePoolDisksRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanUnmountStoragePoolDisksRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

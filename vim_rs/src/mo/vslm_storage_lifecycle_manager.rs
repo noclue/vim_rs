@@ -46,7 +46,10 @@ impl VslmStorageLifecycleManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmQueryDatastoreInfoResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmQueryDatastoreInfoResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -87,20 +90,64 @@ impl VslmStorageLifecycleManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VslmQueryDatastoreInfoRequestType<'a> {
-    #[serde(rename = "datastoreUrl")]
     datastore_url: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmQueryDatastoreInfoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmQueryDatastoreInfoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmQueryDatastoreInfoRequestTypeSer<'b, 'a> {
+    data: &'b VslmQueryDatastoreInfoRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VslmQueryDatastoreInfoRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmQueryDatastoreInfoRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastoreUrl"), &self.data.datastore_url as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmSyncDatastoreRequestType<'a> {
-    #[serde(rename = "datastoreUrl")]
     datastore_url: &'a str,
-    #[serde(rename = "fullSync")]
     full_sync: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "fcdId")]
     fcd_id: Option<&'a crate::types::structs::Id>,
+}
+
+impl<'a> miniserde::Serialize for VslmSyncDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmSyncDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmSyncDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b VslmSyncDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VslmSyncDatastoreRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmSyncDatastoreRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("datastoreUrl"), &self.data.datastore_url as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("fullSync"), &self.data.full_sync as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.fcd_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("fcdId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

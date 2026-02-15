@@ -57,13 +57,39 @@ impl VsanCapabilitySystem {
         let path = format!("/vsan/VsanCapabilitySystem/{moId}/VsanGetCapabilities", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::VsanCapability> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::VsanCapability> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanGetCapabilitiesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     targets: Option<&'a [crate::types::structs::ManagedObjectReference]>,
+}
+
+impl<'a> miniserde::Serialize for VsanGetCapabilitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanGetCapabilitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanGetCapabilitiesRequestTypeSer<'b, 'a> {
+    data: &'b VsanGetCapabilitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanGetCapabilitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanGetCapabilitiesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.targets else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targets"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

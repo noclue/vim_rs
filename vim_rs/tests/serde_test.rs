@@ -28,9 +28,9 @@ fn test_e1000_roundtrip() {
         },
     };
 
-    let json = serde_json::to_string(&e1000).unwrap();
+    let json = miniserde::json::to_string(&e1000);
     println!("E1000 JSON: {}", json);
-    let recovered: VirtualE1000 = serde_json::from_str(&json).unwrap();
+    let recovered: VirtualE1000 = miniserde::json::from_str(&json).unwrap();
     assert_eq!(recovered.virtual_ethernet_card_.mac_address, Some("00:50:56:aa:bb:cc".to_string()));
 }
 
@@ -61,9 +61,9 @@ fn test_e1000_polymorphic_roundtrip() {
     };
 
     let trait_ref: &dyn VirtualEthernetCardTrait = &e1000;
-    let json = serde_json::to_string(trait_ref).unwrap();
+    let json = miniserde::json::to_string(trait_ref);
     println!("Polymorphic E1000 JSON: {}", json);
-    let recovered: Box<dyn VirtualEthernetCardTrait> = serde_json::from_str(&json).unwrap();
+    let recovered: Box<dyn VirtualEthernetCardTrait> = miniserde::json::from_str(&json).unwrap();
     // Can't easily assert on trait object, but at least verify it deserializes
     drop(recovered);
 }
@@ -80,9 +80,8 @@ fn test_vapp_property_fault_simple() {
         "value": "1.0.0"
     }"#;
     
-    let fault: MethodFault = serde_json::from_str(json).unwrap();
+    let fault: MethodFault = miniserde::json::from_str(json).unwrap();
     println!("Fault type: {:?}", fault.type_);
-    //assert_eq!(fault.type_, Some("VAppPropertyFault".to_string()));
 }
 
 #[test]
@@ -104,9 +103,8 @@ fn test_vapp_property_fault_with_message() {
         "value": "1.0.0"
     }"#;
     
-    let fault: MethodFault = serde_json::from_str(json).unwrap();
+    let fault: MethodFault = miniserde::json::from_str(json).unwrap();
     println!("Fault with message: {:?}", fault);
-    //assert_eq!(fault.type_, Some("VAppPropertyFault".to_string()));
     assert!(fault.fault_message.is_some());
 }
 
@@ -139,11 +137,10 @@ fn test_vapp_property_fault_with_args() {
         "value": "1.0.0"
     }"#;
     
-    let result = serde_json::from_str::<MethodFault>(json);
+    let result = miniserde::json::from_str::<MethodFault>(json);
     match result {
         Ok(fault) => {
             println!("Successfully parsed fault with args: {:?}", fault);
-            //assert_eq!(fault.type_, Some("VAppPropertyFault".to_string()));
         }
         Err(e) => {
             println!("Failed to parse: {:?}", e);
@@ -174,7 +171,7 @@ fn test_array_of_virtual_ethernet_card() {
         ]
     }"#;
     
-    let value: ValueElements = serde_json::from_str(json).unwrap();
+    let value: ValueElements = miniserde::json::from_str(json).unwrap();
     println!("Array deserialized successfully");
     
     // Verify it's the right variant

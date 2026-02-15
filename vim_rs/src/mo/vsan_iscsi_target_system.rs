@@ -158,7 +158,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -198,7 +201,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -276,7 +282,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -320,7 +329,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -354,7 +366,8 @@ impl VsanIscsiTargetSystem {
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetHomeObject", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanObjectInformation = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanObjectInformation = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Gets one iSCSI initiator group.  
@@ -388,7 +401,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanIscsiInitiatorGroup>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanIscsiInitiatorGroup>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -417,7 +433,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIscsiInitiatorGroup>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIscsiInitiatorGroup>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -455,7 +474,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanIscsiLun>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanIscsiLun>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -491,7 +513,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIscsiLun>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIscsiLun>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -527,7 +552,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanIscsiTarget>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanIscsiTarget>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -558,7 +586,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIscsiTarget>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIscsiTarget>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -578,7 +609,8 @@ impl VsanIscsiTargetSystem {
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitQueryIscsiTargetServiceVersion", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Remediates the iSCSI LUNs which runtime status are not consistent
@@ -618,7 +650,8 @@ impl VsanIscsiTargetSystem {
         let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanRemediateIscsiLunsRuntimeStatus", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Removes iSCSI initiator group from one cluster.  
@@ -752,7 +785,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -789,7 +825,10 @@ impl VsanIscsiTargetSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -825,170 +864,636 @@ impl VsanIscsiTargetSystem {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanVitAddIscsiInitiatorGroupRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "initiatorGroupName")]
     initiator_group_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitAddIscsiInitiatorGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitAddIscsiInitiatorGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitAddIscsiInitiatorGroupRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitAddIscsiInitiatorGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitAddIscsiInitiatorGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitAddIscsiInitiatorGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("initiatorGroupName"), &self.data.initiator_group_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitAddIscsiInitiatorsToGroupRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "initiatorGroupName")]
     initiator_group_name: &'a str,
-    #[serde(rename = "initiatorNames")]
     initiator_names: &'a [String],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitAddIscsiInitiatorsToGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitAddIscsiInitiatorsToGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitAddIscsiInitiatorsToGroupRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitAddIscsiInitiatorsToGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitAddIscsiInitiatorsToGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitAddIscsiInitiatorsToGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("initiatorGroupName"), &self.data.initiator_group_name as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("initiatorNames"), &self.data.initiator_names as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitAddIscsiInitiatorsToTargetRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
-    #[serde(rename = "initiatorNames")]
     initiator_names: &'a [String],
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "VsanVitAddIscsiLUNRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitAddIscsiInitiatorsToTargetRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitAddIscsiInitiatorsToTargetRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitAddIscsiInitiatorsToTargetRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitAddIscsiInitiatorsToTargetRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitAddIscsiInitiatorsToTargetRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitAddIscsiInitiatorsToTargetRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("initiatorNames"), &self.data.initiator_names as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitAddIscsiLunRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
-    #[serde(rename = "lunSpec")]
     lun_spec: &'a crate::types::structs::VsanIscsiLunSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitAddIscsiLunRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitAddIscsiLunRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitAddIscsiLunRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitAddIscsiLunRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitAddIscsiLunRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitAddIscsiLUNRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("lunSpec"), &self.data.lun_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitAddIscsiTargetRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetSpec")]
     target_spec: &'a crate::types::structs::VsanIscsiTargetSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitAddIscsiTargetRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitAddIscsiTargetRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitAddIscsiTargetRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitAddIscsiTargetRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitAddIscsiTargetRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitAddIscsiTargetRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetSpec"), &self.data.target_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitAddIscsiTargetToGroupRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "initiatorGroupName")]
     initiator_group_name: &'a str,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "VsanVitEditIscsiLUNRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitAddIscsiTargetToGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitAddIscsiTargetToGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitAddIscsiTargetToGroupRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitAddIscsiTargetToGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitAddIscsiTargetToGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitAddIscsiTargetToGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("initiatorGroupName"), &self.data.initiator_group_name as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitEditIscsiLunRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
-    #[serde(rename = "lunSpec")]
     lun_spec: &'a crate::types::structs::VsanIscsiLunSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitEditIscsiLunRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitEditIscsiLunRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitEditIscsiLunRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitEditIscsiLunRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitEditIscsiLunRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitEditIscsiLUNRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("lunSpec"), &self.data.lun_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitEditIscsiTargetRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetSpec")]
     target_spec: &'a crate::types::structs::VsanIscsiTargetSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitEditIscsiTargetRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitEditIscsiTargetRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitEditIscsiTargetRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitEditIscsiTargetRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitEditIscsiTargetRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitEditIscsiTargetRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetSpec"), &self.data.target_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitGetHomeObjectRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitGetHomeObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitGetHomeObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitGetHomeObjectRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitGetHomeObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitGetHomeObjectRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitGetHomeObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitGetIscsiInitiatorGroupRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "initiatorGroupName")]
     initiator_group_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitGetIscsiInitiatorGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitGetIscsiInitiatorGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitGetIscsiInitiatorGroupRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitGetIscsiInitiatorGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitGetIscsiInitiatorGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitGetIscsiInitiatorGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("initiatorGroupName"), &self.data.initiator_group_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitGetIscsiInitiatorGroupsRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "VsanVitGetIscsiLUNRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitGetIscsiInitiatorGroupsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitGetIscsiInitiatorGroupsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitGetIscsiInitiatorGroupsRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitGetIscsiInitiatorGroupsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitGetIscsiInitiatorGroupsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitGetIscsiInitiatorGroupsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitGetIscsiLunRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
-    #[serde(rename = "lunId")]
     lun_id: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "VsanVitGetIscsiLUNsRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitGetIscsiLunRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitGetIscsiLunRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitGetIscsiLunRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitGetIscsiLunRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitGetIscsiLunRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitGetIscsiLUNRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("lunId"), &self.data.lun_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitGetIscsiLuNsRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "targetAliases")]
     target_aliases: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitGetIscsiLuNsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitGetIscsiLuNsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitGetIscsiLuNsRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitGetIscsiLuNsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitGetIscsiLuNsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitGetIscsiLUNsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.target_aliases else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targetAliases"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanVitGetIscsiTargetRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitGetIscsiTargetRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitGetIscsiTargetRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitGetIscsiTargetRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitGetIscsiTargetRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitGetIscsiTargetRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitGetIscsiTargetRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitGetIscsiTargetsRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitGetIscsiTargetsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitGetIscsiTargetsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitGetIscsiTargetsRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitGetIscsiTargetsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitGetIscsiTargetsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitGetIscsiTargetsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanRemediateIscsiLunsRuntimeStatusRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanRemediateIscsiLunsRuntimeStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanRemediateIscsiLunsRuntimeStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanRemediateIscsiLunsRuntimeStatusRequestTypeSer<'b, 'a> {
+    data: &'b VsanRemediateIscsiLunsRuntimeStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanRemediateIscsiLunsRuntimeStatusRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanRemediateIscsiLunsRuntimeStatusRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitRemoveIscsiInitiatorGroupRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "initiatorGroupName")]
     initiator_group_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitRemoveIscsiInitiatorGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitRemoveIscsiInitiatorGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitRemoveIscsiInitiatorGroupRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitRemoveIscsiInitiatorGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitRemoveIscsiInitiatorGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitRemoveIscsiInitiatorGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("initiatorGroupName"), &self.data.initiator_group_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitRemoveIscsiInitiatorsFromGroupRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "initiatorGroupName")]
     initiator_group_name: &'a str,
-    #[serde(rename = "initiatorNames")]
     initiator_names: &'a [String],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitRemoveIscsiInitiatorsFromGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitRemoveIscsiInitiatorsFromGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitRemoveIscsiInitiatorsFromGroupRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitRemoveIscsiInitiatorsFromGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitRemoveIscsiInitiatorsFromGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitRemoveIscsiInitiatorsFromGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("initiatorGroupName"), &self.data.initiator_group_name as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("initiatorNames"), &self.data.initiator_names as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitRemoveIscsiInitiatorsFromTargetRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
-    #[serde(rename = "initiatorNames")]
     initiator_names: &'a [String],
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "VsanVitRemoveIscsiLUNRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitRemoveIscsiInitiatorsFromTargetRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitRemoveIscsiInitiatorsFromTargetRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitRemoveIscsiInitiatorsFromTargetRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitRemoveIscsiInitiatorsFromTargetRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitRemoveIscsiInitiatorsFromTargetRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitRemoveIscsiInitiatorsFromTargetRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("initiatorNames"), &self.data.initiator_names as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitRemoveIscsiLunRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
-    #[serde(rename = "lunId")]
     lun_id: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitRemoveIscsiLunRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitRemoveIscsiLunRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitRemoveIscsiLunRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitRemoveIscsiLunRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitRemoveIscsiLunRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitRemoveIscsiLUNRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("lunId"), &self.data.lun_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitRemoveIscsiTargetRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVitRemoveIscsiTargetRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitRemoveIscsiTargetRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitRemoveIscsiTargetRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitRemoveIscsiTargetRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitRemoveIscsiTargetRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitRemoveIscsiTargetRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVitRemoveIscsiTargetFromGroupRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "initiatorGroupName")]
     initiator_group_name: &'a str,
-    #[serde(rename = "targetAlias")]
     target_alias: &'a str,
+}
+
+impl<'a> miniserde::Serialize for VsanVitRemoveIscsiTargetFromGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVitRemoveIscsiTargetFromGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVitRemoveIscsiTargetFromGroupRequestTypeSer<'b, 'a> {
+    data: &'b VsanVitRemoveIscsiTargetFromGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVitRemoveIscsiTargetFromGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVitRemoveIscsiTargetFromGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("initiatorGroupName"), &self.data.initiator_group_name as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("targetAlias"), &self.data.target_alias as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

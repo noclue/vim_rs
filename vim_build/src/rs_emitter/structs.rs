@@ -34,9 +34,16 @@ impl<'a> TypesEmitter<'a> {
     }
     fn emit_use_statements(&mut self) -> Result<()> {
         self.printer.println("use super::struct_enum;")?;
-        self.printer.println("use serde::ser::SerializeMap;")?;
-        self.printer.println("use serde::de;")?;
-        self.printer.println("use std::fmt::Formatter;")?;
+        self.printer
+            .println("use super::mini_de_static::{FieldsBuilder, VimObjectHolder};")?;
+        self.printer
+            .println("use super::mini_helpers::Base64;")?;
+        self.printer
+            .println("use super::convert::CastFrom;")?;
+        self.printer.println("use miniserde::ser::Fragment;")?;
+        self.printer.println("use std::borrow::Cow;")?;
+        self.printer.newline()?;
+        self.printer.println("miniserde::make_place!(Place);")?;
         self.printer.newline()?;
         Ok(())
     }
@@ -84,7 +91,7 @@ impl<'a> TypesEmitter<'a> {
             self.printer
                 .println("/// Extra fields not part of the base type schema")?;
             self.printer.println(
-                "pub extra_fields_: std::collections::HashMap<String, serde_json::Value>,",
+                "pub extra_fields_: std::collections::HashMap<String, miniserde::json::Value>,",
             )?;
         }
         self.printer.dedent();
@@ -142,10 +149,8 @@ impl<'a> TypesEmitter<'a> {
         prn.indent();
         prn.println("fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {")?;
         prn.indent();
-        prn.println("let mut writer = crate::core::helpers::FmtWriter { formatter: f };")?;
-        prn.println(
-            "serde_json::to_writer_pretty(&mut writer, self).map_err(|_| std::fmt::Error)",
-        )?;
+        prn.println("let json = miniserde::json::to_string(self);")?;
+        prn.println("crate::types::mini_helpers::write_pretty_json(f, &json)")?;
         prn.dedent();
         prn.println("}")?;
         prn.dedent();
@@ -200,6 +205,10 @@ impl<'a> TypesEmitter<'a> {
     /// are accessed through parent fields. E.g., for VirtualVmxnet accessing VirtualDevice.key:
     /// "self.virtual_ethernet_card_.virtual_device_.key"
     /// Skip empty parent types (marker traits) that have no fields.
+    /// Build the access path for a field relative to the struct root (no `self.` prefix).
+    /// Returns a path like `field_name` for own fields, or
+    /// `parent_.field_name` for inherited fields.
+    /// The caller prepends `self.data.` as needed.
     fn build_field_access_path(
         &self,
         vim_type: &Struct,
@@ -208,11 +217,11 @@ impl<'a> TypesEmitter<'a> {
     ) -> Result<String> {
         if vim_type.name == target_struct_name {
             // Field belongs to current struct
-            return Ok(format!("self.{}", field_name));
+            return Ok(field_name.to_string());
         }
 
         // Need to navigate through parent chain, skipping empty parents
-        let mut path = String::from("self");
+        let mut path = String::new();
         let mut current_type_name = vim_type.name.clone();
 
         loop {
@@ -231,12 +240,20 @@ impl<'a> TypesEmitter<'a> {
                 // Only add parent field to path if parent has fields (not a marker trait)
                 if self.vim_model.has_any_fields_in_chain(parent)? {
                     let parent_field = parent_field_name(parent);
-                    path.push_str(&format!(".{}", parent_field));
+                    if path.is_empty() {
+                        path.push_str(&parent_field);
+                    } else {
+                        path.push_str(&format!(".{}", parent_field));
+                    }
                 }
 
                 if parent == target_struct_name {
                     // Found the parent that owns the field
-                    path.push_str(&format!(".{}", field_name));
+                    if path.is_empty() {
+                        path.push_str(field_name);
+                    } else {
+                        path.push_str(&format!(".{}", field_name));
+                    }
                     return Ok(path);
                 }
 
@@ -247,265 +264,595 @@ impl<'a> TypesEmitter<'a> {
             }
         }
 
-        // Fallback: use Deref (Rust will resolve automatically)
-        Ok(format!("self.{}", field_name))
+        // Fallback
+        Ok(field_name.to_string())
     }
 
     fn emit_serialize(&mut self, vim_type: &Struct) -> Result<()> {
         let struct_name = to_type_name(&vim_type.name);
         let discriminant = vim_type.discriminator();
         let inheritance_chain = self.vim_model.inheritance_chain(&vim_type.name)?;
-        self.printer
-            .println(&format!("impl serde::Serialize for {struct_name} {{"))?;
-        self.printer.indent();
-        self.printer
-            .println("fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>")?;
-        self.printer.println("where")?;
-        self.printer.indent();
-        self.printer.println("S: serde::Serializer,")?;
-        self.printer.dedent();
-        self.printer.println("{")?;
-        self.printer.indent();
-        self.printer
-            .println("let mut state = serializer.serialize_map(None)?;")?;
-        if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println(&format!(r#"let type_ = self.type_.as_ref().unwrap_or(&struct_enum::StructType::{struct_name});"#))?;
-            self.printer
-                .println(r#"state.serialize_entry("_typeName", type_)?;"#)?;
-        } else {
-            self.printer.println(&format!(
-                "state.serialize_entry(\"_typeName\", \"{discriminant}\")?;"
-            ))?;
+        let ser_name = format!("{struct_name}Serializer");
+        let is_pruned = vim_type.emit_mode == EmitMode::Prune;
+
+        // Collect all fields with their metadata for both the constructor and next()
+        struct FieldInfo {
+            serialization_name: String,
+            field_access: String,
+            optional: bool,
+            is_binary: bool,
         }
-        for struct_type in inheritance_chain {
+        let mut fields = Vec::new();
+        for struct_type in &inheritance_chain {
             for (_, field) in &struct_type.borrow().fields {
                 let field_name = to_field_name(&field.name);
-                let serialization_name = &field.name;
                 let field_access = self.build_field_access_path(
                     vim_type,
                     &struct_type.borrow().name,
                     &field_name,
                 )?;
+                fields.push(FieldInfo {
+                    serialization_name: field.name.clone(),
+                    field_access,
+                    optional: field.optional,
+                    is_binary: field.vim_type == DataType::Binary,
+                });
+            }
+        }
 
-                if !field.optional {
-                    let field_value = if field.vim_type == DataType::Binary {
-                        format!(
-                            "&crate::core::helpers::SerializeBinary {{ value: &{field_access} }}"
-                        )
+        let has_binary = fields.iter().any(|f| f.is_binary);
+        let has_optional = fields.iter().any(|f| f.optional);
+
+        // 1. impl miniserde::Serialize for StructName
+        self.printer.println(&format!(
+            "impl miniserde::Serialize for {struct_name} {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "fn begin(&self) -> Fragment<'_> {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "Fragment::Map(Box::new({ser_name}::new(self)))"
+        ))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // 2. Serializer struct
+        self.printer.println(&format!(
+            "struct {ser_name}<'a> {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "data: &'a {struct_name},"
+        ))?;
+        self.printer.println("seq: usize,")?;
+        if is_pruned {
+            self.printer.println("type_name: &'static str,")?;
+            self.printer.println(&format!(
+                "extra_iter: Option<std::collections::hash_map::Iter<'a, String, miniserde::json::Value>>,"
+            ))?;
+        }
+        if has_binary {
+            // Add pre-computed base64 fields for binary data
+            for (i, f) in fields.iter().enumerate() {
+                if f.is_binary {
+                    if f.optional {
+                        self.printer.println(&format!(
+                            "b64_{i}: Option<String>,"
+                        ))?;
                     } else {
-                        format!("&{field_access}")
-                    };
-                    self.printer.println(&format!(
-                        "state.serialize_entry(\"{serialization_name}\", {field_value})?;"
-                    ))?;
-                } else {
-                    let field_value = if field.vim_type == DataType::Binary {
-                        "&crate::core::helpers::SerializeBinary { value: field_value }"
-                    } else {
-                        "field_value"
-                    };
-                    self.printer
-                        .println(&format!("if let Some(field_value) = &{field_access} {{"))?;
-                    self.printer.indent();
-                    self.printer.println(&format!(
-                        "state.serialize_entry(\"{serialization_name}\", {field_value})?;"
-                    ))?;
-                    self.printer.dedent();
-                    self.printer.println("}")?;
+                        self.printer.println(&format!(
+                            "b64_{i}: String,"
+                        ))?;
+                    }
                 }
             }
         }
-        if vim_type.emit_mode == EmitMode::Prune {
-            self.printer
-                .println("for (key, value) in &self.extra_fields_ {")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // 3. Constructor
+        self.printer.println(&format!(
+            "impl<'a> {ser_name}<'a> {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "fn new(data: &'a {struct_name}) -> Self {{"
+        ))?;
+        self.printer.indent();
+
+        if is_pruned {
+            self.printer.println(&format!(
+                r#"let type_name: &'static str = data.type_.as_ref().map(|t| t.as_str()).unwrap_or("{discriminant}");"#
+            ))?;
+        }
+
+        // Pre-compute base64 for binary fields
+        if has_binary {
+            for (i, f) in fields.iter().enumerate() {
+                if f.is_binary {
+                    let access = &f.field_access;
+                    if f.optional {
+                        self.printer.println(&format!(
+                            "let b64_{i} = data.{access}.as_ref().map(|data| base64::display::Base64Display::new(data, &base64::engine::general_purpose::STANDARD).to_string());"
+                        ))?;
+                    } else {
+                        self.printer.println(&format!(
+                            "let b64_{i} = base64::display::Base64Display::new(&data.{access}, &base64::engine::general_purpose::STANDARD).to_string();"
+                        ))?;
+                    }
+                }
+            }
+        }
+
+        self.printer.println("Self {")?;
+        self.printer.indent();
+        self.printer.println("data,")?;
+        self.printer.println("seq: 0,")?;
+        if is_pruned {
+            self.printer.println("type_name,")?;
+            self.printer.println("extra_iter: None,")?;
+        }
+        if has_binary {
+            for (i, f) in fields.iter().enumerate() {
+                if f.is_binary {
+                    self.printer.println(&format!("b64_{i},"))?;
+                }
+            }
+        }
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // 4. impl Map for Serializer
+        self.printer.println(&format!(
+            "impl<'a> miniserde::ser::Map for {ser_name}<'a> {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(
+            "fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {"
+        )?;
+        self.printer.indent();
+
+        // Use loop for optional field skipping
+        if has_optional || is_pruned {
+            self.printer.println("loop {")?;
             self.printer.indent();
-            self.printer
-                .println("state.serialize_entry(key, value)?;")?;
+        }
+
+        // For pruned types, drain extra_iter first
+        if is_pruned {
+            self.printer.println("if let Some(iter) = &mut self.extra_iter {")?;
+            self.printer.indent();
+            self.printer.println("if let Some((key, value)) = iter.next() {")?;
+            self.printer.indent();
+            self.printer.println(
+                "return Some((Cow::Borrowed(key.as_str()), value as &dyn miniserde::Serialize));"
+            )?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.println("self.extra_iter = None;")?;
+            self.printer.println("return None;")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.newline()?;
+        }
+
+        self.printer.println("let seq = self.seq;")?;
+        self.printer.println("self.seq += 1;")?;
+        self.printer.println("match seq {")?;
+        self.printer.indent();
+
+        // seq 0: _typeName
+        if is_pruned {
+            self.printer.println(
+                "0 => return Some((Cow::Borrowed(\"_typeName\"), &self.type_name as &dyn miniserde::Serialize)),"
+            )?;
+        } else {
+            self.printer.println(&format!(
+                "0 => return Some((Cow::Borrowed(\"_typeName\"), &\"{discriminant}\")),",
+            ))?;
+        }
+
+        // Remaining fields
+        for (i, f) in fields.iter().enumerate() {
+            let seq_num = i + 1;
+            let ser_name_str = &f.serialization_name;
+            let field_access = &f.field_access;
+
+            if f.optional {
+                self.printer.println(&format!("{seq_num} => {{"))?;
+                self.printer.indent();
+                if f.is_binary {
+                    self.printer.println(&format!(
+                        "let Some(ref b64) = self.b64_{i} else {{ continue; }};"
+                    ))?;
+                    self.printer.println(&format!(
+                        "return Some((Cow::Borrowed(\"{ser_name_str}\"), b64 as &dyn miniserde::Serialize));"
+                    ))?;
+                } else {
+                    self.printer.println(&format!(
+                        "let Some(ref val) = self.data.{field_access} else {{ continue; }};"
+                    ))?;
+                    self.printer.println(&format!(
+                        "return Some((Cow::Borrowed(\"{ser_name_str}\"), val as &dyn miniserde::Serialize));"
+                    ))?;
+                }
+                self.printer.dedent();
+                self.printer.println("}")?;
+            } else if f.is_binary {
+                self.printer.println(&format!(
+                    "{seq_num} => return Some((Cow::Borrowed(\"{ser_name_str}\"), &self.b64_{i} as &dyn miniserde::Serialize)),"
+                ))?;
+            } else {
+                self.printer.println(&format!(
+                    "{seq_num} => return Some((Cow::Borrowed(\"{ser_name_str}\"), &self.data.{field_access} as &dyn miniserde::Serialize)),"
+                ))?;
+            }
+        }
+
+        // After all fields
+        let after_fields_seq = fields.len() + 1;
+        if is_pruned {
+            self.printer.println(&format!("{after_fields_seq} => {{"))?;
+            self.printer.indent();
+            self.printer.println("if !self.data.extra_fields_.is_empty() {")?;
+            self.printer.indent();
+            self.printer.println("self.extra_iter = Some(self.data.extra_fields_.iter());")?;
+            self.printer.println("continue;")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.println("return None;")?;
             self.printer.dedent();
             self.printer.println("}")?;
         }
-        self.printer.println("state.end()")?;
+
+        self.printer.println("_ => return None,")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+
+        if has_optional || is_pruned {
+            self.printer.dedent();
+            self.printer.println("}")?;
+        }
+
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
         self.printer.println("}")?;
+        self.printer.newline()?;
+
         Ok(())
     }
 
     fn emit_deserialize(&mut self, vim_type: &Struct) -> Result<()> {
         let struct_name = to_type_name(&vim_type.name);
-        let type_name = vim_type.discriminator();
+        let fields_name = format!("{struct_name}Fields");
         let inheritance_chain = self.vim_model.inheritance_chain(&vim_type.name)?;
+        let is_pruned = vim_type.emit_mode == EmitMode::Prune;
 
+        // Collect field info for deserialization
+        enum DeserFieldKind {
+            Normal,
+            Binary,
+            TraitObject { trait_name: String },
+        }
+        struct DeserField {
+            field_name: String,
+            ser_name: String,
+            field_type: String,
+            optional: bool,
+            kind: DeserFieldKind,
+        }
+        let mut deser_fields = Vec::new();
+        for struct_type in &inheritance_chain {
+            for (_, field) in &struct_type.borrow().fields {
+                let field_name = to_field_name(&field.name);
+                let field_type = self.tdf.field_type(field)?;
+                let kind = if field.vim_type == DataType::Binary {
+                    DeserFieldKind::Binary
+                } else if let DataType::Reference(ref_name) = &field.vim_type {
+                    // Check if the referenced struct has children and is not pruned.
+                    // "Any" maps to VimAny (an enum), not a trait object.
+                    if ref_name == "Any" {
+                        DeserFieldKind::Normal
+                    } else if let Some(s) = self.vim_model.structs.get(ref_name.as_str()) {
+                        let s_ref = s.borrow();
+                        if s_ref.has_children() && s_ref.emit_mode == EmitMode::Emit {
+                            DeserFieldKind::TraitObject {
+                                trait_name: format!(
+                                    "super::traits::{}Trait",
+                                    to_type_name(ref_name)
+                                ),
+                            }
+                        } else {
+                            DeserFieldKind::Normal
+                        }
+                    } else {
+                        DeserFieldKind::Normal
+                    }
+                } else {
+                    DeserFieldKind::Normal
+                };
+                deser_fields.push(DeserField {
+                    field_name,
+                    ser_name: field.name.clone(),
+                    field_type,
+                    optional: field.optional,
+                    kind,
+                });
+            }
+        }
+
+        // 1. impl Deserialize for StructName
         self.printer.println(&format!(
-            "impl<'de> de::Deserialize<'de> for {struct_name} {{"
+            "impl miniserde::Deserialize for {struct_name} {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println("Place::new(out)")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // 2. impl Visitor for Place<StructName>
+        self.printer.println(&format!(
+            "impl miniserde::de::Visitor for Place<{struct_name}> {{"
         ))?;
         self.printer.indent();
         self.printer.println(
-            "fn deserialize<D: de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {",
+            "fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {"
         )?;
         self.printer.indent();
-        if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println(&format!(
-                "deserializer.deserialize_map(__{struct_name}Visitor(None))"
-            ))?;
-        } else {
-            self.printer.println(&format!(
-                "deserializer.deserialize_map(__{struct_name}Visitor)"
-            ))?;
-        }
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.newline()?;
-        if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println(&format!(
-                "pub struct __{struct_name}Visitor(pub Option<struct_enum::StructType>);"
-            ))?;
-        } else {
-            self.printer
-                .println(&format!("struct __{struct_name}Visitor;"))?;
-        }
-        self.printer.newline()?;
         self.printer.println(&format!(
-            "impl<'de> de::Visitor<'de> for __{struct_name}Visitor {{"
+            "Ok(Box::new({fields_name}::with_output(&mut self.out)))"
+        ))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // 3. Fields struct
+        self.printer.println(&format!(
+            "pub struct {fields_name}<'a> {{"
         ))?;
         self.printer.indent();
-        self.printer.println(&format!(
-            "type Value = {struct_name};",
-            struct_name = struct_name
-        ))?;
-        self.printer.newline()?;
-        self.printer
-            .println("fn expecting(&self, formatter: &mut Formatter) -> std::fmt::Result {")?;
-        self.printer.indent();
-        self.printer
-            .println(&format!(r#"formatter.write_str("{type_name} JSON.")"#))?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.newline()?;
-        self.printer
-            .println("fn visit_map<A>(self, mut map: A) -> Result<Self::Value, A::Error>")?;
-        self.printer.println("where")?;
-        self.printer.indent();
-        self.printer.println("A: de::MapAccess<'de>,")?;
-        self.printer.dedent();
-        self.printer.println("{")?;
-        self.printer.indent();
-        let mut field_count = 1;
-        for struct_type in &inheritance_chain {
-            for (_, field) in &(*struct_type).borrow().fields {
-                let field_name = to_field_name(&field.name);
-                let field_type = self.tdf.field_type(field)?;
-                let field_type = if !field.optional {
-                    format!("Option<{}>", field_type)
-                } else {
-                    field_type
-                };
-                self.printer.println(&format!(
-                    "let mut field{field_count}: {field_type} = None; // {field_name}"
-                ))?;
-                field_count += 1;
-            }
-        }
-        if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println(&format!("let mut type_: Option<struct_enum::StructType> = Some(struct_enum::StructType::{struct_name});"))?;
-            self.printer.println("let mut extra_fields_: std::collections::HashMap<String, serde_json::Value> = std::collections::HashMap::new();")?;
-        }
-        self.printer.newline()?;
-        self.printer
-            .println("while let Some(key) = map.next_key::<String>()? {")?;
-        self.printer.indent();
-        self.printer.println("match key.as_str() {")?;
-        self.printer.indent();
-        self.printer.println(r#""_typeName" => {"#)?;
-        self.printer.indent();
-        self.printer
-            .println("let discriminator: struct_enum::StructType = map.next_value()?;")?;
-        self.printer.println(&format!(
-            r#"if discriminator != struct_enum::StructType::{struct_name} {{"#
-        ))?;
-        self.printer.indent();
-        if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println("type_ = Some(discriminator);")?;
-        } else {
-            self.printer.println(&format!(r#"return Err(de::Error::custom(format!("Expected {type_name}, got {{:?}}", discriminator)));"#))?;
-        }
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.dedent();
-        self.printer.println("},")?;
-        field_count = 1;
-        for struct_type in &inheritance_chain {
-            for (_, field) in &(*struct_type).borrow().fields {
-                let ser_name = &field.name;
-                self.printer.println(&format!(r#""{ser_name}" => {{"#))?;
-                self.printer.indent();
-                if field.vim_type == DataType::Binary {
-                    self.printer.println(&format!("field{field_count} = Some(map.next_value::<crate::core::helpers::DeserializeBinary>()?.value);"))?;
-                } else {
-                    self.printer
-                        .println(&format!("field{field_count} = Some(map.next_value()?);"))?;
+        for (i, f) in deser_fields.iter().enumerate() {
+            let deser_type = match &f.kind {
+                DeserFieldKind::Binary => "Option<Base64>".to_string(),
+                DeserFieldKind::TraitObject { .. } => "Option<VimObjectHolder>".to_string(),
+                DeserFieldKind::Normal => {
+                    if f.optional {
+                        f.field_type.clone()  // Already Option<T>
+                    } else {
+                        format!("Option<{}>", f.field_type) // Wrap in Option for accumulation
+                    }
                 }
-                self.printer.dedent();
-                self.printer.println("},")?;
-                field_count += 1;
-            }
+            };
+            self.printer.println(&format!(
+                "f{i}: {deser_type}, // {}", f.field_name
+            ))?;
         }
-        if vim_type.emit_mode == EmitMode::Prune {
-            self.printer.println(r#"_ => {"#)?;
-            self.printer.indent();
-            self.printer
-                .println("let value: serde_json::Value = map.next_value()?;")?;
-            self.printer.println("extra_fields_.insert(key, value);")?;
-            self.printer.dedent();
-            self.printer.println("},")?;
+        if is_pruned {
+            self.printer.println("type_: Option<struct_enum::StructType>,")?;
+            self.printer.println("type_name: Option<String>,")?;
+            self.printer.println("extra_fields_: std::collections::HashMap<String, miniserde::json::Value>,")?;
+            self.printer.println("current_extra_key: Option<String>,")?;
+            self.printer.println("current_extra_value: Option<miniserde::json::Value>,")?;
+        }
+        self.printer.println(&format!(
+            "__out: Option<&'a mut Option<{struct_name}>>,"
+        ))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // 4. Constructors
+        self.printer.println(&format!(
+            "impl {fields_name}<'_> {{"
+        ))?;
+        self.printer.indent();
+
+        // new() for polymorphic use
+        if is_pruned {
+            self.printer.println(&format!(
+                "pub fn new(type_: Option<struct_enum::StructType>) -> {fields_name}<'static> {{"
+            ))?;
         } else {
-            self.printer
-                .println(r#"_ => { let _: serde_json::Value = map.next_value()?; }"#)?;
+            self.printer.println(&format!(
+                "pub fn new() -> {fields_name}<'static> {{"
+            ))?;
         }
+        self.printer.indent();
+        self.printer.println(&format!("{fields_name} {{"))?;
+        self.printer.indent();
+        for i in 0..deser_fields.len() {
+            self.printer.println(&format!("f{i}: None,"))?;
+        }
+        if is_pruned {
+            self.printer.println("type_,")?;
+            self.printer.println("type_name: None,")?;
+            self.printer.println("extra_fields_: std::collections::HashMap::new(),")?;
+            self.printer.println("current_extra_key: None,")?;
+            self.printer.println("current_extra_value: None,")?;
+        }
+        self.printer.println("__out: None,")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // with_output() for standalone use
+        self.printer.println(&format!(
+            "impl<'a> {fields_name}<'a> {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "fn with_output(out: &'a mut Option<{struct_name}>) -> Self {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(&format!("{fields_name} {{"))?;
+        self.printer.indent();
+        for i in 0..deser_fields.len() {
+            self.printer.println(&format!("f{i}: None,"))?;
+        }
+        if is_pruned {
+            self.printer.println("type_: None,")?;
+            self.printer.println("type_name: None,")?;
+            self.printer.println("extra_fields_: std::collections::HashMap::new(),")?;
+            self.printer.println("current_extra_key: None,")?;
+            self.printer.println("current_extra_value: None,")?;
+        }
+        self.printer.println("__out: Some(out),")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.newline()?;
 
-        // Build nested struct construction from innermost parent to current type
-        field_count = 1;
+        // shift_extra() for pruned types
+        if is_pruned {
+            self.printer.println("fn shift_extra(&mut self) {")?;
+            self.printer.indent();
+            self.printer.println("if let (Some(k), Some(v)) = (self.current_extra_key.take(), self.current_extra_value.take()) {")?;
+            self.printer.indent();
+            self.printer.println("self.extra_fields_.insert(k, v);")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.newline()?;
+        }
 
-        // Build from root to leaf - construct parent objects first, skipping empty parents
-        // Track which parent temp vars were actually created (non-empty types only)
+        // build() method
+        self.printer.println(&format!(
+            "fn build(&mut self) -> miniserde::Result<{struct_name}> {{"
+        ))?;
+        self.printer.indent();
+
+        if is_pruned {
+            self.printer.println("self.shift_extra();")?;
+        }
+
+        // Extract fields from Options, handle trait casts, binary unwrap
+        for (i, f) in deser_fields.iter().enumerate() {
+            match &f.kind {
+                DeserFieldKind::Binary => {
+                    if f.optional {
+                        self.printer.println(&format!(
+                            "let {} = self.f{i}.take().map(|b| b.0);",
+                            f.field_name
+                        ))?;
+                    } else {
+                        self.printer.println(&format!(
+                            "let {} = self.f{i}.take().ok_or(miniserde::Error)?.0;",
+                            f.field_name
+                        ))?;
+                    }
+                }
+                DeserFieldKind::TraitObject { trait_name } => {
+                    if f.optional {
+                        self.printer.println(&format!(
+                            "let {}: {} = if let Some(holder) = self.f{i}.take() {{",
+                            f.field_name, f.field_type
+                        ))?;
+                        self.printer.indent();
+                        self.printer.println("if let Some(vim_obj) = holder.out {")?;
+                        self.printer.indent();
+                        self.printer.println(&format!(
+                            "Some(<dyn {trait_name}>::from_box(vim_obj).map_err(|_| miniserde::Error)?)"
+                        ))?;
+                        self.printer.dedent();
+                        self.printer.println("} else { None }")?;
+                        self.printer.dedent();
+                        self.printer.println("} else { None };")?;
+                    } else {
+                        self.printer.println(&format!(
+                            "let holder = self.f{i}.take().ok_or(miniserde::Error)?;"
+                        ))?;
+                        self.printer.println(&format!(
+                            "let {}: {} = <dyn {trait_name}>::from_box(holder.out.ok_or(miniserde::Error)?).map_err(|_| miniserde::Error)?;",
+                            f.field_name, f.field_type
+                        ))?;
+                    }
+                }
+                DeserFieldKind::Normal => {
+                    if f.optional {
+                        self.printer.println(&format!(
+                            "let {} = self.f{i}.take();",
+                            f.field_name
+                        ))?;
+                    } else {
+                        self.printer.println(&format!(
+                            "let {} = self.f{i}.take().ok_or(miniserde::Error)?;",
+                            f.field_name
+                        ))?;
+                    }
+                }
+            }
+        }
+
+        // Handle pruned type_ resolution
+        if is_pruned {
+            self.printer.println("let type_ = self.type_.take().or_else(|| {")?;
+            self.printer.indent();
+            self.printer.println("self.type_name.as_deref().and_then(|tn| {")?;
+            self.printer.indent();
+            self.printer.println("let st = struct_enum::StructType::from_str(tn);")?;
+            self.printer.println(&format!(
+                "if st == Some(struct_enum::StructType::{struct_name}) {{ None }} else {{ st }}"
+            ))?;
+            self.printer.dedent();
+            self.printer.println("})")?;
+            self.printer.dedent();
+            self.printer.println("});")?;
+        }
+
+        // Build nested struct construction (same logic as before)
+        let mut field_idx = 0;
+
         for (idx, struct_type_ref) in inheritance_chain.iter().enumerate() {
             let struct_ref = (**struct_type_ref).borrow();
             let current_struct_name = to_type_name(&struct_ref.name);
             let is_last = idx == inheritance_chain.len() - 1;
 
-            // Skip empty parent types (marker traits) - don't generate temp vars for them
-            // Only skip if this type AND all its ancestors have no fields
             if !is_last && !self.vim_model.has_any_fields_in_chain(&struct_ref.name)? {
                 continue;
             }
 
             if is_last {
-                // This is the current type we're deserializing
                 self.printer
                     .println(&format!("Ok({current_struct_name} {{"))?;
             } else {
-                // This is a parent type, construct it inline
                 self.printer.println(&format!(
                     "let {}_temp = {current_struct_name} {{",
                     to_field_name(&struct_ref.name)
                 ))?;
             }
-
             self.printer.indent();
 
-            // If this struct has a parent (and not Any), it needs a parent field
-            // Find the nearest non-empty ancestor that has a temp var
+            // Parent field reference
             if let Some(parent_name) = &struct_ref.parent {
                 if parent_name != "Any" && !is_last {
-                    // Find nearest non-empty ancestor
                     let mut ancestor_name = parent_name.clone();
                     loop {
                         if self.vim_model.has_any_fields_in_chain(&ancestor_name)? {
@@ -515,40 +862,26 @@ impl<'a> TypesEmitter<'a> {
                                 .println(&format!("{parent_field}: {parent_temp_var}_temp,"))?;
                             break;
                         }
-                        // Move up to next ancestor
                         if let Some(next_parent) = &self.vim_model.structs.get(&ancestor_name) {
                             if let Some(next) = &next_parent.borrow().parent {
-                                if next == "Any" {
-                                    break;
-                                }
+                                if next == "Any" { break; }
                                 ancestor_name = next.clone();
-                            } else {
-                                break;
-                            }
-                        } else {
-                            break;
-                        }
+                            } else { break; }
+                        } else { break; }
                     }
                 }
             }
 
-            // Add this struct's own fields
-            for (_, field) in &struct_ref.fields {
-                let field_name = to_field_name(&field.name);
-                let field_value = if !field.optional {
-                    format!("field{field_count}.ok_or(de::Error::missing_field(\"{field_name}\"))?")
-                } else {
-                    format!("field{field_count}")
-                };
+            // Assign fields
+            for (_, _field) in &struct_ref.fields {
+                let f = &deser_fields[field_idx];
                 self.printer
-                    .println(&format!("{field_name}: {field_value},"))?;
-                field_count += 1;
+                    .println(&format!("{}: {},", f.field_name, f.field_name))?;
+                field_idx += 1;
             }
 
-            // Handle the current (last) struct specially
             if is_last {
-                // Add parent field if exists and has fields (not a marker trait)
-                // Find the nearest non-empty ancestor
+                // Add parent field
                 if let Some(parent_name) = &vim_type.parent {
                     if parent_name != "Any" {
                         let mut ancestor_name = parent_name.clone();
@@ -560,26 +893,18 @@ impl<'a> TypesEmitter<'a> {
                                     .println(&format!("{parent_field}: {parent_temp_var}_temp,"))?;
                                 break;
                             }
-                            // Move up to next ancestor
                             if let Some(next_parent) = &self.vim_model.structs.get(&ancestor_name) {
                                 if let Some(next) = &next_parent.borrow().parent {
-                                    if next == "Any" {
-                                        break;
-                                    }
+                                    if next == "Any" { break; }
                                     ancestor_name = next.clone();
-                                } else {
-                                    break;
-                                }
-                            } else {
-                                break;
-                            }
+                                } else { break; }
+                            } else { break; }
                         }
                     }
                 }
-
-                if vim_type.emit_mode == EmitMode::Prune {
+                if is_pruned {
                     self.printer.println("type_,")?;
-                    self.printer.println("extra_fields_,")?;
+                    self.printer.println("extra_fields_: std::mem::take(&mut self.extra_fields_),")?;
                 }
                 self.printer.dedent();
                 self.printer.println("})")?;
@@ -589,6 +914,99 @@ impl<'a> TypesEmitter<'a> {
                 self.printer.newline()?;
             }
         }
+
+        self.printer.dedent();
+        self.printer.println("}")?; // end build()
+
+        self.printer.dedent();
+        self.printer.println("}")?; // end impl<'a> Fields<'a>
+        self.printer.newline()?;
+
+        // 5. impl Map for Fields
+        self.printer.println(&format!(
+            "impl miniserde::de::Map for {fields_name}<'_> {{"
+        ))?;
+        self.printer.indent();
+
+        // key() method
+        self.printer.println(
+            "fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {"
+        )?;
+        self.printer.indent();
+        if is_pruned {
+            self.printer.println("self.shift_extra();")?;
+        }
+        self.printer.println("match key {")?;
+        self.printer.indent();
+
+        if is_pruned {
+            self.printer.println(
+                "\"_typeName\" => Ok(miniserde::Deserialize::begin(&mut self.type_name)),"
+            )?;
+        } else {
+            self.printer.println(
+                "\"_typeName\" => Ok(<dyn miniserde::de::Visitor>::ignore()),"
+            )?;
+        }
+
+        for (i, f) in deser_fields.iter().enumerate() {
+            let ser_name = &f.ser_name;
+            match &f.kind {
+                DeserFieldKind::Binary | DeserFieldKind::TraitObject { .. } | DeserFieldKind::Normal => {
+                    self.printer.println(&format!(
+                        "\"{ser_name}\" => Ok(miniserde::Deserialize::begin(&mut self.f{i})),"
+                    ))?;
+                }
+            }
+        }
+
+        if is_pruned {
+            self.printer.println("_ => {")?;
+            self.printer.indent();
+            self.printer.println("self.current_extra_key = Some(key.to_owned());")?;
+            self.printer.println("Ok(miniserde::Deserialize::begin(&mut self.current_extra_value))")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+        } else {
+            self.printer.println(
+                "_ => Ok(<dyn miniserde::de::Visitor>::ignore()),"
+            )?;
+        }
+
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+
+        // finish() method
+        self.printer.println(
+            "fn finish(&mut self) -> miniserde::Result<()> {"
+        )?;
+        self.printer.indent();
+        self.printer.println("let result = self.build()?;")?;
+        self.printer.println("if let Some(out) = self.__out.take() {")?;
+        self.printer.indent();
+        self.printer.println("*out = Some(result);")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.println("Ok(())")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+
+        self.printer.dedent();
+        self.printer.println("}")?; // end impl Map
+        self.printer.newline()?;
+
+        // 6. impl FieldsBuilder for Fields<'static>
+        self.printer.println(&format!(
+            "impl FieldsBuilder for {fields_name}<'static> {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(
+            "fn build_boxed(&mut self) -> miniserde::Result<Box<dyn super::vim_object_trait::VimObjectTrait>> {"
+        )?;
+        self.printer.indent();
+        self.printer.println("Ok(Box::new(self.build()?))")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();

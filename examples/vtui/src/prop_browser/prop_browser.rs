@@ -5,13 +5,13 @@ use std::fs::File;
 use chrono::{Local, SecondsFormat};
 use indexmap::IndexMap;
 use log::{debug, warn};
+use miniserde::json::{Object, Value};
 use ratatui::buffer::Buffer;
 use ratatui::layout::Rect;
 use ratatui::prelude::Alignment;
 use ratatui::style::{Color, Modifier, Style};
 use ratatui::text::{Line, Span};
 use ratatui::widgets::{Block, ScrollbarOrientation, StatefulWidget};
-use serde_json::Value;
 use std::io::Write;
 use std::mem;
 use std::path::PathBuf;
@@ -109,7 +109,7 @@ impl PropertyBrowserState {
             return None;
         };
 
-        let Ok(motype) = serde_json::from_str(&format!("\"{}\"", motype)) else {
+        let Ok(motype) = miniserde::json::from_str(&format!("\"{}\"", motype)) else {
             warn!(
                 "PropertyBrowserState: Failed to parse type name: {}",
                 motype
@@ -231,17 +231,19 @@ impl PropertyBrowserState {
     }
 
     pub fn dump_to_json(&self) -> anyhow::Result<()> {
-        // Get the properties from the browser state
-        let properties = &self.properties;
+        // Convert IndexMap to miniserde Object for serialization
+        let obj: Object = self
+            .properties
+            .iter()
+            .map(|(k, v)| (k.clone(), v.clone()))
+            .collect();
 
-        // Serialize the properties to pretty-printed JSON
-        let json_content = serde_json::to_string_pretty(properties)?;
+        let json_str = miniserde::json::to_string(&obj);
+        let json_content = pretty_print_json(&json_str);
 
-        // Generate filename
         let filename = self.generate_json_filename()?;
         let path = PathBuf::from(&filename);
 
-        // Write to file
         let mut file = File::create(path)?;
         file.write_all(json_content.as_bytes())?;
 
@@ -362,6 +364,83 @@ impl<'a> PropertyBrowser<'a> {
             with_scrollbar: true,
         }
     }
+}
+
+/// Pretty-print compact JSON with indentation (miniserde has no to_string_pretty).
+fn pretty_print_json(json: &str) -> String {
+    let mut out = String::new();
+    let mut indent = 0usize;
+    let mut in_string = false;
+    let mut escape_next = false;
+    let bytes = json.as_bytes();
+    let len = bytes.len();
+    let mut i = 0;
+
+    fn write_indent(s: &mut String, level: usize) {
+        for _ in 0..level {
+            s.push_str("  ");
+        }
+    }
+
+    while i < len {
+        let ch = bytes[i] as char;
+
+        if escape_next {
+            out.push(ch);
+            escape_next = false;
+            i += 1;
+            continue;
+        }
+
+        if in_string {
+            out.push(ch);
+            if ch == '\\' {
+                escape_next = true;
+            } else if ch == '"' {
+                in_string = false;
+            }
+            i += 1;
+            continue;
+        }
+
+        match ch {
+            '"' => {
+                in_string = true;
+                out.push('"');
+            }
+            '{' | '[' => {
+                indent += 1;
+                out.push(ch);
+                let next_meaningful = bytes[i + 1..].iter().position(|b| !b.is_ascii_whitespace());
+                if let Some(pos) = next_meaningful {
+                    let next_ch = bytes[i + 1 + pos] as char;
+                    if next_ch != '}' && next_ch != ']' {
+                        out.push('\n');
+                        write_indent(&mut out, indent);
+                    }
+                }
+            }
+            '}' | ']' => {
+                indent = indent.saturating_sub(1);
+                out.push('\n');
+                write_indent(&mut out, indent);
+                out.push(ch);
+            }
+            ',' => {
+                out.push_str(",\n");
+                write_indent(&mut out, indent);
+            }
+            ':' => {
+                out.push_str(": ");
+            }
+            c if c.is_ascii_whitespace() => {}
+            _ => {
+                out.push(ch);
+            }
+        }
+        i += 1;
+    }
+    out
 }
 
 impl StatefulWidget for PropertyBrowser<'_> {

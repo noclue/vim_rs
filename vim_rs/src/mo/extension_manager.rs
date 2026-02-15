@@ -41,7 +41,10 @@ impl ExtensionManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::Extension>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::Extension>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -62,7 +65,8 @@ impl ExtensionManager {
         let path = format!("/ExtensionManager/{moId}/GetPublicKey", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query statistics about IP allocation usage, either system wide or for
@@ -88,7 +92,10 @@ impl ExtensionManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ExtensionManagerIpAllocationUsage>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ExtensionManagerIpAllocationUsage>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -115,7 +122,10 @@ impl ExtensionManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -301,68 +311,261 @@ impl ExtensionManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Extension>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Extension>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct FindExtensionRequestType<'a> {
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindExtensionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindExtensionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindExtensionRequestTypeSer<'b, 'a> {
+    data: &'b FindExtensionRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for FindExtensionRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindExtensionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryExtensionIpAllocationUsageRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "extensionKeys")]
     extension_keys: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryExtensionIpAllocationUsageRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryExtensionIpAllocationUsageRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryExtensionIpAllocationUsageRequestTypeSer<'b, 'a> {
+    data: &'b QueryExtensionIpAllocationUsageRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryExtensionIpAllocationUsageRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryExtensionIpAllocationUsageRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.extension_keys else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("extensionKeys"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryManagedByRequestType<'a> {
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryManagedByRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryManagedByRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryManagedByRequestTypeSer<'b, 'a> {
+    data: &'b QueryManagedByRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryManagedByRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryManagedByRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RegisterExtensionRequestType<'a> {
     extension: &'a crate::types::structs::Extension,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RegisterExtensionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RegisterExtensionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RegisterExtensionRequestTypeSer<'b, 'a> {
+    data: &'b RegisterExtensionRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RegisterExtensionRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RegisterExtensionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("extension"), &self.data.extension as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetExtensionCertificateRequestType<'a> {
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "certificatePem")]
     certificate_pem: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetExtensionCertificateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetExtensionCertificateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetExtensionCertificateRequestTypeSer<'b, 'a> {
+    data: &'b SetExtensionCertificateRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SetExtensionCertificateRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetExtensionCertificateRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.certificate_pem else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("certificatePem"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct SetPublicKeyRequestType<'a> {
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
-    #[serde(rename = "publicKey")]
     public_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetPublicKeyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetPublicKeyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetPublicKeyRequestTypeSer<'b, 'a> {
+    data: &'b SetPublicKeyRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SetPublicKeyRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetPublicKeyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("publicKey"), &self.data.public_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetServiceAccountRequestType<'a> {
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
-    #[serde(rename = "serviceAccount")]
     service_account: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetServiceAccountRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetServiceAccountRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetServiceAccountRequestTypeSer<'b, 'a> {
+    data: &'b SetServiceAccountRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SetServiceAccountRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetServiceAccountRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("serviceAccount"), &self.data.service_account as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UnregisterExtensionRequestType<'a> {
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UnregisterExtensionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnregisterExtensionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnregisterExtensionRequestTypeSer<'b, 'a> {
+    data: &'b UnregisterExtensionRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UnregisterExtensionRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnregisterExtensionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateExtensionRequestType<'a> {
     extension: &'a crate::types::structs::Extension,
+}
+
+impl<'a> miniserde::Serialize for UpdateExtensionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateExtensionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateExtensionRequestTypeSer<'b, 'a> {
+    data: &'b UpdateExtensionRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateExtensionRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateExtensionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("extension"), &self.data.extension as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

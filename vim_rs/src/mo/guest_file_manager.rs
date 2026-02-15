@@ -147,7 +147,8 @@ impl GuestFileManager {
         let path = format!("/GuestFileManager/{moId}/CreateTemporaryDirectoryInGuest", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a temporary file.
@@ -219,7 +220,8 @@ impl GuestFileManager {
         let path = format!("/GuestFileManager/{moId}/CreateTemporaryFileInGuest", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deletes a directory in the guest OS.
@@ -420,7 +422,8 @@ impl GuestFileManager {
         let path = format!("/GuestFileManager/{moId}/InitiateFileTransferFromGuest", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::FileTransferInformation = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::FileTransferInformation = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Initiates an operation to transfer a file to the guest.
@@ -527,7 +530,8 @@ impl GuestFileManager {
         let path = format!("/GuestFileManager/{moId}/InitiateFileTransferToGuest", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns information about files or directories in the guest.
@@ -610,7 +614,8 @@ impl GuestFileManager {
         let path = format!("/GuestFileManager/{moId}/ListFilesInGuest", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::GuestListFileInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::GuestListFileInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a directory in the guest OS
@@ -798,120 +803,386 @@ impl GuestFileManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ChangeFileAttributesInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "guestFilePath")]
     guest_file_path: &'a str,
-    #[serde(rename = "fileAttributes")]
     file_attributes: &'a dyn crate::types::traits::GuestFileAttributesTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ChangeFileAttributesInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ChangeFileAttributesInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ChangeFileAttributesInGuestRequestTypeSer<'b, 'a> {
+    data: &'b ChangeFileAttributesInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ChangeFileAttributesInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ChangeFileAttributesInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("guestFilePath"), &self.data.guest_file_path as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("fileAttributes"), &self.data.file_attributes as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateTemporaryDirectoryInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     prefix: &'a str,
     suffix: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "directoryPath")]
     directory_path: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateTemporaryDirectoryInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateTemporaryDirectoryInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateTemporaryDirectoryInGuestRequestTypeSer<'b, 'a> {
+    data: &'b CreateTemporaryDirectoryInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateTemporaryDirectoryInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateTemporaryDirectoryInGuestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("prefix"), &self.data.prefix as &dyn miniserde::Serialize)),
+                4 => return Some((std::borrow::Cow::Borrowed("suffix"), &self.data.suffix as &dyn miniserde::Serialize)),
+                5 => {
+                    let Some(ref val) = self.data.directory_path else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("directoryPath"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateTemporaryFileInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     prefix: &'a str,
     suffix: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "directoryPath")]
     directory_path: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateTemporaryFileInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateTemporaryFileInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateTemporaryFileInGuestRequestTypeSer<'b, 'a> {
+    data: &'b CreateTemporaryFileInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateTemporaryFileInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateTemporaryFileInGuestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("prefix"), &self.data.prefix as &dyn miniserde::Serialize)),
+                4 => return Some((std::borrow::Cow::Borrowed("suffix"), &self.data.suffix as &dyn miniserde::Serialize)),
+                5 => {
+                    let Some(ref val) = self.data.directory_path else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("directoryPath"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct DeleteDirectoryInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "directoryPath")]
     directory_path: &'a str,
     recursive: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteDirectoryInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteDirectoryInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteDirectoryInGuestRequestTypeSer<'b, 'a> {
+    data: &'b DeleteDirectoryInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DeleteDirectoryInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteDirectoryInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("directoryPath"), &self.data.directory_path as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("recursive"), &self.data.recursive as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DeleteFileInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "filePath")]
     file_path: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteFileInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteFileInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteFileInGuestRequestTypeSer<'b, 'a> {
+    data: &'b DeleteFileInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DeleteFileInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteFileInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("filePath"), &self.data.file_path as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct InitiateFileTransferFromGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "guestFilePath")]
     guest_file_path: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InitiateFileTransferFromGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InitiateFileTransferFromGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InitiateFileTransferFromGuestRequestTypeSer<'b, 'a> {
+    data: &'b InitiateFileTransferFromGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InitiateFileTransferFromGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InitiateFileTransferFromGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("guestFilePath"), &self.data.guest_file_path as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct InitiateFileTransferToGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "guestFilePath")]
     guest_file_path: &'a str,
-    #[serde(rename = "fileAttributes")]
     file_attributes: &'a dyn crate::types::traits::GuestFileAttributesTrait,
-    #[serde(rename = "fileSize")]
     file_size: i64,
     overwrite: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InitiateFileTransferToGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InitiateFileTransferToGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InitiateFileTransferToGuestRequestTypeSer<'b, 'a> {
+    data: &'b InitiateFileTransferToGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InitiateFileTransferToGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InitiateFileTransferToGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("guestFilePath"), &self.data.guest_file_path as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("fileAttributes"), &self.data.file_attributes as &dyn miniserde::Serialize)),
+            5 => return Some((std::borrow::Cow::Borrowed("fileSize"), &self.data.file_size as &dyn miniserde::Serialize)),
+            6 => return Some((std::borrow::Cow::Borrowed("overwrite"), &self.data.overwrite as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ListFilesInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "filePath")]
     file_path: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     index: Option<i32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "maxResults")]
     max_results: Option<i32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "matchPattern")]
     match_pattern: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ListFilesInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListFilesInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListFilesInGuestRequestTypeSer<'b, 'a> {
+    data: &'b ListFilesInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ListFilesInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListFilesInGuestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("filePath"), &self.data.file_path as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.index else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("index"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.max_results else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("maxResults"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.match_pattern else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("matchPattern"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct MakeDirectoryInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "directoryPath")]
     directory_path: &'a str,
-    #[serde(rename = "createParentDirectories")]
     create_parent_directories: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for MakeDirectoryInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MakeDirectoryInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MakeDirectoryInGuestRequestTypeSer<'b, 'a> {
+    data: &'b MakeDirectoryInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for MakeDirectoryInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MakeDirectoryInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("directoryPath"), &self.data.directory_path as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("createParentDirectories"), &self.data.create_parent_directories as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct MoveDirectoryInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "srcDirectoryPath")]
     src_directory_path: &'a str,
-    #[serde(rename = "dstDirectoryPath")]
     dst_directory_path: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for MoveDirectoryInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MoveDirectoryInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MoveDirectoryInGuestRequestTypeSer<'b, 'a> {
+    data: &'b MoveDirectoryInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for MoveDirectoryInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MoveDirectoryInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("srcDirectoryPath"), &self.data.src_directory_path as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("dstDirectoryPath"), &self.data.dst_directory_path as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct MoveFileInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "srcFilePath")]
     src_file_path: &'a str,
-    #[serde(rename = "dstFilePath")]
     dst_file_path: &'a str,
     overwrite: bool,
+}
+
+impl<'a> miniserde::Serialize for MoveFileInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MoveFileInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MoveFileInGuestRequestTypeSer<'b, 'a> {
+    data: &'b MoveFileInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for MoveFileInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MoveFileInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("srcFilePath"), &self.data.src_file_path as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("dstFilePath"), &self.data.dst_file_path as &dyn miniserde::Serialize)),
+            5 => return Some((std::borrow::Cow::Borrowed("overwrite"), &self.data.overwrite as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

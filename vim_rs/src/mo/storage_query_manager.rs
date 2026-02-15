@@ -39,14 +39,37 @@ impl StorageQueryManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct QueryHostsWithAttachedLunRequestType<'a> {
-    #[serde(rename = "lunUuid")]
     lun_uuid: &'a str,
+}
+
+impl<'a> miniserde::Serialize for QueryHostsWithAttachedLunRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryHostsWithAttachedLunRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryHostsWithAttachedLunRequestTypeSer<'b, 'a> {
+    data: &'b QueryHostsWithAttachedLunRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryHostsWithAttachedLunRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryHostsWithAttachedLunRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("lunUuid"), &self.data.lun_uuid as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

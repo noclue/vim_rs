@@ -14,6 +14,9 @@ pub fn generate_enum_impls(
     vim_model: &Model,
     printer: &mut dyn Printer,
 ) -> Result<()> {
+    // Emit make_place! for the shared Place type used by Deserialize impls
+    printer.println("miniserde::make_place!(Place);")?;
+    printer.newline()?;
     for (_, vim_enum) in &vim_model.enums {
         generate_single_enum_impl(vim_enum, printer)?;
         printer.newline()?;
@@ -130,18 +133,11 @@ fn generate_enum_serialize(
     enum_name: &str,
     printer: &mut dyn Printer,
 ) -> Result<()> {
-    printer.println(&format!("impl serde::Serialize for {} {{", enum_name))?;
+    printer.println(&format!("impl miniserde::Serialize for {} {{", enum_name))?;
     printer.indent();
-    printer.println("fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>")?;
+    printer.println("fn begin(&self) -> miniserde::ser::Fragment<'_> {")?;
     printer.indent();
-    printer.println("where")?;
-    printer.indent();
-    printer.println("S: serde::Serializer,")?;
-    printer.dedent();
-    printer.dedent();
-    printer.println("{")?;
-    printer.indent();
-    printer.println("serializer.serialize_str(self.as_str())")?;
+    printer.println("miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))")?;
     printer.dedent();
     printer.println("}")?;
     printer.dedent();
@@ -155,12 +151,25 @@ fn generate_enum_deserialize(
     enum_name: &str,
     printer: &mut dyn Printer,
 ) -> Result<()> {
-    printer.println(&format!("impl<'de> serde::de::Deserialize<'de> for {} {{", enum_name))?;
+    // impl Deserialize
+    printer.println(&format!("impl miniserde::Deserialize for {} {{", enum_name))?;
     printer.indent();
-    printer.println("fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {")?;
+    printer.println("fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {")?;
     printer.indent();
-    printer.println("let s = String::deserialize(deserializer)?;")?;
-    printer.println(&format!("Ok({}::from_str(&s))", enum_name))?;
+    printer.println("Place::new(out)")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.newline()?;
+    
+    // impl Visitor for Place<EnumName>
+    printer.println(&format!("impl miniserde::de::Visitor for Place<{}> {{", enum_name))?;
+    printer.indent();
+    printer.println("fn string(&mut self, s: &str) -> miniserde::Result<()> {")?;
+    printer.indent();
+    printer.println(&format!("self.out = Some({}::from_str(s));", enum_name))?;
+    printer.println("Ok(())")?;
     printer.dedent();
     printer.println("}")?;
     printer.dedent();

@@ -47,7 +47,8 @@ impl HostSnmpSystem {
         let path = format!("/HostSnmpSystem/{moId}/configuration", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostSnmpConfigSpec = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostSnmpConfigSpec = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// ***Required privileges:*** Global.Settings
@@ -55,12 +56,34 @@ impl HostSnmpSystem {
         let path = format!("/HostSnmpSystem/{moId}/limits", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostSnmpSystemAgentLimits = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostSnmpSystemAgentLimits = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ReconfigureSnmpAgentRequestType<'a> {
     spec: &'a crate::types::structs::HostSnmpConfigSpec,
+}
+
+impl<'a> miniserde::Serialize for ReconfigureSnmpAgentRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReconfigureSnmpAgentRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReconfigureSnmpAgentRequestTypeSer<'b, 'a> {
+    data: &'b ReconfigureSnmpAgentRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ReconfigureSnmpAgentRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReconfigureSnmpAgentRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

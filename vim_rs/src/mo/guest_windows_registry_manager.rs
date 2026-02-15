@@ -282,7 +282,10 @@ impl GuestWindowsRegistryManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::GuestRegKeyRecordSpec>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestRegKeyRecordSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -360,7 +363,10 @@ impl GuestWindowsRegistryManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::GuestRegValueSpec>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestRegValueSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -427,65 +433,212 @@ impl GuestWindowsRegistryManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CreateRegistryKeyInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "keyName")]
     key_name: &'a crate::types::structs::GuestRegKeyNameSpec,
-    #[serde(rename = "isVolatile")]
     is_volatile: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "classType")]
     class_type: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateRegistryKeyInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateRegistryKeyInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateRegistryKeyInGuestRequestTypeSer<'b, 'a> {
+    data: &'b CreateRegistryKeyInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateRegistryKeyInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateRegistryKeyInGuestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("keyName"), &self.data.key_name as &dyn miniserde::Serialize)),
+                4 => return Some((std::borrow::Cow::Borrowed("isVolatile"), &self.data.is_volatile as &dyn miniserde::Serialize)),
+                5 => {
+                    let Some(ref val) = self.data.class_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("classType"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct DeleteRegistryKeyInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "keyName")]
     key_name: &'a crate::types::structs::GuestRegKeyNameSpec,
     recursive: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteRegistryKeyInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteRegistryKeyInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteRegistryKeyInGuestRequestTypeSer<'b, 'a> {
+    data: &'b DeleteRegistryKeyInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DeleteRegistryKeyInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteRegistryKeyInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("keyName"), &self.data.key_name as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("recursive"), &self.data.recursive as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DeleteRegistryValueInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "valueName")]
     value_name: &'a crate::types::structs::GuestRegValueNameSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteRegistryValueInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteRegistryValueInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteRegistryValueInGuestRequestTypeSer<'b, 'a> {
+    data: &'b DeleteRegistryValueInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DeleteRegistryValueInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteRegistryValueInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("valueName"), &self.data.value_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ListRegistryKeysInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "keyName")]
     key_name: &'a crate::types::structs::GuestRegKeyNameSpec,
     recursive: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "matchPattern")]
     match_pattern: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ListRegistryKeysInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListRegistryKeysInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListRegistryKeysInGuestRequestTypeSer<'b, 'a> {
+    data: &'b ListRegistryKeysInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ListRegistryKeysInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListRegistryKeysInGuestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("keyName"), &self.data.key_name as &dyn miniserde::Serialize)),
+                4 => return Some((std::borrow::Cow::Borrowed("recursive"), &self.data.recursive as &dyn miniserde::Serialize)),
+                5 => {
+                    let Some(ref val) = self.data.match_pattern else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("matchPattern"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ListRegistryValuesInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(rename = "keyName")]
     key_name: &'a crate::types::structs::GuestRegKeyNameSpec,
-    #[serde(rename = "expandStrings")]
     expand_strings: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "matchPattern")]
     match_pattern: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ListRegistryValuesInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListRegistryValuesInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListRegistryValuesInGuestRequestTypeSer<'b, 'a> {
+    data: &'b ListRegistryValuesInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ListRegistryValuesInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListRegistryValuesInGuestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("keyName"), &self.data.key_name as &dyn miniserde::Serialize)),
+                4 => return Some((std::borrow::Cow::Borrowed("expandStrings"), &self.data.expand_strings as &dyn miniserde::Serialize)),
+                5 => {
+                    let Some(ref val) = self.data.match_pattern else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("matchPattern"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct SetRegistryValueInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     value: &'a crate::types::structs::GuestRegValueSpec,
+}
+
+impl<'a> miniserde::Serialize for SetRegistryValueInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetRegistryValueInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetRegistryValueInGuestRequestTypeSer<'b, 'a> {
+    data: &'b SetRegistryValueInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SetRegistryValueInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetRegistryValueInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("value"), &self.data.value as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

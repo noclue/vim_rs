@@ -5,8 +5,8 @@
 //!
 //! The `Client::fetch_property()` method allows you to:
 //! - Fetch any property by name from any managed object
-//! - Deserialize the result into any type that implements `serde::Deserialize`
-//! - Use `serde_json::Value` for dynamic/untyped property access
+//! - Deserialize the result into any type that implements `miniserde::Deserialize`
+//! - Use `miniserde::json::Value` for dynamic/untyped property access
 //!
 //! This is useful when:
 //! - You need to access properties not commonly used
@@ -27,17 +27,19 @@ use utils::connect;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {
+    dotenvy::dotenv().ok();
     env_logger::init();
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
 
+    let permissions = client
+        .fetch_property::<miniserde::json::Value>(
+            client.service_content().root_folder.clone(),
+            "permission",
+        )
+        .await?;
     info!(
         "Root folder permissions: {}",
-        client
-            .fetch_property::<serde_json::Value>(
-                client.service_content().root_folder.clone(),
-                "permission"
-            )
-            .await?
+        miniserde::json::to_string(&permissions)
     );
 
     Ok(())

@@ -140,7 +140,8 @@ impl HostDatastoreBrowser {
         let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastore_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns the information for the files that match the given search criteria as a
@@ -181,7 +182,8 @@ impl HostDatastoreBrowser {
         let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastoreSubFolders_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Set of datastores that can be searched on this DatastoreBrowser.
@@ -201,7 +203,10 @@ impl HostDatastoreBrowser {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -224,32 +229,103 @@ impl HostDatastoreBrowser {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::FileQueryTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::FileQueryTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct DeleteFileRequestType<'a> {
-    #[serde(rename = "datastorePath")]
     datastore_path: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteFileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteFileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteFileRequestTypeSer<'b, 'a> {
+    data: &'b DeleteFileRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DeleteFileRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteFileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastorePath"), &self.data.datastore_path as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SearchDatastoreRequestType<'a> {
-    #[serde(rename = "datastorePath")]
     datastore_path: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "searchSpec")]
     search_spec: Option<&'a crate::types::structs::HostDatastoreBrowserSearchSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SearchDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SearchDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SearchDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b SearchDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SearchDatastoreRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SearchDatastoreRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("datastorePath"), &self.data.datastore_path as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.search_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("searchSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct SearchDatastoreSubFoldersRequestType<'a> {
-    #[serde(rename = "datastorePath")]
     datastore_path: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "searchSpec")]
     search_spec: Option<&'a crate::types::structs::HostDatastoreBrowserSearchSpec>,
+}
+
+impl<'a> miniserde::Serialize for SearchDatastoreSubFoldersRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SearchDatastoreSubFoldersRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SearchDatastoreSubFoldersRequestTypeSer<'b, 'a> {
+    data: &'b SearchDatastoreSubFoldersRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SearchDatastoreSubFoldersRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SearchDatastoreSubFoldersRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("datastorePath"), &self.data.datastore_path as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.search_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("searchSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

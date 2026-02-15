@@ -65,7 +65,7 @@ fn create_virtual_e1000() -> VirtualE1000 {
 }
 
 fn create_vapp_property_fault() -> MethodFault {
-    serde_json::from_str(JSON_VAPP_PROPERTY_FAULT).unwrap()
+    miniserde::json::from_str(JSON_VAPP_PROPERTY_FAULT).unwrap()
 }
 
 
@@ -75,7 +75,7 @@ fn bench_e1000_serialize(c: &mut Criterion) {
     
     c.bench_function("e1000_serialize", |b| {
         b.iter(|| {
-            let json = serde_json::to_string(black_box(&e1000)).unwrap();
+            let json = miniserde::json::to_string(black_box(&e1000));
             black_box(json);
         });
     });
@@ -87,7 +87,7 @@ fn bench_e1000_deserialize(c: &mut Criterion) {
     
     c.bench_function("e1000_deserialize", |b| {
         b.iter(|| {
-            let e1000: VirtualE1000 = serde_json::from_str(black_box(json)).unwrap();
+            let e1000: VirtualE1000 = miniserde::json::from_str(black_box(json)).unwrap();
             black_box(e1000);
         });
     });
@@ -99,7 +99,7 @@ fn bench_vapp_property_fault_serialize(c: &mut Criterion) {
     
     c.bench_function("vapp_property_fault_serialize", |b| {
         b.iter(|| {
-            let json = serde_json::to_string(black_box(&vapp_property_fault)).unwrap();
+            let json = miniserde::json::to_string(black_box(&vapp_property_fault));
             black_box(json);
         });
     });
@@ -109,7 +109,7 @@ fn bench_vapp_property_fault_serialize(c: &mut Criterion) {
 fn bench_vapp_property_fault_deserialize(c: &mut Criterion) {
     c.bench_function("vapp_property_fault_deserialize", |b| {
         b.iter(|| {
-            let vapp_property_fault: MethodFault = serde_json::from_str(black_box(JSON_VAPP_PROPERTY_FAULT)).unwrap();
+            let vapp_property_fault: MethodFault = miniserde::json::from_str(black_box(JSON_VAPP_PROPERTY_FAULT)).unwrap();
             black_box(vapp_property_fault);
         });
     });
@@ -122,7 +122,7 @@ fn bench_polymorphic_serialize(c: &mut Criterion) {
     
     c.bench_function("polymorphic_e1000_serialize", |b| {
         b.iter(|| {
-            let json = serde_json::to_string(black_box(trait_ref)).unwrap();
+            let json = miniserde::json::to_string(black_box(trait_ref));
             black_box(json);
         });
     });
@@ -134,7 +134,7 @@ fn bench_polymorphic_deserialize(c: &mut Criterion) {
     
     c.bench_function("polymorphic_e1000_deserialize", |b| {
         b.iter(|| {
-            let e1000: Box<dyn VirtualEthernetCardTrait> = serde_json::from_str(black_box(json)).unwrap();
+            let e1000: Box<dyn VirtualEthernetCardTrait> = miniserde::json::from_str(black_box(json)).unwrap();
             black_box(e1000);
         });
     });
@@ -148,8 +148,8 @@ fn bench_roundtrip(c: &mut Criterion) {
     group.bench_function("e1000", |b| {
         let e1000 = create_virtual_e1000();
         b.iter(|| {
-            let json = serde_json::to_string(black_box(&e1000)).unwrap();
-            let recovered: VirtualE1000 = serde_json::from_str(&json).unwrap();
+            let json = miniserde::json::to_string(black_box(&e1000));
+            let recovered: VirtualE1000 = miniserde::json::from_str(&json).unwrap();
             black_box(recovered);
         });
     });
@@ -158,8 +158,8 @@ fn bench_roundtrip(c: &mut Criterion) {
     group.bench_function("method_fault", |b| {
         let fault = create_vapp_property_fault();
         b.iter(|| {
-            let json = serde_json::to_string(black_box(&fault)).unwrap();
-            let recovered: MethodFault = serde_json::from_str(&json).unwrap();
+            let json = miniserde::json::to_string(black_box(&fault));
+            let recovered: MethodFault = miniserde::json::from_str(&json).unwrap();
             black_box(recovered);
         });
     });
@@ -169,8 +169,8 @@ fn bench_roundtrip(c: &mut Criterion) {
         let e1000 = create_virtual_e1000();
         b.iter(|| {
             let trait_ref: &dyn VirtualEthernetCardTrait = black_box(&e1000);
-            let json = serde_json::to_string(trait_ref).unwrap();
-            let recovered: Box<dyn VirtualEthernetCardTrait> = serde_json::from_str(&json).unwrap();
+            let json = miniserde::json::to_string(trait_ref);
+            let recovered: Box<dyn VirtualEthernetCardTrait> = miniserde::json::from_str(&json).unwrap();
             black_box(recovered);
         });
     });
@@ -188,7 +188,7 @@ fn bench_array_deserialize(c: &mut Criterion) {
     
     c.bench_function("array_of_virtual_ethernet_card_deserialize", |b| {
         b.iter(|| {
-            let value: ValueElements = serde_json::from_str(black_box(json)).unwrap();
+            let value: ValueElements = miniserde::json::from_str(black_box(json)).unwrap();
             black_box(value);
         });
     });

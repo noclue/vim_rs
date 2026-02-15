@@ -84,7 +84,8 @@ impl HostActiveDirectoryAuthentication {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/ImportCertificateForCAM_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
@@ -166,7 +167,8 @@ impl HostActiveDirectoryAuthentication {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomain_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Adds the host to an Active Directory domain through CAM service.
@@ -228,7 +230,8 @@ impl HostActiveDirectoryAuthentication {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomainWithCAM_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Removes the host from the Active Directory domain to which it belongs.
@@ -265,7 +268,8 @@ impl HostActiveDirectoryAuthentication {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/LeaveCurrentDomain_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
@@ -287,7 +291,10 @@ impl HostActiveDirectoryAuthentication {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -384,65 +391,259 @@ impl HostActiveDirectoryAuthentication {
         let path = format!("/HostActiveDirectoryAuthentication/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "ImportCertificateForCAMRequestType", tag = "_typeName")]
 struct ImportCertificateForCamRequestType<'a> {
-    #[serde(rename = "certPath")]
     cert_path: &'a str,
-    #[serde(rename = "camServer")]
     cam_server: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ImportCertificateForCamRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ImportCertificateForCamRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ImportCertificateForCamRequestTypeSer<'b, 'a> {
+    data: &'b ImportCertificateForCamRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ImportCertificateForCamRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ImportCertificateForCAMRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("certPath"), &self.data.cert_path as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("camServer"), &self.data.cam_server as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct InstallSmartCardTrustAnchorRequestType<'a> {
     cert: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InstallSmartCardTrustAnchorRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InstallSmartCardTrustAnchorRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InstallSmartCardTrustAnchorRequestTypeSer<'b, 'a> {
+    data: &'b InstallSmartCardTrustAnchorRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InstallSmartCardTrustAnchorRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InstallSmartCardTrustAnchorRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cert"), &self.data.cert as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct JoinDomainRequestType<'a> {
-    #[serde(rename = "domainName")]
     domain_name: &'a str,
-    #[serde(rename = "userName")]
     user_name: &'a str,
     password: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "JoinDomainWithCAMRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for JoinDomainRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(JoinDomainRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct JoinDomainRequestTypeSer<'b, 'a> {
+    data: &'b JoinDomainRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for JoinDomainRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"JoinDomainRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("domainName"), &self.data.domain_name as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("userName"), &self.data.user_name as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("password"), &self.data.password as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct JoinDomainWithCamRequestType<'a> {
-    #[serde(rename = "domainName")]
     domain_name: &'a str,
-    #[serde(rename = "camServer")]
     cam_server: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for JoinDomainWithCamRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(JoinDomainWithCamRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct JoinDomainWithCamRequestTypeSer<'b, 'a> {
+    data: &'b JoinDomainWithCamRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for JoinDomainWithCamRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"JoinDomainWithCAMRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("domainName"), &self.data.domain_name as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("camServer"), &self.data.cam_server as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct LeaveCurrentDomainRequestType {
     force: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for LeaveCurrentDomainRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(LeaveCurrentDomainRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct LeaveCurrentDomainRequestTypeSer<'b> {
+    data: &'b LeaveCurrentDomainRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for LeaveCurrentDomainRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"LeaveCurrentDomainRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("force"), &self.data.force as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveSmartCardTrustAnchorRequestType<'a> {
     issuer: &'a str,
     serial: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveSmartCardTrustAnchorRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveSmartCardTrustAnchorRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveSmartCardTrustAnchorRequestTypeSer<'b, 'a> {
+    data: &'b RemoveSmartCardTrustAnchorRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveSmartCardTrustAnchorRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveSmartCardTrustAnchorRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("issuer"), &self.data.issuer as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("serial"), &self.data.serial as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveSmartCardTrustAnchorByFingerprintRequestType<'a> {
     fingerprint: &'a str,
     digest: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveSmartCardTrustAnchorByFingerprintRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveSmartCardTrustAnchorByFingerprintRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveSmartCardTrustAnchorByFingerprintRequestTypeSer<'b, 'a> {
+    data: &'b RemoveSmartCardTrustAnchorByFingerprintRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveSmartCardTrustAnchorByFingerprintRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveSmartCardTrustAnchorByFingerprintRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("fingerprint"), &self.data.fingerprint as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("digest"), &self.data.digest as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveSmartCardTrustAnchorCertificateRequestType<'a> {
     certificate: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveSmartCardTrustAnchorCertificateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveSmartCardTrustAnchorCertificateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveSmartCardTrustAnchorCertificateRequestTypeSer<'b, 'a> {
+    data: &'b RemoveSmartCardTrustAnchorCertificateRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveSmartCardTrustAnchorCertificateRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveSmartCardTrustAnchorCertificateRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("certificate"), &self.data.certificate as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ReplaceSmartCardTrustAnchorsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     certs: Option<&'a [String]>,
+}
+
+impl<'a> miniserde::Serialize for ReplaceSmartCardTrustAnchorsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReplaceSmartCardTrustAnchorsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReplaceSmartCardTrustAnchorsRequestTypeSer<'b, 'a> {
+    data: &'b ReplaceSmartCardTrustAnchorsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ReplaceSmartCardTrustAnchorsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReplaceSmartCardTrustAnchorsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.certs else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("certs"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

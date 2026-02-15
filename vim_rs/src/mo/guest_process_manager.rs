@@ -77,7 +77,10 @@ impl GuestProcessManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::GuestProcessInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestProcessInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -148,7 +151,10 @@ impl GuestProcessManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -222,7 +228,8 @@ impl GuestProcessManager {
         let path = format!("/GuestProcessManager/{moId}/StartProgramInGuest", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Terminates a process in the guest OS.
@@ -281,33 +288,133 @@ impl GuestProcessManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ListProcessesInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pids: Option<&'a [i64]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ListProcessesInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListProcessesInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListProcessesInGuestRequestTypeSer<'b, 'a> {
+    data: &'b ListProcessesInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ListProcessesInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListProcessesInGuestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.pids else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("pids"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ReadEnvironmentVariableInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     names: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ReadEnvironmentVariableInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReadEnvironmentVariableInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReadEnvironmentVariableInGuestRequestTypeSer<'b, 'a> {
+    data: &'b ReadEnvironmentVariableInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ReadEnvironmentVariableInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReadEnvironmentVariableInGuestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.names else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("names"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct StartProgramInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     spec: &'a dyn crate::types::traits::GuestProgramSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for StartProgramInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(StartProgramInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct StartProgramInGuestRequestTypeSer<'b, 'a> {
+    data: &'b StartProgramInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for StartProgramInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"StartProgramInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct TerminateProcessInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     pid: i64,
+}
+
+impl<'a> miniserde::Serialize for TerminateProcessInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(TerminateProcessInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct TerminateProcessInGuestRequestTypeSer<'b, 'a> {
+    data: &'b TerminateProcessInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for TerminateProcessInGuestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"TerminateProcessInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("pid"), &self.data.pid as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

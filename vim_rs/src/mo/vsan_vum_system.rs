@@ -49,7 +49,8 @@ impl VsanVumSystem {
         let path = format!("/vsan/VsanVumSystem/{moId}/GetVsanVumConfig", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanVumSystemConfig = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanVumSystemConfig = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0.
@@ -86,7 +87,8 @@ impl VsanVumSystem {
         let path = format!("/vsan/VsanVumSystem/{moId}/VsanHostUpdateFirmware", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Upload a release DB in JSON format.
@@ -117,19 +119,83 @@ impl VsanVumSystem {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct FetchIsoDepotCookieRequestType<'a> {
     username: &'a str,
     password: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FetchIsoDepotCookieRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FetchIsoDepotCookieRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FetchIsoDepotCookieRequestTypeSer<'b, 'a> {
+    data: &'b FetchIsoDepotCookieRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for FetchIsoDepotCookieRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FetchIsoDepotCookieRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("username"), &self.data.username as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("password"), &self.data.password as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanHostUpdateFirmwareRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanHostUpdateFirmwareRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanHostUpdateFirmwareRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanHostUpdateFirmwareRequestTypeSer<'b, 'a> {
+    data: &'b VsanHostUpdateFirmwareRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanHostUpdateFirmwareRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanHostUpdateFirmwareRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVcUploadReleaseDbRequestType<'a> {
     db: &'a str,
+}
+
+impl<'a> miniserde::Serialize for VsanVcUploadReleaseDbRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVcUploadReleaseDbRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVcUploadReleaseDbRequestTypeSer<'b, 'a> {
+    data: &'b VsanVcUploadReleaseDbRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VsanVcUploadReleaseDbRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVcUploadReleaseDbRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("db"), &self.data.db as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

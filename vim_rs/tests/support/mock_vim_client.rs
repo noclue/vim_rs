@@ -164,17 +164,14 @@ impl MockVimClient {
             };
             
             if should_fail {
-                return Err(Error::SerdeError(serde_json::Error::io(std::io::Error::new(
-                    std::io::ErrorKind::Other,
-                    "Simulated CreateListView failure",
-                ))));
+                return Err(Error::ParseError("Simulated CreateListView failure".to_string()));
             }
             
             let mor = vim_rs::types::structs::ManagedObjectReference {
                 r#type: MoTypesEnum::ListView,
                 value: "listview-1".to_string(),
             };
-            return Ok(Bytes::from(serde_json::to_vec(&mor)?));
+            return Ok(Bytes::from(miniserde::json::to_string(&mor).into_bytes()));
         }
         if path.contains("/CreateFilter") && path.starts_with("/PropertyCollector/") {
             self.bump(|c| c.create_filter += 1);
@@ -182,12 +179,9 @@ impl MockVimClient {
                 r#type: MoTypesEnum::PropertyFilter,
                 value: "filter-1".to_string(),
             };
-            return Ok(Bytes::from(serde_json::to_vec(&mor)?));
+            return Ok(Bytes::from(miniserde::json::to_string(&mor).into_bytes()));
         }
-        Err(Error::SerdeError(serde_json::Error::io(std::io::Error::new(
-            std::io::ErrorKind::Other,
-            format!("MockVimClient: unhandled execute_bytes path: {path}"),
-        ))))
+        Err(Error::ParseError(format!("MockVimClient: unhandled execute_bytes path: {path}")))
     }
 
     async fn handle_option_bytes(&self, verb: HttpVerb, path: &str) -> Result<Option<Bytes>> {
@@ -215,10 +209,9 @@ impl MockVimClient {
                 Some(PcEvent::Bytes(b)) => return Ok(Some(b)),
                 Some(PcEvent::Err(e)) => return Err(e),
                 None => {
-                    return Err(Error::SerdeError(serde_json::Error::io(std::io::Error::new(
-                        std::io::ErrorKind::UnexpectedEof,
-                        "MockVimClient: WaitForUpdatesEx channel closed",
-                    ))))
+                    return Err(Error::ParseError(
+                        "MockVimClient: WaitForUpdatesEx channel closed".to_string(),
+                    ))
                 }
             }
         }
@@ -236,18 +229,11 @@ impl VimClient for MockVimClient {
         self.http.get(self.url_for(path))
     }
 
-    fn post_json(&self, path: &str, payload: &dyn erased_serde::Serialize) -> reqwest::RequestBuilder {
-        // Use the production erased-serde adapter to avoid a Value tree here too.
-        struct ErasedJson<'a>(&'a dyn erased_serde::Serialize);
-        impl serde::Serialize for ErasedJson<'_> {
-            fn serialize<S>(&self, serializer: S) -> std::result::Result<S::Ok, S::Error>
-            where
-                S: serde::Serializer,
-            {
-                erased_serde::serialize(self.0, serializer)
-            }
-        }
-        self.http.post(self.url_for(path)).json(&ErasedJson(payload))
+    fn post_json(&self, path: &str, payload: &dyn miniserde::Serialize) -> reqwest::RequestBuilder {
+        let json_body = miniserde::json::to_string(payload);
+        self.http.post(self.url_for(path))
+            .header("Content-Type", "application/json")
+            .body(json_body)
     }
 
     fn post_bare(&self, path: &str) -> reqwest::RequestBuilder {
@@ -278,5 +264,3 @@ impl VimClient for MockVimClient {
         })
     }
 }
-
-

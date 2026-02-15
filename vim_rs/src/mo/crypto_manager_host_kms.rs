@@ -57,7 +57,10 @@ impl CryptoManagerHostKms {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoKeyResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -86,7 +89,8 @@ impl CryptoManagerHostKms {
         let path = format!("/CryptoManagerHostKMS/{moId}/ChangeKey_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Disable encryption on host, if host was in crypto safe mode, put it in
@@ -150,7 +154,10 @@ impl CryptoManagerHostKms {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoManagerHostKeyStatus>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoManagerHostKeyStatus>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -177,7 +184,10 @@ impl CryptoManagerHostKms {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyId>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoKeyId>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -241,7 +251,10 @@ impl CryptoManagerHostKms {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoKeyResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -250,55 +263,240 @@ impl CryptoManagerHostKms {
         let path = format!("/CryptoManagerHostKMS/{moId}/enabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AddKeyRequestType<'a> {
     key: &'a crate::types::structs::CryptoKeyPlain,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddKeyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddKeyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddKeyRequestTypeSer<'b, 'a> {
+    data: &'b AddKeyRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddKeyRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddKeyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct AddKeysRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     keys: Option<&'a [crate::types::structs::CryptoKeyPlain]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddKeysRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddKeysRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddKeysRequestTypeSer<'b, 'a> {
+    data: &'b AddKeysRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddKeysRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddKeysRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.keys else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("keys"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ChangeKeyRequestType<'a> {
-    #[serde(rename = "newKey")]
     new_key: &'a crate::types::structs::CryptoKeyPlain,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ChangeKeyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ChangeKeyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ChangeKeyRequestTypeSer<'b, 'a> {
+    data: &'b ChangeKeyRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ChangeKeyRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ChangeKeyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("newKey"), &self.data.new_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CryptoManagerHostEnableRequestType<'a> {
-    #[serde(rename = "initialKey")]
     initial_key: &'a crate::types::structs::CryptoKeyPlain,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CryptoManagerHostEnableRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CryptoManagerHostEnableRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CryptoManagerHostEnableRequestTypeSer<'b, 'a> {
+    data: &'b CryptoManagerHostEnableRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CryptoManagerHostEnableRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CryptoManagerHostEnableRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("initialKey"), &self.data.initial_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct GetCryptoKeyStatusRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     keys: Option<&'a [crate::types::structs::CryptoKeyId]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GetCryptoKeyStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GetCryptoKeyStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GetCryptoKeyStatusRequestTypeSer<'b, 'a> {
+    data: &'b GetCryptoKeyStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for GetCryptoKeyStatusRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GetCryptoKeyStatusRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.keys else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("keys"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ListKeysRequestType {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     limit: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for ListKeysRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListKeysRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListKeysRequestTypeSer<'b> {
+    data: &'b ListKeysRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ListKeysRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListKeysRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.limit else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("limit"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveKeyRequestType<'a> {
     key: &'a crate::types::structs::CryptoKeyId,
     force: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveKeyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveKeyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveKeyRequestTypeSer<'b, 'a> {
+    data: &'b RemoveKeyRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveKeyRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveKeyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("force"), &self.data.force as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveKeysRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     keys: Option<&'a [crate::types::structs::CryptoKeyId]>,
     force: bool,
+}
+
+impl<'a> miniserde::Serialize for RemoveKeysRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveKeysRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveKeysRequestTypeSer<'b, 'a> {
+    data: &'b RemoveKeysRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveKeysRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveKeysRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.keys else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("keys"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("force"), &self.data.force as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
 }

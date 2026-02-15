@@ -145,7 +145,10 @@ impl HostAccessManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -169,7 +172,10 @@ impl HostAccessManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -189,7 +195,10 @@ impl HostAccessManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostAccessControlEntry>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostAccessControlEntry>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -260,33 +269,126 @@ impl HostAccessManager {
         let path = format!("/HostAccessManager/{moId}/lockdownMode", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::enums::HostLockdownModeEnum = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::enums::HostLockdownModeEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ChangeAccessModeRequestType<'a> {
     principal: &'a str,
-    #[serde(rename = "isGroup")]
     is_group: bool,
-    #[serde(rename = "accessMode")]
     access_mode: crate::types::enums::HostAccessModeEnum,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ChangeAccessModeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ChangeAccessModeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ChangeAccessModeRequestTypeSer<'b, 'a> {
+    data: &'b ChangeAccessModeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ChangeAccessModeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ChangeAccessModeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("principal"), &self.data.principal as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("isGroup"), &self.data.is_group as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("accessMode"), &self.data.access_mode as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ChangeLockdownModeRequestType {
     mode: crate::types::enums::HostLockdownModeEnum,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for ChangeLockdownModeRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ChangeLockdownModeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ChangeLockdownModeRequestTypeSer<'b> {
+    data: &'b ChangeLockdownModeRequestType,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ChangeLockdownModeRequestTypeSer<'_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ChangeLockdownModeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("mode"), &self.data.mode as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateLockdownExceptionsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     users: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateLockdownExceptionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateLockdownExceptionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateLockdownExceptionsRequestTypeSer<'b, 'a> {
+    data: &'b UpdateLockdownExceptionsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateLockdownExceptionsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateLockdownExceptionsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.users else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("users"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct UpdateSystemUsersRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     users: Option<&'a [String]>,
+}
+
+impl<'a> miniserde::Serialize for UpdateSystemUsersRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateSystemUsersRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateSystemUsersRequestTypeSer<'b, 'a> {
+    data: &'b UpdateSystemUsersRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateSystemUsersRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateSystemUsersRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.users else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("users"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

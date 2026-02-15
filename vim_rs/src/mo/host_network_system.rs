@@ -83,7 +83,8 @@ impl HostNetworkSystem {
         let path = format!("/HostNetworkSystem/{moId}/AddServiceConsoleVirtualNic", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Adds a virtual host/VMkernel network adapter.
@@ -131,7 +132,8 @@ impl HostNetworkSystem {
         let path = format!("/HostNetworkSystem/{moId}/AddVirtualNic", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Adds a new virtual switch to the system with the given name.
@@ -208,7 +210,10 @@ impl HostNetworkSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PhysicalNicHintInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PhysicalNicHintInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -603,7 +608,8 @@ impl HostNetworkSystem {
         let path = format!("/HostNetworkSystem/{moId}/UpdateNetworkConfig", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostNetworkConfigResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostNetworkConfigResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Configures link speed and duplexity.
@@ -819,7 +825,10 @@ impl HostNetworkSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -829,7 +838,10 @@ impl HostNetworkSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostNetCapabilities>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostNetCapabilities>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -844,7 +856,10 @@ impl HostNetworkSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -857,7 +872,10 @@ impl HostNetworkSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::HostDnsConfigTrait>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::HostDnsConfigTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -870,7 +888,10 @@ impl HostNetworkSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -886,7 +907,10 @@ impl HostNetworkSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostNetworkConfig>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostNetworkConfig>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -896,7 +920,10 @@ impl HostNetworkSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostNetworkInfo>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostNetworkInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -908,7 +935,10 @@ impl HostNetworkSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostNetOffloadCapabilities>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostNetOffloadCapabilities>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -924,142 +954,625 @@ impl HostNetworkSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AddPortGroupRequestType<'a> {
     portgrp: &'a crate::types::structs::HostPortGroupSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddPortGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddPortGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddPortGroupRequestTypeSer<'b, 'a> {
+    data: &'b AddPortGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddPortGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddPortGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("portgrp"), &self.data.portgrp as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct AddServiceConsoleVirtualNicRequestType<'a> {
     portgroup: &'a str,
     nic: &'a crate::types::structs::HostVirtualNicSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddServiceConsoleVirtualNicRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddServiceConsoleVirtualNicRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
+    data: &'b AddServiceConsoleVirtualNicRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddServiceConsoleVirtualNicRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddServiceConsoleVirtualNicRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("portgroup"), &self.data.portgroup as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("nic"), &self.data.nic as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct AddVirtualNicRequestType<'a> {
     portgroup: &'a str,
     nic: &'a crate::types::structs::HostVirtualNicSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddVirtualNicRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddVirtualNicRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddVirtualNicRequestTypeSer<'b, 'a> {
+    data: &'b AddVirtualNicRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddVirtualNicRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddVirtualNicRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("portgroup"), &self.data.portgroup as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("nic"), &self.data.nic as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct AddVirtualSwitchRequestType<'a> {
-    #[serde(rename = "vswitchName")]
     vswitch_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::HostVirtualSwitchSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddVirtualSwitchRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddVirtualSwitchRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddVirtualSwitchRequestTypeSer<'b, 'a> {
+    data: &'b AddVirtualSwitchRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AddVirtualSwitchRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddVirtualSwitchRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vswitchName"), &self.data.vswitch_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryNetworkHintRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     device: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryNetworkHintRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryNetworkHintRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryNetworkHintRequestTypeSer<'b, 'a> {
+    data: &'b QueryNetworkHintRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryNetworkHintRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryNetworkHintRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.device else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("device"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemovePortGroupRequestType<'a> {
-    #[serde(rename = "pgName")]
     pg_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemovePortGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemovePortGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemovePortGroupRequestTypeSer<'b, 'a> {
+    data: &'b RemovePortGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemovePortGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemovePortGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("pgName"), &self.data.pg_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveServiceConsoleVirtualNicRequestType<'a> {
     device: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveServiceConsoleVirtualNicRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveServiceConsoleVirtualNicRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
+    data: &'b RemoveServiceConsoleVirtualNicRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveServiceConsoleVirtualNicRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveServiceConsoleVirtualNicRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("device"), &self.data.device as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveVirtualNicRequestType<'a> {
     device: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveVirtualNicRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveVirtualNicRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveVirtualNicRequestTypeSer<'b, 'a> {
+    data: &'b RemoveVirtualNicRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveVirtualNicRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveVirtualNicRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("device"), &self.data.device as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveVirtualSwitchRequestType<'a> {
-    #[serde(rename = "vswitchName")]
     vswitch_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveVirtualSwitchRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveVirtualSwitchRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveVirtualSwitchRequestTypeSer<'b, 'a> {
+    data: &'b RemoveVirtualSwitchRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RemoveVirtualSwitchRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveVirtualSwitchRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vswitchName"), &self.data.vswitch_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RestartServiceConsoleVirtualNicRequestType<'a> {
     device: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "setCustomValueRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for RestartServiceConsoleVirtualNicRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RestartServiceConsoleVirtualNicRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RestartServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
+    data: &'b RestartServiceConsoleVirtualNicRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RestartServiceConsoleVirtualNicRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RestartServiceConsoleVirtualNicRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("device"), &self.data.device as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetCustomValueRequestType<'a> {
     key: &'a str,
     value: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "startDpuFailoverRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for SetCustomValueRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetCustomValueRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetCustomValueRequestTypeSer<'b, 'a> {
+    data: &'b SetCustomValueRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SetCustomValueRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"setCustomValueRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("value"), &self.data.value as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct StartDpuFailoverRequestType<'a> {
-    #[serde(rename = "dvsName")]
     dvs_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "targetDpuAlias")]
     target_dpu_alias: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for StartDpuFailoverRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(StartDpuFailoverRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct StartDpuFailoverRequestTypeSer<'b, 'a> {
+    data: &'b StartDpuFailoverRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for StartDpuFailoverRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"startDpuFailoverRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("dvsName"), &self.data.dvs_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.target_dpu_alias else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targetDpuAlias"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct UpdateConsoleIpRouteConfigRequestType<'a> {
     config: &'a dyn crate::types::traits::HostIpRouteConfigTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateConsoleIpRouteConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateConsoleIpRouteConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateConsoleIpRouteConfigRequestTypeSer<'b, 'a> {
+    data: &'b UpdateConsoleIpRouteConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateConsoleIpRouteConfigRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateConsoleIpRouteConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("config"), &self.data.config as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateDnsConfigRequestType<'a> {
     config: &'a dyn crate::types::traits::HostDnsConfigTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateDnsConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateDnsConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateDnsConfigRequestTypeSer<'b, 'a> {
+    data: &'b UpdateDnsConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateDnsConfigRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateDnsConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("config"), &self.data.config as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateIpRouteConfigRequestType<'a> {
     config: &'a dyn crate::types::traits::HostIpRouteConfigTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateIpRouteConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateIpRouteConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateIpRouteConfigRequestTypeSer<'b, 'a> {
+    data: &'b UpdateIpRouteConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateIpRouteConfigRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateIpRouteConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("config"), &self.data.config as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateIpRouteTableConfigRequestType<'a> {
     config: &'a crate::types::structs::HostIpRouteTableConfig,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateIpRouteTableConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateIpRouteTableConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateIpRouteTableConfigRequestTypeSer<'b, 'a> {
+    data: &'b UpdateIpRouteTableConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateIpRouteTableConfigRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateIpRouteTableConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("config"), &self.data.config as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateNetworkConfigRequestType<'a> {
     config: &'a crate::types::structs::HostNetworkConfig,
-    #[serde(rename = "changeMode")]
     change_mode: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateNetworkConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateNetworkConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateNetworkConfigRequestTypeSer<'b, 'a> {
+    data: &'b UpdateNetworkConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateNetworkConfigRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateNetworkConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("config"), &self.data.config as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("changeMode"), &self.data.change_mode as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdatePhysicalNicLinkSpeedRequestType<'a> {
     device: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "linkSpeed")]
     link_speed: Option<&'a crate::types::structs::PhysicalNicLinkInfo>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdatePhysicalNicLinkSpeedRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdatePhysicalNicLinkSpeedRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdatePhysicalNicLinkSpeedRequestTypeSer<'b, 'a> {
+    data: &'b UpdatePhysicalNicLinkSpeedRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdatePhysicalNicLinkSpeedRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdatePhysicalNicLinkSpeedRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("device"), &self.data.device as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.link_speed else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("linkSpeed"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct UpdatePortGroupRequestType<'a> {
-    #[serde(rename = "pgName")]
     pg_name: &'a str,
     portgrp: &'a crate::types::structs::HostPortGroupSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdatePortGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdatePortGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdatePortGroupRequestTypeSer<'b, 'a> {
+    data: &'b UpdatePortGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdatePortGroupRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdatePortGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("pgName"), &self.data.pg_name as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("portgrp"), &self.data.portgrp as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateServiceConsoleVirtualNicRequestType<'a> {
     device: &'a str,
     nic: &'a crate::types::structs::HostVirtualNicSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateServiceConsoleVirtualNicRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateServiceConsoleVirtualNicRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
+    data: &'b UpdateServiceConsoleVirtualNicRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateServiceConsoleVirtualNicRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateServiceConsoleVirtualNicRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("device"), &self.data.device as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("nic"), &self.data.nic as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateVirtualNicRequestType<'a> {
     device: &'a str,
     nic: &'a crate::types::structs::HostVirtualNicSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateVirtualNicRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateVirtualNicRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateVirtualNicRequestTypeSer<'b, 'a> {
+    data: &'b UpdateVirtualNicRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateVirtualNicRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateVirtualNicRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("device"), &self.data.device as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("nic"), &self.data.nic as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateVirtualSwitchRequestType<'a> {
-    #[serde(rename = "vswitchName")]
     vswitch_name: &'a str,
     spec: &'a crate::types::structs::HostVirtualSwitchSpec,
+}
+
+impl<'a> miniserde::Serialize for UpdateVirtualSwitchRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateVirtualSwitchRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateVirtualSwitchRequestTypeSer<'b, 'a> {
+    data: &'b UpdateVirtualSwitchRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpdateVirtualSwitchRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateVirtualSwitchRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vswitchName"), &self.data.vswitch_name as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

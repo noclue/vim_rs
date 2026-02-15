@@ -49,7 +49,8 @@ impl HostCertificateManager {
         let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequest", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Requests the server to generate a certificate-signing
@@ -82,7 +83,8 @@ impl HostCertificateManager {
         let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequestByDn", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Installs a given SSL certificate on the server.
@@ -123,7 +125,10 @@ impl HostCertificateManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -144,7 +149,10 @@ impl HostCertificateManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -240,7 +248,10 @@ impl HostCertificateManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostCertificateManagerCertificateInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostCertificateManagerCertificateInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -251,48 +262,190 @@ impl HostCertificateManager {
         let path = format!("/HostCertificateManager/{moId}/certificateInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostCertificateManagerCertificateInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostCertificateManagerCertificateInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct GenerateCertificateSigningRequestRequestType<'a> {
-    #[serde(rename = "useIpAddressAsCommonName")]
     use_ip_address_as_common_name: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::HostCertificateManagerCertificateSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GenerateCertificateSigningRequestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GenerateCertificateSigningRequestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GenerateCertificateSigningRequestRequestTypeSer<'b, 'a> {
+    data: &'b GenerateCertificateSigningRequestRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for GenerateCertificateSigningRequestRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GenerateCertificateSigningRequestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("useIpAddressAsCommonName"), &self.data.use_ip_address_as_common_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct GenerateCertificateSigningRequestByDnRequestType<'a> {
-    #[serde(rename = "distinguishedName")]
     distinguished_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::HostCertificateManagerCertificateSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GenerateCertificateSigningRequestByDnRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GenerateCertificateSigningRequestByDnRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GenerateCertificateSigningRequestByDnRequestTypeSer<'b, 'a> {
+    data: &'b GenerateCertificateSigningRequestByDnRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for GenerateCertificateSigningRequestByDnRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GenerateCertificateSigningRequestByDnRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("distinguishedName"), &self.data.distinguished_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct InstallServerCertificateRequestType<'a> {
     cert: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InstallServerCertificateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InstallServerCertificateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InstallServerCertificateRequestTypeSer<'b, 'a> {
+    data: &'b InstallServerCertificateRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for InstallServerCertificateRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InstallServerCertificateRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cert"), &self.data.cert as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct NotifyAffectedServicesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     services: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for NotifyAffectedServicesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(NotifyAffectedServicesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct NotifyAffectedServicesRequestTypeSer<'b, 'a> {
+    data: &'b NotifyAffectedServicesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for NotifyAffectedServicesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"NotifyAffectedServicesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.services else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("services"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ProvisionServerPrivateKeyRequestType<'a> {
     key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "ReplaceCACertificatesAndCRLsRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for ProvisionServerPrivateKeyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ProvisionServerPrivateKeyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ProvisionServerPrivateKeyRequestTypeSer<'b, 'a> {
+    data: &'b ProvisionServerPrivateKeyRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ProvisionServerPrivateKeyRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ProvisionServerPrivateKeyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ReplaceCaCertificatesAndCrLsRequestType<'a> {
-    #[serde(rename = "caCert")]
     ca_cert: &'a [String],
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "caCrl")]
     ca_crl: Option<&'a [String]>,
+}
+
+impl<'a> miniserde::Serialize for ReplaceCaCertificatesAndCrLsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReplaceCaCertificatesAndCrLsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReplaceCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
+    data: &'b ReplaceCaCertificatesAndCrLsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ReplaceCaCertificatesAndCrLsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReplaceCACertificatesAndCRLsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("caCert"), &self.data.ca_cert as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.ca_crl else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("caCrl"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

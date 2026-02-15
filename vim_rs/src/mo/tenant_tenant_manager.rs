@@ -71,7 +71,10 @@ impl TenantTenantManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -106,15 +109,65 @@ impl TenantTenantManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct MarkServiceProviderEntitiesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for MarkServiceProviderEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MarkServiceProviderEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MarkServiceProviderEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b MarkServiceProviderEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for MarkServiceProviderEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MarkServiceProviderEntitiesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.entity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entity"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct UnmarkServiceProviderEntitiesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
+}
+
+impl<'a> miniserde::Serialize for UnmarkServiceProviderEntitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnmarkServiceProviderEntitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnmarkServiceProviderEntitiesRequestTypeSer<'b, 'a> {
+    data: &'b UnmarkServiceProviderEntitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UnmarkServiceProviderEntitiesRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnmarkServiceProviderEntitiesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.entity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entity"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

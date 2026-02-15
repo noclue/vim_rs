@@ -171,6 +171,7 @@ async fn wait_for_task(client: Arc<Client>, task_ref: &ManagedObjectReference) -
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
     env_logger::init();
 
     // Connect to vCenter

@@ -59,9 +59,29 @@ impl VslmSessionManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VslmLoginByTokenRequestType<'a> {
-    #[serde(rename = "delegatedTokenXml")]
     delegated_token_xml: &'a str,
+}
+
+impl<'a> miniserde::Serialize for VslmLoginByTokenRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmLoginByTokenRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmLoginByTokenRequestTypeSer<'b, 'a> {
+    data: &'b VslmLoginByTokenRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for VslmLoginByTokenRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmLoginByTokenRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("delegatedTokenXml"), &self.data.delegated_token_xml as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

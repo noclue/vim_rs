@@ -191,20 +191,12 @@ fn emit_ser(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     let file = std::fs::File::create(types_folder.join("dyn_serialize.rs"))
         .expect("Could not create dyn_serialize.rs file");
     let mut printer = printer::FilePrinter::new(file, None, None);
-    rs_emitter::ser::generate_serialize_polymorphic_enum(vim_model, &mut printer)?;
+    rs_emitter::ser::generate_dyn_serialize(vim_model, &mut printer)?;
     Ok(())
 }
 
 fn emit_de(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     let mut printer = printer_for_file(types_folder.join("deserialize.rs"))?;
-    printer.println("use std::fmt;")?;
-    printer.println("use serde::Deserializer;")?;
-    printer.println("use serde::de;")?;
-    printer.println("use super::boxed_types::ValueElements;")?;
-    printer.println("use super::struct_enum;")?;
-    printer.println("use super::structs::*;")?;
-    printer.println("use super::vim_any::VimAny;")?;
-
     let mut gen = DeserializationGenerator::new(vim_model, &mut printer);
     gen.generate_deserialization()?;
     Ok(())
@@ -243,6 +235,8 @@ fn emit_mod_rs(types_folder: &std::path::Path) -> Result<()> {
     p.println("pub mod as_any;")?;
     p.println("pub mod convert;")?;
     p.println("pub mod vim_object_trait;")?;
+    p.println("pub mod mini_de_static;")?;
+    p.println("pub mod mini_helpers;")?;
     p.newline()?;
     Ok(())
 }

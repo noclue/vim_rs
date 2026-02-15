@@ -67,7 +67,10 @@ impl PbmPlacementSolver {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -112,7 +115,10 @@ impl PbmPlacementSolver {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -175,7 +181,10 @@ impl PbmPlacementSolver {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -220,7 +229,10 @@ impl PbmPlacementSolver {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementHub>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementHub>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -259,55 +271,184 @@ impl PbmPlacementSolver {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PbmPlacementHub>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementHub>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct PbmCheckCompatibilityRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "hubsToSearch")]
     hubs_to_search: Option<&'a [crate::types::structs::PbmPlacementHub]>,
     profile: &'a crate::types::structs::PbmProfileId,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmCheckCompatibilityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmCheckCompatibilityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmCheckCompatibilityRequestTypeSer<'b, 'a> {
+    data: &'b PbmCheckCompatibilityRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmCheckCompatibilityRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmCheckCompatibilityRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.hubs_to_search else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hubsToSearch"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("profile"), &self.data.profile as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmCheckCompatibilityWithSpecRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "hubsToSearch")]
     hubs_to_search: Option<&'a [crate::types::structs::PbmPlacementHub]>,
-    #[serde(rename = "profileSpec")]
     profile_spec: &'a crate::types::structs::PbmCapabilityProfileCreateSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmCheckCompatibilityWithSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmCheckCompatibilityWithSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmCheckCompatibilityWithSpecRequestTypeSer<'b, 'a> {
+    data: &'b PbmCheckCompatibilityWithSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmCheckCompatibilityWithSpecRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmCheckCompatibilityWithSpecRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.hubs_to_search else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hubsToSearch"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("profileSpec"), &self.data.profile_spec as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmCheckRequirementsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "hubsToSearch")]
     hubs_to_search: Option<&'a [crate::types::structs::PbmPlacementHub]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "placementSubjectRef")]
     placement_subject_ref: Option<&'a crate::types::structs::PbmServerObjectRef>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "placementSubjectRequirement")]
     placement_subject_requirement: Option<&'a [Box<dyn crate::types::traits::PbmPlacementRequirementTrait>]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmCheckRequirementsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmCheckRequirementsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmCheckRequirementsRequestTypeSer<'b, 'a> {
+    data: &'b PbmCheckRequirementsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmCheckRequirementsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmCheckRequirementsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.hubs_to_search else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hubsToSearch"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.placement_subject_ref else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("placementSubjectRef"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.placement_subject_requirement else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("placementSubjectRequirement"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmQueryMatchingHubRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "hubsToSearch")]
     hubs_to_search: Option<&'a [crate::types::structs::PbmPlacementHub]>,
     profile: &'a crate::types::structs::PbmProfileId,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PbmQueryMatchingHubRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryMatchingHubRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryMatchingHubRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryMatchingHubRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryMatchingHubRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryMatchingHubRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.hubs_to_search else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hubsToSearch"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("profile"), &self.data.profile as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct PbmQueryMatchingHubWithSpecRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "hubsToSearch")]
     hubs_to_search: Option<&'a [crate::types::structs::PbmPlacementHub]>,
-    #[serde(rename = "createSpec")]
     create_spec: &'a crate::types::structs::PbmCapabilityProfileCreateSpec,
+}
+
+impl<'a> miniserde::Serialize for PbmQueryMatchingHubWithSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PbmQueryMatchingHubWithSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PbmQueryMatchingHubWithSpecRequestTypeSer<'b, 'a> {
+    data: &'b PbmQueryMatchingHubWithSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for PbmQueryMatchingHubWithSpecRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PbmQueryMatchingHubWithSpecRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.hubs_to_search else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hubsToSearch"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("createSpec"), &self.data.create_spec as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
 }

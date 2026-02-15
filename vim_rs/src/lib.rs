@@ -99,7 +99,7 @@
 //! 
 //! Let's look at some details. First, we see that fields optional to the API use Rust `Option` (e.g., `Option<i32>`) while required fields require a valid value (e.g., `i32`). Next, we see that arrays of elements are expressed as Rust `Vec`. For fields that have children or can form a cycle, `Box` indirection is used. For fields of polymorphic types, i.e., those that have children, a `dyn *Trait` type is used, which refers to a trait type implemented by all alternative structures (`Option<Box<dyn DescriptionTrait>>`).
 //! 
-//! Structure types support `serde` JSON serialization and deserialization as well as debug print.
+//! Structure types support `miniserde` JSON serialization and deserialization as well as debug print.
 //! 
 //! ### Traits
 //! 
@@ -154,7 +154,7 @@
 //! The `MethodFault` and `Event` types do not have traits, and no descendant types are generated. Instead, both types receive 2 additional members:
 //! 
 //! * `type_: Option<StructType>` - holding the discriminator value, e.g., `EventEx`, `NotFound`, etc.
-//! * `extra_fields_: HashMap<String, serde_json::Value>` - holding any data fields that are not present in the base type, e.g., `eventTypeId`.
+//! * `extra_fields_: HashMap<String, miniserde::json::Value>` - holding any data fields that are not present in the base type, e.g., `eventTypeId`.
 //! 
 //! Note that `extra_fields_` content uses the API native names in camelCase convention instead of the Rust-friendly names used throughout `vim_rs`.
 //! 
@@ -166,7 +166,7 @@
 //!         return "Event".to_string();
 //!     };
 //!     if type_.child_of(StructType::EventEx) || type_.child_of(StructType::ExtendedEvent) {
-//!         if let Some(event_type_id) = event.extra_fields_["eventTypeId"].as_str() {
+//!         if let miniserde::json::Value::String(event_type_id) = &event.extra_fields_["eventTypeId"] {
 //!             return event_type_id.to_string();
 //!         }
 //!     }
@@ -182,8 +182,9 @@
 //! Sometimes one will want to convert part of the dynamic-like objects into proper binding. For example, the `managedObject` in the `ExtendedEvent` can be read into `ManagedObjectReference` as follows:
 //! 
 //! ```rust
+//! use vim_rs::types::mini_helpers::from_value;
 //! let value = event.extra_fields_["managedObject"].clone();
-//! let managed_object: ManagedObjectReference = serde_json::from_value(value)?;
+//! let managed_object: ManagedObjectReference = from_value(value)?;
 //! ```
 //!
 //! ## Property Retrieval with Macros

@@ -174,16 +174,28 @@ impl<'a> ManagedObjectEmitter<'a> {
                         .println("let bytes_opt = self.client.execute_option_bytes(req).await?;")?;
                     self.printer.println("match bytes_opt {")?;
                     self.printer.indent();
-                    self.printer
-                        .println(&format!("Some(bytes) => Ok(Some(serde_json::from_slice::<{}>(bytes.as_ref())?)),", res_type))?;
+                    self.printer.println("Some(bytes) => {")?;
+                    self.printer.indent();
+                    self.printer.println(
+                        "let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;"
+                    )?;
+                    self.printer.println(&format!(
+                        "Ok(Some(miniserde::json::from_str::<{res_type}>(text).map_err(|_| crate::core::client::VimError::ParseError(\"miniserde deserialization failed\".to_string()))?))"
+                    ))?;
+                    self.printer.dedent();
+                    self.printer.println("}")?;
                     self.printer.println("None => Ok(None),")?;
                     self.printer.dedent();
                     self.printer.println("}")?;
                 } else {
                     self.printer
                         .println("let bytes = self.client.execute_bytes(req).await?;")?;
-                    self.printer
-                        .println(&format!("let result: {} = serde_json::from_slice(bytes.as_ref())?;", res_type))?;
+                    self.printer.println(
+                        "let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;"
+                    )?;
+                    self.printer.println(&format!(
+                        "let result: {res_type} = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError(\"miniserde deserialization failed\".to_string()))?;"
+                    ))?;
                     self.printer.println("Ok(result)")?;
                 }
             }
@@ -272,38 +284,22 @@ impl<'a> ManagedObjectEmitter<'a> {
     }
 
     fn emit_request_type(&mut self, request_type: &RefCell<Struct>) -> Result<()> {
-        self.printer.println("#[derive(serde::Serialize)]")?;
         let struct_ref = request_type.borrow();
         let struct_name = struct_ref.rust_name();
         let discriminator = struct_ref
             .discriminator_value
             .clone()
             .unwrap_or(struct_ref.name.to_string());
-        if struct_name == discriminator {
-            self.printer.println(r#"#[serde(tag="_typeName")]"#)?;
-        } else {
-            self.printer.println(&format!(
-                r#"#[serde(rename = "{discriminator}", tag = "_typeName")]"#
-            ))?;
-        }
-        if self.needs_lifetime(request_type.borrow().borrow()) {
-            self.printer
-                .println(&format!("struct {}<'a> {{", struct_name))?;
-        } else {
-            self.printer
-                .println(&format!("struct {} {{", struct_name))?;
-        }
+        let has_lifetime = self.needs_lifetime(request_type.borrow().borrow());
+        let lt = if has_lifetime { "<'a>" } else { "" };
+        let ser_name = format!("{struct_name}Ser");
+
+        // Emit struct definition
+        self.printer
+            .println(&format!("struct {struct_name}{lt} {{"))?;
         self.printer.indent();
-        for (_, field) in &request_type.borrow().fields {
+        for (_, field) in &struct_ref.fields {
             let field_name = field.rust_name();
-            if field.optional {
-                self.printer
-                    .println("#[serde(default, skip_serializing_if = \"Option::is_none\")]")?;
-            }
-            if field_name != field.name {
-                self.printer
-                    .println(&format!(r#"#[serde(rename = "{}")]"#, field.name))?;
-            }
             self.printer.println(&format!(
                 "{}: {},",
                 field_name,
@@ -312,6 +308,108 @@ impl<'a> ManagedObjectEmitter<'a> {
         }
         self.printer.dedent();
         self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // Collect fields
+        let fields: Vec<_> = struct_ref
+            .fields
+            .iter()
+            .map(|(_, f)| (f.rust_name(), f.name.clone(), f.optional))
+            .collect();
+        let has_optional = fields.iter().any(|(_, _, opt)| *opt);
+
+        // Emit miniserde::Serialize impl
+        self.printer.println(&format!(
+            "impl{lt} miniserde::Serialize for {struct_name}{lt} {{"
+        ))?;
+        self.printer.indent();
+        self.printer
+            .println("fn begin(&self) -> miniserde::ser::Fragment<'_> {")?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "miniserde::ser::Fragment::Map(Box::new({ser_name} {{ data: self, seq: 0 }}))"
+        ))?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // Serializer struct
+        let ser_lt = if has_lifetime { "<'b, 'a>" } else { "<'b>" };
+        self.printer.println(&format!(
+            "struct {ser_name}{ser_lt} {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(&format!(
+            "data: &'b {struct_name}{lt},"
+        ))?;
+        self.printer.println("seq: usize,")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // Map impl
+        let map_impl_lt = if has_lifetime { "<'_, '_>" } else { "<'_>" };
+        self.printer.println(&format!(
+            "impl miniserde::ser::Map for {ser_name}{map_impl_lt} {{"
+        ))?;
+        self.printer.indent();
+        self.printer.println(
+            "fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {"
+        )?;
+        self.printer.indent();
+
+        if has_optional {
+            self.printer.println("loop {")?;
+            self.printer.indent();
+        }
+
+        self.printer.println("let seq = self.seq;")?;
+        self.printer.println("self.seq += 1;")?;
+        self.printer.println("match seq {")?;
+        self.printer.indent();
+
+        // seq 0: _typeName
+        self.printer.println(&format!(
+            "0 => return Some((std::borrow::Cow::Borrowed(\"_typeName\"), &\"{discriminator}\")),"
+        ))?;
+
+        // Remaining fields
+        for (i, (field_name, ser_name_str, optional)) in fields.iter().enumerate() {
+            let seq_num = i + 1;
+            if *optional {
+                self.printer.println(&format!("{seq_num} => {{"))?;
+                self.printer.indent();
+                self.printer.println(&format!(
+                    "let Some(ref val) = self.data.{field_name} else {{ continue; }};"
+                ))?;
+                self.printer.println(&format!(
+                    "return Some((std::borrow::Cow::Borrowed(\"{ser_name_str}\"), val as &dyn miniserde::Serialize));"
+                ))?;
+                self.printer.dedent();
+                self.printer.println("}")?;
+            } else {
+                self.printer.println(&format!(
+                    "{seq_num} => return Some((std::borrow::Cow::Borrowed(\"{ser_name_str}\"), &self.data.{field_name} as &dyn miniserde::Serialize)),"
+                ))?;
+            }
+        }
+
+        self.printer.println("_ => return None,")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+
+        if has_optional {
+            self.printer.dedent();
+            self.printer.println("}")?;
+        }
+
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+
         Ok(())
     }
 

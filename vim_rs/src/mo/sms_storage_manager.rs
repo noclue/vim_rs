@@ -50,7 +50,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageArray>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageArray>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -81,7 +84,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::StorageArray>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::StorageArray>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -115,7 +121,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::BackingStoragePool>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::BackingStoragePool>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -148,7 +157,8 @@ impl SmsStorageManager {
         let path = format!("/sms/SmsStorageManager/{moId}/QueryDatastoreBackingPoolMapping", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::DatastoreBackingPoolMapping> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::DatastoreBackingPoolMapping> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the capability for the given datastore.
@@ -180,7 +190,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::StorageCapability>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::StorageCapability>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -221,7 +234,8 @@ impl SmsStorageManager {
         let path = format!("/sms/SmsStorageManager/{moId}/QueryDrsMigrationCapabilityForPerformance", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of SMS API 5.0.
@@ -255,7 +269,8 @@ impl SmsStorageManager {
         let path = format!("/sms/SmsStorageManager/{moId}/QueryDrsMigrationCapabilityForPerformanceEx", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::DrsMigrationCapabilityResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::DrsMigrationCapabilityResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query for fault domains based on the query spec.
@@ -288,7 +303,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::FaultDomainIdTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::FaultDomainIdTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -319,7 +337,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageFileSystem>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageFileSystem>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -355,7 +376,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -386,7 +410,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageLun>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageLun>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -421,7 +448,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageLun>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageLun>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -458,7 +488,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -489,7 +522,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -523,7 +559,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::StoragePortTrait>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::StoragePortTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -558,7 +597,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -589,7 +631,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StorageProcessor>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageProcessor>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -613,7 +658,10 @@ impl SmsStorageManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -657,7 +705,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -688,7 +739,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::StorageContainerResult>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::StorageContainerResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -724,7 +778,10 @@ impl SmsStorageManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -754,7 +811,8 @@ impl SmsStorageManager {
         let path = format!("/sms/SmsStorageManager/{moId}/SmsRefreshCACertificatesAndCRLs_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Register the provider and issue a sync operation on it.
@@ -787,7 +845,8 @@ impl SmsStorageManager {
         let path = format!("/sms/SmsStorageManager/{moId}/RegisterProvider_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Unregister the provider.
@@ -818,7 +877,8 @@ impl SmsStorageManager {
         let path = format!("/sms/SmsStorageManager/{moId}/UnregisterProvider_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Upgrade VASA Provider registered to vCenter/SMS to maximum common version supported by both
@@ -844,169 +904,676 @@ impl SmsStorageManager {
         let path = format!("/sms/SmsStorageManager/{moId}/UpgradeVASAProvider_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct QueryArrayRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "providerId")]
     provider_id: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryArrayRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryArrayRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryArrayRequestTypeSer<'b, 'a> {
+    data: &'b QueryArrayRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryArrayRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryArrayRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.provider_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("providerId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryArrayAssociatedWithLunRequestType<'a> {
-    #[serde(rename = "canonicalName")]
     canonical_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryArrayAssociatedWithLunRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryArrayAssociatedWithLunRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryArrayAssociatedWithLunRequestTypeSer<'b, 'a> {
+    data: &'b QueryArrayAssociatedWithLunRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryArrayAssociatedWithLunRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryArrayAssociatedWithLunRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("canonicalName"), &self.data.canonical_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryAssociatedBackingStoragePoolRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "entityId")]
     entity_id: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "entityType")]
     entity_type: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryAssociatedBackingStoragePoolRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryAssociatedBackingStoragePoolRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryAssociatedBackingStoragePoolRequestTypeSer<'b, 'a> {
+    data: &'b QueryAssociatedBackingStoragePoolRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryAssociatedBackingStoragePoolRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryAssociatedBackingStoragePoolRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.entity_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entityId"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.entity_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entityType"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryDatastoreBackingPoolMappingRequestType<'a> {
     datastore: &'a [crate::types::structs::ManagedObjectReference],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDatastoreBackingPoolMappingRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDatastoreBackingPoolMappingRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDatastoreBackingPoolMappingRequestTypeSer<'b, 'a> {
+    data: &'b QueryDatastoreBackingPoolMappingRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryDatastoreBackingPoolMappingRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDatastoreBackingPoolMappingRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryDatastoreCapabilityRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDatastoreCapabilityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDatastoreCapabilityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDatastoreCapabilityRequestTypeSer<'b, 'a> {
+    data: &'b QueryDatastoreCapabilityRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryDatastoreCapabilityRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDatastoreCapabilityRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryDrsMigrationCapabilityForPerformanceRequestType<'a> {
-    #[serde(rename = "srcDatastore")]
     src_datastore: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "dstDatastore")]
     dst_datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDrsMigrationCapabilityForPerformanceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDrsMigrationCapabilityForPerformanceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDrsMigrationCapabilityForPerformanceRequestTypeSer<'b, 'a> {
+    data: &'b QueryDrsMigrationCapabilityForPerformanceRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryDrsMigrationCapabilityForPerformanceRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDrsMigrationCapabilityForPerformanceRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("srcDatastore"), &self.data.src_datastore as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("dstDatastore"), &self.data.dst_datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryDrsMigrationCapabilityForPerformanceExRequestType<'a> {
     datastore: &'a [crate::types::structs::ManagedObjectReference],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDrsMigrationCapabilityForPerformanceExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDrsMigrationCapabilityForPerformanceExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDrsMigrationCapabilityForPerformanceExRequestTypeSer<'b, 'a> {
+    data: &'b QueryDrsMigrationCapabilityForPerformanceExRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryDrsMigrationCapabilityForPerformanceExRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDrsMigrationCapabilityForPerformanceExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryFaultDomainRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     filter: Option<&'a crate::types::structs::FaultDomainFilter>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryFaultDomainRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryFaultDomainRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryFaultDomainRequestTypeSer<'b, 'a> {
+    data: &'b QueryFaultDomainRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryFaultDomainRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryFaultDomainRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.filter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("filter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryFileSystemAssociatedWithArrayRequestType<'a> {
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryFileSystemAssociatedWithArrayRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryFileSystemAssociatedWithArrayRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryFileSystemAssociatedWithArrayRequestTypeSer<'b, 'a> {
+    data: &'b QueryFileSystemAssociatedWithArrayRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryFileSystemAssociatedWithArrayRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryFileSystemAssociatedWithArrayRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryHostAssociatedWithLunRequestType<'a> {
-    #[serde(rename = "scsi3Id")]
     scsi_3_id: &'a str,
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryHostAssociatedWithLunRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryHostAssociatedWithLunRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryHostAssociatedWithLunRequestTypeSer<'b, 'a> {
+    data: &'b QueryHostAssociatedWithLunRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryHostAssociatedWithLunRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryHostAssociatedWithLunRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("scsi3Id"), &self.data.scsi_3_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryLunAssociatedWithArrayRequestType<'a> {
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryLunAssociatedWithArrayRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryLunAssociatedWithArrayRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryLunAssociatedWithArrayRequestTypeSer<'b, 'a> {
+    data: &'b QueryLunAssociatedWithArrayRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryLunAssociatedWithArrayRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryLunAssociatedWithArrayRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryLunAssociatedWithPortRequestType<'a> {
-    #[serde(rename = "portId")]
     port_id: &'a str,
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryLunAssociatedWithPortRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryLunAssociatedWithPortRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryLunAssociatedWithPortRequestTypeSer<'b, 'a> {
+    data: &'b QueryLunAssociatedWithPortRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryLunAssociatedWithPortRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryLunAssociatedWithPortRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("portId"), &self.data.port_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryNfsDatastoreAssociatedWithFileSystemRequestType<'a> {
-    #[serde(rename = "fileSystemId")]
     file_system_id: &'a str,
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryNfsDatastoreAssociatedWithFileSystemRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryNfsDatastoreAssociatedWithFileSystemRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryNfsDatastoreAssociatedWithFileSystemRequestTypeSer<'b, 'a> {
+    data: &'b QueryNfsDatastoreAssociatedWithFileSystemRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryNfsDatastoreAssociatedWithFileSystemRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryNfsDatastoreAssociatedWithFileSystemRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("fileSystemId"), &self.data.file_system_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPortAssociatedWithArrayRequestType<'a> {
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPortAssociatedWithArrayRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPortAssociatedWithArrayRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPortAssociatedWithArrayRequestTypeSer<'b, 'a> {
+    data: &'b QueryPortAssociatedWithArrayRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryPortAssociatedWithArrayRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPortAssociatedWithArrayRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPortAssociatedWithLunRequestType<'a> {
-    #[serde(rename = "scsi3Id")]
     scsi_3_id: &'a str,
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPortAssociatedWithLunRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPortAssociatedWithLunRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPortAssociatedWithLunRequestTypeSer<'b, 'a> {
+    data: &'b QueryPortAssociatedWithLunRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryPortAssociatedWithLunRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPortAssociatedWithLunRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("scsi3Id"), &self.data.scsi_3_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPortAssociatedWithProcessorRequestType<'a> {
-    #[serde(rename = "processorId")]
     processor_id: &'a str,
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPortAssociatedWithProcessorRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPortAssociatedWithProcessorRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPortAssociatedWithProcessorRequestTypeSer<'b, 'a> {
+    data: &'b QueryPortAssociatedWithProcessorRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryPortAssociatedWithProcessorRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPortAssociatedWithProcessorRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("processorId"), &self.data.processor_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryProcessorAssociatedWithArrayRequestType<'a> {
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryProcessorAssociatedWithArrayRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryProcessorAssociatedWithArrayRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryProcessorAssociatedWithArrayRequestTypeSer<'b, 'a> {
+    data: &'b QueryProcessorAssociatedWithArrayRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryProcessorAssociatedWithArrayRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryProcessorAssociatedWithArrayRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryReplicationGroupInfoRequestType<'a> {
-    #[serde(rename = "rgFilter")]
     rg_filter: &'a crate::types::structs::ReplicationGroupFilter,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryReplicationGroupInfoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryReplicationGroupInfoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryReplicationGroupInfoRequestTypeSer<'b, 'a> {
+    data: &'b QueryReplicationGroupInfoRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryReplicationGroupInfoRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryReplicationGroupInfoRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("rgFilter"), &self.data.rg_filter as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryStorageContainerRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "containerSpec")]
     container_spec: Option<&'a crate::types::structs::StorageContainerSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryStorageContainerRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryStorageContainerRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryStorageContainerRequestTypeSer<'b, 'a> {
+    data: &'b QueryStorageContainerRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryStorageContainerRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryStorageContainerRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.container_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("containerSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryVmfsDatastoreAssociatedWithLunRequestType<'a> {
-    #[serde(rename = "scsi3Id")]
     scsi_3_id: &'a str,
-    #[serde(rename = "arrayId")]
     array_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "SmsRefreshCACertificatesAndCRLsRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for QueryVmfsDatastoreAssociatedWithLunRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVmfsDatastoreAssociatedWithLunRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVmfsDatastoreAssociatedWithLunRequestTypeSer<'b, 'a> {
+    data: &'b QueryVmfsDatastoreAssociatedWithLunRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryVmfsDatastoreAssociatedWithLunRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVmfsDatastoreAssociatedWithLunRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("scsi3Id"), &self.data.scsi_3_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("arrayId"), &self.data.array_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SmsRefreshCaCertificatesAndCrLsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "providerId")]
     provider_id: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SmsRefreshCaCertificatesAndCrLsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SmsRefreshCaCertificatesAndCrLsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SmsRefreshCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
+    data: &'b SmsRefreshCaCertificatesAndCrLsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for SmsRefreshCaCertificatesAndCrLsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SmsRefreshCACertificatesAndCRLsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.provider_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("providerId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RegisterProviderRequestType<'a> {
-    #[serde(rename = "providerSpec")]
     provider_spec: &'a dyn crate::types::traits::SmsProviderSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RegisterProviderRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RegisterProviderRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RegisterProviderRequestTypeSer<'b, 'a> {
+    data: &'b RegisterProviderRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for RegisterProviderRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RegisterProviderRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("providerSpec"), &self.data.provider_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UnregisterProviderRequestType<'a> {
-    #[serde(rename = "providerId")]
     provider_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "UpgradeVASAProviderRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for UnregisterProviderRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnregisterProviderRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnregisterProviderRequestTypeSer<'b, 'a> {
+    data: &'b UnregisterProviderRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UnregisterProviderRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnregisterProviderRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("providerId"), &self.data.provider_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpgradeVasaProviderRequestType<'a> {
-    #[serde(rename = "upgradeSpec")]
     upgrade_spec: &'a crate::types::structs::VasaProviderUpgradeSpec,
+}
+
+impl<'a> miniserde::Serialize for UpgradeVasaProviderRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpgradeVasaProviderRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpgradeVasaProviderRequestTypeSer<'b, 'a> {
+    data: &'b UpgradeVasaProviderRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for UpgradeVasaProviderRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpgradeVASAProviderRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("upgradeSpec"), &self.data.upgrade_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

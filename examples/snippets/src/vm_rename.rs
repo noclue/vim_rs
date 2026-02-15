@@ -27,6 +27,7 @@ use vim_rs::core::tasks::TaskTracker;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
     env_logger::init();
 
     // Connect to vCenter

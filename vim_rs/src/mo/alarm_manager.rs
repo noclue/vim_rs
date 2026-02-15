@@ -96,7 +96,8 @@ impl AlarmManager {
         let path = format!("/AlarmManager/{moId}/CreateAlarm", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Disables alarm for a specific entity.
@@ -172,7 +173,10 @@ impl AlarmManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -191,7 +195,8 @@ impl AlarmManager {
         let path = format!("/AlarmManager/{moId}/AreAlarmActionsEnabled", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// The state of instantiated alarms on the entity.
@@ -214,7 +219,10 @@ impl AlarmManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AlarmState>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -246,7 +254,10 @@ impl AlarmManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::AlarmExpressionTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::AlarmExpressionTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -257,58 +268,257 @@ impl AlarmManager {
         let path = format!("/AlarmManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::AlarmDescription = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::AlarmDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AcknowledgeAlarmRequestType<'a> {
     alarm: &'a crate::types::structs::ManagedObjectReference,
     entity: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AcknowledgeAlarmRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AcknowledgeAlarmRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AcknowledgeAlarmRequestTypeSer<'b, 'a> {
+    data: &'b AcknowledgeAlarmRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AcknowledgeAlarmRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AcknowledgeAlarmRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("alarm"), &self.data.alarm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ClearTriggeredAlarmsRequestType<'a> {
     filter: &'a crate::types::structs::AlarmFilterSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ClearTriggeredAlarmsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ClearTriggeredAlarmsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ClearTriggeredAlarmsRequestTypeSer<'b, 'a> {
+    data: &'b ClearTriggeredAlarmsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ClearTriggeredAlarmsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ClearTriggeredAlarmsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filter"), &self.data.filter as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateAlarmRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a dyn crate::types::traits::AlarmSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateAlarmRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateAlarmRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateAlarmRequestTypeSer<'b, 'a> {
+    data: &'b CreateAlarmRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateAlarmRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateAlarmRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DisableAlarmRequestType<'a> {
     alarm: &'a crate::types::structs::ManagedObjectReference,
     entity: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DisableAlarmRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DisableAlarmRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DisableAlarmRequestTypeSer<'b, 'a> {
+    data: &'b DisableAlarmRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DisableAlarmRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DisableAlarmRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("alarm"), &self.data.alarm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct EnableAlarmRequestType<'a> {
     alarm: &'a crate::types::structs::ManagedObjectReference,
     entity: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for EnableAlarmRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(EnableAlarmRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct EnableAlarmRequestTypeSer<'b, 'a> {
+    data: &'b EnableAlarmRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for EnableAlarmRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"EnableAlarmRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("alarm"), &self.data.alarm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct GetAlarmRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entity: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GetAlarmRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GetAlarmRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GetAlarmRequestTypeSer<'b, 'a> {
+    data: &'b GetAlarmRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for GetAlarmRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GetAlarmRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.entity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entity"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct AreAlarmActionsEnabledRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AreAlarmActionsEnabledRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AreAlarmActionsEnabledRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AreAlarmActionsEnabledRequestTypeSer<'b, 'a> {
+    data: &'b AreAlarmActionsEnabledRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for AreAlarmActionsEnabledRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AreAlarmActionsEnabledRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct GetAlarmStateRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GetAlarmStateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GetAlarmStateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GetAlarmStateRequestTypeSer<'b, 'a> {
+    data: &'b GetAlarmStateRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for GetAlarmStateRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GetAlarmStateRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct EnableAlarmActionsRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
     enabled: bool,
+}
+
+impl<'a> miniserde::Serialize for EnableAlarmActionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(EnableAlarmActionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct EnableAlarmActionsRequestTypeSer<'b, 'a> {
+    data: &'b EnableAlarmActionsRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for EnableAlarmActionsRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"EnableAlarmActionsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("enabled"), &self.data.enabled as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

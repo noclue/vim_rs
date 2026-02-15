@@ -53,7 +53,8 @@ impl DatastoreNamespaceManager {
         let path = format!("/DatastoreNamespaceManager/{moId}/ConvertNamespacePathToUuidPath", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a top-level directory on the given datastore, using the given
@@ -111,7 +112,8 @@ impl DatastoreNamespaceManager {
         let path = format!("/DatastoreNamespaceManager/{moId}/CreateDirectory", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deletes the given top-level directory from a datastore.
@@ -256,52 +258,185 @@ impl DatastoreNamespaceManager {
         let path = format!("/DatastoreNamespaceManager/{moId}/QueryDirectoryInfo", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::DatastoreNamespaceManagerDirectoryInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::DatastoreNamespaceManagerDirectoryInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ConvertNamespacePathToUuidPathRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "namespaceUrl")]
     namespace_url: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ConvertNamespacePathToUuidPathRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ConvertNamespacePathToUuidPathRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ConvertNamespacePathToUuidPathRequestTypeSer<'b, 'a> {
+    data: &'b ConvertNamespacePathToUuidPathRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for ConvertNamespacePathToUuidPathRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ConvertNamespacePathToUuidPathRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("namespaceUrl"), &self.data.namespace_url as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateDirectoryRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "displayName")]
     display_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     policy: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     size: Option<i64>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateDirectoryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateDirectoryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateDirectoryRequestTypeSer<'b, 'a> {
+    data: &'b CreateDirectoryRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for CreateDirectoryRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateDirectoryRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.display_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("displayName"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.policy else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("policy"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.size else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("size"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct DeleteDirectoryRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "datastorePath")]
     datastore_path: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteDirectoryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteDirectoryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteDirectoryRequestTypeSer<'b, 'a> {
+    data: &'b DeleteDirectoryRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for DeleteDirectoryRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteDirectoryRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("datastorePath"), &self.data.datastore_path as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct IncreaseDirectorySizeRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "stableName")]
     stable_name: &'a str,
     size: i64,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for IncreaseDirectorySizeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(IncreaseDirectorySizeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct IncreaseDirectorySizeRequestTypeSer<'b, 'a> {
+    data: &'b IncreaseDirectorySizeRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for IncreaseDirectorySizeRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"IncreaseDirectorySizeRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("stableName"), &self.data.stable_name as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("size"), &self.data.size as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryDirectoryInfoRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "stableName")]
     stable_name: &'a str,
+}
+
+impl<'a> miniserde::Serialize for QueryDirectoryInfoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDirectoryInfoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDirectoryInfoRequestTypeSer<'b, 'a> {
+    data: &'b QueryDirectoryInfoRequestType<'a>,
+    seq: usize,
+}
+
+impl miniserde::ser::Map for QueryDirectoryInfoRequestTypeSer<'_, '_> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDirectoryInfoRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("stableName"), &self.data.stable_name as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
 }
