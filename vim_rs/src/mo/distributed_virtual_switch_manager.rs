@@ -509,7 +509,7 @@ struct QueryDvsCheckCompatibilityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDvsCheckCompatibilityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDvsCheckCompatibilityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -545,7 +545,7 @@ struct DvsManagerExportEntityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DvsManagerExportEntityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DvsManagerExportEntityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -572,7 +572,7 @@ struct DvsManagerImportEntityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DvsManagerImportEntityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DvsManagerImportEntityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -600,7 +600,7 @@ struct DvsManagerLookupDvPortGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DvsManagerLookupDvPortGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DvsManagerLookupDvPortGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -629,7 +629,7 @@ struct QueryCompatibleHostForExistingDvsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryCompatibleHostForExistingDvsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryCompatibleHostForExistingDvsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -659,7 +659,7 @@ struct QueryCompatibleHostForNewDvsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryCompatibleHostForNewDvsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryCompatibleHostForNewDvsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -692,7 +692,7 @@ struct QueryDvsCompatibleHostSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDvsCompatibleHostSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDvsCompatibleHostSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -724,7 +724,7 @@ struct QueryCompatibleVmnicsFromHostsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryCompatibleVmnicsFromHostsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryCompatibleVmnicsFromHostsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -757,7 +757,7 @@ struct QueryDvsConfigTargetRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDvsConfigTargetRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDvsConfigTargetRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -792,7 +792,7 @@ struct QueryDvsFeatureCapabilityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDvsFeatureCapabilityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDvsFeatureCapabilityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -823,7 +823,7 @@ struct QuerySupportedNetworkOffloadSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QuerySupportedNetworkOffloadSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QuerySupportedNetworkOffloadSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -849,7 +849,7 @@ struct QueryAvailableDvsSpecRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryAvailableDvsSpecRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for QueryAvailableDvsSpecRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -880,7 +880,7 @@ struct QueryDvsByUuidRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDvsByUuidRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDvsByUuidRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -906,7 +906,7 @@ struct RectifyDvsOnHostRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RectifyDvsOnHostRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RectifyDvsOnHostRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

@@ -122,7 +122,7 @@ struct RestoreFirmwareConfigurationRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RestoreFirmwareConfigurationRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for RestoreFirmwareConfigurationRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

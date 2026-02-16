@@ -205,7 +205,7 @@ struct AbortCustomizationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AbortCustomizationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AbortCustomizationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -235,7 +235,7 @@ struct CustomizeGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CustomizeGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CustomizeGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -270,7 +270,7 @@ struct StartGuestNetworkRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for StartGuestNetworkRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for StartGuestNetworkRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

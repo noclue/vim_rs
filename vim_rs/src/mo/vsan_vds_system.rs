@@ -315,7 +315,7 @@ struct VsanRollbackVdsToVssRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanRollbackVdsToVssRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanRollbackVdsToVssRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -347,7 +347,7 @@ struct VsanVdsGetMigrationPlanRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVdsGetMigrationPlanRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVdsGetMigrationPlanRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -406,7 +406,7 @@ struct VsanVdsMigrateVssRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVdsMigrateVssRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVdsMigrateVssRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -467,7 +467,7 @@ struct VsanVssMigrateVdsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVssMigrateVdsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVssMigrateVdsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

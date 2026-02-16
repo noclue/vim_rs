@@ -213,7 +213,7 @@ struct CheckCompatibilityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckCompatibilityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckCompatibilityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -256,7 +256,7 @@ struct CheckPowerOnRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckPowerOnRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckPowerOnRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -300,7 +300,7 @@ struct CheckVmConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckVmConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckVmConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

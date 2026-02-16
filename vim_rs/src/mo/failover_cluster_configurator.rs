@@ -278,7 +278,7 @@ struct ConfigureVchaRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ConfigureVchaRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ConfigureVchaRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -305,7 +305,7 @@ struct CreatePassiveNodeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreatePassiveNodeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreatePassiveNodeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -333,7 +333,7 @@ struct CreateWitnessNodeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateWitnessNodeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateWitnessNodeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -360,7 +360,7 @@ struct DeployVchaRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeployVchaRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeployVchaRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -386,7 +386,7 @@ struct PrepareVchaRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PrepareVchaRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PrepareVchaRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

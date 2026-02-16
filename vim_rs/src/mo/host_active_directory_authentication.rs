@@ -412,7 +412,7 @@ struct ImportCertificateForCamRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ImportCertificateForCamRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ImportCertificateForCamRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -439,7 +439,7 @@ struct InstallSmartCardTrustAnchorRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InstallSmartCardTrustAnchorRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InstallSmartCardTrustAnchorRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -467,7 +467,7 @@ struct JoinDomainRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for JoinDomainRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for JoinDomainRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -496,7 +496,7 @@ struct JoinDomainWithCamRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for JoinDomainWithCamRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for JoinDomainWithCamRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -523,7 +523,7 @@ struct LeaveCurrentDomainRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for LeaveCurrentDomainRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for LeaveCurrentDomainRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -550,7 +550,7 @@ struct RemoveSmartCardTrustAnchorRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveSmartCardTrustAnchorRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveSmartCardTrustAnchorRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -578,7 +578,7 @@ struct RemoveSmartCardTrustAnchorByFingerprintRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveSmartCardTrustAnchorByFingerprintRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveSmartCardTrustAnchorByFingerprintRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -605,7 +605,7 @@ struct RemoveSmartCardTrustAnchorCertificateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveSmartCardTrustAnchorCertificateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveSmartCardTrustAnchorCertificateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -631,7 +631,7 @@ struct ReplaceSmartCardTrustAnchorsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReplaceSmartCardTrustAnchorsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReplaceSmartCardTrustAnchorsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

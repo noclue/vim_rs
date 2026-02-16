@@ -580,7 +580,7 @@ struct VsanAddStoragePoolDiskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanAddStoragePoolDiskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanAddStoragePoolDiskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -612,7 +612,7 @@ struct VsanDeleteStoragePoolDiskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanDeleteStoragePoolDiskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanDeleteStoragePoolDiskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -639,7 +639,7 @@ struct InitializeDiskMappingsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InitializeDiskMappingsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InitializeDiskMappingsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -665,7 +665,7 @@ struct QueryClusterDataEfficiencyCapacityStateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryClusterDataEfficiencyCapacityStateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryClusterDataEfficiencyCapacityStateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -691,7 +691,7 @@ struct QueryDiskMappingsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDiskMappingsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDiskMappingsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -718,7 +718,7 @@ struct QueryVsanManagedDisksRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVsanManagedDisksRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVsanManagedDisksRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -752,7 +752,7 @@ struct RebuildDiskMappingRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RebuildDiskMappingRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RebuildDiskMappingRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -782,7 +782,7 @@ struct RemoveDiskExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveDiskExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveDiskExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -812,7 +812,7 @@ struct RemoveDiskMappingExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveDiskMappingExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveDiskMappingExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -840,7 +840,7 @@ struct RetrieveAllFlashCapabilitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveAllFlashCapabilitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveAllFlashCapabilitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -868,7 +868,7 @@ struct UnmountDiskMappingExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UnmountDiskMappingExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UnmountDiskMappingExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -897,7 +897,7 @@ struct VsanUnmountStoragePoolDisksRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanUnmountStoragePoolDisksRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanUnmountStoragePoolDisksRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

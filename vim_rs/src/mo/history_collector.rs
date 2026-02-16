@@ -121,7 +121,7 @@ struct SetCollectorPageSizeRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetCollectorPageSizeRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for SetCollectorPageSizeRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

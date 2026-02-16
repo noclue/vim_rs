@@ -77,7 +77,7 @@ struct VsanGetCapabilitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanGetCapabilitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanGetCapabilitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

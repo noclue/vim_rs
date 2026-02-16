@@ -266,7 +266,7 @@ struct QueryConfigOptionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryConfigOptionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryConfigOptionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -301,7 +301,7 @@ struct QueryConfigOptionExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryConfigOptionExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryConfigOptionExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -332,7 +332,7 @@ struct QueryConfigTargetRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryConfigTargetRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryConfigTargetRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -363,7 +363,7 @@ struct QueryTargetCapabilitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryTargetCapabilitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryTargetCapabilitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

@@ -312,7 +312,7 @@ struct CheckCloneRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckCloneRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckCloneRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -349,7 +349,7 @@ struct CheckInstantCloneRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckInstantCloneRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckInstantCloneRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -386,7 +386,7 @@ struct CheckMigrateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckMigrateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckMigrateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -432,7 +432,7 @@ struct CheckRelocateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckRelocateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckRelocateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -466,7 +466,7 @@ struct QueryVMotionCompatibilityExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVMotionCompatibilityExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVMotionCompatibilityExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

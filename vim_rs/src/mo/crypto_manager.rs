@@ -173,7 +173,7 @@ struct AddKeyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddKeyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddKeyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -199,7 +199,7 @@ struct AddKeysRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddKeysRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddKeysRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -230,7 +230,7 @@ struct ListKeysRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListKeysRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for ListKeysRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -262,7 +262,7 @@ struct RemoveKeyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveKeyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveKeyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -290,7 +290,7 @@ struct RemoveKeysRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveKeysRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveKeysRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

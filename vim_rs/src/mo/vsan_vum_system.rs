@@ -135,7 +135,7 @@ struct FetchIsoDepotCookieRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FetchIsoDepotCookieRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FetchIsoDepotCookieRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -162,7 +162,7 @@ struct VsanHostUpdateFirmwareRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHostUpdateFirmwareRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHostUpdateFirmwareRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -188,7 +188,7 @@ struct VsanVcUploadReleaseDbRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVcUploadReleaseDbRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVcUploadReleaseDbRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

@@ -295,7 +295,7 @@ struct PbmCheckCompatibilityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmCheckCompatibilityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmCheckCompatibilityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -328,7 +328,7 @@ struct PbmCheckCompatibilityWithSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmCheckCompatibilityWithSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmCheckCompatibilityWithSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -362,7 +362,7 @@ struct PbmCheckRequirementsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmCheckRequirementsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmCheckRequirementsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -402,7 +402,7 @@ struct PbmQueryMatchingHubRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryMatchingHubRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryMatchingHubRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -435,7 +435,7 @@ struct PbmQueryMatchingHubWithSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryMatchingHubWithSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryMatchingHubWithSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

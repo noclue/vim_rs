@@ -76,7 +76,7 @@ struct ReconfigureSnmpAgentRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReconfigureSnmpAgentRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReconfigureSnmpAgentRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

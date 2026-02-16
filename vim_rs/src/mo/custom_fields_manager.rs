@@ -155,7 +155,7 @@ struct AddCustomFieldDefRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddCustomFieldDefRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddCustomFieldDefRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -195,7 +195,7 @@ struct RemoveCustomFieldDefRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveCustomFieldDefRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for RemoveCustomFieldDefRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -222,7 +222,7 @@ struct RenameCustomFieldDefRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RenameCustomFieldDefRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RenameCustomFieldDefRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -251,7 +251,7 @@ struct SetFieldRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetFieldRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetFieldRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

@@ -334,7 +334,7 @@ struct FindExtensionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindExtensionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindExtensionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -360,7 +360,7 @@ struct QueryExtensionIpAllocationUsageRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryExtensionIpAllocationUsageRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryExtensionIpAllocationUsageRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -391,7 +391,7 @@ struct QueryManagedByRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryManagedByRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryManagedByRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -417,7 +417,7 @@ struct RegisterExtensionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RegisterExtensionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RegisterExtensionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -444,7 +444,7 @@ struct SetExtensionCertificateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetExtensionCertificateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetExtensionCertificateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -477,7 +477,7 @@ struct SetPublicKeyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetPublicKeyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetPublicKeyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -505,7 +505,7 @@ struct SetServiceAccountRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetServiceAccountRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetServiceAccountRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -532,7 +532,7 @@ struct UnregisterExtensionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UnregisterExtensionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UnregisterExtensionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -558,7 +558,7 @@ struct UpdateExtensionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateExtensionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateExtensionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

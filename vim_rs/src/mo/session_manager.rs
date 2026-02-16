@@ -750,7 +750,7 @@ struct AcquireGenericServiceTicketRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AcquireGenericServiceTicketRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AcquireGenericServiceTicketRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -776,7 +776,7 @@ struct AcquireLocalTicketRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AcquireLocalTicketRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AcquireLocalTicketRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -802,7 +802,7 @@ struct CloneSessionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CloneSessionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CloneSessionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -829,7 +829,7 @@ struct ImpersonateUserRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ImpersonateUserRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ImpersonateUserRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -863,7 +863,7 @@ struct LoginRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for LoginRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for LoginRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -897,7 +897,7 @@ struct LoginBySspiRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for LoginBySspiRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for LoginBySspiRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -929,7 +929,7 @@ struct LoginByTokenRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for LoginByTokenRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for LoginByTokenRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -962,7 +962,7 @@ struct LoginExtensionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for LoginExtensionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for LoginExtensionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -996,7 +996,7 @@ struct LoginExtensionByCertificateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for LoginExtensionByCertificateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for LoginExtensionByCertificateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1029,7 +1029,7 @@ struct LoginExtensionBySubjectNameRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for LoginExtensionBySubjectNameRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for LoginExtensionBySubjectNameRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1062,7 +1062,7 @@ struct SessionIsActiveRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SessionIsActiveRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SessionIsActiveRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1089,7 +1089,7 @@ struct SetLocaleRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetLocaleRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetLocaleRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1115,7 +1115,7 @@ struct TerminateSessionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for TerminateSessionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for TerminateSessionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1141,7 +1141,7 @@ struct UpdateServiceMessageRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateServiceMessageRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateServiceMessageRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

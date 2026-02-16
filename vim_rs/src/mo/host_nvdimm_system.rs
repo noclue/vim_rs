@@ -256,7 +256,7 @@ struct CreateNvdimmNamespaceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateNvdimmNamespaceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateNvdimmNamespaceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -282,7 +282,7 @@ struct CreateNvdimmPMemNamespaceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateNvdimmPMemNamespaceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateNvdimmPMemNamespaceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -308,7 +308,7 @@ struct DeleteNvdimmNamespaceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteNvdimmNamespaceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteNvdimmNamespaceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

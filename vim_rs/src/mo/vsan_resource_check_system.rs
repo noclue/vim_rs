@@ -187,7 +187,7 @@ struct VsanGetResourceCheckStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanGetResourceCheckStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanGetResourceCheckStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -223,7 +223,7 @@ struct VsanPerformResourceCheckRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanPerformResourceCheckRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanPerformResourceCheckRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -255,7 +255,7 @@ struct VsanHostPerformResourceCheckRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHostPerformResourceCheckRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHostPerformResourceCheckRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

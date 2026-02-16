@@ -266,7 +266,7 @@ struct ReadNextTasksByViewSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReadNextTasksByViewSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReadNextTasksByViewSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -299,7 +299,7 @@ struct CreateCollectorForTasksRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateCollectorForTasksRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateCollectorForTasksRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -326,7 +326,7 @@ struct CreateCollectorWithInfoFilterForTasksRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateCollectorWithInfoFilterForTasksRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateCollectorWithInfoFilterForTasksRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -363,7 +363,7 @@ struct CreateTaskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateTaskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateTaskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

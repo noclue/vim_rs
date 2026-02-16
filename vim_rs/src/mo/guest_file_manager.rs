@@ -821,7 +821,7 @@ struct ChangeFileAttributesInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ChangeFileAttributesInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ChangeFileAttributesInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -854,7 +854,7 @@ struct CreateTemporaryDirectoryInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateTemporaryDirectoryInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateTemporaryDirectoryInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -893,7 +893,7 @@ struct CreateTemporaryFileInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateTemporaryFileInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateTemporaryFileInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -931,7 +931,7 @@ struct DeleteDirectoryInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteDirectoryInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteDirectoryInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -962,7 +962,7 @@ struct DeleteFileInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteFileInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteFileInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -992,7 +992,7 @@ struct InitiateFileTransferFromGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InitiateFileTransferFromGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InitiateFileTransferFromGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1025,7 +1025,7 @@ struct InitiateFileTransferToGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InitiateFileTransferToGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InitiateFileTransferToGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1061,7 +1061,7 @@ struct ListFilesInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListFilesInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ListFilesInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1106,7 +1106,7 @@ struct MakeDirectoryInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MakeDirectoryInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for MakeDirectoryInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1138,7 +1138,7 @@ struct MoveDirectoryInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MoveDirectoryInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for MoveDirectoryInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1171,7 +1171,7 @@ struct MoveFileInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MoveFileInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for MoveFileInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

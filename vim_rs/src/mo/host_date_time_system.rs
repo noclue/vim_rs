@@ -159,7 +159,7 @@ struct UpdateDateTimeConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateDateTimeConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateDateTimeConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -185,7 +185,7 @@ struct UpdateDateTimeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateDateTimeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateDateTimeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

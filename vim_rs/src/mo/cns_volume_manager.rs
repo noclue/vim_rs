@@ -811,7 +811,7 @@ struct CnsAttachVolumeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsAttachVolumeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsAttachVolumeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -837,7 +837,7 @@ struct CnsConfigureVolumeAcLsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsConfigureVolumeAcLsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsConfigureVolumeAcLsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -863,7 +863,7 @@ struct CnsCreateVolumeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsCreateVolumeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsCreateVolumeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -889,7 +889,7 @@ struct CnsCreateSnapshotsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsCreateSnapshotsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsCreateSnapshotsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -916,7 +916,7 @@ struct CnsDeleteVolumeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsDeleteVolumeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsDeleteVolumeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -943,7 +943,7 @@ struct CnsDeleteSnapshotsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsDeleteSnapshotsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsDeleteSnapshotsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -969,7 +969,7 @@ struct CnsDetachVolumeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsDetachVolumeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsDetachVolumeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -995,7 +995,7 @@ struct CnsExtendVolumeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsExtendVolumeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsExtendVolumeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1022,7 +1022,7 @@ struct CnsQueryVolumeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsQueryVolumeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsQueryVolumeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1055,7 +1055,7 @@ struct CnsQueryAsyncRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsQueryAsyncRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsQueryAsyncRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1087,7 +1087,7 @@ struct CnsReconfigVolumePolicyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsReconfigVolumePolicyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsReconfigVolumePolicyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1118,7 +1118,7 @@ struct CnsRelocateVolumeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsRelocateVolumeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsRelocateVolumeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1144,7 +1144,7 @@ struct CnsUpdateVolumeMetadataRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CnsUpdateVolumeMetadataRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CnsUpdateVolumeMetadataRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

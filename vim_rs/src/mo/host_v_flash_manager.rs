@@ -175,7 +175,7 @@ struct HostConfigVFlashCacheRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HostConfigVFlashCacheRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HostConfigVFlashCacheRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -201,7 +201,7 @@ struct HostConfigureVFlashResourceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HostConfigureVFlashResourceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HostConfigureVFlashResourceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -227,7 +227,7 @@ struct ConfigureVFlashResourceExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ConfigureVFlashResourceExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ConfigureVFlashResourceExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -258,7 +258,7 @@ struct HostGetVFlashModuleDefaultConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HostGetVFlashModuleDefaultConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HostGetVFlashModuleDefaultConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

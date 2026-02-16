@@ -141,7 +141,7 @@ struct QueryOptionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryOptionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryOptionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -172,7 +172,7 @@ struct UpdateOptionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateOptionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateOptionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

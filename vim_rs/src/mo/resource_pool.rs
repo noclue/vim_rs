@@ -1331,7 +1331,7 @@ struct CreateResourcePoolRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateResourcePoolRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateResourcePoolRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1361,7 +1361,7 @@ struct CreateVAppRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateVAppRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateVAppRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1396,7 +1396,7 @@ struct CreateChildVmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateChildVmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateChildVmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1430,7 +1430,7 @@ struct ImportVAppRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ImportVAppRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ImportVAppRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1466,7 +1466,7 @@ struct MoveIntoResourcePoolRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MoveIntoResourcePoolRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for MoveIntoResourcePoolRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1494,7 +1494,7 @@ struct RegisterChildVmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RegisterChildVmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RegisterChildVmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1530,7 +1530,7 @@ struct RenameRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RenameRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RenameRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1557,7 +1557,7 @@ struct SetCustomValueRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetCustomValueRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetCustomValueRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1584,7 +1584,7 @@ struct UpdateChildResourceConfigurationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateChildResourceConfigurationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateChildResourceConfigurationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1611,7 +1611,7 @@ struct UpdateConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

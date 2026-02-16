@@ -154,7 +154,7 @@ struct ReconfigureServiceConsoleReservationRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReconfigureServiceConsoleReservationRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for ReconfigureServiceConsoleReservationRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -180,7 +180,7 @@ struct ReconfigureVirtualMachineReservationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReconfigureVirtualMachineReservationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReconfigureVirtualMachineReservationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -207,7 +207,7 @@ struct SetCustomValueRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetCustomValueRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetCustomValueRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

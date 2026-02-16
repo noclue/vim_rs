@@ -172,7 +172,7 @@ struct CheckComplianceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckComplianceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckComplianceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -208,7 +208,7 @@ struct ClearComplianceStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ClearComplianceStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ClearComplianceStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -244,7 +244,7 @@ struct QueryComplianceStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryComplianceStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryComplianceStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -280,7 +280,7 @@ struct QueryExpressionMetadataRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryExpressionMetadataRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryExpressionMetadataRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

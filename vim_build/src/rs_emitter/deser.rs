@@ -55,7 +55,7 @@ impl DeserializationGenerator<'_> {
     fn emit_imports(&mut self) -> Result<()> {
         self.printer.println("use super::mini_de_static::{")?;
         self.printer.indent();
-        self.printer.println("TypeInfo, DelegatingDeserializer, WrapValue, FieldsBuilder,")?;
+        self.printer.println("TypeInfo, DelegatingDeserializer, WrapValue,")?;
         self.printer.println("VimObjectHolder, VimObjectHolderBuilder, VimAnyBuilder,")?;
         self.printer.println("make_deser, from_val, polymorphic_array_cast,")?;
         self.printer.dedent();
@@ -65,7 +65,6 @@ impl DeserializationGenerator<'_> {
         self.printer.println("use super::boxed_types::ValueElements;")?;
         self.printer.println("use super::struct_enum::StructType;")?;
         self.printer.println("use super::structs::*;")?;
-        self.printer.println("use super::convert::CastFrom;")?;
         self.printer.newline()?;
         Ok(())
     }

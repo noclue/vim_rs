@@ -880,7 +880,7 @@ struct VsanVitAddIscsiInitiatorGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitAddIscsiInitiatorGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitAddIscsiInitiatorGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -909,7 +909,7 @@ struct VsanVitAddIscsiInitiatorsToGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitAddIscsiInitiatorsToGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitAddIscsiInitiatorsToGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -939,7 +939,7 @@ struct VsanVitAddIscsiInitiatorsToTargetRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitAddIscsiInitiatorsToTargetRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitAddIscsiInitiatorsToTargetRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -969,7 +969,7 @@ struct VsanVitAddIscsiLunRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitAddIscsiLunRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitAddIscsiLunRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -998,7 +998,7 @@ struct VsanVitAddIscsiTargetRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitAddIscsiTargetRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitAddIscsiTargetRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1027,7 +1027,7 @@ struct VsanVitAddIscsiTargetToGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitAddIscsiTargetToGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitAddIscsiTargetToGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1057,7 +1057,7 @@ struct VsanVitEditIscsiLunRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitEditIscsiLunRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitEditIscsiLunRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1086,7 +1086,7 @@ struct VsanVitEditIscsiTargetRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitEditIscsiTargetRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitEditIscsiTargetRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1113,7 +1113,7 @@ struct VsanVitGetHomeObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitGetHomeObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitGetHomeObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1140,7 +1140,7 @@ struct VsanVitGetIscsiInitiatorGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitGetIscsiInitiatorGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitGetIscsiInitiatorGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1167,7 +1167,7 @@ struct VsanVitGetIscsiInitiatorGroupsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitGetIscsiInitiatorGroupsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitGetIscsiInitiatorGroupsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1195,7 +1195,7 @@ struct VsanVitGetIscsiLunRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitGetIscsiLunRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitGetIscsiLunRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1224,7 +1224,7 @@ struct VsanVitGetIscsiLuNsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitGetIscsiLuNsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitGetIscsiLuNsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1257,7 +1257,7 @@ struct VsanVitGetIscsiTargetRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitGetIscsiTargetRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitGetIscsiTargetRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1284,7 +1284,7 @@ struct VsanVitGetIscsiTargetsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitGetIscsiTargetsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitGetIscsiTargetsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1310,7 +1310,7 @@ struct VsanRemediateIscsiLunsRuntimeStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanRemediateIscsiLunsRuntimeStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanRemediateIscsiLunsRuntimeStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1337,7 +1337,7 @@ struct VsanVitRemoveIscsiInitiatorGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitRemoveIscsiInitiatorGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitRemoveIscsiInitiatorGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1366,7 +1366,7 @@ struct VsanVitRemoveIscsiInitiatorsFromGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitRemoveIscsiInitiatorsFromGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitRemoveIscsiInitiatorsFromGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1396,7 +1396,7 @@ struct VsanVitRemoveIscsiInitiatorsFromTargetRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitRemoveIscsiInitiatorsFromTargetRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitRemoveIscsiInitiatorsFromTargetRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1426,7 +1426,7 @@ struct VsanVitRemoveIscsiLunRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitRemoveIscsiLunRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitRemoveIscsiLunRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1455,7 +1455,7 @@ struct VsanVitRemoveIscsiTargetRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitRemoveIscsiTargetRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitRemoveIscsiTargetRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1484,7 +1484,7 @@ struct VsanVitRemoveIscsiTargetFromGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVitRemoveIscsiTargetFromGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVitRemoveIscsiTargetFromGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

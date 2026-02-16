@@ -270,7 +270,7 @@ struct BindVnicRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for BindVnicRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for BindVnicRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -297,7 +297,7 @@ struct QueryBoundVnicsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryBoundVnicsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryBoundVnicsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -323,7 +323,7 @@ struct QueryCandidateNicsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryCandidateNicsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryCandidateNicsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -349,7 +349,7 @@ struct QueryMigrationDependenciesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryMigrationDependenciesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryMigrationDependenciesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -375,7 +375,7 @@ struct QueryPnicStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPnicStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPnicStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -401,7 +401,7 @@ struct QueryVnicStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVnicStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVnicStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -429,7 +429,7 @@ struct UnbindVnicRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UnbindVnicRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UnbindVnicRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

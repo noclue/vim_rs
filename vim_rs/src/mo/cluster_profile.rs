@@ -250,7 +250,7 @@ struct AssociateProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AssociateProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AssociateProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -276,7 +276,7 @@ struct CheckProfileComplianceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckProfileComplianceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckProfileComplianceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -307,7 +307,7 @@ struct DissociateProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DissociateProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DissociateProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -338,7 +338,7 @@ struct UpdateClusterProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateClusterProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateClusterProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

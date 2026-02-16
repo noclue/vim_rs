@@ -298,7 +298,7 @@ struct RemoveSnapshotRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveSnapshotRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for RemoveSnapshotRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -331,7 +331,7 @@ struct RenameSnapshotRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RenameSnapshotRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RenameSnapshotRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -367,7 +367,7 @@ struct RevertToSnapshotRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RevertToSnapshotRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RevertToSnapshotRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -403,7 +403,7 @@ struct SetCustomValueRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetCustomValueRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetCustomValueRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

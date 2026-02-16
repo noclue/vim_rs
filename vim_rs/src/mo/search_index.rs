@@ -414,7 +414,7 @@ struct FindAllByDnsNameRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindAllByDnsNameRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindAllByDnsNameRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -449,7 +449,7 @@ struct FindAllByIpRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindAllByIpRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindAllByIpRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -485,7 +485,7 @@ struct FindAllByUuidRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindAllByUuidRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindAllByUuidRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -523,7 +523,7 @@ struct FindByDatastorePathRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindByDatastorePathRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindByDatastorePathRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -552,7 +552,7 @@ struct FindByDnsNameRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindByDnsNameRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindByDnsNameRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -585,7 +585,7 @@ struct FindByInventoryPathRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindByInventoryPathRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindByInventoryPathRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -613,7 +613,7 @@ struct FindByIpRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindByIpRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindByIpRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -649,7 +649,7 @@ struct FindByUuidRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindByUuidRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindByUuidRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -687,7 +687,7 @@ struct FindChildRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindChildRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindChildRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

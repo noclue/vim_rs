@@ -821,7 +821,7 @@ struct IsKmsClusterActiveRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for IsKmsClusterActiveRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for IsKmsClusterActiveRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -852,7 +852,7 @@ struct AddKeyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddKeyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddKeyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -878,7 +878,7 @@ struct AddKeysRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddKeysRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddKeysRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -910,7 +910,7 @@ struct GenerateClientCsrRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GenerateClientCsrRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GenerateClientCsrRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -944,7 +944,7 @@ struct GenerateKeyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GenerateKeyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GenerateKeyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -984,7 +984,7 @@ struct GenerateSelfSignedClientCertRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GenerateSelfSignedClientCertRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GenerateSelfSignedClientCertRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1017,7 +1017,7 @@ struct GetDefaultKmsClusterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GetDefaultKmsClusterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GetDefaultKmsClusterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1052,7 +1052,7 @@ struct ListKeysRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListKeysRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for ListKeysRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1083,7 +1083,7 @@ struct ListKmipServersRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListKmipServersRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for ListKmipServersRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1116,7 +1116,7 @@ struct ListKmsClustersRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListKmsClustersRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for ListKmsClustersRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1155,7 +1155,7 @@ struct MarkDefaultRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MarkDefaultRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for MarkDefaultRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1182,7 +1182,7 @@ struct QueryCryptoKeyStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryCryptoKeyStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryCryptoKeyStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1214,7 +1214,7 @@ struct RegisterKmipServerRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RegisterKmipServerRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RegisterKmipServerRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1241,7 +1241,7 @@ struct RegisterKmsClusterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RegisterKmsClusterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RegisterKmsClusterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1274,7 +1274,7 @@ struct RemoveKeyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveKeyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveKeyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1302,7 +1302,7 @@ struct RemoveKeysRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveKeysRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveKeysRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1335,7 +1335,7 @@ struct RemoveKmipServerRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveKmipServerRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveKmipServerRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1362,7 +1362,7 @@ struct RetrieveClientCertRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveClientCertRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveClientCertRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1388,7 +1388,7 @@ struct RetrieveClientCsrRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveClientCsrRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveClientCsrRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1415,7 +1415,7 @@ struct RetrieveKmipServerCertRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveKmipServerCertRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveKmipServerCertRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1442,7 +1442,7 @@ struct RetrieveKmipServersStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveKmipServersStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveKmipServersStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1473,7 +1473,7 @@ struct RetrieveSelfSignedClientCertRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveSelfSignedClientCertRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveSelfSignedClientCertRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1500,7 +1500,7 @@ struct SetDefaultKmsClusterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetDefaultKmsClusterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetDefaultKmsClusterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1536,7 +1536,7 @@ struct SetKeyCustomAttributesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetKeyCustomAttributesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetKeyCustomAttributesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1563,7 +1563,7 @@ struct UnregisterKmsClusterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UnregisterKmsClusterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UnregisterKmsClusterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1589,7 +1589,7 @@ struct UpdateKmipServerRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateKmipServerRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateKmipServerRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1616,7 +1616,7 @@ struct UpdateKmsSignedCsrClientCertRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateKmsSignedCsrClientCertRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateKmsSignedCsrClientCertRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1644,7 +1644,7 @@ struct UpdateSelfSignedClientCertRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateSelfSignedClientCertRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateSelfSignedClientCertRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1673,7 +1673,7 @@ struct UploadClientCertRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UploadClientCertRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UploadClientCertRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1702,7 +1702,7 @@ struct UploadKmipServerCertRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UploadKmipServerCertRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UploadKmipServerCertRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

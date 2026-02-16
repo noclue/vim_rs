@@ -2,7 +2,6 @@ use super::vim_object_trait::VimObjectTrait;
 use super::convert::CastFrom;
 use super::struct_enum::StructType;
 use super::structs::*;
-use super::mini_de_static::{VimObjectHolder, VimObjectHolderBuilder};
 
 miniserde::make_place!(Place);
 

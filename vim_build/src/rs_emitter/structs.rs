@@ -302,6 +302,10 @@ impl<'a> TypesEmitter<'a> {
 
         let has_binary = fields.iter().any(|f| f.is_binary);
         let has_optional = fields.iter().any(|f| f.optional);
+        // Whether self.data is accessed in next() -- non-binary fields or pruned extra_fields_
+        let needs_data = fields.iter().any(|f| !f.is_binary) || is_pruned;
+        // Whether the serializer needs a constructor (data access or binary pre-computation)
+        let needs_constructor = needs_data || has_binary;
 
         // 1. impl miniserde::Serialize for StructName
         self.printer.println(&format!(
@@ -312,9 +316,15 @@ impl<'a> TypesEmitter<'a> {
             "fn begin(&self) -> Fragment<'_> {{"
         ))?;
         self.printer.indent();
-        self.printer.println(&format!(
-            "Fragment::Map(Box::new({ser_name}::new(self)))"
-        ))?;
+        if needs_constructor {
+            self.printer.println(&format!(
+                "Fragment::Map(Box::new({ser_name}::new(self)))"
+            ))?;
+        } else {
+            self.printer.println(&format!(
+                "Fragment::Map(Box::new({ser_name} {{ seq: 0 }}))"
+            ))?;
+        }
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
@@ -322,13 +332,20 @@ impl<'a> TypesEmitter<'a> {
         self.printer.newline()?;
 
         // 2. Serializer struct
-        self.printer.println(&format!(
-            "struct {ser_name}<'a> {{"
-        ))?;
-        self.printer.indent();
-        self.printer.println(&format!(
-            "data: &'a {struct_name},"
-        ))?;
+        if needs_data {
+            self.printer.println(&format!(
+                "struct {ser_name}<'a> {{"
+            ))?;
+            self.printer.indent();
+            self.printer.println(&format!(
+                "data: &'a {struct_name},"
+            ))?;
+        } else {
+            self.printer.println(&format!(
+                "struct {ser_name} {{"
+            ))?;
+            self.printer.indent();
+        }
         self.printer.println("seq: usize,")?;
         if is_pruned {
             self.printer.println("type_name: &'static str,")?;
@@ -356,67 +373,87 @@ impl<'a> TypesEmitter<'a> {
         self.printer.println("}")?;
         self.printer.newline()?;
 
-        // 3. Constructor
-        self.printer.println(&format!(
-            "impl<'a> {ser_name}<'a> {{"
-        ))?;
-        self.printer.indent();
-        self.printer.println(&format!(
-            "fn new(data: &'a {struct_name}) -> Self {{"
-        ))?;
-        self.printer.indent();
+        // 3. Constructor (needed when serializer holds data or has pre-computed fields)
+        if needs_constructor {
+            if needs_data {
+                self.printer.println(&format!(
+                    "impl<'a> {ser_name}<'a> {{"
+                ))?;
+                self.printer.indent();
+                self.printer.println(&format!(
+                    "fn new(data: &'a {struct_name}) -> Self {{"
+                ))?;
+            } else {
+                self.printer.println(&format!(
+                    "impl {ser_name} {{"
+                ))?;
+                self.printer.indent();
+                self.printer.println(&format!(
+                    "fn new(data: &{struct_name}) -> Self {{"
+                ))?;
+            }
+            self.printer.indent();
 
-        if is_pruned {
-            self.printer.println(&format!(
-                r#"let type_name: &'static str = data.type_.as_ref().map(|t| t.as_str()).unwrap_or("{discriminant}");"#
-            ))?;
-        }
+            if is_pruned {
+                self.printer.println(&format!(
+                    r#"let type_name: &'static str = data.type_.as_ref().map(|t| t.as_str()).unwrap_or("{discriminant}");"#
+                ))?;
+            }
 
-        // Pre-compute base64 for binary fields
-        if has_binary {
-            for (i, f) in fields.iter().enumerate() {
-                if f.is_binary {
-                    let access = &f.field_access;
-                    if f.optional {
-                        self.printer.println(&format!(
-                            "let b64_{i} = data.{access}.as_ref().map(|data| base64::display::Base64Display::new(data, &base64::engine::general_purpose::STANDARD).to_string());"
-                        ))?;
-                    } else {
-                        self.printer.println(&format!(
-                            "let b64_{i} = base64::display::Base64Display::new(&data.{access}, &base64::engine::general_purpose::STANDARD).to_string();"
-                        ))?;
+            // Pre-compute base64 for binary fields
+            if has_binary {
+                for (i, f) in fields.iter().enumerate() {
+                    if f.is_binary {
+                        let access = &f.field_access;
+                        if f.optional {
+                            self.printer.println(&format!(
+                                "let b64_{i} = data.{access}.as_ref().map(|data| base64::display::Base64Display::new(data, &base64::engine::general_purpose::STANDARD).to_string());"
+                            ))?;
+                        } else {
+                            self.printer.println(&format!(
+                                "let b64_{i} = base64::display::Base64Display::new(&data.{access}, &base64::engine::general_purpose::STANDARD).to_string();"
+                            ))?;
+                        }
                     }
                 }
             }
-        }
 
-        self.printer.println("Self {")?;
-        self.printer.indent();
-        self.printer.println("data,")?;
-        self.printer.println("seq: 0,")?;
-        if is_pruned {
-            self.printer.println("type_name,")?;
-            self.printer.println("extra_iter: None,")?;
-        }
-        if has_binary {
-            for (i, f) in fields.iter().enumerate() {
-                if f.is_binary {
-                    self.printer.println(&format!("b64_{i},"))?;
+            self.printer.println("Self {")?;
+            self.printer.indent();
+            if needs_data {
+                self.printer.println("data,")?;
+            }
+            self.printer.println("seq: 0,")?;
+            if is_pruned {
+                self.printer.println("type_name,")?;
+                self.printer.println("extra_iter: None,")?;
+            }
+            if has_binary {
+                for (i, f) in fields.iter().enumerate() {
+                    if f.is_binary {
+                        self.printer.println(&format!("b64_{i},"))?;
+                    }
                 }
             }
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.newline()?;
         }
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.newline()?;
 
         // 4. impl Map for Serializer
-        self.printer.println(&format!(
-            "impl<'a> miniserde::ser::Map for {ser_name}<'a> {{"
-        ))?;
+        if needs_data {
+            self.printer.println(&format!(
+                "impl<'a> miniserde::ser::Map for {ser_name}<'a> {{"
+            ))?;
+        } else {
+            self.printer.println(&format!(
+                "impl miniserde::ser::Map for {ser_name} {{"
+            ))?;
+        }
         self.printer.indent();
         self.printer.println(
             "fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {"

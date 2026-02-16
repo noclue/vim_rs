@@ -856,7 +856,7 @@ struct ApplyEntitiesConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ApplyEntitiesConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ApplyEntitiesConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -889,7 +889,7 @@ struct ApplyHostConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ApplyHostConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ApplyHostConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -922,7 +922,7 @@ struct CheckAnswerFileStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckAnswerFileStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckAnswerFileStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -953,7 +953,7 @@ struct CompositeHostProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CompositeHostProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CompositeHostProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1003,7 +1003,7 @@ struct CreateDefaultProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateDefaultProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateDefaultProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1039,7 +1039,7 @@ struct CreateProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1065,7 +1065,7 @@ struct ExportAnswerFileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ExportAnswerFileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ExportAnswerFileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1091,7 +1091,7 @@ struct FindAssociatedProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindAssociatedProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindAssociatedProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1118,7 +1118,7 @@ struct GenerateConfigTaskListRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GenerateConfigTaskListRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GenerateConfigTaskListRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1145,7 +1145,7 @@ struct GenerateHostConfigTaskSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GenerateHostConfigTaskSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GenerateHostConfigTaskSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1177,7 +1177,7 @@ struct GenerateHostProfileTaskListRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GenerateHostProfileTaskListRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GenerateHostProfileTaskListRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1204,7 +1204,7 @@ struct QueryAnswerFileStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryAnswerFileStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryAnswerFileStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1231,7 +1231,7 @@ struct QueryPolicyMetadataRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPolicyMetadataRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPolicyMetadataRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1267,7 +1267,7 @@ struct QueryHostProfileMetadataRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryHostProfileMetadataRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryHostProfileMetadataRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1302,7 +1302,7 @@ struct QueryProfileStructureRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryProfileStructureRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryProfileStructureRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1333,7 +1333,7 @@ struct RetrieveAnswerFileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveAnswerFileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveAnswerFileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1360,7 +1360,7 @@ struct RetrieveAnswerFileForProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveAnswerFileForProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveAnswerFileForProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1387,7 +1387,7 @@ struct RetrieveHostCustomizationsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveHostCustomizationsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveHostCustomizationsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1419,7 +1419,7 @@ struct RetrieveHostCustomizationsForProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveHostCustomizationsForProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveHostCustomizationsForProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1452,7 +1452,7 @@ struct UpdateAnswerFileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateAnswerFileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateAnswerFileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1485,7 +1485,7 @@ struct ValidateHostProfileCompositionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ValidateHostProfileCompositionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ValidateHostProfileCompositionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

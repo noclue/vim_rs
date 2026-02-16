@@ -186,7 +186,7 @@ struct PerformVsanUpgradeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PerformVsanUpgradeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PerformVsanUpgradeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -231,7 +231,7 @@ struct PerformVsanUpgradePreflightCheckRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PerformVsanUpgradePreflightCheckRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PerformVsanUpgradePreflightCheckRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -263,7 +263,7 @@ struct QueryVsanUpgradeStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVsanUpgradeStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVsanUpgradeStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

@@ -78,7 +78,7 @@ struct ConfigureHostCacheRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ConfigureHostCacheRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ConfigureHostCacheRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

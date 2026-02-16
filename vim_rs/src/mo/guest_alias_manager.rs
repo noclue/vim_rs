@@ -451,7 +451,7 @@ struct AddGuestAliasRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddGuestAliasRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddGuestAliasRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -484,7 +484,7 @@ struct ListGuestAliasesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListGuestAliasesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ListGuestAliasesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -513,7 +513,7 @@ struct ListGuestMappedAliasesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListGuestMappedAliasesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ListGuestMappedAliasesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -544,7 +544,7 @@ struct RemoveGuestAliasRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveGuestAliasRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveGuestAliasRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -577,7 +577,7 @@ struct RemoveGuestAliasByCertRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveGuestAliasByCertRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveGuestAliasByCertRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

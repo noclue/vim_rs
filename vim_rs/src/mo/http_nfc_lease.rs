@@ -321,7 +321,7 @@ struct HttpNfcLeaseAbortRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HttpNfcLeaseAbortRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HttpNfcLeaseAbortRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -353,7 +353,7 @@ struct HttpNfcLeaseProbeUrlsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HttpNfcLeaseProbeUrlsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HttpNfcLeaseProbeUrlsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -388,7 +388,7 @@ struct HttpNfcLeaseProgressRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HttpNfcLeaseProgressRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for HttpNfcLeaseProgressRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -414,7 +414,7 @@ struct HttpNfcLeasePullFromUrlsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HttpNfcLeasePullFromUrlsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HttpNfcLeasePullFromUrlsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -445,7 +445,7 @@ struct HttpNfcLeaseSetManifestChecksumTypeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HttpNfcLeaseSetManifestChecksumTypeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HttpNfcLeaseSetManifestChecksumTypeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

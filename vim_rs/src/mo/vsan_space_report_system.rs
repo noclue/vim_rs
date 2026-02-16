@@ -161,7 +161,7 @@ struct VsanQueryEntitySpaceUsageRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryEntitySpaceUsageRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryEntitySpaceUsageRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -190,7 +190,7 @@ struct VsanQuerySpaceUsageRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQuerySpaceUsageRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQuerySpaceUsageRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -227,7 +227,7 @@ struct QueryVsanManagedStorageSpaceUsageRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVsanManagedStorageSpaceUsageRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVsanManagedStorageSpaceUsageRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

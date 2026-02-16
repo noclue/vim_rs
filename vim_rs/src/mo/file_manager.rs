@@ -466,7 +466,7 @@ struct ChangeOwnerRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ChangeOwnerRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ChangeOwnerRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -503,7 +503,7 @@ struct CopyDatastoreFileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CopyDatastoreFileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CopyDatastoreFileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -545,7 +545,7 @@ struct DeleteDatastoreFileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteDatastoreFileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteDatastoreFileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -579,7 +579,7 @@ struct MakeDirectoryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MakeDirectoryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for MakeDirectoryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -619,7 +619,7 @@ struct MoveDatastoreFileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MoveDatastoreFileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for MoveDatastoreFileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -661,7 +661,7 @@ struct QueryFileLockInfoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryFileLockInfoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryFileLockInfoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

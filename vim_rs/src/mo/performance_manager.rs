@@ -605,7 +605,7 @@ struct CreatePerfIntervalRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreatePerfIntervalRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreatePerfIntervalRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -634,7 +634,7 @@ struct QueryAvailablePerfMetricRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryAvailablePerfMetricRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryAvailablePerfMetricRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -674,7 +674,7 @@ struct QueryPerfCompositeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPerfCompositeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPerfCompositeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -700,7 +700,7 @@ struct QueryPerfCounterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPerfCounterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPerfCounterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -726,7 +726,7 @@ struct QueryPerfCounterByLevelRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPerfCounterByLevelRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for QueryPerfCounterByLevelRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -752,7 +752,7 @@ struct QueryPerfProviderSummaryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPerfProviderSummaryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPerfProviderSummaryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -778,7 +778,7 @@ struct QueryPerfRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPerfRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPerfRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -804,7 +804,7 @@ struct RemovePerfIntervalRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemovePerfIntervalRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for RemovePerfIntervalRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -830,7 +830,7 @@ struct ResetCounterLevelMappingRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ResetCounterLevelMappingRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ResetCounterLevelMappingRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -856,7 +856,7 @@ struct UpdateCounterLevelMappingRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateCounterLevelMappingRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateCounterLevelMappingRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -882,7 +882,7 @@ struct UpdatePerfIntervalRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdatePerfIntervalRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdatePerfIntervalRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

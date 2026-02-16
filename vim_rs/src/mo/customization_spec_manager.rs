@@ -298,7 +298,7 @@ struct CheckCustomizationResourcesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckCustomizationResourcesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckCustomizationResourcesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -324,7 +324,7 @@ struct CreateCustomizationSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateCustomizationSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateCustomizationSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -350,7 +350,7 @@ struct DeleteCustomizationSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteCustomizationSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteCustomizationSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -377,7 +377,7 @@ struct DuplicateCustomizationSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DuplicateCustomizationSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DuplicateCustomizationSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -404,7 +404,7 @@ struct DoesCustomizationSpecExistRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DoesCustomizationSpecExistRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DoesCustomizationSpecExistRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -430,7 +430,7 @@ struct GetCustomizationSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GetCustomizationSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GetCustomizationSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -456,7 +456,7 @@ struct IsGuestOsCustomizableRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for IsGuestOsCustomizableRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for IsGuestOsCustomizableRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -482,7 +482,7 @@ struct OverwriteCustomizationSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for OverwriteCustomizationSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for OverwriteCustomizationSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -509,7 +509,7 @@ struct RenameCustomizationSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RenameCustomizationSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RenameCustomizationSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -536,7 +536,7 @@ struct CustomizationSpecItemToXmlRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CustomizationSpecItemToXmlRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CustomizationSpecItemToXmlRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -562,7 +562,7 @@ struct XmlToCustomizationSpecItemRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for XmlToCustomizationSpecItemRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for XmlToCustomizationSpecItemRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

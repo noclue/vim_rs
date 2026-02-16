@@ -162,7 +162,7 @@ struct CloseInventoryViewFolderRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CloseInventoryViewFolderRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CloseInventoryViewFolderRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -188,7 +188,7 @@ struct OpenInventoryViewFolderRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for OpenInventoryViewFolderRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for OpenInventoryViewFolderRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

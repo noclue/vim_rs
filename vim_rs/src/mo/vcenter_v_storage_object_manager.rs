@@ -1969,7 +1969,7 @@ struct RevertVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RevertVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RevertVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1999,7 +1999,7 @@ struct AttachTagToVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AttachTagToVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AttachTagToVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2029,7 +2029,7 @@ struct ClearVStorageObjectControlFlagsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ClearVStorageObjectControlFlagsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ClearVStorageObjectControlFlagsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2064,7 +2064,7 @@ struct CloneVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CloneVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CloneVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2092,7 +2092,7 @@ struct CreateDiskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateDiskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateDiskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2124,7 +2124,7 @@ struct CreateDiskFromSnapshotRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateDiskFromSnapshotRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateDiskFromSnapshotRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2169,7 +2169,7 @@ struct VStorageObjectCreateSnapshotRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VStorageObjectCreateSnapshotRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VStorageObjectCreateSnapshotRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2199,7 +2199,7 @@ struct VStorageObjectCreateSnapshotExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VStorageObjectCreateSnapshotExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VStorageObjectCreateSnapshotExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2229,7 +2229,7 @@ struct DeleteSnapshotRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteSnapshotRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteSnapshotRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2259,7 +2259,7 @@ struct VStorageObjectDeleteSnapshotExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VStorageObjectDeleteSnapshotExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VStorageObjectDeleteSnapshotExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2289,7 +2289,7 @@ struct VStorageObjectDeleteSnapshotEx2RequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VStorageObjectDeleteSnapshotEx2RequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VStorageObjectDeleteSnapshotEx2RequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2318,7 +2318,7 @@ struct DeleteVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2346,7 +2346,7 @@ struct DeleteVStorageObjectExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteVStorageObjectExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteVStorageObjectExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2375,7 +2375,7 @@ struct DetachTagFromVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DetachTagFromVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DetachTagFromVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2405,7 +2405,7 @@ struct ExtendDiskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ExtendDiskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ExtendDiskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2435,7 +2435,7 @@ struct VStorageObjectExtendDiskExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VStorageObjectExtendDiskExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VStorageObjectExtendDiskExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2464,7 +2464,7 @@ struct InflateDiskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InflateDiskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InflateDiskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2491,7 +2491,7 @@ struct ListTagsAttachedToVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListTagsAttachedToVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ListTagsAttachedToVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2517,7 +2517,7 @@ struct ListVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ListVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2544,7 +2544,7 @@ struct ListVStorageObjectsAttachedToTagRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListVStorageObjectsAttachedToTagRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ListVStorageObjectsAttachedToTagRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2575,7 +2575,7 @@ struct VstorageObjectVCenterQueryChangedDiskAreasRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VstorageObjectVCenterQueryChangedDiskAreasRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VstorageObjectVCenterQueryChangedDiskAreasRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2606,7 +2606,7 @@ struct QueryVirtualDiskUuidExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVirtualDiskUuidExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVirtualDiskUuidExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2639,7 +2639,7 @@ struct ReconcileDatastoreInventoryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReconcileDatastoreInventoryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReconcileDatastoreInventoryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2671,7 +2671,7 @@ struct ReconcileDatastoreInventoryExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReconcileDatastoreInventoryExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReconcileDatastoreInventoryExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2698,7 +2698,7 @@ struct RegisterDiskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RegisterDiskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RegisterDiskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2732,7 +2732,7 @@ struct RelocateVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RelocateVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RelocateVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2762,7 +2762,7 @@ struct RenameVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RenameVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RenameVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2792,7 +2792,7 @@ struct RenameVStorageObjectExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RenameVStorageObjectExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RenameVStorageObjectExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2822,7 +2822,7 @@ struct RetrieveSnapshotDetailsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveSnapshotDetailsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveSnapshotDetailsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2851,7 +2851,7 @@ struct RetrieveSnapshotInfoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveSnapshotInfoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveSnapshotInfoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2878,7 +2878,7 @@ struct RetrieveVStorageInfrastructureObjectPolicyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveVStorageInfrastructureObjectPolicyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveVStorageInfrastructureObjectPolicyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2906,7 +2906,7 @@ struct RetrieveVStorageObjectRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveVStorageObjectRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2939,7 +2939,7 @@ struct RetrieveVStorageObjectAssociationsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveVStorageObjectAssociationsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveVStorageObjectAssociationsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2971,7 +2971,7 @@ struct RetrieveVStorageObjectStateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveVStorageObjectStateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveVStorageObjectStateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -3000,7 +3000,7 @@ struct RevertVStorageObjectExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RevertVStorageObjectExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RevertVStorageObjectExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -3029,7 +3029,7 @@ struct ScheduleReconcileDatastoreInventoryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ScheduleReconcileDatastoreInventoryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ScheduleReconcileDatastoreInventoryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -3063,7 +3063,7 @@ struct SetVStorageObjectControlFlagsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetVStorageObjectControlFlagsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetVStorageObjectControlFlagsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -3098,7 +3098,7 @@ struct SetVirtualDiskUuidExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetVirtualDiskUuidExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetVirtualDiskUuidExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -3134,7 +3134,7 @@ struct UpdateVStorageInfrastructureObjectPolicyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateVStorageInfrastructureObjectPolicyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateVStorageInfrastructureObjectPolicyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -3163,7 +3163,7 @@ struct UpdateVStorageObjectCryptoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateVStorageObjectCryptoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateVStorageObjectCryptoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -3203,7 +3203,7 @@ struct VCenterUpdateVStorageObjectMetadataExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VCenterUpdateVStorageObjectMetadataExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VCenterUpdateVStorageObjectMetadataExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -3242,7 +3242,7 @@ struct UpdateVStorageObjectPolicyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateVStorageObjectPolicyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateVStorageObjectPolicyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

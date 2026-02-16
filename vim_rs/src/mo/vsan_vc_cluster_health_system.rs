@@ -1784,7 +1784,7 @@ struct VsanAttachVsanSupportBundleToSrRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanAttachVsanSupportBundleToSrRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanAttachVsanSupportBundleToSrRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1811,7 +1811,7 @@ struct VsanDownloadAndInstallVendorToolRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanDownloadAndInstallVendorToolRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanDownloadAndInstallVendorToolRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1837,7 +1837,7 @@ struct VsanDownloadHclFileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanDownloadHclFileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanDownloadHclFileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1864,7 +1864,7 @@ struct VsanGetHclConstraintsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanGetHclConstraintsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanGetHclConstraintsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1895,7 +1895,7 @@ struct VsanVcClusterGetHclInfoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVcClusterGetHclInfoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVcClusterGetHclInfoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1944,7 +1944,7 @@ struct VsanGetReleaseRecommendationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanGetReleaseRecommendationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanGetReleaseRecommendationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1973,7 +1973,7 @@ struct VsanGetDiskHclConstraintsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanGetDiskHclConstraintsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanGetDiskHclConstraintsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2008,7 +2008,7 @@ struct VsanGetHclInfoForEligibleDisksRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanGetHclInfoForEligibleDisksRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanGetHclInfoForEligibleDisksRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2034,7 +2034,7 @@ struct VsanHealthGetVsanClusterSilentChecksRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthGetVsanClusterSilentChecksRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthGetVsanClusterSilentChecksRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2061,7 +2061,7 @@ struct VsanHealthIsRebalanceRunningRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthIsRebalanceRunningRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthIsRebalanceRunningRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2093,7 +2093,7 @@ struct VsanPurgeHclFilesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanPurgeHclFilesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanPurgeHclFilesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2121,7 +2121,7 @@ struct VsanQueryAttachToSrHistoryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryAttachToSrHistoryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryAttachToSrHistoryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2159,7 +2159,7 @@ struct VsanQueryVcClusterCreateVmHealthHistoryTestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterCreateVmHealthHistoryTestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterCreateVmHealthHistoryTestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2197,7 +2197,7 @@ struct VsanQueryVcClusterCreateVmHealthTestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterCreateVmHealthTestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterCreateVmHealthTestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2238,7 +2238,7 @@ struct VsanQueryVcClusterHealthSummaryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterHealthSummaryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterHealthSummaryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2304,7 +2304,7 @@ struct VsanQueryVcClusterHealthSummaryTaskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterHealthSummaryTaskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterHealthSummaryTaskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2344,7 +2344,7 @@ struct VsanQueryClusterHistoricalHealthRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryClusterHistoricalHealthRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryClusterHistoricalHealthRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2372,7 +2372,7 @@ struct VsanQueryVcClusterNetworkPerfHistoryTestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterNetworkPerfHistoryTestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterNetworkPerfHistoryTestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2409,7 +2409,7 @@ struct VsanQueryVcClusterNetworkPerfTaskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterNetworkPerfTaskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterNetworkPerfTaskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2443,7 +2443,7 @@ struct VsanQueryVcClusterNetworkPerfTestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterNetworkPerfTestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterNetworkPerfTestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2478,7 +2478,7 @@ struct VsanQueryVcClusterVmdkLoadHistoryTestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterVmdkLoadHistoryTestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterVmdkLoadHistoryTestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2516,7 +2516,7 @@ struct VsanClusterQueryFileServiceHealthSummaryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanClusterQueryFileServiceHealthSummaryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanClusterQueryFileServiceHealthSummaryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2552,7 +2552,7 @@ struct VsanQueryVcClusterSmartStatsSummaryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterSmartStatsSummaryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterSmartStatsSummaryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2578,7 +2578,7 @@ struct VsanVcClusterQueryVerifyHealthSystemVersionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVcClusterQueryVerifyHealthSystemVersionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVcClusterQueryVerifyHealthSystemVersionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2604,7 +2604,7 @@ struct VsanHealthQueryVsanClusterHealthCheckIntervalRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthQueryVsanClusterHealthCheckIntervalRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthQueryVsanClusterHealthCheckIntervalRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2630,7 +2630,7 @@ struct VsanHealthQueryVsanClusterHealthConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthQueryVsanClusterHealthConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthQueryVsanClusterHealthConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2657,7 +2657,7 @@ struct VsanQueryVcClusterObjExtAttrsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryVcClusterObjExtAttrsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryVcClusterObjExtAttrsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2685,7 +2685,7 @@ struct VsanRebalanceClusterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanRebalanceClusterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanRebalanceClusterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2718,7 +2718,7 @@ struct VsanHealthRepairClusterObjectsImmediateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthRepairClusterObjectsImmediateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthRepairClusterObjectsImmediateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2754,7 +2754,7 @@ struct VsanVcClusterRunVmdkLoadTestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVcClusterRunVmdkLoadTestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVcClusterRunVmdkLoadTestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2795,7 +2795,7 @@ struct VsanHealthSendVsanTelemetryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthSendVsanTelemetryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthSendVsanTelemetryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2821,7 +2821,7 @@ struct VsanHealthSetLogLevelRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthSetLogLevelRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthSetLogLevelRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2853,7 +2853,7 @@ struct VsanHealthSetVsanClusterHealthCheckIntervalRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthSetVsanClusterHealthCheckIntervalRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthSetVsanClusterHealthCheckIntervalRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2882,7 +2882,7 @@ struct VsanHealthSetVsanClusterSilentChecksRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthSetVsanClusterSilentChecksRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthSetVsanClusterSilentChecksRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -2919,7 +2919,7 @@ struct VsanHealthSetVsanClusterTelemetryConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthSetVsanClusterTelemetryConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthSetVsanClusterTelemetryConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2946,7 +2946,7 @@ struct SetVsanVcgMappingForHwDevicesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetVsanVcgMappingForHwDevicesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetVsanVcgMappingForHwDevicesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2973,7 +2973,7 @@ struct VsanStopRebalanceClusterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanStopRebalanceClusterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanStopRebalanceClusterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -3005,7 +3005,7 @@ struct VsanHealthTestVsanClusterTelemetryProxyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthTestVsanClusterTelemetryProxyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthTestVsanClusterTelemetryProxyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -3031,7 +3031,7 @@ struct VsanHealthUpdateDefaultDsPolicyRecommendationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHealthUpdateDefaultDsPolicyRecommendationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHealthUpdateDefaultDsPolicyRecommendationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -3057,7 +3057,7 @@ struct VsanVcUpdateHclDbFromWebRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVcUpdateHclDbFromWebRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVcUpdateHclDbFromWebRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -3088,7 +3088,7 @@ struct VsanVcUploadHclDbRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVcUploadHclDbRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVcUploadHclDbRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

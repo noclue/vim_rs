@@ -1,5 +1,5 @@
 use super::mini_de_static::{
-    TypeInfo, DelegatingDeserializer, WrapValue, FieldsBuilder,
+    TypeInfo, DelegatingDeserializer, WrapValue,
     VimObjectHolder, VimObjectHolderBuilder, VimAnyBuilder,
     make_deser, from_val, polymorphic_array_cast,
 };
@@ -8,7 +8,6 @@ use super::vim_any::VimAny;
 use super::boxed_types::ValueElements;
 use super::struct_enum::StructType;
 use super::structs::*;
-use super::convert::CastFrom;
 
 miniserde::make_place!(Place);
 

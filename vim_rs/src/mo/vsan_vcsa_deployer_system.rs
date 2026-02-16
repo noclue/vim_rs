@@ -143,7 +143,7 @@ struct VsanPostConfigForVcsaRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanPostConfigForVcsaRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanPostConfigForVcsaRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -169,7 +169,7 @@ struct VsanPrepareVsanForVcsaRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanPrepareVsanForVcsaRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanPrepareVsanForVcsaRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -195,7 +195,7 @@ struct VsanVcsaGetBootstrapProgressRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVcsaGetBootstrapProgressRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVcsaGetBootstrapProgressRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

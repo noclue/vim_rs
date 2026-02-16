@@ -140,7 +140,7 @@ struct PerformClusterPowerActionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PerformClusterPowerActionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PerformClusterPowerActionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -167,7 +167,7 @@ struct QueryClusterPowerContextRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryClusterPowerContextRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryClusterPowerContextRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -194,7 +194,7 @@ struct UpdateClusterPowerStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateClusterPowerStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateClusterPowerStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

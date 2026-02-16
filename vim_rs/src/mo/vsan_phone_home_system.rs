@@ -309,7 +309,7 @@ struct VsanPerformOnlineHealthCheckRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanPerformOnlineHealthCheckRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanPerformOnlineHealthCheckRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -335,7 +335,7 @@ struct VsanQueryLsoMwbsizeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryLsoMwbsizeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryLsoMwbsizeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -361,7 +361,7 @@ struct VsanQueryNvmeCriticalWarningStatsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryNvmeCriticalWarningStatsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryNvmeCriticalWarningStatsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -387,7 +387,7 @@ struct VsanQueryObjectSnapshotsInfoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryObjectSnapshotsInfoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryObjectSnapshotsInfoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -413,7 +413,7 @@ struct VsanQueryZdomScrubberDataRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryZdomScrubberDataRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryZdomScrubberDataRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

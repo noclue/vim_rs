@@ -96,7 +96,7 @@ struct VsanRemediateVsanClusterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanRemediateVsanClusterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanRemediateVsanClusterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -122,7 +122,7 @@ struct VsanRemediateVsanHostRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanRemediateVsanHostRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanRemediateVsanHostRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

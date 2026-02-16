@@ -198,7 +198,7 @@ struct CreateScheduledTaskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateScheduledTaskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateScheduledTaskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -226,7 +226,7 @@ struct CreateObjectScheduledTaskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateObjectScheduledTaskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateObjectScheduledTaskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -253,7 +253,7 @@ struct RetrieveEntityScheduledTaskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveEntityScheduledTaskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveEntityScheduledTaskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -284,7 +284,7 @@ struct RetrieveObjectScheduledTaskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveObjectScheduledTaskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveObjectScheduledTaskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

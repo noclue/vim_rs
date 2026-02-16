@@ -390,7 +390,7 @@ struct VsanDeleteObjectsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanDeleteObjectsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanDeleteObjectsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -426,7 +426,7 @@ struct VsanQueryInaccessibleVmSwapObjectsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryInaccessibleVmSwapObjectsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryInaccessibleVmSwapObjectsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -463,7 +463,7 @@ struct VsanQueryObjectIdentitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryObjectIdentitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryObjectIdentitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -519,7 +519,7 @@ struct QuerySyncingVsanObjectsSummaryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QuerySyncingVsanObjectsSummaryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QuerySyncingVsanObjectsSummaryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -552,7 +552,7 @@ struct VosQueryVsanObjectInformationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VosQueryVsanObjectInformationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VosQueryVsanObjectInformationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -584,7 +584,7 @@ struct RelayoutObjectsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RelayoutObjectsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RelayoutObjectsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -612,7 +612,7 @@ struct VosSetVsanObjectPolicyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VosSetVsanObjectPolicyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VosSetVsanObjectPolicyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

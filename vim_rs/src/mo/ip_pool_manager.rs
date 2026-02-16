@@ -283,7 +283,7 @@ struct AllocateIpv4AddressRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AllocateIpv4AddressRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AllocateIpv4AddressRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -313,7 +313,7 @@ struct AllocateIpv6AddressRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AllocateIpv6AddressRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AllocateIpv6AddressRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -342,7 +342,7 @@ struct CreateIpPoolRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateIpPoolRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateIpPoolRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -371,7 +371,7 @@ struct DestroyIpPoolRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DestroyIpPoolRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DestroyIpPoolRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -401,7 +401,7 @@ struct QueryIpAllocationsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIpAllocationsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIpAllocationsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -429,7 +429,7 @@ struct QueryIpPoolsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIpPoolsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIpPoolsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -457,7 +457,7 @@ struct ReleaseIpAllocationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReleaseIpAllocationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReleaseIpAllocationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -486,7 +486,7 @@ struct UpdateIpPoolRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateIpPoolRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateIpPoolRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

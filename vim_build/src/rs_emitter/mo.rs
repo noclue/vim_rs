@@ -350,9 +350,13 @@ impl<'a> ManagedObjectEmitter<'a> {
         self.printer.newline()?;
 
         // Map impl
-        let map_impl_lt = if has_lifetime { "<'_, '_>" } else { "<'_>" };
+        let (map_impl_generics, map_impl_lt) = if has_lifetime {
+            ("<'b, 'a>", "<'b, 'a>")
+        } else {
+            ("<'b>", "<'b>")
+        };
         self.printer.println(&format!(
-            "impl miniserde::ser::Map for {ser_name}{map_impl_lt} {{"
+            "impl{map_impl_generics} miniserde::ser::Map for {ser_name}{map_impl_lt} {{"
         ))?;
         self.printer.indent();
         self.printer.println(

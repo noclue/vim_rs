@@ -141,7 +141,7 @@ struct ModifyListViewRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ModifyListViewRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ModifyListViewRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -176,7 +176,7 @@ struct ResetListViewRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ResetListViewRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ResetListViewRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -207,7 +207,7 @@ struct ResetListViewFromViewRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ResetListViewFromViewRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ResetListViewFromViewRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

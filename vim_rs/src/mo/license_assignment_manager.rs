@@ -98,7 +98,7 @@ struct QueryAssignedLicensesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryAssignedLicensesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryAssignedLicensesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -129,7 +129,7 @@ struct RemoveAssignedLicenseRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveAssignedLicenseRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveAssignedLicenseRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -157,7 +157,7 @@ struct UpdateAssignedLicenseRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateAssignedLicenseRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateAssignedLicenseRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

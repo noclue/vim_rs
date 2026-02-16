@@ -144,7 +144,7 @@ struct CreateProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -170,7 +170,7 @@ struct FindAssociatedProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FindAssociatedProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FindAssociatedProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -197,7 +197,7 @@ struct QueryPolicyMetadataRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPolicyMetadataRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPolicyMetadataRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

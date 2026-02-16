@@ -336,7 +336,7 @@ struct CreateDescriptorRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateDescriptorRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateDescriptorRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -366,7 +366,7 @@ struct CreateImportSpecRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateImportSpecRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateImportSpecRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -396,7 +396,7 @@ struct ParseDescriptorRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ParseDescriptorRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ParseDescriptorRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -425,7 +425,7 @@ struct ValidateHostRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ValidateHostRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ValidateHostRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

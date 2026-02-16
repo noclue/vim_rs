@@ -372,7 +372,7 @@ struct VsanHostAbortWipeDiskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHostAbortWipeDiskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHostAbortWipeDiskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -399,7 +399,7 @@ struct VsanHostGetRuntimeStatsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHostGetRuntimeStatsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHostGetRuntimeStatsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -436,7 +436,7 @@ struct VsanQueryHostDrsStatsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryHostDrsStatsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryHostDrsStatsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -475,7 +475,7 @@ struct VsanQueryHostStatusExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryHostStatusExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryHostStatusExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -509,7 +509,7 @@ struct VsanQuerySyncingVsanObjectsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQuerySyncingVsanObjectsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQuerySyncingVsanObjectsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -552,7 +552,7 @@ struct VsanQueryWhatIfEvacuationResultRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryWhatIfEvacuationResultRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryWhatIfEvacuationResultRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -578,7 +578,7 @@ struct VsanHostQueryWipeDiskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHostQueryWipeDiskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHostQueryWipeDiskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -607,7 +607,7 @@ struct VsanUnmountDiskMappingExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanUnmountDiskMappingExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanUnmountDiskMappingExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -647,7 +647,7 @@ struct VsanHostWipeDiskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanHostWipeDiskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanHostWipeDiskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

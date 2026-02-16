@@ -95,7 +95,7 @@ struct QueryConfiguredModuleOptionStringRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryConfiguredModuleOptionStringRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryConfiguredModuleOptionStringRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -122,7 +122,7 @@ struct UpdateModuleOptionStringRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateModuleOptionStringRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateModuleOptionStringRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

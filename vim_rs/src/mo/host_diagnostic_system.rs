@@ -219,7 +219,7 @@ struct CreateDiagnosticPartitionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateDiagnosticPartitionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateDiagnosticPartitionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -246,7 +246,7 @@ struct QueryPartitionCreateDescRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPartitionCreateDescRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPartitionCreateDescRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -274,7 +274,7 @@ struct QueryPartitionCreateOptionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPartitionCreateOptionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPartitionCreateOptionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -301,7 +301,7 @@ struct SelectActivePartitionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SelectActivePartitionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SelectActivePartitionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

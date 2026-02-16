@@ -105,7 +105,7 @@ struct VslmQueryDatastoreInfoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VslmQueryDatastoreInfoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VslmQueryDatastoreInfoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -133,7 +133,7 @@ struct VslmSyncDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VslmSyncDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VslmSyncDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

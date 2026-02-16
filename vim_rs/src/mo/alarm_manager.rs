@@ -289,7 +289,7 @@ struct AcknowledgeAlarmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AcknowledgeAlarmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AcknowledgeAlarmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -316,7 +316,7 @@ struct ClearTriggeredAlarmsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ClearTriggeredAlarmsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ClearTriggeredAlarmsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -343,7 +343,7 @@ struct CreateAlarmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateAlarmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateAlarmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -371,7 +371,7 @@ struct DisableAlarmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DisableAlarmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DisableAlarmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -399,7 +399,7 @@ struct EnableAlarmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for EnableAlarmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for EnableAlarmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -426,7 +426,7 @@ struct GetAlarmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GetAlarmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GetAlarmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -457,7 +457,7 @@ struct AreAlarmActionsEnabledRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AreAlarmActionsEnabledRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AreAlarmActionsEnabledRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -483,7 +483,7 @@ struct GetAlarmStateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GetAlarmStateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GetAlarmStateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -510,7 +510,7 @@ struct EnableAlarmActionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for EnableAlarmActionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for EnableAlarmActionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

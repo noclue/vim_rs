@@ -212,7 +212,7 @@ struct AcquireCredentialsInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AcquireCredentialsInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AcquireCredentialsInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -246,7 +246,7 @@ struct ReleaseCredentialsInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReleaseCredentialsInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReleaseCredentialsInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -274,7 +274,7 @@ struct ValidateCredentialsInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ValidateCredentialsInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ValidateCredentialsInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

@@ -283,7 +283,7 @@ struct GenerateCertificateSigningRequestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GenerateCertificateSigningRequestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GenerateCertificateSigningRequestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -316,7 +316,7 @@ struct GenerateCertificateSigningRequestByDnRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GenerateCertificateSigningRequestByDnRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GenerateCertificateSigningRequestByDnRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -348,7 +348,7 @@ struct InstallServerCertificateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InstallServerCertificateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InstallServerCertificateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -374,7 +374,7 @@ struct NotifyAffectedServicesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for NotifyAffectedServicesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for NotifyAffectedServicesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -405,7 +405,7 @@ struct ProvisionServerPrivateKeyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ProvisionServerPrivateKeyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ProvisionServerPrivateKeyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -432,7 +432,7 @@ struct ReplaceCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReplaceCaCertificatesAndCrLsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReplaceCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

@@ -240,7 +240,7 @@ struct EmitSyslogMarkRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for EmitSyslogMarkRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for EmitSyslogMarkRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -266,7 +266,7 @@ struct FetchAuditRecordsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FetchAuditRecordsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FetchAuditRecordsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -300,7 +300,7 @@ struct BrowseDiagnosticLogRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for BrowseDiagnosticLogRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for BrowseDiagnosticLogRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -341,7 +341,7 @@ struct GenerateLogBundlesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GenerateLogBundlesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GenerateLogBundlesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -373,7 +373,7 @@ struct QueryDescriptionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDescriptionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDescriptionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

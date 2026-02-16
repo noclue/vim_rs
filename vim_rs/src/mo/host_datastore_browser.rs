@@ -252,7 +252,7 @@ struct DeleteFileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteFileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteFileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -279,7 +279,7 @@ struct SearchDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SearchDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SearchDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -312,7 +312,7 @@ struct SearchDatastoreSubFoldersRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SearchDatastoreSubFoldersRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SearchDatastoreSubFoldersRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

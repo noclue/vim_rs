@@ -318,7 +318,7 @@ struct QueryVMotionCompatibilityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVMotionCompatibilityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVMotionCompatibilityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -355,7 +355,7 @@ struct ValidateMigrationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ValidateMigrationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ValidateMigrationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

@@ -452,7 +452,7 @@ struct CreateRegistryKeyInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateRegistryKeyInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateRegistryKeyInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -490,7 +490,7 @@ struct DeleteRegistryKeyInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteRegistryKeyInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteRegistryKeyInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -521,7 +521,7 @@ struct DeleteRegistryValueInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteRegistryValueInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteRegistryValueInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -553,7 +553,7 @@ struct ListRegistryKeysInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListRegistryKeysInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ListRegistryKeysInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -592,7 +592,7 @@ struct ListRegistryValuesInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListRegistryValuesInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ListRegistryValuesInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -629,7 +629,7 @@ struct SetRegistryValueInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetRegistryValueInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetRegistryValueInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

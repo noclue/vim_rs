@@ -755,7 +755,7 @@ struct PbmAssignDefaultRequirementProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmAssignDefaultRequirementProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmAssignDefaultRequirementProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -782,7 +782,7 @@ struct PbmCreateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmCreateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmCreateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -808,7 +808,7 @@ struct PbmDeleteRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmDeleteRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmDeleteRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -835,7 +835,7 @@ struct PbmFetchCapabilityMetadataRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmFetchCapabilityMetadataRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmFetchCapabilityMetadataRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -871,7 +871,7 @@ struct PbmFetchCapabilitySchemaRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmFetchCapabilitySchemaRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmFetchCapabilitySchemaRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -906,7 +906,7 @@ struct PbmFetchVendorInfoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmFetchVendorInfoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmFetchVendorInfoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -937,7 +937,7 @@ struct PbmFindApplicableDefaultProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmFindApplicableDefaultProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmFindApplicableDefaultProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -963,7 +963,7 @@ struct PbmQueryAssociatedEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryAssociatedEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryAssociatedEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -995,7 +995,7 @@ struct PbmQueryAssociatedEntityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryAssociatedEntityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryAssociatedEntityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1027,7 +1027,7 @@ struct PbmQueryAssociatedProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryAssociatedProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryAssociatedProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1053,7 +1053,7 @@ struct PbmQueryAssociatedProfilesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryAssociatedProfilesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryAssociatedProfilesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1079,7 +1079,7 @@ struct PbmQueryDefaultRequirementProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryDefaultRequirementProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryDefaultRequirementProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1105,7 +1105,7 @@ struct PbmQueryDefaultRequirementProfilesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryDefaultRequirementProfilesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryDefaultRequirementProfilesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1132,7 +1132,7 @@ struct PbmQueryProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1165,7 +1165,7 @@ struct PbmQuerySpaceStatsForStorageContainerRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQuerySpaceStatsForStorageContainerRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQuerySpaceStatsForStorageContainerRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1197,7 +1197,7 @@ struct PbmResetDefaultRequirementProfileRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmResetDefaultRequirementProfileRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmResetDefaultRequirementProfileRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1228,7 +1228,7 @@ struct PbmRetrieveContentRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmRetrieveContentRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmRetrieveContentRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1255,7 +1255,7 @@ struct PbmUpdateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmUpdateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmUpdateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

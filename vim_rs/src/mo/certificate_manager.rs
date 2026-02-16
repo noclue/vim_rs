@@ -102,7 +102,7 @@ struct CertMgrRefreshCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CertMgrRefreshCaCertificatesAndCrLsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CertMgrRefreshCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -128,7 +128,7 @@ struct CertMgrRefreshCertificatesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CertMgrRefreshCertificatesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CertMgrRefreshCertificatesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -154,7 +154,7 @@ struct CertMgrRevokeCertificatesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CertMgrRevokeCertificatesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CertMgrRevokeCertificatesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

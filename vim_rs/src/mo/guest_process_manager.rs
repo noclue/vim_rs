@@ -305,7 +305,7 @@ struct ListProcessesInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ListProcessesInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ListProcessesInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -340,7 +340,7 @@ struct ReadEnvironmentVariableInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReadEnvironmentVariableInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReadEnvironmentVariableInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -375,7 +375,7 @@ struct StartProgramInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for StartProgramInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for StartProgramInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -405,7 +405,7 @@ struct TerminateProcessInGuestRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for TerminateProcessInGuestRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for TerminateProcessInGuestRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

@@ -485,7 +485,7 @@ struct CancelRetrievePropertiesExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CancelRetrievePropertiesExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CancelRetrievePropertiesExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -511,7 +511,7 @@ struct CheckForUpdatesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckForUpdatesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckForUpdatesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -542,7 +542,7 @@ struct ContinueRetrievePropertiesExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ContinueRetrievePropertiesExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ContinueRetrievePropertiesExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -569,7 +569,7 @@ struct CreateFilterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateFilterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateFilterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -596,7 +596,7 @@ struct RetrievePropertiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrievePropertiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrievePropertiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -623,7 +623,7 @@ struct RetrievePropertiesExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrievePropertiesExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrievePropertiesExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -650,7 +650,7 @@ struct WaitForUpdatesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for WaitForUpdatesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for WaitForUpdatesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -682,7 +682,7 @@ struct WaitForUpdatesExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for WaitForUpdatesExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for WaitForUpdatesExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

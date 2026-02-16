@@ -216,7 +216,7 @@ struct DeleteHostSpecificationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteHostSpecificationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteHostSpecificationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -243,7 +243,7 @@ struct DeleteHostSubSpecificationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteHostSubSpecificationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteHostSubSpecificationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -271,7 +271,7 @@ struct HostSpecGetUpdatedHostsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HostSpecGetUpdatedHostsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HostSpecGetUpdatedHostsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -307,7 +307,7 @@ struct RetrieveHostSpecificationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveHostSpecificationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveHostSpecificationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -335,7 +335,7 @@ struct UpdateHostSpecificationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateHostSpecificationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateHostSpecificationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -363,7 +363,7 @@ struct UpdateHostSubSpecificationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateHostSubSpecificationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateHostSubSpecificationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

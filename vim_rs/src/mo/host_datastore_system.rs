@@ -834,7 +834,7 @@ struct ConfigureDatastorePrincipalRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ConfigureDatastorePrincipalRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ConfigureDatastorePrincipalRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -867,7 +867,7 @@ struct CreateLocalDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateLocalDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateLocalDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -894,7 +894,7 @@ struct CreateNasDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateNasDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateNasDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -920,7 +920,7 @@ struct CreateVmfsDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateVmfsDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateVmfsDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -946,7 +946,7 @@ struct CreateVvolDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateVvolDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateVvolDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -972,7 +972,7 @@ struct DisableClusteredVmdkSupportRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DisableClusteredVmdkSupportRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DisableClusteredVmdkSupportRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -998,7 +998,7 @@ struct EnableClusteredVmdkSupportRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for EnableClusteredVmdkSupportRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for EnableClusteredVmdkSupportRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1025,7 +1025,7 @@ struct ExpandVmfsDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ExpandVmfsDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ExpandVmfsDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1053,7 +1053,7 @@ struct ExtendVmfsDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ExtendVmfsDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ExtendVmfsDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1080,7 +1080,7 @@ struct QueryAvailableDisksForVmfsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryAvailableDisksForVmfsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryAvailableDisksForVmfsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1111,7 +1111,7 @@ struct QueryMaxQueueDepthRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryMaxQueueDepthRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryMaxQueueDepthRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1138,7 +1138,7 @@ struct QueryVmfsDatastoreCreateOptionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVmfsDatastoreCreateOptionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVmfsDatastoreCreateOptionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1170,7 +1170,7 @@ struct QueryVmfsDatastoreExpandOptionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVmfsDatastoreExpandOptionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVmfsDatastoreExpandOptionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1198,7 +1198,7 @@ struct QueryVmfsDatastoreExtendOptionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVmfsDatastoreExtendOptionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVmfsDatastoreExtendOptionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1231,7 +1231,7 @@ struct RemoveDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1257,7 +1257,7 @@ struct RemoveDatastoreExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveDatastoreExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveDatastoreExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1283,7 +1283,7 @@ struct ResignatureUnresolvedVmfsVolumeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ResignatureUnresolvedVmfsVolumeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ResignatureUnresolvedVmfsVolumeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1310,7 +1310,7 @@ struct SetMaxQueueDepthRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetMaxQueueDepthRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetMaxQueueDepthRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1337,7 +1337,7 @@ struct UpdateLocalSwapDatastoreRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateLocalSwapDatastoreRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateLocalSwapDatastoreRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

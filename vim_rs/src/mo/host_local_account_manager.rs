@@ -260,7 +260,7 @@ struct AssignUserToGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AssignUserToGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AssignUserToGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -289,7 +289,7 @@ struct ChangePasswordRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ChangePasswordRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ChangePasswordRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -317,7 +317,7 @@ struct CreateGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -343,7 +343,7 @@ struct CreateUserRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateUserRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateUserRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -369,7 +369,7 @@ struct RemoveGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -395,7 +395,7 @@ struct RemoveUserRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveUserRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveUserRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -422,7 +422,7 @@ struct UnassignUserFromGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UnassignUserFromGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UnassignUserFromGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -449,7 +449,7 @@ struct UpdateUserRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateUserRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateUserRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

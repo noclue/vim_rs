@@ -124,7 +124,7 @@ struct MarkServiceProviderEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MarkServiceProviderEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for MarkServiceProviderEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -155,7 +155,7 @@ struct UnmarkServiceProviderEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UnmarkServiceProviderEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UnmarkServiceProviderEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

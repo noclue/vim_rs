@@ -170,7 +170,7 @@ struct VsanVibInstallRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVibInstallRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVibInstallRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -225,7 +225,7 @@ struct VsanVibInstallPreflightCheckRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVibInstallPreflightCheckRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVibInstallPreflightCheckRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -257,7 +257,7 @@ struct VsanVibScanRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanVibScanRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanVibScanRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

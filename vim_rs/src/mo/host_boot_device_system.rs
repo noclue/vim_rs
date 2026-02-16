@@ -69,7 +69,7 @@ struct UpdateBootDeviceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateBootDeviceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateBootDeviceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

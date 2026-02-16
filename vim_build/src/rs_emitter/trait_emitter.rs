@@ -52,7 +52,6 @@ impl<'a> TraitEmitter<'a> {
         printer.println("use super::convert::CastFrom;")?;
         printer.println("use super::struct_enum::StructType;")?;
         printer.println("use super::structs::*;")?;
-        printer.println("use super::mini_de_static::{VimObjectHolder, VimObjectHolderBuilder};")?;
         printer.newline()?;
         printer.println("miniserde::make_place!(Place);")?;
 

@@ -201,7 +201,7 @@ struct DirectPathProfileManagerCreateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DirectPathProfileManagerCreateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerCreateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -227,7 +227,7 @@ struct DirectPathProfileManagerDeleteRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DirectPathProfileManagerDeleteRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerDeleteRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -253,7 +253,7 @@ struct DirectPathProfileManagerListRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DirectPathProfileManagerListRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerListRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -280,7 +280,7 @@ struct DirectPathProfileManagerQueryCapacityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DirectPathProfileManagerQueryCapacityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerQueryCapacityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -313,7 +313,7 @@ struct DirectPathProfileManagerUpdateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DirectPathProfileManagerUpdateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerUpdateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

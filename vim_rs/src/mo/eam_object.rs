@@ -118,7 +118,7 @@ struct QueryIssueRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIssueRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIssueRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -149,7 +149,7 @@ struct ResolveRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ResolveRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ResolveRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

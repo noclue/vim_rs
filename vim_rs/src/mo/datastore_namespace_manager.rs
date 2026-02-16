@@ -279,7 +279,7 @@ struct ConvertNamespacePathToUuidPathRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ConvertNamespacePathToUuidPathRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ConvertNamespacePathToUuidPathRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -314,7 +314,7 @@ struct CreateDirectoryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateDirectoryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateDirectoryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -355,7 +355,7 @@ struct DeleteDirectoryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteDirectoryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteDirectoryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -389,7 +389,7 @@ struct IncreaseDirectorySizeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for IncreaseDirectorySizeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for IncreaseDirectorySizeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -423,7 +423,7 @@ struct QueryDirectoryInfoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDirectoryInfoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDirectoryInfoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

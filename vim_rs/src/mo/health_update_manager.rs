@@ -660,7 +660,7 @@ struct AddFilterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddFilterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddFilterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -694,7 +694,7 @@ struct AddFilterEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddFilterEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddFilterEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -727,7 +727,7 @@ struct AddMonitoredEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddMonitoredEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddMonitoredEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -760,7 +760,7 @@ struct HasMonitoredEntityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HasMonitoredEntityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HasMonitoredEntityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -787,7 +787,7 @@ struct HasProviderRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HasProviderRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HasProviderRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -814,7 +814,7 @@ struct PostHealthUpdatesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PostHealthUpdatesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PostHealthUpdatesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -846,7 +846,7 @@ struct QueryFilterEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryFilterEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryFilterEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -872,7 +872,7 @@ struct QueryFilterInfoIdsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryFilterInfoIdsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryFilterInfoIdsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -898,7 +898,7 @@ struct QueryFilterListRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryFilterListRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryFilterListRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -924,7 +924,7 @@ struct QueryFilterNameRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryFilterNameRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryFilterNameRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -950,7 +950,7 @@ struct QueryHealthUpdateInfosRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryHealthUpdateInfosRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryHealthUpdateInfosRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -976,7 +976,7 @@ struct QueryHealthUpdatesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryHealthUpdatesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryHealthUpdatesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1002,7 +1002,7 @@ struct QueryMonitoredEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryMonitoredEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryMonitoredEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1028,7 +1028,7 @@ struct QueryProviderNameRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryProviderNameRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryProviderNameRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1055,7 +1055,7 @@ struct QueryUnmonitoredHostsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryUnmonitoredHostsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryUnmonitoredHostsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1083,7 +1083,7 @@ struct RegisterHealthUpdateProviderRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RegisterHealthUpdateProviderRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RegisterHealthUpdateProviderRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1115,7 +1115,7 @@ struct RemoveFilterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveFilterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveFilterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1142,7 +1142,7 @@ struct RemoveFilterEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveFilterEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveFilterEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1175,7 +1175,7 @@ struct RemoveMonitoredEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveMonitoredEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveMonitoredEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1207,7 +1207,7 @@ struct UnregisterHealthUpdateProviderRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UnregisterHealthUpdateProviderRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UnregisterHealthUpdateProviderRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

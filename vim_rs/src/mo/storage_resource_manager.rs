@@ -437,7 +437,7 @@ struct ConfigureDatastoreIormRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ConfigureDatastoreIormRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ConfigureDatastoreIormRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -464,7 +464,7 @@ struct QueryIormConfigOptionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIormConfigOptionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIormConfigOptionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -490,7 +490,7 @@ struct ApplyStorageDrsRecommendationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ApplyStorageDrsRecommendationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ApplyStorageDrsRecommendationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -517,7 +517,7 @@ struct ApplyStorageDrsRecommendationToPodRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ApplyStorageDrsRecommendationToPodRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ApplyStorageDrsRecommendationToPodRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -544,7 +544,7 @@ struct CancelStorageDrsRecommendationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CancelStorageDrsRecommendationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CancelStorageDrsRecommendationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -572,7 +572,7 @@ struct ConfigureStorageDrsForPodRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ConfigureStorageDrsForPodRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ConfigureStorageDrsForPodRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -600,7 +600,7 @@ struct QueryDatastorePerformanceSummaryRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDatastorePerformanceSummaryRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDatastorePerformanceSummaryRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -626,7 +626,7 @@ struct RecommendDatastoresRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RecommendDatastoresRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RecommendDatastoresRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -652,7 +652,7 @@ struct RefreshStorageDrsRecommendationRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RefreshStorageDrsRecommendationRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RefreshStorageDrsRecommendationRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -678,7 +678,7 @@ struct RefreshStorageDrsRecommendationsForPodRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RefreshStorageDrsRecommendationsForPodRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RefreshStorageDrsRecommendationsForPodRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -705,7 +705,7 @@ struct ValidateStoragePodConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ValidateStoragePodConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ValidateStoragePodConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

@@ -530,7 +530,7 @@ struct AddIssueRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddIssueRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddIssueRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -556,7 +556,7 @@ struct QueryIssueRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIssueRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIssueRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -587,7 +587,7 @@ struct RegisterAgentVmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RegisterAgentVmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RegisterAgentVmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -613,7 +613,7 @@ struct ResolveRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ResolveRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ResolveRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -639,7 +639,7 @@ struct UnregisterAgentVmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UnregisterAgentVmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UnregisterAgentVmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -665,7 +665,7 @@ struct UpdateRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

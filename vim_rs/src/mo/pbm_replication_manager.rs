@@ -73,7 +73,7 @@ struct PbmQueryReplicationGroupsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryReplicationGroupsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryReplicationGroupsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

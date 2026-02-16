@@ -596,7 +596,7 @@ struct AddLicenseRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddLicenseRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddLicenseRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -629,7 +629,7 @@ struct CheckLicenseFeatureRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckLicenseFeatureRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckLicenseFeatureRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -662,7 +662,7 @@ struct ConfigureLicenseSourceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ConfigureLicenseSourceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ConfigureLicenseSourceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -694,7 +694,7 @@ struct DecodeLicenseRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DecodeLicenseRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DecodeLicenseRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -721,7 +721,7 @@ struct DisableFeatureRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DisableFeatureRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DisableFeatureRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -754,7 +754,7 @@ struct EnableFeatureRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for EnableFeatureRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for EnableFeatureRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -786,7 +786,7 @@ struct QueryLicenseSourceAvailabilityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryLicenseSourceAvailabilityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryLicenseSourceAvailabilityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -817,7 +817,7 @@ struct QuerySupportedFeaturesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QuerySupportedFeaturesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QuerySupportedFeaturesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -848,7 +848,7 @@ struct QueryLicenseUsageRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryLicenseUsageRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryLicenseUsageRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -880,7 +880,7 @@ struct RemoveLicenseLabelRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveLicenseLabelRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveLicenseLabelRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -907,7 +907,7 @@ struct RemoveLicenseRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveLicenseRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveLicenseRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -934,7 +934,7 @@ struct SetLicenseEditionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetLicenseEditionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetLicenseEditionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -971,7 +971,7 @@ struct UpdateLicenseLabelRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateLicenseLabelRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateLicenseLabelRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1000,7 +1000,7 @@ struct UpdateLicenseRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateLicenseRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateLicenseRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

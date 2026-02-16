@@ -924,7 +924,7 @@ struct QueryArrayRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryArrayRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryArrayRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -955,7 +955,7 @@ struct QueryArrayAssociatedWithLunRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryArrayAssociatedWithLunRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryArrayAssociatedWithLunRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -982,7 +982,7 @@ struct QueryAssociatedBackingStoragePoolRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryAssociatedBackingStoragePoolRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryAssociatedBackingStoragePoolRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1017,7 +1017,7 @@ struct QueryDatastoreBackingPoolMappingRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDatastoreBackingPoolMappingRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDatastoreBackingPoolMappingRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1043,7 +1043,7 @@ struct QueryDatastoreCapabilityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDatastoreCapabilityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDatastoreCapabilityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1070,7 +1070,7 @@ struct QueryDrsMigrationCapabilityForPerformanceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDrsMigrationCapabilityForPerformanceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDrsMigrationCapabilityForPerformanceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1097,7 +1097,7 @@ struct QueryDrsMigrationCapabilityForPerformanceExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDrsMigrationCapabilityForPerformanceExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDrsMigrationCapabilityForPerformanceExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1123,7 +1123,7 @@ struct QueryFaultDomainRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryFaultDomainRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryFaultDomainRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1154,7 +1154,7 @@ struct QueryFileSystemAssociatedWithArrayRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryFileSystemAssociatedWithArrayRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryFileSystemAssociatedWithArrayRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1181,7 +1181,7 @@ struct QueryHostAssociatedWithLunRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryHostAssociatedWithLunRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryHostAssociatedWithLunRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1208,7 +1208,7 @@ struct QueryLunAssociatedWithArrayRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryLunAssociatedWithArrayRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryLunAssociatedWithArrayRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1235,7 +1235,7 @@ struct QueryLunAssociatedWithPortRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryLunAssociatedWithPortRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryLunAssociatedWithPortRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1263,7 +1263,7 @@ struct QueryNfsDatastoreAssociatedWithFileSystemRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryNfsDatastoreAssociatedWithFileSystemRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryNfsDatastoreAssociatedWithFileSystemRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1290,7 +1290,7 @@ struct QueryPortAssociatedWithArrayRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPortAssociatedWithArrayRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPortAssociatedWithArrayRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1317,7 +1317,7 @@ struct QueryPortAssociatedWithLunRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPortAssociatedWithLunRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPortAssociatedWithLunRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1345,7 +1345,7 @@ struct QueryPortAssociatedWithProcessorRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPortAssociatedWithProcessorRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPortAssociatedWithProcessorRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1372,7 +1372,7 @@ struct QueryProcessorAssociatedWithArrayRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryProcessorAssociatedWithArrayRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryProcessorAssociatedWithArrayRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1398,7 +1398,7 @@ struct QueryReplicationGroupInfoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryReplicationGroupInfoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryReplicationGroupInfoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1424,7 +1424,7 @@ struct QueryStorageContainerRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryStorageContainerRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryStorageContainerRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1456,7 +1456,7 @@ struct QueryVmfsDatastoreAssociatedWithLunRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryVmfsDatastoreAssociatedWithLunRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryVmfsDatastoreAssociatedWithLunRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1483,7 +1483,7 @@ struct SmsRefreshCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SmsRefreshCaCertificatesAndCrLsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SmsRefreshCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1514,7 +1514,7 @@ struct RegisterProviderRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RegisterProviderRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RegisterProviderRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1540,7 +1540,7 @@ struct UnregisterProviderRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UnregisterProviderRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UnregisterProviderRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1566,7 +1566,7 @@ struct UpgradeVasaProviderRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpgradeVasaProviderRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpgradeVasaProviderRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

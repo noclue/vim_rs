@@ -60,7 +60,7 @@ struct VsanRetrievePropertiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanRetrievePropertiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanRetrievePropertiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

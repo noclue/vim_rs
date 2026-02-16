@@ -463,7 +463,7 @@ struct CheckHostPatchRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CheckHostPatchRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CheckHostPatchRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -504,7 +504,7 @@ struct InstallHostPatchRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InstallHostPatchRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InstallHostPatchRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -540,7 +540,7 @@ struct InstallHostPatchV2RequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InstallHostPatchV2RequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InstallHostPatchV2RequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -583,7 +583,7 @@ struct QueryHostPatchRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryHostPatchRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryHostPatchRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -615,7 +615,7 @@ struct ScanHostPatchRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ScanHostPatchRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ScanHostPatchRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -649,7 +649,7 @@ struct ScanHostPatchV2RequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ScanHostPatchV2RequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ScanHostPatchV2RequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -691,7 +691,7 @@ struct StageHostPatchRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for StageHostPatchRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for StageHostPatchRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -735,7 +735,7 @@ struct UninstallHostPatchRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UninstallHostPatchRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UninstallHostPatchRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

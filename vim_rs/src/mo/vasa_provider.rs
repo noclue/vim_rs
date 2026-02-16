@@ -704,7 +704,7 @@ struct FailoverReplicationGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FailoverReplicationGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FailoverReplicationGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -730,7 +730,7 @@ struct PrepareFailoverReplicationGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PrepareFailoverReplicationGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PrepareFailoverReplicationGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -761,7 +761,7 @@ struct PromoteReplicationGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PromoteReplicationGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PromoteReplicationGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -787,7 +787,7 @@ struct QueryActiveAlarmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryActiveAlarmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryActiveAlarmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -819,7 +819,7 @@ struct QueryPointInTimeReplicaRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryPointInTimeReplicaRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryPointInTimeReplicaRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -854,7 +854,7 @@ struct QueryReplicationGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryReplicationGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryReplicationGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -885,7 +885,7 @@ struct QueryReplicationPeerRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryReplicationPeerRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryReplicationPeerRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -916,7 +916,7 @@ struct ReverseReplicateGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReverseReplicateGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ReverseReplicateGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -947,7 +947,7 @@ struct VasaProviderSyncRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VasaProviderSyncRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VasaProviderSyncRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -979,7 +979,7 @@ struct SyncReplicationGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SyncReplicationGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SyncReplicationGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1011,7 +1011,7 @@ struct TestFailoverReplicationGroupStartRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for TestFailoverReplicationGroupStartRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for TestFailoverReplicationGroupStartRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1038,7 +1038,7 @@ struct TestFailoverReplicationGroupStopRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for TestFailoverReplicationGroupStopRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for TestFailoverReplicationGroupStopRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

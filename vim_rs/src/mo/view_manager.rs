@@ -263,7 +263,7 @@ struct CreateContainerViewRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateContainerViewRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateContainerViewRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -296,7 +296,7 @@ struct CreateListViewRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateListViewRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateListViewRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -327,7 +327,7 @@ struct CreateListViewFromViewRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateListViewFromViewRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateListViewFromViewRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

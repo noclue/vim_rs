@@ -555,7 +555,7 @@ struct HelloSpec<'a> {
 }
 
 impl miniserde::Serialize for HelloSpec<'_> {
-    fn begin(&self) -> miniserde::ser::Fragment {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
         use miniserde::ser::Fragment;
         Fragment::Map(Box::new(HelloSpecSerializer { data: self, seq: 0 }))
     }
@@ -567,7 +567,7 @@ struct HelloSpecSerializer<'a> {
 }
 
 impl miniserde::ser::Map for HelloSpecSerializer<'_> {
-    fn next(&mut self) -> Option<(std::borrow::Cow<str>, &dyn miniserde::Serialize)> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let result = match self.seq {
             0 => Some((std::borrow::Cow::Borrowed("api_releases"), &self.data.api_releases as &dyn miniserde::Serialize)),
             _ => None,

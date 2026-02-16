@@ -73,7 +73,7 @@ struct ConfigurePowerPolicyRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ConfigurePowerPolicyRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for ConfigurePowerPolicyRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

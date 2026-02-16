@@ -175,7 +175,7 @@ struct ReadNextEventsRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReadNextEventsRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for ReadNextEventsRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -201,7 +201,7 @@ struct ReadPreviousEventsRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ReadPreviousEventsRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for ReadPreviousEventsRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -227,7 +227,7 @@ struct SetCollectorPageSizeRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetCollectorPageSizeRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for SetCollectorPageSizeRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

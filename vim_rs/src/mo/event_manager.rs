@@ -238,7 +238,7 @@ struct QueryEventsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryEventsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryEventsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -270,7 +270,7 @@ struct CreateCollectorForEventsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateCollectorForEventsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateCollectorForEventsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -297,7 +297,7 @@ struct LogUserEventRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for LogUserEventRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for LogUserEventRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -325,7 +325,7 @@ struct PostEventRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PostEventRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PostEventRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -357,7 +357,7 @@ struct RetrieveArgumentDescriptionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveArgumentDescriptionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveArgumentDescriptionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

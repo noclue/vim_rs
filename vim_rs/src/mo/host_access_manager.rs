@@ -291,7 +291,7 @@ struct ChangeAccessModeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ChangeAccessModeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ChangeAccessModeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -319,7 +319,7 @@ struct ChangeLockdownModeRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ChangeLockdownModeRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for ChangeLockdownModeRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -345,7 +345,7 @@ struct UpdateLockdownExceptionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateLockdownExceptionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateLockdownExceptionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -376,7 +376,7 @@ struct UpdateSystemUsersRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateSystemUsersRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateSystemUsersRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

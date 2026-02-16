@@ -303,7 +303,7 @@ struct DeleteIoInsightInstanceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for DeleteIoInsightInstanceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for DeleteIoInsightInstanceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -336,7 +336,7 @@ struct QueryIoInsightInstancesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIoInsightInstancesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIoInsightInstancesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -370,7 +370,7 @@ struct RenameIoInsightInstanceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RenameIoInsightInstanceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RenameIoInsightInstanceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -407,7 +407,7 @@ struct StartIoInsightRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for StartIoInsightRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for StartIoInsightRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -456,7 +456,7 @@ struct StopIoInsightRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for StopIoInsightRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for StopIoInsightRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

@@ -58,7 +58,7 @@ struct EstimateDatabaseSizeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for EstimateDatabaseSizeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for EstimateDatabaseSizeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

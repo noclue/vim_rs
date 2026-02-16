@@ -156,25 +156,15 @@ impl std::fmt::Debug for DataObject {
 
 impl miniserde::Serialize for DataObject {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DataObjectSerializer::new(self)))
+        Fragment::Map(Box::new(DataObjectSerializer { seq: 0 }))
     }
 }
 
-struct DataObjectSerializer<'a> {
-    data: &'a DataObject,
+struct DataObjectSerializer {
     seq: usize,
 }
 
-impl<'a> DataObjectSerializer<'a> {
-    fn new(data: &'a DataObject) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DataObjectSerializer<'a> {
+impl miniserde::ser::Map for DataObjectSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -717,25 +707,15 @@ impl std::fmt::Debug for AgencyScope {
 
 impl miniserde::Serialize for AgencyScope {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(AgencyScopeSerializer::new(self)))
+        Fragment::Map(Box::new(AgencyScopeSerializer { seq: 0 }))
     }
 }
 
-struct AgencyScopeSerializer<'a> {
-    data: &'a AgencyScope,
+struct AgencyScopeSerializer {
     seq: usize,
 }
 
-impl<'a> AgencyScopeSerializer<'a> {
-    fn new(data: &'a AgencyScope) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for AgencyScopeSerializer<'a> {
+impl miniserde::ser::Map for AgencyScopeSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1946,25 +1926,15 @@ impl std::fmt::Debug for AgentSslTrust {
 
 impl miniserde::Serialize for AgentSslTrust {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(AgentSslTrustSerializer::new(self)))
+        Fragment::Map(Box::new(AgentSslTrustSerializer { seq: 0 }))
     }
 }
 
-struct AgentSslTrustSerializer<'a> {
-    data: &'a AgentSslTrust,
+struct AgentSslTrustSerializer {
     seq: usize,
 }
 
-impl<'a> AgentSslTrustSerializer<'a> {
-    fn new(data: &'a AgentSslTrust) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for AgentSslTrustSerializer<'a> {
+impl miniserde::ser::Map for AgentSslTrustSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2066,25 +2036,15 @@ impl std::fmt::Debug for AgentAnyCertificate {
 
 impl miniserde::Serialize for AgentAnyCertificate {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(AgentAnyCertificateSerializer::new(self)))
+        Fragment::Map(Box::new(AgentAnyCertificateSerializer { seq: 0 }))
     }
 }
 
-struct AgentAnyCertificateSerializer<'a> {
-    data: &'a AgentAnyCertificate,
+struct AgentAnyCertificateSerializer {
     seq: usize,
 }
 
-impl<'a> AgentAnyCertificateSerializer<'a> {
-    fn new(data: &'a AgentAnyCertificate) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for AgentAnyCertificateSerializer<'a> {
+impl miniserde::ser::Map for AgentAnyCertificateSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -2310,25 +2270,15 @@ impl std::fmt::Debug for AgentStoragePolicy {
 
 impl miniserde::Serialize for AgentStoragePolicy {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(AgentStoragePolicySerializer::new(self)))
+        Fragment::Map(Box::new(AgentStoragePolicySerializer { seq: 0 }))
     }
 }
 
-struct AgentStoragePolicySerializer<'a> {
-    data: &'a AgentStoragePolicy,
+struct AgentStoragePolicySerializer {
     seq: usize,
 }
 
-impl<'a> AgentStoragePolicySerializer<'a> {
-    fn new(data: &'a AgentStoragePolicy) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for AgentStoragePolicySerializer<'a> {
+impl miniserde::ser::Map for AgentStoragePolicySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -25073,25 +25023,15 @@ impl std::fmt::Debug for SolutionsHookAcknowledgeConfig {
 
 impl miniserde::Serialize for SolutionsHookAcknowledgeConfig {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SolutionsHookAcknowledgeConfigSerializer::new(self)))
+        Fragment::Map(Box::new(SolutionsHookAcknowledgeConfigSerializer { seq: 0 }))
     }
 }
 
-struct SolutionsHookAcknowledgeConfigSerializer<'a> {
-    data: &'a SolutionsHookAcknowledgeConfig,
+struct SolutionsHookAcknowledgeConfigSerializer {
     seq: usize,
 }
 
-impl<'a> SolutionsHookAcknowledgeConfigSerializer<'a> {
-    fn new(data: &'a SolutionsHookAcknowledgeConfig) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SolutionsHookAcknowledgeConfigSerializer<'a> {
+impl miniserde::ser::Map for SolutionsHookAcknowledgeConfigSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -25177,25 +25117,15 @@ impl std::fmt::Debug for SolutionsInteractiveHookAcknowledgeConfig {
 
 impl miniserde::Serialize for SolutionsInteractiveHookAcknowledgeConfig {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SolutionsInteractiveHookAcknowledgeConfigSerializer::new(self)))
+        Fragment::Map(Box::new(SolutionsInteractiveHookAcknowledgeConfigSerializer { seq: 0 }))
     }
 }
 
-struct SolutionsInteractiveHookAcknowledgeConfigSerializer<'a> {
-    data: &'a SolutionsInteractiveHookAcknowledgeConfig,
+struct SolutionsInteractiveHookAcknowledgeConfigSerializer {
     seq: usize,
 }
 
-impl<'a> SolutionsInteractiveHookAcknowledgeConfigSerializer<'a> {
-    fn new(data: &'a SolutionsInteractiveHookAcknowledgeConfig) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SolutionsInteractiveHookAcknowledgeConfigSerializer<'a> {
+impl miniserde::ser::Map for SolutionsInteractiveHookAcknowledgeConfigSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -26451,25 +26381,15 @@ impl std::fmt::Debug for SolutionsStoragePolicy {
 
 impl miniserde::Serialize for SolutionsStoragePolicy {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SolutionsStoragePolicySerializer::new(self)))
+        Fragment::Map(Box::new(SolutionsStoragePolicySerializer { seq: 0 }))
     }
 }
 
-struct SolutionsStoragePolicySerializer<'a> {
-    data: &'a SolutionsStoragePolicy,
+struct SolutionsStoragePolicySerializer {
     seq: usize,
 }
 
-impl<'a> SolutionsStoragePolicySerializer<'a> {
-    fn new(data: &'a SolutionsStoragePolicy) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SolutionsStoragePolicySerializer<'a> {
+impl miniserde::ser::Map for SolutionsStoragePolicySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -26792,25 +26712,15 @@ impl std::fmt::Debug for SolutionsTypeSpecificSolutionConfig {
 
 impl miniserde::Serialize for SolutionsTypeSpecificSolutionConfig {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SolutionsTypeSpecificSolutionConfigSerializer::new(self)))
+        Fragment::Map(Box::new(SolutionsTypeSpecificSolutionConfigSerializer { seq: 0 }))
     }
 }
 
-struct SolutionsTypeSpecificSolutionConfigSerializer<'a> {
-    data: &'a SolutionsTypeSpecificSolutionConfig,
+struct SolutionsTypeSpecificSolutionConfigSerializer {
     seq: usize,
 }
 
-impl<'a> SolutionsTypeSpecificSolutionConfigSerializer<'a> {
-    fn new(data: &'a SolutionsTypeSpecificSolutionConfig) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SolutionsTypeSpecificSolutionConfigSerializer<'a> {
+impl miniserde::ser::Map for SolutionsTypeSpecificSolutionConfigSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -27396,25 +27306,15 @@ impl std::fmt::Debug for SolutionsVmSource {
 
 impl miniserde::Serialize for SolutionsVmSource {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SolutionsVmSourceSerializer::new(self)))
+        Fragment::Map(Box::new(SolutionsVmSourceSerializer { seq: 0 }))
     }
 }
 
-struct SolutionsVmSourceSerializer<'a> {
-    data: &'a SolutionsVmSource,
+struct SolutionsVmSourceSerializer {
     seq: usize,
 }
 
-impl<'a> SolutionsVmSourceSerializer<'a> {
-    fn new(data: &'a SolutionsVmSource) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SolutionsVmSourceSerializer<'a> {
+impl miniserde::ser::Map for SolutionsVmSourceSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -28320,25 +28220,15 @@ impl std::fmt::Debug for VibVibServicesSslTrust {
 
 impl miniserde::Serialize for VibVibServicesSslTrust {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VibVibServicesSslTrustSerializer::new(self)))
+        Fragment::Map(Box::new(VibVibServicesSslTrustSerializer { seq: 0 }))
     }
 }
 
-struct VibVibServicesSslTrustSerializer<'a> {
-    data: &'a VibVibServicesSslTrust,
+struct VibVibServicesSslTrustSerializer {
     seq: usize,
 }
 
-impl<'a> VibVibServicesSslTrustSerializer<'a> {
-    fn new(data: &'a VibVibServicesSslTrust) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VibVibServicesSslTrustSerializer<'a> {
+impl miniserde::ser::Map for VibVibServicesSslTrustSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -28424,25 +28314,15 @@ impl std::fmt::Debug for VibVibServicesAnyCertificate {
 
 impl miniserde::Serialize for VibVibServicesAnyCertificate {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VibVibServicesAnyCertificateSerializer::new(self)))
+        Fragment::Map(Box::new(VibVibServicesAnyCertificateSerializer { seq: 0 }))
     }
 }
 
-struct VibVibServicesAnyCertificateSerializer<'a> {
-    data: &'a VibVibServicesAnyCertificate,
+struct VibVibServicesAnyCertificateSerializer {
     seq: usize,
 }
 
-impl<'a> VibVibServicesAnyCertificateSerializer<'a> {
-    fn new(data: &'a VibVibServicesAnyCertificate) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VibVibServicesAnyCertificateSerializer<'a> {
+impl miniserde::ser::Map for VibVibServicesAnyCertificateSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -33814,25 +33694,15 @@ impl std::fmt::Debug for PbmPlacementMatchingResources {
 
 impl miniserde::Serialize for PbmPlacementMatchingResources {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(PbmPlacementMatchingResourcesSerializer::new(self)))
+        Fragment::Map(Box::new(PbmPlacementMatchingResourcesSerializer { seq: 0 }))
     }
 }
 
-struct PbmPlacementMatchingResourcesSerializer<'a> {
-    data: &'a PbmPlacementMatchingResources,
+struct PbmPlacementMatchingResourcesSerializer {
     seq: usize,
 }
 
-impl<'a> PbmPlacementMatchingResourcesSerializer<'a> {
-    fn new(data: &'a PbmPlacementMatchingResources) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for PbmPlacementMatchingResourcesSerializer<'a> {
+impl miniserde::ser::Map for PbmPlacementMatchingResourcesSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -34184,25 +34054,15 @@ impl std::fmt::Debug for PbmPlacementRequirement {
 
 impl miniserde::Serialize for PbmPlacementRequirement {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(PbmPlacementRequirementSerializer::new(self)))
+        Fragment::Map(Box::new(PbmPlacementRequirementSerializer { seq: 0 }))
     }
 }
 
-struct PbmPlacementRequirementSerializer<'a> {
-    data: &'a PbmPlacementRequirement,
+struct PbmPlacementRequirementSerializer {
     seq: usize,
 }
 
-impl<'a> PbmPlacementRequirementSerializer<'a> {
-    fn new(data: &'a PbmPlacementRequirement) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for PbmPlacementRequirementSerializer<'a> {
+impl miniserde::ser::Map for PbmPlacementRequirementSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -35029,25 +34889,15 @@ impl std::fmt::Debug for PbmCapabilityConstraints {
 
 impl miniserde::Serialize for PbmCapabilityConstraints {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(PbmCapabilityConstraintsSerializer::new(self)))
+        Fragment::Map(Box::new(PbmCapabilityConstraintsSerializer { seq: 0 }))
     }
 }
 
-struct PbmCapabilityConstraintsSerializer<'a> {
-    data: &'a PbmCapabilityConstraints,
+struct PbmCapabilityConstraintsSerializer {
     seq: usize,
 }
 
-impl<'a> PbmCapabilityConstraintsSerializer<'a> {
-    fn new(data: &'a PbmCapabilityConstraints) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for PbmCapabilityConstraintsSerializer<'a> {
+impl miniserde::ser::Map for PbmCapabilityConstraintsSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -43318,25 +43168,15 @@ impl std::fmt::Debug for DeviceId {
 
 impl miniserde::Serialize for DeviceId {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DeviceIdSerializer::new(self)))
+        Fragment::Map(Box::new(DeviceIdSerializer { seq: 0 }))
     }
 }
 
-struct DeviceIdSerializer<'a> {
-    data: &'a DeviceId,
+struct DeviceIdSerializer {
     seq: usize,
 }
 
-impl<'a> DeviceIdSerializer<'a> {
-    fn new(data: &'a DeviceId) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DeviceIdSerializer<'a> {
+impl miniserde::ser::Map for DeviceIdSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -43986,25 +43826,15 @@ impl std::fmt::Debug for VirtualMachineId {
 
 impl miniserde::Serialize for VirtualMachineId {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineIdSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineIdSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineIdSerializer<'a> {
-    data: &'a VirtualMachineId,
+struct VirtualMachineIdSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineIdSerializer<'a> {
-    fn new(data: &'a VirtualMachineId) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineIdSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineIdSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -63609,25 +63439,15 @@ impl std::fmt::Debug for DirectPathProfileManagerCapacityQuerySpec {
 
 impl miniserde::Serialize for DirectPathProfileManagerCapacityQuerySpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DirectPathProfileManagerCapacityQuerySpecSerializer::new(self)))
+        Fragment::Map(Box::new(DirectPathProfileManagerCapacityQuerySpecSerializer { seq: 0 }))
     }
 }
 
-struct DirectPathProfileManagerCapacityQuerySpecSerializer<'a> {
-    data: &'a DirectPathProfileManagerCapacityQuerySpec,
+struct DirectPathProfileManagerCapacityQuerySpecSerializer {
     seq: usize,
 }
 
-impl<'a> DirectPathProfileManagerCapacityQuerySpecSerializer<'a> {
-    fn new(data: &'a DirectPathProfileManagerCapacityQuerySpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DirectPathProfileManagerCapacityQuerySpecSerializer<'a> {
+impl miniserde::ser::Map for DirectPathProfileManagerCapacityQuerySpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -64073,25 +63893,15 @@ impl std::fmt::Debug for DirectPathProfileManagerCapacityResult {
 
 impl miniserde::Serialize for DirectPathProfileManagerCapacityResult {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DirectPathProfileManagerCapacityResultSerializer::new(self)))
+        Fragment::Map(Box::new(DirectPathProfileManagerCapacityResultSerializer { seq: 0 }))
     }
 }
 
-struct DirectPathProfileManagerCapacityResultSerializer<'a> {
-    data: &'a DirectPathProfileManagerCapacityResult,
+struct DirectPathProfileManagerCapacityResultSerializer {
     seq: usize,
 }
 
-impl<'a> DirectPathProfileManagerCapacityResultSerializer<'a> {
-    fn new(data: &'a DirectPathProfileManagerCapacityResult) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DirectPathProfileManagerCapacityResultSerializer<'a> {
+impl miniserde::ser::Map for DirectPathProfileManagerCapacityResultSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -64654,25 +64464,15 @@ impl std::fmt::Debug for DirectPathProfileManagerDirectPathConfig {
 
 impl miniserde::Serialize for DirectPathProfileManagerDirectPathConfig {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DirectPathProfileManagerDirectPathConfigSerializer::new(self)))
+        Fragment::Map(Box::new(DirectPathProfileManagerDirectPathConfigSerializer { seq: 0 }))
     }
 }
 
-struct DirectPathProfileManagerDirectPathConfigSerializer<'a> {
-    data: &'a DirectPathProfileManagerDirectPathConfig,
+struct DirectPathProfileManagerDirectPathConfigSerializer {
     seq: usize,
 }
 
-impl<'a> DirectPathProfileManagerDirectPathConfigSerializer<'a> {
-    fn new(data: &'a DirectPathProfileManagerDirectPathConfig) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DirectPathProfileManagerDirectPathConfigSerializer<'a> {
+impl miniserde::ser::Map for DirectPathProfileManagerDirectPathConfigSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -65607,25 +65407,15 @@ impl std::fmt::Debug for DirectPathProfileManagerTargetEntity {
 
 impl miniserde::Serialize for DirectPathProfileManagerTargetEntity {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DirectPathProfileManagerTargetEntitySerializer::new(self)))
+        Fragment::Map(Box::new(DirectPathProfileManagerTargetEntitySerializer { seq: 0 }))
     }
 }
 
-struct DirectPathProfileManagerTargetEntitySerializer<'a> {
-    data: &'a DirectPathProfileManagerTargetEntity,
+struct DirectPathProfileManagerTargetEntitySerializer {
     seq: usize,
 }
 
-impl<'a> DirectPathProfileManagerTargetEntitySerializer<'a> {
-    fn new(data: &'a DirectPathProfileManagerTargetEntity) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DirectPathProfileManagerTargetEntitySerializer<'a> {
+impl miniserde::ser::Map for DirectPathProfileManagerTargetEntitySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -69837,25 +69627,15 @@ impl std::fmt::Debug for DvsHealthCheckCapability {
 
 impl miniserde::Serialize for DvsHealthCheckCapability {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsHealthCheckCapabilitySerializer::new(self)))
+        Fragment::Map(Box::new(DvsHealthCheckCapabilitySerializer { seq: 0 }))
     }
 }
 
-struct DvsHealthCheckCapabilitySerializer<'a> {
-    data: &'a DvsHealthCheckCapability,
+struct DvsHealthCheckCapabilitySerializer {
     seq: usize,
 }
 
-impl<'a> DvsHealthCheckCapabilitySerializer<'a> {
-    fn new(data: &'a DvsHealthCheckCapability) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsHealthCheckCapabilitySerializer<'a> {
+impl miniserde::ser::Map for DvsHealthCheckCapabilitySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -71452,25 +71232,15 @@ impl std::fmt::Debug for DvsUplinkPortPolicy {
 
 impl miniserde::Serialize for DvsUplinkPortPolicy {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsUplinkPortPolicySerializer::new(self)))
+        Fragment::Map(Box::new(DvsUplinkPortPolicySerializer { seq: 0 }))
     }
 }
 
-struct DvsUplinkPortPolicySerializer<'a> {
-    data: &'a DvsUplinkPortPolicy,
+struct DvsUplinkPortPolicySerializer {
     seq: usize,
 }
 
-impl<'a> DvsUplinkPortPolicySerializer<'a> {
-    fn new(data: &'a DvsUplinkPortPolicy) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsUplinkPortPolicySerializer<'a> {
+impl miniserde::ser::Map for DvsUplinkPortPolicySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -75516,25 +75286,15 @@ impl std::fmt::Debug for HbrReplicationTargetSpec {
 
 impl miniserde::Serialize for HbrReplicationTargetSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HbrReplicationTargetSpecSerializer::new(self)))
+        Fragment::Map(Box::new(HbrReplicationTargetSpecSerializer { seq: 0 }))
     }
 }
 
-struct HbrReplicationTargetSpecSerializer<'a> {
-    data: &'a HbrReplicationTargetSpec,
+struct HbrReplicationTargetSpecSerializer {
     seq: usize,
 }
 
-impl<'a> HbrReplicationTargetSpecSerializer<'a> {
-    fn new(data: &'a HbrReplicationTargetSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HbrReplicationTargetSpecSerializer<'a> {
+impl miniserde::ser::Map for HbrReplicationTargetSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -84069,25 +83829,15 @@ impl std::fmt::Debug for IoFilterManagerSslTrust {
 
 impl miniserde::Serialize for IoFilterManagerSslTrust {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(IoFilterManagerSslTrustSerializer::new(self)))
+        Fragment::Map(Box::new(IoFilterManagerSslTrustSerializer { seq: 0 }))
     }
 }
 
-struct IoFilterManagerSslTrustSerializer<'a> {
-    data: &'a IoFilterManagerSslTrust,
+struct IoFilterManagerSslTrustSerializer {
     seq: usize,
 }
 
-impl<'a> IoFilterManagerSslTrustSerializer<'a> {
-    fn new(data: &'a IoFilterManagerSslTrust) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for IoFilterManagerSslTrustSerializer<'a> {
+impl miniserde::ser::Map for IoFilterManagerSslTrustSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -84294,25 +84044,15 @@ impl std::fmt::Debug for UntrustedCertificate {
 
 impl miniserde::Serialize for UntrustedCertificate {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(UntrustedCertificateSerializer::new(self)))
+        Fragment::Map(Box::new(UntrustedCertificateSerializer { seq: 0 }))
     }
 }
 
-struct UntrustedCertificateSerializer<'a> {
-    data: &'a UntrustedCertificate,
+struct UntrustedCertificateSerializer {
     seq: usize,
 }
 
-impl<'a> UntrustedCertificateSerializer<'a> {
-    fn new(data: &'a UntrustedCertificate) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for UntrustedCertificateSerializer<'a> {
+impl miniserde::ser::Map for UntrustedCertificateSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -85983,25 +85723,15 @@ impl std::fmt::Debug for LicenseSource {
 
 impl miniserde::Serialize for LicenseSource {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(LicenseSourceSerializer::new(self)))
+        Fragment::Map(Box::new(LicenseSourceSerializer { seq: 0 }))
     }
 }
 
-struct LicenseSourceSerializer<'a> {
-    data: &'a LicenseSource,
+struct LicenseSourceSerializer {
     seq: usize,
 }
 
-impl<'a> LicenseSourceSerializer<'a> {
-    fn new(data: &'a LicenseSource) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for LicenseSourceSerializer<'a> {
+impl miniserde::ser::Map for LicenseSourceSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -98319,25 +98049,15 @@ impl std::fmt::Debug for SddcBase {
 
 impl miniserde::Serialize for SddcBase {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SddcBaseSerializer::new(self)))
+        Fragment::Map(Box::new(SddcBaseSerializer { seq: 0 }))
     }
 }
 
-struct SddcBaseSerializer<'a> {
-    data: &'a SddcBase,
+struct SddcBaseSerializer {
     seq: usize,
 }
 
-impl<'a> SddcBaseSerializer<'a> {
-    fn new(data: &'a SddcBase) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SddcBaseSerializer<'a> {
+impl miniserde::ser::Map for SddcBaseSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -98886,25 +98606,15 @@ impl std::fmt::Debug for SelectionSet {
 
 impl miniserde::Serialize for SelectionSet {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SelectionSetSerializer::new(self)))
+        Fragment::Map(Box::new(SelectionSetSerializer { seq: 0 }))
     }
 }
 
-struct SelectionSetSerializer<'a> {
-    data: &'a SelectionSet,
+struct SelectionSetSerializer {
     seq: usize,
 }
 
-impl<'a> SelectionSetSerializer<'a> {
-    fn new(data: &'a SelectionSet) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SelectionSetSerializer<'a> {
+impl miniserde::ser::Map for SelectionSetSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -100570,25 +100280,15 @@ impl std::fmt::Debug for ServiceLocatorCredential {
 
 impl miniserde::Serialize for ServiceLocatorCredential {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(ServiceLocatorCredentialSerializer::new(self)))
+        Fragment::Map(Box::new(ServiceLocatorCredentialSerializer { seq: 0 }))
     }
 }
 
-struct ServiceLocatorCredentialSerializer<'a> {
-    data: &'a ServiceLocatorCredential,
+struct ServiceLocatorCredentialSerializer {
     seq: usize,
 }
 
-impl<'a> ServiceLocatorCredentialSerializer<'a> {
-    fn new(data: &'a ServiceLocatorCredential) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for ServiceLocatorCredentialSerializer<'a> {
+impl miniserde::ser::Map for ServiceLocatorCredentialSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -101435,25 +101135,15 @@ impl std::fmt::Debug for SessionManagerServiceRequestSpec {
 
 impl miniserde::Serialize for SessionManagerServiceRequestSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SessionManagerServiceRequestSpecSerializer::new(self)))
+        Fragment::Map(Box::new(SessionManagerServiceRequestSpecSerializer { seq: 0 }))
     }
 }
 
-struct SessionManagerServiceRequestSpecSerializer<'a> {
-    data: &'a SessionManagerServiceRequestSpec,
+struct SessionManagerServiceRequestSpecSerializer {
     seq: usize,
 }
 
-impl<'a> SessionManagerServiceRequestSpecSerializer<'a> {
-    fn new(data: &'a SessionManagerServiceRequestSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SessionManagerServiceRequestSpecSerializer<'a> {
+impl miniserde::ser::Map for SessionManagerServiceRequestSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -102084,25 +101774,15 @@ impl std::fmt::Debug for SiteInfo {
 
 impl miniserde::Serialize for SiteInfo {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SiteInfoSerializer::new(self)))
+        Fragment::Map(Box::new(SiteInfoSerializer { seq: 0 }))
     }
 }
 
-struct SiteInfoSerializer<'a> {
-    data: &'a SiteInfo,
+struct SiteInfoSerializer {
     seq: usize,
 }
 
-impl<'a> SiteInfoSerializer<'a> {
-    fn new(data: &'a SiteInfo) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SiteInfoSerializer<'a> {
+impl miniserde::ser::Map for SiteInfoSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -105402,25 +105082,15 @@ impl std::fmt::Debug for TaskManagerTaskViewSpec {
 
 impl miniserde::Serialize for TaskManagerTaskViewSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(TaskManagerTaskViewSpecSerializer::new(self)))
+        Fragment::Map(Box::new(TaskManagerTaskViewSpecSerializer { seq: 0 }))
     }
 }
 
-struct TaskManagerTaskViewSpecSerializer<'a> {
-    data: &'a TaskManagerTaskViewSpec,
+struct TaskManagerTaskViewSpecSerializer {
     seq: usize,
 }
 
-impl<'a> TaskManagerTaskViewSpecSerializer<'a> {
-    fn new(data: &'a TaskManagerTaskViewSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for TaskManagerTaskViewSpecSerializer<'a> {
+impl miniserde::ser::Map for TaskManagerTaskViewSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -105650,25 +105320,15 @@ impl std::fmt::Debug for TaskReason {
 
 impl miniserde::Serialize for TaskReason {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(TaskReasonSerializer::new(self)))
+        Fragment::Map(Box::new(TaskReasonSerializer { seq: 0 }))
     }
 }
 
-struct TaskReasonSerializer<'a> {
-    data: &'a TaskReason,
+struct TaskReasonSerializer {
     seq: usize,
 }
 
-impl<'a> TaskReasonSerializer<'a> {
-    fn new(data: &'a TaskReason) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for TaskReasonSerializer<'a> {
+impl miniserde::ser::Map for TaskReasonSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -106041,25 +105701,15 @@ impl std::fmt::Debug for TaskReasonSystem {
 
 impl miniserde::Serialize for TaskReasonSystem {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(TaskReasonSystemSerializer::new(self)))
+        Fragment::Map(Box::new(TaskReasonSystemSerializer { seq: 0 }))
     }
 }
 
-struct TaskReasonSystemSerializer<'a> {
-    data: &'a TaskReasonSystem,
+struct TaskReasonSystemSerializer {
     seq: usize,
 }
 
-impl<'a> TaskReasonSystemSerializer<'a> {
-    fn new(data: &'a TaskReasonSystem) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for TaskReasonSystemSerializer<'a> {
+impl miniserde::ser::Map for TaskReasonSystemSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -110826,25 +110476,15 @@ impl std::fmt::Debug for VsanComparator {
 
 impl miniserde::Serialize for VsanComparator {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VsanComparatorSerializer::new(self)))
+        Fragment::Map(Box::new(VsanComparatorSerializer { seq: 0 }))
     }
 }
 
-struct VsanComparatorSerializer<'a> {
-    data: &'a VsanComparator,
+struct VsanComparatorSerializer {
     seq: usize,
 }
 
-impl<'a> VsanComparatorSerializer<'a> {
-    fn new(data: &'a VsanComparator) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VsanComparatorSerializer<'a> {
+impl miniserde::ser::Map for VsanComparatorSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -111201,25 +110841,15 @@ impl std::fmt::Debug for VsanDataObfuscationRule {
 
 impl miniserde::Serialize for VsanDataObfuscationRule {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VsanDataObfuscationRuleSerializer::new(self)))
+        Fragment::Map(Box::new(VsanDataObfuscationRuleSerializer { seq: 0 }))
     }
 }
 
-struct VsanDataObfuscationRuleSerializer<'a> {
-    data: &'a VsanDataObfuscationRule,
+struct VsanDataObfuscationRuleSerializer {
     seq: usize,
 }
 
-impl<'a> VsanDataObfuscationRuleSerializer<'a> {
-    fn new(data: &'a VsanDataObfuscationRule) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VsanDataObfuscationRuleSerializer<'a> {
+impl miniserde::ser::Map for VsanDataObfuscationRuleSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -117917,25 +117547,15 @@ impl std::fmt::Debug for Action {
 
 impl miniserde::Serialize for Action {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(ActionSerializer::new(self)))
+        Fragment::Map(Box::new(ActionSerializer { seq: 0 }))
     }
 }
 
-struct ActionSerializer<'a> {
-    data: &'a Action,
+struct ActionSerializer {
     seq: usize,
 }
 
-impl<'a> ActionSerializer<'a> {
-    fn new(data: &'a Action) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for ActionSerializer<'a> {
+impl miniserde::ser::Map for ActionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -118556,25 +118176,15 @@ impl std::fmt::Debug for SendSnmpAction {
 
 impl miniserde::Serialize for SendSnmpAction {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(SendSnmpActionSerializer::new(self)))
+        Fragment::Map(Box::new(SendSnmpActionSerializer { seq: 0 }))
     }
 }
 
-struct SendSnmpActionSerializer<'a> {
-    data: &'a SendSnmpAction,
+struct SendSnmpActionSerializer {
     seq: usize,
 }
 
-impl<'a> SendSnmpActionSerializer<'a> {
-    fn new(data: &'a SendSnmpAction) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for SendSnmpActionSerializer<'a> {
+impl miniserde::ser::Map for SendSnmpActionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -118784,25 +118394,15 @@ impl std::fmt::Debug for AlarmAction {
 
 impl miniserde::Serialize for AlarmAction {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(AlarmActionSerializer::new(self)))
+        Fragment::Map(Box::new(AlarmActionSerializer { seq: 0 }))
     }
 }
 
-struct AlarmActionSerializer<'a> {
-    data: &'a AlarmAction,
+struct AlarmActionSerializer {
     seq: usize,
 }
 
-impl<'a> AlarmActionSerializer<'a> {
-    fn new(data: &'a AlarmAction) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for AlarmActionSerializer<'a> {
+impl miniserde::ser::Map for AlarmActionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -119392,25 +118992,15 @@ impl std::fmt::Debug for AlarmExpression {
 
 impl miniserde::Serialize for AlarmExpression {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(AlarmExpressionSerializer::new(self)))
+        Fragment::Map(Box::new(AlarmExpressionSerializer { seq: 0 }))
     }
 }
 
-struct AlarmExpressionSerializer<'a> {
-    data: &'a AlarmExpression,
+struct AlarmExpressionSerializer {
     seq: usize,
 }
 
-impl<'a> AlarmExpressionSerializer<'a> {
-    fn new(data: &'a AlarmExpression) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for AlarmExpressionSerializer<'a> {
+impl miniserde::ser::Map for AlarmExpressionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -124892,25 +124482,15 @@ impl std::fmt::Debug for ClusterDasAdmissionControlInfo {
 
 impl miniserde::Serialize for ClusterDasAdmissionControlInfo {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(ClusterDasAdmissionControlInfoSerializer::new(self)))
+        Fragment::Map(Box::new(ClusterDasAdmissionControlInfoSerializer { seq: 0 }))
     }
 }
 
-struct ClusterDasAdmissionControlInfoSerializer<'a> {
-    data: &'a ClusterDasAdmissionControlInfo,
+struct ClusterDasAdmissionControlInfoSerializer {
     seq: usize,
 }
 
-impl<'a> ClusterDasAdmissionControlInfoSerializer<'a> {
-    fn new(data: &'a ClusterDasAdmissionControlInfo) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for ClusterDasAdmissionControlInfoSerializer<'a> {
+impl miniserde::ser::Map for ClusterDasAdmissionControlInfoSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -127298,25 +126878,15 @@ impl std::fmt::Debug for ClusterDasData {
 
 impl miniserde::Serialize for ClusterDasData {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(ClusterDasDataSerializer::new(self)))
+        Fragment::Map(Box::new(ClusterDasDataSerializer { seq: 0 }))
     }
 }
 
-struct ClusterDasDataSerializer<'a> {
-    data: &'a ClusterDasData,
+struct ClusterDasDataSerializer {
     seq: usize,
 }
 
-impl<'a> ClusterDasDataSerializer<'a> {
-    fn new(data: &'a ClusterDasData) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for ClusterDasDataSerializer<'a> {
+impl miniserde::ser::Map for ClusterDasDataSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -128097,25 +127667,15 @@ impl std::fmt::Debug for ClusterDasHostInfo {
 
 impl miniserde::Serialize for ClusterDasHostInfo {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(ClusterDasHostInfoSerializer::new(self)))
+        Fragment::Map(Box::new(ClusterDasHostInfoSerializer { seq: 0 }))
     }
 }
 
-struct ClusterDasHostInfoSerializer<'a> {
-    data: &'a ClusterDasHostInfo,
+struct ClusterDasHostInfoSerializer {
     seq: usize,
 }
 
-impl<'a> ClusterDasHostInfoSerializer<'a> {
-    fn new(data: &'a ClusterDasHostInfo) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for ClusterDasHostInfoSerializer<'a> {
+impl miniserde::ser::Map for ClusterDasHostInfoSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -136256,25 +135816,15 @@ impl std::fmt::Debug for ClusterSlotPolicy {
 
 impl miniserde::Serialize for ClusterSlotPolicy {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(ClusterSlotPolicySerializer::new(self)))
+        Fragment::Map(Box::new(ClusterSlotPolicySerializer { seq: 0 }))
     }
 }
 
-struct ClusterSlotPolicySerializer<'a> {
-    data: &'a ClusterSlotPolicy,
+struct ClusterSlotPolicySerializer {
     seq: usize,
 }
 
-impl<'a> ClusterSlotPolicySerializer<'a> {
-    fn new(data: &'a ClusterSlotPolicy) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for ClusterSlotPolicySerializer<'a> {
+impl miniserde::ser::Map for ClusterSlotPolicySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -162048,25 +161598,15 @@ impl std::fmt::Debug for CnsAccessControlSpec {
 
 impl miniserde::Serialize for CnsAccessControlSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CnsAccessControlSpecSerializer::new(self)))
+        Fragment::Map(Box::new(CnsAccessControlSpecSerializer { seq: 0 }))
     }
 }
 
-struct CnsAccessControlSpecSerializer<'a> {
-    data: &'a CnsAccessControlSpec,
+struct CnsAccessControlSpecSerializer {
     seq: usize,
 }
 
-impl<'a> CnsAccessControlSpecSerializer<'a> {
-    fn new(data: &'a CnsAccessControlSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CnsAccessControlSpecSerializer<'a> {
+impl miniserde::ser::Map for CnsAccessControlSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -163092,25 +162632,15 @@ impl std::fmt::Debug for CnsBaseCreateSpec {
 
 impl miniserde::Serialize for CnsBaseCreateSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CnsBaseCreateSpecSerializer::new(self)))
+        Fragment::Map(Box::new(CnsBaseCreateSpecSerializer { seq: 0 }))
     }
 }
 
-struct CnsBaseCreateSpecSerializer<'a> {
-    data: &'a CnsBaseCreateSpec,
+struct CnsBaseCreateSpecSerializer {
     seq: usize,
 }
 
-impl<'a> CnsBaseCreateSpecSerializer<'a> {
-    fn new(data: &'a CnsBaseCreateSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CnsBaseCreateSpecSerializer<'a> {
+impl miniserde::ser::Map for CnsBaseCreateSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -163202,25 +162732,15 @@ impl std::fmt::Debug for CnsFileCreateSpec {
 
 impl miniserde::Serialize for CnsFileCreateSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CnsFileCreateSpecSerializer::new(self)))
+        Fragment::Map(Box::new(CnsFileCreateSpecSerializer { seq: 0 }))
     }
 }
 
-struct CnsFileCreateSpecSerializer<'a> {
-    data: &'a CnsFileCreateSpec,
+struct CnsFileCreateSpecSerializer {
     seq: usize,
 }
 
-impl<'a> CnsFileCreateSpecSerializer<'a> {
-    fn new(data: &'a CnsFileCreateSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CnsFileCreateSpecSerializer<'a> {
+impl miniserde::ser::Map for CnsFileCreateSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -168256,25 +167776,15 @@ impl std::fmt::Debug for CnsVolumeSource {
 
 impl miniserde::Serialize for CnsVolumeSource {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CnsVolumeSourceSerializer::new(self)))
+        Fragment::Map(Box::new(CnsVolumeSourceSerializer { seq: 0 }))
     }
 }
 
-struct CnsVolumeSourceSerializer<'a> {
-    data: &'a CnsVolumeSource,
+struct CnsVolumeSourceSerializer {
     seq: usize,
 }
 
-impl<'a> CnsVolumeSourceSerializer<'a> {
-    fn new(data: &'a CnsVolumeSource) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CnsVolumeSourceSerializer<'a> {
+impl miniserde::ser::Map for CnsVolumeSourceSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -173773,25 +173283,15 @@ impl std::fmt::Debug for EntityBackup {
 
 impl miniserde::Serialize for EntityBackup {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(EntityBackupSerializer::new(self)))
+        Fragment::Map(Box::new(EntityBackupSerializer { seq: 0 }))
     }
 }
 
-struct EntityBackupSerializer<'a> {
-    data: &'a EntityBackup,
+struct EntityBackupSerializer {
     seq: usize,
 }
 
-impl<'a> EntityBackupSerializer<'a> {
-    fn new(data: &'a EntityBackup) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for EntityBackupSerializer<'a> {
+impl miniserde::ser::Map for EntityBackupSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -174104,25 +173604,15 @@ impl std::fmt::Debug for DvsFilterSpecConnecteeSpec {
 
 impl miniserde::Serialize for DvsFilterSpecConnecteeSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsFilterSpecConnecteeSpecSerializer::new(self)))
+        Fragment::Map(Box::new(DvsFilterSpecConnecteeSpecSerializer { seq: 0 }))
     }
 }
 
-struct DvsFilterSpecConnecteeSpecSerializer<'a> {
-    data: &'a DvsFilterSpecConnecteeSpec,
+struct DvsFilterSpecConnecteeSpecSerializer {
     seq: usize,
 }
 
-impl<'a> DvsFilterSpecConnecteeSpecSerializer<'a> {
-    fn new(data: &'a DvsFilterSpecConnecteeSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsFilterSpecConnecteeSpecSerializer<'a> {
+impl miniserde::ser::Map for DvsFilterSpecConnecteeSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -174577,25 +174067,15 @@ impl std::fmt::Debug for DvsFilterSpecVlanSpec {
 
 impl miniserde::Serialize for DvsFilterSpecVlanSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsFilterSpecVlanSpecSerializer::new(self)))
+        Fragment::Map(Box::new(DvsFilterSpecVlanSpecSerializer { seq: 0 }))
     }
 }
 
-struct DvsFilterSpecVlanSpecSerializer<'a> {
-    data: &'a DvsFilterSpecVlanSpec,
+struct DvsFilterSpecVlanSpecSerializer {
     seq: usize,
 }
 
-impl<'a> DvsFilterSpecVlanSpecSerializer<'a> {
-    fn new(data: &'a DvsFilterSpecVlanSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsFilterSpecVlanSpecSerializer<'a> {
+impl miniserde::ser::Map for DvsFilterSpecVlanSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -175274,25 +174754,15 @@ impl std::fmt::Debug for DistributedVirtualSwitchHostMemberBacking {
 
 impl miniserde::Serialize for DistributedVirtualSwitchHostMemberBacking {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DistributedVirtualSwitchHostMemberBackingSerializer::new(self)))
+        Fragment::Map(Box::new(DistributedVirtualSwitchHostMemberBackingSerializer { seq: 0 }))
     }
 }
 
-struct DistributedVirtualSwitchHostMemberBackingSerializer<'a> {
-    data: &'a DistributedVirtualSwitchHostMemberBacking,
+struct DistributedVirtualSwitchHostMemberBackingSerializer {
     seq: usize,
 }
 
-impl<'a> DistributedVirtualSwitchHostMemberBackingSerializer<'a> {
-    fn new(data: &'a DistributedVirtualSwitchHostMemberBacking) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DistributedVirtualSwitchHostMemberBackingSerializer<'a> {
+impl miniserde::ser::Map for DistributedVirtualSwitchHostMemberBackingSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -179781,25 +179251,15 @@ impl std::fmt::Debug for DvsNetworkRuleAction {
 
 impl miniserde::Serialize for DvsNetworkRuleAction {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsNetworkRuleActionSerializer::new(self)))
+        Fragment::Map(Box::new(DvsNetworkRuleActionSerializer { seq: 0 }))
     }
 }
 
-struct DvsNetworkRuleActionSerializer<'a> {
-    data: &'a DvsNetworkRuleAction,
+struct DvsNetworkRuleActionSerializer {
     seq: usize,
 }
 
-impl<'a> DvsNetworkRuleActionSerializer<'a> {
-    fn new(data: &'a DvsNetworkRuleAction) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsNetworkRuleActionSerializer<'a> {
+impl miniserde::ser::Map for DvsNetworkRuleActionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -179895,25 +179355,15 @@ impl std::fmt::Debug for DvsAcceptNetworkRuleAction {
 
 impl miniserde::Serialize for DvsAcceptNetworkRuleAction {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsAcceptNetworkRuleActionSerializer::new(self)))
+        Fragment::Map(Box::new(DvsAcceptNetworkRuleActionSerializer { seq: 0 }))
     }
 }
 
-struct DvsAcceptNetworkRuleActionSerializer<'a> {
-    data: &'a DvsAcceptNetworkRuleAction,
+struct DvsAcceptNetworkRuleActionSerializer {
     seq: usize,
 }
 
-impl<'a> DvsAcceptNetworkRuleActionSerializer<'a> {
-    fn new(data: &'a DvsAcceptNetworkRuleAction) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsAcceptNetworkRuleActionSerializer<'a> {
+impl miniserde::ser::Map for DvsAcceptNetworkRuleActionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -180011,25 +179461,15 @@ impl std::fmt::Debug for DvsCopyNetworkRuleAction {
 
 impl miniserde::Serialize for DvsCopyNetworkRuleAction {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsCopyNetworkRuleActionSerializer::new(self)))
+        Fragment::Map(Box::new(DvsCopyNetworkRuleActionSerializer { seq: 0 }))
     }
 }
 
-struct DvsCopyNetworkRuleActionSerializer<'a> {
-    data: &'a DvsCopyNetworkRuleAction,
+struct DvsCopyNetworkRuleActionSerializer {
     seq: usize,
 }
 
-impl<'a> DvsCopyNetworkRuleActionSerializer<'a> {
-    fn new(data: &'a DvsCopyNetworkRuleAction) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsCopyNetworkRuleActionSerializer<'a> {
+impl miniserde::ser::Map for DvsCopyNetworkRuleActionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -180125,25 +179565,15 @@ impl std::fmt::Debug for DvsDropNetworkRuleAction {
 
 impl miniserde::Serialize for DvsDropNetworkRuleAction {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsDropNetworkRuleActionSerializer::new(self)))
+        Fragment::Map(Box::new(DvsDropNetworkRuleActionSerializer { seq: 0 }))
     }
 }
 
-struct DvsDropNetworkRuleActionSerializer<'a> {
-    data: &'a DvsDropNetworkRuleAction,
+struct DvsDropNetworkRuleActionSerializer {
     seq: usize,
 }
 
-impl<'a> DvsDropNetworkRuleActionSerializer<'a> {
-    fn new(data: &'a DvsDropNetworkRuleAction) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsDropNetworkRuleActionSerializer<'a> {
+impl miniserde::ser::Map for DvsDropNetworkRuleActionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -180365,25 +179795,15 @@ impl std::fmt::Debug for DvsLogNetworkRuleAction {
 
 impl miniserde::Serialize for DvsLogNetworkRuleAction {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsLogNetworkRuleActionSerializer::new(self)))
+        Fragment::Map(Box::new(DvsLogNetworkRuleActionSerializer { seq: 0 }))
     }
 }
 
-struct DvsLogNetworkRuleActionSerializer<'a> {
-    data: &'a DvsLogNetworkRuleAction,
+struct DvsLogNetworkRuleActionSerializer {
     seq: usize,
 }
 
-impl<'a> DvsLogNetworkRuleActionSerializer<'a> {
-    fn new(data: &'a DvsLogNetworkRuleAction) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsLogNetworkRuleActionSerializer<'a> {
+impl miniserde::ser::Map for DvsLogNetworkRuleActionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -180606,25 +180026,15 @@ impl std::fmt::Debug for DvsPuntNetworkRuleAction {
 
 impl miniserde::Serialize for DvsPuntNetworkRuleAction {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(DvsPuntNetworkRuleActionSerializer::new(self)))
+        Fragment::Map(Box::new(DvsPuntNetworkRuleActionSerializer { seq: 0 }))
     }
 }
 
-struct DvsPuntNetworkRuleActionSerializer<'a> {
-    data: &'a DvsPuntNetworkRuleAction,
+struct DvsPuntNetworkRuleActionSerializer {
     seq: usize,
 }
 
-impl<'a> DvsPuntNetworkRuleActionSerializer<'a> {
-    fn new(data: &'a DvsPuntNetworkRuleAction) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for DvsPuntNetworkRuleActionSerializer<'a> {
+impl miniserde::ser::Map for DvsPuntNetworkRuleActionSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -188325,25 +187735,15 @@ impl std::fmt::Debug for CryptoSpec {
 
 impl miniserde::Serialize for CryptoSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CryptoSpecSerializer::new(self)))
+        Fragment::Map(Box::new(CryptoSpecSerializer { seq: 0 }))
     }
 }
 
-struct CryptoSpecSerializer<'a> {
-    data: &'a CryptoSpec,
+struct CryptoSpecSerializer {
     seq: usize,
 }
 
-impl<'a> CryptoSpecSerializer<'a> {
-    fn new(data: &'a CryptoSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CryptoSpecSerializer<'a> {
+impl miniserde::ser::Map for CryptoSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -188440,25 +187840,15 @@ impl std::fmt::Debug for CryptoSpecDecrypt {
 
 impl miniserde::Serialize for CryptoSpecDecrypt {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CryptoSpecDecryptSerializer::new(self)))
+        Fragment::Map(Box::new(CryptoSpecDecryptSerializer { seq: 0 }))
     }
 }
 
-struct CryptoSpecDecryptSerializer<'a> {
-    data: &'a CryptoSpecDecrypt,
+struct CryptoSpecDecryptSerializer {
     seq: usize,
 }
 
-impl<'a> CryptoSpecDecryptSerializer<'a> {
-    fn new(data: &'a CryptoSpecDecrypt) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CryptoSpecDecryptSerializer<'a> {
+impl miniserde::ser::Map for CryptoSpecDecryptSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -188803,25 +188193,15 @@ impl std::fmt::Debug for CryptoSpecNoOp {
 
 impl miniserde::Serialize for CryptoSpecNoOp {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CryptoSpecNoOpSerializer::new(self)))
+        Fragment::Map(Box::new(CryptoSpecNoOpSerializer { seq: 0 }))
     }
 }
 
-struct CryptoSpecNoOpSerializer<'a> {
-    data: &'a CryptoSpecNoOp,
+struct CryptoSpecNoOpSerializer {
     seq: usize,
 }
 
-impl<'a> CryptoSpecNoOpSerializer<'a> {
-    fn new(data: &'a CryptoSpecNoOp) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CryptoSpecNoOpSerializer<'a> {
+impl miniserde::ser::Map for CryptoSpecNoOpSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -189530,25 +188910,15 @@ impl std::fmt::Debug for KmipClusterInfoKeyInfo {
 
 impl miniserde::Serialize for KmipClusterInfoKeyInfo {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(KmipClusterInfoKeyInfoSerializer::new(self)))
+        Fragment::Map(Box::new(KmipClusterInfoKeyInfoSerializer { seq: 0 }))
     }
 }
 
-struct KmipClusterInfoKeyInfoSerializer<'a> {
-    data: &'a KmipClusterInfoKeyInfo,
+struct KmipClusterInfoKeyInfoSerializer {
     seq: usize,
 }
 
-impl<'a> KmipClusterInfoKeyInfoSerializer<'a> {
-    fn new(data: &'a KmipClusterInfoKeyInfo) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for KmipClusterInfoKeyInfoSerializer<'a> {
+impl miniserde::ser::Map for KmipClusterInfoKeyInfoSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -190349,25 +189719,15 @@ impl std::fmt::Debug for KmipServerSpecKeySpec {
 
 impl miniserde::Serialize for KmipServerSpecKeySpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(KmipServerSpecKeySpecSerializer::new(self)))
+        Fragment::Map(Box::new(KmipServerSpecKeySpecSerializer { seq: 0 }))
     }
 }
 
-struct KmipServerSpecKeySpecSerializer<'a> {
-    data: &'a KmipServerSpecKeySpec,
+struct KmipServerSpecKeySpecSerializer {
     seq: usize,
 }
 
-impl<'a> KmipServerSpecKeySpecSerializer<'a> {
-    fn new(data: &'a KmipServerSpecKeySpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for KmipServerSpecKeySpecSerializer<'a> {
+impl miniserde::ser::Map for KmipServerSpecKeySpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -191448,25 +190808,15 @@ impl std::fmt::Debug for EventArgument {
 
 impl miniserde::Serialize for EventArgument {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(EventArgumentSerializer::new(self)))
+        Fragment::Map(Box::new(EventArgumentSerializer { seq: 0 }))
     }
 }
 
-struct EventArgumentSerializer<'a> {
-    data: &'a EventArgument,
+struct EventArgumentSerializer {
     seq: usize,
 }
 
-impl<'a> EventArgumentSerializer<'a> {
-    fn new(data: &'a EventArgument) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for EventArgumentSerializer<'a> {
+impl miniserde::ser::Map for EventArgumentSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -194947,25 +194297,15 @@ impl std::fmt::Debug for EventManagerEventViewSpec {
 
 impl miniserde::Serialize for EventManagerEventViewSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(EventManagerEventViewSpecSerializer::new(self)))
+        Fragment::Map(Box::new(EventManagerEventViewSpecSerializer { seq: 0 }))
     }
 }
 
-struct EventManagerEventViewSpecSerializer<'a> {
-    data: &'a EventManagerEventViewSpec,
+struct EventManagerEventViewSpecSerializer {
     seq: usize,
 }
 
-impl<'a> EventManagerEventViewSpecSerializer<'a> {
-    fn new(data: &'a EventManagerEventViewSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for EventManagerEventViewSpecSerializer<'a> {
+impl miniserde::ser::Map for EventManagerEventViewSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -202886,25 +202226,15 @@ impl std::fmt::Debug for HostConfigChange {
 
 impl miniserde::Serialize for HostConfigChange {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostConfigChangeSerializer::new(self)))
+        Fragment::Map(Box::new(HostConfigChangeSerializer { seq: 0 }))
     }
 }
 
-struct HostConfigChangeSerializer<'a> {
-    data: &'a HostConfigChange,
+struct HostConfigChangeSerializer {
     seq: usize,
 }
 
-impl<'a> HostConfigChangeSerializer<'a> {
-    fn new(data: &'a HostConfigChange) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostConfigChangeSerializer<'a> {
+impl miniserde::ser::Map for HostConfigChangeSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -209609,25 +208939,15 @@ impl std::fmt::Debug for FileQuery {
 
 impl miniserde::Serialize for FileQuery {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(FileQuerySerializer::new(self)))
+        Fragment::Map(Box::new(FileQuerySerializer { seq: 0 }))
     }
 }
 
-struct FileQuerySerializer<'a> {
-    data: &'a FileQuery,
+struct FileQuerySerializer {
     seq: usize,
 }
 
-impl<'a> FileQuerySerializer<'a> {
-    fn new(data: &'a FileQuery) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for FileQuerySerializer<'a> {
+impl miniserde::ser::Map for FileQuerySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -209714,25 +209034,15 @@ impl std::fmt::Debug for FloppyImageFileQuery {
 
 impl miniserde::Serialize for FloppyImageFileQuery {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(FloppyImageFileQuerySerializer::new(self)))
+        Fragment::Map(Box::new(FloppyImageFileQuerySerializer { seq: 0 }))
     }
 }
 
-struct FloppyImageFileQuerySerializer<'a> {
-    data: &'a FloppyImageFileQuery,
+struct FloppyImageFileQuerySerializer {
     seq: usize,
 }
 
-impl<'a> FloppyImageFileQuerySerializer<'a> {
-    fn new(data: &'a FloppyImageFileQuery) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for FloppyImageFileQuerySerializer<'a> {
+impl miniserde::ser::Map for FloppyImageFileQuerySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -209819,25 +209129,15 @@ impl std::fmt::Debug for FolderFileQuery {
 
 impl miniserde::Serialize for FolderFileQuery {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(FolderFileQuerySerializer::new(self)))
+        Fragment::Map(Box::new(FolderFileQuerySerializer { seq: 0 }))
     }
 }
 
-struct FolderFileQuerySerializer<'a> {
-    data: &'a FolderFileQuery,
+struct FolderFileQuerySerializer {
     seq: usize,
 }
 
-impl<'a> FolderFileQuerySerializer<'a> {
-    fn new(data: &'a FolderFileQuery) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for FolderFileQuerySerializer<'a> {
+impl miniserde::ser::Map for FolderFileQuerySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -209924,25 +209224,15 @@ impl std::fmt::Debug for IsoImageFileQuery {
 
 impl miniserde::Serialize for IsoImageFileQuery {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(IsoImageFileQuerySerializer::new(self)))
+        Fragment::Map(Box::new(IsoImageFileQuerySerializer { seq: 0 }))
     }
 }
 
-struct IsoImageFileQuerySerializer<'a> {
-    data: &'a IsoImageFileQuery,
+struct IsoImageFileQuerySerializer {
     seq: usize,
 }
 
-impl<'a> IsoImageFileQuerySerializer<'a> {
-    fn new(data: &'a IsoImageFileQuery) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for IsoImageFileQuerySerializer<'a> {
+impl miniserde::ser::Map for IsoImageFileQuerySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -210444,25 +209734,15 @@ impl std::fmt::Debug for VmLogFileQuery {
 
 impl miniserde::Serialize for VmLogFileQuery {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VmLogFileQuerySerializer::new(self)))
+        Fragment::Map(Box::new(VmLogFileQuerySerializer { seq: 0 }))
     }
 }
 
-struct VmLogFileQuerySerializer<'a> {
-    data: &'a VmLogFileQuery,
+struct VmLogFileQuerySerializer {
     seq: usize,
 }
 
-impl<'a> VmLogFileQuerySerializer<'a> {
-    fn new(data: &'a VmLogFileQuery) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VmLogFileQuerySerializer<'a> {
+impl miniserde::ser::Map for VmLogFileQuerySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -210550,25 +209830,15 @@ impl std::fmt::Debug for VmNvramFileQuery {
 
 impl miniserde::Serialize for VmNvramFileQuery {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VmNvramFileQuerySerializer::new(self)))
+        Fragment::Map(Box::new(VmNvramFileQuerySerializer { seq: 0 }))
     }
 }
 
-struct VmNvramFileQuerySerializer<'a> {
-    data: &'a VmNvramFileQuery,
+struct VmNvramFileQuerySerializer {
     seq: usize,
 }
 
-impl<'a> VmNvramFileQuerySerializer<'a> {
-    fn new(data: &'a VmNvramFileQuery) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VmNvramFileQuerySerializer<'a> {
+impl miniserde::ser::Map for VmNvramFileQuerySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -210656,25 +209926,15 @@ impl std::fmt::Debug for VmSnapshotFileQuery {
 
 impl miniserde::Serialize for VmSnapshotFileQuery {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VmSnapshotFileQuerySerializer::new(self)))
+        Fragment::Map(Box::new(VmSnapshotFileQuerySerializer { seq: 0 }))
     }
 }
 
-struct VmSnapshotFileQuerySerializer<'a> {
-    data: &'a VmSnapshotFileQuery,
+struct VmSnapshotFileQuerySerializer {
     seq: usize,
 }
 
-impl<'a> VmSnapshotFileQuerySerializer<'a> {
-    fn new(data: &'a VmSnapshotFileQuery) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VmSnapshotFileQuerySerializer<'a> {
+impl miniserde::ser::Map for VmSnapshotFileQuerySerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -216227,25 +215487,15 @@ impl std::fmt::Debug for HostDiskDimensions {
 
 impl miniserde::Serialize for HostDiskDimensions {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostDiskDimensionsSerializer::new(self)))
+        Fragment::Map(Box::new(HostDiskDimensionsSerializer { seq: 0 }))
     }
 }
 
-struct HostDiskDimensionsSerializer<'a> {
-    data: &'a HostDiskDimensions,
+struct HostDiskDimensionsSerializer {
     seq: usize,
 }
 
-impl<'a> HostDiskDimensionsSerializer<'a> {
-    fn new(data: &'a HostDiskDimensions) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostDiskDimensionsSerializer<'a> {
+impl miniserde::ser::Map for HostDiskDimensionsSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -224828,25 +224078,15 @@ impl std::fmt::Debug for HostHbaCreateSpec {
 
 impl miniserde::Serialize for HostHbaCreateSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostHbaCreateSpecSerializer::new(self)))
+        Fragment::Map(Box::new(HostHbaCreateSpecSerializer { seq: 0 }))
     }
 }
 
-struct HostHbaCreateSpecSerializer<'a> {
-    data: &'a HostHbaCreateSpec,
+struct HostHbaCreateSpecSerializer {
     seq: usize,
 }
 
-impl<'a> HostHbaCreateSpecSerializer<'a> {
-    fn new(data: &'a HostHbaCreateSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostHbaCreateSpecSerializer<'a> {
+impl miniserde::ser::Map for HostHbaCreateSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -248986,25 +248226,15 @@ impl std::fmt::Debug for HostNvmeTransportParameters {
 
 impl miniserde::Serialize for HostNvmeTransportParameters {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostNvmeTransportParametersSerializer::new(self)))
+        Fragment::Map(Box::new(HostNvmeTransportParametersSerializer { seq: 0 }))
     }
 }
 
-struct HostNvmeTransportParametersSerializer<'a> {
-    data: &'a HostNvmeTransportParameters,
+struct HostNvmeTransportParametersSerializer {
     seq: usize,
 }
 
-impl<'a> HostNvmeTransportParametersSerializer<'a> {
-    fn new(data: &'a HostNvmeTransportParameters) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostNvmeTransportParametersSerializer<'a> {
+impl miniserde::ser::Map for HostNvmeTransportParametersSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -257750,25 +256980,15 @@ impl std::fmt::Debug for HostRdmaDeviceBacking {
 
 impl miniserde::Serialize for HostRdmaDeviceBacking {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostRdmaDeviceBackingSerializer::new(self)))
+        Fragment::Map(Box::new(HostRdmaDeviceBackingSerializer { seq: 0 }))
     }
 }
 
-struct HostRdmaDeviceBackingSerializer<'a> {
-    data: &'a HostRdmaDeviceBacking,
+struct HostRdmaDeviceBackingSerializer {
     seq: usize,
 }
 
-impl<'a> HostRdmaDeviceBackingSerializer<'a> {
-    fn new(data: &'a HostRdmaDeviceBacking) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostRdmaDeviceBackingSerializer<'a> {
+impl miniserde::ser::Map for HostRdmaDeviceBackingSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -267992,25 +267212,15 @@ impl std::fmt::Debug for HostTargetTransport {
 
 impl miniserde::Serialize for HostTargetTransport {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostTargetTransportSerializer::new(self)))
+        Fragment::Map(Box::new(HostTargetTransportSerializer { seq: 0 }))
     }
 }
 
-struct HostTargetTransportSerializer<'a> {
-    data: &'a HostTargetTransport,
+struct HostTargetTransportSerializer {
     seq: usize,
 }
 
-impl<'a> HostTargetTransportSerializer<'a> {
-    fn new(data: &'a HostTargetTransport) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostTargetTransportSerializer<'a> {
+impl miniserde::ser::Map for HostTargetTransportSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -268106,25 +267316,15 @@ impl std::fmt::Debug for HostBlockAdapterTargetTransport {
 
 impl miniserde::Serialize for HostBlockAdapterTargetTransport {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostBlockAdapterTargetTransportSerializer::new(self)))
+        Fragment::Map(Box::new(HostBlockAdapterTargetTransportSerializer { seq: 0 }))
     }
 }
 
-struct HostBlockAdapterTargetTransportSerializer<'a> {
-    data: &'a HostBlockAdapterTargetTransport,
+struct HostBlockAdapterTargetTransportSerializer {
     seq: usize,
 }
 
-impl<'a> HostBlockAdapterTargetTransportSerializer<'a> {
-    fn new(data: &'a HostBlockAdapterTargetTransport) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostBlockAdapterTargetTransportSerializer<'a> {
+impl miniserde::ser::Map for HostBlockAdapterTargetTransportSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -268694,25 +267894,15 @@ impl std::fmt::Debug for HostParallelScsiTargetTransport {
 
 impl miniserde::Serialize for HostParallelScsiTargetTransport {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostParallelScsiTargetTransportSerializer::new(self)))
+        Fragment::Map(Box::new(HostParallelScsiTargetTransportSerializer { seq: 0 }))
     }
 }
 
-struct HostParallelScsiTargetTransportSerializer<'a> {
-    data: &'a HostParallelScsiTargetTransport,
+struct HostParallelScsiTargetTransportSerializer {
     seq: usize,
 }
 
-impl<'a> HostParallelScsiTargetTransportSerializer<'a> {
-    fn new(data: &'a HostParallelScsiTargetTransport) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostParallelScsiTargetTransportSerializer<'a> {
+impl miniserde::ser::Map for HostParallelScsiTargetTransportSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -268809,25 +267999,15 @@ impl std::fmt::Debug for HostPcieTargetTransport {
 
 impl miniserde::Serialize for HostPcieTargetTransport {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostPcieTargetTransportSerializer::new(self)))
+        Fragment::Map(Box::new(HostPcieTargetTransportSerializer { seq: 0 }))
     }
 }
 
-struct HostPcieTargetTransportSerializer<'a> {
-    data: &'a HostPcieTargetTransport,
+struct HostPcieTargetTransportSerializer {
     seq: usize,
 }
 
-impl<'a> HostPcieTargetTransportSerializer<'a> {
-    fn new(data: &'a HostPcieTargetTransport) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostPcieTargetTransportSerializer<'a> {
+impl miniserde::ser::Map for HostPcieTargetTransportSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -268924,25 +268104,15 @@ impl std::fmt::Debug for HostRdmaTargetTransport {
 
 impl miniserde::Serialize for HostRdmaTargetTransport {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostRdmaTargetTransportSerializer::new(self)))
+        Fragment::Map(Box::new(HostRdmaTargetTransportSerializer { seq: 0 }))
     }
 }
 
-struct HostRdmaTargetTransportSerializer<'a> {
-    data: &'a HostRdmaTargetTransport,
+struct HostRdmaTargetTransportSerializer {
     seq: usize,
 }
 
-impl<'a> HostRdmaTargetTransportSerializer<'a> {
-    fn new(data: &'a HostRdmaTargetTransport) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostRdmaTargetTransportSerializer<'a> {
+impl miniserde::ser::Map for HostRdmaTargetTransportSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -269038,25 +268208,15 @@ impl std::fmt::Debug for HostSerialAttachedTargetTransport {
 
 impl miniserde::Serialize for HostSerialAttachedTargetTransport {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostSerialAttachedTargetTransportSerializer::new(self)))
+        Fragment::Map(Box::new(HostSerialAttachedTargetTransportSerializer { seq: 0 }))
     }
 }
 
-struct HostSerialAttachedTargetTransportSerializer<'a> {
-    data: &'a HostSerialAttachedTargetTransport,
+struct HostSerialAttachedTargetTransportSerializer {
     seq: usize,
 }
 
-impl<'a> HostSerialAttachedTargetTransportSerializer<'a> {
-    fn new(data: &'a HostSerialAttachedTargetTransport) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostSerialAttachedTargetTransportSerializer<'a> {
+impl miniserde::ser::Map for HostSerialAttachedTargetTransportSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -269155,25 +268315,15 @@ impl std::fmt::Debug for HostTcpTargetTransport {
 
 impl miniserde::Serialize for HostTcpTargetTransport {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostTcpTargetTransportSerializer::new(self)))
+        Fragment::Map(Box::new(HostTcpTargetTransportSerializer { seq: 0 }))
     }
 }
 
-struct HostTcpTargetTransportSerializer<'a> {
-    data: &'a HostTcpTargetTransport,
+struct HostTcpTargetTransportSerializer {
     seq: usize,
 }
 
-impl<'a> HostTcpTargetTransportSerializer<'a> {
-    fn new(data: &'a HostTcpTargetTransport) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostTcpTargetTransportSerializer<'a> {
+impl miniserde::ser::Map for HostTcpTargetTransportSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -276497,25 +275647,15 @@ impl std::fmt::Debug for HostVirtualSwitchBridge {
 
 impl miniserde::Serialize for HostVirtualSwitchBridge {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostVirtualSwitchBridgeSerializer::new(self)))
+        Fragment::Map(Box::new(HostVirtualSwitchBridgeSerializer { seq: 0 }))
     }
 }
 
-struct HostVirtualSwitchBridgeSerializer<'a> {
-    data: &'a HostVirtualSwitchBridge,
+struct HostVirtualSwitchBridgeSerializer {
     seq: usize,
 }
 
-impl<'a> HostVirtualSwitchBridgeSerializer<'a> {
-    fn new(data: &'a HostVirtualSwitchBridge) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostVirtualSwitchBridgeSerializer<'a> {
+impl miniserde::ser::Map for HostVirtualSwitchBridgeSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -321451,25 +320591,15 @@ impl std::fmt::Debug for HostProfilesEntityCustomizations {
 
 impl miniserde::Serialize for HostProfilesEntityCustomizations {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(HostProfilesEntityCustomizationsSerializer::new(self)))
+        Fragment::Map(Box::new(HostProfilesEntityCustomizationsSerializer { seq: 0 }))
     }
 }
 
-struct HostProfilesEntityCustomizationsSerializer<'a> {
-    data: &'a HostProfilesEntityCustomizations,
+struct HostProfilesEntityCustomizationsSerializer {
     seq: usize,
 }
 
-impl<'a> HostProfilesEntityCustomizationsSerializer<'a> {
-    fn new(data: &'a HostProfilesEntityCustomizations) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for HostProfilesEntityCustomizationsSerializer<'a> {
+impl miniserde::ser::Map for HostProfilesEntityCustomizationsSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -333532,25 +332662,15 @@ impl std::fmt::Debug for VirtualMachineBaseIndependentFilterSpec {
 
 impl miniserde::Serialize for VirtualMachineBaseIndependentFilterSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineBaseIndependentFilterSpecSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineBaseIndependentFilterSpecSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineBaseIndependentFilterSpecSerializer<'a> {
-    data: &'a VirtualMachineBaseIndependentFilterSpec,
+struct VirtualMachineBaseIndependentFilterSpecSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineBaseIndependentFilterSpecSerializer<'a> {
-    fn new(data: &'a VirtualMachineBaseIndependentFilterSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineBaseIndependentFilterSpecSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineBaseIndependentFilterSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -333652,25 +332772,15 @@ impl std::fmt::Debug for VirtualMachineEmptyIndependentFilterSpec {
 
 impl miniserde::Serialize for VirtualMachineEmptyIndependentFilterSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineEmptyIndependentFilterSpecSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineEmptyIndependentFilterSpecSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineEmptyIndependentFilterSpecSerializer<'a> {
-    data: &'a VirtualMachineEmptyIndependentFilterSpec,
+struct VirtualMachineEmptyIndependentFilterSpecSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineEmptyIndependentFilterSpecSerializer<'a> {
-    fn new(data: &'a VirtualMachineEmptyIndependentFilterSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineEmptyIndependentFilterSpecSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineEmptyIndependentFilterSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -334170,25 +333280,15 @@ impl std::fmt::Debug for VirtualMachineBootOptionsBootableDevice {
 
 impl miniserde::Serialize for VirtualMachineBootOptionsBootableDevice {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineBootOptionsBootableDeviceSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineBootOptionsBootableDeviceSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineBootOptionsBootableDeviceSerializer<'a> {
-    data: &'a VirtualMachineBootOptionsBootableDevice,
+struct VirtualMachineBootOptionsBootableDeviceSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineBootOptionsBootableDeviceSerializer<'a> {
-    fn new(data: &'a VirtualMachineBootOptionsBootableDevice) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineBootOptionsBootableDeviceSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineBootOptionsBootableDeviceSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -334286,25 +333386,15 @@ impl std::fmt::Debug for VirtualMachineBootOptionsBootableCdromDevice {
 
 impl miniserde::Serialize for VirtualMachineBootOptionsBootableCdromDevice {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineBootOptionsBootableCdromDeviceSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineBootOptionsBootableCdromDeviceSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineBootOptionsBootableCdromDeviceSerializer<'a> {
-    data: &'a VirtualMachineBootOptionsBootableCdromDevice,
+struct VirtualMachineBootOptionsBootableCdromDeviceSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineBootOptionsBootableCdromDeviceSerializer<'a> {
-    fn new(data: &'a VirtualMachineBootOptionsBootableCdromDevice) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineBootOptionsBootableCdromDeviceSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineBootOptionsBootableCdromDeviceSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -334652,25 +333742,15 @@ impl std::fmt::Debug for VirtualMachineBootOptionsBootableFloppyDevice {
 
 impl miniserde::Serialize for VirtualMachineBootOptionsBootableFloppyDevice {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineBootOptionsBootableFloppyDeviceSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineBootOptionsBootableFloppyDeviceSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineBootOptionsBootableFloppyDeviceSerializer<'a> {
-    data: &'a VirtualMachineBootOptionsBootableFloppyDevice,
+struct VirtualMachineBootOptionsBootableFloppyDeviceSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineBootOptionsBootableFloppyDeviceSerializer<'a> {
-    fn new(data: &'a VirtualMachineBootOptionsBootableFloppyDevice) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineBootOptionsBootableFloppyDeviceSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineBootOptionsBootableFloppyDeviceSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -341092,25 +340172,15 @@ impl std::fmt::Debug for VirtualMachineDeviceRuntimeInfoDeviceRuntimeState {
 
 impl miniserde::Serialize for VirtualMachineDeviceRuntimeInfoDeviceRuntimeState {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateSerializer<'a> {
-    data: &'a VirtualMachineDeviceRuntimeInfoDeviceRuntimeState,
+struct VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateSerializer<'a> {
-    fn new(data: &'a VirtualMachineDeviceRuntimeInfoDeviceRuntimeState) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -349813,25 +348883,15 @@ impl std::fmt::Debug for VirtualMachineProfileSpec {
 
 impl miniserde::Serialize for VirtualMachineProfileSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineProfileSpecSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineProfileSpecSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineProfileSpecSerializer<'a> {
-    data: &'a VirtualMachineProfileSpec,
+struct VirtualMachineProfileSpecSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineProfileSpecSerializer<'a> {
-    fn new(data: &'a VirtualMachineProfileSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineProfileSpecSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineProfileSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -349932,25 +348992,15 @@ impl std::fmt::Debug for VirtualMachineDefaultProfileSpec {
 
 impl miniserde::Serialize for VirtualMachineDefaultProfileSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineDefaultProfileSpecSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineDefaultProfileSpecSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineDefaultProfileSpecSerializer<'a> {
-    data: &'a VirtualMachineDefaultProfileSpec,
+struct VirtualMachineDefaultProfileSpecSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineDefaultProfileSpecSerializer<'a> {
-    fn new(data: &'a VirtualMachineDefaultProfileSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineDefaultProfileSpecSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineDefaultProfileSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -350229,25 +349279,15 @@ impl std::fmt::Debug for VirtualMachineEmptyProfileSpec {
 
 impl miniserde::Serialize for VirtualMachineEmptyProfileSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualMachineEmptyProfileSpecSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualMachineEmptyProfileSpecSerializer { seq: 0 }))
     }
 }
 
-struct VirtualMachineEmptyProfileSpecSerializer<'a> {
-    data: &'a VirtualMachineEmptyProfileSpec,
+struct VirtualMachineEmptyProfileSpecSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualMachineEmptyProfileSpecSerializer<'a> {
-    fn new(data: &'a VirtualMachineEmptyProfileSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualMachineEmptyProfileSpecSerializer<'a> {
+impl miniserde::ser::Map for VirtualMachineEmptyProfileSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -364772,25 +363812,15 @@ impl std::fmt::Debug for CustomizationIdentitySettings {
 
 impl miniserde::Serialize for CustomizationIdentitySettings {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationIdentitySettingsSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationIdentitySettingsSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationIdentitySettingsSerializer<'a> {
-    data: &'a CustomizationIdentitySettings,
+struct CustomizationIdentitySettingsSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationIdentitySettingsSerializer<'a> {
-    fn new(data: &'a CustomizationIdentitySettings) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationIdentitySettingsSerializer<'a> {
+impl miniserde::ser::Map for CustomizationIdentitySettingsSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -365554,25 +364584,15 @@ impl std::fmt::Debug for CustomizationIpGenerator {
 
 impl miniserde::Serialize for CustomizationIpGenerator {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationIpGeneratorSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationIpGeneratorSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationIpGeneratorSerializer<'a> {
-    data: &'a CustomizationIpGenerator,
+struct CustomizationIpGeneratorSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationIpGeneratorSerializer<'a> {
-    fn new(data: &'a CustomizationIpGenerator) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationIpGeneratorSerializer<'a> {
+impl miniserde::ser::Map for CustomizationIpGeneratorSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -365800,25 +364820,15 @@ impl std::fmt::Debug for CustomizationDhcpIpGenerator {
 
 impl miniserde::Serialize for CustomizationDhcpIpGenerator {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationDhcpIpGeneratorSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationDhcpIpGeneratorSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationDhcpIpGeneratorSerializer<'a> {
-    data: &'a CustomizationDhcpIpGenerator,
+struct CustomizationDhcpIpGeneratorSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationDhcpIpGeneratorSerializer<'a> {
-    fn new(data: &'a CustomizationDhcpIpGenerator) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationDhcpIpGeneratorSerializer<'a> {
+impl miniserde::ser::Map for CustomizationDhcpIpGeneratorSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -366040,25 +365050,15 @@ impl std::fmt::Debug for CustomizationUnknownIpGenerator {
 
 impl miniserde::Serialize for CustomizationUnknownIpGenerator {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationUnknownIpGeneratorSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationUnknownIpGeneratorSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationUnknownIpGeneratorSerializer<'a> {
-    data: &'a CustomizationUnknownIpGenerator,
+struct CustomizationUnknownIpGeneratorSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationUnknownIpGeneratorSerializer<'a> {
-    fn new(data: &'a CustomizationUnknownIpGenerator) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationUnknownIpGeneratorSerializer<'a> {
+impl miniserde::ser::Map for CustomizationUnknownIpGeneratorSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -366154,25 +365154,15 @@ impl std::fmt::Debug for CustomizationIpV6Generator {
 
 impl miniserde::Serialize for CustomizationIpV6Generator {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationIpV6GeneratorSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationIpV6GeneratorSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationIpV6GeneratorSerializer<'a> {
-    data: &'a CustomizationIpV6Generator,
+struct CustomizationIpV6GeneratorSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationIpV6GeneratorSerializer<'a> {
-    fn new(data: &'a CustomizationIpV6Generator) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationIpV6GeneratorSerializer<'a> {
+impl miniserde::ser::Map for CustomizationIpV6GeneratorSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -366268,25 +365258,15 @@ impl std::fmt::Debug for CustomizationAutoIpV6Generator {
 
 impl miniserde::Serialize for CustomizationAutoIpV6Generator {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationAutoIpV6GeneratorSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationAutoIpV6GeneratorSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationAutoIpV6GeneratorSerializer<'a> {
-    data: &'a CustomizationAutoIpV6Generator,
+struct CustomizationAutoIpV6GeneratorSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationAutoIpV6GeneratorSerializer<'a> {
-    fn new(data: &'a CustomizationAutoIpV6Generator) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationAutoIpV6GeneratorSerializer<'a> {
+impl miniserde::ser::Map for CustomizationAutoIpV6GeneratorSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -366514,25 +365494,15 @@ impl std::fmt::Debug for CustomizationDhcpIpV6Generator {
 
 impl miniserde::Serialize for CustomizationDhcpIpV6Generator {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationDhcpIpV6GeneratorSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationDhcpIpV6GeneratorSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationDhcpIpV6GeneratorSerializer<'a> {
-    data: &'a CustomizationDhcpIpV6Generator,
+struct CustomizationDhcpIpV6GeneratorSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationDhcpIpV6GeneratorSerializer<'a> {
-    fn new(data: &'a CustomizationDhcpIpV6Generator) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationDhcpIpV6GeneratorSerializer<'a> {
+impl miniserde::ser::Map for CustomizationDhcpIpV6GeneratorSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -366759,25 +365729,15 @@ impl std::fmt::Debug for CustomizationStatelessIpV6Generator {
 
 impl miniserde::Serialize for CustomizationStatelessIpV6Generator {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationStatelessIpV6GeneratorSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationStatelessIpV6GeneratorSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationStatelessIpV6GeneratorSerializer<'a> {
-    data: &'a CustomizationStatelessIpV6Generator,
+struct CustomizationStatelessIpV6GeneratorSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationStatelessIpV6GeneratorSerializer<'a> {
-    fn new(data: &'a CustomizationStatelessIpV6Generator) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationStatelessIpV6GeneratorSerializer<'a> {
+impl miniserde::ser::Map for CustomizationStatelessIpV6GeneratorSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -366876,25 +365836,15 @@ impl std::fmt::Debug for CustomizationUnknownIpV6Generator {
 
 impl miniserde::Serialize for CustomizationUnknownIpV6Generator {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationUnknownIpV6GeneratorSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationUnknownIpV6GeneratorSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationUnknownIpV6GeneratorSerializer<'a> {
-    data: &'a CustomizationUnknownIpV6Generator,
+struct CustomizationUnknownIpV6GeneratorSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationUnknownIpV6GeneratorSerializer<'a> {
-    fn new(data: &'a CustomizationUnknownIpV6Generator) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationUnknownIpV6GeneratorSerializer<'a> {
+impl miniserde::ser::Map for CustomizationUnknownIpV6GeneratorSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -367140,25 +366090,15 @@ impl std::fmt::Debug for CustomizationName {
 
 impl miniserde::Serialize for CustomizationName {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationNameSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationNameSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationNameSerializer<'a> {
-    data: &'a CustomizationName,
+struct CustomizationNameSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationNameSerializer<'a> {
-    fn new(data: &'a CustomizationName) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationNameSerializer<'a> {
+impl miniserde::ser::Map for CustomizationNameSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -367647,25 +366587,15 @@ impl std::fmt::Debug for CustomizationUnknownName {
 
 impl miniserde::Serialize for CustomizationUnknownName {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationUnknownNameSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationUnknownNameSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationUnknownNameSerializer<'a> {
-    data: &'a CustomizationUnknownName,
+struct CustomizationUnknownNameSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationUnknownNameSerializer<'a> {
-    fn new(data: &'a CustomizationUnknownName) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationUnknownNameSerializer<'a> {
+impl miniserde::ser::Map for CustomizationUnknownNameSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -367769,25 +366699,15 @@ impl std::fmt::Debug for CustomizationVirtualMachineName {
 
 impl miniserde::Serialize for CustomizationVirtualMachineName {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationVirtualMachineNameSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationVirtualMachineNameSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationVirtualMachineNameSerializer<'a> {
-    data: &'a CustomizationVirtualMachineName,
+struct CustomizationVirtualMachineNameSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationVirtualMachineNameSerializer<'a> {
-    fn new(data: &'a CustomizationVirtualMachineName) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationVirtualMachineNameSerializer<'a> {
+impl miniserde::ser::Map for CustomizationVirtualMachineNameSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -367883,25 +366803,15 @@ impl std::fmt::Debug for CustomizationOptions {
 
 impl miniserde::Serialize for CustomizationOptions {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationOptionsSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationOptionsSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationOptionsSerializer<'a> {
-    data: &'a CustomizationOptions,
+struct CustomizationOptionsSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationOptionsSerializer<'a> {
-    fn new(data: &'a CustomizationOptions) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationOptionsSerializer<'a> {
+impl miniserde::ser::Map for CustomizationOptionsSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -367998,25 +366908,15 @@ impl std::fmt::Debug for CustomizationLinuxOptions {
 
 impl miniserde::Serialize for CustomizationLinuxOptions {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(CustomizationLinuxOptionsSerializer::new(self)))
+        Fragment::Map(Box::new(CustomizationLinuxOptionsSerializer { seq: 0 }))
     }
 }
 
-struct CustomizationLinuxOptionsSerializer<'a> {
-    data: &'a CustomizationLinuxOptions,
+struct CustomizationLinuxOptionsSerializer {
     seq: usize,
 }
 
-impl<'a> CustomizationLinuxOptionsSerializer<'a> {
-    fn new(data: &'a CustomizationLinuxOptions) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for CustomizationLinuxOptionsSerializer<'a> {
+impl miniserde::ser::Map for CustomizationLinuxOptionsSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -382771,25 +381671,15 @@ impl std::fmt::Debug for VirtualDeviceBackingInfo {
 
 impl miniserde::Serialize for VirtualDeviceBackingInfo {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualDeviceBackingInfoSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualDeviceBackingInfoSerializer { seq: 0 }))
     }
 }
 
-struct VirtualDeviceBackingInfoSerializer<'a> {
-    data: &'a VirtualDeviceBackingInfo,
+struct VirtualDeviceBackingInfoSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualDeviceBackingInfoSerializer<'a> {
-    fn new(data: &'a VirtualDeviceBackingInfo) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualDeviceBackingInfoSerializer<'a> {
+impl miniserde::ser::Map for VirtualDeviceBackingInfoSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -391222,25 +390112,15 @@ impl std::fmt::Debug for VirtualPciPassthroughPluginBackingInfo {
 
 impl miniserde::Serialize for VirtualPciPassthroughPluginBackingInfo {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualPciPassthroughPluginBackingInfoSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualPciPassthroughPluginBackingInfoSerializer { seq: 0 }))
     }
 }
 
-struct VirtualPciPassthroughPluginBackingInfoSerializer<'a> {
-    data: &'a VirtualPciPassthroughPluginBackingInfo,
+struct VirtualPciPassthroughPluginBackingInfoSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualPciPassthroughPluginBackingInfoSerializer<'a> {
-    fn new(data: &'a VirtualPciPassthroughPluginBackingInfo) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualPciPassthroughPluginBackingInfoSerializer<'a> {
+impl miniserde::ser::Map for VirtualPciPassthroughPluginBackingInfoSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -391647,25 +390527,15 @@ impl std::fmt::Debug for VirtualSerialPortThinPrintBackingInfo {
 
 impl miniserde::Serialize for VirtualSerialPortThinPrintBackingInfo {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualSerialPortThinPrintBackingInfoSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualSerialPortThinPrintBackingInfoSerializer { seq: 0 }))
     }
 }
 
-struct VirtualSerialPortThinPrintBackingInfoSerializer<'a> {
-    data: &'a VirtualSerialPortThinPrintBackingInfo,
+struct VirtualSerialPortThinPrintBackingInfoSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualSerialPortThinPrintBackingInfoSerializer<'a> {
-    fn new(data: &'a VirtualSerialPortThinPrintBackingInfo) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualSerialPortThinPrintBackingInfoSerializer<'a> {
+impl miniserde::ser::Map for VirtualSerialPortThinPrintBackingInfoSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -391944,25 +390814,15 @@ impl std::fmt::Debug for VirtualDeviceBusSlotInfo {
 
 impl miniserde::Serialize for VirtualDeviceBusSlotInfo {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VirtualDeviceBusSlotInfoSerializer::new(self)))
+        Fragment::Map(Box::new(VirtualDeviceBusSlotInfoSerializer { seq: 0 }))
     }
 }
 
-struct VirtualDeviceBusSlotInfoSerializer<'a> {
-    data: &'a VirtualDeviceBusSlotInfo,
+struct VirtualDeviceBusSlotInfoSerializer {
     seq: usize,
 }
 
-impl<'a> VirtualDeviceBusSlotInfoSerializer<'a> {
-    fn new(data: &'a VirtualDeviceBusSlotInfo) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VirtualDeviceBusSlotInfoSerializer<'a> {
+impl miniserde::ser::Map for VirtualDeviceBusSlotInfoSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -416117,25 +414977,15 @@ impl std::fmt::Debug for GuestAuthSubject {
 
 impl miniserde::Serialize for GuestAuthSubject {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(GuestAuthSubjectSerializer::new(self)))
+        Fragment::Map(Box::new(GuestAuthSubjectSerializer { seq: 0 }))
     }
 }
 
-struct GuestAuthSubjectSerializer<'a> {
-    data: &'a GuestAuthSubject,
+struct GuestAuthSubjectSerializer {
     seq: usize,
 }
 
-impl<'a> GuestAuthSubjectSerializer<'a> {
-    fn new(data: &'a GuestAuthSubject) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for GuestAuthSubjectSerializer<'a> {
+impl miniserde::ser::Map for GuestAuthSubjectSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -416228,25 +415078,15 @@ impl std::fmt::Debug for GuestAuthAnySubject {
 
 impl miniserde::Serialize for GuestAuthAnySubject {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(GuestAuthAnySubjectSerializer::new(self)))
+        Fragment::Map(Box::new(GuestAuthAnySubjectSerializer { seq: 0 }))
     }
 }
 
-struct GuestAuthAnySubjectSerializer<'a> {
-    data: &'a GuestAuthAnySubject,
+struct GuestAuthAnySubjectSerializer {
     seq: usize,
 }
 
-impl<'a> GuestAuthAnySubjectSerializer<'a> {
-    fn new(data: &'a GuestAuthAnySubject) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for GuestAuthAnySubjectSerializer<'a> {
+impl miniserde::ser::Map for GuestAuthAnySubjectSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -419501,25 +418341,15 @@ impl std::fmt::Debug for GuestRegValueDataSpec {
 
 impl miniserde::Serialize for GuestRegValueDataSpec {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(GuestRegValueDataSpecSerializer::new(self)))
+        Fragment::Map(Box::new(GuestRegValueDataSpecSerializer { seq: 0 }))
     }
 }
 
-struct GuestRegValueDataSpecSerializer<'a> {
-    data: &'a GuestRegValueDataSpec,
+struct GuestRegValueDataSpecSerializer {
     seq: usize,
 }
 
-impl<'a> GuestRegValueDataSpecSerializer<'a> {
-    fn new(data: &'a GuestRegValueDataSpec) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for GuestRegValueDataSpecSerializer<'a> {
+impl miniserde::ser::Map for GuestRegValueDataSpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -419615,24 +418445,22 @@ impl miniserde::Serialize for GuestRegValueBinarySpec {
     }
 }
 
-struct GuestRegValueBinarySpecSerializer<'a> {
-    data: &'a GuestRegValueBinarySpec,
+struct GuestRegValueBinarySpecSerializer {
     seq: usize,
     b64_0: Option<String>,
 }
 
-impl<'a> GuestRegValueBinarySpecSerializer<'a> {
-    fn new(data: &'a GuestRegValueBinarySpec) -> Self {
+impl GuestRegValueBinarySpecSerializer {
+    fn new(data: &GuestRegValueBinarySpec) -> Self {
         let b64_0 = data.value.as_ref().map(|data| base64::display::Base64Display::new(data, &base64::engine::general_purpose::STANDARD).to_string());
         Self {
-            data,
             seq: 0,
             b64_0,
         }
     }
 }
 
-impl<'a> miniserde::ser::Map for GuestRegValueBinarySpecSerializer<'a> {
+impl miniserde::ser::Map for GuestRegValueBinarySpecSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -423796,25 +422624,15 @@ impl std::fmt::Debug for VsanDirectoryServerConfig {
 
 impl miniserde::Serialize for VsanDirectoryServerConfig {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VsanDirectoryServerConfigSerializer::new(self)))
+        Fragment::Map(Box::new(VsanDirectoryServerConfigSerializer { seq: 0 }))
     }
 }
 
-struct VsanDirectoryServerConfigSerializer<'a> {
-    data: &'a VsanDirectoryServerConfig,
+struct VsanDirectoryServerConfigSerializer {
     seq: usize,
 }
 
-impl<'a> VsanDirectoryServerConfigSerializer<'a> {
-    fn new(data: &'a VsanDirectoryServerConfig) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VsanDirectoryServerConfigSerializer<'a> {
+impl miniserde::ser::Map for VsanDirectoryServerConfigSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -440068,25 +438886,15 @@ impl std::fmt::Debug for VsanConfigBaseIssue {
 
 impl miniserde::Serialize for VsanConfigBaseIssue {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VsanConfigBaseIssueSerializer::new(self)))
+        Fragment::Map(Box::new(VsanConfigBaseIssueSerializer { seq: 0 }))
     }
 }
 
-struct VsanConfigBaseIssueSerializer<'a> {
-    data: &'a VsanConfigBaseIssue,
+struct VsanConfigBaseIssueSerializer {
     seq: usize,
 }
 
-impl<'a> VsanConfigBaseIssueSerializer<'a> {
-    fn new(data: &'a VsanConfigBaseIssue) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VsanConfigBaseIssueSerializer<'a> {
+impl miniserde::ser::Map for VsanConfigBaseIssueSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -442214,25 +441022,15 @@ impl std::fmt::Debug for VsanGenericClusterBaseIssue {
 
 impl miniserde::Serialize for VsanGenericClusterBaseIssue {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VsanGenericClusterBaseIssueSerializer::new(self)))
+        Fragment::Map(Box::new(VsanGenericClusterBaseIssueSerializer { seq: 0 }))
     }
 }
 
-struct VsanGenericClusterBaseIssueSerializer<'a> {
-    data: &'a VsanGenericClusterBaseIssue,
+struct VsanGenericClusterBaseIssueSerializer {
     seq: usize,
 }
 
-impl<'a> VsanGenericClusterBaseIssueSerializer<'a> {
-    fn new(data: &'a VsanGenericClusterBaseIssue) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VsanGenericClusterBaseIssueSerializer<'a> {
+impl miniserde::ser::Map for VsanGenericClusterBaseIssueSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -444945,25 +443743,15 @@ impl std::fmt::Debug for VsanNetworkConfigBaseIssue {
 
 impl miniserde::Serialize for VsanNetworkConfigBaseIssue {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VsanNetworkConfigBaseIssueSerializer::new(self)))
+        Fragment::Map(Box::new(VsanNetworkConfigBaseIssueSerializer { seq: 0 }))
     }
 }
 
-struct VsanNetworkConfigBaseIssueSerializer<'a> {
-    data: &'a VsanNetworkConfigBaseIssue,
+struct VsanNetworkConfigBaseIssueSerializer {
     seq: usize,
 }
 
-impl<'a> VsanNetworkConfigBaseIssueSerializer<'a> {
-    fn new(data: &'a VsanNetworkConfigBaseIssue) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VsanNetworkConfigBaseIssueSerializer<'a> {
+impl miniserde::ser::Map for VsanNetworkConfigBaseIssueSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -473067,25 +471855,15 @@ impl std::fmt::Debug for VslmTaskReason {
 
 impl miniserde::Serialize for VslmTaskReason {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VslmTaskReasonSerializer::new(self)))
+        Fragment::Map(Box::new(VslmTaskReasonSerializer { seq: 0 }))
     }
 }
 
-struct VslmTaskReasonSerializer<'a> {
-    data: &'a VslmTaskReason,
+struct VslmTaskReasonSerializer {
     seq: usize,
 }
 
-impl<'a> VslmTaskReasonSerializer<'a> {
-    fn new(data: &'a VslmTaskReason) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VslmTaskReasonSerializer<'a> {
+impl miniserde::ser::Map for VslmTaskReasonSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -473446,25 +472224,15 @@ impl std::fmt::Debug for VslmTaskReasonSystem {
 
 impl miniserde::Serialize for VslmTaskReasonSystem {
     fn begin(&self) -> Fragment<'_> {
-        Fragment::Map(Box::new(VslmTaskReasonSystemSerializer::new(self)))
+        Fragment::Map(Box::new(VslmTaskReasonSystemSerializer { seq: 0 }))
     }
 }
 
-struct VslmTaskReasonSystemSerializer<'a> {
-    data: &'a VslmTaskReasonSystem,
+struct VslmTaskReasonSystemSerializer {
     seq: usize,
 }
 
-impl<'a> VslmTaskReasonSystemSerializer<'a> {
-    fn new(data: &'a VslmTaskReasonSystem) -> Self {
-        Self {
-            data,
-            seq: 0,
-        }
-    }
-}
-
-impl<'a> miniserde::ser::Map for VslmTaskReasonSystemSerializer<'a> {
+impl miniserde::ser::Map for VslmTaskReasonSystemSerializer {
     fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

@@ -285,7 +285,7 @@ struct PbmCheckComplianceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmCheckComplianceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmCheckComplianceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -317,7 +317,7 @@ struct PbmCheckRollupComplianceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmCheckRollupComplianceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmCheckRollupComplianceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -344,7 +344,7 @@ struct PbmFetchComplianceResultRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmFetchComplianceResultRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmFetchComplianceResultRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -376,7 +376,7 @@ struct PbmFetchRollupComplianceResultRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmFetchRollupComplianceResultRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmFetchRollupComplianceResultRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -402,7 +402,7 @@ struct PbmQueryByRollupComplianceStatusRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PbmQueryByRollupComplianceStatusRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PbmQueryByRollupComplianceStatusRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

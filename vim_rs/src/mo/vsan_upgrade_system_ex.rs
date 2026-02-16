@@ -297,7 +297,7 @@ struct PerformVsanUpgradeExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PerformVsanUpgradeExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PerformVsanUpgradeExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -347,7 +347,7 @@ struct PerformVsanUpgradePreflightAsyncCheckRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PerformVsanUpgradePreflightAsyncCheckRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PerformVsanUpgradePreflightAsyncCheckRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -385,7 +385,7 @@ struct PerformVsanUpgradePreflightCheckExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for PerformVsanUpgradePreflightCheckExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for PerformVsanUpgradePreflightCheckExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -421,7 +421,7 @@ struct VsanQueryUpgradeStatusExRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryUpgradeStatusExRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryUpgradeStatusExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -447,7 +447,7 @@ struct RetrieveSupportedVsanFormatVersionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveSupportedVsanFormatVersionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveSupportedVsanFormatVersionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

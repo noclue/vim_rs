@@ -99,7 +99,7 @@ struct VsanCompleteMigrateVmsToVdsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanCompleteMigrateVmsToVdsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanCompleteMigrateVmsToVdsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -129,7 +129,7 @@ struct VsanMigrateVmsToVdsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanMigrateVmsToVdsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanMigrateVmsToVdsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

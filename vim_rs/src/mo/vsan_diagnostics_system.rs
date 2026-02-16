@@ -454,7 +454,7 @@ struct CreateIoTripAnalyzerRecurrencesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for CreateIoTripAnalyzerRecurrencesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for CreateIoTripAnalyzerRecurrencesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -482,7 +482,7 @@ struct EditIoTripAnalyzerRecurrencesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for EditIoTripAnalyzerRecurrencesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for EditIoTripAnalyzerRecurrencesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -509,7 +509,7 @@ struct GetIoTripAnalyzerSchedulerConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for GetIoTripAnalyzerSchedulerConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for GetIoTripAnalyzerSchedulerConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -537,7 +537,7 @@ struct VsanGetThresholdsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanGetThresholdsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanGetThresholdsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -574,7 +574,7 @@ struct QueryIoDiagnosticsInstancesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIoDiagnosticsInstancesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIoDiagnosticsInstancesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -607,7 +607,7 @@ struct QueryIoDiagnosticsStatsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIoDiagnosticsStatsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIoDiagnosticsStatsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -640,7 +640,7 @@ struct VsanQueryNetworkDiagnosticsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryNetworkDiagnosticsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryNetworkDiagnosticsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -673,7 +673,7 @@ struct RemoveIoTripAnalyzerRecurrencesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveIoTripAnalyzerRecurrencesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveIoTripAnalyzerRecurrencesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -701,7 +701,7 @@ struct VsanSetThresholdsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanSetThresholdsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanSetThresholdsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -735,7 +735,7 @@ struct VsanSetTraceObjectPolicyRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanSetTraceObjectPolicyRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanSetTraceObjectPolicyRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -773,7 +773,7 @@ struct StartIoDiagnosticsTaskRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for StartIoDiagnosticsTaskRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for StartIoDiagnosticsTaskRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

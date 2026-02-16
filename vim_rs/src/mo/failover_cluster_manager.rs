@@ -184,7 +184,7 @@ struct InitiateFailoverRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InitiateFailoverRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for InitiateFailoverRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -210,7 +210,7 @@ struct SetClusterModeRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetClusterModeRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetClusterModeRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

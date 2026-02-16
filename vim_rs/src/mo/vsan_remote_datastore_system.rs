@@ -348,7 +348,7 @@ struct VsanCreateDatastoreSourceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanCreateDatastoreSourceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanCreateDatastoreSourceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -374,7 +374,7 @@ struct VsanDestroyDatastoreSourceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanDestroyDatastoreSourceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanDestroyDatastoreSourceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -402,7 +402,7 @@ struct MountPrecheckRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MountPrecheckRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for MountPrecheckRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -436,7 +436,7 @@ struct VsanPrecheckDatastoreSourceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanPrecheckDatastoreSourceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanPrecheckDatastoreSourceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -468,7 +468,7 @@ struct VsanQueryDatastoreSourceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryDatastoreSourceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryDatastoreSourceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -500,7 +500,7 @@ struct VsanQueryHciMeshDatastoresRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanQueryHciMeshDatastoresRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanQueryHciMeshDatastoresRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -536,7 +536,7 @@ struct RemoteVcMountPrecheckRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoteVcMountPrecheckRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoteVcMountPrecheckRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -563,7 +563,7 @@ struct VsanUpdateDatastoreSourceRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for VsanUpdateDatastoreSourceRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for VsanUpdateDatastoreSourceRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

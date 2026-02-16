@@ -692,7 +692,7 @@ struct AddAuthorizationRoleRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddAuthorizationRoleRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddAuthorizationRoleRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -725,7 +725,7 @@ struct FetchUserPrivilegeOnEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for FetchUserPrivilegeOnEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for FetchUserPrivilegeOnEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -754,7 +754,7 @@ struct HasPrivilegeOnEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HasPrivilegeOnEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HasPrivilegeOnEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -789,7 +789,7 @@ struct HasPrivilegeOnEntityRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HasPrivilegeOnEntityRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HasPrivilegeOnEntityRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -824,7 +824,7 @@ struct HasUserPrivilegeOnEntitiesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for HasUserPrivilegeOnEntitiesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for HasUserPrivilegeOnEntitiesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -858,7 +858,7 @@ struct MergePermissionsRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for MergePermissionsRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for MergePermissionsRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -887,7 +887,7 @@ struct RemoveEntityPermissionRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveEntityPermissionRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveEntityPermissionRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -916,7 +916,7 @@ struct RemoveAuthorizationRoleRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveAuthorizationRoleRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for RemoveAuthorizationRoleRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -944,7 +944,7 @@ struct ResetEntityPermissionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ResetEntityPermissionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ResetEntityPermissionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -977,7 +977,7 @@ struct RetrieveEntityPermissionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveEntityPermissionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RetrieveEntityPermissionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1004,7 +1004,7 @@ struct RetrieveRolePermissionsRequestTypeSer<'b> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RetrieveRolePermissionsRequestTypeSer<'_> {
+impl<'b> miniserde::ser::Map for RetrieveRolePermissionsRequestTypeSer<'b> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1031,7 +1031,7 @@ struct SetEntityPermissionsRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetEntityPermissionsRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetEntityPermissionsRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1065,7 +1065,7 @@ struct UpdateAuthorizationRoleRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateAuthorizationRoleRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateAuthorizationRoleRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;

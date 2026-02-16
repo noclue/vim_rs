@@ -977,7 +977,7 @@ struct AddPortGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddPortGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddPortGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1004,7 +1004,7 @@ struct AddServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddServiceConsoleVirtualNicRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1032,7 +1032,7 @@ struct AddVirtualNicRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddVirtualNicRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddVirtualNicRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1060,7 +1060,7 @@ struct AddVirtualSwitchRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for AddVirtualSwitchRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for AddVirtualSwitchRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1092,7 +1092,7 @@ struct QueryNetworkHintRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryNetworkHintRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryNetworkHintRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1123,7 +1123,7 @@ struct RemovePortGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemovePortGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemovePortGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1149,7 +1149,7 @@ struct RemoveServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveServiceConsoleVirtualNicRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1175,7 +1175,7 @@ struct RemoveVirtualNicRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveVirtualNicRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveVirtualNicRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1201,7 +1201,7 @@ struct RemoveVirtualSwitchRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RemoveVirtualSwitchRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RemoveVirtualSwitchRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1227,7 +1227,7 @@ struct RestartServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for RestartServiceConsoleVirtualNicRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for RestartServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1254,7 +1254,7 @@ struct SetCustomValueRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for SetCustomValueRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for SetCustomValueRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1282,7 +1282,7 @@ struct StartDpuFailoverRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for StartDpuFailoverRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for StartDpuFailoverRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1314,7 +1314,7 @@ struct UpdateConsoleIpRouteConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateConsoleIpRouteConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateConsoleIpRouteConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1340,7 +1340,7 @@ struct UpdateDnsConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateDnsConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateDnsConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1366,7 +1366,7 @@ struct UpdateIpRouteConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateIpRouteConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateIpRouteConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1392,7 +1392,7 @@ struct UpdateIpRouteTableConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateIpRouteTableConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateIpRouteTableConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1419,7 +1419,7 @@ struct UpdateNetworkConfigRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateNetworkConfigRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateNetworkConfigRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1447,7 +1447,7 @@ struct UpdatePhysicalNicLinkSpeedRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdatePhysicalNicLinkSpeedRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdatePhysicalNicLinkSpeedRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -1480,7 +1480,7 @@ struct UpdatePortGroupRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdatePortGroupRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdatePortGroupRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1508,7 +1508,7 @@ struct UpdateServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateServiceConsoleVirtualNicRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateServiceConsoleVirtualNicRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1536,7 +1536,7 @@ struct UpdateVirtualNicRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateVirtualNicRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateVirtualNicRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -1564,7 +1564,7 @@ struct UpdateVirtualSwitchRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpdateVirtualSwitchRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpdateVirtualSwitchRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;

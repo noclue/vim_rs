@@ -417,7 +417,7 @@ struct InitiateTransitionToVlcmRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InitiateTransitionToVlcmRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InitiateTransitionToVlcmRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -445,7 +445,7 @@ struct InstallIoFilterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for InstallIoFilterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for InstallIoFilterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
@@ -479,7 +479,7 @@ struct QueryDisksUsingFilterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryDisksUsingFilterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryDisksUsingFilterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -506,7 +506,7 @@ struct QueryIoFilterInfoRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIoFilterInfoRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIoFilterInfoRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -533,7 +533,7 @@ struct QueryIoFilterIssuesRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for QueryIoFilterIssuesRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for QueryIoFilterIssuesRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -561,7 +561,7 @@ struct ResolveInstallationErrorsOnClusterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ResolveInstallationErrorsOnClusterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ResolveInstallationErrorsOnClusterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -589,7 +589,7 @@ struct ResolveInstallationErrorsOnHostRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for ResolveInstallationErrorsOnHostRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for ResolveInstallationErrorsOnHostRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -617,7 +617,7 @@ struct UninstallIoFilterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UninstallIoFilterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UninstallIoFilterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let seq = self.seq;
         self.seq += 1;
@@ -647,7 +647,7 @@ struct UpgradeIoFilterRequestTypeSer<'b, 'a> {
     seq: usize,
 }
 
-impl miniserde::ser::Map for UpgradeIoFilterRequestTypeSer<'_, '_> {
+impl<'b, 'a> miniserde::ser::Map for UpgradeIoFilterRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         loop {
             let seq = self.seq;
