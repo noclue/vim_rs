@@ -27,7 +27,7 @@
 //! 6. **Build configuration spec** - Wrap modified devices in `VirtualDeviceConfigSpec`
 //!    with operation `Edit`
 //! 7. **Submit reconfiguration** - Call `VirtualMachine::reconfig_vm_task()` to apply changes
-//! 8. **Monitor task completion** - Poll task state until success or failure
+//! 8. **Monitor task completion** - Use `TaskTracker` to wait for task completion
 //!
 //! # Polymorphic Virtual Device Handling
 //!
@@ -98,7 +98,7 @@
 //! - **ObjectRetriever** pattern with `retrieve_objects_from_list()`
 //! - **Type-safe downcasting** using `StructType` enum and `downcast::<T>()`
 //! - **Device reconfiguration** with `VirtualDeviceConfigSpec` and operation enum
-//! - **Asynchronous task monitoring** with state polling and progress reporting
+//! - **Asynchronous task monitoring** with `TaskTracker`
 //!
 //! # Use Cases
 //!
@@ -114,16 +114,17 @@
 
 use anyhow::{Context, Result};
 use log::info;
+use tokio::time::sleep;
 use vim_rs::types::convert::CastInto as _;
 use std::env;
-use std::sync::Arc;
+use std::time::Duration;
 use utils::connect;
 use vim_macros::vim_retrievable;
-use vim_rs::core::Client;
-use vim_rs::mo::{SearchIndex, Task, VirtualMachine};
-use vim_rs::types::enums::{TaskInfoStateEnum, VirtualDeviceConfigSpecOperationEnum};
+use vim_rs::core::tasks::TaskTracker;
+use vim_rs::mo::{SearchIndex, VirtualMachine};
+use vim_rs::types::enums::VirtualDeviceConfigSpecOperationEnum;
 use vim_rs::types::structs::{
-    ManagedObjectReference, VirtualDeviceConfigSpec, VirtualMachineConfigSpec,
+    VirtualDeviceConfigSpec, VirtualMachineConfigSpec,
 };
 use vim_rs::types::traits::{VirtualDeviceTrait, VirtualEthernetCardTrait};
 
@@ -134,49 +135,14 @@ vim_retrievable!(
     }
 );
 
-/// Waits for a vSphere task to complete and returns the result.
-async fn wait_for_task(client: Arc<Client>, task_ref: &ManagedObjectReference) -> Result<()> {
-    let task = Task::new(client, &task_ref.value);
 
-    loop {
-        let task_info = task.info().await?;
 
-        match task_info.state {
-            TaskInfoStateEnum::Success => {
-                info!("✅ Task completed successfully");
-                return Ok(());
-            }
-            TaskInfoStateEnum::Error => {
-                let error_msg = task_info
-                    .error
-                    .map(|e| format!("{:?}", e))
-                    .unwrap_or_else(|| "Unknown error".to_string());
-                return Err(anyhow::anyhow!("Task failed: {}", error_msg));
-            }
-            TaskInfoStateEnum::Running => {
-                info!("Task in progress... ({}%)", task_info.progress.unwrap_or(0));
-                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-            }
-            TaskInfoStateEnum::Queued => {
-                info!("Task queued...");
-                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-            }
-            TaskInfoStateEnum::Other_(state) => {
-                info!("Task in unknown state: {}", state);
-                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-            }
-        }
-    }
-}
-
-#[tokio::main]
-async fn main() -> Result<()> {
-    dotenvy::dotenv().ok();
-    env_logger::init();
-
+async fn toggle_wol() -> Result<()> {
     // Connect to vCenter
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
     info!("Connected to {}", client.service_content().about.full_name);
+
+    let task_tracker = TaskTracker::new(client.clone());
 
     // Get VM inventory path from environment
     let vm_path = env::var("VM_INVENTORY_PATH")
@@ -363,8 +329,21 @@ async fn main() -> Result<()> {
     info!("Reconfigure task created: {}", task_ref.value);
 
     // Wait for task completion
-    wait_for_task(client.clone(), &task_ref).await?;
+    task_tracker.wait::<()>(task_ref).await?;
+    info!("✅ Task completed successfully");
     info!("Successfully toggled Wake-on-LAN for {} NIC(s)", nic_count);
+
+    Ok(())
+}
+
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
+    env_logger::init();
+    toggle_wol().await?;
+    // Yield to run async drop cleanup
+    sleep(Duration::from_millis(10)).await;
 
     Ok(())
 }
