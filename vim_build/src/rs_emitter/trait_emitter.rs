@@ -164,22 +164,6 @@ impl<'a> TraitEmitter<'a> {
         Ok(())
     }
 
-    fn emit_serialize(&mut self) -> Result<()> {
-        let struct_name = to_type_name(&self.type_name);
-        self.printer.println(&format!(
-            "impl miniserde::Serialize for dyn {struct_name}Trait + '_ {{"
-        ))?;
-        self.printer.indent();
-        self.printer.println("fn begin(&self) -> miniserde::ser::Fragment<'_> {")?;
-        self.printer.indent();
-        self.printer.println("self.as_vim_object_ref().begin()")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        Ok(())
-    }
-
     fn emit_trait_deserialization(&mut self) -> Result<()> {
         let struct_name = to_type_name(&self.type_name);
 

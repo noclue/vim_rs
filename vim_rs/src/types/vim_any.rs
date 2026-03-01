@@ -20,6 +20,13 @@ impl miniserde::Serialize for VimAny {
     }
 }
 
+#[cfg(feature = "defaults")]
+impl Default for VimAny {
+    fn default() -> Self {
+        VimAny::Value(ValueElements::PrimitiveString(String::new()))
+    }
+}
+
 impl std::fmt::Debug for VimAny {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {

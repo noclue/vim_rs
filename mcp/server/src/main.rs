@@ -179,6 +179,11 @@ struct GetPropertyTreeInput {
     #[schemars(description = "Maximum depth to traverse (1-5). Use lower values to reduce output size. Default is 5.")]
     #[serde(default = "default_depth")]
     depth: u8,
+
+    /// Optional regex pattern to filter property paths
+    #[schemars(description = "Optional regex pattern to filter property paths. Only paths matching the pattern are included (e.g., 'mac|address' to find MAC-related fields).")]
+    #[serde(default)]
+    filter: String,
 }
 
 fn default_depth() -> u8 {
@@ -439,13 +444,19 @@ impl McpServer {
     }
 
     /// Get the complete property tree for a managed object type
-    #[tool(description = "Get property paths for a managed object type. Shows flat dot-separated paths (e.g., 'config.hardware.device') with Rust types. Optional-ness propagates from parent to child. Use 'depth' (1-5) to limit output.")]
+    #[tool(description = "Get property paths for a managed object type. Shows flat dot-separated paths (e.g., 'config.hardware.device') with Rust types. Optional-ness propagates from parent to child. Use 'depth' (1-5) to limit output. Use 'filter' (regex) to include only matching paths.")]
     async fn get_property_tree(&self, params: Parameters<GetPropertyTreeInput>) -> Result<CallToolResult, McpError> {
         let managed_object = &params.0.managed_object;
         let start_path = &params.0.start_path;
         let depth = params.0.depth as usize;
+        let filter = params.0.filter.trim();
+        let filter_regex = if filter.is_empty() {
+            None
+        } else {
+            regex::Regex::new(filter).ok()
+        };
 
-        match property_collector::get_property_tree(managed_object, start_path, depth) {
+        match property_collector::get_property_tree(managed_object, start_path, depth, filter_regex.as_ref()) {
             Ok(tree) => {
                 let title = if start_path.is_empty() {
                     managed_object.to_string()

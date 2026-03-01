@@ -16,7 +16,7 @@ pub fn build_enumerations(model: &Model) -> Vec<EnumerationEntry> {
         let rust_name = name.trim_end_matches("_enum").to_case(Case::Pascal).into_safe() + "Enum";
 
 
-        let variants = enum_def.variants.iter().map(|v| {
+        let mut variants: Vec<VariantEntry> = enum_def.variants.iter().map(|v| {
             VariantEntry {
                 name: to_enum_variant(v),
                 description: None,  // Can enhance later
@@ -25,6 +25,13 @@ pub fn build_enumerations(model: &Model) -> Vec<EnumerationEntry> {
                     .clone(),
             }
         }).collect();
+
+        // Add the catch-all Other_ variant present on all vim_rs enums
+        variants.push(VariantEntry {
+            name: "Other_".to_string(),
+            description: Some("Catch-all for values not known at compile time. Holds the raw string value.".to_string()),
+            discriminator_value: "(runtime value)".to_string(),
+        });
 
         enumerations.push(EnumerationEntry {
             name: rust_name,

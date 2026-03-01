@@ -2,6 +2,7 @@ use crate::resolver::{resolve_path, FieldData, FieldProcessingType, HierarchyErr
 use crate::field_data::get_type_fields;
 use serde::{Deserialize, Serialize};
 use std::collections::HashSet;
+use regex::Regex;
 
 /// A managed object type with its name
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -157,15 +158,19 @@ fn get_child_fields_for_type(type_name: &str) -> Option<Vec<ChildField>> {
 /// Returns a flat list of property paths with their types.
 /// Each line shows the full dot-separated path from the root.
 /// Optional-ness is propagated: if a parent is optional, all children are shown as Option.
+/// If a regex filter is provided, only paths matching the pattern are included (children of
+/// non-matching paths are still explored, as a child may match).
 ///
 /// # Arguments
 /// * `managed_object` - The managed object type (e.g., "VirtualMachine")
 /// * `start_path` - Optional starting path to show a subtree (e.g., "config.hardware")
 /// * `max_depth` - Maximum depth to traverse (1-5)
+/// * `filter_regex` - Optional regex to filter which paths to include in output
 pub fn get_property_tree(
     managed_object: &str,
     start_path: &str,
     max_depth: usize,
+    filter_regex: Option<&Regex>,
 ) -> Result<String, HierarchyError> {
     // Clamp depth to 1-5 range
     let max_depth = max_depth.clamp(1, 5);
@@ -209,6 +214,7 @@ pub fn get_property_tree(
         &mut visited,
         &base_path,
         parent_optional,
+        filter_regex,
     );
 
     Ok(output)
@@ -224,6 +230,7 @@ pub fn get_property_tree(
 /// * `visited` - Set of visited type names (for cycle detection)
 /// * `current_path` - The accumulated path so far (e.g., "config.hardware")
 /// * `parent_optional` - Whether any ancestor in the path is optional
+/// * `filter_regex` - Optional regex; only matching paths are included in output
 fn build_tree_from_type(
     output: &mut String,
     fields: &phf::Map<&'static str, crate::resolver::NodeData>,
@@ -232,6 +239,7 @@ fn build_tree_from_type(
     visited: &mut HashSet<String>,
     current_path: &str,
     parent_optional: bool,
+    filter_regex: Option<&Regex>,
 ) {
     // Collect and sort fields alphabetically for consistent output
     let mut field_entries: Vec<_> = fields.entries().collect();
@@ -255,7 +263,13 @@ fn build_tree_from_type(
             node_data.type_decl.to_string()
         };
 
-        output.push_str(&format!("{}: {}\n", full_path, type_str));
+        // Include in output only if no filter, or path matches filter
+        let include_in_output = filter_regex
+            .map(|re| re.is_match(&full_path))
+            .unwrap_or(true);
+        if include_in_output {
+            output.push_str(&format!("{}: {}\n", full_path, type_str));
+        }
 
         // Recursively expand struct/trait types if within depth limit
         if depth + 1 < max_depth {
@@ -278,6 +292,7 @@ fn build_tree_from_type(
                             visited,
                             &full_path,
                             effective_optional,
+                            filter_regex,
                         );
 
                         visited.remove(node_data.type_name);
@@ -295,7 +310,7 @@ mod tests {
     #[test]
     fn test_flat_paths_format() {
         // Test that output contains full dot-separated paths, not indented tree
-        let result = get_property_tree("VirtualMachine", "", 2).unwrap();
+        let result = get_property_tree("VirtualMachine", "", 2, None).unwrap();
 
         // Should contain flat paths like "name: ..." not "├─name: ..."
         assert!(
@@ -325,7 +340,7 @@ mod tests {
     #[test]
     fn test_depth_limit_one() {
         // With depth=1, should only show immediate children (no nested paths)
-        let result = get_property_tree("VirtualMachine", "", 1).unwrap();
+        let result = get_property_tree("VirtualMachine", "", 1, None).unwrap();
 
         // No line should contain a dot in the path portion (before the colon)
         for line in result.lines() {
@@ -341,8 +356,8 @@ mod tests {
     #[test]
     fn test_depth_limit_two() {
         // With depth=2, should show one level of nesting (paths like "config.xxx")
-        let result_depth_1 = get_property_tree("VirtualMachine", "", 1).unwrap();
-        let result_depth_2 = get_property_tree("VirtualMachine", "", 2).unwrap();
+        let result_depth_1 = get_property_tree("VirtualMachine", "", 1, None).unwrap();
+        let result_depth_2 = get_property_tree("VirtualMachine", "", 2, None).unwrap();
 
         // Depth 2 should have more lines than depth 1
         let lines_1: Vec<_> = result_depth_1.lines().collect();
@@ -365,13 +380,13 @@ mod tests {
     #[test]
     fn test_depth_clamped_to_valid_range() {
         // Depth 0 should be clamped to 1
-        let result_0 = get_property_tree("VirtualMachine", "", 0).unwrap();
-        let result_1 = get_property_tree("VirtualMachine", "", 1).unwrap();
+        let result_0 = get_property_tree("VirtualMachine", "", 0, None).unwrap();
+        let result_1 = get_property_tree("VirtualMachine", "", 1, None).unwrap();
         assert_eq!(result_0, result_1, "Depth 0 should be clamped to 1");
 
         // Depth 10 should be clamped to 5
-        let result_10 = get_property_tree("VirtualMachine", "", 10).unwrap();
-        let result_5 = get_property_tree("VirtualMachine", "", 5).unwrap();
+        let result_10 = get_property_tree("VirtualMachine", "", 10, None).unwrap();
+        let result_5 = get_property_tree("VirtualMachine", "", 5, None).unwrap();
         assert_eq!(result_10, result_5, "Depth 10 should be clamped to 5");
     }
 
@@ -382,7 +397,7 @@ mod tests {
         // But since guest is optional, guest.guest_state should show as Option
 
         // First verify that 'guest' itself is optional at depth 1
-        let result_depth_1 = get_property_tree("VirtualMachine", "", 1).unwrap();
+        let result_depth_1 = get_property_tree("VirtualMachine", "", 1, None).unwrap();
         let guest_line = result_depth_1
             .lines()
             .find(|line| line.starts_with("guest:"))
@@ -394,7 +409,7 @@ mod tests {
         );
 
         // Now check that nested fields under guest also show as Option
-        let result_depth_2 = get_property_tree("VirtualMachine", "", 2).unwrap();
+        let result_depth_2 = get_property_tree("VirtualMachine", "", 2, None).unwrap();
         let guest_state_line = result_depth_2
             .lines()
             .find(|line| line.starts_with("guest.guest_state:"));
@@ -412,7 +427,7 @@ mod tests {
     #[test]
     fn test_start_path_subtree() {
         // When starting from a subtree, paths should be relative to that point
-        let result = get_property_tree("VirtualMachine", "summary", 1).unwrap();
+        let result = get_property_tree("VirtualMachine", "summary", 1, None).unwrap();
 
         // Paths should start with "summary." prefix
         for line in result.lines() {
@@ -430,7 +445,7 @@ mod tests {
         // If we start from an optional path, all children should be optional
         // VirtualMachine.guest is optional
 
-        let result = get_property_tree("VirtualMachine", "guest", 1).unwrap();
+        let result = get_property_tree("VirtualMachine", "guest", 1, None).unwrap();
 
         // All paths should show as Option since 'guest' is optional
         for line in result.lines() {
@@ -459,13 +474,13 @@ mod tests {
 
     #[test]
     fn test_invalid_managed_object() {
-        let result = get_property_tree("NotARealType", "", 1);
+        let result = get_property_tree("NotARealType", "", 1, None);
         assert!(result.is_err(), "Should error for invalid managed object type");
     }
 
     #[test]
     fn test_invalid_start_path() {
-        let result = get_property_tree("VirtualMachine", "not.a.real.path", 1);
+        let result = get_property_tree("VirtualMachine", "not.a.real.path", 1, None);
         assert!(result.is_err(), "Should error for invalid property path");
     }
 }

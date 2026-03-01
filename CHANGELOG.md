@@ -21,6 +21,20 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Added
 
+- **`defaults` cargo feature** (opt-in): `Default` trait implementations for all generated structs, enums, and `Box<dyn Trait>` types.
+  - Enables struct update syntax (`..Default::default()`) for concise construction, replacing verbose `None` fields.
+  - Enum defaults use the first variant.
+  - Trait object defaults (e.g., `Box::<dyn VirtualDeviceTrait>::default()`) create the base struct.
+  - Enable with `vim_rs = { features = ["defaults"] }` in Cargo.toml.
+
+- **MCP tools**: Updated API documentation and starter guide to align with vim_rs compositional inheritance, trait getter removal, and enum changes.
+  - Traits now show "Fields (accessible via Deref)" instead of removed getter methods; usage examples use direct field access (`device.key`, `eth.mac_address`).
+  - Structs document parent fields (e.g., `selection_spec_: SelectionSpec`) required for construction when the parent has meaningful fields.
+  - Enums document `Other_` variant and `as_str()` / `from_str()` string conversion.
+  - Managed objects note the distinction between property accessors and `*_task` methods.
+  - Starter guide: new Step 3.6 "Compositional Inheritance — How Structs and Traits Use Deref" with parent field convention, construction examples, and multi-level Deref chain; Common Mistakes entry for parent field construction.
+  - Added `mcp/MCP_GAPS.md` with gap analysis for implementer reference.
+
 - **Serde benchmarks**: Added `vim_rs/benches/serde_bench.rs` to measure serialization/deserialization performance.
 - **Serde tests**: Added `vim_rs/tests/serde_test.rs` to verify enum serialization round-trips.
 - **`ValueElements::as_str()`**: Returns the VIM API type name as it appears in the OpenAPI specification.

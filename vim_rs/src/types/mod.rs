@@ -1,3 +1,5 @@
+#[cfg(feature = "defaults")]
+pub mod defaults;
 pub mod enums;
 pub mod structs;
 pub mod traits;

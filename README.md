@@ -391,6 +391,27 @@ Note that `StructType` implements the `child_of` method, allowing to check if a 
 
 In our example above, we check if the event is `EventEx` or `ExtendedEvent` to access the `eventTypeId` field.
 
+## Optional `defaults` Feature
+
+To simplify construction of vim_rs types, enable the opt-in `defaults` feature:
+
+```toml
+vim_rs = { version = "0.3", path = "../vim_rs", features = ["defaults"] }
+```
+
+This provides `Default` implementations for all structs, enums, and trait objects, enabling struct update syntax:
+
+```rust
+// Without defaults: dozens of explicit None fields
+// With defaults: concise construction
+let config_spec = VirtualMachineConfigSpec {
+    device_change: Some(device_changes),
+    ..Default::default()
+};
+```
+
+See [`examples/snippets/src/vm_toggle_wol.rs`](examples/snippets/src/vm_toggle_wol.rs) for a complete example.
+
 Sometimes one will want to convert part of the dynamic-like objects into proper binding. For example, the `managedObject` in the `ExtendedEvent` can be read into `ManagedObjectReference` as follows:
 
 ```rust
@@ -425,6 +446,7 @@ The `vim_rs` crate has a few packages worth understanding:
 2. `mo` - contains bindings for the individual managed object types. Managed object types in VIM have all the remote invocation endpoints. All the objects in `mo` require a `Client` to make HTTP calls.
 3. `types` - contains the definitions of the VIM data types. It is a bit unwieldy and is the main culprit for slow compilation and large executable size (40MB+ when optimized for size).
     * `structs.rs` has all the struct types and is the big monstrosity.
+    * `defaults.rs` (with `defaults` feature) provides `Default` implementations for all types.
     * `traits.rs` defines trait types for all VIM types that have children. In addition, there is logic for cross-trait conversion and JSON serialization.
     * `enums.rs` contains all enum definitions.
     * `struct_enum.rs` is an enum with all struct types that allows for relatively efficient type comparison operations.
@@ -443,8 +465,8 @@ The generator has three packages:
 
 ## FAQ
 
-**Why aren’t standard traits like `PartialEq`, `Eq`, `Hash`, `Clone`, and `Default` implemented on VIM struct types?**  
-Because including these traits across the extensive VIM data model would greatly increase compilation time and binary size. We decided to implement only the essentials to keep build times and executable sizes under control.
+**Why aren’t standard traits like `PartialEq`, `Eq`, `Hash`, and `Clone` implemented on VIM struct types?**  
+Because including these traits across the extensive VIM data model would greatly increase compilation time and binary size. We decided to implement only the essentials to keep build times and executable sizes under control. `Default` is available as an opt-in feature (see Optional `defaults` Feature above).
 
 **What are the expected compilation times for vim-tests?**  
 On a good machine, the first-time compilation of vim-tests can take between 2 and 5 minutes, with subsequent compilations (especially from within an IDE) taking about a minute.

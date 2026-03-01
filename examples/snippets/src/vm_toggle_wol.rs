@@ -209,12 +209,8 @@ async fn toggle_wol() -> Result<()> {
 
         device_changes.push(VirtualDeviceConfigSpec {
             operation: Some(VirtualDeviceConfigSpecOperationEnum::Edit),
-            device: device,
-            file_operation: None,
-            profile: None,
-            backing: None,
-            filter_spec: None,
-            change_mode: None,
+            device,
+            ..Default::default()
         });
         nic_count += 1;
     }
@@ -230,7 +226,7 @@ async fn toggle_wol() -> Result<()> {
     );
 
     // Create VirtualMachineConfigSpec with device changes
-    // We only need to set device_change - all other fields default to None
+    // We only need to set device_change - all other fields default to None via Default trait
     let config_spec = VirtualMachineConfigSpec {
         device_change: Some(
             device_changes
@@ -240,86 +236,7 @@ async fn toggle_wol() -> Result<()> {
                 })
                 .collect(),
         ),
-        change_version: None,
-        name: None,
-        version: None,
-        create_date: None,
-        uuid: None,
-        instance_uuid: None,
-        npiv_node_world_wide_name: None,
-        npiv_port_world_wide_name: None,
-        npiv_world_wide_name_type: None,
-        npiv_desired_node_wwns: None,
-        npiv_desired_port_wwns: None,
-        npiv_temporary_disabled: None,
-        npiv_on_non_rdm_disks: None,
-        npiv_world_wide_name_op: None,
-        location_id: None,
-        guest_id: None,
-        alternate_guest_name: None,
-        annotation: None,
-        files: None,
-        tools: None,
-        flags: None,
-        console_preferences: None,
-        power_op_info: None,
-        reboot_power_off: None,
-        num_cp_us: None,
-        vcpu_config: None,
-        num_cores_per_socket: None,
-        memory_mb: None,
-        memory_hot_add_enabled: None,
-        cpu_hot_add_enabled: None,
-        cpu_hot_remove_enabled: None,
-        virtual_ich_7_m_present: None,
-        virtual_smc_present: None,
-        cpu_allocation: None,
-        memory_allocation: None,
-        latency_sensitivity: None,
-        cpu_affinity: None,
-        memory_affinity: None,
-        network_shaper: None,
-        cpu_feature_mask: None,
-        extra_config: None,
-        swap_placement: None,
-        boot_options: None,
-        v_app_config: None,
-        ft_info: None,
-        rep_config: None,
-        v_app_config_removed: None,
-        v_asserts_enabled: None,
-        change_tracking_enabled: None,
-        firmware: None,
-        max_mks_connections: None,
-        guest_auto_lock_enabled: None,
-        managed_by: None,
-        memory_reservation_locked_to_max: None,
-        nested_hv_enabled: None,
-        v_pmc_enabled: None,
-        scheduled_hardware_upgrade_info: None,
-        vm_profile: None,
-        message_bus_tunnel_enabled: None,
-        crypto: None,
-        migrate_encryption: None,
-        sgx_info: None,
-        ft_encryption_mode: None,
-        guest_monitoring_mode_info: None,
-        sev_enabled: None,
-        virtual_numa: None,
-        motherboard_layout: None,
-        pmem_failover_enabled: None,
-        vmx_stats_collection_enabled: None,
-        vm_op_notification_to_app_enabled: None,
-        vm_op_notification_timeout: None,
-        device_swap: None,
-        simultaneous_threads: None,
-        pmem: None,
-        device_groups: None,
-        fixed_passthru_hot_plug_enabled: None,
-        metro_ft_enabled: None,
-        metro_ft_host_group: None,
-        tdx_enabled: None,
-        sev_snp_enabled: None,
+        ..Default::default()
     };
 
     // Reconfigure the VM
@@ -339,7 +256,7 @@ async fn toggle_wol() -> Result<()> {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    dotenvy::dotenv().ok();
+    dotenvy::dotenv_override().ok();
     env_logger::init();
     toggle_wol().await?;
     // Yield to run async drop cleanup

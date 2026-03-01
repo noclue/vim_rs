@@ -4418,6 +4418,7 @@ dependencies = [
  "phf 0.13.1",
  "pulldown-cmark",
  "rayon",
+ "regex",
  "reqwest 0.13.1",
  "rmcp",
  "schemars",

@@ -13,6 +13,9 @@ keywords = ["vi-json", "vim", "bindings", "vcenter", "vmware"]
 categories = ["api-bindings", "network-programming"]
 exclude = ["target/*", "**/*.rs.bk"]
 
+[features]
+defaults = []
+
 [dependencies]
 base64 = "0.22"
 bytes = "1"

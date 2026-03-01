@@ -120,6 +120,8 @@ fn emit_types(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     emit_enums(&types_folder, vim_model)?;
     emit_structs(&types_folder, vim_model)?;
 
+    emit_defaults(&types_folder, vim_model)?;
+
     // Emit traits
     delete_trait_files(&types_folder)?;
     emit_vim_object_trait(&types_folder, vim_model)?;
@@ -222,8 +224,17 @@ fn emit_structs(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> 
     Ok(())
 }
 
+fn emit_defaults(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    let mut printer = printer_for_file(types_folder.join("defaults.rs"))?;
+    let mut emitter = rs_emitter::defaults::DefaultsEmitter::new(vim_model, &mut printer);
+    emitter.emit_all()?;
+    Ok(())
+}
+
 fn emit_mod_rs(types_folder: &std::path::Path) -> Result<()> {
     let mut p = printer_for_file(types_folder.join("mod.rs"))?;
+    p.println("#[cfg(feature = \"defaults\")]")?;
+    p.println("pub mod defaults;")?;
     p.println("pub mod enums;")?;
     p.println("pub mod structs;")?;
     p.println("pub mod traits;")?;
