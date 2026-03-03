@@ -3,7 +3,7 @@ use ratatui::layout::Constraint;
 use ratatui::style::{Color, Style};
 use ratatui::text::Span;
 use ratatui::widgets::{Cell, Row};
-use vim_macros::vim_updatable;
+use vim_rs::vim_updatable;
 use crate::resource_browser::formatting::{status_color, ID_COLUMN_WIDTH, STATUS, STATUS_COLUMN_WIDTH};
 use crate::resource_type::ResourceType;
 use crate::resource_browser::tabular_data::TabularData;

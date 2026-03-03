@@ -71,7 +71,8 @@ impl VsanVcClusterConfigSystem {
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanClusterGetClaimedCapacity", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get configInfoEx for a vSAN cluster  
@@ -109,7 +110,8 @@ impl VsanVcClusterConfigSystem {
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanClusterGetConfig", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanConfigInfoEx = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanConfigInfoEx = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get vSAN runtime stats of all hosts reside in specified cluster.
@@ -147,7 +149,10 @@ impl VsanVcClusterConfigSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanRuntimeStatsHostMap>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanRuntimeStatsHostMap>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -188,7 +193,10 @@ impl VsanVcClusterConfigSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanHostDrsStats>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanHostDrsStats>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -253,7 +261,8 @@ impl VsanVcClusterConfigSystem {
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanClusterReconfig", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Regenerate the key(s) used by vSAN encryption for the given cluster.
@@ -312,7 +321,8 @@ impl VsanVcClusterConfigSystem {
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/VsanEncryptedClusterRekey_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Run checks for lifecycle operations on a given vSAN cluster.
@@ -356,7 +366,8 @@ impl VsanVcClusterConfigSystem {
         let path = format!("/vsan/VsanVcClusterConfigSystem/{moId}/RunLifecycleCheck", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanVcLifecycleCheckResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanVcLifecycleCheckResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Validate the vSAN cluster reconfig spec to figure out whether user spec can
@@ -396,65 +407,251 @@ impl VsanVcClusterConfigSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanClusterGetClaimedCapacityRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanClusterGetClaimedCapacityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanClusterGetClaimedCapacityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanClusterGetClaimedCapacityRequestTypeSer<'b, 'a> {
+    data: &'b VsanClusterGetClaimedCapacityRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanClusterGetClaimedCapacityRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanClusterGetClaimedCapacityRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanClusterGetConfigRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanClusterGetConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanClusterGetConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanClusterGetConfigRequestTypeSer<'b, 'a> {
+    data: &'b VsanClusterGetConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanClusterGetConfigRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanClusterGetConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanClusterGetRuntimeStatsRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     stats: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanClusterGetRuntimeStatsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanClusterGetRuntimeStatsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanClusterGetRuntimeStatsRequestTypeSer<'b, 'a> {
+    data: &'b VsanClusterGetRuntimeStatsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanClusterGetRuntimeStatsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanClusterGetRuntimeStatsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.stats else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("stats"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanQueryClusterDrsStatsRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     vms: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanQueryClusterDrsStatsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanQueryClusterDrsStatsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanQueryClusterDrsStatsRequestTypeSer<'b, 'a> {
+    data: &'b VsanQueryClusterDrsStatsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanQueryClusterDrsStatsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanQueryClusterDrsStatsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.vms else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vms"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanClusterReconfigRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "vsanReconfigSpec")]
     vsan_reconfig_spec: &'a crate::types::structs::VimVsanReconfigSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanClusterReconfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanClusterReconfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanClusterReconfigRequestTypeSer<'b, 'a> {
+    data: &'b VsanClusterReconfigRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanClusterReconfigRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanClusterReconfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("vsanReconfigSpec"), &self.data.vsan_reconfig_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanEncryptedClusterRekeyRequestType<'a> {
-    #[serde(rename = "encryptedCluster")]
     encrypted_cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "deepRekey")]
     deep_rekey: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "allowReducedRedundancy")]
     allow_reduced_redundancy: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanEncryptedClusterRekeyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanEncryptedClusterRekeyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanEncryptedClusterRekeyRequestTypeSer<'b, 'a> {
+    data: &'b VsanEncryptedClusterRekeyRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanEncryptedClusterRekeyRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanEncryptedClusterRekeyRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("encryptedCluster"), &self.data.encrypted_cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.deep_rekey else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("deepRekey"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.allow_reduced_redundancy else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("allowReducedRedundancy"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RunLifecycleCheckRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "vsanLifecycleCheckSpec")]
     vsan_lifecycle_check_spec: &'a crate::types::structs::VsanVcLifecycleCheckSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RunLifecycleCheckRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RunLifecycleCheckRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RunLifecycleCheckRequestTypeSer<'b, 'a> {
+    data: &'b RunLifecycleCheckRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RunLifecycleCheckRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RunLifecycleCheckRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("vsanLifecycleCheckSpec"), &self.data.vsan_lifecycle_check_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanValidateConfigSpecRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "vsanReconfigSpec")]
     vsan_reconfig_spec: &'a crate::types::structs::VimVsanReconfigSpec,
+}
+
+impl<'a> miniserde::Serialize for VsanValidateConfigSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanValidateConfigSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanValidateConfigSpecRequestTypeSer<'b, 'a> {
+    data: &'b VsanValidateConfigSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanValidateConfigSpecRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanValidateConfigSpecRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("vsanReconfigSpec"), &self.data.vsan_reconfig_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

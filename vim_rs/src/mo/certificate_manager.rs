@@ -35,7 +35,8 @@ impl CertificateManager {
         let path = format!("/CertificateManager/{moId}/CertMgrRefreshCACertificatesAndCRLs_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Gets CSRs from the hosts and then gets these certificates signed by the
@@ -58,7 +59,8 @@ impl CertificateManager {
         let path = format!("/CertificateManager/{moId}/CertMgrRefreshCertificates_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Revokes the certificates of some hosts.
@@ -80,22 +82,86 @@ impl CertificateManager {
         let path = format!("/CertificateManager/{moId}/CertMgrRevokeCertificates_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "CertMgrRefreshCACertificatesAndCRLsRequestType", tag = "_typeName")]
 struct CertMgrRefreshCaCertificatesAndCrLsRequestType<'a> {
     host: &'a [crate::types::structs::ManagedObjectReference],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CertMgrRefreshCaCertificatesAndCrLsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CertMgrRefreshCaCertificatesAndCrLsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CertMgrRefreshCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
+    data: &'b CertMgrRefreshCaCertificatesAndCrLsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CertMgrRefreshCaCertificatesAndCrLsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CertMgrRefreshCACertificatesAndCRLsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CertMgrRefreshCertificatesRequestType<'a> {
     host: &'a [crate::types::structs::ManagedObjectReference],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CertMgrRefreshCertificatesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CertMgrRefreshCertificatesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CertMgrRefreshCertificatesRequestTypeSer<'b, 'a> {
+    data: &'b CertMgrRefreshCertificatesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CertMgrRefreshCertificatesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CertMgrRefreshCertificatesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CertMgrRevokeCertificatesRequestType<'a> {
     host: &'a [crate::types::structs::ManagedObjectReference],
+}
+
+impl<'a> miniserde::Serialize for CertMgrRevokeCertificatesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CertMgrRevokeCertificatesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CertMgrRevokeCertificatesRequestTypeSer<'b, 'a> {
+    data: &'b CertMgrRevokeCertificatesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CertMgrRevokeCertificatesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CertMgrRevokeCertificatesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

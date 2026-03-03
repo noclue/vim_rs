@@ -24,7 +24,8 @@ impl SmsTask {
         let path = format!("/sms/SmsTask/{moId}/QuerySmsTaskInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::SmsTaskInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::SmsTaskInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the result of the task.
@@ -35,7 +36,10 @@ impl SmsTask {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::vim_any::VimAny>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::vim_any::VimAny>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }

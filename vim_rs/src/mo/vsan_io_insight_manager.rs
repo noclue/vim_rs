@@ -86,7 +86,10 @@ impl VsanIoInsightManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanIoInsightInstance>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIoInsightInstance>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -210,7 +213,8 @@ impl VsanIoInsightManager {
         let path = format!("/vsan/VsanIoInsightManager/{moId}/StartIoInsight", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Stop ioinsight tool(s) running on the ESXi host(s) by given parameters
@@ -278,63 +282,201 @@ impl VsanIoInsightManager {
         let path = format!("/vsan/VsanIoInsightManager/{moId}/StopIoInsight", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct DeleteIoInsightInstanceRequestType<'a> {
-    #[serde(rename = "runName")]
     run_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteIoInsightInstanceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteIoInsightInstanceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteIoInsightInstanceRequestTypeSer<'b, 'a> {
+    data: &'b DeleteIoInsightInstanceRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DeleteIoInsightInstanceRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteIoInsightInstanceRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("runName"), &self.data.run_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryIoInsightInstancesRequestType<'a> {
-    #[serde(rename = "querySpec")]
     query_spec: &'a crate::types::structs::VsanIoInsightInstanceQuerySpec,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryIoInsightInstancesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryIoInsightInstancesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryIoInsightInstancesRequestTypeSer<'b, 'a> {
+    data: &'b QueryIoInsightInstancesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryIoInsightInstancesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryIoInsightInstancesRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("querySpec"), &self.data.query_spec as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RenameIoInsightInstanceRequestType<'a> {
-    #[serde(rename = "oldRunName")]
     old_run_name: &'a str,
-    #[serde(rename = "newRunName")]
     new_run_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RenameIoInsightInstanceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RenameIoInsightInstanceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RenameIoInsightInstanceRequestTypeSer<'b, 'a> {
+    data: &'b RenameIoInsightInstanceRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RenameIoInsightInstanceRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RenameIoInsightInstanceRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("oldRunName"), &self.data.old_run_name as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("newRunName"), &self.data.new_run_name as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct StartIoInsightRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "runName")]
     run_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "durationSec")]
     duration_sec: Option<i64>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "targetHosts")]
     target_hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "targetVMs")]
     target_v_ms: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for StartIoInsightRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(StartIoInsightRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct StartIoInsightRequestTypeSer<'b, 'a> {
+    data: &'b StartIoInsightRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for StartIoInsightRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"StartIoInsightRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.run_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("runName"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.duration_sec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("durationSec"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.target_hosts else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targetHosts"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.target_v_ms else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targetVMs"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct StopIoInsightRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "runName")]
     run_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "hostsIoInsightInfos")]
     hosts_io_insight_infos: Option<&'a [crate::types::structs::VsanHostIoInsightInfo]>,
+}
+
+impl<'a> miniserde::Serialize for StopIoInsightRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(StopIoInsightRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct StopIoInsightRequestTypeSer<'b, 'a> {
+    data: &'b StopIoInsightRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for StopIoInsightRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"StopIoInsightRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.run_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("runName"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.hosts_io_insight_infos else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hostsIoInsightInfos"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

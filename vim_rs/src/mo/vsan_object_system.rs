@@ -62,7 +62,8 @@ impl VsanObjectSystem {
         let path = format!("/vsan/VsanObjectSystem/{moId}/VsanDeleteObjects_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query all inaccessible vmswap objects on a vSAN cluster.
@@ -92,7 +93,10 @@ impl VsanObjectSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -173,7 +177,10 @@ impl VsanObjectSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VsanObjectIdentityAndHealth>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanObjectIdentityAndHealth>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -206,7 +213,8 @@ impl VsanObjectSystem {
         let path = format!("/vsan/VsanObjectSystem/{moId}/QuerySyncingVsanObjectsSummary", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanHostVsanObjectSyncQueryResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanHostVsanObjectSyncQueryResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get information about the vSAN object/directory.
@@ -258,7 +266,10 @@ impl VsanObjectSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VsanObjectInformation>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanObjectInformation>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -291,7 +302,8 @@ impl VsanObjectSystem {
         let path = format!("/vsan/VsanObjectSystem/{moId}/RelayoutObjects", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Set the policy of the vSAN object.
@@ -356,78 +368,268 @@ impl VsanObjectSystem {
         let path = format!("/vsan/VsanObjectSystem/{moId}/VosSetVsanObjectPolicy", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanDeleteObjectsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "objUuids")]
     obj_uuids: &'a [String],
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanDeleteObjectsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanDeleteObjectsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanDeleteObjectsRequestTypeSer<'b, 'a> {
+    data: &'b VsanDeleteObjectsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanDeleteObjectsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanDeleteObjectsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("objUuids"), &self.data.obj_uuids as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.force else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("force"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanQueryInaccessibleVmSwapObjectsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanQueryInaccessibleVmSwapObjectsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanQueryInaccessibleVmSwapObjectsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanQueryInaccessibleVmSwapObjectsRequestTypeSer<'b, 'a> {
+    data: &'b VsanQueryInaccessibleVmSwapObjectsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanQueryInaccessibleVmSwapObjectsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanQueryInaccessibleVmSwapObjectsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanQueryObjectIdentitiesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "objUuids")]
     obj_uuids: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "objTypes")]
     obj_types: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "includeHealth")]
     include_health: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "includeObjIdentity")]
     include_obj_identity: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "includeSpaceSummary")]
     include_space_summary: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "extraQuerySpec")]
     extra_query_spec: Option<&'a crate::types::structs::VsanObjIdentityQuerySpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanQueryObjectIdentitiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanQueryObjectIdentitiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanQueryObjectIdentitiesRequestTypeSer<'b, 'a> {
+    data: &'b VsanQueryObjectIdentitiesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanQueryObjectIdentitiesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanQueryObjectIdentitiesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.obj_uuids else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("objUuids"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.obj_types else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("objTypes"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.include_health else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("includeHealth"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.include_obj_identity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("includeObjIdentity"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.include_space_summary else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("includeSpaceSummary"), val as &dyn miniserde::Serialize));
+                }
+                7 => {
+                    let Some(ref val) = self.data.extra_query_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("extraQuerySpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QuerySyncingVsanObjectsSummaryRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "syncingObjectFilter")]
     syncing_object_filter: Option<&'a crate::types::structs::VsanSyncingObjectFilter>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QuerySyncingVsanObjectsSummaryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QuerySyncingVsanObjectsSummaryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QuerySyncingVsanObjectsSummaryRequestTypeSer<'b, 'a> {
+    data: &'b QuerySyncingVsanObjectsSummaryRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QuerySyncingVsanObjectsSummaryRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QuerySyncingVsanObjectsSummaryRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.syncing_object_filter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("syncingObjectFilter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VosQueryVsanObjectInformationRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "vsanObjectQuerySpecs")]
     vsan_object_query_specs: &'a [crate::types::structs::VsanObjectQuerySpec],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VosQueryVsanObjectInformationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VosQueryVsanObjectInformationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VosQueryVsanObjectInformationRequestTypeSer<'b, 'a> {
+    data: &'b VosQueryVsanObjectInformationRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VosQueryVsanObjectInformationRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VosQueryVsanObjectInformationRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("vsanObjectQuerySpecs"), &self.data.vsan_object_query_specs as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct RelayoutObjectsRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RelayoutObjectsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RelayoutObjectsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RelayoutObjectsRequestTypeSer<'b, 'a> {
+    data: &'b RelayoutObjectsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RelayoutObjectsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RelayoutObjectsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VosSetVsanObjectPolicyRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "vsanObjectUuid")]
     vsan_object_uuid: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a dyn crate::types::traits::VirtualMachineProfileSpecTrait>,
+}
+
+impl<'a> miniserde::Serialize for VosSetVsanObjectPolicyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VosSetVsanObjectPolicyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VosSetVsanObjectPolicyRequestTypeSer<'b, 'a> {
+    data: &'b VosSetVsanObjectPolicyRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VosSetVsanObjectPolicyRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VosSetVsanObjectPolicyRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("vsanObjectUuid"), &self.data.vsan_object_uuid as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

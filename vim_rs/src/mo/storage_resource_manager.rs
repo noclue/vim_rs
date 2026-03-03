@@ -68,7 +68,8 @@ impl StorageResourceManager {
         let path = format!("/StorageResourceManager/{moId}/ConfigureDatastoreIORM_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
@@ -94,7 +95,8 @@ impl StorageResourceManager {
         let path = format!("/StorageResourceManager/{moId}/QueryIORMConfigOption", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::StorageIormConfigOption = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::StorageIormConfigOption = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Applies a recommendation from the recommendation list that is generated
@@ -126,7 +128,8 @@ impl StorageResourceManager {
         let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendation_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Applies a recommendation from the recommendation list that is generated
@@ -162,7 +165,8 @@ impl StorageResourceManager {
         let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendationToPod_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Cancels a recommendation.
@@ -217,7 +221,8 @@ impl StorageResourceManager {
         let path = format!("/StorageResourceManager/{moId}/ConfigureStorageDrsForPod_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
@@ -250,7 +255,10 @@ impl StorageResourceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StoragePerformanceSummary>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StoragePerformanceSummary>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -326,7 +334,8 @@ impl StorageResourceManager {
         let path = format!("/StorageResourceManager/{moId}/RecommendDatastores", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::StoragePlacementResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::StoragePlacementResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Make Storage DRS invoke again on the specified pod *StoragePod*
@@ -377,7 +386,8 @@ impl StorageResourceManager {
         let path = format!("/StorageResourceManager/{moId}/RefreshStorageDrsRecommendationsForPod_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Validate the new storage DRS configuration for a pod
@@ -403,69 +413,307 @@ impl StorageResourceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::MethodFault>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::MethodFault>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "ConfigureDatastoreIORMRequestType", tag = "_typeName")]
 struct ConfigureDatastoreIormRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::StorageIormConfigSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "QueryIORMConfigOptionRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for ConfigureDatastoreIormRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ConfigureDatastoreIormRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ConfigureDatastoreIormRequestTypeSer<'b, 'a> {
+    data: &'b ConfigureDatastoreIormRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ConfigureDatastoreIormRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ConfigureDatastoreIORMRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryIormConfigOptionRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryIormConfigOptionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryIormConfigOptionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryIormConfigOptionRequestTypeSer<'b, 'a> {
+    data: &'b QueryIormConfigOptionRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryIormConfigOptionRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryIORMConfigOptionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ApplyStorageDrsRecommendationRequestType<'a> {
     key: &'a [String],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ApplyStorageDrsRecommendationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ApplyStorageDrsRecommendationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ApplyStorageDrsRecommendationRequestTypeSer<'b, 'a> {
+    data: &'b ApplyStorageDrsRecommendationRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ApplyStorageDrsRecommendationRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ApplyStorageDrsRecommendationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ApplyStorageDrsRecommendationToPodRequestType<'a> {
     pod: &'a crate::types::structs::ManagedObjectReference,
     key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ApplyStorageDrsRecommendationToPodRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ApplyStorageDrsRecommendationToPodRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ApplyStorageDrsRecommendationToPodRequestTypeSer<'b, 'a> {
+    data: &'b ApplyStorageDrsRecommendationToPodRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ApplyStorageDrsRecommendationToPodRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ApplyStorageDrsRecommendationToPodRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("pod"), &self.data.pod as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CancelStorageDrsRecommendationRequestType<'a> {
     key: &'a [String],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CancelStorageDrsRecommendationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CancelStorageDrsRecommendationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CancelStorageDrsRecommendationRequestTypeSer<'b, 'a> {
+    data: &'b CancelStorageDrsRecommendationRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CancelStorageDrsRecommendationRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CancelStorageDrsRecommendationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ConfigureStorageDrsForPodRequestType<'a> {
     pod: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::StorageDrsConfigSpec,
     modify: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ConfigureStorageDrsForPodRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ConfigureStorageDrsForPodRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ConfigureStorageDrsForPodRequestTypeSer<'b, 'a> {
+    data: &'b ConfigureStorageDrsForPodRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ConfigureStorageDrsForPodRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ConfigureStorageDrsForPodRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("pod"), &self.data.pod as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("modify"), &self.data.modify as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryDatastorePerformanceSummaryRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDatastorePerformanceSummaryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDatastorePerformanceSummaryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDatastorePerformanceSummaryRequestTypeSer<'b, 'a> {
+    data: &'b QueryDatastorePerformanceSummaryRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryDatastorePerformanceSummaryRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDatastorePerformanceSummaryRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RecommendDatastoresRequestType<'a> {
-    #[serde(rename = "storageSpec")]
     storage_spec: &'a crate::types::structs::StoragePlacementSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RecommendDatastoresRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RecommendDatastoresRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RecommendDatastoresRequestTypeSer<'b, 'a> {
+    data: &'b RecommendDatastoresRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RecommendDatastoresRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RecommendDatastoresRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("storageSpec"), &self.data.storage_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RefreshStorageDrsRecommendationRequestType<'a> {
     pod: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RefreshStorageDrsRecommendationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RefreshStorageDrsRecommendationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RefreshStorageDrsRecommendationRequestTypeSer<'b, 'a> {
+    data: &'b RefreshStorageDrsRecommendationRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RefreshStorageDrsRecommendationRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RefreshStorageDrsRecommendationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("pod"), &self.data.pod as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RefreshStorageDrsRecommendationsForPodRequestType<'a> {
     pod: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RefreshStorageDrsRecommendationsForPodRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RefreshStorageDrsRecommendationsForPodRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RefreshStorageDrsRecommendationsForPodRequestTypeSer<'b, 'a> {
+    data: &'b RefreshStorageDrsRecommendationsForPodRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RefreshStorageDrsRecommendationsForPodRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RefreshStorageDrsRecommendationsForPodRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("pod"), &self.data.pod as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ValidateStoragePodConfigRequestType<'a> {
     pod: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::StorageDrsConfigSpec,
+}
+
+impl<'a> miniserde::Serialize for ValidateStoragePodConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ValidateStoragePodConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ValidateStoragePodConfigRequestTypeSer<'b, 'a> {
+    data: &'b ValidateStoragePodConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ValidateStoragePodConfigRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ValidateStoragePodConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("pod"), &self.data.pod as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

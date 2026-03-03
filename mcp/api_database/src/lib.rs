@@ -291,6 +291,8 @@ pub struct MethodEntry {
     pub name: String,
     pub signature: MethodSignature,
     pub description: Option<String>,
+    #[serde(default)]
+    pub is_property_accessor: bool,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -314,6 +316,24 @@ pub struct FieldEntry {
     pub is_boxed: bool,
     pub is_trait: bool,
     pub trait_name: Option<String>,
+    /// True if this field is the parent struct (compositional inheritance) - required for construction.
+    #[serde(default)]
+    pub is_parent_field: bool,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct InheritedFieldGroup {
+    pub source_type: String,
+    pub path_prefix: String,
+    pub fields: Vec<FieldEntry>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct ExtraFieldEntry {
+    pub vim_name: String,
+    pub vim_type: String,
+    pub rust_type: String,
+    pub description: Option<String>,
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
@@ -333,6 +353,21 @@ pub struct StructureEntry {
     /// Paths from API entry points leading to this struct type.
     #[serde(default)]
     pub paths: Vec<ApiTypePath>,
+    /// Fields inherited from parent types (for construction/read path indication).
+    #[serde(default)]
+    pub inherited_field_groups: Vec<InheritedFieldGroup>,
+    /// For Skip emit mode: camelCase field names accessible via extra_fields_.
+    #[serde(default)]
+    pub extra_fields: Vec<ExtraFieldEntry>,
+    /// For Skip emit mode: Rust name of the pruned parent type.
+    #[serde(default)]
+    pub pruned_parent: Option<String>,
+    /// For Skip emit mode: direct fields of the pruned parent type (denormalized).
+    #[serde(default)]
+    pub pruned_parent_fields: Vec<FieldEntry>,
+    /// For Skip emit mode: inherited field groups of the pruned parent type (denormalized).
+    #[serde(default)]
+    pub pruned_parent_inherited_groups: Vec<InheritedFieldGroup>,
 }
 
 // Enumerations
@@ -363,14 +398,26 @@ pub struct GetterEntry {
 }
 
 #[derive(Debug, Clone, Serialize, Deserialize)]
+pub struct TraitDerefTarget {
+    pub struct_name: String,
+    pub fields: Vec<FieldEntry>,
+}
+
+#[derive(Debug, Clone, Serialize, Deserialize)]
 pub struct TraitEntry {
     pub name: String,
     pub rust_module: String,
     pub description: Option<String>,
     pub parent_trait: Option<String>,
     pub getters: Vec<GetterEntry>,
+    /// Fields accessible via Deref coercion (replaces per-field getters).
+    #[serde(default)]
+    pub deref_target: Option<TraitDerefTarget>,
     pub implementing_types: Vec<String>,
     pub all_descendants: Vec<String>,
+    /// Fields inherited from parent traits.
+    #[serde(default)]
+    pub inherited_field_groups: Vec<InheritedFieldGroup>,
 }
 
 // Wrapper structures with metadata (what's actually in the JSON files)
@@ -966,12 +1013,34 @@ fn format_managed_object_doc(mo: &ManagedObjectEntry) -> String {
     }
 
     if !mo.methods.is_empty() {
-        output.push_str(&format!("## Methods ({} methods)\n\n", mo.methods.len()));
-        output.push_str("Use `get` with method ID to view detailed information.\n\n");
-        for method in &mo.methods {
-            output.push_str(&format!("- `{}::{}`\n", mo.name, method.name));
+        let (accessors, methods): (Vec<_>, Vec<_>) =
+            mo.methods.iter().partition(|m| m.is_property_accessor);
+
+        if !accessors.is_empty() {
+            output.push_str(&format!(
+                "## Property Accessors ({} properties)\n\n",
+                accessors.len()
+            ));
+            output.push_str(
+                "These fetch a single property from the server via HTTP GET.\n\n",
+            );
+            for method in &accessors {
+                output.push_str(&format!("- `{}::{}`\n", mo.name, method.name));
+            }
+            output.push('\n');
         }
-        output.push('\n');
+
+        if !methods.is_empty() {
+            output.push_str(&format!("## Methods ({} methods)\n\n", methods.len()));
+            output.push_str(
+                "Methods ending in `*_task` return a Task reference (use TaskTracker).\n\n",
+            );
+            output.push_str("Use `get` with method ID to view detailed information.\n\n");
+            for method in &methods {
+                output.push_str(&format!("- `{}::{}`\n", mo.name, method.name));
+            }
+            output.push('\n');
+        }
     }
 
     output
@@ -1053,35 +1122,221 @@ fn format_structure_doc(s: &StructureEntry) -> String {
         output.push('\n');
     }
 
-    if !s.children.is_empty() {
-        output.push_str(&format!("## Direct Children ({} types)\n\n", s.children.len()));
-        for child in s.children.iter().take(10) {
-            output.push_str(&format!("- `{}`\n", child));
-        }
-        if s.children.len() > 10 {
-            output.push_str(&format!("\n... and {} more\n", s.children.len() - 10));
-        }
-        output.push('\n');
-    }
-
     if !s.all_descendants.is_empty() {
-        output.push_str(&format!("## All Descendants ({} types total)\n\n", s.all_descendants.len()));
+        let children_set: std::collections::HashSet<_> = s.children.iter().collect();
+        output.push_str(&format!("## Descendants ({} types)\n\n", s.all_descendants.len()));
         for desc in s.all_descendants.iter().take(15) {
-            output.push_str(&format!("- `{}`\n", desc));
+            let marker = if children_set.contains(desc) { " *" } else { "" };
+            output.push_str(&format!("- `{}`{}\n", desc, marker));
         }
         if s.all_descendants.len() > 15 {
-            output.push_str(&format!("\n... and {} more\n", s.all_descendants.len() - 15));
+            output.push_str(&format!("\n*... and {} more. * = direct child.*\n", s.all_descendants.len() - 15));
+        } else {
+            output.push_str("\n*\\* = direct child*\n");
         }
         output.push('\n');
     }
 
-    if !s.fields.is_empty() {
-        output.push_str(&format!("## Fields ({} fields)\n\n", s.fields.len()));
+    // For Skip emit mode: explain the type isn't generated and show inline fields
+    if s.emit_mode == "Skip" {
+        if let Some(ref pruned) = s.pruned_parent {
+            output.push_str("## ⚠ Not Generated in Rust\n\n");
+            output.push_str(&format!(
+                "`{}` is **not** emitted as a separate Rust struct. \
+                 In Rust code the pruned parent type **`{}`** is used instead.\n\n",
+                s.name, pruned
+            ));
+
+            // Discriminator pattern — how to identify this type at runtime
+            output.push_str(&format!(
+                "**Identify at runtime** via the `type_` discriminator on `{}`:\n\n",
+                pruned
+            ));
+            output.push_str("```rust\n");
+            output.push_str("use vim_rs::types::struct_enum::StructType;\n\n");
+            output.push_str(&format!(
+                "if instance.type_ == Some(StructType::{}) {{\n",
+                s.name
+            ));
+            output.push_str(&format!(
+                "    // This {} is specifically a {}\n",
+                pruned, s.name
+            ));
+            output.push_str("}\n");
+            output.push_str("```\n\n");
+
+            // Extra fields access pattern
+            if !s.extra_fields.is_empty() {
+                output.push_str(&format!(
+                    "**Access unique properties** via `extra_fields_` \
+                     (`HashMap<String, miniserde::json::Value>`) on the `{}` instance. \
+                     Keys are original **camelCase** VIM names. \
+                     Deserialize with `midiserde::from_value::<T>(&val)`.\n\n",
+                    pruned
+                ));
+            }
+
+            // Extra fields unique to this skipped type
+            if !s.extra_fields.is_empty() {
+                output.push_str(&format!(
+                    "## Extra Fields (via extra_fields_ on {}) — {} fields\n\n",
+                    pruned,
+                    s.extra_fields.len()
+                ));
+                output.push_str("```rust\n");
+                output.push_str("use midiserde;\n\n");
+                if let Some(first) = s.extra_fields.first() {
+                    output.push_str(&format!(
+                        "if let Some(val) = instance.extra_fields_.get(\"{}\") {{\n",
+                        first.vim_name
+                    ));
+                    output.push_str(&format!(
+                        "    let typed: {} = midiserde::from_value(val)?;\n",
+                        first.rust_type
+                    ));
+                    output.push_str("}\n");
+                }
+                output.push_str("```\n\n");
+                for ef in s.extra_fields.iter().take(20) {
+                    output.push_str(&format!(
+                        "- `\"{}\"`: `{}` — `instance.extra_fields_.get(\"{}\")`\n",
+                        ef.vim_name, ef.rust_type, ef.vim_name
+                    ));
+                    if let Some(desc) = &ef.description {
+                        let doc_preview = if desc.len() > 150 {
+                            format!("{}...", &desc[..150])
+                        } else {
+                            desc.clone()
+                        };
+                        output.push_str(&format!("  {}\n", doc_preview));
+                    }
+                }
+                if s.extra_fields.len() > 20 {
+                    output.push_str(&format!(
+                        "\n... and {} more\n",
+                        s.extra_fields.len() - 20
+                    ));
+                }
+                output.push('\n');
+            }
+
+            // Pruned parent's fields (denormalized) — includes synthetic type_ and extra_fields_
+            let synthetic_count = 2; // type_ and extra_fields_
+            let total_fields = s.pruned_parent_fields.len() + synthetic_count;
+            output.push_str(&format!(
+                "## Fields of {} ({} fields)\n\n",
+                pruned, total_fields
+            ));
+
+            // type_ (synthetic — added by code generator)
+            output.push_str("### `type_: Option<StructType>`\n");
+            output.push_str(&format!(
+                "Discriminator identifying the concrete VIM type at runtime (`#[repr(u32)]` enum — integer comparison). \
+                 `None` means the instance is exactly a `{}`. \
+                 For `{}` this will be `Some(StructType::{})`.\n\n",
+                pruned, s.name, s.name
+            ));
+
+            // extra_fields_ (synthetic — added by code generator)
+            output.push_str(
+                "### `extra_fields_: HashMap<String, miniserde::json::Value>`\n",
+            );
+            output.push_str(
+                "Overflow map for properties from descendant types not generated as separate Rust structs. \
+                 Keys are original **camelCase** VIM property names. \
+                 Deserialize values with `midiserde::from_value::<T>(&val)`.\n\n",
+            );
+
+            // Model fields from the pruned parent
+            for field in &s.pruned_parent_fields {
+                output.push_str(&format!("### `{}: {}`\n", field.name, field.rust_type));
+                if field.required {
+                    output.push_str("- **Required:** true\n");
+                }
+                if field.is_trait {
+                    if let Some(trait_name) = &field.trait_name {
+                        output.push_str(&format!("- **Trait:** `{}`\n", trait_name));
+                    }
+                }
+                if let Some(desc) = &field.description {
+                    let doc_preview = if desc.len() > 200 {
+                        format!("{}...", &desc[..200])
+                    } else {
+                        desc.clone()
+                    };
+                    output.push_str(&format!("{}\n", doc_preview));
+                }
+                output.push('\n');
+            }
+
+            // Pruned parent's inherited field groups (denormalized)
+            for group in &s.pruned_parent_inherited_groups {
+                output.push_str(&format!(
+                    "## Fields Inherited from {} ({})\n\n",
+                    group.source_type, group.path_prefix
+                ));
+                for field in &group.fields {
+                    output.push_str(&format!("### `{}: {}`\n", field.name, field.rust_type));
+                    if field.required {
+                        output.push_str("- **Required:** true\n");
+                    }
+                    if field.is_trait {
+                        if let Some(trait_name) = &field.trait_name {
+                            output.push_str(&format!("- **Trait:** `{}`\n", trait_name));
+                        }
+                    }
+                    if let Some(desc) = &field.description {
+                        let doc_preview = if desc.len() > 200 {
+                            format!("{}...", &desc[..200])
+                        } else {
+                            desc.clone()
+                        };
+                        output.push_str(&format!("{}\n", doc_preview));
+                    }
+                    output.push('\n');
+                }
+            }
+        }
+    } else if !s.fields.is_empty() || s.emit_mode == "Prune" {
+        let is_prune = s.emit_mode == "Prune";
+        let synthetic_count = if is_prune { 2 } else { 0 };
+        let total = s.fields.len() + synthetic_count;
+        output.push_str(&format!("## Fields ({} fields)\n\n", total));
+
+        // Prune types carry two synthetic fields added by the code generator
+        if is_prune {
+            output.push_str("### `type_: Option<StructType>`\n");
+            output.push_str(&format!(
+                "Discriminator identifying the concrete VIM type at runtime (`#[repr(u32)]` enum — integer comparison). \
+                 `None` means the instance is exactly a `{}`. \
+                 `Some(StructType::DescendantName)` means it is a descendant type \
+                 (see Descendants list above). Compare directly: `instance.type_ == Some(StructType::Foo)`.\n\n",
+                s.name
+            ));
+
+            output.push_str(
+                "### `extra_fields_: HashMap<String, miniserde::json::Value>`\n",
+            );
+            output.push_str(&format!(
+                "Overflow map for properties from descendant types that are not generated \
+                 as separate Rust structs. Keys are original **camelCase** VIM property names. \
+                 Deserialize values with `midiserde::from_value::<T>(&val)`. \
+                 Empty when `type_` is `None` (i.e. the instance is exactly `{}`).\n\n",
+                s.name
+            ));
+        }
+
         for field in &s.fields {
-            output.push_str(&format!("### `{}: {}`\n", field.name, field.rust_type));
-            output.push_str(&format!("- **Required:** {}\n", field.required));
-            if field.is_array {
-                output.push_str("- **Array:** Yes\n");
+            if field.is_parent_field {
+                output.push_str(&format!(
+                    "### `{}: {}` (parent — required for construction)\n",
+                    field.name, field.rust_type
+                ));
+            } else {
+                output.push_str(&format!("### `{}: {}`\n", field.name, field.rust_type));
+            }
+            if field.required {
+                output.push_str("- **Required:** true\n");
             }
             if field.is_trait {
                 if let Some(trait_name) = &field.trait_name {
@@ -1094,7 +1349,35 @@ fn format_structure_doc(s: &StructureEntry) -> String {
                 } else {
                     desc.clone()
                 };
-                output.push_str(&format!("- **Description:** {}\n", doc_preview));
+                output.push_str(&format!("{}\n", doc_preview));
+            }
+            output.push('\n');
+        }
+    }
+
+    // Inherited field groups
+    for group in s.inherited_field_groups.iter() {
+        output.push_str(&format!(
+            "## Fields Inherited from {} ({})\n\n",
+            group.source_type, group.path_prefix
+        ));
+        for field in &group.fields {
+            output.push_str(&format!("### `{}: {}`\n", field.name, field.rust_type));
+            if field.required {
+                output.push_str("- **Required:** true\n");
+            }
+            if field.is_trait {
+                if let Some(trait_name) = &field.trait_name {
+                    output.push_str(&format!("- **Trait:** `{}`\n", trait_name));
+                }
+            }
+            if let Some(desc) = &field.description {
+                let doc_preview = if desc.len() > 200 {
+                    format!("{}...", &desc[..200])
+                } else {
+                    desc.clone()
+                };
+                output.push_str(&format!("{}\n", doc_preview));
             }
             output.push('\n');
         }
@@ -1162,15 +1445,34 @@ fn format_enumeration_doc(e: &EnumerationEntry) -> String {
         output.push('\n');
     }
 
+    output.push_str("## String Conversion\n\n");
+    output.push_str("```rust\n");
+    output.push_str("// Enum to string (returns &str with instance lifetime)\n");
+    output.push_str("let s: &str = value.as_str();\n\n");
+    output.push_str(&format!(
+        "// String to enum (unknown values become Other_(String))\n"
+    ));
+    output.push_str(&format!("let e = {}::from_str(\"some_value\");\n", e.name));
+    output.push_str("```\n\n");
+    output.push_str(
+        "**Note:** `.as_str()` returns `&str` (not `&'static str`). \
+         The `From<Enum> for &'static str` impl has been removed; use `.as_str()` instead.\n\n",
+    );
+
     output.push_str("## Usage Example\n\n```rust\n");
     output.push_str(&format!("use vim_rs::types::enums::{};\n\n", e.name));
     output.push_str("match value {\n");
-    for variant in e.variants.iter().take(3) {
+    let named_count = e.variants.iter().filter(|v| v.name != "Other_").count();
+    for variant in e.variants.iter().filter(|v| v.name != "Other_").take(3) {
         output.push_str(&format!("    {}::{} => {{ /* ... */ }}\n", e.name, variant.name));
     }
-    if e.variants.len() > 3 {
+    if named_count > 3 {
         output.push_str("    // ...\n");
     }
+    output.push_str(&format!(
+        "    {}::Other_(s) => {{ /* unknown value */ }}\n",
+        e.name
+    ));
     output.push_str("}\n```\n");
 
     output
@@ -1191,7 +1493,38 @@ fn format_trait_doc(t: &TraitEntry) -> String {
         output.push_str(&format!("**Parent Trait:** `{}`\n\n", parent));
     }
 
-    if !t.getters.is_empty() {
+    // Prefer deref_target (fields via Deref) over legacy getters
+    if let Some(ref deref_target) = t.deref_target {
+        if !deref_target.fields.is_empty() {
+            output.push_str("## Fields (accessible via Deref/DerefMut)\n\n");
+            output.push_str(
+                "Access these fields directly on trait objects via Deref coercion for reading \
+                 (e.g., `device.key`, `eth.mac_address`) and DerefMut for writing (e.g., `device.key = 42`). \
+                 No getter methods exist.\n\n",
+            );
+            for field in &deref_target.fields {
+                output.push_str(&format!("### `{}: {}`\n", field.name, field.rust_type));
+                if field.required {
+                    output.push_str("- **Required:** true\n");
+                }
+                if field.is_trait {
+                    if let Some(ref trait_name) = field.trait_name {
+                        output.push_str(&format!("- **Trait:** `{}`\n", trait_name));
+                    }
+                }
+                if let Some(ref desc) = field.description {
+                    let doc_preview = if desc.len() > 200 {
+                        format!("{}...", &desc[..200])
+                    } else {
+                        desc.clone()
+                    };
+                    output.push_str(&format!("{}\n", doc_preview));
+                }
+                output.push('\n');
+            }
+        }
+    } else if !t.getters.is_empty() {
+        // Backward compat: fallback to getters if deref_target is None
         output.push_str("## Getter Methods\n\n");
         for getter in &t.getters {
             output.push_str(&format!("### `{}() -> {}`\n", getter.name, getter.return_type));
@@ -1202,19 +1535,53 @@ fn format_trait_doc(t: &TraitEntry) -> String {
                 } else {
                     desc.clone()
                 };
-                output.push_str(&format!("- **Description:** {}\n", doc_preview));
+                output.push_str(&format!("{}\n", doc_preview));
+            }
+            output.push('\n');
+        }
+    }
+
+    // Inherited field groups from parent traits
+    for group in t.inherited_field_groups.iter() {
+        output.push_str(&format!(
+            "## Fields Inherited from {} ({})\n\n",
+            group.source_type, group.path_prefix
+        ));
+        for field in &group.fields {
+            output.push_str(&format!("### `{}: {}`\n", field.name, field.rust_type));
+            if field.required {
+                output.push_str("- **Required:** true\n");
+            }
+            if field.is_trait {
+                if let Some(trait_name) = &field.trait_name {
+                    output.push_str(&format!("- **Trait:** `{}`\n", trait_name));
+                }
+            }
+            if let Some(desc) = &field.description {
+                let doc_preview = if desc.len() > 200 {
+                    format!("{}...", &desc[..200])
+                } else {
+                    desc.clone()
+                };
+                output.push_str(&format!("{}\n", doc_preview));
             }
             output.push('\n');
         }
     }
 
     if !t.implementing_types.is_empty() {
-        output.push_str(&format!("## Implementing Types ({} types)\n\n", t.implementing_types.len()));
+        output.push_str(&format!(
+            "## Implementing Types ({} types)\n\n",
+            t.implementing_types.len()
+        ));
         for impl_type in t.implementing_types.iter().take(20) {
             output.push_str(&format!("- `{}`\n", impl_type));
         }
         if t.implementing_types.len() > 20 {
-            output.push_str(&format!("\n... and {} more\n", t.implementing_types.len() - 20));
+            output.push_str(&format!(
+                "\n... and {} more\n",
+                t.implementing_types.len() - 20
+            ));
         }
         output.push('\n');
     }
@@ -1224,14 +1591,23 @@ fn format_trait_doc(t: &TraitEntry) -> String {
     output.push_str(&format!("use vim_rs::types::traits::{};\n\n", t.name));
     if let Some(parent) = &t.parent_trait {
         output.push_str(&format!("let device: &dyn {} = /* ... */;\n", parent));
-        output.push_str(&format!("if let Some(specialized): Option<&dyn {}> = device.as_ref().into_ref() {{\n", t.name));
+        output.push_str(&format!(
+            "if let Some(specialized): Option<&dyn {}> = device.as_ref().into_ref() {{\n",
+            t.name
+        ));
     } else {
         output.push_str(&format!("let device: Box<dyn {}> = /* ... */;\n", t.name));
         output.push_str("if let Some(specialized) = device.as_ref() {\n");
     }
-    if !t.getters.is_empty() {
-        let getter = &t.getters[0];
-        output.push_str(&format!("    let value = specialized.{}();\n", getter.name));
+    // Use first deref field for example, or first getter for backward compat
+    let example_field = t
+        .deref_target
+        .as_ref()
+        .and_then(|d| d.fields.first())
+        .map(|f| f.name.as_str())
+        .or_else(|| t.getters.first().map(|g| g.field_name.as_str()));
+    if let Some(field_name) = example_field {
+        output.push_str(&format!("    let value = &specialized.{};\n", field_name));
     }
     output.push_str("}\n```\n");
 
@@ -1272,6 +1648,7 @@ mod tests {
                         return_type: "Result<Task>".to_string(),
                     },
                     description: Some("Powers on the virtual machine".to_string()),
+                    is_property_accessor: false,
                 },
             ],
         }

@@ -131,7 +131,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/CreateLocalDatastore", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a new network-attached storage datastore.
@@ -169,7 +170,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/CreateNasDatastore", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a new VMFS datastore.
@@ -203,7 +205,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/CreateVmfsDatastore", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create a Virtual-Volume based datastore
@@ -235,7 +238,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/CreateVvolDatastore", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Disable the clustered vmdk support on specified datastore.
@@ -321,7 +325,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/ExpandVmfsDatastore", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Increases the capacity of an existing VMFS datastore by adding new
@@ -358,7 +363,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/ExtendVmfsDatastore", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query to list disks that can be used to contain VMFS datastore extents.
@@ -407,7 +413,10 @@ impl HostDatastoreSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostScsiDisk>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostScsiDisk>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -432,7 +441,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/QueryMaxQueueDepth", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the list of unbound VMFS volumes.
@@ -452,7 +462,10 @@ impl HostDatastoreSystem {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostUnresolvedVmfsVolume>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostUnresolvedVmfsVolume>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -494,7 +507,10 @@ impl HostDatastoreSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VmfsDatastoreOption>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VmfsDatastoreOption>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -529,7 +545,10 @@ impl HostDatastoreSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VmfsDatastoreOption>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VmfsDatastoreOption>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -578,7 +597,10 @@ impl HostDatastoreSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VmfsDatastoreOption>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VmfsDatastoreOption>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -639,7 +661,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/RemoveDatastoreEx_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Resignature an unbound VMFS volume.
@@ -697,7 +720,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/ResignatureUnresolvedVmfsVolume_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Set max queue depth for a specified NFS datastore.
@@ -770,7 +794,8 @@ impl HostDatastoreSystem {
         let path = format!("/HostDatastoreSystem/{moId}/capabilities", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostDatastoreSystemCapabilities = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostDatastoreSystemCapabilities = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// List of datastores on this host.
@@ -785,123 +810,546 @@ impl HostDatastoreSystem {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ConfigureDatastorePrincipalRequestType<'a> {
-    #[serde(rename = "userName")]
     user_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     password: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ConfigureDatastorePrincipalRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ConfigureDatastorePrincipalRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ConfigureDatastorePrincipalRequestTypeSer<'b, 'a> {
+    data: &'b ConfigureDatastorePrincipalRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ConfigureDatastorePrincipalRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ConfigureDatastorePrincipalRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("userName"), &self.data.user_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.password else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("password"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateLocalDatastoreRequestType<'a> {
     name: &'a str,
     path: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateLocalDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateLocalDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateLocalDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b CreateLocalDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateLocalDatastoreRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateLocalDatastoreRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("path"), &self.data.path as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateNasDatastoreRequestType<'a> {
     spec: &'a crate::types::structs::HostNasVolumeSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateNasDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateNasDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateNasDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b CreateNasDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateNasDatastoreRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateNasDatastoreRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateVmfsDatastoreRequestType<'a> {
     spec: &'a crate::types::structs::VmfsDatastoreCreateSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateVmfsDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateVmfsDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateVmfsDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b CreateVmfsDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateVmfsDatastoreRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateVmfsDatastoreRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateVvolDatastoreRequestType<'a> {
     spec: &'a crate::types::structs::HostDatastoreSystemVvolDatastoreSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateVvolDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateVvolDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateVvolDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b CreateVvolDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateVvolDatastoreRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateVvolDatastoreRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DisableClusteredVmdkSupportRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DisableClusteredVmdkSupportRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DisableClusteredVmdkSupportRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DisableClusteredVmdkSupportRequestTypeSer<'b, 'a> {
+    data: &'b DisableClusteredVmdkSupportRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DisableClusteredVmdkSupportRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DisableClusteredVmdkSupportRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct EnableClusteredVmdkSupportRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for EnableClusteredVmdkSupportRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(EnableClusteredVmdkSupportRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct EnableClusteredVmdkSupportRequestTypeSer<'b, 'a> {
+    data: &'b EnableClusteredVmdkSupportRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for EnableClusteredVmdkSupportRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"EnableClusteredVmdkSupportRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ExpandVmfsDatastoreRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::VmfsDatastoreExpandSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ExpandVmfsDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ExpandVmfsDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ExpandVmfsDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b ExpandVmfsDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ExpandVmfsDatastoreRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ExpandVmfsDatastoreRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ExtendVmfsDatastoreRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::VmfsDatastoreExtendSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ExtendVmfsDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ExtendVmfsDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ExtendVmfsDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b ExtendVmfsDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ExtendVmfsDatastoreRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ExtendVmfsDatastoreRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryAvailableDisksForVmfsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datastore: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryAvailableDisksForVmfsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryAvailableDisksForVmfsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryAvailableDisksForVmfsRequestTypeSer<'b, 'a> {
+    data: &'b QueryAvailableDisksForVmfsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryAvailableDisksForVmfsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryAvailableDisksForVmfsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datastore else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datastore"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryMaxQueueDepthRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryMaxQueueDepthRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryMaxQueueDepthRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryMaxQueueDepthRequestTypeSer<'b, 'a> {
+    data: &'b QueryMaxQueueDepthRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryMaxQueueDepthRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryMaxQueueDepthRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryVmfsDatastoreCreateOptionsRequestType<'a> {
-    #[serde(rename = "devicePath")]
     device_path: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vmfsMajorVersion")]
     vmfs_major_version: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryVmfsDatastoreCreateOptionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVmfsDatastoreCreateOptionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVmfsDatastoreCreateOptionsRequestTypeSer<'b, 'a> {
+    data: &'b QueryVmfsDatastoreCreateOptionsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryVmfsDatastoreCreateOptionsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVmfsDatastoreCreateOptionsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("devicePath"), &self.data.device_path as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.vmfs_major_version else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vmfsMajorVersion"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryVmfsDatastoreExpandOptionsRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryVmfsDatastoreExpandOptionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVmfsDatastoreExpandOptionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVmfsDatastoreExpandOptionsRequestTypeSer<'b, 'a> {
+    data: &'b QueryVmfsDatastoreExpandOptionsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryVmfsDatastoreExpandOptionsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVmfsDatastoreExpandOptionsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryVmfsDatastoreExtendOptionsRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "devicePath")]
     device_path: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "suppressExpandCandidates")]
     suppress_expand_candidates: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryVmfsDatastoreExtendOptionsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVmfsDatastoreExtendOptionsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVmfsDatastoreExtendOptionsRequestTypeSer<'b, 'a> {
+    data: &'b QueryVmfsDatastoreExtendOptionsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryVmfsDatastoreExtendOptionsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVmfsDatastoreExtendOptionsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("devicePath"), &self.data.device_path as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.suppress_expand_candidates else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("suppressExpandCandidates"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveDatastoreRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b RemoveDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveDatastoreRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveDatastoreRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveDatastoreExRequestType<'a> {
     datastore: &'a [crate::types::structs::ManagedObjectReference],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveDatastoreExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveDatastoreExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveDatastoreExRequestTypeSer<'b, 'a> {
+    data: &'b RemoveDatastoreExRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveDatastoreExRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveDatastoreExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ResignatureUnresolvedVmfsVolumeRequestType<'a> {
-    #[serde(rename = "resolutionSpec")]
     resolution_spec: &'a crate::types::structs::HostUnresolvedVmfsResignatureSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ResignatureUnresolvedVmfsVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ResignatureUnresolvedVmfsVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ResignatureUnresolvedVmfsVolumeRequestTypeSer<'b, 'a> {
+    data: &'b ResignatureUnresolvedVmfsVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ResignatureUnresolvedVmfsVolumeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ResignatureUnresolvedVmfsVolumeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("resolutionSpec"), &self.data.resolution_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetMaxQueueDepthRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "maxQdepth")]
     max_qdepth: i64,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetMaxQueueDepthRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetMaxQueueDepthRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetMaxQueueDepthRequestTypeSer<'b, 'a> {
+    data: &'b SetMaxQueueDepthRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for SetMaxQueueDepthRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetMaxQueueDepthRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("maxQdepth"), &self.data.max_qdepth as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateLocalSwapDatastoreRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datastore: Option<&'a crate::types::structs::ManagedObjectReference>,
+}
+
+impl<'a> miniserde::Serialize for UpdateLocalSwapDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateLocalSwapDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateLocalSwapDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b UpdateLocalSwapDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateLocalSwapDatastoreRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateLocalSwapDatastoreRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datastore else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datastore"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

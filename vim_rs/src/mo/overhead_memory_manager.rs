@@ -50,13 +50,36 @@ impl OverheadMemoryManager {
         let path = format!("/OverheadMemoryManager/{moId}/LookupVmOverheadMemory", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i64 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct LookupVmOverheadMemoryRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     host: &'a crate::types::structs::ManagedObjectReference,
+}
+
+impl<'a> miniserde::Serialize for LookupVmOverheadMemoryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(LookupVmOverheadMemoryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct LookupVmOverheadMemoryRequestTypeSer<'b, 'a> {
+    data: &'b LookupVmOverheadMemoryRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for LookupVmOverheadMemoryRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"LookupVmOverheadMemoryRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

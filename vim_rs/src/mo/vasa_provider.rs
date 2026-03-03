@@ -57,7 +57,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/FailoverReplicationGroup_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Prepare to fail over the specified replication groups.
@@ -103,7 +104,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/PrepareFailoverReplicationGroup_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Promotes the replication groups currently *INTEST*
@@ -152,7 +154,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/PromoteReplicationGroup_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query for the currently active alarms known to this VASA provider.
@@ -194,7 +197,10 @@ impl VasaProvider {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::AlarmResult>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::AlarmResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -245,7 +251,10 @@ impl VasaProvider {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -256,7 +265,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/QueryProviderInfo", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::SmsProviderInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::SmsProviderInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query for the replication group details.
@@ -310,7 +320,10 @@ impl VasaProvider {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -358,7 +371,10 @@ impl VasaProvider {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::QueryReplicationPeerResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::QueryReplicationPeerResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -390,7 +406,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/VasaProviderReconnect_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Refresh a CA signed certificate for the provider.
@@ -414,7 +431,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/VasaProviderRefreshCertificate_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Initiate replication in the reverse way, making the currently
@@ -459,7 +477,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/ReverseReplicateGroup_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Revoke CA signed certificate of the provider.
@@ -482,7 +501,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/VasaProviderRevokeCertificate_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Issue a sync for the given Storage Array.
@@ -510,7 +530,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/VasaProviderSync_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Synchronize the data between source and replica for the specified
@@ -560,7 +581,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/SyncReplicationGroup_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Start a test failover for the specified replication groups.
@@ -606,7 +628,8 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/TestFailoverReplicationGroupStart_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Stop the ongoing test failover.
@@ -661,94 +684,374 @@ impl VasaProvider {
         let path = format!("/sms/VasaProvider/{moId}/TestFailoverReplicationGroupStop_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct FailoverReplicationGroupRequestType<'a> {
-    #[serde(rename = "failoverParam")]
     failover_param: &'a dyn crate::types::traits::FailoverParamTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FailoverReplicationGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FailoverReplicationGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FailoverReplicationGroupRequestTypeSer<'b, 'a> {
+    data: &'b FailoverReplicationGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FailoverReplicationGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FailoverReplicationGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("failoverParam"), &self.data.failover_param as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PrepareFailoverReplicationGroupRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "groupId")]
     group_id: Option<&'a [crate::types::structs::ReplicationGroupId]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PrepareFailoverReplicationGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PrepareFailoverReplicationGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PrepareFailoverReplicationGroupRequestTypeSer<'b, 'a> {
+    data: &'b PrepareFailoverReplicationGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for PrepareFailoverReplicationGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PrepareFailoverReplicationGroupRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.group_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("groupId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct PromoteReplicationGroupRequestType<'a> {
-    #[serde(rename = "promoteParam")]
     promote_param: &'a crate::types::structs::PromoteParam,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PromoteReplicationGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PromoteReplicationGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PromoteReplicationGroupRequestTypeSer<'b, 'a> {
+    data: &'b PromoteReplicationGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for PromoteReplicationGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PromoteReplicationGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("promoteParam"), &self.data.promote_param as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryActiveAlarmRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "alarmFilter")]
     alarm_filter: Option<&'a crate::types::structs::AlarmFilter>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryActiveAlarmRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryActiveAlarmRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryActiveAlarmRequestTypeSer<'b, 'a> {
+    data: &'b QueryActiveAlarmRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryActiveAlarmRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryActiveAlarmRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.alarm_filter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("alarmFilter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryPointInTimeReplicaRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "groupId")]
     group_id: Option<&'a [crate::types::structs::ReplicationGroupId]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "queryParam")]
     query_param: Option<&'a crate::types::structs::QueryPointInTimeReplicaParam>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPointInTimeReplicaRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPointInTimeReplicaRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPointInTimeReplicaRequestTypeSer<'b, 'a> {
+    data: &'b QueryPointInTimeReplicaRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryPointInTimeReplicaRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPointInTimeReplicaRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.group_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("groupId"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.query_param else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("queryParam"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryReplicationGroupRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "groupId")]
     group_id: Option<&'a [crate::types::structs::ReplicationGroupId]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryReplicationGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryReplicationGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryReplicationGroupRequestTypeSer<'b, 'a> {
+    data: &'b QueryReplicationGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryReplicationGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryReplicationGroupRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.group_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("groupId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryReplicationPeerRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "faultDomainId")]
     fault_domain_id: Option<&'a [Box<dyn crate::types::traits::FaultDomainIdTrait>]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryReplicationPeerRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryReplicationPeerRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryReplicationPeerRequestTypeSer<'b, 'a> {
+    data: &'b QueryReplicationPeerRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryReplicationPeerRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryReplicationPeerRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.fault_domain_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("faultDomainId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ReverseReplicateGroupRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "groupId")]
     group_id: Option<&'a [crate::types::structs::ReplicationGroupId]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ReverseReplicateGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReverseReplicateGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReverseReplicateGroupRequestTypeSer<'b, 'a> {
+    data: &'b ReverseReplicateGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ReverseReplicateGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReverseReplicateGroupRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.group_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("groupId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VasaProviderSyncRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "arrayId")]
     array_id: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VasaProviderSyncRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VasaProviderSyncRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VasaProviderSyncRequestTypeSer<'b, 'a> {
+    data: &'b VasaProviderSyncRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VasaProviderSyncRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VasaProviderSyncRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.array_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("arrayId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct SyncReplicationGroupRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "groupId")]
     group_id: Option<&'a [crate::types::structs::ReplicationGroupId]>,
-    #[serde(rename = "pitName")]
     pit_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SyncReplicationGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SyncReplicationGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SyncReplicationGroupRequestTypeSer<'b, 'a> {
+    data: &'b SyncReplicationGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for SyncReplicationGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SyncReplicationGroupRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.group_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("groupId"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("pitName"), &self.data.pit_name as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct TestFailoverReplicationGroupStartRequestType<'a> {
-    #[serde(rename = "testFailoverParam")]
     test_failover_param: &'a crate::types::structs::TestFailoverParam,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for TestFailoverReplicationGroupStartRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(TestFailoverReplicationGroupStartRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct TestFailoverReplicationGroupStartRequestTypeSer<'b, 'a> {
+    data: &'b TestFailoverReplicationGroupStartRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for TestFailoverReplicationGroupStartRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"TestFailoverReplicationGroupStartRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("testFailoverParam"), &self.data.test_failover_param as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct TestFailoverReplicationGroupStopRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "groupId")]
     group_id: Option<&'a [crate::types::structs::ReplicationGroupId]>,
     force: bool,
+}
+
+impl<'a> miniserde::Serialize for TestFailoverReplicationGroupStopRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(TestFailoverReplicationGroupStopRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct TestFailoverReplicationGroupStopRequestTypeSer<'b, 'a> {
+    data: &'b TestFailoverReplicationGroupStopRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for TestFailoverReplicationGroupStopRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"TestFailoverReplicationGroupStopRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.group_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("groupId"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("force"), &self.data.force as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
 }

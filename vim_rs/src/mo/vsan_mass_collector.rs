@@ -37,14 +37,37 @@ impl VsanMassCollector {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ObjectContent>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ObjectContent>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanRetrievePropertiesRequestType<'a> {
-    #[serde(rename = "massCollectorSpecs")]
     mass_collector_specs: &'a [crate::types::structs::VsanMassCollectorSpec],
+}
+
+impl<'a> miniserde::Serialize for VsanRetrievePropertiesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanRetrievePropertiesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanRetrievePropertiesRequestTypeSer<'b, 'a> {
+    data: &'b VsanRetrievePropertiesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanRetrievePropertiesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanRetrievePropertiesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("massCollectorSpecs"), &self.data.mass_collector_specs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

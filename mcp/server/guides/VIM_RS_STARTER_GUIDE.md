@@ -10,7 +10,7 @@ vim_rs is a Rust SDK for the vSphere API. It provides:
 - Async client with connection pooling
 - Comprehensive error handling
 
-## Three-Tier Knowledge System
+## Two-Tier Knowledge System
 
 When building vim_rs applications, use these resources in order:
 
@@ -21,10 +21,6 @@ When building vim_rs applications, use these resources in order:
 2. **Code Examples** (search with filter='examples', then get by ID)
    - HOW to code it: working patterns for common tasks
    - Use to understand proper usage patterns
-
-3. **Admin Guides** (search with filter='guides', then get by ID)
-   - WHEN/WHY/GOTCHAS: conceptual knowledge, best practices, limitations
-   - Use to understand vSphere concepts and constraints
 
 ## Standard Workflow for vim_rs Applications
 
@@ -77,7 +73,7 @@ async fn main() -> Result<()> {
 **Dependencies needed:**
 ```toml
 [dependencies]
-vim_rs = "0.3"
+vim_rs = "0.4"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
@@ -141,7 +137,7 @@ To fetch data from vSphere, **always use the `vim_retrievable!` macro**. This is
 use anyhow::Result;
 use std::env;
 use log::info;
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
 // Define what properties you want to retrieve
@@ -186,10 +182,7 @@ async fn main() -> Result<()> {
 }
 ```
 
-**Additional dependency:**
-```toml
-vim_macros = "0.3"
-```
+**Note:** The `vim_retrievable!` macro is included in `vim_rs` — no additional dependency needed.
 
 **Key Points:**
 - `vim_retrievable!` generates a struct with property mappings
@@ -294,7 +287,7 @@ if let Some(devices) = vm.devices {
 #### Complete Working Example: Collecting MAC Addresses
 
 ```rust
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 use vim_rs::types::convert::CastInto;
 use vim_rs::types::traits::VirtualEthernetCardTrait;
@@ -349,6 +342,107 @@ async fn get_vm_macs(client: Arc<Client>) -> Result<Vec<(String, String)>> {
 - Always import `vim_rs::types::convert::CastInto`
 - Access fields directly via Deref (e.g., `device.key`, `eth.mac_address`)
 
+
+---
+
+## Step 3.6: Compositional Inheritance — How Structs and Traits Use Deref
+
+vim_rs uses **compositional inheritance** via Rust's `Deref` trait. Child structs do NOT have parent fields expanded inline. Instead, they contain a single parent field with an underscore suffix.
+
+### The Parent Field Convention
+
+- `VirtualEthernetCard` has field `virtual_device_: VirtualDevice`
+- `TraversalSpec` has field `selection_spec_: SelectionSpec`
+- `VirtualE1000` has field `virtual_ethernet_card_: VirtualEthernetCard`
+
+The naming convention is: `snake_case(ParentTypeName) + "_"`
+
+### Constructing Child Structs
+
+**Example: TraversalSpec (has parent field)**
+
+```rust
+use vim_rs::types::structs::{TraversalSpec, SelectionSpec};
+
+let spec = TraversalSpec {
+    // Parent field — REQUIRED, uses underscore suffix naming
+    selection_spec_: SelectionSpec {
+        name: Some("traverseEntities".to_string()),
+    },
+    // Own fields
+    r#type: "ContainerView".to_string(),
+    path: "view".to_string(),
+    skip: Some(false),
+    select_set: None,
+};
+```
+
+**Example: VirtualDeviceConfigSpec (no parent field — DataObject was pruned)**
+
+```rust
+use vim_rs::types::structs::VirtualDeviceConfigSpec;
+use vim_rs::types::enums::VirtualDeviceConfigSpecOperationEnum;
+
+let spec = VirtualDeviceConfigSpec {
+    // No parent field — DataObject was pruned (has no meaningful fields)
+    operation: Some(VirtualDeviceConfigSpecOperationEnum::Edit),
+    device: my_device,
+    file_operation: None,
+    profile: None,
+    backing: None,
+    filter_spec: None,
+    change_mode: None,
+};
+```
+
+**Using the `defaults` feature for easier construction**
+
+Enable the `defaults` feature in your `Cargo.toml`:
+```toml
+vim_rs = { version = "0.3", path = "../../vim_rs", features = ["defaults"] }
+```
+
+Then use `..Default::default()` to fill in optional fields:
+
+```rust
+let spec = VirtualDeviceConfigSpec {
+    operation: Some(VirtualDeviceConfigSpecOperationEnum::Edit),
+    device: my_device,
+    ..Default::default()
+};
+```
+
+For structs with a parent field: `VirtualE1000::default()` or `VirtualEthernetCard { virtual_device_: VirtualDevice::default(), ..Default::default() }`.
+
+### Reading via Deref Chain
+
+Each child struct implements `Deref` to its parent, forming an access chain:
+
+```
+VirtualE1000 --Deref--> VirtualEthernetCard --Deref--> VirtualDevice
+```
+
+So given a `VirtualE1000`:
+- `e1000.mac_address` works (from VirtualEthernetCard)
+- `e1000.key` works (from VirtualDevice, two Deref levels deep)
+
+Trait objects also Deref to their struct:
+- `dyn VirtualDeviceTrait` —Deref→ `VirtualDevice`
+- `dyn VirtualEthernetCardTrait` —Deref→ `VirtualEthernetCard`
+
+So `device.key` works on `&dyn VirtualDeviceTrait` and `eth.mac_address` works on `&dyn VirtualEthernetCardTrait`.
+
+### When Parent Fields Exist vs Don't
+
+**Parent field exists** when the parent type has fields of its own:
+- `VirtualEthernetCard.virtual_device_` (VirtualDevice has key, backing, etc.)
+- `TraversalSpec.selection_spec_` (SelectionSpec has name)
+
+**Parent field is absent** when the parent is pruned (no own fields):
+- `VirtualMachineConfigSpec` — parent DataObject was pruned
+- `EventFilterSpec` — parent DataObject was pruned
+
+Use `get(id="StructName")` in the MCP tools to see if a struct has a parent field.
 
 ---
 
@@ -567,6 +661,30 @@ vim_retrievable!(
         power_state = "runtime.powerState",
     }
 );
+```
+
+---
+
+❌ **DON'T** forget the parent field when constructing child structs:
+```rust
+// WRONG — missing parent field, won't compile
+let spec = TraversalSpec {
+    r#type: "ContainerView".to_string(),
+    path: "view".to_string(),
+    skip: Some(false),
+    select_set: None,
+};
+```
+
+✅ **DO** include the parent field with underscore suffix:
+```rust
+let spec = TraversalSpec {
+    selection_spec_: SelectionSpec { name: Some("...".to_string()) },
+    r#type: "ContainerView".to_string(),
+    path: "view".to_string(),
+    skip: Some(false),
+    select_set: None,
+};
 ```
 
 ---
@@ -1010,7 +1128,7 @@ use std::sync::Arc;
 use log::info;
 use vim_rs::core::{Client, ClientBuilder};
 use vim_rs::core::tasks::TaskTracker;
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
 // 1. Connection helper
@@ -1071,8 +1189,7 @@ async fn main() -> Result<()> {
 **Cargo.toml dependencies:**
 ```toml
 [dependencies]
-vim_rs = "0.3"
-vim_macros = "0.3"
+vim_rs = "0.4"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"

@@ -22,7 +22,7 @@
 //! - [`TaskTracker::wait_any`] → `Result<Option<VimAny>>`
 //!
 //! For convenience, it also provides:
-//! - [`TaskTracker::wait`] which uses `serde_json` to decode the result into a user type `T`.
+//! - [`TaskTracker::wait`] which uses `miniserde` to decode the result into a user type `T`.
 //!   This is helpful for cases like `T = ()`, `T = ManagedObjectReference`, etc., but it is not
 //!   a zero-allocation path.
 //!
@@ -50,7 +50,7 @@ use std::collections::HashMap;
 use std::sync::Arc;
 use tokio::sync::{RwLock, oneshot, mpsc};
 use log::{debug, error};
-use serde::de::DeserializeOwned;
+use crate::types::mini_helpers::from_value;
 
 use crate::core::client::VimClientHandle;
 use crate::core::error::{Error, Result};
@@ -185,31 +185,37 @@ impl TaskTracker {
         }
     }
 
-    /// Convenience: wait for a task and deserialize its result into `T` using `serde_json`.
+    /// Convenience: wait for a task and deserialize its result into `T` via `miniserde`.
     ///
     /// This is useful when you know the expected result type (e.g. `()` for tasks that return no
     /// value), but it is not a zero-allocation path. Prefer [`TaskTracker::wait_any`] if you want
     /// to avoid JSON conversion and handle `VimAny` directly.
-    pub async fn wait<T: DeserializeOwned + 'static>(&self, task: ManagedObjectReference) -> Result<T> {
+    pub async fn wait<T: miniserde::Deserialize + 'static>(&self, task: ManagedObjectReference) -> Result<T> {
         let val_opt = self.wait_value(task).await?;
-        
+
         match val_opt {
             Some(val) => {
-                let result: T = serde_json::from_value(val)?;
+                let result: T = from_value(&val)?;
                 Ok(result)
             },
             None => {
-                let result: T = serde_json::from_value(serde_json::Value::Null)?;
+                let result: T = miniserde::json::from_str("null")
+                    .map_err(|_| Error::internal("Failed to deserialize null into target type".to_string()))?;
                 Ok(result)
             }
         }
     }
 
-    async fn wait_value(&self, task: ManagedObjectReference) -> Result<Option<serde_json::Value>> {
+    async fn wait_value(&self, task: ManagedObjectReference) -> Result<Option<miniserde::json::Value>> {
         let any_opt = self.wait_any(task).await?;
         match any_opt {
             None => Ok(None),
-            Some(any) => Ok(Some(serde_json::to_value(&any)?)),
+            Some(any) => {
+                let json_str = miniserde::json::to_string(&any);
+                let val: miniserde::json::Value = miniserde::json::from_str(&json_str)
+                    .map_err(|_| Error::internal("Failed to roundtrip VimAny to json::Value".to_string()))?;
+                Ok(Some(val))
+            }
         }
     }
 

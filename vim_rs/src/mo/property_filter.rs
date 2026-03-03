@@ -39,7 +39,8 @@ impl PropertyFilter {
         let path = format!("/PropertyFilter/{moId}/partialUpdates", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Specifications for this filter.
@@ -47,7 +48,8 @@ impl PropertyFilter {
         let path = format!("/PropertyFilter/{moId}/spec", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::PropertyFilterSpec = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::PropertyFilterSpec = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }

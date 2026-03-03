@@ -39,8 +39,10 @@ fn get_event_type_id(event: &Event) -> String {
         return "Event".to_string();
     };
     if type_.child_of(StructType::EventEx) || type_.child_of(StructType::ExtendedEvent) {
-        if let Some(event_type_id) = event.extra_fields_["eventTypeId"].as_str() {
-            return event_type_id.to_string();
+        if let Some(miniserde::json::Value::String(event_type_id)) =
+            event.extra_fields_.get("eventTypeId")
+        {
+            return event_type_id.clone();
         }
     }
     let s: &'static str = type_.into();
@@ -105,6 +107,7 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
     env_logger::init();
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
 

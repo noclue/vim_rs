@@ -1,9 +1,10 @@
-use api_database::{TraitsOutput, TraitEntry, GetterEntry};
-use vim_build::vim_model::{Model, EmitMode, Field};
+use api_database::{TraitsOutput, TraitEntry, TraitDerefTarget, FieldEntry};
+use vim_build::vim_model::{Model, EmitMode, DataType};
 use vim_build::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
+use super::common::{format_vim_type, collect_all_descendants, build_inherited_field_groups};
 
 /// Build traits in memory (no file I/O).
 pub fn build_traits(model: &Model) -> Vec<TraitEntry> {
@@ -24,22 +25,49 @@ pub fn build_traits(model: &Model) -> Vec<TraitEntry> {
             continue;
         }
 
-        // Build getter methods from fields
-        let mut getters = Vec::new();
-        for (field_name, field) in &s.fields {
-            let getter_name = format!("get_{}", to_field_name(field_name));
-            let return_type = match getter_return_type(&tdf, field) {
+        // Build deref_target: fields accessible via Deref (no per-field getters exist)
+        let mut fields = Vec::new();
+        for (_field_name, field) in &s.fields {
+            let rust_type = match tdf.field_type(field) {
                 Ok(t) => t,
                 Err(_) => "UnknownType".to_string(),
             };
+            let is_array = matches!(&field.vim_type, DataType::Array(_));
+            let (is_trait, trait_name) = if let DataType::Reference(ref_name) = &field.vim_type {
+                if let Some(ref_struct) = model.structs.get(ref_name) {
+                    let rs = ref_struct.borrow();
+                    let has_children =
+                        !rs.children.is_empty() && matches!(rs.emit_mode, EmitMode::Emit);
+                    if has_children {
+                        (true, Some(format!("{}Trait", rs.rust_name())))
+                    } else {
+                        (false, None)
+                    }
+                } else {
+                    (false, None)
+                }
+            } else {
+                (false, None)
+            };
 
-            getters.push(GetterEntry {
-                name: getter_name,
-                return_type,
+            fields.push(FieldEntry {
+                name: field.rust_name(),
+                rust_type,
+                vim_type: format_vim_type(&field.vim_type),
+                required: !field.optional,
                 description: field.description.clone(),
-                field_name: to_field_name(field_name),
+                is_array,
+                is_boxed: field.require_box,
+                is_trait,
+                trait_name,
+                is_parent_field: false,
             });
         }
+
+        let deref_target = Some(TraitDerefTarget {
+            struct_name: s.rust_name(),
+            fields,
+        });
 
         // Collect all implementing types (all descendants)
         let implementing_types = collect_implementing_types(model, name);
@@ -52,14 +80,19 @@ pub fn build_traits(model: &Model) -> Vec<TraitEntry> {
             .filter(|p| *p != "Any")
             .map(|p| format!("{}Trait", to_type_name(p)));
 
+        // Build inherited field groups from parent trait chain
+        let inherited_field_groups = build_inherited_field_groups(model, name, &tdf);
+
         traits.push(TraitEntry {
             name: format!("{}Trait", s.rust_name()),
             rust_module: "vim_rs::types::traits".to_string(),
             description: s.description.clone(),
             parent_trait,
-            getters,
+            getters: Vec::new(),
+            deref_target,
             implementing_types,
             all_descendants,
+            inherited_field_groups,
         });
     }
 
@@ -103,56 +136,10 @@ fn collect_implementing_types(model: &Model, struct_name: &str) -> Vec<String> {
     types
 }
 
-fn collect_all_descendants(model: &Model, struct_name: &str) -> Vec<String> {
-    let mut descendants = Vec::new();
-
-    if let Ok(children) = model.children(&struct_name.to_string()) {
-        for child in children {
-            let child_borrow = child.borrow();
-            // Only include non-skipped types
-            if !child_borrow.emit_mode.is_skip() {
-                let child_name = child_borrow.name.clone();
-                // Don't include the parent itself
-                if child_name != struct_name {
-                    descendants.push(child_name);
-                }
-            }
-        }
-    }
-
-    descendants.sort();
-    descendants.dedup();
-    descendants
-}
-
-fn to_field_name(name: &str) -> String {
-    use convert_case::{Case, Casing};
-    use check_keyword::CheckKeyword;
-    name.to_case(Case::Snake).into_safe()
-}
-
 fn to_type_name(name: &str) -> String {
     use convert_case::{Case, Casing};
     use check_keyword::CheckKeyword;
     name.to_case(Case::Pascal).into_safe()
 }
 
-fn getter_return_type(tdf: &TypeDefResolver, property: &Field) -> Result<String, Box<dyn std::error::Error>> {
-    let mut field_type = tdf.field_type(property)?;
-
-    if get_by_ref(&property.vim_type) {
-        field_type = format!("&{field_type}");
-    }
-
-    if field_type == "&String" {
-        field_type = "&str".to_string();
-    }
-
-    Ok(field_type)
-}
-
-fn get_by_ref(vim_type: &vim_build::vim_model::DataType) -> bool {
-    use vim_build::vim_model::DataType;
-    matches!(vim_type, DataType::String | DataType::Binary | DataType::Array(_))
-}
 

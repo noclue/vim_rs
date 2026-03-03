@@ -43,7 +43,10 @@ impl ServiceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ServiceManagerServiceInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ServiceManagerServiceInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -55,17 +58,47 @@ impl ServiceManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ServiceManagerServiceInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ServiceManagerServiceInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct QueryServiceListRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "serviceName")]
     service_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     location: Option<&'a [String]>,
+}
+
+impl<'a> miniserde::Serialize for QueryServiceListRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryServiceListRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryServiceListRequestTypeSer<'b, 'a> {
+    data: &'b QueryServiceListRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryServiceListRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryServiceListRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.service_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("serviceName"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.location else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("location"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

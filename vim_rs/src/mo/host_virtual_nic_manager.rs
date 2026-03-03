@@ -59,7 +59,10 @@ impl HostVirtualNicManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VirtualNicManagerNetConfig>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::VirtualNicManagerNetConfig>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -122,7 +125,10 @@ impl HostVirtualNicManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CustomFieldDef>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -131,7 +137,8 @@ impl HostVirtualNicManager {
         let path = format!("/HostVirtualNicManager/{moId}/info", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostVirtualNicManagerInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostVirtualNicManagerInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// List of custom field values.
@@ -146,34 +153,121 @@ impl HostVirtualNicManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct DeselectVnicForNicTypeRequestType<'a> {
-    #[serde(rename = "nicType")]
     nic_type: &'a str,
     device: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeselectVnicForNicTypeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeselectVnicForNicTypeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeselectVnicForNicTypeRequestTypeSer<'b, 'a> {
+    data: &'b DeselectVnicForNicTypeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DeselectVnicForNicTypeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeselectVnicForNicTypeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("nicType"), &self.data.nic_type as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("device"), &self.data.device as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryNetConfigRequestType<'a> {
-    #[serde(rename = "nicType")]
     nic_type: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryNetConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryNetConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryNetConfigRequestTypeSer<'b, 'a> {
+    data: &'b QueryNetConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryNetConfigRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryNetConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("nicType"), &self.data.nic_type as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SelectVnicForNicTypeRequestType<'a> {
-    #[serde(rename = "nicType")]
     nic_type: &'a str,
     device: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "setCustomValueRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for SelectVnicForNicTypeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SelectVnicForNicTypeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SelectVnicForNicTypeRequestTypeSer<'b, 'a> {
+    data: &'b SelectVnicForNicTypeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for SelectVnicForNicTypeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SelectVnicForNicTypeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("nicType"), &self.data.nic_type as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("device"), &self.data.device as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetCustomValueRequestType<'a> {
     key: &'a str,
     value: &'a str,
+}
+
+impl<'a> miniserde::Serialize for SetCustomValueRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetCustomValueRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetCustomValueRequestTypeSer<'b, 'a> {
+    data: &'b SetCustomValueRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for SetCustomValueRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"setCustomValueRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("value"), &self.data.value as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

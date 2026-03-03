@@ -74,7 +74,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/AddLicense", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::LicenseManagerLicenseInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -109,7 +110,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/CheckLicenseFeature", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use *LicenseManager.UpdateLicense*
@@ -177,7 +179,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/DecodeLicense", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::LicenseManagerLicenseInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -213,7 +216,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/DisableFeature", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -250,7 +254,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/EnableFeature", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -273,7 +278,10 @@ impl LicenseManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::LicenseAvailabilityInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::LicenseAvailabilityInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -297,7 +305,10 @@ impl LicenseManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::LicenseFeatureInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::LicenseFeatureInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -328,7 +339,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/QueryLicenseUsage", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::LicenseUsageInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::LicenseUsageInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Removed a license's label.
@@ -451,7 +463,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/UpdateLicense", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::LicenseManagerLicenseInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, this property is not used by the system.
@@ -462,7 +475,10 @@ impl LicenseManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::LicenseDiagnostics>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::LicenseDiagnostics>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -471,7 +487,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/evaluation", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::LicenseManagerEvaluationInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::LicenseManagerEvaluationInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *LicenseManager.QuerySupportedFeatures*
@@ -483,7 +500,10 @@ impl LicenseManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::LicenseFeatureInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::LicenseFeatureInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -499,7 +519,10 @@ impl LicenseManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -517,7 +540,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/licensedEdition", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get information about all the licenses available.
@@ -525,7 +549,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/licenses", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::LicenseManagerLicenseInfo> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::LicenseManagerLicenseInfo> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -536,7 +561,8 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/source", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::LicenseSourceTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::LicenseSourceTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, this property is not used.
@@ -549,112 +575,445 @@ impl LicenseManager {
         let path = format!("/LicenseManager/{moId}/sourceAvailable", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AddLicenseRequestType<'a> {
-    #[serde(rename = "licenseKey")]
     license_key: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     labels: Option<&'a [crate::types::structs::KeyValue]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddLicenseRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddLicenseRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddLicenseRequestTypeSer<'b, 'a> {
+    data: &'b AddLicenseRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for AddLicenseRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddLicenseRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("licenseKey"), &self.data.license_key as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.labels else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("labels"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CheckLicenseFeatureRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "featureKey")]
     feature_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckLicenseFeatureRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckLicenseFeatureRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckLicenseFeatureRequestTypeSer<'b, 'a> {
+    data: &'b CheckLicenseFeatureRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CheckLicenseFeatureRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckLicenseFeatureRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("featureKey"), &self.data.feature_key as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct ConfigureLicenseSourceRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "licenseSource")]
     license_source: &'a dyn crate::types::traits::LicenseSourceTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ConfigureLicenseSourceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ConfigureLicenseSourceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ConfigureLicenseSourceRequestTypeSer<'b, 'a> {
+    data: &'b ConfigureLicenseSourceRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ConfigureLicenseSourceRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ConfigureLicenseSourceRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("licenseSource"), &self.data.license_source as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct DecodeLicenseRequestType<'a> {
-    #[serde(rename = "licenseKey")]
     license_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DecodeLicenseRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DecodeLicenseRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DecodeLicenseRequestTypeSer<'b, 'a> {
+    data: &'b DecodeLicenseRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DecodeLicenseRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DecodeLicenseRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("licenseKey"), &self.data.license_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DisableFeatureRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "featureKey")]
     feature_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DisableFeatureRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DisableFeatureRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DisableFeatureRequestTypeSer<'b, 'a> {
+    data: &'b DisableFeatureRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DisableFeatureRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DisableFeatureRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("featureKey"), &self.data.feature_key as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct EnableFeatureRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "featureKey")]
     feature_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for EnableFeatureRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(EnableFeatureRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct EnableFeatureRequestTypeSer<'b, 'a> {
+    data: &'b EnableFeatureRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for EnableFeatureRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"EnableFeatureRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("featureKey"), &self.data.feature_key as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryLicenseSourceAvailabilityRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryLicenseSourceAvailabilityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryLicenseSourceAvailabilityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryLicenseSourceAvailabilityRequestTypeSer<'b, 'a> {
+    data: &'b QueryLicenseSourceAvailabilityRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryLicenseSourceAvailabilityRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryLicenseSourceAvailabilityRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QuerySupportedFeaturesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QuerySupportedFeaturesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QuerySupportedFeaturesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QuerySupportedFeaturesRequestTypeSer<'b, 'a> {
+    data: &'b QuerySupportedFeaturesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QuerySupportedFeaturesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QuerySupportedFeaturesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryLicenseUsageRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryLicenseUsageRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryLicenseUsageRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryLicenseUsageRequestTypeSer<'b, 'a> {
+    data: &'b QueryLicenseUsageRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryLicenseUsageRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryLicenseUsageRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveLicenseLabelRequestType<'a> {
-    #[serde(rename = "licenseKey")]
     license_key: &'a str,
-    #[serde(rename = "labelKey")]
     label_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveLicenseLabelRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveLicenseLabelRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveLicenseLabelRequestTypeSer<'b, 'a> {
+    data: &'b RemoveLicenseLabelRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveLicenseLabelRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveLicenseLabelRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("licenseKey"), &self.data.license_key as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("labelKey"), &self.data.label_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveLicenseRequestType<'a> {
-    #[serde(rename = "licenseKey")]
     license_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveLicenseRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveLicenseRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveLicenseRequestTypeSer<'b, 'a> {
+    data: &'b RemoveLicenseRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveLicenseRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveLicenseRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("licenseKey"), &self.data.license_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetLicenseEditionRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "featureKey")]
     feature_key: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetLicenseEditionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetLicenseEditionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetLicenseEditionRequestTypeSer<'b, 'a> {
+    data: &'b SetLicenseEditionRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for SetLicenseEditionRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetLicenseEditionRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.feature_key else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("featureKey"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct UpdateLicenseLabelRequestType<'a> {
-    #[serde(rename = "licenseKey")]
     license_key: &'a str,
-    #[serde(rename = "labelKey")]
     label_key: &'a str,
-    #[serde(rename = "labelValue")]
     label_value: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateLicenseLabelRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateLicenseLabelRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateLicenseLabelRequestTypeSer<'b, 'a> {
+    data: &'b UpdateLicenseLabelRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateLicenseLabelRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateLicenseLabelRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("licenseKey"), &self.data.license_key as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("labelKey"), &self.data.label_key as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("labelValue"), &self.data.label_value as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateLicenseRequestType<'a> {
-    #[serde(rename = "licenseKey")]
     license_key: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     labels: Option<&'a [crate::types::structs::KeyValue]>,
+}
+
+impl<'a> miniserde::Serialize for UpdateLicenseRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateLicenseRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateLicenseRequestTypeSer<'b, 'a> {
+    data: &'b UpdateLicenseRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateLicenseRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateLicenseRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("licenseKey"), &self.data.license_key as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.labels else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("labels"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

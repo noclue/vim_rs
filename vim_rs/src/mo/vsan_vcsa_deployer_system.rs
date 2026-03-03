@@ -55,7 +55,10 @@ impl VsanVcsaDeployerSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -90,7 +93,10 @@ impl VsanVcsaDeployerSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -117,23 +123,86 @@ impl VsanVcsaDeployerSystem {
         let path = format!("/vsan/VsanVcsaDeployerSystem/{moId}/VsanVcsaGetBootstrapProgress", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::VsanVcsaDeploymentProgress> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::VsanVcsaDeploymentProgress> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanPostConfigForVcsaRequestType<'a> {
     spec: &'a crate::types::structs::VsanVcPostDeployConfigSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanPostConfigForVcsaRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanPostConfigForVcsaRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanPostConfigForVcsaRequestTypeSer<'b, 'a> {
+    data: &'b VsanPostConfigForVcsaRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanPostConfigForVcsaRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanPostConfigForVcsaRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanPrepareVsanForVcsaRequestType<'a> {
     spec: &'a crate::types::structs::VsanPrepareVsanForVcsaSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanPrepareVsanForVcsaRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanPrepareVsanForVcsaRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanPrepareVsanForVcsaRequestTypeSer<'b, 'a> {
+    data: &'b VsanPrepareVsanForVcsaRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanPrepareVsanForVcsaRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanPrepareVsanForVcsaRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVcsaGetBootstrapProgressRequestType<'a> {
-    #[serde(rename = "taskId")]
     task_id: &'a [String],
+}
+
+impl<'a> miniserde::Serialize for VsanVcsaGetBootstrapProgressRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVcsaGetBootstrapProgressRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVcsaGetBootstrapProgressRequestTypeSer<'b, 'a> {
+    data: &'b VsanVcsaGetBootstrapProgressRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanVcsaGetBootstrapProgressRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVcsaGetBootstrapProgressRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("taskId"), &self.data.task_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

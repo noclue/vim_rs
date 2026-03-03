@@ -25,10 +25,7 @@ use utils::connect;
 use vim_rs::mo::{SearchIndex, VirtualMachine};
 use vim_rs::core::tasks::TaskTracker;
 
-#[tokio::main]
-async fn main() -> Result<()> {
-    env_logger::init();
-
+async fn rename_vm() -> Result<()> {
     // Connect to vCenter
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
     info!("Connected to {}", client.service_content().about.full_name);
@@ -82,8 +79,16 @@ async fn main() -> Result<()> {
     let updated_name = vm.name().await?;
     info!("Verified new VM name: {}", updated_name);
 
-    drop(task_tracker);
-    drop(client);
-    sleep(Duration::from_secs(1)).await;
+    Ok(())
+}
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
+    env_logger::init();
+
+    rename_vm().await?;
+    // Yield to run async drop cleanup
+    sleep(Duration::from_millis(10)).await;
     Ok(())
 }

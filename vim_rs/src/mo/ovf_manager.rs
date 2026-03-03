@@ -128,7 +128,8 @@ impl OvfManager {
         let path = format!("/OvfManager/{moId}/CreateDescriptor", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::OvfCreateDescriptorResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::OvfCreateDescriptorResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Validate the OVF descriptor against the hardware supported by the
@@ -184,7 +185,8 @@ impl OvfManager {
         let path = format!("/OvfManager/{moId}/CreateImportSpec", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::OvfCreateImportSpecResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::OvfCreateImportSpecResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Parse the OVF descriptor and return as much information about it as possible
@@ -228,7 +230,8 @@ impl OvfManager {
         let path = format!("/OvfManager/{moId}/ParseDescriptor", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::OvfParseDescriptorResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::OvfParseDescriptorResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Validate that the given OVF can be imported on the host.
@@ -272,7 +275,8 @@ impl OvfManager {
         let path = format!("/OvfManager/{moId}/ValidateHost", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::OvfValidateHostResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::OvfValidateHostResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns an array of *OvfOptionInfo* object that specifies what options the server
@@ -288,7 +292,10 @@ impl OvfManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::OvfOptionInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::OvfOptionInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -305,39 +312,129 @@ impl OvfManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::OvfOptionInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::OvfOptionInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CreateDescriptorRequestType<'a> {
     obj: &'a crate::types::structs::ManagedObjectReference,
     cdp: &'a crate::types::structs::OvfCreateDescriptorParams,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateDescriptorRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateDescriptorRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateDescriptorRequestTypeSer<'b, 'a> {
+    data: &'b CreateDescriptorRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateDescriptorRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateDescriptorRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("obj"), &self.data.obj as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("cdp"), &self.data.cdp as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateImportSpecRequestType<'a> {
-    #[serde(rename = "ovfDescriptor")]
     ovf_descriptor: &'a str,
-    #[serde(rename = "resourcePool")]
     resource_pool: &'a crate::types::structs::ManagedObjectReference,
     datastore: &'a crate::types::structs::ManagedObjectReference,
     cisp: &'a dyn crate::types::traits::OvfCreateImportSpecParamsTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateImportSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateImportSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateImportSpecRequestTypeSer<'b, 'a> {
+    data: &'b CreateImportSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateImportSpecRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateImportSpecRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("ovfDescriptor"), &self.data.ovf_descriptor as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("resourcePool"), &self.data.resource_pool as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("cisp"), &self.data.cisp as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ParseDescriptorRequestType<'a> {
-    #[serde(rename = "ovfDescriptor")]
     ovf_descriptor: &'a str,
     pdp: &'a crate::types::structs::OvfParseDescriptorParams,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ParseDescriptorRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ParseDescriptorRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ParseDescriptorRequestTypeSer<'b, 'a> {
+    data: &'b ParseDescriptorRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ParseDescriptorRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ParseDescriptorRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("ovfDescriptor"), &self.data.ovf_descriptor as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("pdp"), &self.data.pdp as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ValidateHostRequestType<'a> {
-    #[serde(rename = "ovfDescriptor")]
     ovf_descriptor: &'a str,
     host: &'a crate::types::structs::ManagedObjectReference,
     vhp: &'a crate::types::structs::OvfValidateHostParams,
+}
+
+impl<'a> miniserde::Serialize for ValidateHostRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ValidateHostRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ValidateHostRequestTypeSer<'b, 'a> {
+    data: &'b ValidateHostRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ValidateHostRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ValidateHostRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("ovfDescriptor"), &self.data.ovf_descriptor as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("vhp"), &self.data.vhp as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

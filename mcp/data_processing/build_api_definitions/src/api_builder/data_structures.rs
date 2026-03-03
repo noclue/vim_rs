@@ -1,11 +1,15 @@
 use api_database::*;
 use vim_build::vim_model::{Model, EmitMode, DataType, Struct, TypePath, PathOrigin, PathStep};
-use vim_build::rs_emitter::names::TypeDefResolver;
+use vim_build::rs_emitter::names::{TypeDefResolver, parent_field_name, to_type_name as rust_type_name};
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
 use check_keyword::CheckKeyword;
 use convert_case::{Case, Casing};
+use super::common::{
+    format_vim_type, collect_all_descendants,
+    build_inherited_field_groups as build_inherited_field_groups_shared,
+};
 
 /// Convert a vim_build TypePath to an api_database ApiTypePath.
 fn convert_type_path(path: &TypePath) -> ApiTypePath {
@@ -55,23 +59,6 @@ fn convert_type_path(path: &TypePath) -> ApiTypePath {
 /// Convert a camelCase or PascalCase string to snake_case.
 fn to_snake_case(s: &str) -> String {
     s.to_case(Case::Snake).into_safe()
-}
-
-fn format_vim_type(dt: &DataType) -> String {
-    match dt {
-        DataType::Boolean => "Boolean".to_string(),
-        DataType::String => "String".to_string(),
-        DataType::Int8 => "Int8".to_string(),
-        DataType::Int16 => "Int16".to_string(),
-        DataType::Int32 => "Int32".to_string(),
-        DataType::Int64 => "Int64".to_string(),
-        DataType::Float => "Float".to_string(),
-        DataType::Double => "Double".to_string(),
-        DataType::DateTime => "DateTime".to_string(),
-        DataType::Binary => "Binary".to_string(),
-        DataType::Array(inner) => format!("Array<{}>", format_vim_type(inner)),
-        DataType::Reference(name) => name.clone(),
-    }
 }
 
 /// Build structures in memory (no file I/O).
@@ -129,7 +116,38 @@ pub fn build_structures(model: &Model) -> Vec<StructureEntry> {
                 is_boxed: field.require_box,
                 is_trait,
                 trait_name,
+                is_parent_field: false,
             });
+        }
+
+        // Insert parent field at position 0 if struct has a useful parent (compositional inheritance)
+        if let Some(parent_name) = &s.parent {
+            if parent_name != "Any" {
+                if model.has_useful_parent(name).unwrap_or(false) {
+                    let parent_struct_name = rust_type_name(parent_name);
+                    let parent_field = parent_field_name(parent_name);
+                    let parent_type = format!("vim_rs::types::structs::{}", parent_struct_name);
+                    fields.insert(
+                        0,
+                        FieldEntry {
+                            name: parent_field,
+                            rust_type: parent_type,
+                            vim_type: parent_name.clone(),
+                            required: true,
+                            description: Some(format!(
+                                "Parent struct (compositional inheritance). \
+                                 Fields from {} are accessible directly via Deref coercion.",
+                                parent_struct_name
+                            )),
+                            is_array: false,
+                            is_boxed: false,
+                            is_trait: false,
+                            trait_name: None,
+                            is_parent_field: true,
+                        },
+                    );
+                }
+            }
         }
 
         // Extract related types from fields
@@ -147,6 +165,13 @@ pub fn build_structures(model: &Model) -> Vec<StructureEntry> {
         // Convert paths from vim_build format to api_database format
         let paths: Vec<ApiTypePath> = s.paths.iter().map(convert_type_path).collect();
 
+        // Build inherited field groups (only for Emit mode - Skip types have no Rust struct)
+        let inherited_field_groups = build_inherited_field_groups(model, name, &tdf);
+
+        // Build extra_fields and pruned_parent for Skip emit mode
+        let (extra_fields, pruned_parent, pruned_parent_fields, pruned_parent_inherited_groups) =
+            build_skip_mode_extra(model, name, &tdf);
+
         structures.push(StructureEntry {
             name: s.rust_name(),
             rust_module: "vim_rs::types::structs".to_string(),
@@ -161,6 +186,11 @@ pub fn build_structures(model: &Model) -> Vec<StructureEntry> {
             implements_traits,
             all_descendants,
             paths,
+            inherited_field_groups,
+            extra_fields,
+            pruned_parent,
+            pruned_parent_fields,
+            pruned_parent_inherited_groups,
         });
     }
 
@@ -259,26 +289,125 @@ fn collect_implemented_traits(model: &Model, name: &str) -> Vec<String> {
     traits
 }
 
-fn collect_all_descendants(model: &Model, name: &str) -> Vec<String> {
-    let mut descendants = Vec::new();
+/// Wraps the shared helper with a Skip-mode early return: Skip types have no
+/// Rust struct, so inherited field groups are meaningless for them.
+fn build_inherited_field_groups(
+    model: &Model,
+    name: &str,
+    tdf: &TypeDefResolver<'_>,
+) -> Vec<InheritedFieldGroup> {
+    let is_skip = model
+        .structs
+        .get(name)
+        .map(|r| matches!(r.borrow().emit_mode, EmitMode::Skip(_)))
+        .unwrap_or(true);
+    if is_skip {
+        return Vec::new();
+    }
+    build_inherited_field_groups_shared(model, name, tdf)
+}
 
-    if let Ok(children) = model.children(&name.to_string()) {
-        for child in children {
-            let child_borrow = child.borrow();
-            // Only include non-skipped types
-            if !child_borrow.emit_mode.is_skip() {
-                let child_name = child_borrow.name.clone();
-                // Don't include the parent itself
-                if child_name != name {
-                    descendants.push(child_name);
-                }
-            }
+fn build_skip_mode_extra(
+    model: &Model,
+    name: &str,
+    tdf: &TypeDefResolver<'_>,
+) -> (Vec<ExtraFieldEntry>, Option<String>, Vec<FieldEntry>, Vec<InheritedFieldGroup>) {
+    let s = match model.structs.get(name) {
+        Some(r) => r.borrow(),
+        None => return (Vec::new(), None, Vec::new(), Vec::new()),
+    };
+
+    let EmitMode::Skip(pruned_parent_name) = &s.emit_mode else {
+        return (Vec::new(), None, Vec::new(), Vec::new());
+    };
+
+    let pruned_parent = rust_type_name(pruned_parent_name);
+    let mut extra_fields = Vec::new();
+
+    // Collect fields from this Skip type and its ancestors up to (but not including) the pruned parent
+    let mut current = name.to_string();
+    while current != *pruned_parent_name {
+        let struct_ref = match model.structs.get(&current) {
+            Some(r) => r,
+            None => break,
+        };
+        let struct_borrow = struct_ref.borrow();
+        for (_field_name, field) in &struct_borrow.fields {
+            let rust_type = match tdf.field_type(field) {
+                Ok(t) => t,
+                Err(_) => "UnknownType".to_string(),
+            };
+            extra_fields.push(ExtraFieldEntry {
+                vim_name: field.name.clone(),
+                vim_type: format_vim_type(&field.vim_type),
+                rust_type,
+                description: field.description.clone(),
+            });
         }
+        current = match &struct_borrow.parent {
+            Some(p) if p != "Any" => p.clone(),
+            _ => break,
+        };
     }
 
-    descendants.sort();
-    descendants.dedup();
-    descendants
+    // Denormalize the pruned parent's own fields and inherited field groups
+    let pruned_parent_fields = build_fields_for(model, pruned_parent_name, tdf);
+    let pruned_parent_inherited = build_inherited_field_groups(model, pruned_parent_name, tdf);
+
+    (extra_fields, Some(pruned_parent), pruned_parent_fields, pruned_parent_inherited)
 }
+
+/// Build the field list for a given struct name (used to denormalize pruned parent fields).
+fn build_fields_for(
+    model: &Model,
+    name: &str,
+    tdf: &TypeDefResolver<'_>,
+) -> Vec<FieldEntry> {
+    let struct_ref = match model.structs.get(name) {
+        Some(r) => r,
+        None => return Vec::new(),
+    };
+    let s = struct_ref.borrow();
+    let mut fields = Vec::new();
+
+    for (_field_name, field) in &s.fields {
+        let rust_type = match tdf.field_type(field) {
+            Ok(t) => t,
+            Err(_) => "UnknownType".to_string(),
+        };
+        let is_array = matches!(&field.vim_type, DataType::Array(_));
+        let (is_trait, trait_name) = if let DataType::Reference(ref_name) = &field.vim_type {
+            if let Some(ref_struct) = model.structs.get(ref_name) {
+                let rs = ref_struct.borrow();
+                let has_children = !rs.children.is_empty() && matches!(rs.emit_mode, EmitMode::Emit);
+                if has_children {
+                    (true, Some(format!("{}Trait", rs.rust_name())))
+                } else {
+                    (false, None)
+                }
+            } else {
+                (false, None)
+            }
+        } else {
+            (false, None)
+        };
+
+        fields.push(FieldEntry {
+            name: field.rust_name(),
+            rust_type,
+            vim_type: format_vim_type(&field.vim_type),
+            required: !field.optional,
+            description: field.description.clone(),
+            is_array,
+            is_boxed: field.require_box,
+            is_trait,
+            trait_name,
+            is_parent_field: false,
+        });
+    }
+
+    fields
+}
+
 
 

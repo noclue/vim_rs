@@ -98,7 +98,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmAttachDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Attach a tag to a virtual storage object.
@@ -203,7 +204,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCloneVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create a virtual disk, which is a storage object with
@@ -249,7 +251,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCreateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a new Disk from given snapshot of a VStorageObject.
@@ -306,7 +309,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCreateDiskFromSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a snapshot of a given VStorageObject.
@@ -343,7 +347,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCreateSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
@@ -380,7 +385,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmDeleteSnapshot_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Delete a virtual storage object and its associated backings.
@@ -431,7 +437,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmDeleteVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Detach a tag from a virtual storage object.
@@ -517,7 +524,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmExtendDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Inflate a sparse or thin-provisioned virtual disk up to the full size.
@@ -566,7 +574,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmInflateDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Lists all tags attached to virtual storage object.
@@ -592,7 +601,10 @@ impl VslmVStorageObjectManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmTagEntry>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmTagEntry>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -621,7 +633,10 @@ impl VslmVStorageObjectManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Id>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Id>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -661,7 +676,10 @@ impl VslmVStorageObjectManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VslmVsoVStorageObjectQueryResult>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::VslmVsoVStorageObjectQueryResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -731,7 +749,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmQueryChangedDiskAreas", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::DiskChangeInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::DiskChangeInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Gets the synchronization status of the Global Catalog.
@@ -747,7 +766,10 @@ impl VslmVStorageObjectManager {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmDatastoreSyncStatus>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmDatastoreSyncStatus>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -773,7 +795,10 @@ impl VslmVStorageObjectManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::VslmDatastoreSyncStatus>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::VslmDatastoreSyncStatus>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -803,7 +828,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmReconcileDatastoreInventory_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Promote a virtual disk to a First Class Disk.
@@ -846,7 +872,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRegisterDisk", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VStorageObject = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VStorageObject = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Relocate a virtual storage object.
@@ -891,7 +918,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRelocateVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Rename a virtual storage object.
@@ -964,7 +992,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveSnapshotDetails", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VStorageObjectSnapshotDetails = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VStorageObjectSnapshotDetails = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieves snapshot information of a given VStorageObject.
@@ -994,7 +1023,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveSnapshotInfo", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VStorageObjectSnapshotInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VStorageObjectSnapshotInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieve FCD infrastructure object SBPM policy on given datastore.
@@ -1031,7 +1061,10 @@ impl VslmVStorageObjectManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -1064,7 +1097,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObject", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VStorageObject = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VStorageObject = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieve vm associations for each virtual storage object in the query.
@@ -1084,7 +1118,10 @@ impl VslmVStorageObjectManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmVsoVStorageObjectAssociations>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmVsoVStorageObjectAssociations>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -1125,7 +1162,10 @@ impl VslmVStorageObjectManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KeyValue>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::KeyValue>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -1167,7 +1207,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectMetadataValue", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieve a virtual storage object state.
@@ -1200,7 +1241,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectState", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VStorageObjectStateInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VStorageObjectStateInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieves details of a list of virtual storage objects from cache.
@@ -1224,7 +1266,10 @@ impl VslmVStorageObjectManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::VslmVsoVStorageObjectResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmVsoVStorageObjectResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -1279,7 +1324,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRevertVStorageObject_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Schedules reconcile of the inventory info of virtual storage objects on
@@ -1384,7 +1430,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVStorageInfrastructureObjectPolicy_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Update the storage crypto on a virtual storage object.
@@ -1429,7 +1476,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVstorageObjectCrypto_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Update metadata KV pairs to a virtual storage object.
@@ -1483,7 +1531,8 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVStorageObjectMetadata_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Update the storage policy on a virtual storage object.
@@ -1525,266 +1574,1127 @@ impl VslmVStorageObjectManager {
         let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVstorageObjectPolicy_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VslmAttachDiskRequestType<'a> {
     id: &'a crate::types::structs::Id,
     vm: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "controllerKey")]
     controller_key: Option<i32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "unitNumber")]
     unit_number: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmAttachDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmAttachDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmAttachDiskRequestTypeSer<'b, 'a> {
+    data: &'b VslmAttachDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmAttachDiskRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmAttachDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.controller_key else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("controllerKey"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.unit_number else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("unitNumber"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmAttachTagToVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
     category: &'a str,
     tag: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmAttachTagToVStorageObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmAttachTagToVStorageObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmAttachTagToVStorageObjectRequestTypeSer<'b, 'a> {
+    data: &'b VslmAttachTagToVStorageObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmAttachTagToVStorageObjectRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmAttachTagToVStorageObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("category"), &self.data.category as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("tag"), &self.data.tag as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmClearVStorageObjectControlFlagsRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "controlFlags")]
     control_flags: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmClearVStorageObjectControlFlagsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmClearVStorageObjectControlFlagsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmClearVStorageObjectControlFlagsRequestTypeSer<'b, 'a> {
+    data: &'b VslmClearVStorageObjectControlFlagsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmClearVStorageObjectControlFlagsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmClearVStorageObjectControlFlagsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.control_flags else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("controlFlags"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmCloneVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
     spec: &'a crate::types::structs::VslmCloneSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmCloneVStorageObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmCloneVStorageObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmCloneVStorageObjectRequestTypeSer<'b, 'a> {
+    data: &'b VslmCloneVStorageObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmCloneVStorageObjectRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmCloneVStorageObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmCreateDiskRequestType<'a> {
     spec: &'a crate::types::structs::VslmCreateSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmCreateDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmCreateDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmCreateDiskRequestTypeSer<'b, 'a> {
+    data: &'b VslmCreateDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmCreateDiskRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmCreateDiskRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmCreateDiskFromSnapshotRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(rename = "snapshotId")]
     snapshot_id: &'a crate::types::structs::Id,
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     crypto: Option<&'a dyn crate::types::traits::CryptoSpecTrait>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     path: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmCreateDiskFromSnapshotRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmCreateDiskFromSnapshotRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmCreateDiskFromSnapshotRequestTypeSer<'b, 'a> {
+    data: &'b VslmCreateDiskFromSnapshotRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmCreateDiskFromSnapshotRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmCreateDiskFromSnapshotRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("snapshotId"), &self.data.snapshot_id as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.crypto else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("crypto"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.path else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("path"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmCreateSnapshotRequestType<'a> {
     id: &'a crate::types::structs::Id,
     description: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmCreateSnapshotRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmCreateSnapshotRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmCreateSnapshotRequestTypeSer<'b, 'a> {
+    data: &'b VslmCreateSnapshotRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmCreateSnapshotRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmCreateSnapshotRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("description"), &self.data.description as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmDeleteSnapshotRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(rename = "snapshotId")]
     snapshot_id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmDeleteSnapshotRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmDeleteSnapshotRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmDeleteSnapshotRequestTypeSer<'b, 'a> {
+    data: &'b VslmDeleteSnapshotRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmDeleteSnapshotRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmDeleteSnapshotRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("snapshotId"), &self.data.snapshot_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmDeleteVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmDeleteVStorageObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmDeleteVStorageObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmDeleteVStorageObjectRequestTypeSer<'b, 'a> {
+    data: &'b VslmDeleteVStorageObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmDeleteVStorageObjectRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmDeleteVStorageObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmDetachTagFromVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
     category: &'a str,
     tag: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmDetachTagFromVStorageObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmDetachTagFromVStorageObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmDetachTagFromVStorageObjectRequestTypeSer<'b, 'a> {
+    data: &'b VslmDetachTagFromVStorageObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmDetachTagFromVStorageObjectRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmDetachTagFromVStorageObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("category"), &self.data.category as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("tag"), &self.data.tag as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmExtendDiskRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(rename = "newCapacityInMB")]
     new_capacity_in_mb: i64,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmExtendDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmExtendDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmExtendDiskRequestTypeSer<'b, 'a> {
+    data: &'b VslmExtendDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmExtendDiskRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmExtendDiskRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("newCapacityInMB"), &self.data.new_capacity_in_mb as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmInflateDiskRequestType<'a> {
     id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmInflateDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmInflateDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmInflateDiskRequestTypeSer<'b, 'a> {
+    data: &'b VslmInflateDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmInflateDiskRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmInflateDiskRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmListTagsAttachedToVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmListTagsAttachedToVStorageObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmListTagsAttachedToVStorageObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmListTagsAttachedToVStorageObjectRequestTypeSer<'b, 'a> {
+    data: &'b VslmListTagsAttachedToVStorageObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmListTagsAttachedToVStorageObjectRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmListTagsAttachedToVStorageObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmListVStorageObjectsAttachedToTagRequestType<'a> {
     category: &'a str,
     tag: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmListVStorageObjectsAttachedToTagRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmListVStorageObjectsAttachedToTagRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmListVStorageObjectsAttachedToTagRequestTypeSer<'b, 'a> {
+    data: &'b VslmListVStorageObjectsAttachedToTagRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmListVStorageObjectsAttachedToTagRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmListVStorageObjectsAttachedToTagRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("category"), &self.data.category as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("tag"), &self.data.tag as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmListVStorageObjectForSpecRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     query: Option<&'a [crate::types::structs::VslmVsoVStorageObjectQuerySpec]>,
-    #[serde(rename = "maxResult")]
     max_result: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmListVStorageObjectForSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmListVStorageObjectForSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmListVStorageObjectForSpecRequestTypeSer<'b, 'a> {
+    data: &'b VslmListVStorageObjectForSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmListVStorageObjectForSpecRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmListVStorageObjectForSpecRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.query else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("query"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("maxResult"), &self.data.max_result as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmQueryChangedDiskAreasRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(rename = "snapshotId")]
     snapshot_id: &'a crate::types::structs::Id,
-    #[serde(rename = "startOffset")]
     start_offset: i64,
-    #[serde(rename = "changeId")]
     change_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmQueryChangedDiskAreasRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmQueryChangedDiskAreasRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmQueryChangedDiskAreasRequestTypeSer<'b, 'a> {
+    data: &'b VslmQueryChangedDiskAreasRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmQueryChangedDiskAreasRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmQueryChangedDiskAreasRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("snapshotId"), &self.data.snapshot_id as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("startOffset"), &self.data.start_offset as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("changeId"), &self.data.change_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmQueryGlobalCatalogSyncStatusForDatastoreRequestType<'a> {
-    #[serde(rename = "datastoreURL")]
     datastore_url: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmQueryGlobalCatalogSyncStatusForDatastoreRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmQueryGlobalCatalogSyncStatusForDatastoreRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmQueryGlobalCatalogSyncStatusForDatastoreRequestTypeSer<'b, 'a> {
+    data: &'b VslmQueryGlobalCatalogSyncStatusForDatastoreRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmQueryGlobalCatalogSyncStatusForDatastoreRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmQueryGlobalCatalogSyncStatusForDatastoreRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastoreURL"), &self.data.datastore_url as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmReconcileDatastoreInventoryRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmReconcileDatastoreInventoryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmReconcileDatastoreInventoryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmReconcileDatastoreInventoryRequestTypeSer<'b, 'a> {
+    data: &'b VslmReconcileDatastoreInventoryRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmReconcileDatastoreInventoryRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmReconcileDatastoreInventoryRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmRegisterDiskRequestType<'a> {
     path: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     name: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRegisterDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRegisterDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRegisterDiskRequestTypeSer<'b, 'a> {
+    data: &'b VslmRegisterDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRegisterDiskRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRegisterDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("path"), &self.data.path as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("name"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmRelocateVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
     spec: &'a crate::types::structs::VslmRelocateSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRelocateVStorageObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRelocateVStorageObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRelocateVStorageObjectRequestTypeSer<'b, 'a> {
+    data: &'b VslmRelocateVStorageObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRelocateVStorageObjectRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRelocateVStorageObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmRenameVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
     name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRenameVStorageObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRenameVStorageObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRenameVStorageObjectRequestTypeSer<'b, 'a> {
+    data: &'b VslmRenameVStorageObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRenameVStorageObjectRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRenameVStorageObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmRetrieveSnapshotDetailsRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(rename = "snapshotId")]
     snapshot_id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRetrieveSnapshotDetailsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRetrieveSnapshotDetailsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRetrieveSnapshotDetailsRequestTypeSer<'b, 'a> {
+    data: &'b VslmRetrieveSnapshotDetailsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRetrieveSnapshotDetailsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRetrieveSnapshotDetailsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("snapshotId"), &self.data.snapshot_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmRetrieveSnapshotInfoRequestType<'a> {
     id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRetrieveSnapshotInfoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRetrieveSnapshotInfoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRetrieveSnapshotInfoRequestTypeSer<'b, 'a> {
+    data: &'b VslmRetrieveSnapshotInfoRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRetrieveSnapshotInfoRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRetrieveSnapshotInfoRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmRetrieveVStorageInfrastructureObjectPolicyRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRetrieveVStorageInfrastructureObjectPolicyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRetrieveVStorageInfrastructureObjectPolicyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRetrieveVStorageInfrastructureObjectPolicyRequestTypeSer<'b, 'a> {
+    data: &'b VslmRetrieveVStorageInfrastructureObjectPolicyRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRetrieveVStorageInfrastructureObjectPolicyRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRetrieveVStorageInfrastructureObjectPolicyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmRetrieveVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRetrieveVStorageObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRetrieveVStorageObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRetrieveVStorageObjectRequestTypeSer<'b, 'a> {
+    data: &'b VslmRetrieveVStorageObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRetrieveVStorageObjectRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRetrieveVStorageObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmRetrieveVStorageObjectAssociationsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     ids: Option<&'a [crate::types::structs::Id]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRetrieveVStorageObjectAssociationsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRetrieveVStorageObjectAssociationsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRetrieveVStorageObjectAssociationsRequestTypeSer<'b, 'a> {
+    data: &'b VslmRetrieveVStorageObjectAssociationsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRetrieveVStorageObjectAssociationsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRetrieveVStorageObjectAssociationsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.ids else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("ids"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmRetrieveVStorageObjectMetadataRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "snapshotId")]
     snapshot_id: Option<&'a crate::types::structs::Id>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     prefix: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRetrieveVStorageObjectMetadataRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRetrieveVStorageObjectMetadataRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRetrieveVStorageObjectMetadataRequestTypeSer<'b, 'a> {
+    data: &'b VslmRetrieveVStorageObjectMetadataRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRetrieveVStorageObjectMetadataRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRetrieveVStorageObjectMetadataRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.snapshot_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("snapshotId"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.prefix else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("prefix"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmRetrieveVStorageObjectMetadataValueRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "snapshotId")]
     snapshot_id: Option<&'a crate::types::structs::Id>,
     key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRetrieveVStorageObjectMetadataValueRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRetrieveVStorageObjectMetadataValueRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRetrieveVStorageObjectMetadataValueRequestTypeSer<'b, 'a> {
+    data: &'b VslmRetrieveVStorageObjectMetadataValueRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRetrieveVStorageObjectMetadataValueRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRetrieveVStorageObjectMetadataValueRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.snapshot_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("snapshotId"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmRetrieveVStorageObjectStateRequestType<'a> {
     id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRetrieveVStorageObjectStateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRetrieveVStorageObjectStateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRetrieveVStorageObjectStateRequestTypeSer<'b, 'a> {
+    data: &'b VslmRetrieveVStorageObjectStateRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRetrieveVStorageObjectStateRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRetrieveVStorageObjectStateRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmRetrieveVStorageObjectsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     ids: Option<&'a [crate::types::structs::Id]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRetrieveVStorageObjectsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRetrieveVStorageObjectsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRetrieveVStorageObjectsRequestTypeSer<'b, 'a> {
+    data: &'b VslmRetrieveVStorageObjectsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRetrieveVStorageObjectsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRetrieveVStorageObjectsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.ids else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("ids"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmRevertVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(rename = "snapshotId")]
     snapshot_id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmRevertVStorageObjectRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmRevertVStorageObjectRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmRevertVStorageObjectRequestTypeSer<'b, 'a> {
+    data: &'b VslmRevertVStorageObjectRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmRevertVStorageObjectRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmRevertVStorageObjectRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("snapshotId"), &self.data.snapshot_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmScheduleReconcileDatastoreInventoryRequestType<'a> {
     datastore: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmScheduleReconcileDatastoreInventoryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmScheduleReconcileDatastoreInventoryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmScheduleReconcileDatastoreInventoryRequestTypeSer<'b, 'a> {
+    data: &'b VslmScheduleReconcileDatastoreInventoryRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmScheduleReconcileDatastoreInventoryRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmScheduleReconcileDatastoreInventoryRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmSetVStorageObjectControlFlagsRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "controlFlags")]
     control_flags: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmSetVStorageObjectControlFlagsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmSetVStorageObjectControlFlagsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmSetVStorageObjectControlFlagsRequestTypeSer<'b, 'a> {
+    data: &'b VslmSetVStorageObjectControlFlagsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmSetVStorageObjectControlFlagsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmSetVStorageObjectControlFlagsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.control_flags else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("controlFlags"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmUpdateVStorageInfrastructureObjectPolicyRequestType<'a> {
     spec: &'a crate::types::structs::VslmInfrastructureObjectPolicySpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmUpdateVStorageInfrastructureObjectPolicyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmUpdateVStorageInfrastructureObjectPolicyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmUpdateVStorageInfrastructureObjectPolicyRequestTypeSer<'b, 'a> {
+    data: &'b VslmUpdateVStorageInfrastructureObjectPolicyRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmUpdateVStorageInfrastructureObjectPolicyRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmUpdateVStorageInfrastructureObjectPolicyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VslmUpdateVstorageObjectCryptoRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "disksCrypto")]
     disks_crypto: Option<&'a crate::types::structs::DiskCryptoSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmUpdateVstorageObjectCryptoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmUpdateVstorageObjectCryptoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmUpdateVstorageObjectCryptoRequestTypeSer<'b, 'a> {
+    data: &'b VslmUpdateVstorageObjectCryptoRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmUpdateVstorageObjectCryptoRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmUpdateVstorageObjectCryptoRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.disks_crypto else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("disksCrypto"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmUpdateVStorageObjectMetadataRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     metadata: Option<&'a [crate::types::structs::KeyValue]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "deleteKeys")]
     delete_keys: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VslmUpdateVStorageObjectMetadataRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmUpdateVStorageObjectMetadataRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmUpdateVStorageObjectMetadataRequestTypeSer<'b, 'a> {
+    data: &'b VslmUpdateVStorageObjectMetadataRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmUpdateVStorageObjectMetadataRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmUpdateVStorageObjectMetadataRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.metadata else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("metadata"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.delete_keys else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("deleteKeys"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VslmUpdateVstorageObjectPolicyRequestType<'a> {
     id: &'a crate::types::structs::Id,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
+}
+
+impl<'a> miniserde::Serialize for VslmUpdateVstorageObjectPolicyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VslmUpdateVstorageObjectPolicyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VslmUpdateVstorageObjectPolicyRequestTypeSer<'b, 'a> {
+    data: &'b VslmUpdateVstorageObjectPolicyRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VslmUpdateVstorageObjectPolicyRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VslmUpdateVstorageObjectPolicyRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

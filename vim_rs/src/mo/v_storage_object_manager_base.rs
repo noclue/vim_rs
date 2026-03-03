@@ -55,7 +55,8 @@ impl VStorageObjectManagerBase {
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectCreateSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
@@ -100,7 +101,8 @@ impl VStorageObjectManagerBase {
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
@@ -143,7 +145,8 @@ impl VStorageObjectManagerBase {
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectDeleteSnapshotEx2_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
@@ -205,7 +208,8 @@ impl VStorageObjectManagerBase {
         let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectExtendDiskEx_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Rename a virtual storage object.
@@ -247,7 +251,8 @@ impl VStorageObjectManagerBase {
         let path = format!("/VStorageObjectManagerBase/{moId}/RenameVStorageObjectEx", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VslmVClockInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VslmVClockInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Reverts to a given snapshot of a VStorageObject.
@@ -305,53 +310,188 @@ impl VStorageObjectManagerBase {
         let path = format!("/VStorageObjectManagerBase/{moId}/RevertVStorageObjectEx_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VStorageObjectCreateSnapshotExRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
     description: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VStorageObjectCreateSnapshotExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VStorageObjectCreateSnapshotExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VStorageObjectCreateSnapshotExRequestTypeSer<'b, 'a> {
+    data: &'b VStorageObjectCreateSnapshotExRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VStorageObjectCreateSnapshotExRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VStorageObjectCreateSnapshotExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("description"), &self.data.description as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VStorageObjectDeleteSnapshotExRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "snapshotId")]
     snapshot_id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VStorageObjectDeleteSnapshotExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VStorageObjectDeleteSnapshotExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VStorageObjectDeleteSnapshotExRequestTypeSer<'b, 'a> {
+    data: &'b VStorageObjectDeleteSnapshotExRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VStorageObjectDeleteSnapshotExRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VStorageObjectDeleteSnapshotExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("snapshotId"), &self.data.snapshot_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VStorageObjectDeleteSnapshotEx2RequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "snapshotId")]
     snapshot_id: &'a crate::types::structs::Id,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VStorageObjectDeleteSnapshotEx2RequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VStorageObjectDeleteSnapshotEx2RequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VStorageObjectDeleteSnapshotEx2RequestTypeSer<'b, 'a> {
+    data: &'b VStorageObjectDeleteSnapshotEx2RequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VStorageObjectDeleteSnapshotEx2RequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VStorageObjectDeleteSnapshotEx2RequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("snapshotId"), &self.data.snapshot_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VStorageObjectExtendDiskExRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "newCapacityInMB")]
     new_capacity_in_mb: i64,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VStorageObjectExtendDiskExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VStorageObjectExtendDiskExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VStorageObjectExtendDiskExRequestTypeSer<'b, 'a> {
+    data: &'b VStorageObjectExtendDiskExRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VStorageObjectExtendDiskExRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VStorageObjectExtendDiskExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("newCapacityInMB"), &self.data.new_capacity_in_mb as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RenameVStorageObjectExRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RenameVStorageObjectExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RenameVStorageObjectExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RenameVStorageObjectExRequestTypeSer<'b, 'a> {
+    data: &'b RenameVStorageObjectExRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RenameVStorageObjectExRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RenameVStorageObjectExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RevertVStorageObjectExRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "snapshotId")]
     snapshot_id: &'a crate::types::structs::Id,
+}
+
+impl<'a> miniserde::Serialize for RevertVStorageObjectExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RevertVStorageObjectExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RevertVStorageObjectExRequestTypeSer<'b, 'a> {
+    data: &'b RevertVStorageObjectExRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RevertVStorageObjectExRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RevertVStorageObjectExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("snapshotId"), &self.data.snapshot_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

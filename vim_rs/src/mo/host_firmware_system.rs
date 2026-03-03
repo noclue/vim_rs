@@ -31,7 +31,8 @@ impl HostFirmwareSystem {
         let path = format!("/HostFirmwareSystem/{moId}/BackupFirmwareConfiguration", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Return the URL on the host to which the configuration bundle must be
@@ -48,7 +49,8 @@ impl HostFirmwareSystem {
         let path = format!("/HostFirmwareSystem/{moId}/QueryFirmwareConfigUploadURL", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Reset the configuration to factory defaults.
@@ -105,8 +107,29 @@ impl HostFirmwareSystem {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct RestoreFirmwareConfigurationRequestType {
     force: bool,
+}
+
+impl miniserde::Serialize for RestoreFirmwareConfigurationRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RestoreFirmwareConfigurationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RestoreFirmwareConfigurationRequestTypeSer<'b> {
+    data: &'b RestoreFirmwareConfigurationRequestType,
+    seq: usize,
+}
+
+impl<'b> miniserde::ser::Map for RestoreFirmwareConfigurationRequestTypeSer<'b> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RestoreFirmwareConfigurationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("force"), &self.data.force as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

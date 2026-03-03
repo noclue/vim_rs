@@ -1,5 +1,6 @@
 pub(crate) mod boxed_types;
 mod common;
+pub(crate) mod defaults;
 pub mod deser;
 pub mod enums;
 pub mod enum_impls;

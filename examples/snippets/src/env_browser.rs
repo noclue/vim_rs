@@ -24,7 +24,7 @@ use vim_rs::mo::{ComputeResource, EnvironmentBrowser};
 use anyhow::{Context, Result};
 use log::{error, info};
 use utils::connect;
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
 vim_retrievable!(
@@ -35,6 +35,7 @@ vim_retrievable!(
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
     env_logger::init();
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
     let compute_resource =

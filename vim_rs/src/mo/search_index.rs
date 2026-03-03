@@ -58,7 +58,8 @@ impl SearchIndex {
         let path = format!("/SearchIndex/{moId}/FindAllByDnsName", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::ManagedObjectReference> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Finds all virtual machines or hosts by IP address, where the IP address is
@@ -97,7 +98,8 @@ impl SearchIndex {
         let path = format!("/SearchIndex/{moId}/FindAllByIp", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::ManagedObjectReference> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Finds all virtual machines or hosts by UUID.
@@ -140,7 +142,8 @@ impl SearchIndex {
         let path = format!("/SearchIndex/{moId}/FindAllByUuid", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::ManagedObjectReference> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Finds a virtual machine by its location on a datastore.
@@ -175,7 +178,10 @@ impl SearchIndex {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -215,7 +221,10 @@ impl SearchIndex {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -248,7 +257,10 @@ impl SearchIndex {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -291,7 +303,10 @@ impl SearchIndex {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -335,7 +350,10 @@ impl SearchIndex {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -371,88 +389,313 @@ impl SearchIndex {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct FindAllByDnsNameRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "dnsName")]
     dns_name: &'a str,
-    #[serde(rename = "vmSearch")]
     vm_search: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindAllByDnsNameRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindAllByDnsNameRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindAllByDnsNameRequestTypeSer<'b, 'a> {
+    data: &'b FindAllByDnsNameRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindAllByDnsNameRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindAllByDnsNameRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("dnsName"), &self.data.dns_name as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("vmSearch"), &self.data.vm_search as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct FindAllByIpRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     ip: &'a str,
-    #[serde(rename = "vmSearch")]
     vm_search: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindAllByIpRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindAllByIpRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindAllByIpRequestTypeSer<'b, 'a> {
+    data: &'b FindAllByIpRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindAllByIpRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindAllByIpRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("ip"), &self.data.ip as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("vmSearch"), &self.data.vm_search as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct FindAllByUuidRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     uuid: &'a str,
-    #[serde(rename = "vmSearch")]
     vm_search: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "instanceUuid")]
     instance_uuid: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindAllByUuidRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindAllByUuidRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindAllByUuidRequestTypeSer<'b, 'a> {
+    data: &'b FindAllByUuidRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindAllByUuidRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindAllByUuidRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("uuid"), &self.data.uuid as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("vmSearch"), &self.data.vm_search as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.instance_uuid else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("instanceUuid"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct FindByDatastorePathRequestType<'a> {
     datacenter: &'a crate::types::structs::ManagedObjectReference,
     path: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindByDatastorePathRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindByDatastorePathRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindByDatastorePathRequestTypeSer<'b, 'a> {
+    data: &'b FindByDatastorePathRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindByDatastorePathRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindByDatastorePathRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("datacenter"), &self.data.datacenter as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("path"), &self.data.path as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct FindByDnsNameRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "dnsName")]
     dns_name: &'a str,
-    #[serde(rename = "vmSearch")]
     vm_search: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindByDnsNameRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindByDnsNameRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindByDnsNameRequestTypeSer<'b, 'a> {
+    data: &'b FindByDnsNameRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindByDnsNameRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindByDnsNameRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("dnsName"), &self.data.dns_name as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("vmSearch"), &self.data.vm_search as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct FindByInventoryPathRequestType<'a> {
-    #[serde(rename = "inventoryPath")]
     inventory_path: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindByInventoryPathRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindByInventoryPathRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindByInventoryPathRequestTypeSer<'b, 'a> {
+    data: &'b FindByInventoryPathRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindByInventoryPathRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindByInventoryPathRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("inventoryPath"), &self.data.inventory_path as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct FindByIpRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     ip: &'a str,
-    #[serde(rename = "vmSearch")]
     vm_search: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindByIpRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindByIpRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindByIpRequestTypeSer<'b, 'a> {
+    data: &'b FindByIpRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindByIpRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindByIpRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("ip"), &self.data.ip as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("vmSearch"), &self.data.vm_search as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct FindByUuidRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     uuid: &'a str,
-    #[serde(rename = "vmSearch")]
     vm_search: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "instanceUuid")]
     instance_uuid: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindByUuidRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindByUuidRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindByUuidRequestTypeSer<'b, 'a> {
+    data: &'b FindByUuidRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindByUuidRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindByUuidRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("uuid"), &self.data.uuid as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("vmSearch"), &self.data.vm_search as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.instance_uuid else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("instanceUuid"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct FindChildRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
+}
+
+impl<'a> miniserde::Serialize for FindChildRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindChildRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindChildRequestTypeSer<'b, 'a> {
+    data: &'b FindChildRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindChildRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindChildRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

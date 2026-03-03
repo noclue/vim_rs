@@ -41,7 +41,7 @@
 
 use log::info;
 use utils::connect;
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 use vim_rs::types::convert::CastInto;
 use vim_rs::types::traits::VirtualEthernetCardTrait;

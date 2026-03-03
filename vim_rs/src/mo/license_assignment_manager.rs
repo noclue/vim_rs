@@ -26,7 +26,10 @@ impl LicenseAssignmentManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::LicenseAssignmentManagerLicenseAssignment>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::LicenseAssignmentManagerLicenseAssignment>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -75,30 +78,100 @@ impl LicenseAssignmentManager {
         let path = format!("/LicenseAssignmentManager/{moId}/UpdateAssignedLicense", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::LicenseManagerLicenseInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct QueryAssignedLicensesRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "entityId")]
     entity_id: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryAssignedLicensesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryAssignedLicensesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryAssignedLicensesRequestTypeSer<'b, 'a> {
+    data: &'b QueryAssignedLicensesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryAssignedLicensesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryAssignedLicensesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.entity_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entityId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveAssignedLicenseRequestType<'a> {
-    #[serde(rename = "entityId")]
     entity_id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveAssignedLicenseRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveAssignedLicenseRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveAssignedLicenseRequestTypeSer<'b, 'a> {
+    data: &'b RemoveAssignedLicenseRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveAssignedLicenseRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveAssignedLicenseRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entityId"), &self.data.entity_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateAssignedLicenseRequestType<'a> {
     entity: &'a str,
-    #[serde(rename = "licenseKey")]
     license_key: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "entityDisplayName")]
     entity_display_name: Option<&'a str>,
+}
+
+impl<'a> miniserde::Serialize for UpdateAssignedLicenseRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateAssignedLicenseRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateAssignedLicenseRequestTypeSer<'b, 'a> {
+    data: &'b UpdateAssignedLicenseRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateAssignedLicenseRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateAssignedLicenseRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("licenseKey"), &self.data.license_key as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.entity_display_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entityDisplayName"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

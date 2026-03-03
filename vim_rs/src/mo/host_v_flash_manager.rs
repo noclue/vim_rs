@@ -95,7 +95,8 @@ impl HostVFlashManager {
         let path = format!("/HostVFlashManager/{moId}/ConfigureVFlashResourceEx_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieve the default supported configuration for a given vFlash module
@@ -123,7 +124,8 @@ impl HostVFlashManager {
         let path = format!("/HostVFlashManager/{moId}/HostGetVFlashModuleDefaultConfig", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VirtualDiskVFlashCacheConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VirtualDiskVFlashCacheConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Remove vFlash resource on the host by destroying the contained VFFS volume.
@@ -150,31 +152,120 @@ impl HostVFlashManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostVFlashManagerVFlashConfigInfo>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostVFlashManagerVFlashConfigInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct HostConfigVFlashCacheRequestType<'a> {
     spec: &'a crate::types::structs::HostVFlashManagerVFlashCacheConfigSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HostConfigVFlashCacheRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HostConfigVFlashCacheRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HostConfigVFlashCacheRequestTypeSer<'b, 'a> {
+    data: &'b HostConfigVFlashCacheRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for HostConfigVFlashCacheRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostConfigVFlashCacheRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct HostConfigureVFlashResourceRequestType<'a> {
     spec: &'a crate::types::structs::HostVFlashManagerVFlashResourceConfigSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HostConfigureVFlashResourceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HostConfigureVFlashResourceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HostConfigureVFlashResourceRequestTypeSer<'b, 'a> {
+    data: &'b HostConfigureVFlashResourceRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for HostConfigureVFlashResourceRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostConfigureVFlashResourceRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ConfigureVFlashResourceExRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "devicePath")]
     device_path: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ConfigureVFlashResourceExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ConfigureVFlashResourceExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ConfigureVFlashResourceExRequestTypeSer<'b, 'a> {
+    data: &'b ConfigureVFlashResourceExRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ConfigureVFlashResourceExRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ConfigureVFlashResourceExRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.device_path else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("devicePath"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct HostGetVFlashModuleDefaultConfigRequestType<'a> {
-    #[serde(rename = "vFlashModule")]
     v_flash_module: &'a str,
+}
+
+impl<'a> miniserde::Serialize for HostGetVFlashModuleDefaultConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HostGetVFlashModuleDefaultConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HostGetVFlashModuleDefaultConfigRequestTypeSer<'b, 'a> {
+    data: &'b HostGetVFlashModuleDefaultConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for HostGetVFlashModuleDefaultConfigRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostGetVFlashModuleDefaultConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vFlashModule"), &self.data.v_flash_module as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

@@ -223,7 +223,10 @@ impl GuestAliasManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::GuestAliases>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestAliases>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -282,7 +285,10 @@ impl GuestAliasManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::GuestMappedAliases>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestMappedAliases>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -425,48 +431,163 @@ impl GuestAliasManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AddGuestAliasRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     username: &'a str,
-    #[serde(rename = "mapCert")]
     map_cert: bool,
-    #[serde(rename = "base64Cert")]
     base_64_cert: &'a str,
-    #[serde(rename = "aliasInfo")]
     alias_info: &'a crate::types::structs::GuestAuthAliasInfo,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddGuestAliasRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddGuestAliasRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddGuestAliasRequestTypeSer<'b, 'a> {
+    data: &'b AddGuestAliasRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for AddGuestAliasRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddGuestAliasRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("username"), &self.data.username as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("mapCert"), &self.data.map_cert as &dyn miniserde::Serialize)),
+            5 => return Some((std::borrow::Cow::Borrowed("base64Cert"), &self.data.base_64_cert as &dyn miniserde::Serialize)),
+            6 => return Some((std::borrow::Cow::Borrowed("aliasInfo"), &self.data.alias_info as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ListGuestAliasesRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     username: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ListGuestAliasesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListGuestAliasesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListGuestAliasesRequestTypeSer<'b, 'a> {
+    data: &'b ListGuestAliasesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ListGuestAliasesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListGuestAliasesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("username"), &self.data.username as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ListGuestMappedAliasesRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ListGuestMappedAliasesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListGuestMappedAliasesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListGuestMappedAliasesRequestTypeSer<'b, 'a> {
+    data: &'b ListGuestMappedAliasesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ListGuestMappedAliasesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListGuestMappedAliasesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveGuestAliasRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     username: &'a str,
-    #[serde(rename = "base64Cert")]
     base_64_cert: &'a str,
     subject: &'a dyn crate::types::traits::GuestAuthSubjectTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveGuestAliasRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveGuestAliasRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveGuestAliasRequestTypeSer<'b, 'a> {
+    data: &'b RemoveGuestAliasRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveGuestAliasRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveGuestAliasRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("username"), &self.data.username as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("base64Cert"), &self.data.base_64_cert as &dyn miniserde::Serialize)),
+            5 => return Some((std::borrow::Cow::Borrowed("subject"), &self.data.subject as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveGuestAliasByCertRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
     username: &'a str,
-    #[serde(rename = "base64Cert")]
     base_64_cert: &'a str,
+}
+
+impl<'a> miniserde::Serialize for RemoveGuestAliasByCertRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveGuestAliasByCertRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveGuestAliasByCertRequestTypeSer<'b, 'a> {
+    data: &'b RemoveGuestAliasByCertRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveGuestAliasByCertRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveGuestAliasByCertRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("username"), &self.data.username as &dyn miniserde::Serialize)),
+            4 => return Some((std::borrow::Cow::Borrowed("base64Cert"), &self.data.base_64_cert as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

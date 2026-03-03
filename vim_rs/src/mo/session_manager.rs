@@ -43,7 +43,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/AcquireCloneTicket", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates and returns a one-time credential that may be used to make the
@@ -79,7 +80,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/AcquireGenericServiceTicket", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::SessionManagerGenericServiceTicket = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::SessionManagerGenericServiceTicket = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Acquires a one-time ticket for mutual authentication between a server and client.
@@ -126,7 +128,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/AcquireLocalTicket", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::SessionManagerLocalTicket = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::SessionManagerLocalTicket = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Clone the session specified by the clone ticket and associate it with
@@ -159,7 +162,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/CloneSession", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Converts current session to impersonate the specified user.
@@ -197,7 +201,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/ImpersonateUser", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Log on to the server.
@@ -247,7 +252,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/Login", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 5.1 for VirtualCenter login use SSO style
@@ -314,7 +320,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/LoginBySSPI", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Log on to the server through token representing principal identity.
@@ -372,7 +379,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/LoginByToken", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use SSO style of login instead
@@ -421,7 +429,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/LoginExtension", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.0, use SSO style of login instead
@@ -471,7 +480,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/LoginExtensionByCertificate", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.0, use SSO style of login instead
@@ -524,7 +534,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/LoginExtensionBySubjectName", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::UserSession = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Log out and terminate the current session.
@@ -555,7 +566,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/SessionIsActive", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Sets the session locale.
@@ -639,7 +651,10 @@ impl SessionManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::UserSession>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::UserSession>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -650,7 +665,8 @@ impl SessionManager {
         let path = format!("/SessionManager/{moId}/defaultLocale", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// The system global message from the server.
@@ -661,7 +677,10 @@ impl SessionManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<String>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -673,7 +692,10 @@ impl SessionManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -685,7 +707,10 @@ impl SessionManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::UserSession>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::UserSession>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -702,106 +727,428 @@ impl SessionManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AcquireGenericServiceTicketRequestType<'a> {
     spec: &'a dyn crate::types::traits::SessionManagerServiceRequestSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AcquireGenericServiceTicketRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AcquireGenericServiceTicketRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AcquireGenericServiceTicketRequestTypeSer<'b, 'a> {
+    data: &'b AcquireGenericServiceTicketRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for AcquireGenericServiceTicketRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AcquireGenericServiceTicketRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct AcquireLocalTicketRequestType<'a> {
-    #[serde(rename = "userName")]
     user_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AcquireLocalTicketRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AcquireLocalTicketRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AcquireLocalTicketRequestTypeSer<'b, 'a> {
+    data: &'b AcquireLocalTicketRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for AcquireLocalTicketRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AcquireLocalTicketRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("userName"), &self.data.user_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CloneSessionRequestType<'a> {
-    #[serde(rename = "cloneTicket")]
     clone_ticket: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CloneSessionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CloneSessionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CloneSessionRequestTypeSer<'b, 'a> {
+    data: &'b CloneSessionRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CloneSessionRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CloneSessionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cloneTicket"), &self.data.clone_ticket as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ImpersonateUserRequestType<'a> {
-    #[serde(rename = "userName")]
     user_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     locale: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ImpersonateUserRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ImpersonateUserRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ImpersonateUserRequestTypeSer<'b, 'a> {
+    data: &'b ImpersonateUserRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ImpersonateUserRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ImpersonateUserRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("userName"), &self.data.user_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.locale else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("locale"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct LoginRequestType<'a> {
-    #[serde(rename = "userName")]
     user_name: &'a str,
     password: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     locale: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "LoginBySSPIRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for LoginRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(LoginRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct LoginRequestTypeSer<'b, 'a> {
+    data: &'b LoginRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for LoginRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"LoginRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("userName"), &self.data.user_name as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("password"), &self.data.password as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.locale else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("locale"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct LoginBySspiRequestType<'a> {
-    #[serde(rename = "base64Token")]
     base_64_token: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     locale: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for LoginBySspiRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(LoginBySspiRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct LoginBySspiRequestTypeSer<'b, 'a> {
+    data: &'b LoginBySspiRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for LoginBySspiRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"LoginBySSPIRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("base64Token"), &self.data.base_64_token as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.locale else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("locale"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct LoginByTokenRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     locale: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for LoginByTokenRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(LoginByTokenRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct LoginByTokenRequestTypeSer<'b, 'a> {
+    data: &'b LoginByTokenRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for LoginByTokenRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"LoginByTokenRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.locale else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("locale"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct LoginExtensionRequestType<'a> {
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
-    #[serde(rename = "base64SignedCredentials")]
     base_64_signed_credentials: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     locale: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for LoginExtensionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(LoginExtensionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct LoginExtensionRequestTypeSer<'b, 'a> {
+    data: &'b LoginExtensionRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for LoginExtensionRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"LoginExtensionRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("base64SignedCredentials"), &self.data.base_64_signed_credentials as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.locale else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("locale"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct LoginExtensionByCertificateRequestType<'a> {
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     locale: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for LoginExtensionByCertificateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(LoginExtensionByCertificateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct LoginExtensionByCertificateRequestTypeSer<'b, 'a> {
+    data: &'b LoginExtensionByCertificateRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for LoginExtensionByCertificateRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"LoginExtensionByCertificateRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.locale else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("locale"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct LoginExtensionBySubjectNameRequestType<'a> {
-    #[serde(rename = "extensionKey")]
     extension_key: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     locale: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for LoginExtensionBySubjectNameRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(LoginExtensionBySubjectNameRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct LoginExtensionBySubjectNameRequestTypeSer<'b, 'a> {
+    data: &'b LoginExtensionBySubjectNameRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for LoginExtensionBySubjectNameRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"LoginExtensionBySubjectNameRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("extensionKey"), &self.data.extension_key as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.locale else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("locale"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct SessionIsActiveRequestType<'a> {
-    #[serde(rename = "sessionID")]
     session_id: &'a str,
-    #[serde(rename = "userName")]
     user_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SessionIsActiveRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SessionIsActiveRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SessionIsActiveRequestTypeSer<'b, 'a> {
+    data: &'b SessionIsActiveRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for SessionIsActiveRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SessionIsActiveRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("sessionID"), &self.data.session_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("userName"), &self.data.user_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetLocaleRequestType<'a> {
     locale: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetLocaleRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetLocaleRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetLocaleRequestTypeSer<'b, 'a> {
+    data: &'b SetLocaleRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for SetLocaleRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetLocaleRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("locale"), &self.data.locale as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct TerminateSessionRequestType<'a> {
-    #[serde(rename = "sessionId")]
     session_id: &'a [String],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for TerminateSessionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(TerminateSessionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct TerminateSessionRequestTypeSer<'b, 'a> {
+    data: &'b TerminateSessionRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for TerminateSessionRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"TerminateSessionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("sessionId"), &self.data.session_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateServiceMessageRequestType<'a> {
     message: &'a str,
+}
+
+impl<'a> miniserde::Serialize for UpdateServiceMessageRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateServiceMessageRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateServiceMessageRequestTypeSer<'b, 'a> {
+    data: &'b UpdateServiceMessageRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateServiceMessageRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateServiceMessageRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("message"), &self.data.message as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

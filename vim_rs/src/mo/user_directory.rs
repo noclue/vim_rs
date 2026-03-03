@@ -104,7 +104,10 @@ impl UserDirectory {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::UserSearchResultTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::UserSearchResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -117,28 +120,60 @@ impl UserDirectory {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct RetrieveUserGroupsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     domain: Option<&'a str>,
-    #[serde(rename = "searchStr")]
     search_str: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "belongsToGroup")]
     belongs_to_group: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "belongsToUser")]
     belongs_to_user: Option<&'a str>,
-    #[serde(rename = "exactMatch")]
     exact_match: bool,
-    #[serde(rename = "findUsers")]
     find_users: bool,
-    #[serde(rename = "findGroups")]
     find_groups: bool,
+}
+
+impl<'a> miniserde::Serialize for RetrieveUserGroupsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveUserGroupsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveUserGroupsRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveUserGroupsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveUserGroupsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveUserGroupsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.domain else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("domain"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("searchStr"), &self.data.search_str as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.belongs_to_group else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("belongsToGroup"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.belongs_to_user else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("belongsToUser"), val as &dyn miniserde::Serialize));
+                }
+                5 => return Some((std::borrow::Cow::Borrowed("exactMatch"), &self.data.exact_match as &dyn miniserde::Serialize)),
+                6 => return Some((std::borrow::Cow::Borrowed("findUsers"), &self.data.find_users as &dyn miniserde::Serialize)),
+                7 => return Some((std::borrow::Cow::Borrowed("findGroups"), &self.data.find_groups as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
 }

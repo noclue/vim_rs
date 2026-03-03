@@ -65,7 +65,8 @@ impl ProfileComplianceManager {
         let path = format!("/ProfileComplianceManager/{moId}/CheckCompliance_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Clear the saved ComplianceResult based on profile and entity filtering criteria.
@@ -120,7 +121,10 @@ impl ProfileComplianceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ComplianceResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -144,41 +148,155 @@ impl ProfileComplianceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ProfileExpressionMetadata>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ProfileExpressionMetadata>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CheckComplianceRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [crate::types::structs::ManagedObjectReference]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckComplianceRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckComplianceRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckComplianceRequestTypeSer<'b, 'a> {
+    data: &'b CheckComplianceRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CheckComplianceRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckComplianceRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.entity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entity"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ClearComplianceStatusRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [crate::types::structs::ManagedObjectReference]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ClearComplianceStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ClearComplianceStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ClearComplianceStatusRequestTypeSer<'b, 'a> {
+    data: &'b ClearComplianceStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ClearComplianceStatusRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ClearComplianceStatusRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.entity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entity"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryComplianceStatusRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a [crate::types::structs::ManagedObjectReference]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entity: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryComplianceStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryComplianceStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryComplianceStatusRequestTypeSer<'b, 'a> {
+    data: &'b QueryComplianceStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryComplianceStatusRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryComplianceStatusRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.entity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entity"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryExpressionMetadataRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "expressionName")]
     expression_name: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a crate::types::structs::ManagedObjectReference>,
+}
+
+impl<'a> miniserde::Serialize for QueryExpressionMetadataRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryExpressionMetadataRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryExpressionMetadataRequestTypeSer<'b, 'a> {
+    data: &'b QueryExpressionMetadataRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryExpressionMetadataRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryExpressionMetadataRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.expression_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("expressionName"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

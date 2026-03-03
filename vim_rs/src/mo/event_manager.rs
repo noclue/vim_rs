@@ -56,7 +56,10 @@ impl EventManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::Event>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Event>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -92,7 +95,8 @@ impl EventManager {
         let path = format!("/EventManager/{moId}/CreateCollectorForEvents", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Logs a user defined event against a particular managed entity.
@@ -172,7 +176,10 @@ impl EventManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::EventArgDesc>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::EventArgDesc>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -183,7 +190,8 @@ impl EventManager {
         let path = format!("/EventManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::EventDescription = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::EventDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// The latest event that happened on the VirtualCenter server.
@@ -194,7 +202,10 @@ impl EventManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::Event>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::Event>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -206,41 +217,154 @@ impl EventManager {
         let path = format!("/EventManager/{moId}/maxCollector", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: i32 = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct QueryEventsRequestType<'a> {
     filter: &'a crate::types::structs::EventFilterSpec,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "eventViewSpec")]
     event_view_spec: Option<&'a dyn crate::types::traits::EventManagerEventViewSpecTrait>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryEventsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryEventsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryEventsRequestTypeSer<'b, 'a> {
+    data: &'b QueryEventsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryEventsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryEventsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("filter"), &self.data.filter as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.event_view_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("eventViewSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateCollectorForEventsRequestType<'a> {
     filter: &'a crate::types::structs::EventFilterSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateCollectorForEventsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateCollectorForEventsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateCollectorForEventsRequestTypeSer<'b, 'a> {
+    data: &'b CreateCollectorForEventsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateCollectorForEventsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateCollectorForEventsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filter"), &self.data.filter as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct LogUserEventRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
     msg: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for LogUserEventRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(LogUserEventRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct LogUserEventRequestTypeSer<'b, 'a> {
+    data: &'b LogUserEventRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for LogUserEventRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"LogUserEventRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("msg"), &self.data.msg as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PostEventRequestType<'a> {
-    #[serde(rename = "eventToPost")]
     event_to_post: &'a crate::types::structs::Event,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "taskInfo")]
     task_info: Option<&'a crate::types::structs::TaskInfo>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for PostEventRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PostEventRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PostEventRequestTypeSer<'b, 'a> {
+    data: &'b PostEventRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for PostEventRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"PostEventRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("eventToPost"), &self.data.event_to_post as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.task_info else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("taskInfo"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RetrieveArgumentDescriptionRequestType<'a> {
-    #[serde(rename = "eventTypeId")]
     event_type_id: &'a str,
+}
+
+impl<'a> miniserde::Serialize for RetrieveArgumentDescriptionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveArgumentDescriptionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveArgumentDescriptionRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveArgumentDescriptionRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveArgumentDescriptionRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveArgumentDescriptionRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("eventTypeId"), &self.data.event_type_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

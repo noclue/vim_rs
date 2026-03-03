@@ -43,7 +43,8 @@ impl DirectPathProfileManager {
         let path = format!("/DirectPathProfileManager/{moId}/DirectPathProfileManagerCreate", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Delete a DirectPath profile.
@@ -96,7 +97,10 @@ impl DirectPathProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DirectPathProfileInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DirectPathProfileInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -144,7 +148,10 @@ impl DirectPathProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::DirectPathProfileManagerCapacityResultTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::DirectPathProfileManagerCapacityResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -179,33 +186,142 @@ impl DirectPathProfileManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct DirectPathProfileManagerCreateRequestType<'a> {
     spec: &'a crate::types::structs::DirectPathProfileManagerCreateSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DirectPathProfileManagerCreateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DirectPathProfileManagerCreateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DirectPathProfileManagerCreateRequestTypeSer<'b, 'a> {
+    data: &'b DirectPathProfileManagerCreateRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerCreateRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DirectPathProfileManagerCreateRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DirectPathProfileManagerDeleteRequestType<'a> {
     id: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DirectPathProfileManagerDeleteRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DirectPathProfileManagerDeleteRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DirectPathProfileManagerDeleteRequestTypeSer<'b, 'a> {
+    data: &'b DirectPathProfileManagerDeleteRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerDeleteRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DirectPathProfileManagerDeleteRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DirectPathProfileManagerListRequestType<'a> {
-    #[serde(rename = "filterSpec")]
     filter_spec: &'a crate::types::structs::DirectPathProfileManagerFilterSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DirectPathProfileManagerListRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DirectPathProfileManagerListRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DirectPathProfileManagerListRequestTypeSer<'b, 'a> {
+    data: &'b DirectPathProfileManagerListRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerListRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DirectPathProfileManagerListRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("filterSpec"), &self.data.filter_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DirectPathProfileManagerQueryCapacityRequestType<'a> {
     target: &'a dyn crate::types::traits::DirectPathProfileManagerTargetEntityTrait,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "querySpec")]
     query_spec: Option<&'a [Box<dyn crate::types::traits::DirectPathProfileManagerCapacityQuerySpecTrait>]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DirectPathProfileManagerQueryCapacityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DirectPathProfileManagerQueryCapacityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DirectPathProfileManagerQueryCapacityRequestTypeSer<'b, 'a> {
+    data: &'b DirectPathProfileManagerQueryCapacityRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerQueryCapacityRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DirectPathProfileManagerQueryCapacityRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("target"), &self.data.target as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.query_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("querySpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct DirectPathProfileManagerUpdateRequestType<'a> {
     id: &'a str,
     spec: &'a crate::types::structs::DirectPathProfileManagerUpdateSpec,
+}
+
+impl<'a> miniserde::Serialize for DirectPathProfileManagerUpdateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DirectPathProfileManagerUpdateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DirectPathProfileManagerUpdateRequestTypeSer<'b, 'a> {
+    data: &'b DirectPathProfileManagerUpdateRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DirectPathProfileManagerUpdateRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DirectPathProfileManagerUpdateRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

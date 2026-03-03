@@ -1,4 +1,4 @@
-use serde::de;
+miniserde::make_place!(Place);
 
 /// List of all VIM structure types used in serialization and type casts.
 ///
@@ -12480,19 +12480,22 @@ impl StructType {
     }
 }
 
-impl serde::Serialize for StructType {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for StructType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> de::Deserialize<'de> for StructType {
-    fn deserialize<D: de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        StructType::from_str(&s).ok_or_else(|| de::Error::custom("Invalid struct type name"))
+impl miniserde::Deserialize for StructType {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<StructType> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = StructType::from_str(s);
+        if self.out.is_some() { Ok(()) } else { Err(miniserde::Error) }
     }
 }
 

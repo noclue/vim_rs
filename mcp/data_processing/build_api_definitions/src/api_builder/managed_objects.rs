@@ -1,6 +1,6 @@
 use api_database::*;
 use crate::api_builder::signature_generator;
-use vim_build::vim_model::Model;
+use vim_build::vim_model::{Model, HttpMethod};
 use vim_build::rs_emitter::names::to_fn_name;
 use std::path::Path;
 use chrono::Utc;
@@ -28,6 +28,7 @@ pub fn build_managed_objects(model: &Model) -> Vec<ManagedObjectEntry> {
                 name: to_fn_name(&method.name),
                 signature,
                 description: method.description.clone(),  // Raw markdown - no parsing!
+                is_property_accessor: method.http_method == HttpMethod::Get,
             });
         }
 

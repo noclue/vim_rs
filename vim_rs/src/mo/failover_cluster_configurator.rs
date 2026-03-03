@@ -60,7 +60,8 @@ impl FailoverClusterConfigurator {
         let path = format!("/FailoverClusterConfigurator/{moId}/configureVcha_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a Passive node in a degraded VCHA Cluster with node location
@@ -90,7 +91,8 @@ impl FailoverClusterConfigurator {
         let path = format!("/FailoverClusterConfigurator/{moId}/createPassiveNode_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Creates a Witness node in a degraded VCHA Cluster with node location
@@ -120,7 +122,8 @@ impl FailoverClusterConfigurator {
         let path = format!("/FailoverClusterConfigurator/{moId}/createWitnessNode_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deploys and Configures VCHA on the local vCenter as a single API.
@@ -156,7 +159,8 @@ impl FailoverClusterConfigurator {
         let path = format!("/FailoverClusterConfigurator/{moId}/deployVcha_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Destroys the VCHA cluster setup and removes all VCHA specific
@@ -179,7 +183,8 @@ impl FailoverClusterConfigurator {
         let path = format!("/FailoverClusterConfigurator/{moId}/destroyVcha_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns the configuration information for each node that is part of
@@ -195,7 +200,8 @@ impl FailoverClusterConfigurator {
         let path = format!("/FailoverClusterConfigurator/{moId}/getVchaConfig", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VchaClusterConfigInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VchaClusterConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Prepares the vCenter appliance for a VCHA cluster deployment.
@@ -227,7 +233,8 @@ impl FailoverClusterConfigurator {
         let path = format!("/FailoverClusterConfigurator/{moId}/prepareVcha_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// A list of method names that must not be called and will throw
@@ -248,42 +255,145 @@ impl FailoverClusterConfigurator {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<String>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "configureVchaRequestType", tag = "_typeName")]
 struct ConfigureVchaRequestType<'a> {
-    #[serde(rename = "configSpec")]
     config_spec: &'a crate::types::structs::VchaClusterConfigSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "createPassiveNodeRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for ConfigureVchaRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ConfigureVchaRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ConfigureVchaRequestTypeSer<'b, 'a> {
+    data: &'b ConfigureVchaRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ConfigureVchaRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"configureVchaRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("configSpec"), &self.data.config_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreatePassiveNodeRequestType<'a> {
-    #[serde(rename = "passiveDeploymentSpec")]
     passive_deployment_spec: &'a crate::types::structs::PassiveNodeDeploymentSpec,
-    #[serde(rename = "sourceVcSpec")]
     source_vc_spec: &'a crate::types::structs::SourceNodeSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "createWitnessNodeRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for CreatePassiveNodeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreatePassiveNodeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreatePassiveNodeRequestTypeSer<'b, 'a> {
+    data: &'b CreatePassiveNodeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreatePassiveNodeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"createPassiveNodeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("passiveDeploymentSpec"), &self.data.passive_deployment_spec as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("sourceVcSpec"), &self.data.source_vc_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateWitnessNodeRequestType<'a> {
-    #[serde(rename = "witnessDeploymentSpec")]
     witness_deployment_spec: &'a dyn crate::types::traits::NodeDeploymentSpecTrait,
-    #[serde(rename = "sourceVcSpec")]
     source_vc_spec: &'a crate::types::structs::SourceNodeSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "deployVchaRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for CreateWitnessNodeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateWitnessNodeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateWitnessNodeRequestTypeSer<'b, 'a> {
+    data: &'b CreateWitnessNodeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateWitnessNodeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"createWitnessNodeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("witnessDeploymentSpec"), &self.data.witness_deployment_spec as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("sourceVcSpec"), &self.data.source_vc_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DeployVchaRequestType<'a> {
-    #[serde(rename = "deploymentSpec")]
     deployment_spec: &'a crate::types::structs::VchaClusterDeploymentSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "prepareVchaRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for DeployVchaRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeployVchaRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeployVchaRequestTypeSer<'b, 'a> {
+    data: &'b DeployVchaRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DeployVchaRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"deployVchaRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("deploymentSpec"), &self.data.deployment_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct PrepareVchaRequestType<'a> {
-    #[serde(rename = "networkSpec")]
     network_spec: &'a crate::types::structs::VchaClusterNetworkSpec,
+}
+
+impl<'a> miniserde::Serialize for PrepareVchaRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(PrepareVchaRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct PrepareVchaRequestTypeSer<'b, 'a> {
+    data: &'b PrepareVchaRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for PrepareVchaRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"prepareVchaRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("networkSpec"), &self.data.network_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

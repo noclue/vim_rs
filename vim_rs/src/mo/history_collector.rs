@@ -101,13 +101,34 @@ impl HistoryCollector {
         let path = format!("/HistoryCollector/{moId}/filter", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::vim_any::VimAny = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::vim_any::VimAny = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct SetCollectorPageSizeRequestType {
-    #[serde(rename = "maxCount")]
     max_count: i32,
+}
+
+impl miniserde::Serialize for SetCollectorPageSizeRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetCollectorPageSizeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetCollectorPageSizeRequestTypeSer<'b> {
+    data: &'b SetCollectorPageSizeRequestType,
+    seq: usize,
+}
+
+impl<'b> miniserde::ser::Map for SetCollectorPageSizeRequestTypeSer<'b> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetCollectorPageSizeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("maxCount"), &self.data.max_count as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

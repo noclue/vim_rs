@@ -8,7 +8,7 @@ pub fn generate_struct_enum(
     vim_model: &Model,
     printer: &mut dyn Printer,
 ) -> rs_emitter::errors::Result<()> {
-    printer.println("use serde::de;")?;
+    printer.println("miniserde::make_place!(Place);")?;
     printer.newline()?;
     
     printer.println("/// List of all VIM structure types used in serialization and type casts.")?;
@@ -132,18 +132,11 @@ fn generate_struct_type_impl(
 fn generate_serialize_impl(
     printer: &mut dyn Printer,
 ) -> rs_emitter::errors::Result<()> {
-    printer.println("impl serde::Serialize for StructType {")?;
+    printer.println("impl miniserde::Serialize for StructType {")?;
     printer.indent();
-    printer.println("fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>")?;
+    printer.println("fn begin(&self) -> miniserde::ser::Fragment<'_> {")?;
     printer.indent();
-    printer.println("where")?;
-    printer.indent();
-    printer.println("S: serde::Serializer,")?;
-    printer.dedent();
-    printer.dedent();
-    printer.println("{")?;
-    printer.indent();
-    printer.println("serializer.serialize_str(self.as_str())")?;
+    printer.println("miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))")?;
     printer.dedent();
     printer.println("}")?;
     printer.dedent();
@@ -154,12 +147,22 @@ fn generate_serialize_impl(
 fn generate_deserialize_impl(
     printer: &mut dyn Printer,
 ) -> rs_emitter::errors::Result<()> {
-    printer.println("impl<'de> de::Deserialize<'de> for StructType {")?;
+    printer.println("impl miniserde::Deserialize for StructType {")?;
     printer.indent();
-    printer.println("fn deserialize<D: de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {")?;
+    printer.println("fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {")?;
     printer.indent();
-    printer.println("let s = String::deserialize(deserializer)?;")?;
-    printer.println("StructType::from_str(&s).ok_or_else(|| de::Error::custom(\"Invalid struct type name\"))")?;
+    printer.println("Place::new(out)")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.newline()?;
+    printer.println("impl miniserde::de::Visitor for Place<StructType> {")?;
+    printer.indent();
+    printer.println("fn string(&mut self, s: &str) -> miniserde::Result<()> {")?;
+    printer.indent();
+    printer.println("self.out = StructType::from_str(s);")?;
+    printer.println("if self.out.is_some() { Ok(()) } else { Err(miniserde::Error) }")?;
     printer.dedent();
     printer.println("}")?;
     printer.dedent();

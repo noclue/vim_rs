@@ -34,9 +34,10 @@ use vim_mcp_server::EMBEDDING_MODEL;
 #[cfg(feature = "web-ui")]
 mod web_ui;
 
-// CUDA GPU acceleration (optional)
 #[cfg(feature = "cuda")]
 use ort::execution_providers::CUDAExecutionProvider;
+#[cfg(feature = "coreml")]
+use ort::execution_providers::{CoreMLExecutionProvider, coreml::{ModelFormat, ComputeUnits}};
 
 // ============================================================================
 // CLI Arguments
@@ -179,6 +180,11 @@ struct GetPropertyTreeInput {
     #[schemars(description = "Maximum depth to traverse (1-5). Use lower values to reduce output size. Default is 5.")]
     #[serde(default = "default_depth")]
     depth: u8,
+
+    /// Optional regex pattern to filter property paths
+    #[schemars(description = "Optional regex pattern to filter property paths. Only paths matching the pattern are included (e.g., 'mac|address' to find MAC-related fields).")]
+    #[serde(default)]
+    filter: String,
 }
 
 fn default_depth() -> u8 {
@@ -219,16 +225,33 @@ impl McpServer {
                 info!("Loading embedded BGE-small-en-v1.5 model...");
                 let user_model = vim_mcp_server::embedded_model::create_embedded_model();
                 
-                #[cfg(feature = "cuda")]
+                #[cfg(any(feature = "cuda", feature = "coreml"))]
                 let init_options = {
-                    info!("CUDA feature enabled - attempting GPU acceleration");
+                    let mut providers = Vec::new();
+
+                    #[cfg(feature = "cuda")]
+                    {
+                        info!("CUDA feature enabled - attempting GPU acceleration");
+                        providers.push(CUDAExecutionProvider::default().build());
+                    }
+
+                    #[cfg(feature = "coreml")]
+                    {
+                        info!("CoreML feature enabled - using Apple Neural Engine acceleration");
+                        providers.push(
+                            CoreMLExecutionProvider::default()
+                                .with_model_format(ModelFormat::MLProgram)
+                                .with_static_input_shapes(true)
+                                .with_compute_units(ComputeUnits::CPUAndGPU)
+                                .build()
+                        );
+                    }
+
                     InitOptionsUserDefined::new()
-                        .with_execution_providers(vec![
-                            CUDAExecutionProvider::default().build()
-                        ])
+                        .with_execution_providers(providers)
                 };
                 
-                #[cfg(not(feature = "cuda"))]
+                #[cfg(not(any(feature = "cuda", feature = "coreml")))]
                 let init_options = InitOptionsUserDefined::new();
                 
                 TextEmbedding::try_new_from_user_defined(user_model, init_options)
@@ -250,19 +273,38 @@ impl McpServer {
 
                 info!("Loading embedding model from cache: {}", model_cache_dir.display());
 
-                // Configure execution providers: CUDA if available, fallback to CPU
-                #[cfg(feature = "cuda")]
+                #[cfg(any(feature = "cuda", feature = "coreml"))]
                 let init_options = {
-                    info!("CUDA feature enabled - attempting GPU acceleration");
+                    let mut providers = Vec::new();
+
+                    #[cfg(feature = "cuda")]
+                    {
+                        info!("CUDA feature enabled - attempting GPU acceleration");
+                        providers.push(CUDAExecutionProvider::default().build());
+                    }
+
+                    #[cfg(feature = "coreml")]
+                    {
+                        info!("CoreML feature enabled - using Apple Neural Engine acceleration");
+                        let coreml_cache = model_cache_dir.join("coreml_cache");
+                        std::fs::create_dir_all(&coreml_cache).ok();
+                        providers.push(
+                            CoreMLExecutionProvider::default()
+                                .with_model_format(ModelFormat::MLProgram)
+                                .with_static_input_shapes(true)
+                                .with_compute_units(ComputeUnits::CPUAndGPU)
+                                .with_model_cache_dir(coreml_cache.display().to_string())
+                                .build()
+                        );
+                    }
+
                     InitOptions::new(EMBEDDING_MODEL)
                         .with_cache_dir(model_cache_dir)
                         .with_show_download_progress(false)
-                        .with_execution_providers(vec![
-                            CUDAExecutionProvider::default().build()
-                        ])
+                        .with_execution_providers(providers)
                 };
 
-                #[cfg(not(feature = "cuda"))]
+                #[cfg(not(any(feature = "cuda", feature = "coreml")))]
                 let init_options = InitOptions::new(EMBEDDING_MODEL)
                     .with_cache_dir(model_cache_dir)
                     .with_show_download_progress(false);
@@ -439,13 +481,28 @@ impl McpServer {
     }
 
     /// Get the complete property tree for a managed object type
-    #[tool(description = "Get property paths for a managed object type. Shows flat dot-separated paths (e.g., 'config.hardware.device') with Rust types. Optional-ness propagates from parent to child. Use 'depth' (1-5) to limit output.")]
+    #[tool(description = "Get property paths for a managed object type. Shows flat dot-separated paths (e.g., 'config.hardware.device') with Rust types. Optional-ness propagates from parent to child. Use 'depth' (1-5) to limit output. Use 'filter' (regex) to include only matching paths.")]
     async fn get_property_tree(&self, params: Parameters<GetPropertyTreeInput>) -> Result<CallToolResult, McpError> {
         let managed_object = &params.0.managed_object;
         let start_path = &params.0.start_path;
         let depth = params.0.depth as usize;
+        let filter = params.0.filter.trim();
+        let filter_regex = if filter.is_empty() {
+            None
+        } else {
+            match regex::Regex::new(filter) {
+                Ok(re) => Some(re),
+                Err(e) => {
+                    return Ok(CallToolResult::error(vec![Content::text(format!(
+                        "Invalid regex filter `{}`: {}\n\n\
+                        Provide a valid Rust-flavour regex, or omit the filter to return all paths.",
+                        filter, e
+                    ))]));
+                }
+            }
+        };
 
-        match property_collector::get_property_tree(managed_object, start_path, depth) {
+        match property_collector::get_property_tree(managed_object, start_path, depth, filter_regex.as_ref()) {
             Ok(tree) => {
                 let title = if start_path.is_empty() {
                     managed_object.to_string()

@@ -173,7 +173,8 @@ impl FileManager {
         let path = format!("/FileManager/{moId}/CopyDatastoreFile_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Deletes the specified file or folder from the datastore.
@@ -236,7 +237,8 @@ impl FileManager {
         let path = format!("/FileManager/{moId}/DeleteDatastoreFile_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create a folder using the specified name.
@@ -398,7 +400,8 @@ impl FileManager {
         let path = format!("/FileManager/{moId}/MoveDatastoreFile_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Fetches as much information as possible for the file path passed in.
@@ -441,71 +444,237 @@ impl FileManager {
         let path = format!("/FileManager/{moId}/QueryFileLockInfo", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::FileLockInfoResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::FileLockInfoResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ChangeOwnerRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
     owner: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ChangeOwnerRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ChangeOwnerRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ChangeOwnerRequestTypeSer<'b, 'a> {
+    data: &'b ChangeOwnerRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ChangeOwnerRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ChangeOwnerRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("owner"), &self.data.owner as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct CopyDatastoreFileRequestType<'a> {
-    #[serde(rename = "sourceName")]
     source_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "sourceDatacenter")]
     source_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "destinationName")]
     destination_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "destinationDatacenter")]
     destination_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CopyDatastoreFileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CopyDatastoreFileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CopyDatastoreFileRequestTypeSer<'b, 'a> {
+    data: &'b CopyDatastoreFileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CopyDatastoreFileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CopyDatastoreFileRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("sourceName"), &self.data.source_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.source_datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("sourceDatacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("destinationName"), &self.data.destination_name as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.destination_datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("destinationDatacenter"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.force else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("force"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct DeleteDatastoreFileRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteDatastoreFileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteDatastoreFileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteDatastoreFileRequestTypeSer<'b, 'a> {
+    data: &'b DeleteDatastoreFileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DeleteDatastoreFileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteDatastoreFileRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct MakeDirectoryRequestType<'a> {
     name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "createParentDirectories")]
     create_parent_directories: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for MakeDirectoryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MakeDirectoryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MakeDirectoryRequestTypeSer<'b, 'a> {
+    data: &'b MakeDirectoryRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for MakeDirectoryRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MakeDirectoryRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("datacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.create_parent_directories else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("createParentDirectories"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct MoveDatastoreFileRequestType<'a> {
-    #[serde(rename = "sourceName")]
     source_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "sourceDatacenter")]
     source_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(rename = "destinationName")]
     destination_name: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "destinationDatacenter")]
     destination_datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     force: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for MoveDatastoreFileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MoveDatastoreFileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MoveDatastoreFileRequestTypeSer<'b, 'a> {
+    data: &'b MoveDatastoreFileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for MoveDatastoreFileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MoveDatastoreFileRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("sourceName"), &self.data.source_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.source_datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("sourceDatacenter"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("destinationName"), &self.data.destination_name as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.destination_datacenter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("destinationDatacenter"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.force else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("force"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryFileLockInfoRequestType<'a> {
     path: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
+}
+
+impl<'a> miniserde::Serialize for QueryFileLockInfoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryFileLockInfoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryFileLockInfoRequestTypeSer<'b, 'a> {
+    data: &'b QueryFileLockInfoRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryFileLockInfoRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryFileLockInfoRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("path"), &self.data.path as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

@@ -1,6 +1,6 @@
 [package]
 name = "vim_rs"
-version = "0.3.0"
+version = "0.4.0"
 edition = "2021"
 authors = ["Kiril Karaatanasov <karaatanasov@gmail.com>"]
 license = "Apache-2.0"
@@ -13,19 +13,20 @@ keywords = ["vi-json", "vim", "bindings", "vcenter", "vmware"]
 categories = ["api-bindings", "network-programming"]
 exclude = ["target/*", "**/*.rs.bk"]
 
+[features]
+defaults = []
+
 [dependencies]
 base64 = "0.22"
 bytes = "1"
-erased-serde = "0.4"
 env_logger = "0.11"
 indexmap = "2.9"
 log = "0.4"
-reqwest = { version = "0.12", features = ["json"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_json = { version = "1.0", features = ["raw_value"] }
+miniserde = "0.1"
+reqwest = { version = "0.12" }
 thiserror = "2.0"
 tokio = { version = "1.44", features = ["rt-multi-thread", "macros", "sync"] }
-vim_macros = { version = "0.3", path = "../vim_macros" }
+vim_macros = { version = "0.4", path = "../vim_macros" }
 phf = "0.13"
 
 [build-dependencies]
@@ -38,5 +39,5 @@ doctest = false
 criterion = { version = "0.5", features = ["html_reports"] }
 
 [[bench]]
-name = "serde_bench"
+name = "miniserde_bench"
 harness = false

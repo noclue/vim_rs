@@ -43,6 +43,7 @@ use vim_rs::types::structs::{PerfEntityMetric, PerfMetricId, PerfMetricIntSeries
 /// * Iterates over the statistics and prints the counter name, instance and value.
 #[tokio::main]
 async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
     env_logger::init();
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
 

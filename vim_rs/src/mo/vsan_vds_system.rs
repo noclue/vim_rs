@@ -44,7 +44,8 @@ impl VsanVdsSystem {
         let path = format!("/vsan/VsanVdsSystem/{moId}/VsanRollbackVdsToVss", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Computes a migration plan to convert the VSS instances per host in
@@ -122,7 +123,8 @@ impl VsanVdsSystem {
         let path = format!("/vsan/VsanVdsSystem/{moId}/VsanVdsGetMigrationPlan", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanVdsMigrationPlan = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanVdsMigrationPlan = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Perform a migration to convert the VSS instances per host in
@@ -223,7 +225,8 @@ impl VsanVdsSystem {
         let path = format!("/vsan/VsanVdsSystem/{moId}/VsanVdsMigrateVss", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Perform a migration to convert the VDS instance in the cluster to a newly
@@ -292,75 +295,208 @@ impl VsanVdsSystem {
         let path = format!("/vsan/VsanVdsSystem/{moId}/VsanVssMigrateVds", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanRollbackVdsToVssRequestType<'a> {
     task: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanRollbackVdsToVssRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanRollbackVdsToVssRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanRollbackVdsToVssRequestTypeSer<'b, 'a> {
+    data: &'b VsanRollbackVdsToVssRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanRollbackVdsToVssRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanRollbackVdsToVssRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("task"), &self.data.task as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct VsanVdsGetMigrationPlanRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vswitchName")]
     vswitch_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vdsName")]
     vds_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vmnicDevices")]
     vmnic_devices: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "infraVm")]
     infra_vm: Option<&'a [crate::types::structs::ManagedObjectReference]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     vds: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVdsGetMigrationPlanRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVdsGetMigrationPlanRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVdsGetMigrationPlanRequestTypeSer<'b, 'a> {
+    data: &'b VsanVdsGetMigrationPlanRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanVdsGetMigrationPlanRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVdsGetMigrationPlanRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.vswitch_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vswitchName"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.vds_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vdsName"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.vmnic_devices else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vmnicDevices"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.infra_vm else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("infraVm"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.vds else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vds"), val as &dyn miniserde::Serialize));
+                }
+                7 => {
+                    let Some(ref val) = self.data.hosts else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hosts"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanVdsMigrateVssRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "migrationPlan")]
     migration_plan: Option<&'a crate::types::structs::VsanVdsMigrationPlan>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vswitchName")]
     vswitch_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vdsName")]
     vds_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vmnicDevices")]
     vmnic_devices: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "infraVm")]
     infra_vm: Option<&'a [crate::types::structs::ManagedObjectReference]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     vds: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanVdsMigrateVssRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVdsMigrateVssRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVdsMigrateVssRequestTypeSer<'b, 'a> {
+    data: &'b VsanVdsMigrateVssRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanVdsMigrateVssRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVdsMigrateVssRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.migration_plan else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("migrationPlan"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.vswitch_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vswitchName"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.vds_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vdsName"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.vmnic_devices else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vmnicDevices"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.infra_vm else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("infraVm"), val as &dyn miniserde::Serialize));
+                }
+                7 => {
+                    let Some(ref val) = self.data.vds else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vds"), val as &dyn miniserde::Serialize));
+                }
+                8 => {
+                    let Some(ref val) = self.data.hosts else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hosts"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanVssMigrateVdsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
     vds: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vswitchName")]
     vswitch_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "vmnicDevices")]
     vmnic_devices: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "infraVm")]
     infra_vm: Option<&'a [crate::types::structs::ManagedObjectReference]>,
+}
+
+impl<'a> miniserde::Serialize for VsanVssMigrateVdsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanVssMigrateVdsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanVssMigrateVdsRequestTypeSer<'b, 'a> {
+    data: &'b VsanVssMigrateVdsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanVssMigrateVdsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanVssMigrateVdsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.hosts else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hosts"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("vds"), &self.data.vds as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.vswitch_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vswitchName"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.vmnic_devices else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("vmnicDevices"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.infra_vm else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("infraVm"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

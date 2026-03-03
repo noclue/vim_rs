@@ -73,7 +73,8 @@ impl VirtualMachineProvisioningChecker {
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckClone_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Tests the feasibility of a proposed
@@ -120,7 +121,8 @@ impl VirtualMachineProvisioningChecker {
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckInstantClone_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Tests the feasibility of a proposed
@@ -185,7 +187,8 @@ impl VirtualMachineProvisioningChecker {
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckMigrate_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Tests the feasibility of a proposed
@@ -249,7 +252,8 @@ impl VirtualMachineProvisioningChecker {
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckRelocate_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Investigates the general VMotion compatibility of a set of virtual machines
@@ -284,56 +288,193 @@ impl VirtualMachineProvisioningChecker {
         let path = format!("/VirtualMachineProvisioningChecker/{moId}/QueryVMotionCompatibilityEx_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CheckCloneRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     folder: &'a crate::types::structs::ManagedObjectReference,
     name: &'a str,
     spec: &'a crate::types::structs::VirtualMachineCloneSpec,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckCloneRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckCloneRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckCloneRequestTypeSer<'b, 'a> {
+    data: &'b CheckCloneRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CheckCloneRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckCloneRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("folder"), &self.data.folder as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                4 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+                5 => {
+                    let Some(ref val) = self.data.test_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("testType"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CheckInstantCloneRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::VirtualMachineInstantCloneSpec,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckInstantCloneRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckInstantCloneRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckInstantCloneRequestTypeSer<'b, 'a> {
+    data: &'b CheckInstantCloneRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CheckInstantCloneRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckInstantCloneRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.test_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("testType"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CheckMigrateRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     pool: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     state: Option<crate::types::enums::VirtualMachinePowerStateEnum>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckMigrateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckMigrateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckMigrateRequestTypeSer<'b, 'a> {
+    data: &'b CheckMigrateRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CheckMigrateRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckMigrateRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.pool else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("pool"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.state else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("state"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.test_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("testType"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CheckRelocateRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::VirtualMachineRelocateSpec,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "testType")]
     test_type: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckRelocateRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckRelocateRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckRelocateRequestTypeSer<'b, 'a> {
+    data: &'b CheckRelocateRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CheckRelocateRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckRelocateRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.test_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("testType"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryVMotionCompatibilityExRequestType<'a> {
     vm: &'a [crate::types::structs::ManagedObjectReference],
     host: &'a [crate::types::structs::ManagedObjectReference],
+}
+
+impl<'a> miniserde::Serialize for QueryVMotionCompatibilityExRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVMotionCompatibilityExRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVMotionCompatibilityExRequestTypeSer<'b, 'a> {
+    data: &'b QueryVMotionCompatibilityExRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryVMotionCompatibilityExRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVMotionCompatibilityExRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

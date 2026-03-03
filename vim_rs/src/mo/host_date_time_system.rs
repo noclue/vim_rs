@@ -32,7 +32,10 @@ impl HostDateTimeSystem {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::HostDateTimeSystemTimeZone>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostDateTimeSystemTimeZone>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -47,7 +50,8 @@ impl HostDateTimeSystem {
         let path = format!("/HostDateTimeSystem/{moId}/QueryDateTime", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Refresh the DateTime related settings to pick up any changes that might
@@ -78,7 +82,10 @@ impl HostDateTimeSystem {
         let req = self.client.post_bare(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::HostDateTimeSystemServiceTestResult>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostDateTimeSystemServiceTestResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -132,18 +139,60 @@ impl HostDateTimeSystem {
         let path = format!("/HostDateTimeSystem/{moId}/dateTimeInfo", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostDateTimeInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostDateTimeInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct UpdateDateTimeConfigRequestType<'a> {
     config: &'a crate::types::structs::HostDateTimeConfig,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateDateTimeConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateDateTimeConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateDateTimeConfigRequestTypeSer<'b, 'a> {
+    data: &'b UpdateDateTimeConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateDateTimeConfigRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateDateTimeConfigRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("config"), &self.data.config as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateDateTimeRequestType<'a> {
-    #[serde(rename = "dateTime")]
     date_time: &'a str,
+}
+
+impl<'a> miniserde::Serialize for UpdateDateTimeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateDateTimeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateDateTimeRequestTypeSer<'b, 'a> {
+    data: &'b UpdateDateTimeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateDateTimeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateDateTimeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("dateTime"), &self.data.date_time as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

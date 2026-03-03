@@ -149,7 +149,8 @@ impl ViewManager {
         let path = format!("/ViewManager/{moId}/CreateContainerView", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create a new *InventoryView* managed object for this session.
@@ -163,7 +164,8 @@ impl ViewManager {
         let path = format!("/ViewManager/{moId}/CreateInventoryView", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create a *ListView* object for this session.
@@ -190,7 +192,8 @@ impl ViewManager {
         let path = format!("/ViewManager/{moId}/CreateListView", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create a *ListView* object for this session.
@@ -216,7 +219,8 @@ impl ViewManager {
         let path = format!("/ViewManager/{moId}/CreateListViewFromView", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// An array of view references.
@@ -234,28 +238,103 @@ impl ViewManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CreateContainerViewRequestType<'a> {
     container: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "type")]
     r#type: Option<&'a [String]>,
     recursive: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateContainerViewRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateContainerViewRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateContainerViewRequestTypeSer<'b, 'a> {
+    data: &'b CreateContainerViewRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateContainerViewRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateContainerViewRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("container"), &self.data.container as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.r#type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("type"), val as &dyn miniserde::Serialize));
+                }
+                3 => return Some((std::borrow::Cow::Borrowed("recursive"), &self.data.recursive as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateListViewRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     obj: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateListViewRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateListViewRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateListViewRequestTypeSer<'b, 'a> {
+    data: &'b CreateListViewRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateListViewRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateListViewRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.obj else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("obj"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateListViewFromViewRequestType<'a> {
     view: &'a crate::types::structs::ManagedObjectReference,
+}
+
+impl<'a> miniserde::Serialize for CreateListViewFromViewRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateListViewFromViewRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateListViewFromViewRequestTypeSer<'b, 'a> {
+    data: &'b CreateListViewFromViewRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateListViewFromViewRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateListViewFromViewRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("view"), &self.data.view as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

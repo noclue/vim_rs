@@ -35,7 +35,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/IsKmsClusterActive", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Add an existing key.
@@ -83,7 +84,10 @@ impl CryptoManagerKmip {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoKeyResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -117,7 +121,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/GenerateClientCsr", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Generate new encryption key.
@@ -150,7 +155,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/GenerateKey", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::CryptoKeyResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::CryptoKeyResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Generate a self-signed client certificate with its private key.
@@ -184,7 +190,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/GenerateSelfSignedClientCert", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the default KMS cluster of the specified managed entity.
@@ -215,7 +222,10 @@ impl CryptoManagerKmip {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::KeyProviderId>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::KeyProviderId>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -242,7 +252,10 @@ impl CryptoManagerKmip {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyId>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoKeyId>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -264,7 +277,10 @@ impl CryptoManagerKmip {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KmipClusterInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::KmipClusterInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -312,7 +328,10 @@ impl CryptoManagerKmip {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KmipClusterInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::KmipClusterInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -359,7 +378,10 @@ impl CryptoManagerKmip {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoManagerKmipCryptoKeyStatus>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoManagerKmipCryptoKeyStatus>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -447,7 +469,10 @@ impl CryptoManagerKmip {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::CryptoKeyResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoKeyResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -485,7 +510,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveClientCert", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the generated client certificate signing request.
@@ -508,7 +534,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveClientCsr", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the server certficate.
@@ -535,7 +562,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveKmipServerCert", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::CryptoManagerKmipServerCertInfo = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::CryptoManagerKmipServerCertInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the status of the KMIP servers.
@@ -555,7 +583,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveKmipServersStatus_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the generated self signed client certificate.
@@ -578,7 +607,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/RetrieveSelfSignedClientCert", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: String = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Set the default KMS cluster for the specified managed entity.
@@ -627,7 +657,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/SetKeyCustomAttributes", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::CryptoKeyResult = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::CryptoKeyResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Unregister the specified KMS cluster from the CryptoManager.
@@ -757,7 +788,8 @@ impl CryptoManagerKmip {
         let path = format!("/CryptoManagerKmip/{moId}/enabled", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// A list of registered KMIP servers, grouped by clusters.
@@ -766,216 +798,919 @@ impl CryptoManagerKmip {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::KmipClusterInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::KmipClusterInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct IsKmsClusterActiveRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::KeyProviderId>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for IsKmsClusterActiveRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(IsKmsClusterActiveRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct IsKmsClusterActiveRequestTypeSer<'b, 'a> {
+    data: &'b IsKmsClusterActiveRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for IsKmsClusterActiveRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"IsKmsClusterActiveRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct AddKeyRequestType<'a> {
     key: &'a crate::types::structs::CryptoKeyPlain,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddKeyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddKeyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddKeyRequestTypeSer<'b, 'a> {
+    data: &'b AddKeyRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for AddKeyRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddKeyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct AddKeysRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     keys: Option<&'a [crate::types::structs::CryptoKeyPlain]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddKeysRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddKeysRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddKeysRequestTypeSer<'b, 'a> {
+    data: &'b AddKeysRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for AddKeysRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddKeysRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.keys else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("keys"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct GenerateClientCsrRequestType<'a> {
     cluster: &'a crate::types::structs::KeyProviderId,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     request: Option<&'a crate::types::structs::CryptoManagerKmipCertSignRequest>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GenerateClientCsrRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GenerateClientCsrRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GenerateClientCsrRequestTypeSer<'b, 'a> {
+    data: &'b GenerateClientCsrRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for GenerateClientCsrRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GenerateClientCsrRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.request else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("request"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct GenerateKeyRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "keyProvider")]
     key_provider: Option<&'a crate::types::structs::KeyProviderId>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     spec: Option<&'a crate::types::structs::CryptoManagerKmipCustomAttributeSpec>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "keySpec")]
     key_spec: Option<&'a crate::types::structs::CryptoManagerKmipGenerateKeySpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GenerateKeyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GenerateKeyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GenerateKeyRequestTypeSer<'b, 'a> {
+    data: &'b GenerateKeyRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for GenerateKeyRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GenerateKeyRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.key_provider else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("keyProvider"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spec"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.key_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("keySpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct GenerateSelfSignedClientCertRequestType<'a> {
     cluster: &'a crate::types::structs::KeyProviderId,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     request: Option<&'a crate::types::structs::CryptoManagerKmipCertSignRequest>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GenerateSelfSignedClientCertRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GenerateSelfSignedClientCertRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GenerateSelfSignedClientCertRequestTypeSer<'b, 'a> {
+    data: &'b GenerateSelfSignedClientCertRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for GenerateSelfSignedClientCertRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GenerateSelfSignedClientCertRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.request else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("request"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct GetDefaultKmsClusterRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entity: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "defaultsToParent")]
     defaults_to_parent: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GetDefaultKmsClusterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GetDefaultKmsClusterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GetDefaultKmsClusterRequestTypeSer<'b, 'a> {
+    data: &'b GetDefaultKmsClusterRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for GetDefaultKmsClusterRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GetDefaultKmsClusterRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.entity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entity"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.defaults_to_parent else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("defaultsToParent"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ListKeysRequestType {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     limit: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for ListKeysRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListKeysRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListKeysRequestTypeSer<'b> {
+    data: &'b ListKeysRequestType,
+    seq: usize,
+}
+
+impl<'b> miniserde::ser::Map for ListKeysRequestTypeSer<'b> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListKeysRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.limit else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("limit"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ListKmipServersRequestType {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     limit: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for ListKmipServersRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListKmipServersRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListKmipServersRequestTypeSer<'b> {
+    data: &'b ListKmipServersRequestType,
+    seq: usize,
+}
+
+impl<'b> miniserde::ser::Map for ListKmipServersRequestTypeSer<'b> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListKmipServersRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.limit else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("limit"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ListKmsClustersRequestType {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "includeKmsServers")]
     include_kms_servers: Option<bool>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "managementTypeFilter")]
     management_type_filter: Option<i32>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "statusFilter")]
     status_filter: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for ListKmsClustersRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ListKmsClustersRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ListKmsClustersRequestTypeSer<'b> {
+    data: &'b ListKmsClustersRequestType,
+    seq: usize,
+}
+
+impl<'b> miniserde::ser::Map for ListKmsClustersRequestTypeSer<'b> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ListKmsClustersRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.include_kms_servers else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("includeKmsServers"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.management_type_filter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("managementTypeFilter"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.status_filter else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("statusFilter"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct MarkDefaultRequestType<'a> {
-    #[serde(rename = "clusterId")]
     cluster_id: &'a crate::types::structs::KeyProviderId,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for MarkDefaultRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(MarkDefaultRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct MarkDefaultRequestTypeSer<'b, 'a> {
+    data: &'b MarkDefaultRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for MarkDefaultRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"MarkDefaultRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("clusterId"), &self.data.cluster_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryCryptoKeyStatusRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "keyIds")]
     key_ids: Option<&'a [crate::types::structs::CryptoKeyId]>,
-    #[serde(rename = "checkKeyBitMap")]
     check_key_bit_map: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryCryptoKeyStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryCryptoKeyStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryCryptoKeyStatusRequestTypeSer<'b, 'a> {
+    data: &'b QueryCryptoKeyStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryCryptoKeyStatusRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryCryptoKeyStatusRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.key_ids else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("keyIds"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("checkKeyBitMap"), &self.data.check_key_bit_map as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct RegisterKmipServerRequestType<'a> {
     server: &'a crate::types::structs::KmipServerSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RegisterKmipServerRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RegisterKmipServerRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RegisterKmipServerRequestTypeSer<'b, 'a> {
+    data: &'b RegisterKmipServerRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RegisterKmipServerRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RegisterKmipServerRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("server"), &self.data.server as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RegisterKmsClusterRequestType<'a> {
-    #[serde(rename = "clusterId")]
     cluster_id: &'a crate::types::structs::KeyProviderId,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "managementType")]
     management_type: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RegisterKmsClusterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RegisterKmsClusterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RegisterKmsClusterRequestTypeSer<'b, 'a> {
+    data: &'b RegisterKmsClusterRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RegisterKmsClusterRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RegisterKmsClusterRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("clusterId"), &self.data.cluster_id as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.management_type else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("managementType"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveKeyRequestType<'a> {
     key: &'a crate::types::structs::CryptoKeyId,
     force: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveKeyRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveKeyRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveKeyRequestTypeSer<'b, 'a> {
+    data: &'b RemoveKeyRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveKeyRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveKeyRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("key"), &self.data.key as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("force"), &self.data.force as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveKeysRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     keys: Option<&'a [crate::types::structs::CryptoKeyId]>,
     force: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveKeysRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveKeysRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveKeysRequestTypeSer<'b, 'a> {
+    data: &'b RemoveKeysRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveKeysRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveKeysRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.keys else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("keys"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("force"), &self.data.force as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveKmipServerRequestType<'a> {
-    #[serde(rename = "clusterId")]
     cluster_id: &'a crate::types::structs::KeyProviderId,
-    #[serde(rename = "serverName")]
     server_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveKmipServerRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveKmipServerRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveKmipServerRequestTypeSer<'b, 'a> {
+    data: &'b RemoveKmipServerRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveKmipServerRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveKmipServerRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("clusterId"), &self.data.cluster_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("serverName"), &self.data.server_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrieveClientCertRequestType<'a> {
     cluster: &'a crate::types::structs::KeyProviderId,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveClientCertRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveClientCertRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveClientCertRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveClientCertRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveClientCertRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveClientCertRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrieveClientCsrRequestType<'a> {
     cluster: &'a crate::types::structs::KeyProviderId,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveClientCsrRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveClientCsrRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveClientCsrRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveClientCsrRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveClientCsrRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveClientCsrRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrieveKmipServerCertRequestType<'a> {
-    #[serde(rename = "keyProvider")]
     key_provider: &'a crate::types::structs::KeyProviderId,
     server: &'a crate::types::structs::KmipServerInfo,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveKmipServerCertRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveKmipServerCertRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveKmipServerCertRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveKmipServerCertRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveKmipServerCertRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveKmipServerCertRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("keyProvider"), &self.data.key_provider as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("server"), &self.data.server as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrieveKmipServersStatusRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     clusters: Option<&'a [crate::types::structs::KmipClusterInfo]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveKmipServersStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveKmipServersStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveKmipServersStatusRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveKmipServersStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveKmipServersStatusRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveKmipServersStatusRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.clusters else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("clusters"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RetrieveSelfSignedClientCertRequestType<'a> {
     cluster: &'a crate::types::structs::KeyProviderId,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveSelfSignedClientCertRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveSelfSignedClientCertRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveSelfSignedClientCertRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveSelfSignedClientCertRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveSelfSignedClientCertRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveSelfSignedClientCertRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct SetDefaultKmsClusterRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     entity: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "clusterId")]
     cluster_id: Option<&'a crate::types::structs::KeyProviderId>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetDefaultKmsClusterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetDefaultKmsClusterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetDefaultKmsClusterRequestTypeSer<'b, 'a> {
+    data: &'b SetDefaultKmsClusterRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for SetDefaultKmsClusterRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetDefaultKmsClusterRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.entity else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("entity"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.cluster_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("clusterId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct SetKeyCustomAttributesRequestType<'a> {
-    #[serde(rename = "keyId")]
     key_id: &'a crate::types::structs::CryptoKeyId,
     spec: &'a crate::types::structs::CryptoManagerKmipCustomAttributeSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for SetKeyCustomAttributesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(SetKeyCustomAttributesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct SetKeyCustomAttributesRequestTypeSer<'b, 'a> {
+    data: &'b SetKeyCustomAttributesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for SetKeyCustomAttributesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"SetKeyCustomAttributesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("keyId"), &self.data.key_id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UnregisterKmsClusterRequestType<'a> {
-    #[serde(rename = "clusterId")]
     cluster_id: &'a crate::types::structs::KeyProviderId,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UnregisterKmsClusterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnregisterKmsClusterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnregisterKmsClusterRequestTypeSer<'b, 'a> {
+    data: &'b UnregisterKmsClusterRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UnregisterKmsClusterRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnregisterKmsClusterRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("clusterId"), &self.data.cluster_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateKmipServerRequestType<'a> {
     server: &'a crate::types::structs::KmipServerSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateKmipServerRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateKmipServerRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateKmipServerRequestTypeSer<'b, 'a> {
+    data: &'b UpdateKmipServerRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateKmipServerRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateKmipServerRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("server"), &self.data.server as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateKmsSignedCsrClientCertRequestType<'a> {
     cluster: &'a crate::types::structs::KeyProviderId,
     certificate: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateKmsSignedCsrClientCertRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateKmsSignedCsrClientCertRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateKmsSignedCsrClientCertRequestTypeSer<'b, 'a> {
+    data: &'b UpdateKmsSignedCsrClientCertRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateKmsSignedCsrClientCertRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateKmsSignedCsrClientCertRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("certificate"), &self.data.certificate as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateSelfSignedClientCertRequestType<'a> {
     cluster: &'a crate::types::structs::KeyProviderId,
     certificate: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateSelfSignedClientCertRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateSelfSignedClientCertRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateSelfSignedClientCertRequestTypeSer<'b, 'a> {
+    data: &'b UpdateSelfSignedClientCertRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateSelfSignedClientCertRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateSelfSignedClientCertRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("certificate"), &self.data.certificate as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UploadClientCertRequestType<'a> {
     cluster: &'a crate::types::structs::KeyProviderId,
     certificate: &'a str,
-    #[serde(rename = "privateKey")]
     private_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UploadClientCertRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UploadClientCertRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UploadClientCertRequestTypeSer<'b, 'a> {
+    data: &'b UploadClientCertRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UploadClientCertRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UploadClientCertRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("certificate"), &self.data.certificate as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("privateKey"), &self.data.private_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UploadKmipServerCertRequestType<'a> {
     cluster: &'a crate::types::structs::KeyProviderId,
     certificate: &'a str,
+}
+
+impl<'a> miniserde::Serialize for UploadKmipServerCertRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UploadKmipServerCertRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UploadKmipServerCertRequestTypeSer<'b, 'a> {
+    data: &'b UploadKmipServerCertRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UploadKmipServerCertRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UploadKmipServerCertRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("certificate"), &self.data.certificate as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

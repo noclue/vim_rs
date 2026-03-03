@@ -79,7 +79,10 @@ impl IscsiManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::IscsiPortInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::IscsiPortInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -116,7 +119,10 @@ impl IscsiManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::IscsiPortInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::IscsiPortInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -140,7 +146,8 @@ impl IscsiManager {
         let path = format!("/IscsiManager/{moId}/QueryMigrationDependencies", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::IscsiMigrationDependency = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::IscsiMigrationDependency = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query if Physical NIC device is used for iSCSI.
@@ -169,7 +176,8 @@ impl IscsiManager {
         let path = format!("/IscsiManager/{moId}/QueryPnicStatus", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::IscsiStatus = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::IscsiStatus = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Query the status of Virtual NIC association with the iSCSI.
@@ -204,7 +212,8 @@ impl IscsiManager {
         let path = format!("/IscsiManager/{moId}/QueryVnicStatus", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::IscsiStatus = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::IscsiStatus = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Unbind Virtual NIC binding from an iSCSI adapter.
@@ -245,50 +254,191 @@ impl IscsiManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct BindVnicRequestType<'a> {
-    #[serde(rename = "iScsiHbaName")]
     i_scsi_hba_name: &'a str,
-    #[serde(rename = "vnicDevice")]
     vnic_device: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for BindVnicRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(BindVnicRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct BindVnicRequestTypeSer<'b, 'a> {
+    data: &'b BindVnicRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for BindVnicRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"BindVnicRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("iScsiHbaName"), &self.data.i_scsi_hba_name as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("vnicDevice"), &self.data.vnic_device as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryBoundVnicsRequestType<'a> {
-    #[serde(rename = "iScsiHbaName")]
     i_scsi_hba_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryBoundVnicsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryBoundVnicsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryBoundVnicsRequestTypeSer<'b, 'a> {
+    data: &'b QueryBoundVnicsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryBoundVnicsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryBoundVnicsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("iScsiHbaName"), &self.data.i_scsi_hba_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryCandidateNicsRequestType<'a> {
-    #[serde(rename = "iScsiHbaName")]
     i_scsi_hba_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryCandidateNicsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryCandidateNicsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryCandidateNicsRequestTypeSer<'b, 'a> {
+    data: &'b QueryCandidateNicsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryCandidateNicsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryCandidateNicsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("iScsiHbaName"), &self.data.i_scsi_hba_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryMigrationDependenciesRequestType<'a> {
-    #[serde(rename = "pnicDevice")]
     pnic_device: &'a [String],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryMigrationDependenciesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryMigrationDependenciesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryMigrationDependenciesRequestTypeSer<'b, 'a> {
+    data: &'b QueryMigrationDependenciesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryMigrationDependenciesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryMigrationDependenciesRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("pnicDevice"), &self.data.pnic_device as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPnicStatusRequestType<'a> {
-    #[serde(rename = "pnicDevice")]
     pnic_device: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPnicStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPnicStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPnicStatusRequestTypeSer<'b, 'a> {
+    data: &'b QueryPnicStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryPnicStatusRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPnicStatusRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("pnicDevice"), &self.data.pnic_device as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryVnicStatusRequestType<'a> {
-    #[serde(rename = "vnicDevice")]
     vnic_device: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryVnicStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryVnicStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryVnicStatusRequestTypeSer<'b, 'a> {
+    data: &'b QueryVnicStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryVnicStatusRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryVnicStatusRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vnicDevice"), &self.data.vnic_device as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UnbindVnicRequestType<'a> {
-    #[serde(rename = "iScsiHbaName")]
     i_scsi_hba_name: &'a str,
-    #[serde(rename = "vnicDevice")]
     vnic_device: &'a str,
     force: bool,
+}
+
+impl<'a> miniserde::Serialize for UnbindVnicRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnbindVnicRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnbindVnicRequestTypeSer<'b, 'a> {
+    data: &'b UnbindVnicRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UnbindVnicRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnbindVnicRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("iScsiHbaName"), &self.data.i_scsi_hba_name as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("vnicDevice"), &self.data.vnic_device as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("force"), &self.data.force as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

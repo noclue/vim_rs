@@ -1,4 +1,4 @@
-use serde_json::Value;
+use miniserde::json::{Number, Object, Value};
 use ratatui::prelude::{Color, Line, Span, Style};
 use tui_tree_widget::TreeItem;
 
@@ -11,13 +11,16 @@ const BOOL: Style = Style::new().fg(Color::LightMagenta);
 const MANAGED_OBJECT: Style = Style::new().fg(Color::LightCyan);
 const NULL: Style = GROUP;
 
-
+fn number_to_string(n: &Number) -> String {
+    match n {
+        Number::U64(x) => x.to_string(),
+        Number::I64(x) => x.to_string(),
+        Number::F64(x) => x.to_string(),
+    }
+}
 
 /// Convert a JSON property to a TreeItem
-pub fn property_to_tree_item(
-    key: String,
-    value: &Value,
-) -> TreeItem<'static, String> {
+pub fn property_to_tree_item(key: String, value: &Value) -> TreeItem<'static, String> {
     let text = display_line(key.clone(), value);
     let children = value_children(value);
     if children.is_empty() {
@@ -27,9 +30,6 @@ pub fn property_to_tree_item(
     }
 }
 
-
-
-
 fn display_line(key: String, value: &Value) -> Line<'static> {
     Line::from(vec![
         Span::styled(key, KEYS),
@@ -38,25 +38,25 @@ fn display_line(key: String, value: &Value) -> Line<'static> {
     ])
 }
 
-// Helper function to get a short string representation for values in the tree labels
 fn value_to_span(value: &Value) -> Span<'static> {
-
     match value {
         Value::Object(map) => object_to_span(map),
-        Value::Array(arr) => Span::styled(format!("[{}]", arr.len()),GROUP),
-        Value::String(s) => Span::styled(format!("\"{}\"", s), STRING), // Add quotes for strings
-        Value::Null => Span::styled("null",NULL),
+        Value::Array(arr) => Span::styled(format!("[{}]", arr.len()), GROUP),
+        Value::String(s) => Span::styled(format!("\"{}\"", s), STRING),
+        Value::Null => Span::styled("null", NULL),
         Value::Bool(b) => Span::styled(b.to_string(), BOOL),
-        Value::Number(n) => Span::styled(n.to_string(),NUMBER),
+        Value::Number(n) => Span::styled(number_to_string(n), NUMBER),
     }
 }
 
-fn object_to_span(map: &serde_json::Map<String, Value>) -> Span<'static> {
+fn object_to_span(map: &Object) -> Span<'static> {
     let Some(type_name) = get_type_name(map) else {
         return Span::styled("{...}", GROUP);
     };
     if type_name == "ManagedObjectReference" {
-        if let (Some(Value::String(motype)), Some(Value::String(value))) = (map.get("type"), map.get("value")) {
+        if let (Some(Value::String(motype)), Some(Value::String(value))) =
+            (map.get("type"), map.get("value"))
+        {
             return Span::styled(format!("{}: {}", motype, value), MANAGED_OBJECT);
         }
     }
@@ -67,26 +67,20 @@ fn value_children(value: &Value) -> Vec<TreeItem<'static, String>> {
     match value {
         Value::Object(map) => {
             let mut items = Vec::with_capacity(map.len());
-            for (key, val) in map {
+            for (key, val) in map.iter() {
                 if key == "_typeName" {
                     if let Value::String(s) = val {
-                        if s == "ManagedObjectReference" {
-                            return vec![]; // We do not want to expand ManagedObjectReferences
+                        if s.as_str() == "ManagedObjectReference" {
+                            return vec![];
                         }
                     }
-                    continue; // Skip the _typeName field
+                    continue;
                 }
-                // Create spans with owned Strings to ensure 'static lifetime
                 let text = display_line(key.clone(), val);
-
-                // Recursively process child values
                 let children = value_children(val);
-
                 let item = if children.is_empty() {
-                    // Leaf node if the value is primitive or an empty collection
                     TreeItem::new_leaf(key.clone(), text)
                 } else {
-                    // Inner node if the value is an object or array with children
                     TreeItem::new(key.clone(), text, children)
                         .expect("Failed to create tree item; check for duplicate keys/indices")
                 };
@@ -98,14 +92,8 @@ fn value_children(value: &Value) -> Vec<TreeItem<'static, String>> {
             let mut items = Vec::with_capacity(arr.len());
             for (index, val) in arr.iter().enumerate() {
                 let index_string = get_key_value(val).unwrap_or_else(|| index.to_string());
-                // Create spans with owned Strings
-                // let index_span = Span::styled(index_string.clone(), KEYS);
-                // let text = Line::from(vec![index_span,Span::from(": "), value_to_span(val)]);
                 let text = display_line(index_string.clone(), val);
-
-                // Recursively process child values
                 let children = value_children(val);
-
                 let item = if children.is_empty() {
                     TreeItem::new_leaf(index.to_string(), text)
                 } else {
@@ -120,12 +108,8 @@ fn value_children(value: &Value) -> Vec<TreeItem<'static, String>> {
     }
 }
 
-
-
-pub fn get_type_name(map: &serde_json::Map<String, Value>) -> Option<String> {
-    let Some(value) = map.get("_typeName") else {
-        return None;
-    };
+pub fn get_type_name(map: &Object) -> Option<String> {
+    let value = map.get("_typeName")?;
     match value {
         Value::String(s) => Some(s.clone()),
         _ => None,
@@ -135,12 +119,10 @@ pub fn get_type_name(map: &serde_json::Map<String, Value>) -> Option<String> {
 fn get_key_value(val: &Value) -> Option<String> {
     match val {
         Value::Object(map) => {
-            let Some(value) = map.get("key") else {
-                return None;
-            };
+            let value = map.get("key")?;
             match value {
                 Value::String(s) => Some(s.clone()),
-                Value::Number(n) => Some(n.to_string()),
+                Value::Number(n) => Some(number_to_string(n)),
                 Value::Bool(b) => Some(b.to_string()),
                 _ => None,
             }

@@ -15630,6 +15630,8 @@ pub enum VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum {
 }
 
 
+miniserde::make_place!(Place);
+
 static MO_TYPES_ENUM_MAP: phf::Map<&'static str, MoTypesEnum> = ::phf::Map {
     key: 12913932095322966823,
     disps: &[
@@ -16079,19 +16081,22 @@ impl MoTypesEnum {
     }
 }
 
-impl serde::Serialize for MoTypesEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for MoTypesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for MoTypesEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(MoTypesEnum::from_str(&s))
+impl miniserde::Deserialize for MoTypesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<MoTypesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(MoTypesEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16146,19 +16151,22 @@ impl DpInvalidProtectionReasonEnum {
     }
 }
 
-impl serde::Serialize for DpInvalidProtectionReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpInvalidProtectionReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpInvalidProtectionReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpInvalidProtectionReasonEnum::from_str(&s))
+impl miniserde::Deserialize for DpInvalidProtectionReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpInvalidProtectionReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpInvalidProtectionReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16213,19 +16221,22 @@ impl DpMigrationTypeEnum {
     }
 }
 
-impl serde::Serialize for DpMigrationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpMigrationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpMigrationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpMigrationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DpMigrationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpMigrationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpMigrationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16282,19 +16293,22 @@ impl DpProtectionStatusTypeEnum {
     }
 }
 
-impl serde::Serialize for DpProtectionStatusTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpProtectionStatusTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpProtectionStatusTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpProtectionStatusTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DpProtectionStatusTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpProtectionStatusTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpProtectionStatusTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16351,19 +16365,22 @@ impl DpProtectionSupportTypeEnum {
     }
 }
 
-impl serde::Serialize for DpProtectionSupportTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpProtectionSupportTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpProtectionSupportTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpProtectionSupportTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DpProtectionSupportTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpProtectionSupportTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpProtectionSupportTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16427,19 +16444,22 @@ impl DpSnapshotTypeEnum {
     }
 }
 
-impl serde::Serialize for DpSnapshotTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpSnapshotTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpSnapshotTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpSnapshotTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DpSnapshotTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpSnapshotTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpSnapshotTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16494,19 +16514,22 @@ impl DpSyncTypeEnum {
     }
 }
 
-impl serde::Serialize for DpSyncTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpSyncTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpSyncTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpSyncTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DpSyncTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpSyncTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpSyncTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16574,19 +16597,22 @@ impl DpVSphereDataProtectionCapabilitiesEnum {
     }
 }
 
-impl serde::Serialize for DpVSphereDataProtectionCapabilitiesEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpVSphereDataProtectionCapabilitiesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpVSphereDataProtectionCapabilitiesEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpVSphereDataProtectionCapabilitiesEnum::from_str(&s))
+impl miniserde::Deserialize for DpVSphereDataProtectionCapabilitiesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpVSphereDataProtectionCapabilitiesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpVSphereDataProtectionCapabilitiesEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16643,19 +16669,22 @@ impl DpVssBackupContextEnum {
     }
 }
 
-impl serde::Serialize for DpVssBackupContextEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpVssBackupContextEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpVssBackupContextEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpVssBackupContextEnum::from_str(&s))
+impl miniserde::Deserialize for DpVssBackupContextEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpVssBackupContextEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpVssBackupContextEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16710,19 +16739,22 @@ impl DpVssBackupTypeEnum {
     }
 }
 
-impl serde::Serialize for DpVssBackupTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpVssBackupTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpVssBackupTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpVssBackupTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DpVssBackupTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpVssBackupTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpVssBackupTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16779,19 +16811,22 @@ impl DpCapabilitySupportLevelEnum {
     }
 }
 
-impl serde::Serialize for DpCapabilitySupportLevelEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpCapabilitySupportLevelEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpCapabilitySupportLevelEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpCapabilitySupportLevelEnum::from_str(&s))
+impl miniserde::Deserialize for DpCapabilitySupportLevelEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpCapabilitySupportLevelEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpCapabilitySupportLevelEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16850,19 +16885,22 @@ impl DpDrSrmWorkflowEnum {
     }
 }
 
-impl serde::Serialize for DpDrSrmWorkflowEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpDrSrmWorkflowEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpDrSrmWorkflowEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpDrSrmWorkflowEnum::from_str(&s))
+impl miniserde::Deserialize for DpDrSrmWorkflowEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpDrSrmWorkflowEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpDrSrmWorkflowEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16915,19 +16953,22 @@ impl AgencyVmPlacementPolicyVmAntiAffinityEnum {
     }
 }
 
-impl serde::Serialize for AgencyVmPlacementPolicyVmAntiAffinityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AgencyVmPlacementPolicyVmAntiAffinityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AgencyVmPlacementPolicyVmAntiAffinityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AgencyVmPlacementPolicyVmAntiAffinityEnum::from_str(&s))
+impl miniserde::Deserialize for AgencyVmPlacementPolicyVmAntiAffinityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AgencyVmPlacementPolicyVmAntiAffinityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AgencyVmPlacementPolicyVmAntiAffinityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -16980,19 +17021,22 @@ impl AgencyVmPlacementPolicyVmDataAffinityEnum {
     }
 }
 
-impl serde::Serialize for AgencyVmPlacementPolicyVmDataAffinityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AgencyVmPlacementPolicyVmDataAffinityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AgencyVmPlacementPolicyVmDataAffinityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AgencyVmPlacementPolicyVmDataAffinityEnum::from_str(&s))
+impl miniserde::Deserialize for AgencyVmPlacementPolicyVmDataAffinityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AgencyVmPlacementPolicyVmDataAffinityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AgencyVmPlacementPolicyVmDataAffinityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17045,19 +17089,22 @@ impl AgentConfigInfoAuthenticationSchemeEnum {
     }
 }
 
-impl serde::Serialize for AgentConfigInfoAuthenticationSchemeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AgentConfigInfoAuthenticationSchemeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AgentConfigInfoAuthenticationSchemeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AgentConfigInfoAuthenticationSchemeEnum::from_str(&s))
+impl miniserde::Deserialize for AgentConfigInfoAuthenticationSchemeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AgentConfigInfoAuthenticationSchemeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AgentConfigInfoAuthenticationSchemeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17112,19 +17159,22 @@ impl AgentConfigInfoOvfDiskProvisioningEnum {
     }
 }
 
-impl serde::Serialize for AgentConfigInfoOvfDiskProvisioningEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AgentConfigInfoOvfDiskProvisioningEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AgentConfigInfoOvfDiskProvisioningEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AgentConfigInfoOvfDiskProvisioningEnum::from_str(&s))
+impl miniserde::Deserialize for AgentConfigInfoOvfDiskProvisioningEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AgentConfigInfoOvfDiskProvisioningEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AgentConfigInfoOvfDiskProvisioningEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17179,19 +17229,22 @@ impl AgentVmHookVmStateEnum {
     }
 }
 
-impl serde::Serialize for AgentVmHookVmStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AgentVmHookVmStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AgentVmHookVmStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AgentVmHookVmStateEnum::from_str(&s))
+impl miniserde::Deserialize for AgentVmHookVmStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AgentVmHookVmStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AgentVmHookVmStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17246,19 +17299,22 @@ impl EamObjectRuntimeInfoGoalStateEnum {
     }
 }
 
-impl serde::Serialize for EamObjectRuntimeInfoGoalStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EamObjectRuntimeInfoGoalStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EamObjectRuntimeInfoGoalStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EamObjectRuntimeInfoGoalStateEnum::from_str(&s))
+impl miniserde::Deserialize for EamObjectRuntimeInfoGoalStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EamObjectRuntimeInfoGoalStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EamObjectRuntimeInfoGoalStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17313,19 +17369,22 @@ impl EamObjectRuntimeInfoStatusEnum {
     }
 }
 
-impl serde::Serialize for EamObjectRuntimeInfoStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EamObjectRuntimeInfoStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EamObjectRuntimeInfoStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EamObjectRuntimeInfoStatusEnum::from_str(&s))
+impl miniserde::Deserialize for EamObjectRuntimeInfoStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EamObjectRuntimeInfoStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EamObjectRuntimeInfoStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17378,19 +17437,22 @@ impl EsxAgentManagerMaintenanceModePolicyEnum {
     }
 }
 
-impl serde::Serialize for EsxAgentManagerMaintenanceModePolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EsxAgentManagerMaintenanceModePolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EsxAgentManagerMaintenanceModePolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EsxAgentManagerMaintenanceModePolicyEnum::from_str(&s))
+impl miniserde::Deserialize for EsxAgentManagerMaintenanceModePolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EsxAgentManagerMaintenanceModePolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EsxAgentManagerMaintenanceModePolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17443,19 +17505,22 @@ impl HooksHookTypeEnum {
     }
 }
 
-impl serde::Serialize for HooksHookTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HooksHookTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HooksHookTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HooksHookTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HooksHookTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HooksHookTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HooksHookTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17521,19 +17586,22 @@ impl SolutionsInvalidReasonEnum {
     }
 }
 
-impl serde::Serialize for SolutionsInvalidReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SolutionsInvalidReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SolutionsInvalidReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SolutionsInvalidReasonEnum::from_str(&s))
+impl miniserde::Deserialize for SolutionsInvalidReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SolutionsInvalidReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SolutionsInvalidReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17592,19 +17660,22 @@ impl SolutionsNonComplianceReasonEnum {
     }
 }
 
-impl serde::Serialize for SolutionsNonComplianceReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SolutionsNonComplianceReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SolutionsNonComplianceReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SolutionsNonComplianceReasonEnum::from_str(&s))
+impl miniserde::Deserialize for SolutionsNonComplianceReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SolutionsNonComplianceReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SolutionsNonComplianceReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17659,19 +17730,22 @@ impl SolutionsVmDeploymentOptimizationEnum {
     }
 }
 
-impl serde::Serialize for SolutionsVmDeploymentOptimizationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SolutionsVmDeploymentOptimizationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SolutionsVmDeploymentOptimizationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SolutionsVmDeploymentOptimizationEnum::from_str(&s))
+impl miniserde::Deserialize for SolutionsVmDeploymentOptimizationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SolutionsVmDeploymentOptimizationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SolutionsVmDeploymentOptimizationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17724,19 +17798,22 @@ impl SolutionsVmDiskProvisioningEnum {
     }
 }
 
-impl serde::Serialize for SolutionsVmDiskProvisioningEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SolutionsVmDiskProvisioningEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SolutionsVmDiskProvisioningEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SolutionsVmDiskProvisioningEnum::from_str(&s))
+impl miniserde::Deserialize for SolutionsVmDiskProvisioningEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SolutionsVmDiskProvisioningEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SolutionsVmDiskProvisioningEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17787,19 +17864,22 @@ impl SolutionsVmPlacementPolicyEnum {
     }
 }
 
-impl serde::Serialize for SolutionsVmPlacementPolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SolutionsVmPlacementPolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SolutionsVmPlacementPolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SolutionsVmPlacementPolicyEnum::from_str(&s))
+impl miniserde::Deserialize for SolutionsVmPlacementPolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SolutionsVmPlacementPolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SolutionsVmPlacementPolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17865,19 +17945,22 @@ impl PbmLoggingConfigurationComponentEnum {
     }
 }
 
-impl serde::Serialize for PbmLoggingConfigurationComponentEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmLoggingConfigurationComponentEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmLoggingConfigurationComponentEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmLoggingConfigurationComponentEnum::from_str(&s))
+impl miniserde::Deserialize for PbmLoggingConfigurationComponentEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmLoggingConfigurationComponentEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmLoggingConfigurationComponentEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17932,19 +18015,22 @@ impl PbmLoggingConfigurationLogLevelEnum {
     }
 }
 
-impl serde::Serialize for PbmLoggingConfigurationLogLevelEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmLoggingConfigurationLogLevelEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmLoggingConfigurationLogLevelEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmLoggingConfigurationLogLevelEnum::from_str(&s))
+impl miniserde::Deserialize for PbmLoggingConfigurationLogLevelEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmLoggingConfigurationLogLevelEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmLoggingConfigurationLogLevelEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -17997,19 +18083,22 @@ impl PbmDebugManagerKeystoreNameEnum {
     }
 }
 
-impl serde::Serialize for PbmDebugManagerKeystoreNameEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmDebugManagerKeystoreNameEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmDebugManagerKeystoreNameEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmDebugManagerKeystoreNameEnum::from_str(&s))
+impl miniserde::Deserialize for PbmDebugManagerKeystoreNameEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmDebugManagerKeystoreNameEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmDebugManagerKeystoreNameEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18075,19 +18164,22 @@ impl PbmObjectTypeEnum {
     }
 }
 
-impl serde::Serialize for PbmObjectTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmObjectTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmObjectTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmObjectTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PbmObjectTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmObjectTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmObjectTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18142,19 +18234,22 @@ impl PbmVvolTypeEnum {
     }
 }
 
-impl serde::Serialize for PbmVvolTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmVvolTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmVvolTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmVvolTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PbmVvolTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmVvolTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmVvolTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18205,19 +18300,22 @@ impl PbmCapabilityOperatorEnum {
     }
 }
 
-impl serde::Serialize for PbmCapabilityOperatorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmCapabilityOperatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmCapabilityOperatorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmCapabilityOperatorEnum::from_str(&s))
+impl miniserde::Deserialize for PbmCapabilityOperatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmCapabilityOperatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmCapabilityOperatorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18270,19 +18368,22 @@ impl PbmCapabilitySchemaCapabilityCategoryEnum {
     }
 }
 
-impl serde::Serialize for PbmCapabilitySchemaCapabilityCategoryEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmCapabilitySchemaCapabilityCategoryEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmCapabilitySchemaCapabilityCategoryEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmCapabilitySchemaCapabilityCategoryEnum::from_str(&s))
+impl miniserde::Deserialize for PbmCapabilitySchemaCapabilityCategoryEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmCapabilitySchemaCapabilityCategoryEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmCapabilitySchemaCapabilityCategoryEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18352,19 +18453,22 @@ impl PbmLineOfServiceInfoLineOfServiceEnumEnum {
     }
 }
 
-impl serde::Serialize for PbmLineOfServiceInfoLineOfServiceEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmLineOfServiceInfoLineOfServiceEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmLineOfServiceInfoLineOfServiceEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmLineOfServiceInfoLineOfServiceEnumEnum::from_str(&s))
+impl miniserde::Deserialize for PbmLineOfServiceInfoLineOfServiceEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmLineOfServiceInfoLineOfServiceEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmLineOfServiceInfoLineOfServiceEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18417,19 +18521,22 @@ impl PbmBuiltinGenericTypeEnum {
     }
 }
 
-impl serde::Serialize for PbmBuiltinGenericTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmBuiltinGenericTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmBuiltinGenericTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmBuiltinGenericTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PbmBuiltinGenericTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmBuiltinGenericTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmBuiltinGenericTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18499,19 +18606,22 @@ impl PbmBuiltinTypeEnum {
     }
 }
 
-impl serde::Serialize for PbmBuiltinTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmBuiltinTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmBuiltinTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmBuiltinTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PbmBuiltinTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmBuiltinTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmBuiltinTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18575,19 +18685,22 @@ impl PbmCapabilityTimeUnitTypeEnum {
     }
 }
 
-impl serde::Serialize for PbmCapabilityTimeUnitTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmCapabilityTimeUnitTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmCapabilityTimeUnitTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmCapabilityTimeUnitTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PbmCapabilityTimeUnitTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmCapabilityTimeUnitTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmCapabilityTimeUnitTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18646,19 +18759,22 @@ impl PbmComplianceStatusEnum {
     }
 }
 
-impl serde::Serialize for PbmComplianceStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmComplianceStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmComplianceStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmComplianceStatusEnum::from_str(&s))
+impl miniserde::Deserialize for PbmComplianceStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmComplianceStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmComplianceStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18713,19 +18829,22 @@ impl PbmComplianceResultComplianceTaskStatusEnum {
     }
 }
 
-impl serde::Serialize for PbmComplianceResultComplianceTaskStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmComplianceResultComplianceTaskStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmComplianceResultComplianceTaskStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmComplianceResultComplianceTaskStatusEnum::from_str(&s))
+impl miniserde::Deserialize for PbmComplianceResultComplianceTaskStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmComplianceResultComplianceTaskStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmComplianceResultComplianceTaskStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18782,19 +18901,22 @@ impl PbmHealthStatusForEntityEnum {
     }
 }
 
-impl serde::Serialize for PbmHealthStatusForEntityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmHealthStatusForEntityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmHealthStatusForEntityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmHealthStatusForEntityEnum::from_str(&s))
+impl miniserde::Deserialize for PbmHealthStatusForEntityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmHealthStatusForEntityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmHealthStatusForEntityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18849,19 +18971,22 @@ impl PbmAssociateAndApplyPolicyStatusPolicyStatusEnum {
     }
 }
 
-impl serde::Serialize for PbmAssociateAndApplyPolicyStatusPolicyStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmAssociateAndApplyPolicyStatusPolicyStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmAssociateAndApplyPolicyStatusPolicyStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmAssociateAndApplyPolicyStatusPolicyStatusEnum::from_str(&s))
+impl miniserde::Deserialize for PbmAssociateAndApplyPolicyStatusPolicyStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmAssociateAndApplyPolicyStatusPolicyStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmAssociateAndApplyPolicyStatusPolicyStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18916,19 +19041,22 @@ impl PbmProfileCategoryEnumEnum {
     }
 }
 
-impl serde::Serialize for PbmProfileCategoryEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmProfileCategoryEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmProfileCategoryEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmProfileCategoryEnumEnum::from_str(&s))
+impl miniserde::Deserialize for PbmProfileCategoryEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmProfileCategoryEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmProfileCategoryEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -18987,19 +19115,22 @@ impl PbmSystemCreatedProfileTypeEnum {
     }
 }
 
-impl serde::Serialize for PbmSystemCreatedProfileTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmSystemCreatedProfileTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmSystemCreatedProfileTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmSystemCreatedProfileTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PbmSystemCreatedProfileTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmSystemCreatedProfileTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmSystemCreatedProfileTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19058,19 +19189,22 @@ impl PbmOperationEnum {
     }
 }
 
-impl serde::Serialize for PbmOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmOperationEnum::from_str(&s))
+impl miniserde::Deserialize for PbmOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19134,19 +19268,22 @@ impl PbmIofilterInfoFilterTypeEnum {
     }
 }
 
-impl serde::Serialize for PbmIofilterInfoFilterTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmIofilterInfoFilterTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmIofilterInfoFilterTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmIofilterInfoFilterTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PbmIofilterInfoFilterTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmIofilterInfoFilterTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmIofilterInfoFilterTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19201,19 +19338,22 @@ impl PbmPolicyAssociationVolumeAllocationTypeEnum {
     }
 }
 
-impl serde::Serialize for PbmPolicyAssociationVolumeAllocationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmPolicyAssociationVolumeAllocationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmPolicyAssociationVolumeAllocationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmPolicyAssociationVolumeAllocationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PbmPolicyAssociationVolumeAllocationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmPolicyAssociationVolumeAllocationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmPolicyAssociationVolumeAllocationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19264,19 +19404,22 @@ impl PbmProfileResourceTypeEnumEnum {
     }
 }
 
-impl serde::Serialize for PbmProfileResourceTypeEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmProfileResourceTypeEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmProfileResourceTypeEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmProfileResourceTypeEnumEnum::from_str(&s))
+impl miniserde::Deserialize for PbmProfileResourceTypeEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmProfileResourceTypeEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmProfileResourceTypeEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19333,19 +19476,22 @@ impl PbmVmOperationEnum {
     }
 }
 
-impl serde::Serialize for PbmVmOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PbmVmOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PbmVmOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PbmVmOperationEnum::from_str(&s))
+impl miniserde::Deserialize for PbmVmOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PbmVmOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PbmVmOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19422,19 +19568,22 @@ impl EntityReferenceEntityTypeEnum {
     }
 }
 
-impl serde::Serialize for EntityReferenceEntityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EntityReferenceEntityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EntityReferenceEntityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EntityReferenceEntityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for EntityReferenceEntityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EntityReferenceEntityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EntityReferenceEntityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19491,19 +19640,22 @@ impl SmsTaskStateEnum {
     }
 }
 
-impl serde::Serialize for SmsTaskStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SmsTaskStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SmsTaskStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SmsTaskStateEnum::from_str(&s))
+impl miniserde::Deserialize for SmsTaskStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SmsTaskStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SmsTaskStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19556,19 +19708,22 @@ impl VpCategoryEnum {
     }
 }
 
-impl serde::Serialize for VpCategoryEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VpCategoryEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VpCategoryEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VpCategoryEnum::from_str(&s))
+impl miniserde::Deserialize for VpCategoryEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VpCategoryEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VpCategoryEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19627,19 +19782,22 @@ impl VasaProviderCertificateStatusEnum {
     }
 }
 
-impl serde::Serialize for VasaProviderCertificateStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VasaProviderCertificateStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VasaProviderCertificateStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VasaProviderCertificateStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VasaProviderCertificateStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VasaProviderCertificateStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VasaProviderCertificateStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19692,19 +19850,22 @@ impl ProviderProfileEnum {
     }
 }
 
-impl serde::Serialize for ProviderProfileEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ProviderProfileEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ProviderProfileEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ProviderProfileEnum::from_str(&s))
+impl miniserde::Deserialize for ProviderProfileEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ProviderProfileEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ProviderProfileEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19759,19 +19920,22 @@ impl VpTypeEnum {
     }
 }
 
-impl serde::Serialize for VpTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VpTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VpTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VpTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VpTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VpTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VpTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19826,19 +19990,22 @@ impl VasaProviderProfileEnum {
     }
 }
 
-impl serde::Serialize for VasaProviderProfileEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VasaProviderProfileEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VasaProviderProfileEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VasaProviderProfileEnum::from_str(&s))
+impl miniserde::Deserialize for VasaProviderProfileEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VasaProviderProfileEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VasaProviderProfileEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19900,19 +20067,22 @@ impl VasaProviderStatusEnum {
     }
 }
 
-impl serde::Serialize for VasaProviderStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VasaProviderStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VasaProviderStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VasaProviderStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VasaProviderStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VasaProviderStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VasaProviderStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -19965,19 +20135,22 @@ impl VasaAuthenticationTypeEnum {
     }
 }
 
-impl serde::Serialize for VasaAuthenticationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VasaAuthenticationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VasaAuthenticationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VasaAuthenticationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VasaAuthenticationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VasaAuthenticationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VasaAuthenticationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20032,19 +20205,22 @@ impl SmsAlarmStatusEnum {
     }
 }
 
-impl serde::Serialize for SmsAlarmStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SmsAlarmStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SmsAlarmStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SmsAlarmStatusEnum::from_str(&s))
+impl miniserde::Deserialize for SmsAlarmStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SmsAlarmStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SmsAlarmStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20110,19 +20286,22 @@ impl AlarmTypeEnum {
     }
 }
 
-impl serde::Serialize for AlarmTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AlarmTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AlarmTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AlarmTypeEnum::from_str(&s))
+impl miniserde::Deserialize for AlarmTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AlarmTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AlarmTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20177,19 +20356,22 @@ impl BackingStoragePoolTypeEnum {
     }
 }
 
-impl serde::Serialize for BackingStoragePoolTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for BackingStoragePoolTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for BackingStoragePoolTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(BackingStoragePoolTypeEnum::from_str(&s))
+impl miniserde::Deserialize for BackingStoragePoolTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<BackingStoragePoolTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(BackingStoragePoolTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20277,19 +20459,22 @@ impl SmsEntityTypeEnum {
     }
 }
 
-impl serde::Serialize for SmsEntityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SmsEntityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SmsEntityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SmsEntityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for SmsEntityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SmsEntityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SmsEntityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20346,19 +20531,22 @@ impl BlockDeviceInterfaceEnum {
     }
 }
 
-impl serde::Serialize for BlockDeviceInterfaceEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for BlockDeviceInterfaceEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for BlockDeviceInterfaceEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(BlockDeviceInterfaceEnum::from_str(&s))
+impl miniserde::Deserialize for BlockDeviceInterfaceEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<BlockDeviceInterfaceEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(BlockDeviceInterfaceEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20411,19 +20599,22 @@ impl FileSystemInterfaceEnum {
     }
 }
 
-impl serde::Serialize for FileSystemInterfaceEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for FileSystemInterfaceEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for FileSystemInterfaceEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(FileSystemInterfaceEnum::from_str(&s))
+impl miniserde::Deserialize for FileSystemInterfaceEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<FileSystemInterfaceEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(FileSystemInterfaceEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20489,19 +20680,22 @@ impl VasaProfileEnum {
     }
 }
 
-impl serde::Serialize for VasaProfileEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VasaProfileEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VasaProfileEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VasaProfileEnum::from_str(&s))
+impl miniserde::Deserialize for VasaProfileEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VasaProfileEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VasaProfileEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20558,19 +20752,22 @@ impl StorageContainerVvolContainerTypeEnumEnum {
     }
 }
 
-impl serde::Serialize for StorageContainerVvolContainerTypeEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for StorageContainerVvolContainerTypeEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for StorageContainerVvolContainerTypeEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(StorageContainerVvolContainerTypeEnumEnum::from_str(&s))
+impl miniserde::Deserialize for StorageContainerVvolContainerTypeEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<StorageContainerVvolContainerTypeEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(StorageContainerVvolContainerTypeEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20621,19 +20818,22 @@ impl FileSystemInterfaceVersionEnum {
     }
 }
 
-impl serde::Serialize for FileSystemInterfaceVersionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for FileSystemInterfaceVersionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for FileSystemInterfaceVersionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(FileSystemInterfaceVersionEnum::from_str(&s))
+impl miniserde::Deserialize for FileSystemInterfaceVersionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<FileSystemInterfaceVersionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(FileSystemInterfaceVersionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20688,19 +20888,22 @@ impl ThinProvisioningStatusEnum {
     }
 }
 
-impl serde::Serialize for ThinProvisioningStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ThinProvisioningStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ThinProvisioningStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ThinProvisioningStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ThinProvisioningStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ThinProvisioningStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ThinProvisioningStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20759,19 +20962,22 @@ impl ReplicationReplicationStateEnum {
     }
 }
 
-impl serde::Serialize for ReplicationReplicationStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ReplicationReplicationStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ReplicationReplicationStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ReplicationReplicationStateEnum::from_str(&s))
+impl miniserde::Deserialize for ReplicationReplicationStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ReplicationReplicationStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ReplicationReplicationStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20824,19 +21030,22 @@ impl BatchResultResultEnum {
     }
 }
 
-impl serde::Serialize for BatchResultResultEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for BatchResultResultEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for BatchResultResultEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(BatchResultResultEnum::from_str(&s))
+impl miniserde::Deserialize for BatchResultResultEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<BatchResultResultEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(BatchResultResultEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20891,19 +21100,22 @@ impl ClusterComputeResourceHciWorkflowStateEnum {
     }
 }
 
-impl serde::Serialize for ClusterComputeResourceHciWorkflowStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterComputeResourceHciWorkflowStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterComputeResourceHciWorkflowStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterComputeResourceHciWorkflowStateEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterComputeResourceHciWorkflowStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterComputeResourceHciWorkflowStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterComputeResourceHciWorkflowStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -20958,19 +21170,22 @@ impl ClusterComputeResourceVcsHealthStatusEnum {
     }
 }
 
-impl serde::Serialize for ClusterComputeResourceVcsHealthStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterComputeResourceVcsHealthStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterComputeResourceVcsHealthStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterComputeResourceVcsHealthStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterComputeResourceVcsHealthStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterComputeResourceVcsHealthStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterComputeResourceVcsHealthStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21025,19 +21240,22 @@ impl ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
     }
 }
 
-impl serde::Serialize for ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum::from_str(&s))
+impl miniserde::Deserialize for ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21090,19 +21308,22 @@ impl ComputeResourceNetworkBootModeEnum {
     }
 }
 
-impl serde::Serialize for ComputeResourceNetworkBootModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ComputeResourceNetworkBootModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ComputeResourceNetworkBootModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ComputeResourceNetworkBootModeEnum::from_str(&s))
+impl miniserde::Deserialize for ComputeResourceNetworkBootModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ComputeResourceNetworkBootModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ComputeResourceNetworkBootModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21157,19 +21378,22 @@ impl ConfigSpecOperationEnum {
     }
 }
 
-impl serde::Serialize for ConfigSpecOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ConfigSpecOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ConfigSpecOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ConfigSpecOperationEnum::from_str(&s))
+impl miniserde::Deserialize for ConfigSpecOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ConfigSpecOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ConfigSpecOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21222,19 +21446,22 @@ impl DatastoreAccessibleEnum {
     }
 }
 
-impl serde::Serialize for DatastoreAccessibleEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DatastoreAccessibleEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DatastoreAccessibleEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DatastoreAccessibleEnum::from_str(&s))
+impl miniserde::Deserialize for DatastoreAccessibleEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DatastoreAccessibleEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DatastoreAccessibleEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21289,19 +21516,22 @@ impl DatastoreSectorFormatEnum {
     }
 }
 
-impl serde::Serialize for DatastoreSectorFormatEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DatastoreSectorFormatEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DatastoreSectorFormatEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DatastoreSectorFormatEnum::from_str(&s))
+impl miniserde::Deserialize for DatastoreSectorFormatEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DatastoreSectorFormatEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DatastoreSectorFormatEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21356,19 +21586,22 @@ impl DatastoreSummaryMaintenanceModeStateEnum {
     }
 }
 
-impl serde::Serialize for DatastoreSummaryMaintenanceModeStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DatastoreSummaryMaintenanceModeStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DatastoreSummaryMaintenanceModeStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DatastoreSummaryMaintenanceModeStateEnum::from_str(&s))
+impl miniserde::Deserialize for DatastoreSummaryMaintenanceModeStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DatastoreSummaryMaintenanceModeStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DatastoreSummaryMaintenanceModeStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21432,19 +21665,22 @@ impl DiagnosticManagerLogCreatorEnum {
     }
 }
 
-impl serde::Serialize for DiagnosticManagerLogCreatorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DiagnosticManagerLogCreatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DiagnosticManagerLogCreatorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DiagnosticManagerLogCreatorEnum::from_str(&s))
+impl miniserde::Deserialize for DiagnosticManagerLogCreatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DiagnosticManagerLogCreatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DiagnosticManagerLogCreatorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21495,19 +21731,22 @@ impl DiagnosticManagerLogFormatEnum {
     }
 }
 
-impl serde::Serialize for DiagnosticManagerLogFormatEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DiagnosticManagerLogFormatEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DiagnosticManagerLogFormatEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DiagnosticManagerLogFormatEnum::from_str(&s))
+impl miniserde::Deserialize for DiagnosticManagerLogFormatEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DiagnosticManagerLogFormatEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DiagnosticManagerLogFormatEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21582,19 +21821,22 @@ impl DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualSwitchHostInfrastructureTrafficClassEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21647,19 +21889,22 @@ impl DistributedVirtualSwitchNetworkResourceControlVersionEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualSwitchNetworkResourceControlVersionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualSwitchNetworkResourceControlVersionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualSwitchNetworkResourceControlVersionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualSwitchNetworkResourceControlVersionEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualSwitchNetworkResourceControlVersionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualSwitchNetworkResourceControlVersionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualSwitchNetworkResourceControlVersionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21718,19 +21963,22 @@ impl DistributedVirtualSwitchNicTeamingPolicyModeEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualSwitchNicTeamingPolicyModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualSwitchNicTeamingPolicyModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualSwitchNicTeamingPolicyModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualSwitchNicTeamingPolicyModeEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualSwitchNicTeamingPolicyModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualSwitchNicTeamingPolicyModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualSwitchNicTeamingPolicyModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21789,19 +22037,22 @@ impl DistributedVirtualSwitchProductSpecOperationTypeEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualSwitchProductSpecOperationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualSwitchProductSpecOperationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualSwitchProductSpecOperationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualSwitchProductSpecOperationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualSwitchProductSpecOperationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualSwitchProductSpecOperationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualSwitchProductSpecOperationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21854,19 +22105,22 @@ impl DrsInjectorWorkloadCorrelationStateEnum {
     }
 }
 
-impl serde::Serialize for DrsInjectorWorkloadCorrelationStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DrsInjectorWorkloadCorrelationStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DrsInjectorWorkloadCorrelationStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DrsInjectorWorkloadCorrelationStateEnum::from_str(&s))
+impl miniserde::Deserialize for DrsInjectorWorkloadCorrelationStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DrsInjectorWorkloadCorrelationStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DrsInjectorWorkloadCorrelationStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21919,19 +22173,22 @@ impl FolderDesiredHostStateEnum {
     }
 }
 
-impl serde::Serialize for FolderDesiredHostStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for FolderDesiredHostStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for FolderDesiredHostStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(FolderDesiredHostStateEnum::from_str(&s))
+impl miniserde::Deserialize for FolderDesiredHostStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<FolderDesiredHostStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(FolderDesiredHostStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -21997,19 +22254,22 @@ impl FolderExternallyManagedFolderTypeEnum {
     }
 }
 
-impl serde::Serialize for FolderExternallyManagedFolderTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for FolderExternallyManagedFolderTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for FolderExternallyManagedFolderTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(FolderExternallyManagedFolderTypeEnum::from_str(&s))
+impl miniserde::Deserialize for FolderExternallyManagedFolderTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<FolderExternallyManagedFolderTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(FolderExternallyManagedFolderTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22071,19 +22331,22 @@ impl ReplicationVmStateEnum {
     }
 }
 
-impl serde::Serialize for ReplicationVmStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ReplicationVmStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ReplicationVmStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ReplicationVmStateEnum::from_str(&s))
+impl miniserde::Deserialize for ReplicationVmStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ReplicationVmStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ReplicationVmStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22138,19 +22401,22 @@ impl QuiesceModeEnum {
     }
 }
 
-impl serde::Serialize for QuiesceModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for QuiesceModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for QuiesceModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(QuiesceModeEnum::from_str(&s))
+impl miniserde::Deserialize for QuiesceModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<QuiesceModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(QuiesceModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22209,19 +22475,22 @@ impl HealthUpdateInfoComponentTypeEnum {
     }
 }
 
-impl serde::Serialize for HealthUpdateInfoComponentTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HealthUpdateInfoComponentTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HealthUpdateInfoComponentTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HealthUpdateInfoComponentTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HealthUpdateInfoComponentTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HealthUpdateInfoComponentTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HealthUpdateInfoComponentTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22276,19 +22545,22 @@ impl HostSystemConnectionStateEnum {
     }
 }
 
-impl serde::Serialize for HostSystemConnectionStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSystemConnectionStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSystemConnectionStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSystemConnectionStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostSystemConnectionStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSystemConnectionStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSystemConnectionStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22345,19 +22617,22 @@ impl HostCryptoStateEnum {
     }
 }
 
-impl serde::Serialize for HostCryptoStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostCryptoStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostCryptoStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostCryptoStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostCryptoStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCryptoStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCryptoStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22414,19 +22689,22 @@ impl HostSystemPowerStateEnum {
     }
 }
 
-impl serde::Serialize for HostSystemPowerStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSystemPowerStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSystemPowerStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSystemPowerStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostSystemPowerStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSystemPowerStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSystemPowerStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22488,19 +22766,22 @@ impl HostSystemRemediationStateStateEnum {
     }
 }
 
-impl serde::Serialize for HostSystemRemediationStateStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSystemRemediationStateStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSystemRemediationStateStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSystemRemediationStateStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostSystemRemediationStateStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSystemRemediationStateStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSystemRemediationStateStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22557,19 +22838,22 @@ impl HostStandbyModeEnum {
     }
 }
 
-impl serde::Serialize for HostStandbyModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostStandbyModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostStandbyModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostStandbyModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostStandbyModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostStandbyModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostStandbyModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22622,19 +22906,22 @@ impl HttpNfcLeaseManifestEntryChecksumTypeEnum {
     }
 }
 
-impl serde::Serialize for HttpNfcLeaseManifestEntryChecksumTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HttpNfcLeaseManifestEntryChecksumTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HttpNfcLeaseManifestEntryChecksumTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HttpNfcLeaseManifestEntryChecksumTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HttpNfcLeaseManifestEntryChecksumTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HttpNfcLeaseManifestEntryChecksumTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HttpNfcLeaseManifestEntryChecksumTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22687,19 +22974,22 @@ impl HttpNfcLeaseModeEnum {
     }
 }
 
-impl serde::Serialize for HttpNfcLeaseModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HttpNfcLeaseModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HttpNfcLeaseModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HttpNfcLeaseModeEnum::from_str(&s))
+impl miniserde::Deserialize for HttpNfcLeaseModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HttpNfcLeaseModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HttpNfcLeaseModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22756,19 +23046,22 @@ impl HttpNfcLeaseStateEnum {
     }
 }
 
-impl serde::Serialize for HttpNfcLeaseStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HttpNfcLeaseStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HttpNfcLeaseStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HttpNfcLeaseStateEnum::from_str(&s))
+impl miniserde::Deserialize for HttpNfcLeaseStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HttpNfcLeaseStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HttpNfcLeaseStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22834,19 +23127,22 @@ impl IoFilterTypeEnum {
     }
 }
 
-impl serde::Serialize for IoFilterTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for IoFilterTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for IoFilterTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(IoFilterTypeEnum::from_str(&s))
+impl miniserde::Deserialize for IoFilterTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<IoFilterTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(IoFilterTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22901,19 +23197,22 @@ impl IoFilterOperationEnum {
     }
 }
 
-impl serde::Serialize for IoFilterOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for IoFilterOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for IoFilterOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(IoFilterOperationEnum::from_str(&s))
+impl miniserde::Deserialize for IoFilterOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<IoFilterOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(IoFilterOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -22972,19 +23271,22 @@ impl LatencySensitivitySensitivityLevelEnum {
     }
 }
 
-impl serde::Serialize for LatencySensitivitySensitivityLevelEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LatencySensitivitySensitivityLevelEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LatencySensitivitySensitivityLevelEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LatencySensitivitySensitivityLevelEnum::from_str(&s))
+impl miniserde::Deserialize for LatencySensitivitySensitivityLevelEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LatencySensitivitySensitivityLevelEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LatencySensitivitySensitivityLevelEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23043,19 +23345,22 @@ impl LicenseFeatureInfoUnitEnum {
     }
 }
 
-impl serde::Serialize for LicenseFeatureInfoUnitEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LicenseFeatureInfoUnitEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LicenseFeatureInfoUnitEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LicenseFeatureInfoUnitEnum::from_str(&s))
+impl miniserde::Deserialize for LicenseFeatureInfoUnitEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LicenseFeatureInfoUnitEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LicenseFeatureInfoUnitEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23110,19 +23415,22 @@ impl LicenseFeatureInfoSourceRestrictionEnum {
     }
 }
 
-impl serde::Serialize for LicenseFeatureInfoSourceRestrictionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LicenseFeatureInfoSourceRestrictionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LicenseFeatureInfoSourceRestrictionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LicenseFeatureInfoSourceRestrictionEnum::from_str(&s))
+impl miniserde::Deserialize for LicenseFeatureInfoSourceRestrictionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LicenseFeatureInfoSourceRestrictionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LicenseFeatureInfoSourceRestrictionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23177,19 +23485,22 @@ impl LicenseFeatureInfoStateEnum {
     }
 }
 
-impl serde::Serialize for LicenseFeatureInfoStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LicenseFeatureInfoStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LicenseFeatureInfoStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LicenseFeatureInfoStateEnum::from_str(&s))
+impl miniserde::Deserialize for LicenseFeatureInfoStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LicenseFeatureInfoStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LicenseFeatureInfoStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23253,19 +23564,22 @@ impl HostLicensableResourceKeyEnum {
     }
 }
 
-impl serde::Serialize for HostLicensableResourceKeyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostLicensableResourceKeyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostLicensableResourceKeyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostLicensableResourceKeyEnum::from_str(&s))
+impl miniserde::Deserialize for HostLicensableResourceKeyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostLicensableResourceKeyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostLicensableResourceKeyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23351,19 +23665,22 @@ impl LicenseManagerLicenseKeyEnum {
     }
 }
 
-impl serde::Serialize for LicenseManagerLicenseKeyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LicenseManagerLicenseKeyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LicenseManagerLicenseKeyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LicenseManagerLicenseKeyEnum::from_str(&s))
+impl miniserde::Deserialize for LicenseManagerLicenseKeyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LicenseManagerLicenseKeyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LicenseManagerLicenseKeyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23420,19 +23737,22 @@ impl LicenseManagerStateEnum {
     }
 }
 
-impl serde::Serialize for LicenseManagerStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LicenseManagerStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LicenseManagerStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LicenseManagerStateEnum::from_str(&s))
+impl miniserde::Deserialize for LicenseManagerStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LicenseManagerStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LicenseManagerStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23489,19 +23809,22 @@ impl LicenseReservationInfoStateEnum {
     }
 }
 
-impl serde::Serialize for LicenseReservationInfoStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LicenseReservationInfoStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LicenseReservationInfoStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LicenseReservationInfoStateEnum::from_str(&s))
+impl miniserde::Deserialize for LicenseReservationInfoStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LicenseReservationInfoStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LicenseReservationInfoStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23558,19 +23881,22 @@ impl ManagedEntityStatusEnum {
     }
 }
 
-impl serde::Serialize for ManagedEntityStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ManagedEntityStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ManagedEntityStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ManagedEntityStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ManagedEntityStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ManagedEntityStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ManagedEntityStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23625,19 +23951,22 @@ impl OvfConsumerOstNodeTypeEnum {
     }
 }
 
-impl serde::Serialize for OvfConsumerOstNodeTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for OvfConsumerOstNodeTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for OvfConsumerOstNodeTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(OvfConsumerOstNodeTypeEnum::from_str(&s))
+impl miniserde::Deserialize for OvfConsumerOstNodeTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<OvfConsumerOstNodeTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(OvfConsumerOstNodeTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23707,19 +24036,22 @@ impl OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
     }
 }
 
-impl serde::Serialize for OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(OvfCreateImportSpecParamsDiskProvisioningTypeEnum::from_str(&s))
+impl miniserde::Deserialize for OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<OvfCreateImportSpecParamsDiskProvisioningTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(OvfCreateImportSpecParamsDiskProvisioningTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23781,19 +24113,22 @@ impl PerfSummaryTypeEnum {
     }
 }
 
-impl serde::Serialize for PerfSummaryTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PerfSummaryTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PerfSummaryTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PerfSummaryTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PerfSummaryTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PerfSummaryTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PerfSummaryTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23848,19 +24183,22 @@ impl PerfStatsTypeEnum {
     }
 }
 
-impl serde::Serialize for PerfStatsTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PerfStatsTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PerfStatsTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PerfStatsTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PerfStatsTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PerfStatsTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PerfStatsTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -23941,19 +24279,22 @@ impl PerformanceManagerUnitEnum {
     }
 }
 
-impl serde::Serialize for PerformanceManagerUnitEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PerformanceManagerUnitEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PerformanceManagerUnitEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PerformanceManagerUnitEnum::from_str(&s))
+impl miniserde::Deserialize for PerformanceManagerUnitEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PerformanceManagerUnitEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PerformanceManagerUnitEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24006,19 +24347,22 @@ impl PerfFormatEnum {
     }
 }
 
-impl serde::Serialize for PerfFormatEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PerfFormatEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PerfFormatEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PerfFormatEnum::from_str(&s))
+impl miniserde::Deserialize for PerfFormatEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PerfFormatEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PerfFormatEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24073,19 +24417,22 @@ impl PlaceVmsXClusterSpecPlacementTypeEnum {
     }
 }
 
-impl serde::Serialize for PlaceVmsXClusterSpecPlacementTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PlaceVmsXClusterSpecPlacementTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PlaceVmsXClusterSpecPlacementTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PlaceVmsXClusterSpecPlacementTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PlaceVmsXClusterSpecPlacementTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PlaceVmsXClusterSpecPlacementTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PlaceVmsXClusterSpecPlacementTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24138,19 +24485,22 @@ impl ResourceConfigSpecScaleSharesBehaviorEnum {
     }
 }
 
-impl serde::Serialize for ResourceConfigSpecScaleSharesBehaviorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ResourceConfigSpecScaleSharesBehaviorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ResourceConfigSpecScaleSharesBehaviorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ResourceConfigSpecScaleSharesBehaviorEnum::from_str(&s))
+impl miniserde::Deserialize for ResourceConfigSpecScaleSharesBehaviorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ResourceConfigSpecScaleSharesBehaviorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ResourceConfigSpecScaleSharesBehaviorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24203,19 +24553,22 @@ impl VMotionCompatibilityTypeEnum {
     }
 }
 
-impl serde::Serialize for VMotionCompatibilityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VMotionCompatibilityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VMotionCompatibilityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VMotionCompatibilityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VMotionCompatibilityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VMotionCompatibilityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VMotionCompatibilityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24272,19 +24625,22 @@ impl ValidateMigrationTestTypeEnum {
     }
 }
 
-impl serde::Serialize for ValidateMigrationTestTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ValidateMigrationTestTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ValidateMigrationTestTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ValidateMigrationTestTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ValidateMigrationTestTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ValidateMigrationTestTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ValidateMigrationTestTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24339,19 +24695,22 @@ impl SessionManagerGenericServiceTicketTicketTypeEnum {
     }
 }
 
-impl serde::Serialize for SessionManagerGenericServiceTicketTicketTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SessionManagerGenericServiceTicketTicketTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SessionManagerGenericServiceTicketTicketTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SessionManagerGenericServiceTicketTicketTypeEnum::from_str(&s))
+impl miniserde::Deserialize for SessionManagerGenericServiceTicketTicketTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SessionManagerGenericServiceTicketTicketTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SessionManagerGenericServiceTicketTicketTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24417,19 +24776,22 @@ impl SessionManagerHttpServiceRequestSpecMethodEnum {
     }
 }
 
-impl serde::Serialize for SessionManagerHttpServiceRequestSpecMethodEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SessionManagerHttpServiceRequestSpecMethodEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SessionManagerHttpServiceRequestSpecMethodEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SessionManagerHttpServiceRequestSpecMethodEnum::from_str(&s))
+impl miniserde::Deserialize for SessionManagerHttpServiceRequestSpecMethodEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SessionManagerHttpServiceRequestSpecMethodEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SessionManagerHttpServiceRequestSpecMethodEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24486,19 +24848,22 @@ impl SharesLevelEnum {
     }
 }
 
-impl serde::Serialize for SharesLevelEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SharesLevelEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SharesLevelEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SharesLevelEnum::from_str(&s))
+impl miniserde::Deserialize for SharesLevelEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SharesLevelEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SharesLevelEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24553,19 +24918,22 @@ impl SimpleCommandEncodingEnum {
     }
 }
 
-impl serde::Serialize for SimpleCommandEncodingEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SimpleCommandEncodingEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SimpleCommandEncodingEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SimpleCommandEncodingEnum::from_str(&s))
+impl miniserde::Deserialize for SimpleCommandEncodingEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SimpleCommandEncodingEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SimpleCommandEncodingEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24618,19 +24986,22 @@ impl StorageIormThresholdModeEnum {
     }
 }
 
-impl serde::Serialize for StorageIormThresholdModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for StorageIormThresholdModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for StorageIormThresholdModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(StorageIormThresholdModeEnum::from_str(&s))
+impl miniserde::Deserialize for StorageIormThresholdModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<StorageIormThresholdModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(StorageIormThresholdModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24685,19 +25056,22 @@ impl TaskFilterSpecRecursionOptionEnum {
     }
 }
 
-impl serde::Serialize for TaskFilterSpecRecursionOptionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for TaskFilterSpecRecursionOptionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for TaskFilterSpecRecursionOptionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(TaskFilterSpecRecursionOptionEnum::from_str(&s))
+impl miniserde::Deserialize for TaskFilterSpecRecursionOptionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<TaskFilterSpecRecursionOptionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(TaskFilterSpecRecursionOptionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24752,19 +25126,22 @@ impl TaskFilterSpecTimeOptionEnum {
     }
 }
 
-impl serde::Serialize for TaskFilterSpecTimeOptionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for TaskFilterSpecTimeOptionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for TaskFilterSpecTimeOptionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(TaskFilterSpecTimeOptionEnum::from_str(&s))
+impl miniserde::Deserialize for TaskFilterSpecTimeOptionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<TaskFilterSpecTimeOptionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(TaskFilterSpecTimeOptionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24821,19 +25198,22 @@ impl TaskInfoStateEnum {
     }
 }
 
-impl serde::Serialize for TaskInfoStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for TaskInfoStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for TaskInfoStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(TaskInfoStateEnum::from_str(&s))
+impl miniserde::Deserialize for TaskInfoStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<TaskInfoStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(TaskInfoStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24890,19 +25270,22 @@ impl VirtualAppVAppStateEnum {
     }
 }
 
-impl serde::Serialize for VirtualAppVAppStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualAppVAppStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualAppVAppStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualAppVAppStateEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualAppVAppStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualAppVAppStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualAppVAppStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -24957,19 +25340,22 @@ impl VirtualDiskAdapterTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskAdapterTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskAdapterTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskAdapterTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskAdapterTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskAdapterTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskAdapterTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskAdapterTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25046,19 +25432,22 @@ impl VirtualDiskTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25113,19 +25502,22 @@ impl VirtualMachineAppHeartbeatStatusTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineAppHeartbeatStatusTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineAppHeartbeatStatusTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineAppHeartbeatStatusTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineAppHeartbeatStatusTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineAppHeartbeatStatusTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineAppHeartbeatStatusTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineAppHeartbeatStatusTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25184,19 +25576,22 @@ impl VirtualMachineConnectionStateEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineConnectionStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineConnectionStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineConnectionStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineConnectionStateEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineConnectionStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineConnectionStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineConnectionStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25249,19 +25644,22 @@ impl VirtualMachineCryptoStateEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineCryptoStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineCryptoStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineCryptoStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineCryptoStateEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineCryptoStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineCryptoStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineCryptoStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25323,19 +25721,22 @@ impl VirtualMachineFaultToleranceStateEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineFaultToleranceStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineFaultToleranceStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineFaultToleranceStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineFaultToleranceStateEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineFaultToleranceStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineFaultToleranceStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineFaultToleranceStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25390,19 +25791,22 @@ impl VirtualMachineFaultToleranceTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineFaultToleranceTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineFaultToleranceTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineFaultToleranceTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineFaultToleranceTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineFaultToleranceTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineFaultToleranceTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineFaultToleranceTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25457,19 +25861,22 @@ impl VirtualMachineMovePriorityEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineMovePriorityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineMovePriorityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineMovePriorityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineMovePriorityEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineMovePriorityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineMovePriorityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineMovePriorityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25533,19 +25940,22 @@ impl VirtualMachineNeedSecondaryReasonEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineNeedSecondaryReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineNeedSecondaryReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineNeedSecondaryReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineNeedSecondaryReasonEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineNeedSecondaryReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineNeedSecondaryReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineNeedSecondaryReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25600,19 +26010,22 @@ impl VirtualMachinePowerStateEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachinePowerStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachinePowerStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachinePowerStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachinePowerStateEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachinePowerStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachinePowerStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachinePowerStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25667,19 +26080,22 @@ impl VirtualMachineRecordReplayStateEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineRecordReplayStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineRecordReplayStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineRecordReplayStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineRecordReplayStateEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineRecordReplayStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineRecordReplayStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineRecordReplayStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25741,19 +26157,22 @@ impl VirtualMachineTicketTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineTicketTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineTicketTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineTicketTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineTicketTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineTicketTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineTicketTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineTicketTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25810,19 +26229,22 @@ impl VsanCompositeConstraintConjoinerEnumEnum {
     }
 }
 
-impl serde::Serialize for VsanCompositeConstraintConjoinerEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanCompositeConstraintConjoinerEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanCompositeConstraintConjoinerEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanCompositeConstraintConjoinerEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VsanCompositeConstraintConjoinerEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanCompositeConstraintConjoinerEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanCompositeConstraintConjoinerEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25895,19 +26317,22 @@ impl VsanMassCollectorObjectCollectionEnumEnum {
     }
 }
 
-impl serde::Serialize for VsanMassCollectorObjectCollectionEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanMassCollectorObjectCollectionEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanMassCollectorObjectCollectionEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanMassCollectorObjectCollectionEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VsanMassCollectorObjectCollectionEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanMassCollectorObjectCollectionEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanMassCollectorObjectCollectionEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -25971,19 +26396,22 @@ impl VsanPropertyConstraintComparatorEnumEnum {
     }
 }
 
-impl serde::Serialize for VsanPropertyConstraintComparatorEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanPropertyConstraintComparatorEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanPropertyConstraintComparatorEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanPropertyConstraintComparatorEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VsanPropertyConstraintComparatorEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanPropertyConstraintComparatorEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanPropertyConstraintComparatorEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26036,19 +26464,22 @@ impl VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26116,19 +26547,22 @@ impl ActionParameterEnum {
     }
 }
 
-impl serde::Serialize for ActionParameterEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ActionParameterEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ActionParameterEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ActionParameterEnum::from_str(&s))
+impl miniserde::Deserialize for ActionParameterEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ActionParameterEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ActionParameterEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26183,19 +26617,22 @@ impl AlarmFilterSpecAlarmTypeByEntityEnum {
     }
 }
 
-impl serde::Serialize for AlarmFilterSpecAlarmTypeByEntityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AlarmFilterSpecAlarmTypeByEntityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AlarmFilterSpecAlarmTypeByEntityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AlarmFilterSpecAlarmTypeByEntityEnum::from_str(&s))
+impl miniserde::Deserialize for AlarmFilterSpecAlarmTypeByEntityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AlarmFilterSpecAlarmTypeByEntityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AlarmFilterSpecAlarmTypeByEntityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26250,19 +26687,22 @@ impl AlarmFilterSpecAlarmTypeByTriggerEnum {
     }
 }
 
-impl serde::Serialize for AlarmFilterSpecAlarmTypeByTriggerEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AlarmFilterSpecAlarmTypeByTriggerEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AlarmFilterSpecAlarmTypeByTriggerEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AlarmFilterSpecAlarmTypeByTriggerEnum::from_str(&s))
+impl miniserde::Deserialize for AlarmFilterSpecAlarmTypeByTriggerEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AlarmFilterSpecAlarmTypeByTriggerEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AlarmFilterSpecAlarmTypeByTriggerEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26324,19 +26764,22 @@ impl EventAlarmExpressionComparisonOperatorEnum {
     }
 }
 
-impl serde::Serialize for EventAlarmExpressionComparisonOperatorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EventAlarmExpressionComparisonOperatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EventAlarmExpressionComparisonOperatorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EventAlarmExpressionComparisonOperatorEnum::from_str(&s))
+impl miniserde::Deserialize for EventAlarmExpressionComparisonOperatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EventAlarmExpressionComparisonOperatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EventAlarmExpressionComparisonOperatorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26389,19 +26832,22 @@ impl MetricAlarmOperatorEnum {
     }
 }
 
-impl serde::Serialize for MetricAlarmOperatorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for MetricAlarmOperatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for MetricAlarmOperatorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(MetricAlarmOperatorEnum::from_str(&s))
+impl miniserde::Deserialize for MetricAlarmOperatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<MetricAlarmOperatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(MetricAlarmOperatorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26454,19 +26900,22 @@ impl StateAlarmOperatorEnum {
     }
 }
 
-impl serde::Serialize for StateAlarmOperatorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for StateAlarmOperatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for StateAlarmOperatorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(StateAlarmOperatorEnum::from_str(&s))
+impl miniserde::Deserialize for StateAlarmOperatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<StateAlarmOperatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(StateAlarmOperatorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26532,19 +26981,22 @@ impl ActionTypeEnum {
     }
 }
 
-impl serde::Serialize for ActionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ActionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ActionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ActionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ActionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ActionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ActionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26634,19 +27086,22 @@ impl ClusterPowerStatusEnum {
     }
 }
 
-impl serde::Serialize for ClusterPowerStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterPowerStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterPowerStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterPowerStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterPowerStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterPowerStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterPowerStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26699,19 +27154,22 @@ impl ClusterCryptoConfigInfoCryptoModeEnum {
     }
 }
 
-impl serde::Serialize for ClusterCryptoConfigInfoCryptoModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterCryptoConfigInfoCryptoModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterCryptoConfigInfoCryptoModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterCryptoConfigInfoCryptoModeEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterCryptoConfigInfoCryptoModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterCryptoConfigInfoCryptoModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterCryptoConfigInfoCryptoModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26777,19 +27235,22 @@ impl ClusterDasAamNodeStateDasStateEnum {
     }
 }
 
-impl serde::Serialize for ClusterDasAamNodeStateDasStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterDasAamNodeStateDasStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterDasAamNodeStateDasStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterDasAamNodeStateDasStateEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterDasAamNodeStateDasStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterDasAamNodeStateDasStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterDasAamNodeStateDasStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26844,19 +27305,22 @@ impl ClusterDasConfigInfoHbDatastoreCandidateEnum {
     }
 }
 
-impl serde::Serialize for ClusterDasConfigInfoHbDatastoreCandidateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterDasConfigInfoHbDatastoreCandidateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterDasConfigInfoHbDatastoreCandidateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterDasConfigInfoHbDatastoreCandidateEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterDasConfigInfoHbDatastoreCandidateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterDasConfigInfoHbDatastoreCandidateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterDasConfigInfoHbDatastoreCandidateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26909,19 +27373,22 @@ impl ClusterDasConfigInfoServiceStateEnum {
     }
 }
 
-impl serde::Serialize for ClusterDasConfigInfoServiceStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterDasConfigInfoServiceStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterDasConfigInfoServiceStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterDasConfigInfoServiceStateEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterDasConfigInfoServiceStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterDasConfigInfoServiceStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterDasConfigInfoServiceStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -26976,19 +27443,22 @@ impl ClusterDasConfigInfoVmMonitoringStateEnum {
     }
 }
 
-impl serde::Serialize for ClusterDasConfigInfoVmMonitoringStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterDasConfigInfoVmMonitoringStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterDasConfigInfoVmMonitoringStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterDasConfigInfoVmMonitoringStateEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterDasConfigInfoVmMonitoringStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterDasConfigInfoVmMonitoringStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterDasConfigInfoVmMonitoringStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27061,19 +27531,22 @@ impl ClusterDasFdmAvailabilityStateEnum {
     }
 }
 
-impl serde::Serialize for ClusterDasFdmAvailabilityStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterDasFdmAvailabilityStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterDasFdmAvailabilityStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterDasFdmAvailabilityStateEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterDasFdmAvailabilityStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterDasFdmAvailabilityStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterDasFdmAvailabilityStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27130,19 +27603,22 @@ impl DasVmPriorityEnum {
     }
 }
 
-impl serde::Serialize for DasVmPriorityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DasVmPriorityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DasVmPriorityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DasVmPriorityEnum::from_str(&s))
+impl miniserde::Deserialize for DasVmPriorityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DasVmPriorityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DasVmPriorityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27199,19 +27675,22 @@ impl ClusterDasVmSettingsIsolationResponseEnum {
     }
 }
 
-impl serde::Serialize for ClusterDasVmSettingsIsolationResponseEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterDasVmSettingsIsolationResponseEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterDasVmSettingsIsolationResponseEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterDasVmSettingsIsolationResponseEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterDasVmSettingsIsolationResponseEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterDasVmSettingsIsolationResponseEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterDasVmSettingsIsolationResponseEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27275,19 +27754,22 @@ impl ClusterDasVmSettingsRestartPriorityEnum {
     }
 }
 
-impl serde::Serialize for ClusterDasVmSettingsRestartPriorityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterDasVmSettingsRestartPriorityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterDasVmSettingsRestartPriorityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterDasVmSettingsRestartPriorityEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterDasVmSettingsRestartPriorityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterDasVmSettingsRestartPriorityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterDasVmSettingsRestartPriorityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27340,19 +27822,22 @@ impl DpmBehaviorEnum {
     }
 }
 
-impl serde::Serialize for DpmBehaviorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DpmBehaviorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DpmBehaviorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DpmBehaviorEnum::from_str(&s))
+impl miniserde::Deserialize for DpmBehaviorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpmBehaviorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpmBehaviorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27407,19 +27892,22 @@ impl DrsBehaviorEnum {
     }
 }
 
-impl serde::Serialize for DrsBehaviorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DrsBehaviorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DrsBehaviorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DrsBehaviorEnum::from_str(&s))
+impl miniserde::Deserialize for DrsBehaviorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DrsBehaviorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DrsBehaviorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27478,19 +27966,22 @@ impl DrsRecommendationReasonCodeEnum {
     }
 }
 
-impl serde::Serialize for DrsRecommendationReasonCodeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DrsRecommendationReasonCodeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DrsRecommendationReasonCodeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DrsRecommendationReasonCodeEnum::from_str(&s))
+impl miniserde::Deserialize for DrsRecommendationReasonCodeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DrsRecommendationReasonCodeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DrsRecommendationReasonCodeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27545,19 +28036,22 @@ impl ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
     }
 }
 
-impl serde::Serialize for ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterHostInfraUpdateHaModeActionOperationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterHostInfraUpdateHaModeActionOperationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterHostInfraUpdateHaModeActionOperationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27610,19 +28104,22 @@ impl HostPowerOperationTypeEnum {
     }
 }
 
-impl serde::Serialize for HostPowerOperationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostPowerOperationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostPowerOperationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostPowerOperationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostPowerOperationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostPowerOperationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostPowerOperationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27675,19 +28172,22 @@ impl ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum {
     }
 }
 
-impl serde::Serialize for ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27740,19 +28240,22 @@ impl ClusterInfraUpdateHaConfigInfoRemediationTypeEnum {
     }
 }
 
-impl serde::Serialize for ClusterInfraUpdateHaConfigInfoRemediationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterInfraUpdateHaConfigInfoRemediationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterInfraUpdateHaConfigInfoRemediationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterInfraUpdateHaConfigInfoRemediationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterInfraUpdateHaConfigInfoRemediationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterInfraUpdateHaConfigInfoRemediationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterInfraUpdateHaConfigInfoRemediationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27809,19 +28312,22 @@ impl PlacementSpecPlacementTypeEnum {
     }
 }
 
-impl serde::Serialize for PlacementSpecPlacementTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PlacementSpecPlacementTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PlacementSpecPlacementTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PlacementSpecPlacementTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PlacementSpecPlacementTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PlacementSpecPlacementTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PlacementSpecPlacementTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -27874,19 +28380,22 @@ impl ClusterPowerOnVmOptionEnum {
     }
 }
 
-impl serde::Serialize for ClusterPowerOnVmOptionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterPowerOnVmOptionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterPowerOnVmOptionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterPowerOnVmOptionEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterPowerOnVmOptionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterPowerOnVmOptionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterPowerOnVmOptionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28014,19 +28523,22 @@ impl RecommendationReasonCodeEnum {
     }
 }
 
-impl serde::Serialize for RecommendationReasonCodeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for RecommendationReasonCodeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for RecommendationReasonCodeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(RecommendationReasonCodeEnum::from_str(&s))
+impl miniserde::Deserialize for RecommendationReasonCodeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<RecommendationReasonCodeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(RecommendationReasonCodeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28077,19 +28589,22 @@ impl RecommendationTypeEnum {
     }
 }
 
-impl serde::Serialize for RecommendationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for RecommendationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for RecommendationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(RecommendationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for RecommendationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<RecommendationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(RecommendationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28146,19 +28661,22 @@ impl VsanStorageComplianceStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanStorageComplianceStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanStorageComplianceStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanStorageComplianceStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanStorageComplianceStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanStorageComplianceStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanStorageComplianceStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanStorageComplianceStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28211,19 +28729,22 @@ impl ClusterSystemVMsConfigInfoDeploymentModeEnum {
     }
 }
 
-impl serde::Serialize for ClusterSystemVMsConfigInfoDeploymentModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterSystemVMsConfigInfoDeploymentModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterSystemVMsConfigInfoDeploymentModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterSystemVMsConfigInfoDeploymentModeEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterSystemVMsConfigInfoDeploymentModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterSystemVMsConfigInfoDeploymentModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterSystemVMsConfigInfoDeploymentModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28302,19 +28823,22 @@ impl VimClusterVsanStretchedClusterConfigIssueEnumEnum {
     }
 }
 
-impl serde::Serialize for VimClusterVsanStretchedClusterConfigIssueEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimClusterVsanStretchedClusterConfigIssueEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimClusterVsanStretchedClusterConfigIssueEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimClusterVsanStretchedClusterConfigIssueEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VimClusterVsanStretchedClusterConfigIssueEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimClusterVsanStretchedClusterConfigIssueEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimClusterVsanStretchedClusterConfigIssueEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28373,19 +28897,22 @@ impl ClusterVmComponentProtectionSettingsStorageVmReactionEnum {
     }
 }
 
-impl serde::Serialize for ClusterVmComponentProtectionSettingsStorageVmReactionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterVmComponentProtectionSettingsStorageVmReactionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterVmComponentProtectionSettingsStorageVmReactionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterVmComponentProtectionSettingsStorageVmReactionEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterVmComponentProtectionSettingsStorageVmReactionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterVmComponentProtectionSettingsStorageVmReactionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterVmComponentProtectionSettingsStorageVmReactionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28440,19 +28967,22 @@ impl ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum {
     }
 }
 
-impl serde::Serialize for ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28511,19 +29041,22 @@ impl ClusterVmReadinessReadyConditionEnum {
     }
 }
 
-impl serde::Serialize for ClusterVmReadinessReadyConditionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterVmReadinessReadyConditionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterVmReadinessReadyConditionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterVmReadinessReadyConditionEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterVmReadinessReadyConditionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterVmReadinessReadyConditionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterVmReadinessReadyConditionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28580,19 +29113,22 @@ impl VsanBaselinePreferenceTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanBaselinePreferenceTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanBaselinePreferenceTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanBaselinePreferenceTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanBaselinePreferenceTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanBaselinePreferenceTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanBaselinePreferenceTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanBaselinePreferenceTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -28649,19 +29185,22 @@ impl VsanCapabilityStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanCapabilityStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanCapabilityStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanCapabilityStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanCapabilityStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanCapabilityStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanCapabilityStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanCapabilityStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29028,19 +29567,22 @@ impl VsanCapabilityTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanCapabilityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanCapabilityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanCapabilityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanCapabilityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanCapabilityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanCapabilityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanCapabilityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29102,19 +29644,22 @@ impl VsanCapabilityType90Enum {
     }
 }
 
-impl serde::Serialize for VsanCapabilityType90Enum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanCapabilityType90Enum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanCapabilityType90Enum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanCapabilityType90Enum::from_str(&s))
+impl miniserde::Deserialize for VsanCapabilityType90Enum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanCapabilityType90Enum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanCapabilityType90Enum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29235,19 +29780,22 @@ impl VsanClusterHealthActionIdEnumEnum {
     }
 }
 
-impl serde::Serialize for VsanClusterHealthActionIdEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanClusterHealthActionIdEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanClusterHealthActionIdEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanClusterHealthActionIdEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VsanClusterHealthActionIdEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanClusterHealthActionIdEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanClusterHealthActionIdEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29313,19 +29861,22 @@ impl VsanClusterHealthCategoryEnumEnum {
     }
 }
 
-impl serde::Serialize for VsanClusterHealthCategoryEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanClusterHealthCategoryEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanClusterHealthCategoryEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanClusterHealthCategoryEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VsanClusterHealthCategoryEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanClusterHealthCategoryEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanClusterHealthCategoryEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29382,19 +29933,22 @@ impl VsanDatastoreTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanDatastoreTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanDatastoreTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanDatastoreTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanDatastoreTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanDatastoreTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanDatastoreTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanDatastoreTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29453,19 +30007,22 @@ impl VimClusterVsanDiskGroupCreationTypeEnum {
     }
 }
 
-impl serde::Serialize for VimClusterVsanDiskGroupCreationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimClusterVsanDiskGroupCreationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimClusterVsanDiskGroupCreationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimClusterVsanDiskGroupCreationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VimClusterVsanDiskGroupCreationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimClusterVsanDiskGroupCreationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimClusterVsanDiskGroupCreationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29522,19 +30079,22 @@ impl VsanIoInsightInstanceStateEnum {
     }
 }
 
-impl serde::Serialize for VsanIoInsightInstanceStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIoInsightInstanceStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIoInsightInstanceStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIoInsightInstanceStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIoInsightInstanceStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIoInsightInstanceStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIoInsightInstanceStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29589,19 +30149,22 @@ impl VsanIscsiLunStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanIscsiLunStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIscsiLunStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIscsiLunStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIscsiLunStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIscsiLunStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIscsiLunStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIscsiLunStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29656,19 +30219,22 @@ impl VsanIscsiLunRuntimeStatusTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanIscsiLunRuntimeStatusTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIscsiLunRuntimeStatusTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIscsiLunRuntimeStatusTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIscsiLunRuntimeStatusTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIscsiLunRuntimeStatusTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIscsiLunRuntimeStatusTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIscsiLunRuntimeStatusTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29725,19 +30291,22 @@ impl VsanIscsiTargetAuthTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanIscsiTargetAuthTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIscsiTargetAuthTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIscsiTargetAuthTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIscsiTargetAuthTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIscsiTargetAuthTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIscsiTargetAuthTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIscsiTargetAuthTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29792,19 +30361,22 @@ impl VsanIscsiTargetServiceProcessStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanIscsiTargetServiceProcessStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIscsiTargetServiceProcessStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIscsiTargetServiceProcessStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIscsiTargetServiceProcessStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIscsiTargetServiceProcessStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIscsiTargetServiceProcessStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIscsiTargetServiceProcessStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29927,19 +30499,22 @@ impl VsanObjectTypeEnumEnum {
     }
 }
 
-impl serde::Serialize for VsanObjectTypeEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanObjectTypeEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanObjectTypeEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanObjectTypeEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VsanObjectTypeEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanObjectTypeEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanObjectTypeEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -29990,19 +30565,22 @@ impl VsanObjectTypeEnum90Enum {
     }
 }
 
-impl serde::Serialize for VsanObjectTypeEnum90Enum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanObjectTypeEnum90Enum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanObjectTypeEnum90Enum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanObjectTypeEnum90Enum::from_str(&s))
+impl miniserde::Deserialize for VsanObjectTypeEnum90Enum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanObjectTypeEnum90Enum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanObjectTypeEnum90Enum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30061,19 +30639,22 @@ impl VsanPerfDiagnosticQueryTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanPerfDiagnosticQueryTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanPerfDiagnosticQueryTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanPerfDiagnosticQueryTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanPerfDiagnosticQueryTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanPerfDiagnosticQueryTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanPerfDiagnosticQueryTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanPerfDiagnosticQueryTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30143,19 +30724,22 @@ impl VsanPerfStatsUnitTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanPerfStatsUnitTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanPerfStatsUnitTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanPerfStatsUnitTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanPerfStatsUnitTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanPerfStatsUnitTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanPerfStatsUnitTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanPerfStatsUnitTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30212,19 +30796,22 @@ impl VsanPerfStatsTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanPerfStatsTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanPerfStatsTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanPerfStatsTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanPerfStatsTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanPerfStatsTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanPerfStatsTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanPerfStatsTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30288,19 +30875,22 @@ impl VsanPerfSummaryTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanPerfSummaryTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanPerfSummaryTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanPerfSummaryTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanPerfSummaryTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanPerfSummaryTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanPerfSummaryTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanPerfSummaryTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30355,19 +30945,22 @@ impl VsanPerfThresholdDirectionTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanPerfThresholdDirectionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanPerfThresholdDirectionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanPerfThresholdDirectionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanPerfThresholdDirectionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanPerfThresholdDirectionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanPerfThresholdDirectionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanPerfThresholdDirectionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30422,19 +31015,22 @@ impl VsanRelayoutObjectsErrorCodeEnum {
     }
 }
 
-impl serde::Serialize for VsanRelayoutObjectsErrorCodeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanRelayoutObjectsErrorCodeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanRelayoutObjectsErrorCodeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanRelayoutObjectsErrorCodeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanRelayoutObjectsErrorCodeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanRelayoutObjectsErrorCodeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanRelayoutObjectsErrorCodeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30493,19 +31089,22 @@ impl VsanSpaceReportingEntityTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanSpaceReportingEntityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSpaceReportingEntityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSpaceReportingEntityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSpaceReportingEntityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSpaceReportingEntityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSpaceReportingEntityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSpaceReportingEntityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30567,19 +31166,22 @@ impl VsanHealthLogLevelEnumEnum {
     }
 }
 
-impl serde::Serialize for VsanHealthLogLevelEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHealthLogLevelEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHealthLogLevelEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHealthLogLevelEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHealthLogLevelEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHealthLogLevelEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHealthLogLevelEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30636,19 +31238,22 @@ impl CnsClusterFlavorEnum {
     }
 }
 
-impl serde::Serialize for CnsClusterFlavorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CnsClusterFlavorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CnsClusterFlavorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CnsClusterFlavorEnum::from_str(&s))
+impl miniserde::Deserialize for CnsClusterFlavorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CnsClusterFlavorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CnsClusterFlavorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30701,19 +31306,22 @@ impl CnsClusterTypeEnum {
     }
 }
 
-impl serde::Serialize for CnsClusterTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CnsClusterTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CnsClusterTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CnsClusterTypeEnum::from_str(&s))
+impl miniserde::Deserialize for CnsClusterTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CnsClusterTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CnsClusterTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30770,19 +31378,22 @@ impl CnsKubernetesEntityTypeEnum {
     }
 }
 
-impl serde::Serialize for CnsKubernetesEntityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CnsKubernetesEntityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CnsKubernetesEntityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CnsKubernetesEntityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for CnsKubernetesEntityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CnsKubernetesEntityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CnsKubernetesEntityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30837,19 +31448,22 @@ impl MetricFormatEnum {
     }
 }
 
-impl serde::Serialize for MetricFormatEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for MetricFormatEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for MetricFormatEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(MetricFormatEnum::from_str(&s))
+impl miniserde::Deserialize for MetricFormatEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<MetricFormatEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(MetricFormatEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30915,19 +31529,22 @@ impl MetricTypeEnum {
     }
 }
 
-impl serde::Serialize for MetricTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for MetricTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for MetricTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(MetricTypeEnum::from_str(&s))
+impl miniserde::Deserialize for MetricTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<MetricTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(MetricTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -30997,19 +31614,22 @@ impl QuerySelectionNameTypeEnum {
     }
 }
 
-impl serde::Serialize for QuerySelectionNameTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for QuerySelectionNameTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for QuerySelectionNameTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(QuerySelectionNameTypeEnum::from_str(&s))
+impl miniserde::Deserialize for QuerySelectionNameTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<QuerySelectionNameTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(QuerySelectionNameTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31064,19 +31684,22 @@ impl CnsVolumeTypeEnum {
     }
 }
 
-impl serde::Serialize for CnsVolumeTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CnsVolumeTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CnsVolumeTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CnsVolumeTypeEnum::from_str(&s))
+impl miniserde::Deserialize for CnsVolumeTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CnsVolumeTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CnsVolumeTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31129,19 +31752,22 @@ impl DvsFilterOnFailureEnum {
     }
 }
 
-impl serde::Serialize for DvsFilterOnFailureEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DvsFilterOnFailureEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DvsFilterOnFailureEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DvsFilterOnFailureEnum::from_str(&s))
+impl miniserde::Deserialize for DvsFilterOnFailureEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DvsFilterOnFailureEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DvsFilterOnFailureEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31198,19 +31824,22 @@ impl DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum {
     }
 }
 
-impl serde::Serialize for DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum::from_str(&s))
+impl miniserde::Deserialize for DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31263,19 +31892,22 @@ impl DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
     }
 }
 
-impl serde::Serialize for DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum::from_str(&s))
+impl miniserde::Deserialize for DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31328,19 +31960,22 @@ impl DistributedVirtualPortgroupBackingTypeEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualPortgroupBackingTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualPortgroupBackingTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualPortgroupBackingTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualPortgroupBackingTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualPortgroupBackingTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualPortgroupBackingTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualPortgroupBackingTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31395,19 +32030,22 @@ impl DistributedVirtualPortgroupMetaTagNameEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualPortgroupMetaTagNameEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualPortgroupMetaTagNameEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualPortgroupMetaTagNameEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualPortgroupMetaTagNameEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualPortgroupMetaTagNameEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualPortgroupMetaTagNameEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualPortgroupMetaTagNameEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31462,19 +32100,22 @@ impl DistributedVirtualPortgroupPortgroupTypeEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualPortgroupPortgroupTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualPortgroupPortgroupTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualPortgroupPortgroupTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualPortgroupPortgroupTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualPortgroupPortgroupTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualPortgroupPortgroupTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualPortgroupPortgroupTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31527,19 +32168,22 @@ impl EntityTypeEnum {
     }
 }
 
-impl serde::Serialize for EntityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EntityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EntityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EntityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for EntityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EntityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EntityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31594,19 +32238,22 @@ impl EntityImportTypeEnum {
     }
 }
 
-impl serde::Serialize for EntityImportTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EntityImportTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EntityImportTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EntityImportTypeEnum::from_str(&s))
+impl miniserde::Deserialize for EntityImportTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EntityImportTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EntityImportTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31659,19 +32306,22 @@ impl DvsFilterSpecLinkConfigEnum {
     }
 }
 
-impl serde::Serialize for DvsFilterSpecLinkConfigEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DvsFilterSpecLinkConfigEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DvsFilterSpecLinkConfigEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DvsFilterSpecLinkConfigEnum::from_str(&s))
+impl miniserde::Deserialize for DvsFilterSpecLinkConfigEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DvsFilterSpecLinkConfigEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DvsFilterSpecLinkConfigEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31724,19 +32374,22 @@ impl DvsFilterSpecLinkStateEnum {
     }
 }
 
-impl serde::Serialize for DvsFilterSpecLinkStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DvsFilterSpecLinkStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DvsFilterSpecLinkStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DvsFilterSpecLinkStateEnum::from_str(&s))
+impl miniserde::Deserialize for DvsFilterSpecLinkStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DvsFilterSpecLinkStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DvsFilterSpecLinkStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31789,19 +32442,22 @@ impl HostDvsConfigSpecSwitchModeEnum {
     }
 }
 
-impl serde::Serialize for HostDvsConfigSpecSwitchModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDvsConfigSpecSwitchModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDvsConfigSpecSwitchModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDvsConfigSpecSwitchModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostDvsConfigSpecSwitchModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDvsConfigSpecSwitchModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDvsConfigSpecSwitchModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31856,19 +32512,22 @@ impl HostDistributedVirtualSwitchManagerFailoverReasonEnum {
     }
 }
 
-impl serde::Serialize for HostDistributedVirtualSwitchManagerFailoverReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDistributedVirtualSwitchManagerFailoverReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDistributedVirtualSwitchManagerFailoverReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDistributedVirtualSwitchManagerFailoverReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostDistributedVirtualSwitchManagerFailoverReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDistributedVirtualSwitchManagerFailoverReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDistributedVirtualSwitchManagerFailoverReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31919,19 +32578,22 @@ impl HostDistributedVirtualSwitchManagerFailoverStageEnum {
     }
 }
 
-impl serde::Serialize for HostDistributedVirtualSwitchManagerFailoverStageEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDistributedVirtualSwitchManagerFailoverStageEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDistributedVirtualSwitchManagerFailoverStageEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDistributedVirtualSwitchManagerFailoverStageEnum::from_str(&s))
+impl miniserde::Deserialize for HostDistributedVirtualSwitchManagerFailoverStageEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDistributedVirtualSwitchManagerFailoverStageEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDistributedVirtualSwitchManagerFailoverStageEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -31993,19 +32655,22 @@ impl DistributedVirtualSwitchHostMemberHostComponentStateEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualSwitchHostMemberHostComponentStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualSwitchHostMemberHostComponentStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualSwitchHostMemberHostComponentStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualSwitchHostMemberHostComponentStateEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualSwitchHostMemberHostComponentStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualSwitchHostMemberHostComponentStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualSwitchHostMemberHostComponentStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32058,19 +32723,22 @@ impl DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32123,19 +32791,22 @@ impl DistributedVirtualSwitchHostMemberTransportZoneTypeEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualSwitchHostMemberTransportZoneTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualSwitchHostMemberTransportZoneTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualSwitchHostMemberTransportZoneTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualSwitchHostMemberTransportZoneTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualSwitchHostMemberTransportZoneTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualSwitchHostMemberTransportZoneTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualSwitchHostMemberTransportZoneTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32194,19 +32865,22 @@ impl DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum {
     }
 }
 
-impl serde::Serialize for DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32261,19 +32935,22 @@ impl DvsNetworkRuleDirectionTypeEnum {
     }
 }
 
-impl serde::Serialize for DvsNetworkRuleDirectionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DvsNetworkRuleDirectionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DvsNetworkRuleDirectionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DvsNetworkRuleDirectionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DvsNetworkRuleDirectionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DvsNetworkRuleDirectionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DvsNetworkRuleDirectionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32326,19 +33003,22 @@ impl VMwareDvsLacpApiVersionEnum {
     }
 }
 
-impl serde::Serialize for VMwareDvsLacpApiVersionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VMwareDvsLacpApiVersionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VMwareDvsLacpApiVersionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VMwareDvsLacpApiVersionEnum::from_str(&s))
+impl miniserde::Deserialize for VMwareDvsLacpApiVersionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VMwareDvsLacpApiVersionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VMwareDvsLacpApiVersionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32430,19 +33110,22 @@ impl VMwareDvsLacpLoadBalanceAlgorithmEnum {
     }
 }
 
-impl serde::Serialize for VMwareDvsLacpLoadBalanceAlgorithmEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VMwareDvsLacpLoadBalanceAlgorithmEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VMwareDvsLacpLoadBalanceAlgorithmEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VMwareDvsLacpLoadBalanceAlgorithmEnum::from_str(&s))
+impl miniserde::Deserialize for VMwareDvsLacpLoadBalanceAlgorithmEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VMwareDvsLacpLoadBalanceAlgorithmEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VMwareDvsLacpLoadBalanceAlgorithmEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32495,19 +33178,22 @@ impl DvsMacLimitPolicyTypeEnum {
     }
 }
 
-impl serde::Serialize for DvsMacLimitPolicyTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DvsMacLimitPolicyTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DvsMacLimitPolicyTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DvsMacLimitPolicyTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DvsMacLimitPolicyTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DvsMacLimitPolicyTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DvsMacLimitPolicyTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32560,19 +33246,22 @@ impl VMwareDvsMulticastFilteringModeEnum {
     }
 }
 
-impl serde::Serialize for VMwareDvsMulticastFilteringModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VMwareDvsMulticastFilteringModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VMwareDvsMulticastFilteringModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VMwareDvsMulticastFilteringModeEnum::from_str(&s))
+impl miniserde::Deserialize for VMwareDvsMulticastFilteringModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VMwareDvsMulticastFilteringModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VMwareDvsMulticastFilteringModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32627,19 +33316,22 @@ impl VmwareDistributedVirtualSwitchPvlanPortTypeEnum {
     }
 }
 
-impl serde::Serialize for VmwareDistributedVirtualSwitchPvlanPortTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VmwareDistributedVirtualSwitchPvlanPortTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VmwareDistributedVirtualSwitchPvlanPortTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VmwareDistributedVirtualSwitchPvlanPortTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VmwareDistributedVirtualSwitchPvlanPortTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VmwareDistributedVirtualSwitchPvlanPortTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VmwareDistributedVirtualSwitchPvlanPortTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32696,19 +33388,22 @@ impl VMwareDvsTeamingMatchStatusEnum {
     }
 }
 
-impl serde::Serialize for VMwareDvsTeamingMatchStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VMwareDvsTeamingMatchStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VMwareDvsTeamingMatchStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VMwareDvsTeamingMatchStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VMwareDvsTeamingMatchStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VMwareDvsTeamingMatchStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VMwareDvsTeamingMatchStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32761,19 +33456,22 @@ impl VMwareUplinkLacpModeEnum {
     }
 }
 
-impl serde::Serialize for VMwareUplinkLacpModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VMwareUplinkLacpModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VMwareUplinkLacpModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VMwareUplinkLacpModeEnum::from_str(&s))
+impl miniserde::Deserialize for VMwareUplinkLacpModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VMwareUplinkLacpModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VMwareUplinkLacpModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32826,19 +33524,22 @@ impl VMwareUplinkLacpTimeoutModeEnum {
     }
 }
 
-impl serde::Serialize for VMwareUplinkLacpTimeoutModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VMwareUplinkLacpTimeoutModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VMwareUplinkLacpTimeoutModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VMwareUplinkLacpTimeoutModeEnum::from_str(&s))
+impl miniserde::Deserialize for VMwareUplinkLacpTimeoutModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VMwareUplinkLacpTimeoutModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VMwareUplinkLacpTimeoutModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32893,19 +33594,22 @@ impl VMwareDvsVspanSessionEncapTypeEnum {
     }
 }
 
-impl serde::Serialize for VMwareDvsVspanSessionEncapTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VMwareDvsVspanSessionEncapTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VMwareDvsVspanSessionEncapTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VMwareDvsVspanSessionEncapTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VMwareDvsVspanSessionEncapTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VMwareDvsVspanSessionEncapTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VMwareDvsVspanSessionEncapTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -32964,19 +33668,22 @@ impl VMwareDvsVspanSessionTypeEnum {
     }
 }
 
-impl serde::Serialize for VMwareDvsVspanSessionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VMwareDvsVspanSessionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VMwareDvsVspanSessionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VMwareDvsVspanSessionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VMwareDvsVspanSessionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VMwareDvsVspanSessionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VMwareDvsVspanSessionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33031,19 +33738,22 @@ impl CryptoManagerHostKeyManagementTypeEnum {
     }
 }
 
-impl serde::Serialize for CryptoManagerHostKeyManagementTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CryptoManagerHostKeyManagementTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CryptoManagerHostKeyManagementTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CryptoManagerHostKeyManagementTypeEnum::from_str(&s))
+impl miniserde::Deserialize for CryptoManagerHostKeyManagementTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CryptoManagerHostKeyManagementTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CryptoManagerHostKeyManagementTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33113,19 +33823,22 @@ impl CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
     }
 }
 
-impl serde::Serialize for CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::from_str(&s))
+impl miniserde::Deserialize for CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33178,19 +33891,22 @@ impl KmipClusterInfoKeyTypeEnum {
     }
 }
 
-impl serde::Serialize for KmipClusterInfoKeyTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for KmipClusterInfoKeyTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for KmipClusterInfoKeyTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(KmipClusterInfoKeyTypeEnum::from_str(&s))
+impl miniserde::Deserialize for KmipClusterInfoKeyTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<KmipClusterInfoKeyTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(KmipClusterInfoKeyTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33247,19 +33963,22 @@ impl KmipClusterInfoKmsManagementTypeEnum {
     }
 }
 
-impl serde::Serialize for KmipClusterInfoKmsManagementTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for KmipClusterInfoKmsManagementTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for KmipClusterInfoKmsManagementTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(KmipClusterInfoKmsManagementTypeEnum::from_str(&s))
+impl miniserde::Deserialize for KmipClusterInfoKmsManagementTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<KmipClusterInfoKmsManagementTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(KmipClusterInfoKmsManagementTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33316,19 +34035,22 @@ impl CustomizationFailedReasonCodeEnum {
     }
 }
 
-impl serde::Serialize for CustomizationFailedReasonCodeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CustomizationFailedReasonCodeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CustomizationFailedReasonCodeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CustomizationFailedReasonCodeEnum::from_str(&s))
+impl miniserde::Deserialize for CustomizationFailedReasonCodeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CustomizationFailedReasonCodeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CustomizationFailedReasonCodeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33385,19 +34107,22 @@ impl DvsEventPortBlockStateEnum {
     }
 }
 
-impl serde::Serialize for DvsEventPortBlockStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DvsEventPortBlockStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DvsEventPortBlockStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DvsEventPortBlockStateEnum::from_str(&s))
+impl miniserde::Deserialize for DvsEventPortBlockStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DvsEventPortBlockStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DvsEventPortBlockStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33454,19 +34179,22 @@ impl EventEventSeverityEnum {
     }
 }
 
-impl serde::Serialize for EventEventSeverityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EventEventSeverityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EventEventSeverityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EventEventSeverityEnum::from_str(&s))
+impl miniserde::Deserialize for EventEventSeverityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EventEventSeverityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EventEventSeverityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33523,19 +34251,22 @@ impl EventCategoryEnum {
     }
 }
 
-impl serde::Serialize for EventCategoryEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EventCategoryEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EventCategoryEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EventCategoryEnum::from_str(&s))
+impl miniserde::Deserialize for EventCategoryEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EventCategoryEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EventCategoryEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33590,19 +34321,22 @@ impl EventFilterSpecRecursionOptionEnum {
     }
 }
 
-impl serde::Serialize for EventFilterSpecRecursionOptionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for EventFilterSpecRecursionOptionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for EventFilterSpecRecursionOptionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(EventFilterSpecRecursionOptionEnum::from_str(&s))
+impl miniserde::Deserialize for EventFilterSpecRecursionOptionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<EventFilterSpecRecursionOptionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(EventFilterSpecRecursionOptionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33668,19 +34402,22 @@ impl HostDasErrorEventHostDasErrorReasonEnum {
     }
 }
 
-impl serde::Serialize for HostDasErrorEventHostDasErrorReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDasErrorEventHostDasErrorReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDasErrorEventHostDasErrorReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDasErrorEventHostDasErrorReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostDasErrorEventHostDasErrorReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDasErrorEventHostDasErrorReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDasErrorEventHostDasErrorReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33748,19 +34485,22 @@ impl HostDisconnectedEventReasonCodeEnum {
     }
 }
 
-impl serde::Serialize for HostDisconnectedEventReasonCodeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDisconnectedEventReasonCodeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDisconnectedEventReasonCodeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDisconnectedEventReasonCodeEnum::from_str(&s))
+impl miniserde::Deserialize for HostDisconnectedEventReasonCodeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDisconnectedEventReasonCodeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDisconnectedEventReasonCodeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33817,19 +34557,22 @@ impl VmDasBeingResetEventReasonCodeEnum {
     }
 }
 
-impl serde::Serialize for VmDasBeingResetEventReasonCodeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VmDasBeingResetEventReasonCodeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VmDasBeingResetEventReasonCodeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VmDasBeingResetEventReasonCodeEnum::from_str(&s))
+impl miniserde::Deserialize for VmDasBeingResetEventReasonCodeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VmDasBeingResetEventReasonCodeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VmDasBeingResetEventReasonCodeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33886,19 +34629,22 @@ impl VmFailedStartingSecondaryEventFailureReasonEnum {
     }
 }
 
-impl serde::Serialize for VmFailedStartingSecondaryEventFailureReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VmFailedStartingSecondaryEventFailureReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VmFailedStartingSecondaryEventFailureReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VmFailedStartingSecondaryEventFailureReasonEnum::from_str(&s))
+impl miniserde::Deserialize for VmFailedStartingSecondaryEventFailureReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VmFailedStartingSecondaryEventFailureReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VmFailedStartingSecondaryEventFailureReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -33951,19 +34697,22 @@ impl VmShutdownOnIsolationEventOperationEnum {
     }
 }
 
-impl serde::Serialize for VmShutdownOnIsolationEventOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VmShutdownOnIsolationEventOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VmShutdownOnIsolationEventOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VmShutdownOnIsolationEventOperationEnum::from_str(&s))
+impl miniserde::Deserialize for VmShutdownOnIsolationEventOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VmShutdownOnIsolationEventOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VmShutdownOnIsolationEventOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34016,19 +34765,22 @@ impl AffinityTypeEnum {
     }
 }
 
-impl serde::Serialize for AffinityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AffinityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AffinityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AffinityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for AffinityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AffinityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AffinityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34096,19 +34848,22 @@ impl AgentInstallFailedReasonEnum {
     }
 }
 
-impl serde::Serialize for AgentInstallFailedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AgentInstallFailedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AgentInstallFailedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AgentInstallFailedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for AgentInstallFailedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AgentInstallFailedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AgentInstallFailedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34159,19 +34914,22 @@ impl CannotEnableVmcpForClusterReasonEnum {
     }
 }
 
-impl serde::Serialize for CannotEnableVmcpForClusterReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CannotEnableVmcpForClusterReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CannotEnableVmcpForClusterReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CannotEnableVmcpForClusterReasonEnum::from_str(&s))
+impl miniserde::Deserialize for CannotEnableVmcpForClusterReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CannotEnableVmcpForClusterReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CannotEnableVmcpForClusterReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34224,19 +34982,22 @@ impl CannotMoveFaultToleranceVmMoveTypeEnum {
     }
 }
 
-impl serde::Serialize for CannotMoveFaultToleranceVmMoveTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CannotMoveFaultToleranceVmMoveTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CannotMoveFaultToleranceVmMoveTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CannotMoveFaultToleranceVmMoveTypeEnum::from_str(&s))
+impl miniserde::Deserialize for CannotMoveFaultToleranceVmMoveTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CannotMoveFaultToleranceVmMoveTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CannotMoveFaultToleranceVmMoveTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34293,19 +35054,22 @@ impl CannotPowerOffVmInClusterOperationEnum {
     }
 }
 
-impl serde::Serialize for CannotPowerOffVmInClusterOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CannotPowerOffVmInClusterOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CannotPowerOffVmInClusterOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CannotPowerOffVmInClusterOperationEnum::from_str(&s))
+impl miniserde::Deserialize for CannotPowerOffVmInClusterOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CannotPowerOffVmInClusterOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CannotPowerOffVmInClusterOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34369,19 +35133,22 @@ impl CannotUseNetworkReasonEnum {
     }
 }
 
-impl serde::Serialize for CannotUseNetworkReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CannotUseNetworkReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CannotUseNetworkReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CannotUseNetworkReasonEnum::from_str(&s))
+impl miniserde::Deserialize for CannotUseNetworkReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CannotUseNetworkReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CannotUseNetworkReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34454,19 +35221,22 @@ impl DasConfigFaultDasConfigFaultReasonEnum {
     }
 }
 
-impl serde::Serialize for DasConfigFaultDasConfigFaultReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DasConfigFaultDasConfigFaultReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DasConfigFaultDasConfigFaultReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DasConfigFaultDasConfigFaultReasonEnum::from_str(&s))
+impl miniserde::Deserialize for DasConfigFaultDasConfigFaultReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DasConfigFaultDasConfigFaultReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DasConfigFaultDasConfigFaultReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34521,19 +35291,22 @@ impl DeviceNotSupportedReasonEnum {
     }
 }
 
-impl serde::Serialize for DeviceNotSupportedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DeviceNotSupportedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DeviceNotSupportedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DeviceNotSupportedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for DeviceNotSupportedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DeviceNotSupportedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DeviceNotSupportedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34584,19 +35357,22 @@ impl DisallowedChangeByServiceDisallowedChangeEnum {
     }
 }
 
-impl serde::Serialize for DisallowedChangeByServiceDisallowedChangeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DisallowedChangeByServiceDisallowedChangeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DisallowedChangeByServiceDisallowedChangeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DisallowedChangeByServiceDisallowedChangeEnum::from_str(&s))
+impl miniserde::Deserialize for DisallowedChangeByServiceDisallowedChangeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DisallowedChangeByServiceDisallowedChangeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DisallowedChangeByServiceDisallowedChangeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34651,19 +35427,22 @@ impl FtIssuesOnHostHostSelectionTypeEnum {
     }
 }
 
-impl serde::Serialize for FtIssuesOnHostHostSelectionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for FtIssuesOnHostHostSelectionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for FtIssuesOnHostHostSelectionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(FtIssuesOnHostHostSelectionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for FtIssuesOnHostHostSelectionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<FtIssuesOnHostHostSelectionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(FtIssuesOnHostHostSelectionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34714,19 +35493,22 @@ impl HostHasComponentFailureHostComponentTypeEnum {
     }
 }
 
-impl serde::Serialize for HostHasComponentFailureHostComponentTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostHasComponentFailureHostComponentTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostHasComponentFailureHostComponentTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostHasComponentFailureHostComponentTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostHasComponentFailureHostComponentTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostHasComponentFailureHostComponentTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostHasComponentFailureHostComponentTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34779,19 +35561,22 @@ impl HostIncompatibleForFaultToleranceReasonEnum {
     }
 }
 
-impl serde::Serialize for HostIncompatibleForFaultToleranceReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostIncompatibleForFaultToleranceReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostIncompatibleForFaultToleranceReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostIncompatibleForFaultToleranceReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostIncompatibleForFaultToleranceReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostIncompatibleForFaultToleranceReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostIncompatibleForFaultToleranceReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34844,19 +35629,22 @@ impl HostIncompatibleForRecordReplayReasonEnum {
     }
 }
 
-impl serde::Serialize for HostIncompatibleForRecordReplayReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostIncompatibleForRecordReplayReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostIncompatibleForRecordReplayReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostIncompatibleForRecordReplayReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostIncompatibleForRecordReplayReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostIncompatibleForRecordReplayReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostIncompatibleForRecordReplayReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34909,19 +35697,22 @@ impl IncompatibleHostForVmReplicationIncompatibleReasonEnum {
     }
 }
 
-impl serde::Serialize for IncompatibleHostForVmReplicationIncompatibleReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for IncompatibleHostForVmReplicationIncompatibleReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for IncompatibleHostForVmReplicationIncompatibleReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(IncompatibleHostForVmReplicationIncompatibleReasonEnum::from_str(&s))
+impl miniserde::Deserialize for IncompatibleHostForVmReplicationIncompatibleReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<IncompatibleHostForVmReplicationIncompatibleReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(IncompatibleHostForVmReplicationIncompatibleReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -34976,19 +35767,22 @@ impl InvalidDasConfigArgumentEntryForInvalidArgumentEnum {
     }
 }
 
-impl serde::Serialize for InvalidDasConfigArgumentEntryForInvalidArgumentEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for InvalidDasConfigArgumentEntryForInvalidArgumentEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for InvalidDasConfigArgumentEntryForInvalidArgumentEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(InvalidDasConfigArgumentEntryForInvalidArgumentEnum::from_str(&s))
+impl miniserde::Deserialize for InvalidDasConfigArgumentEntryForInvalidArgumentEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<InvalidDasConfigArgumentEntryForInvalidArgumentEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(InvalidDasConfigArgumentEntryForInvalidArgumentEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35041,19 +35835,22 @@ impl InvalidProfileReferenceHostReasonEnum {
     }
 }
 
-impl serde::Serialize for InvalidProfileReferenceHostReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for InvalidProfileReferenceHostReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for InvalidProfileReferenceHostReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(InvalidProfileReferenceHostReasonEnum::from_str(&s))
+impl miniserde::Deserialize for InvalidProfileReferenceHostReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<InvalidProfileReferenceHostReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(InvalidProfileReferenceHostReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35110,19 +35907,22 @@ impl LicenseAssignmentFailedReasonEnum {
     }
 }
 
-impl serde::Serialize for LicenseAssignmentFailedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LicenseAssignmentFailedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LicenseAssignmentFailedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LicenseAssignmentFailedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for LicenseAssignmentFailedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LicenseAssignmentFailedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LicenseAssignmentFailedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35175,19 +35975,22 @@ impl NotSupportedDeviceForFtDeviceTypeEnum {
     }
 }
 
-impl serde::Serialize for NotSupportedDeviceForFtDeviceTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NotSupportedDeviceForFtDeviceTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NotSupportedDeviceForFtDeviceTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NotSupportedDeviceForFtDeviceTypeEnum::from_str(&s))
+impl miniserde::Deserialize for NotSupportedDeviceForFtDeviceTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NotSupportedDeviceForFtDeviceTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NotSupportedDeviceForFtDeviceTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35240,19 +36043,22 @@ impl NumVirtualCpusIncompatibleReasonEnum {
     }
 }
 
-impl serde::Serialize for NumVirtualCpusIncompatibleReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NumVirtualCpusIncompatibleReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NumVirtualCpusIncompatibleReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NumVirtualCpusIncompatibleReasonEnum::from_str(&s))
+impl miniserde::Deserialize for NumVirtualCpusIncompatibleReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NumVirtualCpusIncompatibleReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NumVirtualCpusIncompatibleReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35307,19 +36113,22 @@ impl QuarantineModeFaultFaultTypeEnum {
     }
 }
 
-impl serde::Serialize for QuarantineModeFaultFaultTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for QuarantineModeFaultFaultTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for QuarantineModeFaultFaultTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(QuarantineModeFaultFaultTypeEnum::from_str(&s))
+impl miniserde::Deserialize for QuarantineModeFaultFaultTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<QuarantineModeFaultFaultTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(QuarantineModeFaultFaultTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35383,19 +36192,22 @@ impl ReplicationDiskConfigFaultReasonForFaultEnum {
     }
 }
 
-impl serde::Serialize for ReplicationDiskConfigFaultReasonForFaultEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ReplicationDiskConfigFaultReasonForFaultEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ReplicationDiskConfigFaultReasonForFaultEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ReplicationDiskConfigFaultReasonForFaultEnum::from_str(&s))
+impl miniserde::Deserialize for ReplicationDiskConfigFaultReasonForFaultEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ReplicationDiskConfigFaultReasonForFaultEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ReplicationDiskConfigFaultReasonForFaultEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35481,19 +36293,22 @@ impl ReplicationVmConfigFaultReasonForFaultEnum {
     }
 }
 
-impl serde::Serialize for ReplicationVmConfigFaultReasonForFaultEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ReplicationVmConfigFaultReasonForFaultEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ReplicationVmConfigFaultReasonForFaultEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ReplicationVmConfigFaultReasonForFaultEnum::from_str(&s))
+impl miniserde::Deserialize for ReplicationVmConfigFaultReasonForFaultEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ReplicationVmConfigFaultReasonForFaultEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ReplicationVmConfigFaultReasonForFaultEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35561,19 +36376,22 @@ impl ReplicationVmFaultReasonForFaultEnum {
     }
 }
 
-impl serde::Serialize for ReplicationVmFaultReasonForFaultEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ReplicationVmFaultReasonForFaultEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ReplicationVmFaultReasonForFaultEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ReplicationVmFaultReasonForFaultEnum::from_str(&s))
+impl miniserde::Deserialize for ReplicationVmFaultReasonForFaultEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ReplicationVmFaultReasonForFaultEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ReplicationVmFaultReasonForFaultEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35626,19 +36444,22 @@ impl ReplicationVmInProgressFaultActivityEnum {
     }
 }
 
-impl serde::Serialize for ReplicationVmInProgressFaultActivityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ReplicationVmInProgressFaultActivityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ReplicationVmInProgressFaultActivityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ReplicationVmInProgressFaultActivityEnum::from_str(&s))
+impl miniserde::Deserialize for ReplicationVmInProgressFaultActivityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ReplicationVmInProgressFaultActivityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ReplicationVmInProgressFaultActivityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35691,19 +36512,22 @@ impl ThirdPartyLicenseAssignmentFailedReasonEnum {
     }
 }
 
-impl serde::Serialize for ThirdPartyLicenseAssignmentFailedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ThirdPartyLicenseAssignmentFailedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ThirdPartyLicenseAssignmentFailedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ThirdPartyLicenseAssignmentFailedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for ThirdPartyLicenseAssignmentFailedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ThirdPartyLicenseAssignmentFailedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ThirdPartyLicenseAssignmentFailedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35762,19 +36586,22 @@ impl VFlashModuleNotSupportedReasonEnum {
     }
 }
 
-impl serde::Serialize for VFlashModuleNotSupportedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VFlashModuleNotSupportedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VFlashModuleNotSupportedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VFlashModuleNotSupportedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for VFlashModuleNotSupportedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VFlashModuleNotSupportedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VFlashModuleNotSupportedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35908,19 +36735,22 @@ impl VmFaultToleranceConfigIssueReasonForIssueEnum {
     }
 }
 
-impl serde::Serialize for VmFaultToleranceConfigIssueReasonForIssueEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VmFaultToleranceConfigIssueReasonForIssueEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VmFaultToleranceConfigIssueReasonForIssueEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VmFaultToleranceConfigIssueReasonForIssueEnum::from_str(&s))
+impl miniserde::Deserialize for VmFaultToleranceConfigIssueReasonForIssueEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VmFaultToleranceConfigIssueReasonForIssueEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VmFaultToleranceConfigIssueReasonForIssueEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -35979,19 +36809,22 @@ impl VmFaultToleranceInvalidFileBackingDeviceTypeEnum {
     }
 }
 
-impl serde::Serialize for VmFaultToleranceInvalidFileBackingDeviceTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VmFaultToleranceInvalidFileBackingDeviceTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VmFaultToleranceInvalidFileBackingDeviceTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VmFaultToleranceInvalidFileBackingDeviceTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VmFaultToleranceInvalidFileBackingDeviceTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VmFaultToleranceInvalidFileBackingDeviceTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VmFaultToleranceInvalidFileBackingDeviceTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36044,19 +36877,22 @@ impl WillLoseHaProtectionResolutionEnum {
     }
 }
 
-impl serde::Serialize for WillLoseHaProtectionResolutionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for WillLoseHaProtectionResolutionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for WillLoseHaProtectionResolutionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(WillLoseHaProtectionResolutionEnum::from_str(&s))
+impl miniserde::Deserialize for WillLoseHaProtectionResolutionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<WillLoseHaProtectionResolutionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(WillLoseHaProtectionResolutionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36107,19 +36943,22 @@ impl HostActiveDirectoryAuthenticationCertificateDigestEnum {
     }
 }
 
-impl serde::Serialize for HostActiveDirectoryAuthenticationCertificateDigestEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostActiveDirectoryAuthenticationCertificateDigestEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostActiveDirectoryAuthenticationCertificateDigestEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostActiveDirectoryAuthenticationCertificateDigestEnum::from_str(&s))
+impl miniserde::Deserialize for HostActiveDirectoryAuthenticationCertificateDigestEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostActiveDirectoryAuthenticationCertificateDigestEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostActiveDirectoryAuthenticationCertificateDigestEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36183,19 +37022,22 @@ impl HostActiveDirectoryInfoDomainMembershipStatusEnum {
     }
 }
 
-impl serde::Serialize for HostActiveDirectoryInfoDomainMembershipStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostActiveDirectoryInfoDomainMembershipStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostActiveDirectoryInfoDomainMembershipStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostActiveDirectoryInfoDomainMembershipStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostActiveDirectoryInfoDomainMembershipStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostActiveDirectoryInfoDomainMembershipStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostActiveDirectoryInfoDomainMembershipStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36257,19 +37099,22 @@ impl AutoStartActionEnum {
     }
 }
 
-impl serde::Serialize for AutoStartActionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AutoStartActionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AutoStartActionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AutoStartActionEnum::from_str(&s))
+impl miniserde::Deserialize for AutoStartActionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AutoStartActionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AutoStartActionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36324,19 +37169,22 @@ impl AutoStartWaitHeartbeatSettingEnum {
     }
 }
 
-impl serde::Serialize for AutoStartWaitHeartbeatSettingEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AutoStartWaitHeartbeatSettingEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AutoStartWaitHeartbeatSettingEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AutoStartWaitHeartbeatSettingEnum::from_str(&s))
+impl miniserde::Deserialize for AutoStartWaitHeartbeatSettingEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AutoStartWaitHeartbeatSettingEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AutoStartWaitHeartbeatSettingEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36389,19 +37237,22 @@ impl HostBiosInfoFirmwareTypeEnum {
     }
 }
 
-impl serde::Serialize for HostBiosInfoFirmwareTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostBiosInfoFirmwareTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostBiosInfoFirmwareTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostBiosInfoFirmwareTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostBiosInfoFirmwareTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostBiosInfoFirmwareTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostBiosInfoFirmwareTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36469,19 +37320,22 @@ impl HostCapabilityFtUnsupportedReasonEnum {
     }
 }
 
-impl serde::Serialize for HostCapabilityFtUnsupportedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostCapabilityFtUnsupportedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostCapabilityFtUnsupportedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostCapabilityFtUnsupportedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostCapabilityFtUnsupportedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCapabilityFtUnsupportedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCapabilityFtUnsupportedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36543,19 +37397,22 @@ impl HostReplayUnsupportedReasonEnum {
     }
 }
 
-impl serde::Serialize for HostReplayUnsupportedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostReplayUnsupportedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostReplayUnsupportedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostReplayUnsupportedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostReplayUnsupportedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostReplayUnsupportedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostReplayUnsupportedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36610,19 +37467,22 @@ impl HostCapabilityUnmapMethodSupportedEnum {
     }
 }
 
-impl serde::Serialize for HostCapabilityUnmapMethodSupportedEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostCapabilityUnmapMethodSupportedEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostCapabilityUnmapMethodSupportedEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostCapabilityUnmapMethodSupportedEnum::from_str(&s))
+impl miniserde::Deserialize for HostCapabilityUnmapMethodSupportedEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCapabilityUnmapMethodSupportedEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCapabilityUnmapMethodSupportedEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36677,19 +37537,22 @@ impl HostCapabilityVmDirectPathGen2UnsupportedReasonEnum {
     }
 }
 
-impl serde::Serialize for HostCapabilityVmDirectPathGen2UnsupportedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostCapabilityVmDirectPathGen2UnsupportedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostCapabilityVmDirectPathGen2UnsupportedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostCapabilityVmDirectPathGen2UnsupportedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostCapabilityVmDirectPathGen2UnsupportedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCapabilityVmDirectPathGen2UnsupportedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCapabilityVmDirectPathGen2UnsupportedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36751,19 +37614,22 @@ impl HostCertificateManagerCertificateInfoCertificateStatusEnum {
     }
 }
 
-impl serde::Serialize for HostCertificateManagerCertificateInfoCertificateStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostCertificateManagerCertificateInfoCertificateStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostCertificateManagerCertificateInfoCertificateStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostCertificateManagerCertificateInfoCertificateStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostCertificateManagerCertificateInfoCertificateStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCertificateManagerCertificateInfoCertificateStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCertificateManagerCertificateInfoCertificateStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36816,19 +37682,22 @@ impl HostCertificateManagerCertificateKindEnum {
     }
 }
 
-impl serde::Serialize for HostCertificateManagerCertificateKindEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostCertificateManagerCertificateKindEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostCertificateManagerCertificateKindEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostCertificateManagerCertificateKindEnum::from_str(&s))
+impl miniserde::Deserialize for HostCertificateManagerCertificateKindEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCertificateManagerCertificateKindEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCertificateManagerCertificateKindEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36881,19 +37750,22 @@ impl HostConfigChangeModeEnum {
     }
 }
 
-impl serde::Serialize for HostConfigChangeModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostConfigChangeModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostConfigChangeModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostConfigChangeModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostConfigChangeModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostConfigChangeModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostConfigChangeModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -36950,19 +37822,22 @@ impl HostConfigChangeOperationEnum {
     }
 }
 
-impl serde::Serialize for HostConfigChangeOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostConfigChangeOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostConfigChangeOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostConfigChangeOperationEnum::from_str(&s))
+impl miniserde::Deserialize for HostConfigChangeOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostConfigChangeOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostConfigChangeOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37015,19 +37890,22 @@ impl HostConfigChangeOwnerEnum {
     }
 }
 
-impl serde::Serialize for HostConfigChangeOwnerEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostConfigChangeOwnerEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostConfigChangeOwnerEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostConfigChangeOwnerEnum::from_str(&s))
+impl miniserde::Deserialize for HostConfigChangeOwnerEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostConfigChangeOwnerEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostConfigChangeOwnerEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37084,19 +37962,22 @@ impl HostCpuPackageVendorEnum {
     }
 }
 
-impl serde::Serialize for HostCpuPackageVendorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostCpuPackageVendorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostCpuPackageVendorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostCpuPackageVendorEnum::from_str(&s))
+impl miniserde::Deserialize for HostCpuPackageVendorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCpuPackageVendorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCpuPackageVendorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37151,19 +38032,22 @@ impl HostCpuPowerManagementInfoPolicyTypeEnum {
     }
 }
 
-impl serde::Serialize for HostCpuPowerManagementInfoPolicyTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostCpuPowerManagementInfoPolicyTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostCpuPowerManagementInfoPolicyTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostCpuPowerManagementInfoPolicyTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostCpuPowerManagementInfoPolicyTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCpuPowerManagementInfoPolicyTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCpuPowerManagementInfoPolicyTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37218,19 +38102,22 @@ impl HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum {
     }
 }
 
-impl serde::Serialize for HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum::from_str(&s))
+impl miniserde::Deserialize for HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37283,19 +38170,22 @@ impl HostDateTimeInfoProtocolEnum {
     }
 }
 
-impl serde::Serialize for HostDateTimeInfoProtocolEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDateTimeInfoProtocolEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDateTimeInfoProtocolEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDateTimeInfoProtocolEnum::from_str(&s))
+impl miniserde::Deserialize for HostDateTimeInfoProtocolEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDateTimeInfoProtocolEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDateTimeInfoProtocolEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37348,19 +38238,22 @@ impl DiagnosticPartitionTypeEnum {
     }
 }
 
-impl serde::Serialize for DiagnosticPartitionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DiagnosticPartitionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DiagnosticPartitionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DiagnosticPartitionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DiagnosticPartitionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DiagnosticPartitionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DiagnosticPartitionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37413,19 +38306,22 @@ impl DiagnosticPartitionStorageTypeEnum {
     }
 }
 
-impl serde::Serialize for DiagnosticPartitionStorageTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DiagnosticPartitionStorageTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DiagnosticPartitionStorageTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DiagnosticPartitionStorageTypeEnum::from_str(&s))
+impl miniserde::Deserialize for DiagnosticPartitionStorageTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DiagnosticPartitionStorageTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DiagnosticPartitionStorageTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37487,19 +38383,22 @@ impl HostDigestInfoDigestMethodTypeEnum {
     }
 }
 
-impl serde::Serialize for HostDigestInfoDigestMethodTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDigestInfoDigestMethodTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDigestInfoDigestMethodTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDigestInfoDigestMethodTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostDigestInfoDigestMethodTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDigestInfoDigestMethodTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDigestInfoDigestMethodTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37556,19 +38455,22 @@ impl HostDigestVerificationSettingEnum {
     }
 }
 
-impl serde::Serialize for HostDigestVerificationSettingEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDigestVerificationSettingEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDigestVerificationSettingEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDigestVerificationSettingEnum::from_str(&s))
+impl miniserde::Deserialize for HostDigestVerificationSettingEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDigestVerificationSettingEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDigestVerificationSettingEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37623,19 +38525,22 @@ impl HostDiskPartitionInfoPartitionFormatEnum {
     }
 }
 
-impl serde::Serialize for HostDiskPartitionInfoPartitionFormatEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDiskPartitionInfoPartitionFormatEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDiskPartitionInfoPartitionFormatEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDiskPartitionInfoPartitionFormatEnum::from_str(&s))
+impl miniserde::Deserialize for HostDiskPartitionInfoPartitionFormatEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDiskPartitionInfoPartitionFormatEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDiskPartitionInfoPartitionFormatEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37701,19 +38606,22 @@ impl HostDiskPartitionInfoTypeEnum {
     }
 }
 
-impl serde::Serialize for HostDiskPartitionInfoTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostDiskPartitionInfoTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostDiskPartitionInfoTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostDiskPartitionInfoTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostDiskPartitionInfoTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostDiskPartitionInfoTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostDiskPartitionInfoTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37764,19 +38672,22 @@ impl HostFeatureVersionKeyEnum {
     }
 }
 
-impl serde::Serialize for HostFeatureVersionKeyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostFeatureVersionKeyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostFeatureVersionKeyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostFeatureVersionKeyEnum::from_str(&s))
+impl miniserde::Deserialize for HostFeatureVersionKeyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostFeatureVersionKeyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostFeatureVersionKeyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37833,19 +38744,22 @@ impl FibreChannelPortTypeEnum {
     }
 }
 
-impl serde::Serialize for FibreChannelPortTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for FibreChannelPortTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for FibreChannelPortTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(FibreChannelPortTypeEnum::from_str(&s))
+impl miniserde::Deserialize for FibreChannelPortTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<FibreChannelPortTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(FibreChannelPortTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37900,19 +38814,22 @@ impl FileSystemMountInfoVStorageSupportStatusEnum {
     }
 }
 
-impl serde::Serialize for FileSystemMountInfoVStorageSupportStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for FileSystemMountInfoVStorageSupportStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for FileSystemMountInfoVStorageSupportStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(FileSystemMountInfoVStorageSupportStatusEnum::from_str(&s))
+impl miniserde::Deserialize for FileSystemMountInfoVStorageSupportStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<FileSystemMountInfoVStorageSupportStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(FileSystemMountInfoVStorageSupportStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -37982,19 +38899,22 @@ impl HostFileSystemVolumeFileSystemTypeEnum {
     }
 }
 
-impl serde::Serialize for HostFileSystemVolumeFileSystemTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostFileSystemVolumeFileSystemTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostFileSystemVolumeFileSystemTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostFileSystemVolumeFileSystemTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostFileSystemVolumeFileSystemTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostFileSystemVolumeFileSystemTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostFileSystemVolumeFileSystemTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38051,19 +38971,22 @@ impl HostFirewallSystemRuleSetIdEnum {
     }
 }
 
-impl serde::Serialize for HostFirewallSystemRuleSetIdEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostFirewallSystemRuleSetIdEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostFirewallSystemRuleSetIdEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostFirewallSystemRuleSetIdEnum::from_str(&s))
+impl miniserde::Deserialize for HostFirewallSystemRuleSetIdEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostFirewallSystemRuleSetIdEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostFirewallSystemRuleSetIdEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38114,19 +39037,22 @@ impl HostFirewallSystemServiceNameEnum {
     }
 }
 
-impl serde::Serialize for HostFirewallSystemServiceNameEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostFirewallSystemServiceNameEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostFirewallSystemServiceNameEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostFirewallSystemServiceNameEnum::from_str(&s))
+impl miniserde::Deserialize for HostFirewallSystemServiceNameEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostFirewallSystemServiceNameEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostFirewallSystemServiceNameEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38181,19 +39107,22 @@ impl HostFruFruTypeEnum {
     }
 }
 
-impl serde::Serialize for HostFruFruTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostFruFruTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostFruFruTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostFruFruTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostFruFruTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostFruFruTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostFruFruTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38246,19 +39175,22 @@ impl HostGraphicsConfigGraphicsTypeEnum {
     }
 }
 
-impl serde::Serialize for HostGraphicsConfigGraphicsTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostGraphicsConfigGraphicsTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostGraphicsConfigGraphicsTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostGraphicsConfigGraphicsTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostGraphicsConfigGraphicsTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostGraphicsConfigGraphicsTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostGraphicsConfigGraphicsTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38311,19 +39243,22 @@ impl HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
     }
 }
 
-impl serde::Serialize for HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostGraphicsConfigSharedPassthruAssignmentPolicyEnum::from_str(&s))
+impl miniserde::Deserialize for HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostGraphicsConfigSharedPassthruAssignmentPolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostGraphicsConfigSharedPassthruAssignmentPolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38376,19 +39311,22 @@ impl HostGraphicsConfigVgpuModeEnum {
     }
 }
 
-impl serde::Serialize for HostGraphicsConfigVgpuModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostGraphicsConfigVgpuModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostGraphicsConfigVgpuModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostGraphicsConfigVgpuModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostGraphicsConfigVgpuModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostGraphicsConfigVgpuModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostGraphicsConfigVgpuModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38445,19 +39383,22 @@ impl HostGraphicsInfoGraphicsTypeEnum {
     }
 }
 
-impl serde::Serialize for HostGraphicsInfoGraphicsTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostGraphicsInfoGraphicsTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostGraphicsInfoGraphicsTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostGraphicsInfoGraphicsTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostGraphicsInfoGraphicsTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostGraphicsInfoGraphicsTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostGraphicsInfoGraphicsTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38514,19 +39455,22 @@ impl HostGraphicsInfoVgpuModeEnum {
     }
 }
 
-impl serde::Serialize for HostGraphicsInfoVgpuModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostGraphicsInfoVgpuModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostGraphicsInfoVgpuModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostGraphicsInfoVgpuModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostGraphicsInfoVgpuModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostGraphicsInfoVgpuModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostGraphicsInfoVgpuModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38583,19 +39527,22 @@ impl HostHardwareElementStatusEnum {
     }
 }
 
-impl serde::Serialize for HostHardwareElementStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostHardwareElementStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostHardwareElementStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostHardwareElementStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostHardwareElementStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostHardwareElementStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostHardwareElementStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38654,19 +39601,22 @@ impl HostAccessModeEnum {
     }
 }
 
-impl serde::Serialize for HostAccessModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostAccessModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostAccessModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostAccessModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostAccessModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostAccessModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostAccessModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38721,19 +39671,22 @@ impl HostLockdownModeEnum {
     }
 }
 
-impl serde::Serialize for HostLockdownModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostLockdownModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostLockdownModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostLockdownModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostLockdownModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostLockdownModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostLockdownModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38790,19 +39743,22 @@ impl HostImageAcceptanceLevelEnum {
     }
 }
 
-impl serde::Serialize for HostImageAcceptanceLevelEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostImageAcceptanceLevelEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostImageAcceptanceLevelEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostImageAcceptanceLevelEnum::from_str(&s))
+impl miniserde::Deserialize for HostImageAcceptanceLevelEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostImageAcceptanceLevelEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostImageAcceptanceLevelEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38859,19 +39815,22 @@ impl HostInternetScsiHbaChapAuthenticationTypeEnum {
     }
 }
 
-impl serde::Serialize for HostInternetScsiHbaChapAuthenticationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostInternetScsiHbaChapAuthenticationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostInternetScsiHbaChapAuthenticationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostInternetScsiHbaChapAuthenticationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostInternetScsiHbaChapAuthenticationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostInternetScsiHbaChapAuthenticationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostInternetScsiHbaChapAuthenticationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38928,19 +39887,22 @@ impl HostInternetScsiHbaDigestTypeEnum {
     }
 }
 
-impl serde::Serialize for HostInternetScsiHbaDigestTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostInternetScsiHbaDigestTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostInternetScsiHbaDigestTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostInternetScsiHbaDigestTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostInternetScsiHbaDigestTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostInternetScsiHbaDigestTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostInternetScsiHbaDigestTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -38995,19 +39957,22 @@ impl InternetScsiSnsDiscoveryMethodEnum {
     }
 }
 
-impl serde::Serialize for InternetScsiSnsDiscoveryMethodEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for InternetScsiSnsDiscoveryMethodEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for InternetScsiSnsDiscoveryMethodEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(InternetScsiSnsDiscoveryMethodEnum::from_str(&s))
+impl miniserde::Deserialize for InternetScsiSnsDiscoveryMethodEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<InternetScsiSnsDiscoveryMethodEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(InternetScsiSnsDiscoveryMethodEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39064,19 +40029,22 @@ impl SlpDiscoveryMethodEnum {
     }
 }
 
-impl serde::Serialize for SlpDiscoveryMethodEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SlpDiscoveryMethodEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SlpDiscoveryMethodEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SlpDiscoveryMethodEnum::from_str(&s))
+impl miniserde::Deserialize for SlpDiscoveryMethodEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SlpDiscoveryMethodEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SlpDiscoveryMethodEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39133,19 +40101,22 @@ impl HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum {
     }
 }
 
-impl serde::Serialize for HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39198,19 +40169,22 @@ impl HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum {
     }
 }
 
-impl serde::Serialize for HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum::from_str(&s))
+impl miniserde::Deserialize for HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39265,19 +40239,22 @@ impl HostInternetScsiHbaNetworkBindingSupportTypeEnum {
     }
 }
 
-impl serde::Serialize for HostInternetScsiHbaNetworkBindingSupportTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostInternetScsiHbaNetworkBindingSupportTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostInternetScsiHbaNetworkBindingSupportTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostInternetScsiHbaNetworkBindingSupportTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostInternetScsiHbaNetworkBindingSupportTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostInternetScsiHbaNetworkBindingSupportTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostInternetScsiHbaNetworkBindingSupportTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39336,19 +40313,22 @@ impl HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum {
     }
 }
 
-impl serde::Serialize for HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum::from_str(&s))
+impl miniserde::Deserialize for HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39407,19 +40387,22 @@ impl HostIpConfigIpV6AddressConfigTypeEnum {
     }
 }
 
-impl serde::Serialize for HostIpConfigIpV6AddressConfigTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostIpConfigIpV6AddressConfigTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostIpConfigIpV6AddressConfigTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostIpConfigIpV6AddressConfigTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostIpConfigIpV6AddressConfigTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostIpConfigIpV6AddressConfigTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostIpConfigIpV6AddressConfigTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39483,19 +40466,22 @@ impl HostIpConfigIpV6AddressStatusEnum {
     }
 }
 
-impl serde::Serialize for HostIpConfigIpV6AddressStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostIpConfigIpV6AddressStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostIpConfigIpV6AddressStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostIpConfigIpV6AddressStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostIpConfigIpV6AddressStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostIpConfigIpV6AddressStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostIpConfigIpV6AddressStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39552,19 +40538,22 @@ impl IscsiPortInfoPathStatusEnum {
     }
 }
 
-impl serde::Serialize for IscsiPortInfoPathStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for IscsiPortInfoPathStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for IscsiPortInfoPathStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(IscsiPortInfoPathStatusEnum::from_str(&s))
+impl miniserde::Deserialize for IscsiPortInfoPathStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<IscsiPortInfoPathStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(IscsiPortInfoPathStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39621,19 +40610,22 @@ impl LinkDiscoveryProtocolConfigOperationTypeEnum {
     }
 }
 
-impl serde::Serialize for LinkDiscoveryProtocolConfigOperationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LinkDiscoveryProtocolConfigOperationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LinkDiscoveryProtocolConfigOperationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LinkDiscoveryProtocolConfigOperationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for LinkDiscoveryProtocolConfigOperationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LinkDiscoveryProtocolConfigOperationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LinkDiscoveryProtocolConfigOperationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39686,19 +40678,22 @@ impl LinkDiscoveryProtocolConfigProtocolTypeEnum {
     }
 }
 
-impl serde::Serialize for LinkDiscoveryProtocolConfigProtocolTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for LinkDiscoveryProtocolConfigProtocolTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for LinkDiscoveryProtocolConfigProtocolTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(LinkDiscoveryProtocolConfigProtocolTypeEnum::from_str(&s))
+impl miniserde::Deserialize for LinkDiscoveryProtocolConfigProtocolTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<LinkDiscoveryProtocolConfigProtocolTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(LinkDiscoveryProtocolConfigProtocolTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39753,19 +40748,22 @@ impl HostLowLevelProvisioningManagerFileTypeEnum {
     }
 }
 
-impl serde::Serialize for HostLowLevelProvisioningManagerFileTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostLowLevelProvisioningManagerFileTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostLowLevelProvisioningManagerFileTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostLowLevelProvisioningManagerFileTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostLowLevelProvisioningManagerFileTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostLowLevelProvisioningManagerFileTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostLowLevelProvisioningManagerFileTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39818,19 +40816,22 @@ impl HostLowLevelProvisioningManagerReloadTargetEnum {
     }
 }
 
-impl serde::Serialize for HostLowLevelProvisioningManagerReloadTargetEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostLowLevelProvisioningManagerReloadTargetEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostLowLevelProvisioningManagerReloadTargetEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostLowLevelProvisioningManagerReloadTargetEnum::from_str(&s))
+impl miniserde::Deserialize for HostLowLevelProvisioningManagerReloadTargetEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostLowLevelProvisioningManagerReloadTargetEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostLowLevelProvisioningManagerReloadTargetEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39881,19 +40882,22 @@ impl HostMaintenanceSpecPurposeEnum {
     }
 }
 
-impl serde::Serialize for HostMaintenanceSpecPurposeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostMaintenanceSpecPurposeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostMaintenanceSpecPurposeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostMaintenanceSpecPurposeEnum::from_str(&s))
+impl miniserde::Deserialize for HostMaintenanceSpecPurposeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostMaintenanceSpecPurposeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostMaintenanceSpecPurposeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -39948,19 +40952,22 @@ impl VirtualMachineMemoryAllocationPolicyEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineMemoryAllocationPolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineMemoryAllocationPolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineMemoryAllocationPolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineMemoryAllocationPolicyEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineMemoryAllocationPolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineMemoryAllocationPolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineMemoryAllocationPolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40017,19 +41024,22 @@ impl HostMemoryTierFlagsEnum {
     }
 }
 
-impl serde::Serialize for HostMemoryTierFlagsEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostMemoryTierFlagsEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostMemoryTierFlagsEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostMemoryTierFlagsEnum::from_str(&s))
+impl miniserde::Deserialize for HostMemoryTierFlagsEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostMemoryTierFlagsEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostMemoryTierFlagsEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40084,19 +41094,22 @@ impl HostMemoryTierTypeEnum {
     }
 }
 
-impl serde::Serialize for HostMemoryTierTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostMemoryTierTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostMemoryTierTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostMemoryTierTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostMemoryTierTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostMemoryTierTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostMemoryTierTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40151,19 +41164,22 @@ impl HostMemoryTieringTypeEnum {
     }
 }
 
-impl serde::Serialize for HostMemoryTieringTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostMemoryTieringTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostMemoryTieringTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostMemoryTieringTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostMemoryTieringTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostMemoryTieringTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostMemoryTieringTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40216,19 +41232,22 @@ impl HostMountModeEnum {
     }
 }
 
-impl serde::Serialize for HostMountModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostMountModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostMountModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostMountModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostMountModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostMountModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostMountModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40283,19 +41302,22 @@ impl HostMountInfoInaccessibleReasonEnum {
     }
 }
 
-impl serde::Serialize for HostMountInfoInaccessibleReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostMountInfoInaccessibleReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostMountInfoInaccessibleReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostMountInfoInaccessibleReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostMountInfoInaccessibleReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostMountInfoInaccessibleReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostMountInfoInaccessibleReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40363,19 +41385,22 @@ impl HostMountInfoMountFailedReasonEnum {
     }
 }
 
-impl serde::Serialize for HostMountInfoMountFailedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostMountInfoMountFailedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostMountInfoMountFailedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostMountInfoMountFailedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostMountInfoMountFailedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostMountInfoMountFailedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostMountInfoMountFailedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40434,19 +41459,22 @@ impl MultipathStateEnum {
     }
 }
 
-impl serde::Serialize for MultipathStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for MultipathStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for MultipathStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(MultipathStateEnum::from_str(&s))
+impl miniserde::Deserialize for MultipathStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<MultipathStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(MultipathStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40503,19 +41531,22 @@ impl HostNasVolumeSecurityTypeEnum {
     }
 }
 
-impl serde::Serialize for HostNasVolumeSecurityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostNasVolumeSecurityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostNasVolumeSecurityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostNasVolumeSecurityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostNasVolumeSecurityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostNasVolumeSecurityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostNasVolumeSecurityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40568,19 +41599,22 @@ impl HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
     }
 }
 
-impl serde::Serialize for HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostNetStackInstanceCongestionControlAlgorithmTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostNetStackInstanceCongestionControlAlgorithmTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostNetStackInstanceCongestionControlAlgorithmTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40639,19 +41673,22 @@ impl HostNetStackInstanceSystemStackKeyEnum {
     }
 }
 
-impl serde::Serialize for HostNetStackInstanceSystemStackKeyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostNetStackInstanceSystemStackKeyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostNetStackInstanceSystemStackKeyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostNetStackInstanceSystemStackKeyEnum::from_str(&s))
+impl miniserde::Deserialize for HostNetStackInstanceSystemStackKeyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostNetStackInstanceSystemStackKeyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostNetStackInstanceSystemStackKeyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40708,19 +41745,22 @@ impl HostNumericSensorHealthStateEnum {
     }
 }
 
-impl serde::Serialize for HostNumericSensorHealthStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostNumericSensorHealthStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostNumericSensorHealthStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostNumericSensorHealthStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostNumericSensorHealthStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostNumericSensorHealthStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostNumericSensorHealthStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40797,19 +41837,22 @@ impl HostNumericSensorTypeEnum {
     }
 }
 
-impl serde::Serialize for HostNumericSensorTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostNumericSensorTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostNumericSensorTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostNumericSensorTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostNumericSensorTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostNumericSensorTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostNumericSensorTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40862,19 +41905,22 @@ impl NvdimmNvdimmHealthInfoStateEnum {
     }
 }
 
-impl serde::Serialize for NvdimmNvdimmHealthInfoStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NvdimmNvdimmHealthInfoStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NvdimmNvdimmHealthInfoStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NvdimmNvdimmHealthInfoStateEnum::from_str(&s))
+impl miniserde::Deserialize for NvdimmNvdimmHealthInfoStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NvdimmNvdimmHealthInfoStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NvdimmNvdimmHealthInfoStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40927,19 +41973,22 @@ impl NvdimmInterleaveSetStateEnum {
     }
 }
 
-impl serde::Serialize for NvdimmInterleaveSetStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NvdimmInterleaveSetStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NvdimmInterleaveSetStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NvdimmInterleaveSetStateEnum::from_str(&s))
+impl miniserde::Deserialize for NvdimmInterleaveSetStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NvdimmInterleaveSetStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NvdimmInterleaveSetStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -40998,19 +42047,22 @@ impl NvdimmNamespaceDetailsHealthStatusEnum {
     }
 }
 
-impl serde::Serialize for NvdimmNamespaceDetailsHealthStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NvdimmNamespaceDetailsHealthStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NvdimmNamespaceDetailsHealthStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NvdimmNamespaceDetailsHealthStatusEnum::from_str(&s))
+impl miniserde::Deserialize for NvdimmNamespaceDetailsHealthStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NvdimmNamespaceDetailsHealthStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NvdimmNamespaceDetailsHealthStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41065,19 +42117,22 @@ impl NvdimmNamespaceDetailsStateEnum {
     }
 }
 
-impl serde::Serialize for NvdimmNamespaceDetailsStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NvdimmNamespaceDetailsStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NvdimmNamespaceDetailsStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NvdimmNamespaceDetailsStateEnum::from_str(&s))
+impl miniserde::Deserialize for NvdimmNamespaceDetailsStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NvdimmNamespaceDetailsStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NvdimmNamespaceDetailsStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41141,19 +42196,22 @@ impl NvdimmNamespaceHealthStatusEnum {
     }
 }
 
-impl serde::Serialize for NvdimmNamespaceHealthStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NvdimmNamespaceHealthStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NvdimmNamespaceHealthStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NvdimmNamespaceHealthStatusEnum::from_str(&s))
+impl miniserde::Deserialize for NvdimmNamespaceHealthStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NvdimmNamespaceHealthStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NvdimmNamespaceHealthStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41208,19 +42266,22 @@ impl NvdimmNamespaceStateEnum {
     }
 }
 
-impl serde::Serialize for NvdimmNamespaceStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NvdimmNamespaceStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NvdimmNamespaceStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NvdimmNamespaceStateEnum::from_str(&s))
+impl miniserde::Deserialize for NvdimmNamespaceStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NvdimmNamespaceStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NvdimmNamespaceStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41273,19 +42334,22 @@ impl NvdimmNamespaceTypeEnum {
     }
 }
 
-impl serde::Serialize for NvdimmNamespaceTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NvdimmNamespaceTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NvdimmNamespaceTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NvdimmNamespaceTypeEnum::from_str(&s))
+impl miniserde::Deserialize for NvdimmNamespaceTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NvdimmNamespaceTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NvdimmNamespaceTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41351,19 +42415,22 @@ impl NvdimmRangeTypeEnum {
     }
 }
 
-impl serde::Serialize for NvdimmRangeTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NvdimmRangeTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NvdimmRangeTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NvdimmRangeTypeEnum::from_str(&s))
+impl miniserde::Deserialize for NvdimmRangeTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NvdimmRangeTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NvdimmRangeTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41416,19 +42483,22 @@ impl HostNvmeDiscoveryLogSubsystemTypeEnum {
     }
 }
 
-impl serde::Serialize for HostNvmeDiscoveryLogSubsystemTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostNvmeDiscoveryLogSubsystemTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostNvmeDiscoveryLogSubsystemTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostNvmeDiscoveryLogSubsystemTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostNvmeDiscoveryLogSubsystemTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostNvmeDiscoveryLogSubsystemTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostNvmeDiscoveryLogSubsystemTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41483,19 +42553,22 @@ impl HostNvmeDiscoveryLogTransportRequirementsEnum {
     }
 }
 
-impl serde::Serialize for HostNvmeDiscoveryLogTransportRequirementsEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostNvmeDiscoveryLogTransportRequirementsEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostNvmeDiscoveryLogTransportRequirementsEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostNvmeDiscoveryLogTransportRequirementsEnum::from_str(&s))
+impl miniserde::Deserialize for HostNvmeDiscoveryLogTransportRequirementsEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostNvmeDiscoveryLogTransportRequirementsEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostNvmeDiscoveryLogTransportRequirementsEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41557,19 +42630,22 @@ impl HostNvmeTransportParametersNvmeAddressFamilyEnum {
     }
 }
 
-impl serde::Serialize for HostNvmeTransportParametersNvmeAddressFamilyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostNvmeTransportParametersNvmeAddressFamilyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostNvmeTransportParametersNvmeAddressFamilyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostNvmeTransportParametersNvmeAddressFamilyEnum::from_str(&s))
+impl miniserde::Deserialize for HostNvmeTransportParametersNvmeAddressFamilyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostNvmeTransportParametersNvmeAddressFamilyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostNvmeTransportParametersNvmeAddressFamilyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41631,19 +42707,22 @@ impl HostNvmeTransportTypeEnum {
     }
 }
 
-impl serde::Serialize for HostNvmeTransportTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostNvmeTransportTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostNvmeTransportTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostNvmeTransportTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostNvmeTransportTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostNvmeTransportTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostNvmeTransportTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41700,19 +42779,22 @@ impl HostOpaqueSwitchOpaqueSwitchStateEnum {
     }
 }
 
-impl serde::Serialize for HostOpaqueSwitchOpaqueSwitchStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostOpaqueSwitchOpaqueSwitchStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostOpaqueSwitchOpaqueSwitchStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostOpaqueSwitchOpaqueSwitchStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostOpaqueSwitchOpaqueSwitchStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostOpaqueSwitchOpaqueSwitchStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostOpaqueSwitchOpaqueSwitchStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41763,19 +42845,22 @@ impl HostPartialMaintenanceModeIdEnum {
     }
 }
 
-impl serde::Serialize for HostPartialMaintenanceModeIdEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostPartialMaintenanceModeIdEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostPartialMaintenanceModeIdEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostPartialMaintenanceModeIdEnum::from_str(&s))
+impl miniserde::Deserialize for HostPartialMaintenanceModeIdEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostPartialMaintenanceModeIdEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostPartialMaintenanceModeIdEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41832,19 +42917,22 @@ impl HostPartialMaintenanceModeStatusEnum {
     }
 }
 
-impl serde::Serialize for HostPartialMaintenanceModeStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostPartialMaintenanceModeStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostPartialMaintenanceModeStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostPartialMaintenanceModeStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostPartialMaintenanceModeStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostPartialMaintenanceModeStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostPartialMaintenanceModeStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41897,19 +42985,22 @@ impl HostPatchManagerInstallStateEnum {
     }
 }
 
-impl serde::Serialize for HostPatchManagerInstallStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostPatchManagerInstallStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostPatchManagerInstallStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostPatchManagerInstallStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostPatchManagerInstallStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostPatchManagerInstallStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostPatchManagerInstallStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -41973,19 +43064,22 @@ impl HostPatchManagerIntegrityStatusEnum {
     }
 }
 
-impl serde::Serialize for HostPatchManagerIntegrityStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostPatchManagerIntegrityStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostPatchManagerIntegrityStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostPatchManagerIntegrityStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostPatchManagerIntegrityStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostPatchManagerIntegrityStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostPatchManagerIntegrityStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42047,19 +43141,22 @@ impl HostPatchManagerReasonEnum {
     }
 }
 
-impl serde::Serialize for HostPatchManagerReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostPatchManagerReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostPatchManagerReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostPatchManagerReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostPatchManagerReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostPatchManagerReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostPatchManagerReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42112,19 +43209,22 @@ impl PhysicalNicResourcePoolSchedulerDisallowedReasonEnum {
     }
 }
 
-impl serde::Serialize for PhysicalNicResourcePoolSchedulerDisallowedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PhysicalNicResourcePoolSchedulerDisallowedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PhysicalNicResourcePoolSchedulerDisallowedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PhysicalNicResourcePoolSchedulerDisallowedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for PhysicalNicResourcePoolSchedulerDisallowedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PhysicalNicResourcePoolSchedulerDisallowedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PhysicalNicResourcePoolSchedulerDisallowedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42175,19 +43275,22 @@ impl PhysicalNicVmDirectPathGen2SupportedModeEnum {
     }
 }
 
-impl serde::Serialize for PhysicalNicVmDirectPathGen2SupportedModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PhysicalNicVmDirectPathGen2SupportedModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PhysicalNicVmDirectPathGen2SupportedModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PhysicalNicVmDirectPathGen2SupportedModeEnum::from_str(&s))
+impl miniserde::Deserialize for PhysicalNicVmDirectPathGen2SupportedModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PhysicalNicVmDirectPathGen2SupportedModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PhysicalNicVmDirectPathGen2SupportedModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42244,19 +43347,22 @@ impl PortGroupConnecteeTypeEnum {
     }
 }
 
-impl serde::Serialize for PortGroupConnecteeTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PortGroupConnecteeTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PortGroupConnecteeTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PortGroupConnecteeTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PortGroupConnecteeTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PortGroupConnecteeTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PortGroupConnecteeTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42309,19 +43415,22 @@ impl HostProtocolEndpointPeTypeEnum {
     }
 }
 
-impl serde::Serialize for HostProtocolEndpointPeTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostProtocolEndpointPeTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostProtocolEndpointPeTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostProtocolEndpointPeTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostProtocolEndpointPeTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostProtocolEndpointPeTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostProtocolEndpointPeTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42376,19 +43485,22 @@ impl HostProtocolEndpointProtocolEndpointTypeEnum {
     }
 }
 
-impl serde::Serialize for HostProtocolEndpointProtocolEndpointTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostProtocolEndpointProtocolEndpointTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostProtocolEndpointProtocolEndpointTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostProtocolEndpointProtocolEndpointTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostProtocolEndpointProtocolEndpointTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostProtocolEndpointProtocolEndpointTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostProtocolEndpointProtocolEndpointTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42443,19 +43555,22 @@ impl HostPtpConfigDeviceTypeEnum {
     }
 }
 
-impl serde::Serialize for HostPtpConfigDeviceTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostPtpConfigDeviceTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostPtpConfigDeviceTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostPtpConfigDeviceTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostPtpConfigDeviceTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostPtpConfigDeviceTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostPtpConfigDeviceTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42508,19 +43623,22 @@ impl HostQualifiedNameTypeEnum {
     }
 }
 
-impl serde::Serialize for HostQualifiedNameTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostQualifiedNameTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostQualifiedNameTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostQualifiedNameTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostQualifiedNameTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostQualifiedNameTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostQualifiedNameTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42582,19 +43700,22 @@ impl HostRdmaDeviceConnectionStateEnum {
     }
 }
 
-impl serde::Serialize for HostRdmaDeviceConnectionStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostRdmaDeviceConnectionStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostRdmaDeviceConnectionStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostRdmaDeviceConnectionStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostRdmaDeviceConnectionStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostRdmaDeviceConnectionStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostRdmaDeviceConnectionStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42645,19 +43766,22 @@ impl RdmaProtocolEnum {
     }
 }
 
-impl serde::Serialize for RdmaProtocolEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for RdmaProtocolEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for RdmaProtocolEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(RdmaProtocolEnum::from_str(&s))
+impl miniserde::Deserialize for RdmaProtocolEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<RdmaProtocolEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(RdmaProtocolEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42710,19 +43834,22 @@ impl HostFirewallRuleDirectionEnum {
     }
 }
 
-impl serde::Serialize for HostFirewallRuleDirectionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostFirewallRuleDirectionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostFirewallRuleDirectionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostFirewallRuleDirectionEnum::from_str(&s))
+impl miniserde::Deserialize for HostFirewallRuleDirectionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostFirewallRuleDirectionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostFirewallRuleDirectionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42775,19 +43902,22 @@ impl HostFirewallRulePortTypeEnum {
     }
 }
 
-impl serde::Serialize for HostFirewallRulePortTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostFirewallRulePortTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostFirewallRulePortTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostFirewallRulePortTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostFirewallRulePortTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostFirewallRulePortTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostFirewallRulePortTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42840,19 +43970,22 @@ impl HostFirewallRuleProtocolEnum {
     }
 }
 
-impl serde::Serialize for HostFirewallRuleProtocolEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostFirewallRuleProtocolEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostFirewallRuleProtocolEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostFirewallRuleProtocolEnum::from_str(&s))
+impl miniserde::Deserialize for HostFirewallRuleProtocolEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostFirewallRuleProtocolEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostFirewallRuleProtocolEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42909,19 +44042,22 @@ impl HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum {
     }
 }
 
-impl serde::Serialize for HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -42974,19 +44110,22 @@ impl HostRuntimeInfoStateEncryptionInfoProtectionModeEnum {
     }
 }
 
-impl serde::Serialize for HostRuntimeInfoStateEncryptionInfoProtectionModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostRuntimeInfoStateEncryptionInfoProtectionModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostRuntimeInfoStateEncryptionInfoProtectionModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostRuntimeInfoStateEncryptionInfoProtectionModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostRuntimeInfoStateEncryptionInfoProtectionModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostRuntimeInfoStateEncryptionInfoProtectionModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostRuntimeInfoStateEncryptionInfoProtectionModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43041,19 +44180,22 @@ impl HostRuntimeInfoStatelessNvdsMigrationStateEnum {
     }
 }
 
-impl serde::Serialize for HostRuntimeInfoStatelessNvdsMigrationStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostRuntimeInfoStatelessNvdsMigrationStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostRuntimeInfoStatelessNvdsMigrationStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostRuntimeInfoStatelessNvdsMigrationStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostRuntimeInfoStatelessNvdsMigrationStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostRuntimeInfoStatelessNvdsMigrationStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostRuntimeInfoStatelessNvdsMigrationStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43112,19 +44254,22 @@ impl ScsiDiskTypeEnum {
     }
 }
 
-impl serde::Serialize for ScsiDiskTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ScsiDiskTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ScsiDiskTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ScsiDiskTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ScsiDiskTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ScsiDiskTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ScsiDiskTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43181,19 +44326,22 @@ impl ScsiLunDescriptorQualityEnum {
     }
 }
 
-impl serde::Serialize for ScsiLunDescriptorQualityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ScsiLunDescriptorQualityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ScsiLunDescriptorQualityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ScsiLunDescriptorQualityEnum::from_str(&s))
+impl miniserde::Deserialize for ScsiLunDescriptorQualityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ScsiLunDescriptorQualityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ScsiLunDescriptorQualityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43246,19 +44394,22 @@ impl DeviceProtocolEnum {
     }
 }
 
-impl serde::Serialize for DeviceProtocolEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DeviceProtocolEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DeviceProtocolEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DeviceProtocolEnum::from_str(&s))
+impl miniserde::Deserialize for DeviceProtocolEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DeviceProtocolEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DeviceProtocolEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43315,19 +44466,22 @@ impl ScsiLunLunReservationStatusEnum {
     }
 }
 
-impl serde::Serialize for ScsiLunLunReservationStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ScsiLunLunReservationStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ScsiLunLunReservationStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ScsiLunLunReservationStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ScsiLunLunReservationStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ScsiLunLunReservationStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ScsiLunLunReservationStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43404,19 +44558,22 @@ impl ScsiLunTypeEnum {
     }
 }
 
-impl serde::Serialize for ScsiLunTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ScsiLunTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ScsiLunTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ScsiLunTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ScsiLunTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ScsiLunTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ScsiLunTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43482,19 +44639,22 @@ impl ScsiLunStateEnum {
     }
 }
 
-impl serde::Serialize for ScsiLunStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ScsiLunStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ScsiLunStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ScsiLunStateEnum::from_str(&s))
+impl miniserde::Deserialize for ScsiLunStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ScsiLunStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ScsiLunStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43549,19 +44709,22 @@ impl ScsiLunVStorageSupportStatusEnum {
     }
 }
 
-impl serde::Serialize for ScsiLunVStorageSupportStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ScsiLunVStorageSupportStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ScsiLunVStorageSupportStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ScsiLunVStorageSupportStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ScsiLunVStorageSupportStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ScsiLunVStorageSupportStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ScsiLunVStorageSupportStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43616,19 +44779,22 @@ impl HostServicePolicyEnum {
     }
 }
 
-impl serde::Serialize for HostServicePolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostServicePolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostServicePolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostServicePolicyEnum::from_str(&s))
+impl miniserde::Deserialize for HostServicePolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostServicePolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostServicePolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43683,19 +44849,22 @@ impl HostSevInfoSevStateEnum {
     }
 }
 
-impl serde::Serialize for HostSevInfoSevStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSevInfoSevStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSevInfoSevStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSevInfoSevStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostSevInfoSevStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSevInfoSevStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSevInfoSevStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43750,19 +44919,22 @@ impl HostSgxInfoFlcModesEnum {
     }
 }
 
-impl serde::Serialize for HostSgxInfoFlcModesEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSgxInfoFlcModesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSgxInfoFlcModesEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSgxInfoFlcModesEnum::from_str(&s))
+impl miniserde::Deserialize for HostSgxInfoFlcModesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSgxInfoFlcModesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSgxInfoFlcModesEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43828,19 +45000,22 @@ impl HostSgxInfoSgxStatesEnum {
     }
 }
 
-impl serde::Serialize for HostSgxInfoSgxStatesEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSgxInfoSgxStatesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSgxInfoSgxStatesEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSgxInfoSgxStatesEnum::from_str(&s))
+impl miniserde::Deserialize for HostSgxInfoSgxStatesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSgxInfoSgxStatesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSgxInfoSgxStatesEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43895,19 +45070,22 @@ impl HostSgxRegistrationInfoRegistrationStatusEnum {
     }
 }
 
-impl serde::Serialize for HostSgxRegistrationInfoRegistrationStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSgxRegistrationInfoRegistrationStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSgxRegistrationInfoRegistrationStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSgxRegistrationInfoRegistrationStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostSgxRegistrationInfoRegistrationStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSgxRegistrationInfoRegistrationStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSgxRegistrationInfoRegistrationStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -43960,19 +45138,22 @@ impl HostSgxRegistrationInfoRegistrationTypeEnum {
     }
 }
 
-impl serde::Serialize for HostSgxRegistrationInfoRegistrationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSgxRegistrationInfoRegistrationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSgxRegistrationInfoRegistrationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSgxRegistrationInfoRegistrationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostSgxRegistrationInfoRegistrationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSgxRegistrationInfoRegistrationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSgxRegistrationInfoRegistrationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44027,19 +45208,22 @@ impl HostSnmpAgentCapabilityEnum {
     }
 }
 
-impl serde::Serialize for HostSnmpAgentCapabilityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSnmpAgentCapabilityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSnmpAgentCapabilityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSnmpAgentCapabilityEnum::from_str(&s))
+impl miniserde::Deserialize for HostSnmpAgentCapabilityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSnmpAgentCapabilityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSnmpAgentCapabilityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44098,19 +45282,22 @@ impl SoftwarePackageConstraintEnum {
     }
 }
 
-impl serde::Serialize for SoftwarePackageConstraintEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SoftwarePackageConstraintEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SoftwarePackageConstraintEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SoftwarePackageConstraintEnum::from_str(&s))
+impl miniserde::Deserialize for SoftwarePackageConstraintEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SoftwarePackageConstraintEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SoftwarePackageConstraintEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44165,19 +45352,22 @@ impl SoftwarePackageVibTypeEnum {
     }
 }
 
-impl serde::Serialize for SoftwarePackageVibTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for SoftwarePackageVibTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for SoftwarePackageVibTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(SoftwarePackageVibTypeEnum::from_str(&s))
+impl miniserde::Deserialize for SoftwarePackageVibTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SoftwarePackageVibTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SoftwarePackageVibTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44230,19 +45420,22 @@ impl HostStorageProtocolEnum {
     }
 }
 
-impl serde::Serialize for HostStorageProtocolEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostStorageProtocolEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostStorageProtocolEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostStorageProtocolEnum::from_str(&s))
+impl miniserde::Deserialize for HostStorageProtocolEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostStorageProtocolEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostStorageProtocolEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44301,19 +45494,22 @@ impl HostSystemIdentificationInfoIdentifierEnum {
     }
 }
 
-impl serde::Serialize for HostSystemIdentificationInfoIdentifierEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostSystemIdentificationInfoIdentifierEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostSystemIdentificationInfoIdentifierEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostSystemIdentificationInfoIdentifierEnum::from_str(&s))
+impl miniserde::Deserialize for HostSystemIdentificationInfoIdentifierEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostSystemIdentificationInfoIdentifierEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostSystemIdentificationInfoIdentifierEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44370,19 +45566,22 @@ impl HostTdxInfoTdxStateEnum {
     }
 }
 
-impl serde::Serialize for HostTdxInfoTdxStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostTdxInfoTdxStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostTdxInfoTdxStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostTdxInfoTdxStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostTdxInfoTdxStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostTdxInfoTdxStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostTdxInfoTdxStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44435,19 +45634,22 @@ impl HostTpmAttestationInfoAcceptanceStatusEnum {
     }
 }
 
-impl serde::Serialize for HostTpmAttestationInfoAcceptanceStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostTpmAttestationInfoAcceptanceStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostTpmAttestationInfoAcceptanceStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostTpmAttestationInfoAcceptanceStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostTpmAttestationInfoAcceptanceStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostTpmAttestationInfoAcceptanceStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostTpmAttestationInfoAcceptanceStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44502,19 +45704,22 @@ impl HostTrustAuthorityAttestationInfoAttestationStatusEnum {
     }
 }
 
-impl serde::Serialize for HostTrustAuthorityAttestationInfoAttestationStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostTrustAuthorityAttestationInfoAttestationStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostTrustAuthorityAttestationInfoAttestationStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostTrustAuthorityAttestationInfoAttestationStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostTrustAuthorityAttestationInfoAttestationStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostTrustAuthorityAttestationInfoAttestationStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostTrustAuthorityAttestationInfoAttestationStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44567,19 +45772,22 @@ impl HostUnresolvedVmfsExtentUnresolvedReasonEnum {
     }
 }
 
-impl serde::Serialize for HostUnresolvedVmfsExtentUnresolvedReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostUnresolvedVmfsExtentUnresolvedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostUnresolvedVmfsExtentUnresolvedReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostUnresolvedVmfsExtentUnresolvedReasonEnum::from_str(&s))
+impl miniserde::Deserialize for HostUnresolvedVmfsExtentUnresolvedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostUnresolvedVmfsExtentUnresolvedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostUnresolvedVmfsExtentUnresolvedReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44632,19 +45840,22 @@ impl HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
     }
 }
 
-impl serde::Serialize for HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum::from_str(&s))
+impl miniserde::Deserialize for HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44721,19 +45932,22 @@ impl HostVirtualNicManagerNicTypeEnum {
     }
 }
 
-impl serde::Serialize for HostVirtualNicManagerNicTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostVirtualNicManagerNicTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostVirtualNicManagerNicTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostVirtualNicManagerNicTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostVirtualNicManagerNicTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostVirtualNicManagerNicTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostVirtualNicManagerNicTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44788,19 +46002,22 @@ impl HostVmciAccessManagerModeEnum {
     }
 }
 
-impl serde::Serialize for HostVmciAccessManagerModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostVmciAccessManagerModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostVmciAccessManagerModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostVmciAccessManagerModeEnum::from_str(&s))
+impl miniserde::Deserialize for HostVmciAccessManagerModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostVmciAccessManagerModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostVmciAccessManagerModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44853,19 +46070,22 @@ impl HostVmfsVolumeUnmapBandwidthPolicyEnum {
     }
 }
 
-impl serde::Serialize for HostVmfsVolumeUnmapBandwidthPolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostVmfsVolumeUnmapBandwidthPolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostVmfsVolumeUnmapBandwidthPolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostVmfsVolumeUnmapBandwidthPolicyEnum::from_str(&s))
+impl miniserde::Deserialize for HostVmfsVolumeUnmapBandwidthPolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostVmfsVolumeUnmapBandwidthPolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostVmfsVolumeUnmapBandwidthPolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44918,19 +46138,22 @@ impl HostVmfsVolumeUnmapPriorityEnum {
     }
 }
 
-impl serde::Serialize for HostVmfsVolumeUnmapPriorityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostVmfsVolumeUnmapPriorityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostVmfsVolumeUnmapPriorityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostVmfsVolumeUnmapPriorityEnum::from_str(&s))
+impl miniserde::Deserialize for HostVmfsVolumeUnmapPriorityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostVmfsVolumeUnmapPriorityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostVmfsVolumeUnmapPriorityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -44985,19 +46208,22 @@ impl VsanControllerTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanControllerTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanControllerTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanControllerTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanControllerTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanControllerTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanControllerTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanControllerTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45070,19 +46296,22 @@ impl VsanDiskBalanceStateEnum {
     }
 }
 
-impl serde::Serialize for VsanDiskBalanceStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanDiskBalanceStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanDiskBalanceStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanDiskBalanceStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanDiskBalanceStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanDiskBalanceStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanDiskBalanceStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45194,19 +46423,22 @@ impl VsanEncryptionIssueEnum {
     }
 }
 
-impl serde::Serialize for VsanEncryptionIssueEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanEncryptionIssueEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanEncryptionIssueEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanEncryptionIssueEnum::from_str(&s))
+impl miniserde::Deserialize for VsanEncryptionIssueEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanEncryptionIssueEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanEncryptionIssueEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45268,19 +46500,22 @@ impl VsanHostQueryCheckLimitsOptionTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanHostQueryCheckLimitsOptionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHostQueryCheckLimitsOptionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHostQueryCheckLimitsOptionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHostQueryCheckLimitsOptionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHostQueryCheckLimitsOptionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHostQueryCheckLimitsOptionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHostQueryCheckLimitsOptionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45337,19 +46572,22 @@ impl VsanIoInsightStateEnum {
     }
 }
 
-impl serde::Serialize for VsanIoInsightStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIoInsightStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIoInsightStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIoInsightStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIoInsightStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIoInsightStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIoInsightStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45433,19 +46671,22 @@ impl VsanObjectHealthStateEnum {
     }
 }
 
-impl serde::Serialize for VsanObjectHealthStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanObjectHealthStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanObjectHealthStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanObjectHealthStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanObjectHealthStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanObjectHealthStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanObjectHealthStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45515,19 +46756,22 @@ impl VsanPeerHostConnectivityHealthStateEnum {
     }
 }
 
-impl serde::Serialize for VsanPeerHostConnectivityHealthStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanPeerHostConnectivityHealthStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanPeerHostConnectivityHealthStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanPeerHostConnectivityHealthStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanPeerHostConnectivityHealthStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanPeerHostConnectivityHealthStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanPeerHostConnectivityHealthStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45606,19 +46850,22 @@ impl VsanSmartParameterTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanSmartParameterTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSmartParameterTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSmartParameterTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSmartParameterTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSmartParameterTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSmartParameterTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSmartParameterTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45677,19 +46924,22 @@ impl NetIpConfigInfoIpAddressOriginEnum {
     }
 }
 
-impl serde::Serialize for NetIpConfigInfoIpAddressOriginEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NetIpConfigInfoIpAddressOriginEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NetIpConfigInfoIpAddressOriginEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NetIpConfigInfoIpAddressOriginEnum::from_str(&s))
+impl miniserde::Deserialize for NetIpConfigInfoIpAddressOriginEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NetIpConfigInfoIpAddressOriginEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NetIpConfigInfoIpAddressOriginEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45753,19 +47003,22 @@ impl NetIpConfigInfoIpAddressStatusEnum {
     }
 }
 
-impl serde::Serialize for NetIpConfigInfoIpAddressStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NetIpConfigInfoIpAddressStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NetIpConfigInfoIpAddressStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NetIpConfigInfoIpAddressStatusEnum::from_str(&s))
+impl miniserde::Deserialize for NetIpConfigInfoIpAddressStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NetIpConfigInfoIpAddressStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NetIpConfigInfoIpAddressStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45822,19 +47075,22 @@ impl NetIpStackInfoEntryTypeEnum {
     }
 }
 
-impl serde::Serialize for NetIpStackInfoEntryTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NetIpStackInfoEntryTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NetIpStackInfoEntryTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NetIpStackInfoEntryTypeEnum::from_str(&s))
+impl miniserde::Deserialize for NetIpStackInfoEntryTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NetIpStackInfoEntryTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NetIpStackInfoEntryTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45891,19 +47147,22 @@ impl NetIpStackInfoPreferenceEnum {
     }
 }
 
-impl serde::Serialize for NetIpStackInfoPreferenceEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NetIpStackInfoPreferenceEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NetIpStackInfoPreferenceEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NetIpStackInfoPreferenceEnum::from_str(&s))
+impl miniserde::Deserialize for NetIpStackInfoPreferenceEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NetIpStackInfoPreferenceEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NetIpStackInfoPreferenceEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -45960,19 +47219,22 @@ impl NetBiosConfigInfoModeEnum {
     }
 }
 
-impl serde::Serialize for NetBiosConfigInfoModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for NetBiosConfigInfoModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for NetBiosConfigInfoModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(NetBiosConfigInfoModeEnum::from_str(&s))
+impl miniserde::Deserialize for NetBiosConfigInfoModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<NetBiosConfigInfoModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(NetBiosConfigInfoModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46027,19 +47289,22 @@ impl ArrayUpdateOperationEnum {
     }
 }
 
-impl serde::Serialize for ArrayUpdateOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ArrayUpdateOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ArrayUpdateOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ArrayUpdateOperationEnum::from_str(&s))
+impl miniserde::Deserialize for ArrayUpdateOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ArrayUpdateOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ArrayUpdateOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46096,19 +47361,22 @@ impl ComplianceResultStatusEnum {
     }
 }
 
-impl serde::Serialize for ComplianceResultStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ComplianceResultStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ComplianceResultStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ComplianceResultStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ComplianceResultStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ComplianceResultStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ComplianceResultStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46170,19 +47438,22 @@ impl ProfileNumericComparatorEnum {
     }
 }
 
-impl serde::Serialize for ProfileNumericComparatorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ProfileNumericComparatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ProfileNumericComparatorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ProfileNumericComparatorEnum::from_str(&s))
+impl miniserde::Deserialize for ProfileNumericComparatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ProfileNumericComparatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ProfileNumericComparatorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46241,19 +47512,22 @@ impl ProfileParameterMetadataRelationTypeEnum {
     }
 }
 
-impl serde::Serialize for ProfileParameterMetadataRelationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ProfileParameterMetadataRelationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ProfileParameterMetadataRelationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ProfileParameterMetadataRelationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ProfileParameterMetadataRelationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ProfileParameterMetadataRelationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ProfileParameterMetadataRelationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46310,19 +47584,22 @@ impl ClusterProfileServiceTypeEnum {
     }
 }
 
-impl serde::Serialize for ClusterProfileServiceTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterProfileServiceTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterProfileServiceTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterProfileServiceTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterProfileServiceTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterProfileServiceTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterProfileServiceTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46377,19 +47654,22 @@ impl ProfileExecuteResultStatusEnum {
     }
 }
 
-impl serde::Serialize for ProfileExecuteResultStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ProfileExecuteResultStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ProfileExecuteResultStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ProfileExecuteResultStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ProfileExecuteResultStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ProfileExecuteResultStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ProfileExecuteResultStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46446,19 +47726,22 @@ impl HostProfileValidationFailureInfoUpdateTypeEnum {
     }
 }
 
-impl serde::Serialize for HostProfileValidationFailureInfoUpdateTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostProfileValidationFailureInfoUpdateTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostProfileValidationFailureInfoUpdateTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostProfileValidationFailureInfoUpdateTypeEnum::from_str(&s))
+impl miniserde::Deserialize for HostProfileValidationFailureInfoUpdateTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostProfileValidationFailureInfoUpdateTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostProfileValidationFailureInfoUpdateTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46513,19 +47796,22 @@ impl HostProfileValidationStateEnum {
     }
 }
 
-impl serde::Serialize for HostProfileValidationStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostProfileValidationStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostProfileValidationStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostProfileValidationStateEnum::from_str(&s))
+impl miniserde::Deserialize for HostProfileValidationStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostProfileValidationStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostProfileValidationStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46580,19 +47866,22 @@ impl HostProfileManagerAnswerFileStatusEnum {
     }
 }
 
-impl serde::Serialize for HostProfileManagerAnswerFileStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostProfileManagerAnswerFileStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostProfileManagerAnswerFileStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostProfileManagerAnswerFileStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostProfileManagerAnswerFileStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostProfileManagerAnswerFileStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostProfileManagerAnswerFileStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46658,19 +47947,22 @@ impl ApplyHostProfileConfigurationResultStatusEnum {
     }
 }
 
-impl serde::Serialize for ApplyHostProfileConfigurationResultStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ApplyHostProfileConfigurationResultStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ApplyHostProfileConfigurationResultStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ApplyHostProfileConfigurationResultStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ApplyHostProfileConfigurationResultStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ApplyHostProfileConfigurationResultStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ApplyHostProfileConfigurationResultStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46723,19 +48015,22 @@ impl HostProfileManagerCompositionResultResultElementStatusEnum {
     }
 }
 
-impl serde::Serialize for HostProfileManagerCompositionResultResultElementStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostProfileManagerCompositionResultResultElementStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostProfileManagerCompositionResultResultElementStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostProfileManagerCompositionResultResultElementStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostProfileManagerCompositionResultResultElementStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostProfileManagerCompositionResultResultElementStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostProfileManagerCompositionResultResultElementStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46788,19 +48083,22 @@ impl HostProfileManagerCompositionValidationResultResultElementStatusEnum {
     }
 }
 
-impl serde::Serialize for HostProfileManagerCompositionValidationResultResultElementStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostProfileManagerCompositionValidationResultResultElementStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostProfileManagerCompositionValidationResultResultElementStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostProfileManagerCompositionValidationResultResultElementStatusEnum::from_str(&s))
+impl miniserde::Deserialize for HostProfileManagerCompositionValidationResultResultElementStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostProfileManagerCompositionValidationResultResultElementStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostProfileManagerCompositionValidationResultResultElementStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46853,19 +48151,22 @@ impl HostProfileManagerTaskListRequirementEnum {
     }
 }
 
-impl serde::Serialize for HostProfileManagerTaskListRequirementEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HostProfileManagerTaskListRequirementEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HostProfileManagerTaskListRequirementEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HostProfileManagerTaskListRequirementEnum::from_str(&s))
+impl miniserde::Deserialize for HostProfileManagerTaskListRequirementEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostProfileManagerTaskListRequirementEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostProfileManagerTaskListRequirementEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46920,19 +48221,22 @@ impl AnswerFileValidationInfoStatusEnum {
     }
 }
 
-impl serde::Serialize for AnswerFileValidationInfoStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for AnswerFileValidationInfoStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for AnswerFileValidationInfoStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(AnswerFileValidationInfoStatusEnum::from_str(&s))
+impl miniserde::Deserialize for AnswerFileValidationInfoStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AnswerFileValidationInfoStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AnswerFileValidationInfoStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -46996,19 +48300,22 @@ impl DayOfWeekEnum {
     }
 }
 
-impl serde::Serialize for DayOfWeekEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for DayOfWeekEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for DayOfWeekEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(DayOfWeekEnum::from_str(&s))
+impl miniserde::Deserialize for DayOfWeekEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DayOfWeekEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DayOfWeekEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47067,19 +48374,22 @@ impl WeekOfMonthEnum {
     }
 }
 
-impl serde::Serialize for WeekOfMonthEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for WeekOfMonthEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for WeekOfMonthEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(WeekOfMonthEnum::from_str(&s))
+impl miniserde::Deserialize for WeekOfMonthEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<WeekOfMonthEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(WeekOfMonthEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47136,19 +48446,22 @@ impl PlacementAffinityRuleRuleScopeEnum {
     }
 }
 
-impl serde::Serialize for PlacementAffinityRuleRuleScopeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PlacementAffinityRuleRuleScopeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PlacementAffinityRuleRuleScopeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PlacementAffinityRuleRuleScopeEnum::from_str(&s))
+impl miniserde::Deserialize for PlacementAffinityRuleRuleScopeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PlacementAffinityRuleRuleScopeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PlacementAffinityRuleRuleScopeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47205,19 +48518,22 @@ impl PlacementAffinityRuleRuleTypeEnum {
     }
 }
 
-impl serde::Serialize for PlacementAffinityRuleRuleTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PlacementAffinityRuleRuleTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PlacementAffinityRuleRuleTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PlacementAffinityRuleRuleTypeEnum::from_str(&s))
+impl miniserde::Deserialize for PlacementAffinityRuleRuleTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PlacementAffinityRuleRuleTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PlacementAffinityRuleRuleTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47270,19 +48586,22 @@ impl StorageDrsPodConfigInfoBehaviorEnum {
     }
 }
 
-impl serde::Serialize for StorageDrsPodConfigInfoBehaviorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for StorageDrsPodConfigInfoBehaviorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for StorageDrsPodConfigInfoBehaviorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(StorageDrsPodConfigInfoBehaviorEnum::from_str(&s))
+impl miniserde::Deserialize for StorageDrsPodConfigInfoBehaviorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<StorageDrsPodConfigInfoBehaviorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(StorageDrsPodConfigInfoBehaviorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47335,19 +48654,22 @@ impl StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum {
     }
 }
 
-impl serde::Serialize for StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum::from_str(&s))
+impl miniserde::Deserialize for StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47404,19 +48726,22 @@ impl StoragePlacementSpecPlacementTypeEnum {
     }
 }
 
-impl serde::Serialize for StoragePlacementSpecPlacementTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for StoragePlacementSpecPlacementTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for StoragePlacementSpecPlacementTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(StoragePlacementSpecPlacementTypeEnum::from_str(&s))
+impl miniserde::Deserialize for StoragePlacementSpecPlacementTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<StoragePlacementSpecPlacementTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(StoragePlacementSpecPlacementTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47471,19 +48796,22 @@ impl VirtualDiskRuleSpecRuleTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskRuleSpecRuleTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskRuleSpecRuleTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskRuleSpecRuleTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskRuleSpecRuleTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskRuleSpecRuleTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskRuleSpecRuleTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskRuleSpecRuleTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47538,19 +48866,22 @@ impl VAppCloneSpecProvisioningTypeEnum {
     }
 }
 
-impl serde::Serialize for VAppCloneSpecProvisioningTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VAppCloneSpecProvisioningTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VAppCloneSpecProvisioningTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VAppCloneSpecProvisioningTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VAppCloneSpecProvisioningTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VAppCloneSpecProvisioningTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VAppCloneSpecProvisioningTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47609,19 +48940,22 @@ impl VAppAutoStartActionEnum {
     }
 }
 
-impl serde::Serialize for VAppAutoStartActionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VAppAutoStartActionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VAppAutoStartActionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VAppAutoStartActionEnum::from_str(&s))
+impl miniserde::Deserialize for VAppAutoStartActionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VAppAutoStartActionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VAppAutoStartActionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47674,19 +49008,22 @@ impl VAppIpAssignmentInfoAllocationSchemesEnum {
     }
 }
 
-impl serde::Serialize for VAppIpAssignmentInfoAllocationSchemesEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VAppIpAssignmentInfoAllocationSchemesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VAppIpAssignmentInfoAllocationSchemesEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VAppIpAssignmentInfoAllocationSchemesEnum::from_str(&s))
+impl miniserde::Deserialize for VAppIpAssignmentInfoAllocationSchemesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VAppIpAssignmentInfoAllocationSchemesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VAppIpAssignmentInfoAllocationSchemesEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47743,19 +49080,22 @@ impl VAppIpAssignmentInfoIpAllocationPolicyEnum {
     }
 }
 
-impl serde::Serialize for VAppIpAssignmentInfoIpAllocationPolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VAppIpAssignmentInfoIpAllocationPolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VAppIpAssignmentInfoIpAllocationPolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VAppIpAssignmentInfoIpAllocationPolicyEnum::from_str(&s))
+impl miniserde::Deserialize for VAppIpAssignmentInfoIpAllocationPolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VAppIpAssignmentInfoIpAllocationPolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VAppIpAssignmentInfoIpAllocationPolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47808,19 +49148,22 @@ impl VAppIpAssignmentInfoProtocolsEnum {
     }
 }
 
-impl serde::Serialize for VAppIpAssignmentInfoProtocolsEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VAppIpAssignmentInfoProtocolsEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VAppIpAssignmentInfoProtocolsEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VAppIpAssignmentInfoProtocolsEnum::from_str(&s))
+impl miniserde::Deserialize for VAppIpAssignmentInfoProtocolsEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VAppIpAssignmentInfoProtocolsEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VAppIpAssignmentInfoProtocolsEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47877,19 +49220,22 @@ impl VchaStateEnum {
     }
 }
 
-impl serde::Serialize for VchaStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VchaStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VchaStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VchaStateEnum::from_str(&s))
+impl miniserde::Deserialize for VchaStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VchaStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VchaStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -47944,19 +49290,22 @@ impl VchaClusterModeEnum {
     }
 }
 
-impl serde::Serialize for VchaClusterModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VchaClusterModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VchaClusterModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VchaClusterModeEnum::from_str(&s))
+impl miniserde::Deserialize for VchaClusterModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VchaClusterModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VchaClusterModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48011,19 +49360,22 @@ impl VchaClusterStateEnum {
     }
 }
 
-impl serde::Serialize for VchaClusterStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VchaClusterStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VchaClusterStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VchaClusterStateEnum::from_str(&s))
+impl miniserde::Deserialize for VchaClusterStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VchaClusterStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VchaClusterStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48078,19 +49430,22 @@ impl VchaNodeRoleEnum {
     }
 }
 
-impl serde::Serialize for VchaNodeRoleEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VchaNodeRoleEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VchaNodeRoleEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VchaNodeRoleEnum::from_str(&s))
+impl miniserde::Deserialize for VchaNodeRoleEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VchaNodeRoleEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VchaNodeRoleEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48143,19 +49498,22 @@ impl VchaNodeStateEnum {
     }
 }
 
-impl serde::Serialize for VchaNodeStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VchaNodeStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VchaNodeStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VchaNodeStateEnum::from_str(&s))
+impl miniserde::Deserialize for VchaNodeStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VchaNodeStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VchaNodeStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48208,19 +49566,22 @@ impl VirtualMachineBootOptionsNetworkBootProtocolTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineBootOptionsNetworkBootProtocolTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineBootOptionsNetworkBootProtocolTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineBootOptionsNetworkBootProtocolTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineBootOptionsNetworkBootProtocolTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineBootOptionsNetworkBootProtocolTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineBootOptionsNetworkBootProtocolTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineBootOptionsNetworkBootProtocolTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48271,19 +49632,22 @@ impl VirtualMachineCertThumbprintHashAlgorithmEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineCertThumbprintHashAlgorithmEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineCertThumbprintHashAlgorithmEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineCertThumbprintHashAlgorithmEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineCertThumbprintHashAlgorithmEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineCertThumbprintHashAlgorithmEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineCertThumbprintHashAlgorithmEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineCertThumbprintHashAlgorithmEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48336,19 +49700,22 @@ impl VirtualMachineCloneSpecTpmProvisionPolicyEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineCloneSpecTpmProvisionPolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineCloneSpecTpmProvisionPolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineCloneSpecTpmProvisionPolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineCloneSpecTpmProvisionPolicyEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineCloneSpecTpmProvisionPolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineCloneSpecTpmProvisionPolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineCloneSpecTpmProvisionPolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48403,19 +49770,22 @@ impl VirtualMachineConfigInfoNpivWwnTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineConfigInfoNpivWwnTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineConfigInfoNpivWwnTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineConfigInfoNpivWwnTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineConfigInfoNpivWwnTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineConfigInfoNpivWwnTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineConfigInfoNpivWwnTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineConfigInfoNpivWwnTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48470,19 +49840,22 @@ impl VirtualMachineConfigInfoSwapPlacementTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineConfigInfoSwapPlacementTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineConfigInfoSwapPlacementTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineConfigInfoSwapPlacementTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineConfigInfoSwapPlacementTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineConfigInfoSwapPlacementTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineConfigInfoSwapPlacementTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineConfigInfoSwapPlacementTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48537,19 +49910,22 @@ impl VirtualMachineConfigSpecEncryptedFtModesEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineConfigSpecEncryptedFtModesEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineConfigSpecEncryptedFtModesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineConfigSpecEncryptedFtModesEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineConfigSpecEncryptedFtModesEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineConfigSpecEncryptedFtModesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineConfigSpecEncryptedFtModesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineConfigSpecEncryptedFtModesEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48604,19 +49980,22 @@ impl VirtualMachineConfigSpecEncryptedVMotionModesEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineConfigSpecEncryptedVMotionModesEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineConfigSpecEncryptedVMotionModesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineConfigSpecEncryptedVMotionModesEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineConfigSpecEncryptedVMotionModesEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineConfigSpecEncryptedVMotionModesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineConfigSpecEncryptedVMotionModesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineConfigSpecEncryptedVMotionModesEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48673,19 +50052,22 @@ impl VirtualMachineConfigSpecNpivWwnOpEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineConfigSpecNpivWwnOpEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineConfigSpecNpivWwnOpEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineConfigSpecNpivWwnOpEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineConfigSpecNpivWwnOpEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineConfigSpecNpivWwnOpEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineConfigSpecNpivWwnOpEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineConfigSpecNpivWwnOpEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48740,19 +50122,22 @@ impl VirtualMachinePowerOpTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachinePowerOpTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachinePowerOpTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachinePowerOpTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachinePowerOpTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachinePowerOpTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachinePowerOpTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachinePowerOpTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48805,19 +50190,22 @@ impl VirtualMachineStandbyActionTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineStandbyActionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineStandbyActionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineStandbyActionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineStandbyActionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineStandbyActionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineStandbyActionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineStandbyActionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48870,19 +50258,22 @@ impl VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathG
     }
 }
 
-impl serde::Serialize for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -48961,19 +50352,22 @@ impl VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathG
     }
 }
 
-impl serde::Serialize for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49076,19 +50470,22 @@ impl VirtualMachineFileLayoutExFileTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineFileLayoutExFileTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineFileLayoutExFileTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineFileLayoutExFileTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineFileLayoutExFileTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineFileLayoutExFileTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineFileLayoutExFileTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineFileLayoutExFileTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49143,19 +50540,22 @@ impl VirtualMachineHtSharingEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineHtSharingEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineHtSharingEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineHtSharingEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineHtSharingEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineHtSharingEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineHtSharingEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineHtSharingEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49210,19 +50610,22 @@ impl VirtualMachineFlagInfoMonitorTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineFlagInfoMonitorTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineFlagInfoMonitorTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineFlagInfoMonitorTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineFlagInfoMonitorTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineFlagInfoMonitorTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineFlagInfoMonitorTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineFlagInfoMonitorTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49279,19 +50682,22 @@ impl VirtualMachinePowerOffBehaviorEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachinePowerOffBehaviorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachinePowerOffBehaviorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachinePowerOffBehaviorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachinePowerOffBehaviorEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachinePowerOffBehaviorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachinePowerOffBehaviorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachinePowerOffBehaviorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49346,19 +50752,22 @@ impl VirtualMachineFlagInfoVirtualExecUsageEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineFlagInfoVirtualExecUsageEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineFlagInfoVirtualExecUsageEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineFlagInfoVirtualExecUsageEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineFlagInfoVirtualExecUsageEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineFlagInfoVirtualExecUsageEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineFlagInfoVirtualExecUsageEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineFlagInfoVirtualExecUsageEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49413,19 +50822,22 @@ impl VirtualMachineFlagInfoVirtualMmuUsageEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineFlagInfoVirtualMmuUsageEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineFlagInfoVirtualMmuUsageEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineFlagInfoVirtualMmuUsageEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineFlagInfoVirtualMmuUsageEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineFlagInfoVirtualMmuUsageEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineFlagInfoVirtualMmuUsageEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineFlagInfoVirtualMmuUsageEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49480,19 +50892,22 @@ impl VirtualMachineForkConfigInfoChildTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineForkConfigInfoChildTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineForkConfigInfoChildTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineForkConfigInfoChildTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineForkConfigInfoChildTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineForkConfigInfoChildTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineForkConfigInfoChildTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineForkConfigInfoChildTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49547,19 +50962,22 @@ impl GuestInfoAppStateTypeEnum {
     }
 }
 
-impl serde::Serialize for GuestInfoAppStateTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for GuestInfoAppStateTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for GuestInfoAppStateTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(GuestInfoAppStateTypeEnum::from_str(&s))
+impl miniserde::Deserialize for GuestInfoAppStateTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<GuestInfoAppStateTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(GuestInfoAppStateTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49618,19 +51036,22 @@ impl GuestInfoCustomizationStatusEnum {
     }
 }
 
-impl serde::Serialize for GuestInfoCustomizationStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for GuestInfoCustomizationStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for GuestInfoCustomizationStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(GuestInfoCustomizationStatusEnum::from_str(&s))
+impl miniserde::Deserialize for GuestInfoCustomizationStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<GuestInfoCustomizationStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(GuestInfoCustomizationStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49692,19 +51113,22 @@ impl VirtualMachineGuestStateEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineGuestStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineGuestStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineGuestStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineGuestStateEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineGuestStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineGuestStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineGuestStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49763,19 +51187,22 @@ impl VirtualMachineToolsInstallTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineToolsInstallTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineToolsInstallTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineToolsInstallTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineToolsInstallTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineToolsInstallTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineToolsInstallTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineToolsInstallTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49830,19 +51257,22 @@ impl VirtualMachineToolsRunningStatusEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineToolsRunningStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineToolsRunningStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineToolsRunningStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineToolsRunningStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineToolsRunningStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineToolsRunningStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineToolsRunningStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49899,19 +51329,22 @@ impl VirtualMachineToolsStatusEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineToolsStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineToolsStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineToolsStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineToolsStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineToolsStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineToolsStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineToolsStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -49979,19 +51412,22 @@ impl VirtualMachineToolsVersionStatusEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineToolsVersionStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineToolsVersionStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineToolsVersionStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineToolsVersionStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineToolsVersionStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineToolsVersionStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineToolsVersionStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -50044,19 +51480,22 @@ impl GuestOsDescriptorFirmwareTypeEnum {
     }
 }
 
-impl serde::Serialize for GuestOsDescriptorFirmwareTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for GuestOsDescriptorFirmwareTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for GuestOsDescriptorFirmwareTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(GuestOsDescriptorFirmwareTypeEnum::from_str(&s))
+impl miniserde::Deserialize for GuestOsDescriptorFirmwareTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<GuestOsDescriptorFirmwareTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(GuestOsDescriptorFirmwareTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -50118,19 +51557,22 @@ impl VirtualMachineGuestOsFamilyEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineGuestOsFamilyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineGuestOsFamilyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineGuestOsFamilyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineGuestOsFamilyEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineGuestOsFamilyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineGuestOsFamilyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineGuestOsFamilyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -50640,19 +52082,22 @@ impl VirtualMachineGuestOsIdentifierEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineGuestOsIdentifierEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineGuestOsIdentifierEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineGuestOsIdentifierEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineGuestOsIdentifierEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineGuestOsIdentifierEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineGuestOsIdentifierEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineGuestOsIdentifierEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -50716,19 +52161,22 @@ impl GuestOsDescriptorSupportLevelEnum {
     }
 }
 
-impl serde::Serialize for GuestOsDescriptorSupportLevelEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for GuestOsDescriptorSupportLevelEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for GuestOsDescriptorSupportLevelEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(GuestOsDescriptorSupportLevelEnum::from_str(&s))
+impl miniserde::Deserialize for GuestOsDescriptorSupportLevelEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<GuestOsDescriptorSupportLevelEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(GuestOsDescriptorSupportLevelEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -50779,19 +52227,22 @@ impl GuestQuiesceEndGuestQuiesceErrorEnum {
     }
 }
 
-impl serde::Serialize for GuestQuiesceEndGuestQuiesceErrorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for GuestQuiesceEndGuestQuiesceErrorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for GuestQuiesceEndGuestQuiesceErrorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(GuestQuiesceEndGuestQuiesceErrorEnum::from_str(&s))
+impl miniserde::Deserialize for GuestQuiesceEndGuestQuiesceErrorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<GuestQuiesceEndGuestQuiesceErrorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(GuestQuiesceEndGuestQuiesceErrorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -50844,19 +52295,22 @@ impl VirtualMachineMetadataManagerVmMetadataOpEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineMetadataManagerVmMetadataOpEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineMetadataManagerVmMetadataOpEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineMetadataManagerVmMetadataOpEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineMetadataManagerVmMetadataOpEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineMetadataManagerVmMetadataOpEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineMetadataManagerVmMetadataOpEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineMetadataManagerVmMetadataOpEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -50907,19 +52361,22 @@ impl VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -50978,19 +52435,22 @@ impl VirtualMachineRelocateDiskMoveOptionsEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineRelocateDiskMoveOptionsEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineRelocateDiskMoveOptionsEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineRelocateDiskMoveOptionsEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineRelocateDiskMoveOptionsEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineRelocateDiskMoveOptionsEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineRelocateDiskMoveOptionsEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineRelocateDiskMoveOptionsEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51043,19 +52503,22 @@ impl VirtualMachineRelocateTransformationEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineRelocateTransformationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineRelocateTransformationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineRelocateTransformationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineRelocateTransformationEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineRelocateTransformationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineRelocateTransformationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineRelocateTransformationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51110,19 +52573,22 @@ impl ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum {
     }
 }
 
-impl serde::Serialize for ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum::from_str(&s))
+impl miniserde::Deserialize for ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51179,19 +52645,22 @@ impl ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum {
     }
 }
 
-impl serde::Serialize for ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum::from_str(&s))
+impl miniserde::Deserialize for ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51266,19 +52735,22 @@ impl VirtualMachineScsiPassthroughTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineScsiPassthroughTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineScsiPassthroughTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineScsiPassthroughTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineScsiPassthroughTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineScsiPassthroughTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineScsiPassthroughTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineScsiPassthroughTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51331,19 +52803,22 @@ impl VirtualMachineSgxInfoFlcModesEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineSgxInfoFlcModesEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineSgxInfoFlcModesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineSgxInfoFlcModesEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineSgxInfoFlcModesEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineSgxInfoFlcModesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineSgxInfoFlcModesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineSgxInfoFlcModesEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51396,19 +52871,22 @@ impl VirtualMachineTargetInfoConfigurationTagEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineTargetInfoConfigurationTagEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineTargetInfoConfigurationTagEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineTargetInfoConfigurationTagEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineTargetInfoConfigurationTagEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineTargetInfoConfigurationTagEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineTargetInfoConfigurationTagEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineTargetInfoConfigurationTagEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51461,19 +52939,22 @@ impl UpgradePolicyEnum {
     }
 }
 
-impl serde::Serialize for UpgradePolicyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for UpgradePolicyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for UpgradePolicyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(UpgradePolicyEnum::from_str(&s))
+impl miniserde::Deserialize for UpgradePolicyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<UpgradePolicyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(UpgradePolicyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51563,19 +53044,22 @@ impl VirtualMachineUsbInfoFamilyEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineUsbInfoFamilyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineUsbInfoFamilyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineUsbInfoFamilyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineUsbInfoFamilyEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineUsbInfoFamilyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineUsbInfoFamilyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineUsbInfoFamilyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51639,19 +53123,22 @@ impl VirtualMachineUsbInfoSpeedEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineUsbInfoSpeedEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineUsbInfoSpeedEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineUsbInfoSpeedEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineUsbInfoSpeedEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineUsbInfoSpeedEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineUsbInfoSpeedEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineUsbInfoSpeedEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51708,19 +53195,22 @@ impl VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51773,19 +53263,22 @@ impl VirtualMachineVgpuProfileInfoProfileClassEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineVgpuProfileInfoProfileClassEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineVgpuProfileInfoProfileClassEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineVgpuProfileInfoProfileClassEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineVgpuProfileInfoProfileClassEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineVgpuProfileInfoProfileClassEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineVgpuProfileInfoProfileClassEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineVgpuProfileInfoProfileClassEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51838,19 +53331,22 @@ impl VirtualMachineVgpuProfileInfoProfileSharingEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineVgpuProfileInfoProfileSharingEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineVgpuProfileInfoProfileSharingEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineVgpuProfileInfoProfileSharingEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineVgpuProfileInfoProfileSharingEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineVgpuProfileInfoProfileSharingEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineVgpuProfileInfoProfileSharingEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineVgpuProfileInfoProfileSharingEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51909,19 +53405,22 @@ impl VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -51974,19 +53473,22 @@ impl VirtualHardwareMotherboardLayoutEnum {
     }
 }
 
-impl serde::Serialize for VirtualHardwareMotherboardLayoutEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualHardwareMotherboardLayoutEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualHardwareMotherboardLayoutEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualHardwareMotherboardLayoutEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualHardwareMotherboardLayoutEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualHardwareMotherboardLayoutEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualHardwareMotherboardLayoutEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52039,19 +53541,22 @@ impl VirtualMachineVirtualPMemSnapshotModeEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineVirtualPMemSnapshotModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineVirtualPMemSnapshotModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineVirtualPMemSnapshotModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineVirtualPMemSnapshotModeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineVirtualPMemSnapshotModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineVirtualPMemSnapshotModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineVirtualPMemSnapshotModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52106,19 +53611,22 @@ impl VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineWindowsQuiesceSpecVssBackupContextEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineWindowsQuiesceSpecVssBackupContextEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineWindowsQuiesceSpecVssBackupContextEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52177,19 +53685,22 @@ impl CheckTestTypeEnum {
     }
 }
 
-impl serde::Serialize for CheckTestTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CheckTestTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CheckTestTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CheckTestTypeEnum::from_str(&s))
+impl miniserde::Deserialize for CheckTestTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CheckTestTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CheckTestTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52244,19 +53755,22 @@ impl CustomizationNetBiosModeEnum {
     }
 }
 
-impl serde::Serialize for CustomizationNetBiosModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CustomizationNetBiosModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CustomizationNetBiosModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CustomizationNetBiosModeEnum::from_str(&s))
+impl miniserde::Deserialize for CustomizationNetBiosModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CustomizationNetBiosModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CustomizationNetBiosModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52309,19 +53823,22 @@ impl CustomizationLicenseDataModeEnum {
     }
 }
 
-impl serde::Serialize for CustomizationLicenseDataModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CustomizationLicenseDataModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CustomizationLicenseDataModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CustomizationLicenseDataModeEnum::from_str(&s))
+impl miniserde::Deserialize for CustomizationLicenseDataModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CustomizationLicenseDataModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CustomizationLicenseDataModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52376,19 +53893,22 @@ impl CustomizationSysprepRebootOptionEnum {
     }
 }
 
-impl serde::Serialize for CustomizationSysprepRebootOptionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for CustomizationSysprepRebootOptionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for CustomizationSysprepRebootOptionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(CustomizationSysprepRebootOptionEnum::from_str(&s))
+impl miniserde::Deserialize for CustomizationSysprepRebootOptionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CustomizationSysprepRebootOptionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CustomizationSysprepRebootOptionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52443,19 +53963,22 @@ impl VirtualDeviceConnectInfoMigrateConnectOpEnum {
     }
 }
 
-impl serde::Serialize for VirtualDeviceConnectInfoMigrateConnectOpEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDeviceConnectInfoMigrateConnectOpEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDeviceConnectInfoMigrateConnectOpEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDeviceConnectInfoMigrateConnectOpEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDeviceConnectInfoMigrateConnectOpEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDeviceConnectInfoMigrateConnectOpEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDeviceConnectInfoMigrateConnectOpEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52512,19 +54035,22 @@ impl VirtualDeviceConnectInfoStatusEnum {
     }
 }
 
-impl serde::Serialize for VirtualDeviceConnectInfoStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDeviceConnectInfoStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDeviceConnectInfoStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDeviceConnectInfoStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDeviceConnectInfoStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDeviceConnectInfoStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDeviceConnectInfoStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52583,19 +54109,22 @@ impl VirtualDeviceFileExtensionEnum {
     }
 }
 
-impl serde::Serialize for VirtualDeviceFileExtensionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDeviceFileExtensionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDeviceFileExtensionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDeviceFileExtensionEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDeviceFileExtensionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDeviceFileExtensionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDeviceFileExtensionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52648,19 +54177,22 @@ impl VirtualDeviceUriBackingOptionDirectionEnum {
     }
 }
 
-impl serde::Serialize for VirtualDeviceUriBackingOptionDirectionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDeviceUriBackingOptionDirectionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDeviceUriBackingOptionDirectionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDeviceUriBackingOptionDirectionEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDeviceUriBackingOptionDirectionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDeviceUriBackingOptionDirectionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDeviceUriBackingOptionDirectionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52713,19 +54245,22 @@ impl VirtualDeviceConfigSpecChangeModeEnum {
     }
 }
 
-impl serde::Serialize for VirtualDeviceConfigSpecChangeModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDeviceConfigSpecChangeModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDeviceConfigSpecChangeModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDeviceConfigSpecChangeModeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDeviceConfigSpecChangeModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDeviceConfigSpecChangeModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDeviceConfigSpecChangeModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52780,19 +54315,22 @@ impl VirtualDeviceConfigSpecFileOperationEnum {
     }
 }
 
-impl serde::Serialize for VirtualDeviceConfigSpecFileOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDeviceConfigSpecFileOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDeviceConfigSpecFileOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDeviceConfigSpecFileOperationEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDeviceConfigSpecFileOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDeviceConfigSpecFileOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDeviceConfigSpecFileOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52847,19 +54385,22 @@ impl VirtualDeviceConfigSpecOperationEnum {
     }
 }
 
-impl serde::Serialize for VirtualDeviceConfigSpecOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDeviceConfigSpecOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDeviceConfigSpecOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDeviceConfigSpecOperationEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDeviceConfigSpecOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDeviceConfigSpecOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDeviceConfigSpecOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52914,19 +54455,22 @@ impl VirtualDiskDeltaDiskFormatEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskDeltaDiskFormatEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskDeltaDiskFormatEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskDeltaDiskFormatEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskDeltaDiskFormatEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskDeltaDiskFormatEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskDeltaDiskFormatEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskDeltaDiskFormatEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -52979,19 +54523,22 @@ impl VirtualDiskDeltaDiskFormatVariantEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskDeltaDiskFormatVariantEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskDeltaDiskFormatVariantEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskDeltaDiskFormatVariantEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskDeltaDiskFormatVariantEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskDeltaDiskFormatVariantEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskDeltaDiskFormatVariantEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskDeltaDiskFormatVariantEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53044,19 +54591,22 @@ impl VirtualDiskSharingEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskSharingEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskSharingEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskSharingEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskSharingEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskSharingEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskSharingEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskSharingEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53109,19 +54659,22 @@ impl VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53174,19 +54727,22 @@ impl VirtualDiskVFlashCacheConfigInfoCacheModeEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskVFlashCacheConfigInfoCacheModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskVFlashCacheConfigInfoCacheModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskVFlashCacheConfigInfoCacheModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskVFlashCacheConfigInfoCacheModeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskVFlashCacheConfigInfoCacheModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskVFlashCacheConfigInfoCacheModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskVFlashCacheConfigInfoCacheModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53239,19 +54795,22 @@ impl VirtualDiskCompatibilityModeEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskCompatibilityModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskCompatibilityModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskCompatibilityModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskCompatibilityModeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskCompatibilityModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskCompatibilityModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskCompatibilityModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53313,19 +54872,22 @@ impl VirtualDiskModeEnum {
     }
 }
 
-impl serde::Serialize for VirtualDiskModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualDiskModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualDiskModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualDiskModeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualDiskModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53380,19 +54942,22 @@ impl VirtualEthernetCardLegacyNetworkDeviceNameEnum {
     }
 }
 
-impl serde::Serialize for VirtualEthernetCardLegacyNetworkDeviceNameEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualEthernetCardLegacyNetworkDeviceNameEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualEthernetCardLegacyNetworkDeviceNameEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualEthernetCardLegacyNetworkDeviceNameEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualEthernetCardLegacyNetworkDeviceNameEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualEthernetCardLegacyNetworkDeviceNameEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualEthernetCardLegacyNetworkDeviceNameEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53447,19 +55012,22 @@ impl VirtualEthernetCardMacTypeEnum {
     }
 }
 
-impl serde::Serialize for VirtualEthernetCardMacTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualEthernetCardMacTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualEthernetCardMacTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualEthernetCardMacTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualEthernetCardMacTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualEthernetCardMacTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualEthernetCardMacTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53512,19 +55080,22 @@ impl VirtualNvmeControllerSharingEnum {
     }
 }
 
-impl serde::Serialize for VirtualNvmeControllerSharingEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualNvmeControllerSharingEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualNvmeControllerSharingEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualNvmeControllerSharingEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualNvmeControllerSharingEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualNvmeControllerSharingEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualNvmeControllerSharingEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53590,19 +55161,22 @@ impl VirtualPointingDeviceHostChoiceEnum {
     }
 }
 
-impl serde::Serialize for VirtualPointingDeviceHostChoiceEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualPointingDeviceHostChoiceEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualPointingDeviceHostChoiceEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualPointingDeviceHostChoiceEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualPointingDeviceHostChoiceEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualPointingDeviceHostChoiceEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualPointingDeviceHostChoiceEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53657,19 +55231,22 @@ impl VirtualScsiSharingEnum {
     }
 }
 
-impl serde::Serialize for VirtualScsiSharingEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualScsiSharingEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualScsiSharingEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualScsiSharingEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualScsiSharingEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualScsiSharingEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualScsiSharingEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53722,19 +55299,22 @@ impl VirtualSerialPortEndPointEnum {
     }
 }
 
-impl serde::Serialize for VirtualSerialPortEndPointEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualSerialPortEndPointEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualSerialPortEndPointEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualSerialPortEndPointEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualSerialPortEndPointEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualSerialPortEndPointEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualSerialPortEndPointEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53787,19 +55367,22 @@ impl VirtualMachineVmciDeviceActionEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineVmciDeviceActionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineVmciDeviceActionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineVmciDeviceActionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineVmciDeviceActionEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineVmciDeviceActionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineVmciDeviceActionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineVmciDeviceActionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53854,19 +55437,22 @@ impl VirtualMachineVmciDeviceDirectionEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineVmciDeviceDirectionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineVmciDeviceDirectionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineVmciDeviceDirectionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineVmciDeviceDirectionEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineVmciDeviceDirectionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineVmciDeviceDirectionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineVmciDeviceDirectionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53928,19 +55514,22 @@ impl VirtualMachineVmciDeviceProtocolEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineVmciDeviceProtocolEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineVmciDeviceProtocolEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineVmciDeviceProtocolEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineVmciDeviceProtocolEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineVmciDeviceProtocolEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineVmciDeviceProtocolEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineVmciDeviceProtocolEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -53995,19 +55584,22 @@ impl VirtualMachineVideoCardUse3DRendererEnum {
     }
 }
 
-impl serde::Serialize for VirtualMachineVideoCardUse3DRendererEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualMachineVideoCardUse3DRendererEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualMachineVideoCardUse3DRendererEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualMachineVideoCardUse3DRendererEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualMachineVideoCardUse3DRendererEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineVideoCardUse3DRendererEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineVideoCardUse3DRendererEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54064,19 +55656,22 @@ impl VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum {
     }
 }
 
-impl serde::Serialize for VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54129,19 +55724,22 @@ impl VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum {
     }
 }
 
-impl serde::Serialize for VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum::from_str(&s))
+impl miniserde::Deserialize for VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54196,19 +55794,22 @@ impl GuestFileTypeEnum {
     }
 }
 
-impl serde::Serialize for GuestFileTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for GuestFileTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for GuestFileTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(GuestFileTypeEnum::from_str(&s))
+impl miniserde::Deserialize for GuestFileTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<GuestFileTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(GuestFileTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54263,19 +55864,22 @@ impl GuestRegKeyWowSpecEnum {
     }
 }
 
-impl serde::Serialize for GuestRegKeyWowSpecEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for GuestRegKeyWowSpecEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for GuestRegKeyWowSpecEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(GuestRegKeyWowSpecEnum::from_str(&s))
+impl miniserde::Deserialize for GuestRegKeyWowSpecEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<GuestRegKeyWowSpecEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(GuestRegKeyWowSpecEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54334,19 +55938,22 @@ impl VsanCapacityReservationStateEnum {
     }
 }
 
-impl serde::Serialize for VsanCapacityReservationStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanCapacityReservationStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanCapacityReservationStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanCapacityReservationStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanCapacityReservationStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanCapacityReservationStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanCapacityReservationStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54399,19 +56006,22 @@ impl VsanFileServiceConfigOpTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanFileServiceConfigOpTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanFileServiceConfigOpTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanFileServiceConfigOpTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanFileServiceConfigOpTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanFileServiceConfigOpTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanFileServiceConfigOpTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanFileServiceConfigOpTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54466,19 +56076,22 @@ impl VsanFileServicePreflightCheckScopeEnum {
     }
 }
 
-impl serde::Serialize for VsanFileServicePreflightCheckScopeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanFileServicePreflightCheckScopeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanFileServicePreflightCheckScopeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanFileServicePreflightCheckScopeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanFileServicePreflightCheckScopeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanFileServicePreflightCheckScopeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanFileServicePreflightCheckScopeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54533,19 +56146,22 @@ impl VsanFileServiceVmStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanFileServiceVmStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanFileServiceVmStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanFileServiceVmStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanFileServiceVmStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanFileServiceVmStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanFileServiceVmStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanFileServiceVmStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54602,19 +56218,22 @@ impl VsanFileShareAccessTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanFileShareAccessTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanFileShareAccessTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanFileShareAccessTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanFileShareAccessTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanFileShareAccessTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanFileShareAccessTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanFileShareAccessTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54669,19 +56288,22 @@ impl VsanFileShareManagingEntityEnum {
     }
 }
 
-impl serde::Serialize for VsanFileShareManagingEntityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanFileShareManagingEntityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanFileShareManagingEntityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanFileShareManagingEntityEnum::from_str(&s))
+impl miniserde::Deserialize for VsanFileShareManagingEntityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanFileShareManagingEntityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanFileShareManagingEntityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54740,19 +56362,22 @@ impl VsanFileShareNfsSecTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanFileShareNfsSecTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanFileShareNfsSecTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanFileShareNfsSecTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanFileShareNfsSecTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanFileShareNfsSecTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanFileShareNfsSecTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanFileShareNfsSecTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54809,19 +56434,22 @@ impl VsanFileProtocolEnum {
     }
 }
 
-impl serde::Serialize for VsanFileProtocolEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanFileProtocolEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanFileProtocolEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanFileProtocolEnum::from_str(&s))
+impl miniserde::Deserialize for VsanFileProtocolEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanFileProtocolEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanFileProtocolEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54876,19 +56504,22 @@ impl VsanFileShareSmbEncryptionTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanFileShareSmbEncryptionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanFileShareSmbEncryptionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanFileShareSmbEncryptionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanFileShareSmbEncryptionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanFileShareSmbEncryptionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanFileShareSmbEncryptionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanFileShareSmbEncryptionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -54954,19 +56585,22 @@ impl HciMeshClientOperationEnum {
     }
 }
 
-impl serde::Serialize for HciMeshClientOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for HciMeshClientOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for HciMeshClientOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(HciMeshClientOperationEnum::from_str(&s))
+impl miniserde::Deserialize for HciMeshClientOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HciMeshClientOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HciMeshClientOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55050,19 +56684,22 @@ impl VsanIoDiagnosticsFailedCheckTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanIoDiagnosticsFailedCheckTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIoDiagnosticsFailedCheckTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIoDiagnosticsFailedCheckTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIoDiagnosticsFailedCheckTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIoDiagnosticsFailedCheckTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIoDiagnosticsFailedCheckTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIoDiagnosticsFailedCheckTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55126,19 +56763,22 @@ impl VsanIoDiagnosticsInstanceEventTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanIoDiagnosticsInstanceEventTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIoDiagnosticsInstanceEventTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIoDiagnosticsInstanceEventTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIoDiagnosticsInstanceEventTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIoDiagnosticsInstanceEventTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIoDiagnosticsInstanceEventTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIoDiagnosticsInstanceEventTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55193,19 +56833,22 @@ impl VsanIoDiagnosticsInstanceStateEnum {
     }
 }
 
-impl serde::Serialize for VsanIoDiagnosticsInstanceStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIoDiagnosticsInstanceStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIoDiagnosticsInstanceStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIoDiagnosticsInstanceStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIoDiagnosticsInstanceStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIoDiagnosticsInstanceStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIoDiagnosticsInstanceStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55258,19 +56901,22 @@ impl VsanIoDiagnosticsTargetTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanIoDiagnosticsTargetTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIoDiagnosticsTargetTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIoDiagnosticsTargetTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIoDiagnosticsTargetTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIoDiagnosticsTargetTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIoDiagnosticsTargetTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIoDiagnosticsTargetTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55345,19 +56991,22 @@ impl VsanIoLatencyTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanIoLatencyTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIoLatencyTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIoLatencyTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIoLatencyTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIoLatencyTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIoLatencyTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIoLatencyTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55410,19 +57059,22 @@ impl VimVsanLifecycleCheckOperationEnum {
     }
 }
 
-impl serde::Serialize for VimVsanLifecycleCheckOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanLifecycleCheckOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanLifecycleCheckOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanLifecycleCheckOperationEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanLifecycleCheckOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanLifecycleCheckOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanLifecycleCheckOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55479,19 +57131,22 @@ impl VimVsanLifecycleClusterTypeEnum {
     }
 }
 
-impl serde::Serialize for VimVsanLifecycleClusterTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanLifecycleClusterTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanLifecycleClusterTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanLifecycleClusterTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanLifecycleClusterTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanLifecycleClusterTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanLifecycleClusterTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55548,19 +57203,22 @@ impl VimVsanLifecyclePreCheckTypeEnum {
     }
 }
 
-impl serde::Serialize for VimVsanLifecyclePreCheckTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanLifecyclePreCheckTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanLifecyclePreCheckTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanLifecyclePreCheckTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanLifecyclePreCheckTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanLifecyclePreCheckTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanLifecyclePreCheckTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55617,19 +57275,22 @@ impl VsanModeEnum {
     }
 }
 
-impl serde::Serialize for VsanModeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanModeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanModeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanModeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55726,19 +57387,22 @@ impl VimVsanMountPrecheckTypeEnum {
     }
 }
 
-impl serde::Serialize for VimVsanMountPrecheckTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanMountPrecheckTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanMountPrecheckTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanMountPrecheckTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanMountPrecheckTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanMountPrecheckTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanMountPrecheckTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55797,19 +57461,22 @@ impl VsanPerfsvcRemediateActionEnum {
     }
 }
 
-impl serde::Serialize for VsanPerfsvcRemediateActionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanPerfsvcRemediateActionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanPerfsvcRemediateActionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanPerfsvcRemediateActionEnum::from_str(&s))
+impl miniserde::Deserialize for VsanPerfsvcRemediateActionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanPerfsvcRemediateActionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanPerfsvcRemediateActionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55866,19 +57533,22 @@ impl PrecheckDatastoreSourceOperationEnum {
     }
 }
 
-impl serde::Serialize for PrecheckDatastoreSourceOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PrecheckDatastoreSourceOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PrecheckDatastoreSourceOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PrecheckDatastoreSourceOperationEnum::from_str(&s))
+impl miniserde::Deserialize for PrecheckDatastoreSourceOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PrecheckDatastoreSourceOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PrecheckDatastoreSourceOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55931,19 +57601,22 @@ impl VsanRemoteVcLinkTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanRemoteVcLinkTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanRemoteVcLinkTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanRemoteVcLinkTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanRemoteVcLinkTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanRemoteVcLinkTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanRemoteVcLinkTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanRemoteVcLinkTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -55998,19 +57671,22 @@ impl RemoteVsanNetworkTopologyEnum {
     }
 }
 
-impl serde::Serialize for RemoteVsanNetworkTopologyEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for RemoteVsanNetworkTopologyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for RemoteVsanNetworkTopologyEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(RemoteVsanNetworkTopologyEnum::from_str(&s))
+impl miniserde::Deserialize for RemoteVsanNetworkTopologyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<RemoteVsanNetworkTopologyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(RemoteVsanNetworkTopologyEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56065,19 +57741,22 @@ impl VsanResourceCheckComponentTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanResourceCheckComponentTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanResourceCheckComponentTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanResourceCheckComponentTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanResourceCheckComponentTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanResourceCheckComponentTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanResourceCheckComponentTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanResourceCheckComponentTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56130,19 +57809,22 @@ impl ResourceCheckDedupStoreHealthStateEnum {
     }
 }
 
-impl serde::Serialize for ResourceCheckDedupStoreHealthStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ResourceCheckDedupStoreHealthStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ResourceCheckDedupStoreHealthStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ResourceCheckDedupStoreHealthStateEnum::from_str(&s))
+impl miniserde::Deserialize for ResourceCheckDedupStoreHealthStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ResourceCheckDedupStoreHealthStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ResourceCheckDedupStoreHealthStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56208,19 +57890,22 @@ impl VsanResourceCheckStatusTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanResourceCheckStatusTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanResourceCheckStatusTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanResourceCheckStatusTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanResourceCheckStatusTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanResourceCheckStatusTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanResourceCheckStatusTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanResourceCheckStatusTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56273,19 +57958,22 @@ impl VsanSnapshotCreatorEnum {
     }
 }
 
-impl serde::Serialize for VsanSnapshotCreatorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSnapshotCreatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSnapshotCreatorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSnapshotCreatorEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSnapshotCreatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSnapshotCreatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSnapshotCreatorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56340,19 +58028,22 @@ impl VsanSnapshotTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanSnapshotTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSnapshotTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSnapshotTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSnapshotTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSnapshotTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSnapshotTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSnapshotTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56409,19 +58100,22 @@ impl VsanAnalyticsEventLocationTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanAnalyticsEventLocationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanAnalyticsEventLocationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanAnalyticsEventLocationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanAnalyticsEventLocationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanAnalyticsEventLocationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanAnalyticsEventLocationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanAnalyticsEventLocationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56480,19 +58174,22 @@ impl VsanAnalyticsEventSnapshotTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanAnalyticsEventSnapshotTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanAnalyticsEventSnapshotTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanAnalyticsEventSnapshotTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanAnalyticsEventSnapshotTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanAnalyticsEventSnapshotTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanAnalyticsEventSnapshotTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanAnalyticsEventSnapshotTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56615,19 +58312,22 @@ impl VsanAnalyticsEventTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanAnalyticsEventTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanAnalyticsEventTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanAnalyticsEventTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanAnalyticsEventTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanAnalyticsEventTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanAnalyticsEventTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanAnalyticsEventTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56682,19 +58382,22 @@ impl VsanConfigTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanConfigTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanConfigTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanConfigTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanConfigTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanConfigTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanConfigTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanConfigTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56749,19 +58452,22 @@ impl VsanDiskCompatibilityTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanDiskCompatibilityTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanDiskCompatibilityTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanDiskCompatibilityTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanDiskCompatibilityTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanDiskCompatibilityTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanDiskCompatibilityTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanDiskCompatibilityTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56860,19 +58566,22 @@ impl VsanHealthPerspectiveEnum {
     }
 }
 
-impl serde::Serialize for VsanHealthPerspectiveEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHealthPerspectiveEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHealthPerspectiveEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHealthPerspectiveEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHealthPerspectiveEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHealthPerspectiveEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHealthPerspectiveEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56923,19 +58632,22 @@ impl VsanHealthPerspective90Enum {
     }
 }
 
-impl serde::Serialize for VsanHealthPerspective90Enum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHealthPerspective90Enum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHealthPerspective90Enum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHealthPerspective90Enum::from_str(&s))
+impl miniserde::Deserialize for VsanHealthPerspective90Enum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHealthPerspective90Enum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHealthPerspective90Enum::from_str(s));
+        Ok(())
     }
 }
 
@@ -56992,19 +58704,22 @@ impl VsanHealthStatusTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanHealthStatusTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHealthStatusTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHealthStatusTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHealthStatusTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHealthStatusTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHealthStatusTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHealthStatusTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57061,19 +58776,22 @@ impl VsanHealthThresholdTargetEnum {
     }
 }
 
-impl serde::Serialize for VsanHealthThresholdTargetEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHealthThresholdTargetEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHealthThresholdTargetEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHealthThresholdTargetEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHealthThresholdTargetEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHealthThresholdTargetEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHealthThresholdTargetEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57128,19 +58846,22 @@ impl VsanIoTripAnalyzerRecurrenceStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanIoTripAnalyzerRecurrenceStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanIoTripAnalyzerRecurrenceStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanIoTripAnalyzerRecurrenceStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanIoTripAnalyzerRecurrenceStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanIoTripAnalyzerRecurrenceStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanIoTripAnalyzerRecurrenceStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanIoTripAnalyzerRecurrenceStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57199,19 +58920,22 @@ impl VsanPolicyRegulationCheckOpEnumEnum {
     }
 }
 
-impl serde::Serialize for VsanPolicyRegulationCheckOpEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanPolicyRegulationCheckOpEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanPolicyRegulationCheckOpEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanPolicyRegulationCheckOpEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VsanPolicyRegulationCheckOpEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanPolicyRegulationCheckOpEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanPolicyRegulationCheckOpEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57266,19 +58990,22 @@ impl VimVsanVsanScanObjectsIssueTypeEnum {
     }
 }
 
-impl serde::Serialize for VimVsanVsanScanObjectsIssueTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanVsanScanObjectsIssueTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanVsanScanObjectsIssueTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanVsanScanObjectsIssueTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanVsanScanObjectsIssueTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanVsanScanObjectsIssueTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanVsanScanObjectsIssueTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57333,19 +59060,22 @@ impl VsanServiceStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanServiceStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanServiceStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanServiceStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanServiceStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanServiceStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanServiceStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanServiceStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57402,19 +59132,22 @@ impl VsanSiteLocationTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanSiteLocationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSiteLocationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSiteLocationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSiteLocationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSiteLocationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSiteLocationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSiteLocationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57473,19 +59206,22 @@ impl VsanSnapHealthTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanSnapHealthTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSnapHealthTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSnapHealthTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSnapHealthTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSnapHealthTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSnapHealthTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSnapHealthTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57544,19 +59280,22 @@ impl VsanSnapStatsExpirationTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanSnapStatsExpirationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSnapStatsExpirationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSnapStatsExpirationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSnapStatsExpirationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSnapStatsExpirationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSnapStatsExpirationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSnapStatsExpirationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57611,19 +59350,22 @@ impl VsanSnapVmMembershipChangeStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanSnapVmMembershipChangeStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSnapVmMembershipChangeStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSnapVmMembershipChangeStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSnapVmMembershipChangeStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSnapVmMembershipChangeStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSnapVmMembershipChangeStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSnapVmMembershipChangeStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57691,19 +59433,22 @@ impl VsanSyncReasonEnum {
     }
 }
 
-impl serde::Serialize for VsanSyncReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSyncReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSyncReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSyncReasonEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSyncReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSyncReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSyncReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57760,19 +59505,22 @@ impl VsanSyncStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanSyncStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanSyncStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanSyncStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanSyncStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanSyncStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSyncStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSyncStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57825,19 +59573,22 @@ impl VsanUpdateItemImpactTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanUpdateItemImpactTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanUpdateItemImpactTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanUpdateItemImpactTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanUpdateItemImpactTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanUpdateItemImpactTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanUpdateItemImpactTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanUpdateItemImpactTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57896,19 +59647,22 @@ impl VsanUpdateItemTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanUpdateItemTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanUpdateItemTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanUpdateItemTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanUpdateItemTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanUpdateItemTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanUpdateItemTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanUpdateItemTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -57976,19 +59730,22 @@ impl VimVsanVsanVcsaDeploymentPhaseEnum {
     }
 }
 
-impl serde::Serialize for VimVsanVsanVcsaDeploymentPhaseEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanVsanVcsaDeploymentPhaseEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanVsanVcsaDeploymentPhaseEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanVsanVcsaDeploymentPhaseEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanVsanVcsaDeploymentPhaseEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanVsanVcsaDeploymentPhaseEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanVsanVcsaDeploymentPhaseEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58043,19 +59800,22 @@ impl VsanVibTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanVibTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanVibTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanVibTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanVibTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanVibTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanVibTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanVibTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58130,19 +59890,22 @@ impl VsanXvcQueryCriteriaOperatorEnum {
     }
 }
 
-impl serde::Serialize for VsanXvcQueryCriteriaOperatorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanXvcQueryCriteriaOperatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanXvcQueryCriteriaOperatorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanXvcQueryCriteriaOperatorEnum::from_str(&s))
+impl miniserde::Deserialize for VsanXvcQueryCriteriaOperatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanXvcQueryCriteriaOperatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanXvcQueryCriteriaOperatorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58197,19 +59960,22 @@ impl VsanXvcQueryFilterOperatorEnum {
     }
 }
 
-impl serde::Serialize for VsanXvcQueryFilterOperatorEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanXvcQueryFilterOperatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanXvcQueryFilterOperatorEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanXvcQueryFilterOperatorEnum::from_str(&s))
+impl miniserde::Deserialize for VsanXvcQueryFilterOperatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanXvcQueryFilterOperatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanXvcQueryFilterOperatorEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58268,19 +60034,22 @@ impl VimVsanClusterComplianceResourceCheckStatusTypeEnum {
     }
 }
 
-impl serde::Serialize for VimVsanClusterComplianceResourceCheckStatusTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanClusterComplianceResourceCheckStatusTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanClusterComplianceResourceCheckStatusTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanClusterComplianceResourceCheckStatusTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanClusterComplianceResourceCheckStatusTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanClusterComplianceResourceCheckStatusTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanClusterComplianceResourceCheckStatusTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58335,19 +60104,22 @@ impl VimVsanClusterVsanManagedStorageTypeEnum {
     }
 }
 
-impl serde::Serialize for VimVsanClusterVsanManagedStorageTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanClusterVsanManagedStorageTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanClusterVsanManagedStorageTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanClusterVsanManagedStorageTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanClusterVsanManagedStorageTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanClusterVsanManagedStorageTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanClusterVsanManagedStorageTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58406,19 +60178,22 @@ impl ClusterPowerStateEnum {
     }
 }
 
-impl serde::Serialize for ClusterPowerStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ClusterPowerStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ClusterPowerStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ClusterPowerStateEnum::from_str(&s))
+impl miniserde::Deserialize for ClusterPowerStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ClusterPowerStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ClusterPowerStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58480,19 +60255,22 @@ impl VsanComplianceStatusEnum {
     }
 }
 
-impl serde::Serialize for VsanComplianceStatusEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanComplianceStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanComplianceStatusEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanComplianceStatusEnum::from_str(&s))
+impl miniserde::Deserialize for VsanComplianceStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanComplianceStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanComplianceStatusEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58547,19 +60325,22 @@ impl VsanHostDecommissionModeObjectActionEnum {
     }
 }
 
-impl serde::Serialize for VsanHostDecommissionModeObjectActionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHostDecommissionModeObjectActionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHostDecommissionModeObjectActionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHostDecommissionModeObjectActionEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHostDecommissionModeObjectActionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHostDecommissionModeObjectActionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHostDecommissionModeObjectActionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58618,19 +60399,22 @@ impl VimVsanHostDiskMappingCreationTypeEnum {
     }
 }
 
-impl serde::Serialize for VimVsanHostDiskMappingCreationTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanHostDiskMappingCreationTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanHostDiskMappingCreationTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanHostDiskMappingCreationTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanHostDiskMappingCreationTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanHostDiskMappingCreationTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanHostDiskMappingCreationTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58685,19 +60469,22 @@ impl VsanHostDiskResultStateEnum {
     }
 }
 
-impl serde::Serialize for VsanHostDiskResultStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHostDiskResultStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHostDiskResultStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHostDiskResultStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHostDiskResultStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHostDiskResultStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHostDiskResultStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58756,19 +60543,22 @@ impl VsanEncryptionOperationEnum {
     }
 }
 
-impl serde::Serialize for VsanEncryptionOperationEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanEncryptionOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanEncryptionOperationEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanEncryptionOperationEnum::from_str(&s))
+impl miniserde::Deserialize for VsanEncryptionOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanEncryptionOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanEncryptionOperationEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58825,19 +60615,22 @@ impl VsanEncryptionTransitionStateEnum {
     }
 }
 
-impl serde::Serialize for VsanEncryptionTransitionStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanEncryptionTransitionStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanEncryptionTransitionStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanEncryptionTransitionStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanEncryptionTransitionStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanEncryptionTransitionStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanEncryptionTransitionStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58892,19 +60685,22 @@ impl VsanHostHealthStateEnum {
     }
 }
 
-impl serde::Serialize for VsanHostHealthStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHostHealthStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHostHealthStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHostHealthStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHostHealthStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHostHealthStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHostHealthStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -58974,19 +60770,22 @@ impl VsanHostNodeStateEnum {
     }
 }
 
-impl serde::Serialize for VsanHostNodeStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHostNodeStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHostNodeStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHostNodeStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHostNodeStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHostNodeStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHostNodeStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59041,19 +60840,22 @@ impl VimVsanHostTrafficTypeEnum {
     }
 }
 
-impl serde::Serialize for VimVsanHostTrafficTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanHostTrafficTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanHostTrafficTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanHostTrafficTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VimVsanHostTrafficTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanHostTrafficTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanHostTrafficTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59104,19 +60906,22 @@ impl VimVsanHostTrafficType90Enum {
     }
 }
 
-impl serde::Serialize for VimVsanHostTrafficType90Enum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VimVsanHostTrafficType90Enum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VimVsanHostTrafficType90Enum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VimVsanHostTrafficType90Enum::from_str(&s))
+impl miniserde::Deserialize for VimVsanHostTrafficType90Enum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanHostTrafficType90Enum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanHostTrafficType90Enum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59173,19 +60978,22 @@ impl ServerNodeTypeEnum {
     }
 }
 
-impl serde::Serialize for ServerNodeTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ServerNodeTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ServerNodeTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ServerNodeTypeEnum::from_str(&s))
+impl miniserde::Deserialize for ServerNodeTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ServerNodeTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ServerNodeTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59249,19 +61057,22 @@ impl VsanHostStatsTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanHostStatsTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHostStatsTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHostStatsTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHostStatsTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHostStatsTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHostStatsTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHostStatsTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59314,19 +61125,22 @@ impl StoragePoolDiskTypeEnum {
     }
 }
 
-impl serde::Serialize for StoragePoolDiskTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for StoragePoolDiskTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for StoragePoolDiskTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(StoragePoolDiskTypeEnum::from_str(&s))
+impl miniserde::Deserialize for StoragePoolDiskTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<StoragePoolDiskTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(StoragePoolDiskTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59381,19 +61195,22 @@ impl TrimDiskTypeEnum {
     }
 }
 
-impl serde::Serialize for TrimDiskTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for TrimDiskTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for TrimDiskTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(TrimDiskTypeEnum::from_str(&s))
+impl miniserde::Deserialize for TrimDiskTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<TrimDiskTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(TrimDiskTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59457,19 +61274,22 @@ impl VsanDiskEvacReasonEnum {
     }
 }
 
-impl serde::Serialize for VsanDiskEvacReasonEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanDiskEvacReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanDiskEvacReasonEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanDiskEvacReasonEnum::from_str(&s))
+impl miniserde::Deserialize for VsanDiskEvacReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanDiskEvacReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanDiskEvacReasonEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59524,19 +61344,22 @@ impl VsanDiskTrimOptionEnum {
     }
 }
 
-impl serde::Serialize for VsanDiskTrimOptionEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanDiskTrimOptionEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanDiskTrimOptionEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanDiskTrimOptionEnum::from_str(&s))
+impl miniserde::Deserialize for VsanDiskTrimOptionEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanDiskTrimOptionEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanDiskTrimOptionEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59593,19 +61416,22 @@ impl VsanDiskTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanDiskTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanDiskTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanDiskTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanDiskTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanDiskTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanDiskTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanDiskTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59658,19 +61484,22 @@ impl VsanDiskgroupCapabilityEnum {
     }
 }
 
-impl serde::Serialize for VsanDiskgroupCapabilityEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanDiskgroupCapabilityEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanDiskgroupCapabilityEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanDiskgroupCapabilityEnum::from_str(&s))
+impl miniserde::Deserialize for VsanDiskgroupCapabilityEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanDiskgroupCapabilityEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanDiskgroupCapabilityEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59725,19 +61554,22 @@ impl VsanDiskIssueTypeEnum {
     }
 }
 
-impl serde::Serialize for VsanDiskIssueTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanDiskIssueTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanDiskIssueTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanDiskIssueTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VsanDiskIssueTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanDiskIssueTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanDiskIssueTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59794,19 +61626,22 @@ impl VsanHostWipeDiskEligibleEnum {
     }
 }
 
-impl serde::Serialize for VsanHostWipeDiskEligibleEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHostWipeDiskEligibleEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHostWipeDiskEligibleEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHostWipeDiskEligibleEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHostWipeDiskEligibleEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHostWipeDiskEligibleEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHostWipeDiskEligibleEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59863,19 +61698,22 @@ impl VsanHostWipeDiskStateEnum {
     }
 }
 
-impl serde::Serialize for VsanHostWipeDiskStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VsanHostWipeDiskStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VsanHostWipeDiskStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VsanHostWipeDiskStateEnum::from_str(&s))
+impl miniserde::Deserialize for VsanHostWipeDiskStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHostWipeDiskStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHostWipeDiskStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -59930,19 +61768,22 @@ impl BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
     }
 }
 
-impl serde::Serialize for BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum::from_str(&s))
+impl miniserde::Deserialize for BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60039,19 +61880,22 @@ impl VslmDiskInfoFlagEnum {
     }
 }
 
-impl serde::Serialize for VslmDiskInfoFlagEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VslmDiskInfoFlagEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VslmDiskInfoFlagEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VslmDiskInfoFlagEnum::from_str(&s))
+impl miniserde::Deserialize for VslmDiskInfoFlagEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VslmDiskInfoFlagEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VslmDiskInfoFlagEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60102,19 +61946,22 @@ impl VStorageObjectConsumptionTypeEnum {
     }
 }
 
-impl serde::Serialize for VStorageObjectConsumptionTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VStorageObjectConsumptionTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VStorageObjectConsumptionTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VStorageObjectConsumptionTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VStorageObjectConsumptionTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VStorageObjectConsumptionTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VStorageObjectConsumptionTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60169,19 +62016,22 @@ impl VslmVStorageObjectControlFlagEnum {
     }
 }
 
-impl serde::Serialize for VslmVStorageObjectControlFlagEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VslmVStorageObjectControlFlagEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VslmVStorageObjectControlFlagEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VslmVStorageObjectControlFlagEnum::from_str(&s))
+impl miniserde::Deserialize for VslmVStorageObjectControlFlagEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VslmVStorageObjectControlFlagEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VslmVStorageObjectControlFlagEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60238,19 +62088,22 @@ impl PropertyChangeOpEnum {
     }
 }
 
-impl serde::Serialize for PropertyChangeOpEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for PropertyChangeOpEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for PropertyChangeOpEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(PropertyChangeOpEnum::from_str(&s))
+impl miniserde::Deserialize for PropertyChangeOpEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<PropertyChangeOpEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(PropertyChangeOpEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60305,19 +62158,22 @@ impl ObjectUpdateKindEnum {
     }
 }
 
-impl serde::Serialize for ObjectUpdateKindEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for ObjectUpdateKindEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for ObjectUpdateKindEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(ObjectUpdateKindEnum::from_str(&s))
+impl miniserde::Deserialize for ObjectUpdateKindEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<ObjectUpdateKindEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(ObjectUpdateKindEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60374,19 +62230,22 @@ impl VslmTaskInfoStateEnum {
     }
 }
 
-impl serde::Serialize for VslmTaskInfoStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VslmTaskInfoStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VslmTaskInfoStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VslmTaskInfoStateEnum::from_str(&s))
+impl miniserde::Deserialize for VslmTaskInfoStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VslmTaskInfoStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VslmTaskInfoStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60439,19 +62298,22 @@ impl VslmEventTypeEnum {
     }
 }
 
-impl serde::Serialize for VslmEventTypeEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VslmEventTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VslmEventTypeEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VslmEventTypeEnum::from_str(&s))
+impl miniserde::Deserialize for VslmEventTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VslmEventTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VslmEventTypeEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60504,19 +62366,22 @@ impl VslmEventVslmEventInfoStateEnum {
     }
 }
 
-impl serde::Serialize for VslmEventVslmEventInfoStateEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VslmEventVslmEventInfoStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VslmEventVslmEventInfoStateEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VslmEventVslmEventInfoStateEnum::from_str(&s))
+impl miniserde::Deserialize for VslmEventVslmEventInfoStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VslmEventVslmEventInfoStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VslmEventVslmEventInfoStateEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60582,19 +62447,22 @@ impl VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum {
     }
 }
 
-impl serde::Serialize for VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::from_str(s));
+        Ok(())
     }
 }
 
@@ -60662,19 +62530,22 @@ impl VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum {
     }
 }
 
-impl serde::Serialize for VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum {
-    fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>
-        where
-            S: serde::Serializer,
-    {
-        serializer.serialize_str(self.as_str())
+impl miniserde::Serialize for VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
     }
 }
 
-impl<'de> serde::de::Deserialize<'de> for VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum {
-    fn deserialize<D: serde::de::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {
-        let s = String::deserialize(deserializer)?;
-        Ok(VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::from_str(&s))
+impl miniserde::Deserialize for VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::from_str(s));
+        Ok(())
     }
 }
 

@@ -96,7 +96,10 @@ impl HostSpecificationManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -134,7 +137,8 @@ impl HostSpecificationManager {
         let path = format!("/HostSpecificationManager/{moId}/RetrieveHostSpecification", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostSpecification = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostSpecification = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Update the host specification with the provided copy.
@@ -197,46 +201,177 @@ impl HostSpecificationManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct DeleteHostSpecificationRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteHostSpecificationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteHostSpecificationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteHostSpecificationRequestTypeSer<'b, 'a> {
+    data: &'b DeleteHostSpecificationRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DeleteHostSpecificationRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteHostSpecificationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DeleteHostSubSpecificationRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "subSpecName")]
     sub_spec_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DeleteHostSubSpecificationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DeleteHostSubSpecificationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DeleteHostSubSpecificationRequestTypeSer<'b, 'a> {
+    data: &'b DeleteHostSubSpecificationRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DeleteHostSubSpecificationRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DeleteHostSubSpecificationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("subSpecName"), &self.data.sub_spec_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct HostSpecGetUpdatedHostsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "startChangeID")]
     start_change_id: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "endChangeID")]
     end_change_id: Option<&'a str>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for HostSpecGetUpdatedHostsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(HostSpecGetUpdatedHostsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct HostSpecGetUpdatedHostsRequestTypeSer<'b, 'a> {
+    data: &'b HostSpecGetUpdatedHostsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for HostSpecGetUpdatedHostsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostSpecGetUpdatedHostsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.start_change_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("startChangeID"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.end_change_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("endChangeID"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RetrieveHostSpecificationRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "fromHost")]
     from_host: bool,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveHostSpecificationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveHostSpecificationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveHostSpecificationRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveHostSpecificationRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveHostSpecificationRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveHostSpecificationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("fromHost"), &self.data.from_host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateHostSpecificationRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "hostSpec")]
     host_spec: &'a crate::types::structs::HostSpecification,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateHostSpecificationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateHostSpecificationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateHostSpecificationRequestTypeSer<'b, 'a> {
+    data: &'b UpdateHostSpecificationRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateHostSpecificationRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateHostSpecificationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("hostSpec"), &self.data.host_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateHostSubSpecificationRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "hostSubSpec")]
     host_sub_spec: &'a crate::types::structs::HostSubSpecification,
+}
+
+impl<'a> miniserde::Serialize for UpdateHostSubSpecificationRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateHostSubSpecificationRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateHostSubSpecificationRequestTypeSer<'b, 'a> {
+    data: &'b UpdateHostSubSpecificationRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateHostSubSpecificationRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateHostSubSpecificationRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("hostSubSpec"), &self.data.host_sub_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

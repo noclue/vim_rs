@@ -4,7 +4,7 @@ use ratatui::layout::Constraint;
 use ratatui::style::{Color, Style};
 use ratatui::text::Span;
 use ratatui::widgets::{Cell, Row};
-use vim_macros::vim_updatable;
+use vim_rs::vim_updatable;
 use vim_rs::core::client::Client;
 use vim_rs::mo::Datastore;
 use vim_rs::types::structs::ManagedObjectReference;

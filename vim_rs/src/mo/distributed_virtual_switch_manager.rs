@@ -63,7 +63,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DistributedVirtualSwitchManagerCompatibilityResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DistributedVirtualSwitchManagerCompatibilityResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -104,7 +107,8 @@ impl DistributedVirtualSwitchManager {
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerExportEntity_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Import the configuration of entities specified in
@@ -144,7 +148,8 @@ impl DistributedVirtualSwitchManager {
         let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerImportEntity_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns the portgroup identified by the key within the specified VDS
@@ -176,7 +181,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -218,7 +226,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -255,7 +266,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -277,7 +291,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DistributedVirtualSwitchHostProductSpec>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DistributedVirtualSwitchHostProductSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -307,7 +324,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DvsManagerPhysicalNicsList>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DvsManagerPhysicalNicsList>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -335,7 +355,8 @@ impl DistributedVirtualSwitchManager {
         let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsConfigTarget", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::DvsManagerDvsConfigTarget = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::DvsManagerDvsConfigTarget = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// This operation indicates which version-specific DVS features are
@@ -355,7 +376,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Box<dyn crate::types::traits::DvsFeatureCapabilityTrait>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::DvsFeatureCapabilityTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -377,7 +401,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DistributedVirtualSwitchNetworkOffloadSpec>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DistributedVirtualSwitchNetworkOffloadSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -398,7 +425,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::DistributedVirtualSwitchProductSpec>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DistributedVirtualSwitchProductSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -424,7 +454,10 @@ impl DistributedVirtualSwitchManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::ManagedObjectReference>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -454,108 +487,433 @@ impl DistributedVirtualSwitchManager {
         let path = format!("/DistributedVirtualSwitchManager/{moId}/RectifyDvsOnHost_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct QueryDvsCheckCompatibilityRequestType<'a> {
-    #[serde(rename = "hostContainer")]
     host_container: &'a crate::types::structs::DistributedVirtualSwitchManagerHostContainer,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "dvsProductSpec")]
     dvs_product_spec: Option<&'a crate::types::structs::DistributedVirtualSwitchManagerDvsProductSpec>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "hostFilterSpec")]
     host_filter_spec: Option<&'a [Box<dyn crate::types::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>]>,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "DVSManagerExportEntityRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDvsCheckCompatibilityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDvsCheckCompatibilityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDvsCheckCompatibilityRequestTypeSer<'b, 'a> {
+    data: &'b QueryDvsCheckCompatibilityRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryDvsCheckCompatibilityRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDvsCheckCompatibilityRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("hostContainer"), &self.data.host_container as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.dvs_product_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("dvsProductSpec"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.host_filter_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hostFilterSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct DvsManagerExportEntityRequestType<'a> {
-    #[serde(rename = "selectionSet")]
     selection_set: &'a [Box<dyn crate::types::traits::SelectionSetTrait>],
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "DVSManagerImportEntityRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for DvsManagerExportEntityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DvsManagerExportEntityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DvsManagerExportEntityRequestTypeSer<'b, 'a> {
+    data: &'b DvsManagerExportEntityRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DvsManagerExportEntityRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DVSManagerExportEntityRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("selectionSet"), &self.data.selection_set as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DvsManagerImportEntityRequestType<'a> {
-    #[serde(rename = "entityBackup")]
     entity_backup: &'a [crate::types::structs::EntityBackupConfig],
-    #[serde(rename = "importType")]
     import_type: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(rename = "DVSManagerLookupDvPortGroupRequestType", tag = "_typeName")]
+
+impl<'a> miniserde::Serialize for DvsManagerImportEntityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DvsManagerImportEntityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DvsManagerImportEntityRequestTypeSer<'b, 'a> {
+    data: &'b DvsManagerImportEntityRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DvsManagerImportEntityRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DVSManagerImportEntityRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entityBackup"), &self.data.entity_backup as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("importType"), &self.data.import_type as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct DvsManagerLookupDvPortGroupRequestType<'a> {
-    #[serde(rename = "switchUuid")]
     switch_uuid: &'a str,
-    #[serde(rename = "portgroupKey")]
     portgroup_key: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for DvsManagerLookupDvPortGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(DvsManagerLookupDvPortGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct DvsManagerLookupDvPortGroupRequestTypeSer<'b, 'a> {
+    data: &'b DvsManagerLookupDvPortGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for DvsManagerLookupDvPortGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DVSManagerLookupDvPortGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("switchUuid"), &self.data.switch_uuid as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("portgroupKey"), &self.data.portgroup_key as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryCompatibleHostForExistingDvsRequestType<'a> {
     container: &'a crate::types::structs::ManagedObjectReference,
     recursive: bool,
     dvs: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryCompatibleHostForExistingDvsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryCompatibleHostForExistingDvsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryCompatibleHostForExistingDvsRequestTypeSer<'b, 'a> {
+    data: &'b QueryCompatibleHostForExistingDvsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryCompatibleHostForExistingDvsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryCompatibleHostForExistingDvsRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("container"), &self.data.container as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("recursive"), &self.data.recursive as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("dvs"), &self.data.dvs as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryCompatibleHostForNewDvsRequestType<'a> {
     container: &'a crate::types::structs::ManagedObjectReference,
     recursive: bool,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "switchProductSpec")]
     switch_product_spec: Option<&'a crate::types::structs::DistributedVirtualSwitchProductSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryCompatibleHostForNewDvsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryCompatibleHostForNewDvsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryCompatibleHostForNewDvsRequestTypeSer<'b, 'a> {
+    data: &'b QueryCompatibleHostForNewDvsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryCompatibleHostForNewDvsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryCompatibleHostForNewDvsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("container"), &self.data.container as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("recursive"), &self.data.recursive as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.switch_product_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("switchProductSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryDvsCompatibleHostSpecRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "switchProductSpec")]
     switch_product_spec: Option<&'a crate::types::structs::DistributedVirtualSwitchProductSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDvsCompatibleHostSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDvsCompatibleHostSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDvsCompatibleHostSpecRequestTypeSer<'b, 'a> {
+    data: &'b QueryDvsCompatibleHostSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryDvsCompatibleHostSpecRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDvsCompatibleHostSpecRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.switch_product_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("switchProductSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryCompatibleVmnicsFromHostsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
     dvs: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryCompatibleVmnicsFromHostsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryCompatibleVmnicsFromHostsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryCompatibleVmnicsFromHostsRequestTypeSer<'b, 'a> {
+    data: &'b QueryCompatibleVmnicsFromHostsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryCompatibleVmnicsFromHostsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryCompatibleVmnicsFromHostsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.hosts else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hosts"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("dvs"), &self.data.dvs as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryDvsConfigTargetRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     host: Option<&'a crate::types::structs::ManagedObjectReference>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     dvs: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDvsConfigTargetRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDvsConfigTargetRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDvsConfigTargetRequestTypeSer<'b, 'a> {
+    data: &'b QueryDvsConfigTargetRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryDvsConfigTargetRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDvsConfigTargetRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.host else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("host"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.dvs else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("dvs"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryDvsFeatureCapabilityRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "switchProductSpec")]
     switch_product_spec: Option<&'a crate::types::structs::DistributedVirtualSwitchProductSpec>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDvsFeatureCapabilityRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDvsFeatureCapabilityRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDvsFeatureCapabilityRequestTypeSer<'b, 'a> {
+    data: &'b QueryDvsFeatureCapabilityRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryDvsFeatureCapabilityRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDvsFeatureCapabilityRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.switch_product_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("switchProductSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QuerySupportedNetworkOffloadSpecRequestType<'a> {
-    #[serde(rename = "switchProductSpec")]
     switch_product_spec: &'a crate::types::structs::DistributedVirtualSwitchProductSpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QuerySupportedNetworkOffloadSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QuerySupportedNetworkOffloadSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QuerySupportedNetworkOffloadSpecRequestTypeSer<'b, 'a> {
+    data: &'b QuerySupportedNetworkOffloadSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QuerySupportedNetworkOffloadSpecRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QuerySupportedNetworkOffloadSpecRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("switchProductSpec"), &self.data.switch_product_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryAvailableDvsSpecRequestType {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     recommended: Option<bool>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for QueryAvailableDvsSpecRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryAvailableDvsSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryAvailableDvsSpecRequestTypeSer<'b> {
+    data: &'b QueryAvailableDvsSpecRequestType,
+    seq: usize,
+}
+
+impl<'b> miniserde::ser::Map for QueryAvailableDvsSpecRequestTypeSer<'b> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryAvailableDvsSpecRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.recommended else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("recommended"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryDvsByUuidRequestType<'a> {
     uuid: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDvsByUuidRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDvsByUuidRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDvsByUuidRequestTypeSer<'b, 'a> {
+    data: &'b QueryDvsByUuidRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryDvsByUuidRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDvsByUuidRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("uuid"), &self.data.uuid as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RectifyDvsOnHostRequestType<'a> {
     hosts: &'a [crate::types::structs::ManagedObjectReference],
+}
+
+impl<'a> miniserde::Serialize for RectifyDvsOnHostRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RectifyDvsOnHostRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RectifyDvsOnHostRequestTypeSer<'b, 'a> {
+    data: &'b RectifyDvsOnHostRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RectifyDvsOnHostRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RectifyDvsOnHostRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("hosts"), &self.data.hosts as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

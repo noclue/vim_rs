@@ -1,28 +1,16 @@
-use std::collections::HashMap;
-use std::ops::Deref;
 use indexmap::IndexMap;
 
-use crate::vim_model::{BoxType, EmitMode};
-use crate::{printer::Printer, vim_model::Model};
+use crate::vim_model::{BoxType, DataType, EmitMode, Model};
+use crate::printer::Printer;
 
+use super::errors::Result;
 use super::{to_type_name, TypeDefResolver};
-
-use super::errors::{Error, Result};
-
-// Number of items in a group that will stop further optimization.
-const FULL_SCAN_THRESHOLD: usize = 5;
-
-enum ItemRenderer {
-    Object,
-    Value,
-}
 
 pub struct DeserializationGenerator<'a> {
     vim_model: &'a Model,
     printer: &'a mut dyn Printer,
     any_value_types: IndexMap<String, &'a BoxType>,
     tdf: TypeDefResolver<'a>,
-    deserialize_renderer: ItemRenderer,
 }
 
 impl DeserializationGenerator<'_> {
@@ -47,504 +35,479 @@ impl DeserializationGenerator<'_> {
             printer,
             any_value_types: value_types,
             tdf: TypeDefResolver::new(vim_model),
-            deserialize_renderer: ItemRenderer::Object,
         }
     }
 
     pub fn generate_deserialization(&mut self) -> Result<()> {
-        self.generate_vim_any_deserialization()?;
-        self.generate_object_deserialization()?;
-        self.generate_value_deserialization()?;
-        Ok(())
-    }
-    pub fn generate_object_deserialization(&mut self) -> Result<()> {
-        self.deserialize_renderer = ItemRenderer::Object;
-        let names: &[&str] = &self
-            .vim_model
-            .structs
-            .iter()
-            .filter(|s| s.0 != "Any")
-            .map(|s| s.0.as_str())
-            .collect::<Vec<&str>>();
-
-        let group_data = calculate_groupings(names);
-        self.render_match_tree(group_data)?;
-
+        self.emit_imports()?;
+        self.emit_make_place()?;
+        self.emit_wrap_value_impls()?;
+        self.emit_polymorphic_array_cast_fns()?;
+        self.emit_vim_object_holder_impls()?;
+        self.emit_type_registry()?;
+        self.emit_lookup_type()?;
+        self.emit_vim_object_holder_builder_map()?;
+        self.emit_value_elements_deser()?;
+        self.emit_vim_any_deser()?;
         Ok(())
     }
 
-    pub fn generate_value_deserialization(&mut self) -> Result<()> {
-        self.deserialize_renderer = ItemRenderer::Value;
-
-        let names: &[&str] = &self
-            .any_value_types
-            .keys()
-            .map(|s| s.as_str())
-            .collect::<Vec<&str>>();
-
-        let group_data = calculate_groupings(names);
-        self.render_match_tree(group_data)?;
-
-        Ok(())
-    }
-
-    pub fn generate_vim_any_deserialization(&mut self) -> Result<()> {
-        self.printer.println(
-            r#"
-fn to_u64(text: &str) -> Option<u64> {
-    if text.len() != 8 {
-        return None;
-    }
-    let bytes: &[u8; 8] = text.as_bytes().try_into().ok()?;
-    Some(u64::from_be_bytes(*bytes))
-}
-
-fn to_u32(text: &str) -> Option<u32> {
-    if text.len() != 4 {
-        return None;
-    }
-    let bytes: &[u8; 4] = text.as_bytes().try_into().ok()?;
-    Some(u32::from_be_bytes(*bytes))
-}
-
-pub struct VimAnyVisitor;
-
-impl<'de> de::Visitor<'de> for VimAnyVisitor {
-    type Value = VimAny;
-
-    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
-        formatter.write_str("vim JSON object with _typeName field discrimnator")
-    }
-
-    fn visit_map<A: de::MapAccess<'de>>(self, mut map: A) -> Result<Self::Value, A::Error> {
-        let mut type_name = None;
-        let mut map_data: Vec<(String, &serde_json::value::RawValue)> = Vec::new();
-        while let Some(key) = map.next_key::<String>()? {
-            if key == "_typeName" {
-                if type_name.is_none() {
-                    let value: String = map.next_value()?;
-                    type_name = Some(value);
-                } // ignore subsequent _typeName fields
-                if map_data.is_empty() {
-                    break
-                };
-            } else {
-                let value: &serde_json::value::RawValue = map.next_value()?;
-                map_data.push((key, value));
-            }
-        }
-        let Some(type_name) = type_name else {
-                return Err(de::Error::missing_field("_typeName"));
-        };
-        if map_data.is_empty() { // Optimize the case when the first element is the discriminator
-            // Attempt to deserialize object from type_name and map
-            if let Some(dsfunc) = get_object_deserializer(&type_name) {
-                let ds = de::value::MapAccessDeserializer::new(map);
-                return dsfunc(ds).map_err(de::Error::custom);
-            } else {
-                let Some(dsfunc) = get_value_deserializer(&type_name) else {
-                    return Err(de::Error::custom(format!("Unknown variant: {}", type_name)));
-                };
-                let Some(key) = map.next_key::<String>()? else {
-                    return Err(de::Error::custom("Missing key"));
-                };
-                if key == "_value" {
-                    let v: &serde_json::value::RawValue = map.next_value()?;
-                    return dsfunc(v).map_err(de::Error::custom).map(VimAny::Value);
-                }
-                return Err(de::Error::custom(format!("Expected key '_value' and found {}", key)));
-            }
-        };
-
-        // We have buffered all keys try to make sense of it
-        // Process value elements
-        if let Some(dsfunc) = get_object_deserializer(&type_name) {
-            let map = de::value::MapDeserializer::new(map_data.into_iter());
-            let ds = de::value::MapAccessDeserializer::new(map);
-            return dsfunc(ds).map_err(de::Error::custom);
-        }
-
-        // Process value elements
-        let Some(dsfunc) = get_value_deserializer(&type_name) else {
-            return Err(de::Error::custom(format!("Unknown variant: {}", type_name)));
-        };
-        if map_data.len() == 1 && map_data[0].0 == "_value" {
-            let v: &serde_json::value::RawValue = map_data
-                .get(0)
-                .ok_or_else(|| de::Error::missing_field("_value"))?
-                .1;
-            return dsfunc(v).map_err(de::Error::custom).map(VimAny::Value);
-        }
-        Err(de::Error::custom("Invalid format for boxed value element."))
-    }
-}"#,
-        )?;
-        Ok(())
-    }
-
-    /// Renders a hierarchical match statement that dispatches to the individual names.
-    fn render_match_tree(&mut self, group_data: Vec<GroupInfo>) -> Result<()> {
-        match self.deserialize_renderer {
-            ItemRenderer::Object => self.printer.println("fn get_object_deserializer<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {")?,
-            ItemRenderer::Value => self.printer.println("pub(crate) fn get_value_deserializer(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<ValueElements, serde_json::Error>> {")?,
-        }
+    fn emit_imports(&mut self) -> Result<()> {
+        self.printer.println("use super::mini_de_static::{")?;
         self.printer.indent();
-
-        self.printer.println("match type_name.len() {")?;
-        self.printer.indent();
-
-        for group in &group_data {
-            self.printer.println(&format!("{} => {{", group.length))?;
-            self.printer.indent();
-            if group.names.len() == 1 {
-                self.process_simple_group(&group.names)?;
-            } else {
-                match self.deserialize_renderer {
-                    ItemRenderer::Object => self.printer.println(&format!(
-                        "get_object_deserializer_{}(type_name)",
-                        group.length
-                    ))?,
-                    ItemRenderer::Value => self.printer.println(&format!(
-                        "get_value_deserializer_{}(type_name)",
-                        group.length
-                    ))?,
-                };
-            }
-            self.printer.dedent();
-            self.printer.println("}")?;
-        }
-        self.printer.println("_ => None,")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-
-        for group in &group_data {
-            if group.names.len() == 1 {
-                continue;
-            };
-            match self.deserialize_renderer {
-                ItemRenderer::Object => self.printer.println(&format!("fn get_object_deserializer_{}<'de, A: de::MapAccess<'de>>(type_name: &str) -> Option<fn(de::value::MapAccessDeserializer<A>) -> Result<VimAny, A::Error>> {{", group.length))?,
-                ItemRenderer::Value => self.printer.println(&format!("fn get_value_deserializer_{}(type_name: &str) -> Option<fn(&serde_json::value::RawValue) -> Result<ValueElements, serde_json::Error>> {{", group.length))?,
-            }
-            self.printer.indent();
-            if group.filter_len > 0 {
-                self.process_complex_group(group)?;
-            } else {
-                self.process_simple_group(&group.names)?;
-            }
-            self.printer.dedent();
-            self.printer.println("}")?;
-        }
-
-        Ok(())
-    }
-
-    fn deserialize_value_type(&mut self, name: &str) -> Result<()> {
-        let Some(box_type) = self.any_value_types.get(name) else {
-            return Err(Error::InternalError(format!(
-                "Cannot find value type record for {}",
-                name
-            )));
-        };
-        let enum_name = to_type_name(&box_type.name);
-        let value_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
-
-        self.printer.println("Some(|raw| {")?;
-        self.printer.indent();
-        self.printer.println(&format!(
-            "let value: {} = serde_json::from_str(raw.get())?;",
-            value_type
-        ))?;
-        self.printer
-            .println(&format!("Ok(ValueElements::{}(value))", enum_name))?;
-        self.printer.dedent();
-        self.printer.println("})")?;
-        Ok(())
-    }
-
-    fn deserialize_object_type(&mut self, name: &str) -> Result<()> {
-        let Some(struct_cell) = self.vim_model.structs.get(name) else {
-            return Err(Error::InternalError(format!("Cannot find struct record for {}", name)));
-        };
-        let struct_type = struct_cell.borrow();
-        if let EmitMode::Skip(ref prune_type) = struct_type.deref().emit_mode {
-            self.printer.println("Some(|ds| {")?;
-            self.printer.indent();
-            self.printer.println(&format!(
-                "let v = __{}Visitor(Some(struct_enum::StructType::{}));",
-                to_type_name(prune_type), to_type_name(name)
-            ))?;
-            self.printer.println("Ok(VimAny::Object(Box::new(ds.deserialize_map(v)?)))")?;
-        } else {
-            self.printer.println("Some(|ds| {")?;
-            self.printer.indent();
-            self.printer.println(&format!(
-                "let obj: {} = de::Deserialize::deserialize(ds)?;",
-                to_type_name(name)
-            ))?;
-            self.printer.println("Ok(VimAny::Object(Box::new(obj)))")?;
-        }
-        self.printer.dedent();
-        self.printer.println("})")?;
-        Ok(())
-    }
-
-    fn process_simple_group(&mut self, names: &[String]) -> Result<()> {
-        if names.is_empty() {
-            return Err(Error::InternalError(
-                "No names provided to process_simple_group".into(),
-            ));
-        }
-        if names.len() == 1 {
-            self.printer
-                .println(&format!("if type_name == \"{}\" {{", names[0]))?;
-            self.printer.indent();
-            match self.deserialize_renderer {
-                ItemRenderer::Object => self.deserialize_object_type(&names[0])?,
-                ItemRenderer::Value => self.deserialize_value_type(&names[0])?,
-            }
-            self.printer.dedent();
-            self.printer.println("} else { None }")?;
-            return Ok(());
-        }
-
-        self.printer.println("match type_name {")?;
-        self.printer.indent();
-        for name in names {
-            self.printer.println(&format!("\"{}\" => {{", name))?;
-            self.printer.indent();
-            match self.deserialize_renderer {
-                ItemRenderer::Object => self.deserialize_object_type(name)?,
-                ItemRenderer::Value => self.deserialize_value_type(name)?,
-            }
-            self.printer.dedent();
-            self.printer.println("}")?;
-        }
-        self.printer.println("_ => None")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        Ok(())
-    }
-
-    fn process_complex_group(&mut self, group: &GroupInfo) -> Result<()> {
-        if group.names.is_empty() {
-            return Err(Error::InternalError(
-                "No names provided to process_complex_group".into(),
-            ));
-        }
-        self.printer.println(&format!(
-            "let s = &type_name[{}..{}];",
-            group.position,
-            group.position + group.filter_len
-        ))?;
-        if group.filter_len == 4 {
-            self.printer
-                .println(r#"let Some(type_ord) = to_u32(s) else {"#)?;
-        } else if group.filter_len == 8 {
-            self.printer
-                .println(r#"let Some(type_ord) = to_u64(s) else {"#)?;
-        } else {
-            return Err(Error::InternalError(format!(
-                "Unsupported filter length: {}",
-                group.filter_len
-            )));
-        }
-        self.printer.indent();
-        self.printer.println(r#"return None;"#)?;
+        self.printer.println("TypeInfo, DelegatingDeserializer, WrapValue,")?;
+        self.printer.println("VimObjectHolder, VimObjectHolderBuilder, VimAnyBuilder,")?;
+        self.printer.println("make_deser, from_val, polymorphic_array_cast,")?;
         self.printer.dedent();
         self.printer.println("};")?;
-        let mut names = group.names.clone();
-        names.sort_by(|a, b| a[group.position..].cmp(&b[group.position..]));
-        self.printer.println("match type_ord {")?;
-        self.printer.indent();
-        let mut subgroup = Vec::new();
-        let mut previous = "".to_string();
-        for name in &names {
-            let value = name[group.position..(group.position + group.filter_len)].to_string();
-            if previous.is_empty() || previous != value {
-                // A subgroup is starting here and if not first it is ending too
-                self.render_subgroup(&mut subgroup, &previous)?;
-                previous = value;
+        self.printer.println("use super::mini_helpers::from_value;")?;
+        self.printer.println("use super::vim_any::VimAny;")?;
+        self.printer.println("use super::boxed_types::ValueElements;")?;
+        self.printer.println("use super::struct_enum::StructType;")?;
+        self.printer.println("use super::structs::*;")?;
+        self.printer.newline()?;
+        Ok(())
+    }
+
+    fn emit_make_place(&mut self) -> Result<()> {
+        self.printer.println("miniserde::make_place!(Place);")?;
+        self.printer.newline()?;
+        Ok(())
+    }
+
+    /// Emit WrapValue implementations for primitive/array types used in ValueElements.
+    /// Deduplicate by Rust type to avoid conflicting trait impls.
+    fn emit_wrap_value_impls(&mut self) -> Result<()> {
+        self.printer
+            .println("// WrapValue implementations for ValueElements types")?;
+
+        let mut seen_types = std::collections::HashSet::new();
+
+        for (_discriminator, box_type) in &self.any_value_types {
+            let enum_variant = to_type_name(&box_type.name);
+            let rust_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
+
+            // Determine if this is a polymorphic array (trait object array).
+            // Those need special handling via cast functions, not WrapValue.
+            if self.is_polymorphic_array_type(&box_type.property_type) {
+                continue; // Handled by emit_polymorphic_array_cast_fns
             }
-            subgroup.push(name.clone());
+
+            // Skip duplicate Rust types (e.g. multiple array discriminators mapping to Vec<MethodFault>)
+            if !seen_types.insert(rust_type.clone()) {
+                continue;
+            }
+
+            self.printer.println(&format!(
+                "impl WrapValue for {rust_type} {{"
+            ))?;
+            self.printer.indent();
+            self.printer.println(&format!(
+                "fn wrap(self) -> ValueElements {{ ValueElements::{enum_variant}(self) }}"
+            ))?;
+            self.printer.dedent();
+            self.printer.println("}")?;
         }
-        self.render_subgroup(&mut subgroup, &previous)?;
-        self.printer.println("_ => None")?;
+        self.printer.newline()?;
+        Ok(())
+    }
+
+    /// Check if a DataType is a polymorphic array (array of trait objects)
+    fn is_polymorphic_array_type(&self, dt: &DataType) -> bool {
+        if let DataType::Array(inner) = dt {
+            if let DataType::Reference(ref_name) = inner.as_ref() {
+                // "Any" maps to VimAny, not a trait object array
+                if ref_name == "Any" {
+                    return false;
+                }
+                if let Some(s) = self.vim_model.structs.get(ref_name.as_str()) {
+                    let s_ref = s.borrow();
+                    return s_ref.has_children() && s_ref.emit_mode == EmitMode::Emit;
+                }
+            }
+        }
+        false
+    }
+
+    /// Get the trait name for a polymorphic struct reference
+    fn get_trait_name(&self, ref_name: &str) -> Option<String> {
+        // "Any" maps to VimAny, not a trait - skip it
+        if ref_name == "Any" {
+            return None;
+        }
+        if let Some(s) = self.vim_model.structs.get(ref_name) {
+            let s_ref = s.borrow();
+            if s_ref.has_children() && s_ref.emit_mode == EmitMode::Emit {
+                return Some(format!("super::traits::{}Trait", to_type_name(ref_name)));
+            }
+        }
+        None
+    }
+
+    /// Emit cast functions for polymorphic array types
+    fn emit_polymorphic_array_cast_fns(&mut self) -> Result<()> {
+        self.printer
+            .println("// Polymorphic array cast functions")?;
+
+        for (_discriminator, box_type) in &self.any_value_types {
+            if !self.is_polymorphic_array_type(&box_type.property_type) {
+                continue;
+            }
+            let enum_variant = to_type_name(&box_type.name);
+            if let DataType::Array(inner) = &box_type.property_type {
+                if let DataType::Reference(ref_name) = inner.as_ref() {
+                    if let Some(trait_name) = self.get_trait_name(ref_name) {
+                        let fn_name = format!("cast_to_{}_array", super::to_field_name(ref_name));
+                        self.printer.println(&format!(
+                            "fn {fn_name}(h: Vec<VimObjectHolder>) -> miniserde::Result<ValueElements> {{"
+                        ))?;
+                        self.printer.indent();
+                        self.printer.println(&format!(
+                            "polymorphic_array_cast::<dyn {trait_name}>(h, ValueElements::{enum_variant})"
+                        ))?;
+                        self.printer.dedent();
+                        self.printer.println("}")?;
+                    }
+                }
+            }
+        }
+        self.printer.newline()?;
+        Ok(())
+    }
+
+    fn emit_vim_object_holder_impls(&mut self) -> Result<()> {
+        self.printer
+            .println("// VimObjectHolder Deserialize/Visitor implementations")?;
+        self.printer
+            .println("impl miniserde::Deserialize for VimObjectHolder {")?;
+        self.printer.indent();
+        self.printer.println(
+            "fn begin(out: &mut Option<VimObjectHolder>) -> &mut dyn miniserde::de::Visitor {",
+        )?;
+        self.printer.indent();
+        self.printer.println("Place::new(out)")?;
         self.printer.dedent();
         self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        self.printer
+            .println("impl miniserde::de::Visitor for Place<VimObjectHolder> {")?;
+        self.printer.indent();
+        self.printer.println(
+            "fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {",
+        )?;
+        self.printer.indent();
+        self.printer
+            .println("Ok(Box::new(VimObjectHolderBuilder::new(&mut self.out)))")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
         Ok(())
     }
 
-    fn render_subgroup(&mut self, subgroup: &mut Vec<String>, pattern: &String) -> Result<()> {
-        if !subgroup.is_empty() {
-            let Some(numeric) = to_numeric_value(pattern) else {
-                return Err(Error::InternalError(format!(
-                    "Cannot convert pattern into numeric: {}",
-                    pattern
-                )));
-            };
-            self.printer
-                .println(&format!("{} => {{ // {}", numeric, pattern))?;
-            self.printer.indent();
-            self.process_simple_group(subgroup.as_slice())?;
-            self.printer.dedent();
-            self.printer.println("},")?;
-            subgroup.clear();
-        }
-        Ok(())
-    }
-}
+    /// Build the PHF TYPE_REGISTRY using phf_codegen::Map
+    fn emit_type_registry(&mut self) -> Result<()> {
+        self.printer
+            .println("// PHF Type Registry for O(1) type name lookup")?;
 
-/// Groups names by length and for each group find the best way to dispatch.
-/// If a group is less then FULL_SCAN_THRESHOLD we use simple match statement by the full name.
-/// If a group is larger we try to find index of a 4 or 8 letter long substring that will allows to
-/// split the group into subgroups with minimal number of elements.
-fn calculate_groupings(names: &[&str]) -> Vec<GroupInfo> {
-    let groups = split_by_length(names);
+        let mut map_builder = phf_codegen::Map::new();
 
-    let mut sorted_groups: Vec<_> = groups.into_iter().collect();
-    sorted_groups.sort_by_key(|(len, _)| *len);
+        // 1. Object types (all structs)
+        for (name, struct_cell) in &self.vim_model.structs {
+            if name == "Any" {
+                continue;
+            }
+            let struct_ref = struct_cell.borrow();
+            let struct_name = to_type_name(name);
 
-    let mut group_data = Vec::new();
-    const DEFAULT_PARAMS: Params = Params {
-        position: 0,
-        len: 0,
-    };
-
-    for (length, names) in sorted_groups {
-        let params = optimize_group(&names);
-        //println!("{} (cnt: {})\t->\t{:?}", length, names.len(), params);
-        group_data.push(GroupInfo {
-            length,
-            names,
-            position: params.as_ref().unwrap_or(&DEFAULT_PARAMS).position,
-            filter_len: params.as_ref().unwrap_or(&DEFAULT_PARAMS).len,
-        });
-    }
-    group_data
-}
-
-#[derive(Debug)]
-struct Params {
-    position: usize,
-    len: usize,
-}
-
-struct EvalResult {
-    position: usize,
-    max_subgroup_len: usize,
-}
-
-struct GroupInfo {
-    length: usize,
-    names: Vec<String>,
-    position: usize,
-    filter_len: usize,
-}
-
-fn split_by_length(names: &[&str]) -> HashMap<usize, Vec<String>> {
-    let mut groups: HashMap<usize, Vec<String>> = HashMap::new();
-
-    // Group names by length
-    for &name in names {
-        let len = name.len();
-        groups.entry(len).or_default().push(name.to_string());
-    }
-    groups
-}
-
-// Removes characters up to position and sorts the remaining characters
-fn cut_and_sort_names(position: usize, names: &[String]) -> Vec<String> {
-    let mut filtered: Vec<String> = names
-        .iter()
-        .map(|name| name[position..].to_string())
-        .collect();
-    filtered.sort();
-    filtered
-}
-
-fn eval_filter_len(filter_len: usize, names: &[String]) -> EvalResult {
-    let empty = String::new();
-    let pattern_len = names[0].len();
-    let mut optimal_position = 0;
-    let mut minimal_max_subgroup_len = usize::MAX;
-
-    let mut position = 0;
-    while position <= (pattern_len - filter_len) {
-        let mut prior = &empty;
-        let mut subgroup_len = 1;
-        let mut max_subgroup_len = 1;
-        let cut_names = cut_and_sort_names(position, names);
-        for name in &cut_names {
-            if prior.is_empty() || name[..filter_len] != prior[..filter_len] {
-                prior = name;
-                subgroup_len = 1;
-            } else {
-                subgroup_len += 1;
-                max_subgroup_len = std::cmp::max(max_subgroup_len, subgroup_len);
+            match &struct_ref.emit_mode {
+                EmitMode::Emit | EmitMode::Prune => {
+                    // Normal struct or pruned type -> direct builder
+                    let builder_expr = if struct_ref.emit_mode == EmitMode::Prune {
+                        format!(
+                            "TypeInfo::Object {{ name: \"{}\", builder_fn: || Box::new({}Fields::new(None)) }}",
+                            struct_ref.discriminator(),
+                            struct_name
+                        )
+                    } else {
+                        format!(
+                            "TypeInfo::Object {{ name: \"{}\", builder_fn: || Box::new({}Fields::new()) }}",
+                            struct_ref.discriminator(),
+                            struct_name
+                        )
+                    };
+                    map_builder.entry(struct_ref.discriminator(), &builder_expr);
+                }
+                EmitMode::Skip(parent_type) => {
+                    // Skipped struct (pruned descendant) -> use parent's Fields with type_ preset
+                    let parent_name = to_type_name(parent_type);
+                    let builder_expr = format!(
+                        "TypeInfo::Object {{ name: \"{}\", builder_fn: || Box::new({}Fields::new(Some(StructType::{}))) }}",
+                        struct_ref.discriminator(),
+                        parent_name,
+                        struct_name
+                    );
+                    map_builder.entry(struct_ref.discriminator(), &builder_expr);
+                }
             }
         }
-        if max_subgroup_len < minimal_max_subgroup_len {
-            minimal_max_subgroup_len = max_subgroup_len;
-            optimal_position = position;
+
+        // 2. Value types (primitives and arrays)
+        for (discriminator, box_type) in &self.any_value_types {
+            if self.is_polymorphic_array_type(&box_type.property_type) {
+                // Polymorphic array type - use cast functions
+                if let DataType::Array(inner) = &box_type.property_type {
+                    if let DataType::Reference(ref_name) = inner.as_ref() {
+                        let fn_name =
+                            format!("cast_to_{}_array", super::to_field_name(ref_name));
+                        let value_expr = format!(
+                            "TypeInfo::Value {{ name: \"{discriminator}\", make_deserializer: || Box::new(DelegatingDeserializer::<Vec<VimObjectHolder>>::new({fn_name})), from_value: |v| {fn_name}(from_value(v)?) }}"
+                        );
+                        map_builder.entry(discriminator.clone(), &value_expr);
+                    }
+                }
+            } else {
+                // Simple value type - use make_deser/from_val
+                let rust_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
+                let value_expr = format!(
+                    "TypeInfo::Value {{ name: \"{discriminator}\", make_deserializer: make_deser::<{rust_type}>, from_value: from_val::<{rust_type}> }}"
+                );
+                map_builder.entry(discriminator.clone(), &value_expr);
+            }
         }
-        if max_subgroup_len == 1 {
-            break;
-        };
-        position += 1;
-    }
-    EvalResult {
-        position: optimal_position,
-        max_subgroup_len: minimal_max_subgroup_len,
-    }
-}
 
-fn optimize_group(names: &[String]) -> Option<Params> {
-    if names.len() < FULL_SCAN_THRESHOLD {
-        return None;
+        self.printer.println(&format!(
+            "static TYPE_REGISTRY: phf::Map<&'static str, TypeInfo> = {};",
+            map_builder.build()
+        ))?;
+        self.printer.newline()?;
+
+        Ok(())
     }
 
-    let mut best_param = None;
-    let mut min_subgroup_len = names.len();
-
-    for filter_len in (vec![4, 8]).into_iter() {
-        let res = eval_filter_len(filter_len, names);
-        if res.max_subgroup_len < min_subgroup_len {
-            best_param = Some(Params {
-                position: res.position,
-                len: filter_len,
-            });
-            min_subgroup_len = res.max_subgroup_len;
-        }
-        if min_subgroup_len == 1 {
-            break;
-        }
+    fn emit_lookup_type(&mut self) -> Result<()> {
+        self.printer.println("#[inline]")?;
+        self.printer.println(
+            "pub fn lookup_type(type_name: &str) -> Option<&'static TypeInfo> {",
+        )?;
+        self.printer.indent();
+        self.printer.println("TYPE_REGISTRY.get(type_name)")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        Ok(())
     }
-    best_param
-}
 
-fn to_u64(text: &str) -> Option<u64> {
-    if text.len() != 8 {
-        return None;
+    fn emit_vim_object_holder_builder_map(&mut self) -> Result<()> {
+        self.printer
+            .println("impl miniserde::de::Map for VimObjectHolderBuilder<'_> {")?;
+        self.printer.indent();
+        self.printer.println(
+            "fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {",
+        )?;
+        self.printer.indent();
+        self.printer.println("self.core.key(key, lookup_type)")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        self.printer
+            .println("fn finish(&mut self) -> miniserde::Result<()> {")?;
+        self.printer.indent();
+        self.printer
+            .println("match self.core.finish(lookup_type)? {")?;
+        self.printer.indent();
+        self.printer.println("VimAny::Object(obj) => {")?;
+        self.printer.indent();
+        self.printer
+            .println("*self.__out = Some(VimObjectHolder { out: Some(obj) });")?;
+        self.printer.println("Ok(())")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer
+            .println("VimAny::Value(_) => Err(miniserde::Error),")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        Ok(())
     }
-    let bytes: &[u8; 8] = text.as_bytes().try_into().ok()?;
-    Some(u64::from_be_bytes(*bytes))
-}
 
-fn to_u32(text: &str) -> Option<u32> {
-    if text.len() != 4 {
-        return None;
-    }
-    let bytes: &[u8; 4] = text.as_bytes().try_into().ok()?;
-    Some(u32::from_be_bytes(*bytes))
-}
+    fn emit_value_elements_deser(&mut self) -> Result<()> {
+        self.printer
+            .println("// ValueElements deserialization (wrapper format)")?;
 
-fn to_numeric_value(text: &str) -> Option<String> {
-    if text.len() == 8 {
-        return to_u64(text).map(|v| format!("{:#x}", v));
-    } else if text.len() == 4 {
-        return to_u32(text).map(|v| format!("{:#x}", v));
+        // Deserialize impl
+        self.printer
+            .println("impl miniserde::Deserialize for ValueElements {")?;
+        self.printer.indent();
+        self.printer.println(
+            "fn begin(out: &mut Option<ValueElements>) -> &mut dyn miniserde::de::Visitor {",
+        )?;
+        self.printer.indent();
+        self.printer.println("Place::new(out)")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // Visitor impl
+        self.printer
+            .println("impl miniserde::de::Visitor for Place<ValueElements> {")?;
+        self.printer.indent();
+        self.printer.println(
+            "fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {",
+        )?;
+        self.printer.indent();
+        self.printer
+            .println("Ok(Box::new(ValueElementsFields::new(&mut self.out)))")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // ValueElementsFields struct
+        self.printer
+            .println("struct ValueElementsFields<'a> {")?;
+        self.printer.indent();
+        self.printer.println("type_name: Option<String>,")?;
+        self.printer
+            .println("value: Option<miniserde::json::Value>,")?;
+        self.printer
+            .println("__out: &'a mut Option<ValueElements>,")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        self.printer
+            .println("impl<'a> ValueElementsFields<'a> {")?;
+        self.printer.indent();
+        self.printer
+            .println("fn new(out: &'a mut Option<ValueElements>) -> Self {")?;
+        self.printer.indent();
+        self.printer
+            .println("Self { type_name: None, value: None, __out: out }")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // Map impl
+        self.printer
+            .println("impl miniserde::de::Map for ValueElementsFields<'_> {")?;
+        self.printer.indent();
+        self.printer.println(
+            "fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {",
+        )?;
+        self.printer.indent();
+        self.printer.println("match key {")?;
+        self.printer.indent();
+        self.printer.println(
+            "\"_typeName\" => Ok(miniserde::Deserialize::begin(&mut self.type_name)),"
+        )?;
+        self.printer.println(
+            "\"_value\" => Ok(miniserde::Deserialize::begin(&mut self.value)),"
+        )?;
+        self.printer
+            .println("_ => Ok(<dyn miniserde::de::Visitor>::ignore()),")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        self.printer
+            .println("fn finish(&mut self) -> miniserde::Result<()> {")?;
+        self.printer.indent();
+        self.printer.println(
+            "let type_name = self.type_name.take().ok_or(miniserde::Error)?;",
+        )?;
+        self.printer
+            .println("let value = self.value.take().ok_or(miniserde::Error)?;")?;
+        self.printer.println(
+            "let type_info = lookup_type(&type_name).filter(|ti| !ti.is_object()).ok_or(miniserde::Error)?;",
+        )?;
+        self.printer
+            .println("let result = type_info.deserialize_from_value(&value)?;")?;
+        self.printer.println("*self.__out = Some(result);")?;
+        self.printer.println("Ok(())")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        Ok(())
     }
-    None
+
+    fn emit_vim_any_deser(&mut self) -> Result<()> {
+        self.printer.println("// VimAny deserialization")?;
+
+        // Deserialize
+        self.printer
+            .println("impl miniserde::Deserialize for VimAny {")?;
+        self.printer.indent();
+        self.printer.println(
+            "fn begin(out: &mut Option<VimAny>) -> &mut dyn miniserde::de::Visitor {",
+        )?;
+        self.printer.indent();
+        self.printer.println("Place::new(out)")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // Visitor
+        self.printer
+            .println("impl miniserde::de::Visitor for Place<VimAny> {")?;
+        self.printer.indent();
+        self.printer.println(
+            "fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {",
+        )?;
+        self.printer.indent();
+        self.printer
+            .println("Ok(Box::new(VimAnyBuilder::new(&mut self.out)))")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // VimAnyBuilder Map impl
+        self.printer
+            .println("impl miniserde::de::Map for VimAnyBuilder<'_> {")?;
+        self.printer.indent();
+        self.printer.println(
+            "fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {",
+        )?;
+        self.printer.indent();
+        self.printer.println("self.core.key(key, lookup_type)")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        self.printer
+            .println("fn finish(&mut self) -> miniserde::Result<()> {")?;
+        self.printer.indent();
+        self.printer
+            .println("let result = self.core.finish(lookup_type)?;")?;
+        self.printer.println("*self.__out = Some(result);")?;
+        self.printer.println("Ok(())")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        Ok(())
+    }
 }

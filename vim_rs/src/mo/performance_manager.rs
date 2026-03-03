@@ -165,7 +165,10 @@ impl PerformanceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PerfMetricId>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PerfMetricId>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -207,7 +210,8 @@ impl PerformanceManager {
         let path = format!("/PerformanceManager/{moId}/QueryPerfComposite", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::PerfCompositeMetric = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::PerfCompositeMetric = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieves counter information for the specified list of counter IDs.
@@ -230,7 +234,10 @@ impl PerformanceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PerfCounterInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PerfCounterInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -258,7 +265,8 @@ impl PerformanceManager {
         let path = format!("/PerformanceManager/{moId}/QueryPerfCounterByLevel", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Vec<crate::types::structs::PerfCounterInfo> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Vec<crate::types::structs::PerfCounterInfo> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieves the *PerfProviderSummary* data object that
@@ -285,7 +293,8 @@ impl PerformanceManager {
         let path = format!("/PerformanceManager/{moId}/QueryPerfProviderSummary", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::PerfProviderSummary = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::PerfProviderSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieves the performance metrics for the specified entity (or entities)
@@ -328,7 +337,10 @@ impl PerformanceManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::PerfEntityMetricBaseTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::PerfEntityMetricBaseTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -542,7 +554,8 @@ impl PerformanceManager {
         let path = format!("/PerformanceManager/{moId}/description", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::PerformanceDescription = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::PerformanceDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// A list of *intervals* configured on the
@@ -554,7 +567,10 @@ impl PerformanceManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PerfInterval>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PerfInterval>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -566,78 +582,314 @@ impl PerformanceManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::PerfCounterInfo>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PerfCounterInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct CreatePerfIntervalRequestType<'a> {
-    #[serde(rename = "intervalId")]
     interval_id: &'a crate::types::structs::PerfInterval,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreatePerfIntervalRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreatePerfIntervalRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreatePerfIntervalRequestTypeSer<'b, 'a> {
+    data: &'b CreatePerfIntervalRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreatePerfIntervalRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreatePerfIntervalRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("intervalId"), &self.data.interval_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryAvailablePerfMetricRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "beginTime")]
     begin_time: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "endTime")]
     end_time: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "intervalId")]
     interval_id: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryAvailablePerfMetricRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryAvailablePerfMetricRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryAvailablePerfMetricRequestTypeSer<'b, 'a> {
+    data: &'b QueryAvailablePerfMetricRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryAvailablePerfMetricRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryAvailablePerfMetricRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.begin_time else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("beginTime"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.end_time else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("endTime"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.interval_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("intervalId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryPerfCompositeRequestType<'a> {
-    #[serde(rename = "querySpec")]
     query_spec: &'a crate::types::structs::PerfQuerySpec,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPerfCompositeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPerfCompositeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPerfCompositeRequestTypeSer<'b, 'a> {
+    data: &'b QueryPerfCompositeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryPerfCompositeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPerfCompositeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("querySpec"), &self.data.query_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPerfCounterRequestType<'a> {
-    #[serde(rename = "counterId")]
     counter_id: &'a [i32],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPerfCounterRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPerfCounterRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPerfCounterRequestTypeSer<'b, 'a> {
+    data: &'b QueryPerfCounterRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryPerfCounterRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPerfCounterRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("counterId"), &self.data.counter_id as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPerfCounterByLevelRequestType {
     level: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for QueryPerfCounterByLevelRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPerfCounterByLevelRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPerfCounterByLevelRequestTypeSer<'b> {
+    data: &'b QueryPerfCounterByLevelRequestType,
+    seq: usize,
+}
+
+impl<'b> miniserde::ser::Map for QueryPerfCounterByLevelRequestTypeSer<'b> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPerfCounterByLevelRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("level"), &self.data.level as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPerfProviderSummaryRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPerfProviderSummaryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPerfProviderSummaryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPerfProviderSummaryRequestTypeSer<'b, 'a> {
+    data: &'b QueryPerfProviderSummaryRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryPerfProviderSummaryRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPerfProviderSummaryRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPerfRequestType<'a> {
-    #[serde(rename = "querySpec")]
     query_spec: &'a [crate::types::structs::PerfQuerySpec],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPerfRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPerfRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPerfRequestTypeSer<'b, 'a> {
+    data: &'b QueryPerfRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryPerfRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPerfRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("querySpec"), &self.data.query_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemovePerfIntervalRequestType {
-    #[serde(rename = "samplePeriod")]
     sample_period: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl miniserde::Serialize for RemovePerfIntervalRequestType {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemovePerfIntervalRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemovePerfIntervalRequestTypeSer<'b> {
+    data: &'b RemovePerfIntervalRequestType,
+    seq: usize,
+}
+
+impl<'b> miniserde::ser::Map for RemovePerfIntervalRequestTypeSer<'b> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemovePerfIntervalRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("samplePeriod"), &self.data.sample_period as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ResetCounterLevelMappingRequestType<'a> {
     counters: &'a [i32],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ResetCounterLevelMappingRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ResetCounterLevelMappingRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ResetCounterLevelMappingRequestTypeSer<'b, 'a> {
+    data: &'b ResetCounterLevelMappingRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ResetCounterLevelMappingRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ResetCounterLevelMappingRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("counters"), &self.data.counters as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateCounterLevelMappingRequestType<'a> {
-    #[serde(rename = "counterLevelMap")]
     counter_level_map: &'a [crate::types::structs::PerformanceManagerCounterLevelMapping],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateCounterLevelMappingRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateCounterLevelMappingRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateCounterLevelMappingRequestTypeSer<'b, 'a> {
+    data: &'b UpdateCounterLevelMappingRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateCounterLevelMappingRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateCounterLevelMappingRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("counterLevelMap"), &self.data.counter_level_map as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdatePerfIntervalRequestType<'a> {
     interval: &'a crate::types::structs::PerfInterval,
+}
+
+impl<'a> miniserde::Serialize for UpdatePerfIntervalRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdatePerfIntervalRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdatePerfIntervalRequestTypeSer<'b, 'a> {
+    data: &'b UpdatePerfIntervalRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdatePerfIntervalRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdatePerfIntervalRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("interval"), &self.data.interval as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

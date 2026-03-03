@@ -27,7 +27,7 @@
 //! 6. **Build configuration spec** - Wrap modified devices in `VirtualDeviceConfigSpec`
 //!    with operation `Edit`
 //! 7. **Submit reconfiguration** - Call `VirtualMachine::reconfig_vm_task()` to apply changes
-//! 8. **Monitor task completion** - Poll task state until success or failure
+//! 8. **Monitor task completion** - Use `TaskTracker` to wait for task completion
 //!
 //! # Polymorphic Virtual Device Handling
 //!
@@ -98,7 +98,7 @@
 //! - **ObjectRetriever** pattern with `retrieve_objects_from_list()`
 //! - **Type-safe downcasting** using `StructType` enum and `downcast::<T>()`
 //! - **Device reconfiguration** with `VirtualDeviceConfigSpec` and operation enum
-//! - **Asynchronous task monitoring** with state polling and progress reporting
+//! - **Asynchronous task monitoring** with `TaskTracker`
 //!
 //! # Use Cases
 //!
@@ -114,16 +114,17 @@
 
 use anyhow::{Context, Result};
 use log::info;
+use tokio::time::sleep;
 use vim_rs::types::convert::CastInto as _;
 use std::env;
-use std::sync::Arc;
+use std::time::Duration;
 use utils::connect;
-use vim_macros::vim_retrievable;
-use vim_rs::core::Client;
-use vim_rs::mo::{SearchIndex, Task, VirtualMachine};
-use vim_rs::types::enums::{TaskInfoStateEnum, VirtualDeviceConfigSpecOperationEnum};
+use vim_rs::vim_retrievable;
+use vim_rs::core::tasks::TaskTracker;
+use vim_rs::mo::{SearchIndex, VirtualMachine};
+use vim_rs::types::enums::VirtualDeviceConfigSpecOperationEnum;
 use vim_rs::types::structs::{
-    ManagedObjectReference, VirtualDeviceConfigSpec, VirtualMachineConfigSpec,
+    VirtualDeviceConfigSpec, VirtualMachineConfigSpec,
 };
 use vim_rs::types::traits::{VirtualDeviceTrait, VirtualEthernetCardTrait};
 
@@ -134,48 +135,14 @@ vim_retrievable!(
     }
 );
 
-/// Waits for a vSphere task to complete and returns the result.
-async fn wait_for_task(client: Arc<Client>, task_ref: &ManagedObjectReference) -> Result<()> {
-    let task = Task::new(client, &task_ref.value);
 
-    loop {
-        let task_info = task.info().await?;
 
-        match task_info.state {
-            TaskInfoStateEnum::Success => {
-                info!("✅ Task completed successfully");
-                return Ok(());
-            }
-            TaskInfoStateEnum::Error => {
-                let error_msg = task_info
-                    .error
-                    .map(|e| format!("{:?}", e))
-                    .unwrap_or_else(|| "Unknown error".to_string());
-                return Err(anyhow::anyhow!("Task failed: {}", error_msg));
-            }
-            TaskInfoStateEnum::Running => {
-                info!("Task in progress... ({}%)", task_info.progress.unwrap_or(0));
-                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-            }
-            TaskInfoStateEnum::Queued => {
-                info!("Task queued...");
-                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-            }
-            TaskInfoStateEnum::Other_(state) => {
-                info!("Task in unknown state: {}", state);
-                tokio::time::sleep(tokio::time::Duration::from_millis(500)).await;
-            }
-        }
-    }
-}
-
-#[tokio::main]
-async fn main() -> Result<()> {
-    env_logger::init();
-
+async fn toggle_wol() -> Result<()> {
     // Connect to vCenter
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
     info!("Connected to {}", client.service_content().about.full_name);
+
+    let task_tracker = TaskTracker::new(client.clone());
 
     // Get VM inventory path from environment
     let vm_path = env::var("VM_INVENTORY_PATH")
@@ -242,12 +209,8 @@ async fn main() -> Result<()> {
 
         device_changes.push(VirtualDeviceConfigSpec {
             operation: Some(VirtualDeviceConfigSpecOperationEnum::Edit),
-            device: device,
-            file_operation: None,
-            profile: None,
-            backing: None,
-            filter_spec: None,
-            change_mode: None,
+            device,
+            ..Default::default()
         });
         nic_count += 1;
     }
@@ -263,7 +226,7 @@ async fn main() -> Result<()> {
     );
 
     // Create VirtualMachineConfigSpec with device changes
-    // We only need to set device_change - all other fields default to None
+    // We only need to set device_change - all other fields default to None via Default trait
     let config_spec = VirtualMachineConfigSpec {
         device_change: Some(
             device_changes
@@ -273,86 +236,7 @@ async fn main() -> Result<()> {
                 })
                 .collect(),
         ),
-        change_version: None,
-        name: None,
-        version: None,
-        create_date: None,
-        uuid: None,
-        instance_uuid: None,
-        npiv_node_world_wide_name: None,
-        npiv_port_world_wide_name: None,
-        npiv_world_wide_name_type: None,
-        npiv_desired_node_wwns: None,
-        npiv_desired_port_wwns: None,
-        npiv_temporary_disabled: None,
-        npiv_on_non_rdm_disks: None,
-        npiv_world_wide_name_op: None,
-        location_id: None,
-        guest_id: None,
-        alternate_guest_name: None,
-        annotation: None,
-        files: None,
-        tools: None,
-        flags: None,
-        console_preferences: None,
-        power_op_info: None,
-        reboot_power_off: None,
-        num_cp_us: None,
-        vcpu_config: None,
-        num_cores_per_socket: None,
-        memory_mb: None,
-        memory_hot_add_enabled: None,
-        cpu_hot_add_enabled: None,
-        cpu_hot_remove_enabled: None,
-        virtual_ich_7_m_present: None,
-        virtual_smc_present: None,
-        cpu_allocation: None,
-        memory_allocation: None,
-        latency_sensitivity: None,
-        cpu_affinity: None,
-        memory_affinity: None,
-        network_shaper: None,
-        cpu_feature_mask: None,
-        extra_config: None,
-        swap_placement: None,
-        boot_options: None,
-        v_app_config: None,
-        ft_info: None,
-        rep_config: None,
-        v_app_config_removed: None,
-        v_asserts_enabled: None,
-        change_tracking_enabled: None,
-        firmware: None,
-        max_mks_connections: None,
-        guest_auto_lock_enabled: None,
-        managed_by: None,
-        memory_reservation_locked_to_max: None,
-        nested_hv_enabled: None,
-        v_pmc_enabled: None,
-        scheduled_hardware_upgrade_info: None,
-        vm_profile: None,
-        message_bus_tunnel_enabled: None,
-        crypto: None,
-        migrate_encryption: None,
-        sgx_info: None,
-        ft_encryption_mode: None,
-        guest_monitoring_mode_info: None,
-        sev_enabled: None,
-        virtual_numa: None,
-        motherboard_layout: None,
-        pmem_failover_enabled: None,
-        vmx_stats_collection_enabled: None,
-        vm_op_notification_to_app_enabled: None,
-        vm_op_notification_timeout: None,
-        device_swap: None,
-        simultaneous_threads: None,
-        pmem: None,
-        device_groups: None,
-        fixed_passthru_hot_plug_enabled: None,
-        metro_ft_enabled: None,
-        metro_ft_host_group: None,
-        tdx_enabled: None,
-        sev_snp_enabled: None,
+        ..Default::default()
     };
 
     // Reconfigure the VM
@@ -362,8 +246,21 @@ async fn main() -> Result<()> {
     info!("Reconfigure task created: {}", task_ref.value);
 
     // Wait for task completion
-    wait_for_task(client.clone(), &task_ref).await?;
+    task_tracker.wait::<()>(task_ref).await?;
+    info!("✅ Task completed successfully");
     info!("Successfully toggled Wake-on-LAN for {} NIC(s)", nic_count);
+
+    Ok(())
+}
+
+
+#[tokio::main]
+async fn main() -> Result<()> {
+    dotenvy::dotenv().ok();
+    env_logger::init();
+    toggle_wol().await?;
+    // Yield to run async drop cleanup
+    sleep(Duration::from_millis(10)).await;
 
     Ok(())
 }

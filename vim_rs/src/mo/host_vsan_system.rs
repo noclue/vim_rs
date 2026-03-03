@@ -53,7 +53,8 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/AddDisks_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Evacuate this host from VSAN cluster.
@@ -96,7 +97,8 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/EvacuateVsanNode_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Initialize and use the sets of disks in the given *VsanHostDiskMapping*
@@ -137,7 +139,8 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/InitializeDisks_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Queries disks on this host for suitability to use with the VSAN service,
@@ -163,7 +166,10 @@ impl HostVsanSystem {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<Box<dyn crate::types::traits::VsanHostDiskResultTrait>>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::VsanHostDiskResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -178,7 +184,8 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/QueryHostStatus", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanHostClusterStatus = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanHostClusterStatus = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Recommission this host to VSAN cluster.
@@ -206,7 +213,8 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/RecommissionVsanNode_Task", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Remove the set of given disks from use by the VSAN service on this host.
@@ -263,7 +271,8 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/RemoveDisk_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Delete given set of disk mappings from use by the VSAN service on this host.
@@ -312,7 +321,8 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/RemoveDiskMapping_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Unmount the mounted *VsanHostDiskMapping*.
@@ -357,7 +367,8 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/UnmountDiskMapping_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Update the VSAN service on this host according to the given host
@@ -395,7 +406,8 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/UpdateVsan_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// The current VSAN service configuration information for this host.
@@ -405,61 +417,247 @@ impl HostVsanSystem {
         let path = format!("/vsan/HostVsanSystem/{moId}/config", moId = &self.mo_id);
         let req = self.client.get_request(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::VsanHostConfigInfoTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::VsanHostConfigInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AddDisksRequestType<'a> {
     disk: &'a [crate::types::structs::HostScsiDisk],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AddDisksRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AddDisksRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AddDisksRequestTypeSer<'b, 'a> {
+    data: &'b AddDisksRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for AddDisksRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AddDisksRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("disk"), &self.data.disk as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct EvacuateVsanNodeRequestType<'a> {
-    #[serde(rename = "maintenanceSpec")]
     maintenance_spec: &'a crate::types::structs::HostMaintenanceSpec,
     timeout: i32,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for EvacuateVsanNodeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(EvacuateVsanNodeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct EvacuateVsanNodeRequestTypeSer<'b, 'a> {
+    data: &'b EvacuateVsanNodeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for EvacuateVsanNodeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"EvacuateVsanNodeRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("maintenanceSpec"), &self.data.maintenance_spec as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("timeout"), &self.data.timeout as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct InitializeDisksRequestType<'a> {
     mapping: &'a [crate::types::structs::VsanHostDiskMapping],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for InitializeDisksRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(InitializeDisksRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct InitializeDisksRequestTypeSer<'b, 'a> {
+    data: &'b InitializeDisksRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for InitializeDisksRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"InitializeDisksRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("mapping"), &self.data.mapping as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryDisksForVsanRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "canonicalName")]
     canonical_name: Option<&'a [String]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryDisksForVsanRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryDisksForVsanRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryDisksForVsanRequestTypeSer<'b, 'a> {
+    data: &'b QueryDisksForVsanRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryDisksForVsanRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryDisksForVsanRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.canonical_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("canonicalName"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveDiskRequestType<'a> {
     disk: &'a [crate::types::structs::HostScsiDisk],
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "maintenanceSpec")]
     maintenance_spec: Option<&'a crate::types::structs::HostMaintenanceSpec>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     timeout: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveDiskRequestTypeSer<'b, 'a> {
+    data: &'b RemoveDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveDiskRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveDiskRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("disk"), &self.data.disk as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.maintenance_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("maintenanceSpec"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.timeout else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("timeout"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RemoveDiskMappingRequestType<'a> {
     mapping: &'a [crate::types::structs::VsanHostDiskMapping],
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "maintenanceSpec")]
     maintenance_spec: Option<&'a crate::types::structs::HostMaintenanceSpec>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     timeout: Option<i32>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveDiskMappingRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveDiskMappingRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveDiskMappingRequestTypeSer<'b, 'a> {
+    data: &'b RemoveDiskMappingRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveDiskMappingRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveDiskMappingRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("mapping"), &self.data.mapping as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.maintenance_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("maintenanceSpec"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.timeout else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("timeout"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct UnmountDiskMappingRequestType<'a> {
     mapping: &'a [crate::types::structs::VsanHostDiskMapping],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UnmountDiskMappingRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnmountDiskMappingRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnmountDiskMappingRequestTypeSer<'b, 'a> {
+    data: &'b UnmountDiskMappingRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UnmountDiskMappingRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnmountDiskMappingRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("mapping"), &self.data.mapping as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateVsanRequestType<'a> {
     config: &'a dyn crate::types::traits::VsanHostConfigInfoTrait,
+}
+
+impl<'a> miniserde::Serialize for UpdateVsanRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateVsanRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateVsanRequestTypeSer<'b, 'a> {
+    data: &'b UpdateVsanRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateVsanRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateVsanRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("config"), &self.data.config as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

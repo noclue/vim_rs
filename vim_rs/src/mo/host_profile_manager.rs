@@ -55,7 +55,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/ApplyEntitiesConfig_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Apply the configuration to the host.
@@ -106,7 +107,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/ApplyHostConfig_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Check the validity of the answer files for the specified hosts.
@@ -136,7 +138,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/CheckAnswerFileStatus_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Composes (merge, replace, delete, disable)
@@ -182,7 +185,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/CompositeHostProfile_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create a default subprofile of a given type (for example, a
@@ -230,7 +234,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/CreateDefaultProfile", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::ApplyProfileTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::ApplyProfileTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Create a profile from the specified CreateSpec.
@@ -261,7 +266,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/CreateProfile", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Export a host's answer file into a serialized form.
@@ -292,7 +298,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/ExportAnswerFile_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Get the profile(s) to which this entity is associated.
@@ -318,7 +325,10 @@ impl HostProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -350,7 +360,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/GenerateConfigTaskList", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::HostProfileManagerConfigTaskList = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::HostProfileManagerConfigTaskList = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// This method generates *ApplyHostProfileConfigurationSpec* data object
@@ -394,7 +405,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/GenerateHostConfigTaskSpec_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Generate a list of configuration tasks that will be performed on the
@@ -432,7 +444,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/GenerateHostProfileTaskList_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns the status of the answer files associated with specified hosts.
@@ -459,7 +472,10 @@ impl HostProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::AnswerFileStatusResult>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AnswerFileStatusResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -490,7 +506,10 @@ impl HostProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ProfilePolicyMetadata>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ProfilePolicyMetadata>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -518,7 +537,10 @@ impl HostProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ProfileMetadata>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ProfileMetadata>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -541,7 +563,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/QueryProfileStructure", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ProfileProfileStructure = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ProfileProfileStructure = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Returns the answer file associated with a particular host.
@@ -564,7 +587,10 @@ impl HostProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::AnswerFile>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::AnswerFile>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -593,7 +619,10 @@ impl HostProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<crate::types::structs::AnswerFile>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<crate::types::structs::AnswerFile>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -621,7 +650,10 @@ impl HostProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StructuredCustomizations>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StructuredCustomizations>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -653,7 +685,10 @@ impl HostProfileManager {
         let req = self.client.post_json(&path, &input);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::StructuredCustomizations>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StructuredCustomizations>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
@@ -694,7 +729,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/UpdateAnswerFile_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Validates the proposed host profile composition.
@@ -781,7 +817,8 @@ impl HostProfileManager {
         let path = format!("/HostProfileManager/{moId}/ValidateHostProfileComposition_Task", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// A list of profiles known to this ProfileManager.
@@ -796,181 +833,692 @@ impl HostProfileManager {
         let req = self.client.get_request(&path);
         let bytes_opt = self.client.execute_option_bytes(req).await?;
         match bytes_opt {
-            Some(bytes) => Ok(Some(serde_json::from_slice::<Vec<crate::types::structs::ManagedObjectReference>>(bytes.as_ref())?)),
+            Some(bytes) => {
+                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
+            }
             None => Ok(None),
         }
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct ApplyEntitiesConfigRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "applyConfigSpecs")]
     apply_config_specs: Option<&'a [crate::types::structs::ApplyHostProfileConfigurationSpec]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ApplyEntitiesConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ApplyEntitiesConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ApplyEntitiesConfigRequestTypeSer<'b, 'a> {
+    data: &'b ApplyEntitiesConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ApplyEntitiesConfigRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ApplyEntitiesConfigRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.apply_config_specs else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("applyConfigSpecs"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ApplyHostConfigRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "configSpec")]
     config_spec: &'a crate::types::structs::HostConfigSpec,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "userInput")]
     user_input: Option<&'a [crate::types::structs::ProfileDeferredPolicyOptionParameter]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ApplyHostConfigRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ApplyHostConfigRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ApplyHostConfigRequestTypeSer<'b, 'a> {
+    data: &'b ApplyHostConfigRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ApplyHostConfigRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ApplyHostConfigRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("configSpec"), &self.data.config_spec as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.user_input else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("userInput"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CheckAnswerFileStatusRequestType<'a> {
     host: &'a [crate::types::structs::ManagedObjectReference],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CheckAnswerFileStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CheckAnswerFileStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CheckAnswerFileStatusRequestTypeSer<'b, 'a> {
+    data: &'b CheckAnswerFileStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CheckAnswerFileStatusRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CheckAnswerFileStatusRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CompositeHostProfileRequestType<'a> {
     source: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     targets: Option<&'a [crate::types::structs::ManagedObjectReference]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "toBeMerged")]
     to_be_merged: Option<&'a crate::types::structs::HostApplyProfile>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "toBeReplacedWith")]
     to_be_replaced_with: Option<&'a crate::types::structs::HostApplyProfile>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "toBeDeleted")]
     to_be_deleted: Option<&'a crate::types::structs::HostApplyProfile>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "enableStatusToBeCopied")]
     enable_status_to_be_copied: Option<&'a crate::types::structs::HostApplyProfile>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CompositeHostProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CompositeHostProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CompositeHostProfileRequestTypeSer<'b, 'a> {
+    data: &'b CompositeHostProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CompositeHostProfileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CompositeHostProfileRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("source"), &self.data.source as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.targets else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targets"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.to_be_merged else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("toBeMerged"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.to_be_replaced_with else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("toBeReplacedWith"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.to_be_deleted else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("toBeDeleted"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.enable_status_to_be_copied else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("enableStatusToBeCopied"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateDefaultProfileRequestType<'a> {
-    #[serde(rename = "profileType")]
     profile_type: &'a str,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "profileTypeName")]
     profile_type_name: Option<&'a str>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateDefaultProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateDefaultProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateDefaultProfileRequestTypeSer<'b, 'a> {
+    data: &'b CreateDefaultProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateDefaultProfileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateDefaultProfileRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("profileType"), &self.data.profile_type as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.profile_type_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profileTypeName"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct CreateProfileRequestType<'a> {
-    #[serde(rename = "createSpec")]
     create_spec: &'a dyn crate::types::traits::ProfileCreateSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateProfileRequestTypeSer<'b, 'a> {
+    data: &'b CreateProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateProfileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateProfileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("createSpec"), &self.data.create_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ExportAnswerFileRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ExportAnswerFileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ExportAnswerFileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ExportAnswerFileRequestTypeSer<'b, 'a> {
+    data: &'b ExportAnswerFileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ExportAnswerFileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ExportAnswerFileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct FindAssociatedProfileRequestType<'a> {
     entity: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for FindAssociatedProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(FindAssociatedProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct FindAssociatedProfileRequestTypeSer<'b, 'a> {
+    data: &'b FindAssociatedProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for FindAssociatedProfileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindAssociatedProfileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct GenerateConfigTaskListRequestType<'a> {
-    #[serde(rename = "configSpec")]
     config_spec: &'a crate::types::structs::HostConfigSpec,
     host: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GenerateConfigTaskListRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GenerateConfigTaskListRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GenerateConfigTaskListRequestTypeSer<'b, 'a> {
+    data: &'b GenerateConfigTaskListRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for GenerateConfigTaskListRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GenerateConfigTaskListRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("configSpec"), &self.data.config_spec as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct GenerateHostConfigTaskSpecRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "hostsInfo")]
     hosts_info: Option<&'a [crate::types::structs::StructuredCustomizations]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GenerateHostConfigTaskSpecRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GenerateHostConfigTaskSpecRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GenerateHostConfigTaskSpecRequestTypeSer<'b, 'a> {
+    data: &'b GenerateHostConfigTaskSpecRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for GenerateHostConfigTaskSpecRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GenerateHostConfigTaskSpecRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.hosts_info else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hostsInfo"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct GenerateHostProfileTaskListRequestType<'a> {
-    #[serde(rename = "configSpec")]
     config_spec: &'a crate::types::structs::HostConfigSpec,
     host: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for GenerateHostProfileTaskListRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GenerateHostProfileTaskListRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GenerateHostProfileTaskListRequestTypeSer<'b, 'a> {
+    data: &'b GenerateHostProfileTaskListRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for GenerateHostProfileTaskListRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GenerateHostProfileTaskListRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("configSpec"), &self.data.config_spec as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryAnswerFileStatusRequestType<'a> {
     host: &'a [crate::types::structs::ManagedObjectReference],
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryAnswerFileStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryAnswerFileStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryAnswerFileStatusRequestTypeSer<'b, 'a> {
+    data: &'b QueryAnswerFileStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryAnswerFileStatusRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryAnswerFileStatusRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct QueryPolicyMetadataRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "policyName")]
     policy_name: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryPolicyMetadataRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryPolicyMetadataRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryPolicyMetadataRequestTypeSer<'b, 'a> {
+    data: &'b QueryPolicyMetadataRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryPolicyMetadataRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryPolicyMetadataRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.policy_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("policyName"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryHostProfileMetadataRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "profileName")]
     profile_name: Option<&'a [String]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryHostProfileMetadataRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryHostProfileMetadataRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryHostProfileMetadataRequestTypeSer<'b, 'a> {
+    data: &'b QueryHostProfileMetadataRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryHostProfileMetadataRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryHostProfileMetadataRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.profile_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profileName"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct QueryProfileStructureRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     profile: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for QueryProfileStructureRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryProfileStructureRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryProfileStructureRequestTypeSer<'b, 'a> {
+    data: &'b QueryProfileStructureRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryProfileStructureRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryProfileStructureRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.profile else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("profile"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RetrieveAnswerFileRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveAnswerFileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveAnswerFileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveAnswerFileRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveAnswerFileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveAnswerFileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveAnswerFileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrieveAnswerFileForProfileRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "applyProfile")]
     apply_profile: &'a crate::types::structs::HostApplyProfile,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveAnswerFileForProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveAnswerFileForProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveAnswerFileForProfileRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveAnswerFileForProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveAnswerFileForProfileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveAnswerFileForProfileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("applyProfile"), &self.data.apply_profile as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RetrieveHostCustomizationsRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveHostCustomizationsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveHostCustomizationsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveHostCustomizationsRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveHostCustomizationsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveHostCustomizationsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveHostCustomizationsRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.hosts else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hosts"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct RetrieveHostCustomizationsForProfileRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     hosts: Option<&'a [crate::types::structs::ManagedObjectReference]>,
-    #[serde(rename = "applyProfile")]
     apply_profile: &'a crate::types::structs::HostApplyProfile,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RetrieveHostCustomizationsForProfileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RetrieveHostCustomizationsForProfileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RetrieveHostCustomizationsForProfileRequestTypeSer<'b, 'a> {
+    data: &'b RetrieveHostCustomizationsForProfileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RetrieveHostCustomizationsForProfileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RetrieveHostCustomizationsForProfileRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.hosts else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("hosts"), val as &dyn miniserde::Serialize));
+                }
+                2 => return Some((std::borrow::Cow::Borrowed("applyProfile"), &self.data.apply_profile as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
 struct UpdateAnswerFileRequestType<'a> {
     host: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "configSpec")]
     config_spec: &'a dyn crate::types::traits::AnswerFileCreateSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UpdateAnswerFileRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateAnswerFileRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateAnswerFileRequestTypeSer<'b, 'a> {
+    data: &'b UpdateAnswerFileRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateAnswerFileRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateAnswerFileRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("host"), &self.data.host as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("configSpec"), &self.data.config_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ValidateHostProfileCompositionRequestType<'a> {
     source: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     targets: Option<&'a [crate::types::structs::ManagedObjectReference]>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "toBeMerged")]
     to_be_merged: Option<&'a crate::types::structs::HostApplyProfile>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "toReplaceWith")]
     to_replace_with: Option<&'a crate::types::structs::HostApplyProfile>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "toBeDeleted")]
     to_be_deleted: Option<&'a crate::types::structs::HostApplyProfile>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "enableStatusToBeCopied")]
     enable_status_to_be_copied: Option<&'a crate::types::structs::HostApplyProfile>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "errorOnly")]
     error_only: Option<bool>,
+}
+
+impl<'a> miniserde::Serialize for ValidateHostProfileCompositionRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ValidateHostProfileCompositionRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ValidateHostProfileCompositionRequestTypeSer<'b, 'a> {
+    data: &'b ValidateHostProfileCompositionRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ValidateHostProfileCompositionRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ValidateHostProfileCompositionRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("source"), &self.data.source as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.targets else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targets"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.to_be_merged else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("toBeMerged"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.to_replace_with else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("toReplaceWith"), val as &dyn miniserde::Serialize));
+                }
+                5 => {
+                    let Some(ref val) = self.data.to_be_deleted else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("toBeDeleted"), val as &dyn miniserde::Serialize));
+                }
+                6 => {
+                    let Some(ref val) = self.data.enable_status_to_be_copied else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("enableStatusToBeCopied"), val as &dyn miniserde::Serialize));
+                }
+                7 => {
+                    let Some(ref val) = self.data.error_only else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("errorOnly"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
 }

@@ -244,51 +244,219 @@ impl HostLocalAccountManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AssignUserToGroupRequestType<'a> {
     user: &'a str,
     group: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AssignUserToGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AssignUserToGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AssignUserToGroupRequestTypeSer<'b, 'a> {
+    data: &'b AssignUserToGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for AssignUserToGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AssignUserToGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("user"), &self.data.user as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("group"), &self.data.group as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ChangePasswordRequestType<'a> {
     user: &'a str,
-    #[serde(rename = "oldPassword")]
     old_password: &'a str,
-    #[serde(rename = "newPassword")]
     new_password: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ChangePasswordRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ChangePasswordRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ChangePasswordRequestTypeSer<'b, 'a> {
+    data: &'b ChangePasswordRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ChangePasswordRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ChangePasswordRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("user"), &self.data.user as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("oldPassword"), &self.data.old_password as &dyn miniserde::Serialize)),
+            3 => return Some((std::borrow::Cow::Borrowed("newPassword"), &self.data.new_password as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateGroupRequestType<'a> {
     group: &'a dyn crate::types::traits::HostAccountSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateGroupRequestTypeSer<'b, 'a> {
+    data: &'b CreateGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("group"), &self.data.group as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct CreateUserRequestType<'a> {
     user: &'a dyn crate::types::traits::HostAccountSpecTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for CreateUserRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CreateUserRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CreateUserRequestTypeSer<'b, 'a> {
+    data: &'b CreateUserRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CreateUserRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CreateUserRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("user"), &self.data.user as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveGroupRequestType<'a> {
-    #[serde(rename = "groupName")]
     group_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveGroupRequestTypeSer<'b, 'a> {
+    data: &'b RemoveGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("groupName"), &self.data.group_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct RemoveUserRequestType<'a> {
-    #[serde(rename = "userName")]
     user_name: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for RemoveUserRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RemoveUserRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RemoveUserRequestTypeSer<'b, 'a> {
+    data: &'b RemoveUserRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RemoveUserRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoveUserRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("userName"), &self.data.user_name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UnassignUserFromGroupRequestType<'a> {
     user: &'a str,
     group: &'a str,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for UnassignUserFromGroupRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnassignUserFromGroupRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnassignUserFromGroupRequestTypeSer<'b, 'a> {
+    data: &'b UnassignUserFromGroupRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UnassignUserFromGroupRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnassignUserFromGroupRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("user"), &self.data.user as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("group"), &self.data.group as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct UpdateUserRequestType<'a> {
     user: &'a dyn crate::types::traits::HostAccountSpecTrait,
+}
+
+impl<'a> miniserde::Serialize for UpdateUserRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UpdateUserRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UpdateUserRequestTypeSer<'b, 'a> {
+    data: &'b UpdateUserRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UpdateUserRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UpdateUserRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("user"), &self.data.user as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

@@ -25,7 +25,8 @@ impl VsanResourceCheckSystem {
         let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanHostCancelResourceCheck", moId = &self.mo_id);
         let req = self.client.post_bare(&path);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: bool = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Retrieve the status of the latest resource check.
@@ -76,7 +77,8 @@ impl VsanResourceCheckSystem {
         let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanGetResourceCheckStatus", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::VsanResourceCheckStatus = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::VsanResourceCheckStatus = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Perform a resource check for given spec.
@@ -141,7 +143,8 @@ impl VsanResourceCheckSystem {
         let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanPerformResourceCheck", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// ***Required privileges:*** System.Read
@@ -163,30 +166,103 @@ impl VsanResourceCheckSystem {
         let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanHostPerformResourceCheck", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: crate::types::structs::ManagedObjectReference = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct VsanGetResourceCheckStatusRequestType<'a> {
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "resourceCheckSpec")]
     resource_check_spec: Option<&'a crate::types::structs::VsanResourceCheckSpec>,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanGetResourceCheckStatusRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanGetResourceCheckStatusRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanGetResourceCheckStatusRequestTypeSer<'b, 'a> {
+    data: &'b VsanGetResourceCheckStatusRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanGetResourceCheckStatusRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanGetResourceCheckStatusRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.resource_check_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("resourceCheckSpec"), val as &dyn miniserde::Serialize));
+                }
+                2 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanPerformResourceCheckRequestType<'a> {
-    #[serde(rename = "resourceCheckSpec")]
     resource_check_spec: &'a crate::types::structs::VsanResourceCheckSpec,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
     cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for VsanPerformResourceCheckRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanPerformResourceCheckRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanPerformResourceCheckRequestTypeSer<'b, 'a> {
+    data: &'b VsanPerformResourceCheckRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanPerformResourceCheckRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanPerformResourceCheckRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("resourceCheckSpec"), &self.data.resource_check_spec as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct VsanHostPerformResourceCheckRequestType<'a> {
-    #[serde(rename = "resourceCheckSpec")]
     resource_check_spec: &'a crate::types::structs::VsanResourceCheckSpec,
+}
+
+impl<'a> miniserde::Serialize for VsanHostPerformResourceCheckRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanHostPerformResourceCheckRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanHostPerformResourceCheckRequestTypeSer<'b, 'a> {
+    data: &'b VsanHostPerformResourceCheckRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanHostPerformResourceCheckRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanHostPerformResourceCheckRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("resourceCheckSpec"), &self.data.resource_check_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

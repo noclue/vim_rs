@@ -84,7 +84,8 @@ impl GuestAuthManager {
         let path = format!("/GuestAuthManager/{moId}/AcquireCredentialsInGuest", moId = &self.mo_id);
         let req = self.client.post_json(&path, &input);
         let bytes = self.client.execute_bytes(req).await?;
-        let result: Box<dyn crate::types::traits::GuestAuthenticationTrait> = serde_json::from_slice(bytes.as_ref())?;
+        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
+        let result: Box<dyn crate::types::traits::GuestAuthenticationTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
         Ok(result)
     }
     /// Releases session data and resources associated with
@@ -194,25 +195,94 @@ impl GuestAuthManager {
         self.client.execute_void(req).await
     }
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
 struct AcquireCredentialsInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
-    #[serde(rename = "requestedAuth")]
     requested_auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
-    #[serde(default, skip_serializing_if = "Option::is_none")]
-    #[serde(rename = "sessionID")]
     session_id: Option<i64>,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for AcquireCredentialsInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(AcquireCredentialsInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct AcquireCredentialsInGuestRequestTypeSer<'b, 'a> {
+    data: &'b AcquireCredentialsInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for AcquireCredentialsInGuestRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"AcquireCredentialsInGuestRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("requestedAuth"), &self.data.requested_auth as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.session_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("sessionID"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
 struct ReleaseCredentialsInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
 }
-#[derive(serde::Serialize)]
-#[serde(tag="_typeName")]
+
+impl<'a> miniserde::Serialize for ReleaseCredentialsInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ReleaseCredentialsInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ReleaseCredentialsInGuestRequestTypeSer<'b, 'a> {
+    data: &'b ReleaseCredentialsInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ReleaseCredentialsInGuestRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ReleaseCredentialsInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
 struct ValidateCredentialsInGuestRequestType<'a> {
     vm: &'a crate::types::structs::ManagedObjectReference,
     auth: &'a dyn crate::types::traits::GuestAuthenticationTrait,
+}
+
+impl<'a> miniserde::Serialize for ValidateCredentialsInGuestRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ValidateCredentialsInGuestRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ValidateCredentialsInGuestRequestTypeSer<'b, 'a> {
+    data: &'b ValidateCredentialsInGuestRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ValidateCredentialsInGuestRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ValidateCredentialsInGuestRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("vm"), &self.data.vm as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("auth"), &self.data.auth as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
 }

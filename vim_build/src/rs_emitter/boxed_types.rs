@@ -25,7 +25,7 @@ impl<'a> BoxedTypesEmitter<'a> {
         self.emit_enum()?;
         self.emit_as_str()?;
         self.emit_serialize()?;
-        self.emit_deserialize()?;
+        // Note: Deserialize for ValueElements is now generated in deserialize.rs
         Ok(())
     }
     fn emit_enum(&mut self) -> Result<()> {
@@ -49,10 +49,8 @@ impl<'a> BoxedTypesEmitter<'a> {
     }
 
     fn emit_imports(&mut self) -> Result<()> {
-        self.printer.println("use serde::de;")?;
-        self.printer.println("use serde::ser::SerializeStruct;")?;
-        self.printer
-            .println("use super::deserialize::get_value_deserializer;")?;
+        self.printer.println("use miniserde::ser::Fragment;")?;
+        self.printer.println("use std::borrow::Cow;")?;
         self.printer.newline()?;
         Ok(())
     }
@@ -85,137 +83,99 @@ impl<'a> BoxedTypesEmitter<'a> {
     }
 
     fn emit_serialize(&mut self) -> Result<()> {
+        // impl miniserde::Serialize for ValueElements
         self.printer
-            .println("impl serde::Serialize for ValueElements {")?;
+            .println("impl miniserde::Serialize for ValueElements {")?;
         self.printer.indent();
         self.printer
-            .println("fn serialize<S>(&self, serializer: S) -> Result<S::Ok, S::Error>")?;
-        self.printer.println("where")?;
-        self.printer.println("S: serde::Serializer,")?;
-        self.printer.println("{")?;
+            .println("fn begin(&self) -> Fragment<'_> {")?;
         self.printer.indent();
         self.printer
-            .println("let mut state = serializer.serialize_struct(\"ValueElements\", 2)?;")?;
-        self.printer.println("match self {")?;
+            .println("Fragment::Map(Box::new(ValueElementsSerializer::new(self)))")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+
+        // ValueElementsSerializer struct
+        self.printer.println("struct ValueElementsSerializer<'a> {")?;
         self.printer.indent();
-        for (_, box_type) in &self.vim_model.any_value_types {
-            let type_name = to_type_name(&box_type.name);
-            let ser_name = &box_type
-                .discriminator_value
-                .as_ref()
-                .unwrap_or(&box_type.name);
-            self.printer
-                .println(&format!("ValueElements::{type_name}(value) => {{"))?;
-            self.printer.indent();
-            self.printer.println(&format!(
-                "state.serialize_field(\"_typeName\", \"{ser_name}\")?;"
-            ))?;
-            let value = match box_type.property_type {
-                DataType::Binary => "&crate::core::helpers::SerializeBinary { value }",
-                _ => "value",
-            };
-            self.printer
-                .println(&format!("state.serialize_field(\"_value\", {value})?;"))?;
-            self.printer.dedent();
-            self.printer.println("},")?;
+        self.printer.println("data: &'a ValueElements,")?;
+        self.printer.println("seq: usize,")?;
+        self.printer.println("type_name: &'static str,")?;
+        // Pre-compute base64 for binary variants
+        let has_binary = self.vim_model.any_value_types.values().any(|bt| bt.property_type == DataType::Binary);
+        if has_binary {
+            self.printer.println("b64_cache: Option<String>,")?;
         }
         self.printer.dedent();
         self.printer.println("}")?;
-        self.printer.println("state.end()")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        Ok(())
-    }
+        self.printer.newline()?;
 
-    fn emit_deserialize(&mut self) -> Result<()> {
-        self.printer
-            .println("impl<'de> serde::Deserialize<'de> for ValueElements {")?;
+        self.printer.println("impl<'a> ValueElementsSerializer<'a> {")?;
         self.printer.indent();
-        self.printer.println("fn deserialize<D: serde::Deserializer<'de>>(deserializer: D) -> Result<Self, D::Error> {")?;
+        self.printer.println("fn new(data: &'a ValueElements) -> Self {")?;
         self.printer.indent();
-        self.printer
-            .println("deserializer.deserialize_map(__ValueElementsVisitor)")?;
+        if has_binary {
+            self.printer.println("let b64_cache = match data {")?;
+            self.printer.indent();
+            for (_, box_type) in &self.vim_model.any_value_types {
+                if box_type.property_type == DataType::Binary {
+                    let variant = to_type_name(&box_type.name);
+                    self.printer.println(&format!(
+                        "ValueElements::{variant}(value) => Some(base64::display::Base64Display::new(value, &base64::engine::general_purpose::STANDARD).to_string()),"
+                    ))?;
+                }
+            }
+            self.printer.println("_ => None,")?;
+            self.printer.dedent();
+            self.printer.println("};")?;
+            self.printer.println("Self { data, seq: 0, type_name: data.as_str(), b64_cache }")?;
+        } else {
+            self.printer.println("Self { data, seq: 0, type_name: data.as_str() }")?;
+        }
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.newline()?;
-        self.printer.println("struct __ValueElementsVisitor;")?;
-        self.printer.newline()?;
-        self.printer
-            .println("impl<'de> serde::de::Visitor<'de> for __ValueElementsVisitor {")?;
+
+        // impl Map for ValueElementsSerializer
+        self.printer.println("impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {")?;
         self.printer.indent();
-        self.printer.println("type Value = ValueElements;")?;
-        self.printer.newline()?;
-        self.printer.println(
-            "fn expecting(&self, formatter: &mut std::fmt::Formatter) -> std::fmt::Result {",
-        )?;
+        self.printer.println("fn next(&mut self) -> Option<(Cow<'_, str>, &dyn miniserde::Serialize)> {")?;
         self.printer.indent();
-        self.printer
-            .println("formatter.write_str(\"A ValueElements!\")")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.newline()?;
-        self.printer.println("fn visit_map<A: serde::de::MapAccess<'de>>(self, mut map: A) -> Result<Self::Value, A::Error> {")?;
+        self.printer.println("let seq = self.seq;")?;
+        self.printer.println("self.seq += 1;")?;
+        self.printer.println("match seq {")?;
         self.printer.indent();
-        self.printer
-            .println("let mut type_name: Option<String> = None;")?;
-        self.printer
-            .println("let mut value: Option<&serde_json::value::RawValue> = None;")?;
-        self.printer
-            .println("while let Some(key) = map.next_key::<String>()? {")?;
+        // seq 0: _typeName
+        self.printer.println("0 => Some((Cow::Borrowed(\"_typeName\"), &self.type_name)),")?;
+        // seq 1: _value
+        self.printer.println("1 => {")?;
         self.printer.indent();
-        self.printer.println("match key.as_str() {")?;
+        self.printer.println("match self.data {")?;
         self.printer.indent();
-        self.printer.println("\"_typeName\" => {")?;
-        self.printer.indent();
-        self.printer.println("if type_name.is_some() {")?;
-        self.printer.indent();
-        self.printer
-            .println("return Err(de::Error::duplicate_field(\"_typeName\"));")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer
-            .println("type_name = Some(map.next_value()?);")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.println("\"_value\" => {")?;
-        self.printer.indent();
-        self.printer.println("if value.is_some() {")?;
-        self.printer.indent();
-        self.printer
-            .println("return Err(de::Error::duplicate_field(\"_value\"));")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.println("value = Some(map.next_value()?);")?;
-        self.printer.dedent();
-        self.printer.println("}")?;
-        self.printer.println("_ => {")?;
-        self.printer.indent();
-        self.printer
-            .println("let _: serde_json::Value = map.next_value()?;")?;
+        for (_, box_type) in &self.vim_model.any_value_types {
+            let variant = to_type_name(&box_type.name);
+            if box_type.property_type == DataType::Binary {
+                self.printer.println(&format!(
+                    "ValueElements::{variant}(_) => Some((Cow::Borrowed(\"_value\"), self.b64_cache.as_ref().unwrap() as &dyn miniserde::Serialize)),"
+                ))?;
+            } else {
+                self.printer.println(&format!(
+                    "ValueElements::{variant}(value) => Some((Cow::Borrowed(\"_value\"), value as &dyn miniserde::Serialize)),"
+                ))?;
+            }
+        }
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
         self.printer.println("}")?;
+        self.printer.println("_ => None,")?;
         self.printer.dedent();
         self.printer.println("}")?;
-        self.printer.println(
-            "let type_name = type_name.ok_or(de::Error::missing_field(\"_typeName\"))?;",
-        )?;
-        self.printer
-            .println("let value = value.ok_or(de::Error::missing_field(\"_value\"))?;")?;
-        self.printer
-            .println("let Some(dsfunc) = get_value_deserializer(type_name.as_str()) else {")?;
-        self.printer.indent();
-        self.printer
-            .println("return Err(de::Error::custom(format!(\"Unknown type: {}\", type_name)));")?;
-        self.printer.dedent();
-        self.printer.println("};")?;
-        self.printer
-            .println("dsfunc(value).map_err(de::Error::custom)")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();
