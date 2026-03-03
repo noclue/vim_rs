@@ -1,3 +1,4 @@
+mod common;
 mod signature_generator;
 mod managed_objects;
 mod data_structures;

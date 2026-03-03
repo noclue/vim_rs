@@ -20,9 +20,7 @@ pub fn build_enumerations(model: &Model) -> Vec<EnumerationEntry> {
             VariantEntry {
                 name: to_enum_variant(v),
                 description: None,  // Can enhance later
-                discriminator_value: enum_def.discriminator_value.as_ref()
-                    .unwrap_or(v)
-                    .clone(),
+                discriminator_value: v.clone(),
             }
         }).collect();
 

@@ -256,7 +256,7 @@ async fn toggle_wol() -> Result<()> {
 
 #[tokio::main]
 async fn main() -> Result<()> {
-    dotenvy::dotenv_override().ok();
+    dotenvy::dotenv().ok();
     env_logger::init();
     toggle_wol().await?;
     // Yield to run async drop cleanup

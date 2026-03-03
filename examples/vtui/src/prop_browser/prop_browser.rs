@@ -372,8 +372,8 @@ fn pretty_print_json(json: &str) -> String {
     let mut indent = 0usize;
     let mut in_string = false;
     let mut escape_next = false;
-    let bytes = json.as_bytes();
-    let len = bytes.len();
+    let chars: Vec<char> = json.chars().collect();
+    let len = chars.len();
     let mut i = 0;
 
     fn write_indent(s: &mut String, level: usize) {
@@ -383,7 +383,7 @@ fn pretty_print_json(json: &str) -> String {
     }
 
     while i < len {
-        let ch = bytes[i] as char;
+        let ch = chars[i];
 
         if escape_next {
             out.push(ch);
@@ -411,9 +411,9 @@ fn pretty_print_json(json: &str) -> String {
             '{' | '[' => {
                 indent += 1;
                 out.push(ch);
-                let next_meaningful = bytes[i + 1..].iter().position(|b| !b.is_ascii_whitespace());
+                let next_meaningful = chars[i + 1..].iter().position(|c| !c.is_ascii_whitespace());
                 if let Some(pos) = next_meaningful {
-                    let next_ch = bytes[i + 1 + pos] as char;
+                    let next_ch = chars[i + 1 + pos];
                     if next_ch != '}' && next_ch != ']' {
                         out.push('\n');
                         write_indent(&mut out, indent);

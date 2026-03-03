@@ -1,9 +1,10 @@
-use api_database::{TraitsOutput, TraitEntry, TraitDerefTarget, FieldEntry, InheritedFieldGroup};
+use api_database::{TraitsOutput, TraitEntry, TraitDerefTarget, FieldEntry};
 use vim_build::vim_model::{Model, EmitMode, DataType};
-use vim_build::rs_emitter::names::{TypeDefResolver, parent_field_name};
+use vim_build::rs_emitter::names::TypeDefResolver;
 use std::path::Path;
 use chrono::Utc;
 use tracing::info;
+use super::common::{format_vim_type, collect_all_descendants, build_inherited_field_groups};
 
 /// Build traits in memory (no file I/O).
 pub fn build_traits(model: &Model) -> Vec<TraitEntry> {
@@ -119,91 +120,6 @@ pub fn emit_traits_json(
     Ok(())
 }
 
-fn build_inherited_field_groups(
-    model: &Model,
-    name: &str,
-    tdf: &TypeDefResolver<'_>,
-) -> Vec<InheritedFieldGroup> {
-    let mut groups = Vec::new();
-    let mut path_prefix = String::new();
-    let mut current = name.to_string();
-
-    loop {
-        let parent_name = match model.structs.get(&current) {
-            Some(r) => r.borrow().parent.clone(),
-            None => break,
-        };
-        let parent_name = match parent_name {
-            Some(p) if p != "Any" => p,
-            _ => break,
-        };
-        let parent_struct = match model.structs.get(&parent_name) {
-            Some(r) => r.borrow(),
-            None => break,
-        };
-        if matches!(parent_struct.emit_mode, EmitMode::Prune | EmitMode::Skip(_)) {
-            break;
-        }
-
-        let segment = if path_prefix.is_empty() {
-            parent_field_name(&parent_name)
-        } else {
-            format!("{}.{}", path_prefix, parent_field_name(&parent_name))
-        };
-        path_prefix = segment.clone();
-
-        let mut ancestor_fields = Vec::new();
-        for (_field_name, field) in &parent_struct.fields {
-            let rust_type = match tdf.field_type(field) {
-                Ok(t) => t,
-                Err(_) => "UnknownType".to_string(),
-            };
-            let is_array = matches!(&field.vim_type, DataType::Array(_));
-            let (is_trait, trait_name) = if let DataType::Reference(ref_name) = &field.vim_type {
-                if let Some(ref_struct) = model.structs.get(ref_name) {
-                    let rs = ref_struct.borrow();
-                    let has_children =
-                        !rs.children.is_empty() && matches!(rs.emit_mode, EmitMode::Emit);
-                    if has_children {
-                        (true, Some(format!("{}Trait", rs.rust_name())))
-                    } else {
-                        (false, None)
-                    }
-                } else {
-                    (false, None)
-                }
-            } else {
-                (false, None)
-            };
-
-            ancestor_fields.push(FieldEntry {
-                name: field.rust_name(),
-                rust_type,
-                vim_type: format_vim_type(&field.vim_type),
-                required: !field.optional,
-                description: field.description.clone(),
-                is_array,
-                is_boxed: field.require_box,
-                is_trait,
-                trait_name,
-                is_parent_field: false,
-            });
-        }
-
-        if !ancestor_fields.is_empty() {
-            groups.push(InheritedFieldGroup {
-                source_type: parent_struct.rust_name(),
-                path_prefix: path_prefix.clone(),
-                fields: ancestor_fields,
-            });
-        }
-
-        current = parent_name.clone();
-    }
-
-    groups
-}
-
 fn collect_implementing_types(model: &Model, struct_name: &str) -> Vec<String> {
     let mut types = Vec::new();
 
@@ -220,52 +136,10 @@ fn collect_implementing_types(model: &Model, struct_name: &str) -> Vec<String> {
     types
 }
 
-fn collect_all_descendants(model: &Model, struct_name: &str) -> Vec<String> {
-    let mut descendants = Vec::new();
-
-    let is_pruned = model
-        .structs
-        .get(struct_name)
-        .map(|s| matches!(s.borrow().emit_mode, EmitMode::Prune))
-        .unwrap_or(false);
-
-    if let Ok(children) = model.children(&struct_name.to_string()) {
-        for child in children {
-            let child_borrow = child.borrow();
-            if is_pruned || !child_borrow.emit_mode.is_skip() {
-                let child_name = child_borrow.name.clone();
-                if child_name != struct_name {
-                    descendants.push(child_name);
-                }
-            }
-        }
-    }
-
-    descendants.sort();
-    descendants.dedup();
-    descendants
-}
-
 fn to_type_name(name: &str) -> String {
     use convert_case::{Case, Casing};
     use check_keyword::CheckKeyword;
     name.to_case(Case::Pascal).into_safe()
 }
 
-fn format_vim_type(dt: &DataType) -> String {
-    match dt {
-        DataType::Boolean => "Boolean".to_string(),
-        DataType::String => "String".to_string(),
-        DataType::Int8 => "Int8".to_string(),
-        DataType::Int16 => "Int16".to_string(),
-        DataType::Int32 => "Int32".to_string(),
-        DataType::Int64 => "Int64".to_string(),
-        DataType::Float => "Float".to_string(),
-        DataType::Double => "Double".to_string(),
-        DataType::DateTime => "DateTime".to_string(),
-        DataType::Binary => "Binary".to_string(),
-        DataType::Array(inner) => format!("Array<{}>", format_vim_type(inner)),
-        DataType::Reference(name) => name.clone(),
-    }
-}
 
