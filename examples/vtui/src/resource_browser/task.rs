@@ -2,7 +2,7 @@ use std::cmp::Ordering;
 use std::collections::HashMap;
 use std::sync::{Arc, OnceLock};
 use ratatui::widgets::{Cell, Row};
-use vim_macros::vim_updatable;
+use vim_rs::vim_updatable;
 use vim_rs::types::enums::TaskInfoStateEnum;
 use chrono::{DateTime, FixedOffset, TimeDelta};
 use ratatui::layout::Constraint;

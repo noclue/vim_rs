@@ -1177,7 +1177,6 @@ dependencies = [
  "log",
  "tokio",
  "utils",
- "vim_macros",
  "vim_rs",
 ]
 
@@ -2050,7 +2049,6 @@ dependencies = [
  "miniserde",
  "tokio",
  "utils",
- "vim_macros",
  "vim_rs",
 ]
 
@@ -2587,7 +2585,7 @@ checksum = "0b928f33d975fc6ad9f86c8f283853ad26bdd5b10b7f1542aa2fa15e2289105a"
 
 [[package]]
 name = "vim_macros"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "phf 0.11.3",
  "proc-macro2",
@@ -2598,7 +2596,7 @@ dependencies = [
 
 [[package]]
 name = "vim_rs"
-version = "0.3.0"
+version = "0.4.0"
 dependencies = [
  "base64",
  "bytes",
@@ -2640,7 +2638,6 @@ dependencies = [
  "thiserror 2.0.18",
  "tokio",
  "tui-tree-widget",
- "vim_macros",
  "vim_rs",
 ]
 

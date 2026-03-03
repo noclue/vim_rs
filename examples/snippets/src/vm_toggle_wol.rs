@@ -119,7 +119,7 @@ use vim_rs::types::convert::CastInto as _;
 use std::env;
 use std::time::Duration;
 use utils::connect;
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::tasks::TaskTracker;
 use vim_rs::mo::{SearchIndex, VirtualMachine};
 use vim_rs::types::enums::VirtualDeviceConfigSpecOperationEnum;

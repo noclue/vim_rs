@@ -8,7 +8,7 @@ use anyhow::{Context, Result};
 use log::{error, info};
 use utils::connect;
 
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::{
     mo::SearchIndex, types::structs::ManagedObjectReference,
 };

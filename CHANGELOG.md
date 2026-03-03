@@ -35,13 +35,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - Starter guide: new Step 3.6 "Compositional Inheritance — How Structs and Traits Use Deref" with parent field convention, construction examples, and multi-level Deref chain; Common Mistakes entry for parent field construction.
   - Added `mcp/MCP_GAPS.md` with gap analysis for implementer reference.
 
-- **Serde benchmarks**: Added `vim_rs/benches/serde_bench.rs` to measure serialization/deserialization performance.
-- **Serde tests**: Added `vim_rs/tests/serde_test.rs` to verify enum serialization round-trips.
+- **Serialization benchmarks**: Added `vim_rs/benches/miniserde_bench.rs` to measure miniserde serialization/deserialization performance.
+- **Serialization tests**: Added `vim_rs/tests/serde_test.rs` to verify enum serialization round-trips with miniserde.
+
+- **`vim_rs::vim_retrievable!` and `vim_rs::vim_updatable!` re-exported from `vim_rs`**: The
+  `vim_macros` macros are now available directly via `use vim_rs::vim_retrievable;` and
+  `use vim_rs::vim_updatable;`. Users no longer need a separate `vim_macros` dependency in
+  `Cargo.toml` — `vim_rs = "0.4"` is sufficient.
+  - `vim_macros` can be removed from `[dependencies]` in user crates.
+  - The `vim_macros` crate remains published separately for users who prefer explicit imports.
+
+- **Helper utilities for miniserde** (`vim_rs::types::mini_helpers`):
+  - `from_value(v: miniserde::json::Value) -> Result<T>` — deserializes a `miniserde::json::Value` into any `T: miniserde::Deserialize`; equivalent to `serde_json::from_value`.
+  - `Base64` — a newtype wrapper around `Vec<u8>` that serializes/deserializes as a Base64-encoded JSON string, required because miniserde has no built-in bytes type.
+  - `replay_value_to_visitor()` — low-level helper that feeds a parsed `miniserde::json::Value` to an arbitrary miniserde `Visitor`; useful when you need to deserialize a value whose concrete type is not known at parse time.
 - **`ValueElements::as_str()`**: Returns the VIM API type name as it appears in the OpenAPI specification.
   - Useful for type discrimination, logging, and debugging when working with `VimAny` and dynamic property values.
   - Example: `ValueElements::PrimitiveString(_)` returns `"string"`, `ValueElements::ArrayOfManagedObjectReference(_)` returns `"ArrayOfManagedObjectReference"`.
 
 ### Changed
+
+- **BREAKING: Replaced `serde`/`serde_json` with `miniserde` for all JSON serialization**.
+  - All generated types now derive `miniserde::Serialize` and `miniserde::Deserialize` instead of the `serde` equivalents.
+  - **Dependencies removed**: `serde`, `serde_json`, `erased-serde`.
+  - **Dependencies added**: `miniserde`.
+  - Affects all types in `vim_rs::types` (structs, enums, trait objects).
+  - **Performance benefits**: faster compilation, smaller binary sizes, and reduced LLVM IR complexity.
+  - **Migration guide** for users upgrading from 0.3.0:
+    - Replace `use serde::{Serialize, Deserialize}` with `use miniserde::{Serialize, Deserialize}`.
+    - Replace `serde_json::from_str(&s)` with `miniserde::json::from_str(&s)`.
+    - Replace `serde_json::to_string(&v)` with `miniserde::json::to_string(&v)`.
+    - Replace `serde_json::from_value(v)` with `vim_rs::types::mini_helpers::from_value(v)`.
+    - `miniserde` supports only a subset of the serde data model (no `#[serde(rename)]`, no flattening, no untagged enums). vim_rs generated types are already adapted to miniserde's constraints.
 
 - **BREAKING: Compositional inheritance using Deref/DerefMut**.
   - Child structs no longer have parent fields expanded inline. Instead, they contain a single parent field (e.g., `virtual_ethernet_card_: VirtualEthernetCard`).
@@ -89,6 +114,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ### Removed
 
+- **BREAKING: `serde`, `serde_json`, and `erased-serde` dependencies removed**.
+  - Replace with `miniserde` and `vim_rs::types::mini_helpers` as described in the Changed section above.
+
 - **BREAKING: `strum_macros` derive removed from all enums**.
   - `#[strum(serialize = "...")]` attributes no longer used.
   - String conversions now handled by generated PHF maps and manual implementations.
@@ -130,5 +158,3 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - Examples updated to use thread-safe cache patterns required by `CacheManager` (`Send + Sync`).
-
-

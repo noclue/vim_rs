@@ -73,7 +73,7 @@ async fn main() -> Result<()> {
 **Dependencies needed:**
 ```toml
 [dependencies]
-vim_rs = "0.3"
+vim_rs = "0.4"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
@@ -137,7 +137,7 @@ To fetch data from vSphere, **always use the `vim_retrievable!` macro**. This is
 use anyhow::Result;
 use std::env;
 use log::info;
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
 // Define what properties you want to retrieve
@@ -182,10 +182,7 @@ async fn main() -> Result<()> {
 }
 ```
 
-**Additional dependency:**
-```toml
-vim_macros = "0.3"
-```
+**Note:** The `vim_retrievable!` macro is included in `vim_rs` — no additional dependency needed.
 
 **Key Points:**
 - `vim_retrievable!` generates a struct with property mappings
@@ -290,7 +287,7 @@ if let Some(devices) = vm.devices {
 #### Complete Working Example: Collecting MAC Addresses
 
 ```rust
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 use vim_rs::types::convert::CastInto;
 use vim_rs::types::traits::VirtualEthernetCardTrait;
@@ -1131,7 +1128,7 @@ use std::sync::Arc;
 use log::info;
 use vim_rs::core::{Client, ClientBuilder};
 use vim_rs::core::tasks::TaskTracker;
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
 // 1. Connection helper
@@ -1192,8 +1189,7 @@ async fn main() -> Result<()> {
 **Cargo.toml dependencies:**
 ```toml
 [dependencies]
-vim_rs = "0.3"
-vim_macros = "0.3"
+vim_rs = "0.4"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"

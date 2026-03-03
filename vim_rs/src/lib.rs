@@ -309,6 +309,9 @@
 // (Without this, `vim_rs::` resolves only as an external crate path.)
 extern crate self as vim_rs;
 
+pub use vim_macros::vim_retrievable;
+pub use vim_macros::vim_updatable;
+
 pub mod core;
 pub mod types;
 

@@ -90,14 +90,14 @@ In the examples above, `collector` is an instance of `PropertyCollector`, and `v
 
 ## Property Retrieval with Macros
 
-The `vim_macros` related crate provides two powerful macros to simplify working with vSphere properties:
+Two powerful macros simplify working with vSphere properties. They are available directly from `vim_rs` (no separate `vim_macros` dependency needed):
 
 ### One-time Property Retrieval with `vim_retrievable`
 
 Define structures that map to vSphere object properties and retrieve them with a single call:
 
 ```rust
-use vim_macros::vim_retrievable;
+use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 
 // Define a struct mapping to HostSystem properties
@@ -396,7 +396,7 @@ In our example above, we check if the event is `EventEx` or `ExtendedEvent` to a
 To simplify construction of vim_rs types, enable the opt-in `defaults` feature:
 
 ```toml
-vim_rs = { version = "0.3", path = "../vim_rs", features = ["defaults"] }
+vim_rs = { version = "0.4", features = ["defaults"] }
 ```
 
 This provides `Default` implementations for all structs, enums, and trait objects, enabling struct update syntax:

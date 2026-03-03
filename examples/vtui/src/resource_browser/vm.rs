@@ -2,7 +2,7 @@ use std::cmp::Ordering;
 use ratatui::layout::Constraint;
 use ratatui::style::{Color, Style, Stylize};
 use ratatui::text::Span;
-use vim_macros::vim_updatable;
+use vim_rs::vim_updatable;
 use ratatui::widgets::{Cell, Row};
 use vim_rs::types::enums::VirtualMachinePowerStateEnum;
 use crate::resource_browser::formatting;
