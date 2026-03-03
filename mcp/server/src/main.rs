@@ -34,9 +34,10 @@ use vim_mcp_server::EMBEDDING_MODEL;
 #[cfg(feature = "web-ui")]
 mod web_ui;
 
-// CUDA GPU acceleration (optional)
 #[cfg(feature = "cuda")]
 use ort::execution_providers::CUDAExecutionProvider;
+#[cfg(feature = "coreml")]
+use ort::execution_providers::{CoreMLExecutionProvider, coreml::{ModelFormat, ComputeUnits}};
 
 // ============================================================================
 // CLI Arguments
@@ -224,16 +225,33 @@ impl McpServer {
                 info!("Loading embedded BGE-small-en-v1.5 model...");
                 let user_model = vim_mcp_server::embedded_model::create_embedded_model();
                 
-                #[cfg(feature = "cuda")]
+                #[cfg(any(feature = "cuda", feature = "coreml"))]
                 let init_options = {
-                    info!("CUDA feature enabled - attempting GPU acceleration");
+                    let mut providers = Vec::new();
+
+                    #[cfg(feature = "cuda")]
+                    {
+                        info!("CUDA feature enabled - attempting GPU acceleration");
+                        providers.push(CUDAExecutionProvider::default().build());
+                    }
+
+                    #[cfg(feature = "coreml")]
+                    {
+                        info!("CoreML feature enabled - using Apple Neural Engine acceleration");
+                        providers.push(
+                            CoreMLExecutionProvider::default()
+                                .with_model_format(ModelFormat::MLProgram)
+                                .with_static_input_shapes(true)
+                                .with_compute_units(ComputeUnits::CPUAndGPU)
+                                .build()
+                        );
+                    }
+
                     InitOptionsUserDefined::new()
-                        .with_execution_providers(vec![
-                            CUDAExecutionProvider::default().build()
-                        ])
+                        .with_execution_providers(providers)
                 };
                 
-                #[cfg(not(feature = "cuda"))]
+                #[cfg(not(any(feature = "cuda", feature = "coreml")))]
                 let init_options = InitOptionsUserDefined::new();
                 
                 TextEmbedding::try_new_from_user_defined(user_model, init_options)
@@ -255,19 +273,38 @@ impl McpServer {
 
                 info!("Loading embedding model from cache: {}", model_cache_dir.display());
 
-                // Configure execution providers: CUDA if available, fallback to CPU
-                #[cfg(feature = "cuda")]
+                #[cfg(any(feature = "cuda", feature = "coreml"))]
                 let init_options = {
-                    info!("CUDA feature enabled - attempting GPU acceleration");
+                    let mut providers = Vec::new();
+
+                    #[cfg(feature = "cuda")]
+                    {
+                        info!("CUDA feature enabled - attempting GPU acceleration");
+                        providers.push(CUDAExecutionProvider::default().build());
+                    }
+
+                    #[cfg(feature = "coreml")]
+                    {
+                        info!("CoreML feature enabled - using Apple Neural Engine acceleration");
+                        let coreml_cache = model_cache_dir.join("coreml_cache");
+                        std::fs::create_dir_all(&coreml_cache).ok();
+                        providers.push(
+                            CoreMLExecutionProvider::default()
+                                .with_model_format(ModelFormat::MLProgram)
+                                .with_static_input_shapes(true)
+                                .with_compute_units(ComputeUnits::CPUAndGPU)
+                                .with_model_cache_dir(coreml_cache.display().to_string())
+                                .build()
+                        );
+                    }
+
                     InitOptions::new(EMBEDDING_MODEL)
                         .with_cache_dir(model_cache_dir)
                         .with_show_download_progress(false)
-                        .with_execution_providers(vec![
-                            CUDAExecutionProvider::default().build()
-                        ])
+                        .with_execution_providers(providers)
                 };
 
-                #[cfg(not(feature = "cuda"))]
+                #[cfg(not(any(feature = "cuda", feature = "coreml")))]
                 let init_options = InitOptions::new(EMBEDDING_MODEL)
                     .with_cache_dir(model_cache_dir)
                     .with_show_download_progress(false);
@@ -453,7 +490,16 @@ impl McpServer {
         let filter_regex = if filter.is_empty() {
             None
         } else {
-            regex::Regex::new(filter).ok()
+            match regex::Regex::new(filter) {
+                Ok(re) => Some(re),
+                Err(e) => {
+                    return Ok(CallToolResult::error(vec![Content::text(format!(
+                        "Invalid regex filter `{}`: {}\n\n\
+                        Provide a valid Rust-flavour regex, or omit the filter to return all paths.",
+                        filter, e
+                    ))]));
+                }
+            }
         };
 
         match property_collector::get_property_tree(managed_object, start_path, depth, filter_regex.as_ref()) {

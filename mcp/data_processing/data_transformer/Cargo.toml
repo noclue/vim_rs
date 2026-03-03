@@ -29,6 +29,7 @@ serde_json = "1.0"
 
 [features]
 default = []
-# Forward cuda feature to build-embeddings
+# Forward hardware acceleration features to build-embeddings
 cuda = ["build-embeddings/cuda"]
+coreml = ["build-embeddings/coreml"]
 
