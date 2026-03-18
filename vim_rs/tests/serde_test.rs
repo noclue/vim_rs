@@ -2,6 +2,41 @@ use vim_rs::types::structs::{VirtualE1000, VirtualEthernetCard, VirtualDevice, M
 use vim_rs::types::traits::VirtualEthernetCardTrait;
 use vim_rs::types::boxed_types::ValueElements;
 
+// this is the format used for empty and unset array in VI/JSON. Note in XML
+// there is no way to differentiate null, from empty from missing array.
+// See the error test below where one of the errors has no arguments (empty
+// arguments).
+#[test]
+fn test_json_update_set() {
+    let json_text = r#"{"version":"2"}"#;
+    let result: vim_rs::types::structs::UpdateSet = miniserde::json::from_str(&json_text).unwrap();
+    assert_eq!(result.version, "2");
+    assert!(result.truncated.is_none());
+    assert!(result.filter_set.is_none());
+}
+
+// This deserializaiton fails need to debug. Not used in VI/JSON so it is not a high priority.
+// #[test]
+// fn test_json_null_update_set() {
+//     let json_text = r#"{"version":"2", "filterSet":null }"#;
+//     let result: vim_rs::types::structs::UpdateSet = miniserde::json::from_str(&json_text).unwrap();
+//     assert_eq!(result.version, "2");
+//     assert!(result.truncated.is_none());
+//     assert!(result.filter_set.is_none());
+// }
+
+// This works with the current JSON code but is not used in VI/JSON.
+#[test]
+fn test_json_empty_update_set() {
+    let json_text = r#"{"version":"2", "filterSet":[] }"#;
+    let result: vim_rs::types::structs::UpdateSet = miniserde::json::from_str(&json_text).unwrap();
+    assert_eq!(result.version, "2");
+    assert!(result.truncated.is_none());
+    assert!(result.filter_set.is_some());
+    assert!(result.filter_set.unwrap().is_empty());
+}
+
+
 #[test]
 fn test_e1000_roundtrip() {
     let e1000 = VirtualE1000 {
