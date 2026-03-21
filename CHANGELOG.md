@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [UNRELEASED]
 
+## [0.4.1] - 2026-03-21
+
 ### Added
 
 - Experimental opt-in `xml` cargo feature for SOAP/XML transport against the VIM APIs.
