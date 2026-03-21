@@ -42,14 +42,9 @@ impl VslmStorageLifecycleManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_query_datastore_info(&self, datastore_url: &str) -> Result<Option<Vec<crate::types::structs::VslmQueryDatastoreInfoResult>>> {
         let input = VslmQueryDatastoreInfoRequestType {datastore_url, };
-        let path = format!("/vslm/VslmStorageLifecycleManager/{moId}/VslmQueryDatastoreInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmStorageLifecycleManager", &self.mo_id, "VslmQueryDatastoreInfo", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmQueryDatastoreInfoResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -85,9 +80,7 @@ impl VslmStorageLifecycleManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_sync_datastore(&self, datastore_url: &str, full_sync: bool, fcd_id: Option<&crate::types::structs::Id>) -> Result<()> {
         let input = VslmSyncDatastoreRequestType {datastore_url, full_sync, fcd_id, };
-        let path = format!("/vslm/VslmStorageLifecycleManager/{moId}/VslmSyncDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmStorageLifecycleManager", &self.mo_id, "VslmSyncDatastore", Some(&input)).await
     }
 }
 struct VslmQueryDatastoreInfoRequestType<'a> {

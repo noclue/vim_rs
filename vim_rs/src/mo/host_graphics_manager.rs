@@ -17,33 +17,23 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn is_shared_graphics_active(&self) -> Result<bool> {
-        let path = format!("/HostGraphicsManager/{moId}/IsSharedGraphicsActive", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostGraphicsManager", &self.mo_id, "IsSharedGraphicsActive", None).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Refresh the available graphics information.
     /// 
     /// ***Required privileges:*** Host.Config.Settings
     pub async fn refresh_graphics_manager(&self) -> Result<()> {
-        let path = format!("/HostGraphicsManager/{moId}/RefreshGraphicsManager", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostGraphicsManager", &self.mo_id, "RefreshGraphicsManager", None).await
     }
     /// ***Since:*** vSphere API Release 7.0.3.0
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn retrieve_vgpu_device_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineVgpuDeviceInfo>>> {
-        let path = format!("/HostGraphicsManager/{moId}/RetrieveVgpuDeviceInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostGraphicsManager", &self.mo_id, "RetrieveVgpuDeviceInfo", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VirtualMachineVgpuDeviceInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -51,14 +41,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn retrieve_vgpu_profile_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineVgpuProfileInfo>>> {
-        let path = format!("/HostGraphicsManager/{moId}/RetrieveVgpuProfileInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostGraphicsManager", &self.mo_id, "RetrieveVgpuProfileInfo", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VirtualMachineVgpuProfileInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -78,9 +63,7 @@ impl HostGraphicsManager {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/HostGraphicsManager/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostGraphicsManager", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Update graphics configuration
     /// 
@@ -92,9 +75,7 @@ impl HostGraphicsManager {
     /// -
     pub async fn update_graphics_config(&self, config: &crate::types::structs::HostGraphicsConfig) -> Result<()> {
         let input = UpdateGraphicsConfigRequestType {config, };
-        let path = format!("/HostGraphicsManager/{moId}/UpdateGraphicsConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostGraphicsManager", &self.mo_id, "UpdateGraphicsConfig", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -102,14 +83,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/HostGraphicsManager/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -117,14 +93,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn graphics_config(&self) -> Result<Option<crate::types::structs::HostGraphicsConfig>> {
-        let path = format!("/HostGraphicsManager/{moId}/graphicsConfig", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "graphicsConfig").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostGraphicsConfig>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -132,14 +103,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn graphics_info(&self) -> Result<Option<Vec<crate::types::structs::HostGraphicsInfo>>> {
-        let path = format!("/HostGraphicsManager/{moId}/graphicsInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "graphicsInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostGraphicsInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -149,14 +115,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn shared_gpu_capabilities(&self) -> Result<Option<Vec<crate::types::structs::HostSharedGpuCapabilities>>> {
-        let path = format!("/HostGraphicsManager/{moId}/sharedGpuCapabilities", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "sharedGpuCapabilities").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostSharedGpuCapabilities>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -168,14 +129,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn shared_passthru_gpu_types(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/HostGraphicsManager/{moId}/sharedPassthruGpuTypes", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "sharedPassthruGpuTypes").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -187,14 +143,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostGraphicsManager/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

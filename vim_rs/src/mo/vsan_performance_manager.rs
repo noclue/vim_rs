@@ -88,11 +88,8 @@ impl VsanPerformanceManager {
     /// when called against vCenter.
     pub async fn vsan_perf_create_stats_object(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, profile: Option<&dyn crate::types::traits::VirtualMachineProfileSpecTrait>) -> Result<String> {
         let input = VsanPerfCreateStatsObjectRequestType {cluster, profile, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfCreateStatsObject", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfCreateStatsObject", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The asynchronous API of CreateStatsObject.
@@ -125,11 +122,8 @@ impl VsanPerformanceManager {
     /// cluster has no hosts.
     pub async fn vsan_perf_create_stats_object_task(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, profile: Option<&dyn crate::types::traits::VirtualMachineProfileSpecTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerfCreateStatsObjectTaskRequestType {cluster, profile, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfCreateStatsObjectTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfCreateStatsObjectTask", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Delete vSAN object/directory containing the vSAN Perf Stats DB.
@@ -167,11 +161,8 @@ impl VsanPerformanceManager {
     /// when called against vCenter.
     pub async fn vsan_perf_delete_stats_object(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<bool> {
         let input = VsanPerfDeleteStatsObjectRequestType {cluster, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDeleteStatsObject", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfDeleteStatsObject", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The asynchronous API of DeleteStatsObject.
@@ -201,11 +192,8 @@ impl VsanPerformanceManager {
     /// cluster has no hosts.
     pub async fn vsan_perf_delete_stats_object_task(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerfDeleteStatsObjectTaskRequestType {cluster, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDeleteStatsObjectTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfDeleteStatsObjectTask", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Delete saved time range in performance service.
@@ -225,9 +213,7 @@ impl VsanPerformanceManager {
     /// Failure
     pub async fn vsan_perf_delete_time_range(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, name: &str) -> Result<()> {
         let input = VsanPerfDeleteTimeRangeRequestType {cluster, name, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDeleteTimeRange", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfDeleteTimeRange", Some(&input)).await
     }
     /// Get supported aggregated entity types for front end data-driven
     /// reporting of diagnostic exceptions which return aggregated data.
@@ -241,14 +227,9 @@ impl VsanPerformanceManager {
     ///
     /// Failure
     pub async fn vsan_perf_get_aggregated_entity_types(&self) -> Result<Option<Vec<crate::types::structs::VsanPerfEntityType>>> {
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfGetAggregatedEntityTypes", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfGetAggregatedEntityTypes", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanPerfEntityType>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -257,14 +238,9 @@ impl VsanPerformanceManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn vsan_perf_get_supported_diagnostic_exceptions(&self) -> Result<Option<Vec<crate::types::structs::VsanPerfDiagnosticException>>> {
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfGetSupportedDiagnosticExceptions", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfGetSupportedDiagnosticExceptions", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanPerfDiagnosticException>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -295,14 +271,9 @@ impl VsanPerformanceManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn vsan_perf_get_supported_entity_types(&self) -> Result<Option<Vec<crate::types::structs::VsanPerfEntityType>>> {
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfGetSupportedEntityTypes", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfGetSupportedEntityTypes", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanPerfEntityType>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -338,14 +309,9 @@ impl VsanPerformanceManager {
     /// ***NotFound***: If no result is found in the cache for the specified task
     pub async fn get_vsan_perf_diagnosis_result(&self, task: &crate::types::structs::ManagedObjectReference, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanPerfDiagnosticResult>>> {
         let input = GetVsanPerfDiagnosisResultRequestType {task, cluster, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/GetVsanPerfDiagnosisResult", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "GetVsanPerfDiagnosisResult", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanPerfDiagnosticResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -373,11 +339,8 @@ impl VsanPerformanceManager {
     /// when called against vCenter.
     pub async fn vsan_perf_query_cluster_health(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Vec<crate::types::structs::VsanClusterHealthGroup>> {
         let input = VsanPerfQueryClusterHealthRequestType {cluster, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryClusterHealth", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanClusterHealthGroup> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfQueryClusterHealth", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanClusterHealthGroup> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query performance service related information about the node(s).
@@ -407,14 +370,9 @@ impl VsanPerformanceManager {
     /// Failure
     pub async fn vsan_perf_query_node_information(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanPerfNodeInformation>>> {
         let input = VsanPerfQueryNodeInformationRequestType {cluster, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryNodeInformation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfQueryNodeInformation", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanPerfNodeInformation>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -447,11 +405,8 @@ impl VsanPerformanceManager {
     /// ***VsanFault***: If any other unexpected fault is encountered.
     pub async fn query_remote_server_clusters(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, query_spec: Option<&crate::types::structs::VsanRemoteClusterQuerySpec>) -> Result<Vec<String>> {
         let input = QueryRemoteServerClustersRequestType {cluster, query_spec, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/QueryRemoteServerClusters", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<String> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "QueryRemoteServerClusters", Some(&input)).await?;
+        let result: Vec<String> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get information about the vSAN object/directory containing the vSAN Perf Stats DB.
@@ -481,11 +436,8 @@ impl VsanPerformanceManager {
     /// when called against vCenter.
     pub async fn vsan_perf_query_stats_object_information(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::VsanObjectInformation> {
         let input = VsanPerfQueryStatsObjectInformationRequestType {cluster, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryStatsObjectInformation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanObjectInformation = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfQueryStatsObjectInformation", Some(&input)).await?;
+        let result: crate::types::structs::VsanObjectInformation = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query saved time ranges in performance service.
@@ -506,14 +458,9 @@ impl VsanPerformanceManager {
     /// Failure
     pub async fn vsan_perf_query_time_ranges(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, query_spec: &crate::types::structs::VsanPerfTimeRangeQuerySpec) -> Result<Option<Vec<crate::types::structs::VsanPerfTimeRange>>> {
         let input = VsanPerfQueryTimeRangesRequestType {cluster, query_spec, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryTimeRanges", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfQueryTimeRanges", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanPerfTimeRange>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1179,11 +1126,8 @@ impl VsanPerformanceManager {
     /// when called against vCenter.
     pub async fn vsan_perf_query_perf(&self, query_specs: &[crate::types::structs::VsanPerfQuerySpec], cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Vec<crate::types::structs::VsanPerfEntityMetricCsv>> {
         let input = VsanPerfQueryPerfRequestType {query_specs, cluster, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfQueryPerf", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanPerfEntityMetricCsv> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfQueryPerf", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanPerfEntityMetricCsv> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The API is designed to return a list of hotspot entities that are consuming the
@@ -1223,11 +1167,8 @@ impl VsanPerformanceManager {
     /// ***NotSupported***: if vSAN is not enabled in target cluster.
     pub async fn query_vsan_perf_hotspot_entities(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, query_spec: &crate::types::structs::VsanPerfHotspotQuerySpec) -> Result<Vec<crate::types::structs::VsanPerfHotspotEntitiesMetrics>> {
         let input = QueryVsanPerfHotspotEntitiesRequestType {cluster, query_spec, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/QueryVsanPerfHotspotEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanPerfHotspotEntitiesMetrics> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "QueryVsanPerfHotspotEntities", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanPerfHotspotEntitiesMetrics> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The API is designed to return a list of top contributors with either type of
@@ -1261,11 +1202,8 @@ impl VsanPerformanceManager {
     /// ***VsanNodeNotMaster***: if this API is invokded against stats agent node.
     pub async fn query_vsan_perf_top_entities(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, query_spec: &crate::types::structs::VsanPerfTopQuerySpec) -> Result<Vec<crate::types::structs::VsanPerfEntityMetricCsv>> {
         let input = QueryVsanPerfTopEntitiesRequestType {cluster, query_spec, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/QueryVsanPerfTopEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanPerfEntityMetricCsv> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "QueryVsanPerfTopEntities", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanPerfEntityMetricCsv> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Save time ranges in performance service.
@@ -1285,9 +1223,7 @@ impl VsanPerformanceManager {
     /// Failure
     pub async fn vsan_perf_save_time_ranges(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, time_ranges: &[crate::types::structs::VsanPerfTimeRange]) -> Result<()> {
         let input = VsanPerfSaveTimeRangesRequestType {cluster, time_ranges, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfSaveTimeRanges", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfSaveTimeRanges", Some(&input)).await
     }
     /// Set the policy of the vSAN object/directory containing the vSAN Perf Stats DB.
     /// 
@@ -1351,11 +1287,8 @@ impl VsanPerformanceManager {
     /// ***VsanFault***: if the caller doesn't have the required privilege
     pub async fn vsan_perf_set_stats_object_policy(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, profile: Option<&dyn crate::types::traits::VirtualMachineProfileSpecTrait>) -> Result<bool> {
         let input = VsanPerfSetStatsObjectPolicyRequestType {cluster, profile, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfSetStatsObjectPolicy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfSetStatsObjectPolicy", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Toggle vSAN performance service verbose mode.
@@ -1375,9 +1308,7 @@ impl VsanPerformanceManager {
     /// Failure
     pub async fn vsan_perf_toggle_verbose_mode(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, verbose_mode: bool) -> Result<()> {
         let input = VsanPerfToggleVerboseModeRequestType {cluster, verbose_mode, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfToggleVerboseMode", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfToggleVerboseMode", Some(&input)).await
     }
     /// Deprecated as of vSphere API 6.7, please use VsanPerfDiagnoseTask instead.
     /// 
@@ -1408,14 +1339,9 @@ impl VsanPerformanceManager {
     /// Failure
     pub async fn vsan_perf_diagnose(&self, perf_diagnose_query: &crate::types::structs::VsanPerfDiagnoseQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanPerfDiagnosticResult>>> {
         let input = VsanPerfDiagnoseRequestType {perf_diagnose_query, cluster, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDiagnose", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfDiagnose", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanPerfDiagnosticResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1462,11 +1388,8 @@ impl VsanPerformanceManager {
     /// cluster has no hosts.
     pub async fn vsan_perf_diagnose_task(&self, perf_diagnose_query: &crate::types::structs::VsanPerfDiagnoseQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerfDiagnoseTaskRequestType {perf_diagnose_query, cluster, };
-        let path = format!("/vsan/VsanPerformanceManager/{moId}/VsanPerfDiagnoseTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfDiagnoseTask", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

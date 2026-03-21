@@ -40,11 +40,8 @@ impl DirectPathProfileManager {
     /// specified in *DirectPathProfileManagerCreateSpec*.
     pub async fn direct_path_profile_manager_create(&self, spec: &crate::types::structs::DirectPathProfileManagerCreateSpec) -> Result<String> {
         let input = DirectPathProfileManagerCreateRequestType {spec, };
-        let path = format!("/DirectPathProfileManager/{moId}/DirectPathProfileManagerCreate", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "DirectPathProfileManager", &self.mo_id, "DirectPathProfileManagerCreate", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Delete a DirectPath profile.
@@ -67,9 +64,7 @@ impl DirectPathProfileManager {
     /// is being used by a VM or associated with a VM resource profile.
     pub async fn direct_path_profile_manager_delete(&self, id: &str) -> Result<()> {
         let input = DirectPathProfileManagerDeleteRequestType {id, };
-        let path = format!("/DirectPathProfileManager/{moId}/DirectPathProfileManagerDelete", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "DirectPathProfileManager", &self.mo_id, "DirectPathProfileManagerDelete", Some(&input)).await
     }
     /// List DirectPath profiles in this vCenter that match the specified
     /// filtering criteria.
@@ -93,14 +88,9 @@ impl DirectPathProfileManager {
     /// returned.
     pub async fn direct_path_profile_manager_list(&self, filter_spec: &crate::types::structs::DirectPathProfileManagerFilterSpec) -> Result<Option<Vec<crate::types::structs::DirectPathProfileInfo>>> {
         let input = DirectPathProfileManagerListRequestType {filter_spec, };
-        let path = format!("/DirectPathProfileManager/{moId}/DirectPathProfileManagerList", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DirectPathProfileManager", &self.mo_id, "DirectPathProfileManagerList", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DirectPathProfileInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -144,14 +134,9 @@ impl DirectPathProfileManager {
     /// such as invalid host or cluster.
     pub async fn direct_path_profile_manager_query_capacity(&self, target: &dyn crate::types::traits::DirectPathProfileManagerTargetEntityTrait, query_spec: Option<&[Box<dyn crate::types::traits::DirectPathProfileManagerCapacityQuerySpecTrait>]>) -> Result<Option<Vec<Box<dyn crate::types::traits::DirectPathProfileManagerCapacityResultTrait>>>> {
         let input = DirectPathProfileManagerQueryCapacityRequestType {target, query_spec, };
-        let path = format!("/DirectPathProfileManager/{moId}/DirectPathProfileManagerQueryCapacity", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DirectPathProfileManager", &self.mo_id, "DirectPathProfileManagerQueryCapacity", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::DirectPathProfileManagerCapacityResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -181,9 +166,7 @@ impl DirectPathProfileManager {
     /// specified identifier.
     pub async fn direct_path_profile_manager_update(&self, id: &str, spec: &crate::types::structs::DirectPathProfileManagerUpdateSpec) -> Result<()> {
         let input = DirectPathProfileManagerUpdateRequestType {id, spec, };
-        let path = format!("/DirectPathProfileManager/{moId}/DirectPathProfileManagerUpdate", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "DirectPathProfileManager", &self.mo_id, "DirectPathProfileManagerUpdate", Some(&input)).await
     }
 }
 struct DirectPathProfileManagerCreateRequestType<'a> {

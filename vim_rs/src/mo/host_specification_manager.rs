@@ -34,9 +34,7 @@ impl HostSpecificationManager {
     /// the spec.
     pub async fn delete_host_specification(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = DeleteHostSpecificationRequestType {host, };
-        let path = format!("/HostSpecificationManager/{moId}/DeleteHostSpecification", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSpecificationManager", &self.mo_id, "DeleteHostSpecification", Some(&input)).await
     }
     /// Delete the host sub specification specified by the provided <code>
     /// subSpecname</code> of the specified host.
@@ -60,9 +58,7 @@ impl HostSpecificationManager {
     /// the sub spec.
     pub async fn delete_host_sub_specification(&self, host: &crate::types::structs::ManagedObjectReference, sub_spec_name: &str) -> Result<()> {
         let input = DeleteHostSubSpecificationRequestType {host, sub_spec_name, };
-        let path = format!("/HostSpecificationManager/{moId}/DeleteHostSubSpecification", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSpecificationManager", &self.mo_id, "DeleteHostSubSpecification", Some(&input)).await
     }
     /// Query the hosts whose specification was updated in the specified
     /// time period.
@@ -92,14 +88,9 @@ impl HostSpecificationManager {
     /// Refers instances of *HostSystem*.
     pub async fn host_spec_get_updated_hosts(&self, start_change_id: Option<&str>, end_change_id: Option<&str>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = HostSpecGetUpdatedHostsRequestType {start_change_id, end_change_id, };
-        let path = format!("/HostSpecificationManager/{moId}/HostSpecGetUpdatedHosts", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostSpecificationManager", &self.mo_id, "HostSpecGetUpdatedHosts", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -134,11 +125,8 @@ impl HostSpecificationManager {
     /// from host.
     pub async fn retrieve_host_specification(&self, host: &crate::types::structs::ManagedObjectReference, from_host: bool) -> Result<crate::types::structs::HostSpecification> {
         let input = RetrieveHostSpecificationRequestType {host, from_host, };
-        let path = format!("/HostSpecificationManager/{moId}/RetrieveHostSpecification", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostSpecification = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSpecificationManager", &self.mo_id, "RetrieveHostSpecification", Some(&input)).await?;
+        let result: crate::types::structs::HostSpecification = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Update the host specification with the provided copy.
@@ -166,9 +154,7 @@ impl HostSpecificationManager {
     /// ***HostSpecificationOperationFailed***: If the method fails.
     pub async fn update_host_specification(&self, host: &crate::types::structs::ManagedObjectReference, host_spec: &crate::types::structs::HostSpecification) -> Result<()> {
         let input = UpdateHostSpecificationRequestType {host, host_spec, };
-        let path = format!("/HostSpecificationManager/{moId}/UpdateHostSpecification", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSpecificationManager", &self.mo_id, "UpdateHostSpecification", Some(&input)).await
     }
     /// Update the host specification with the provided host sub specification.
     /// 
@@ -196,9 +182,7 @@ impl HostSpecificationManager {
     /// ***HostSpecificationOperationFailed***: If the method fails.
     pub async fn update_host_sub_specification(&self, host: &crate::types::structs::ManagedObjectReference, host_sub_spec: &crate::types::structs::HostSubSpecification) -> Result<()> {
         let input = UpdateHostSubSpecificationRequestType {host, host_sub_spec, };
-        let path = format!("/HostSpecificationManager/{moId}/UpdateHostSubSpecification", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSpecificationManager", &self.mo_id, "UpdateHostSubSpecification", Some(&input)).await
     }
 }
 struct DeleteHostSpecificationRequestType<'a> {

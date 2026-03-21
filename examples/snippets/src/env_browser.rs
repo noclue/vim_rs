@@ -17,13 +17,17 @@
 //! This information is valuable when you need to programmatically determine what
 //! virtual hardware configurations are supported before deploying or reconfiguring
 //! virtual machines in a specific environment.
+//!
+//! ## Typical uses
+//!
+//! VM provisioning wizards, pre-flight checks before deploy, and reporting supported hardware profiles.
 
 use std::env;
 use vim_rs::mo::{ComputeResource, EnvironmentBrowser};
 
 use anyhow::{Context, Result};
 use log::{error, info};
-use utils::connect;
+use snippets::connect;
 use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 

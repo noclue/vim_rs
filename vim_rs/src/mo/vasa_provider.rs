@@ -54,11 +54,8 @@ impl VasaProvider {
     /// ***SmsReplicationFault***: if an error is encountered while processing the request.
     pub async fn failover_replication_group_task(&self, failover_param: &dyn crate::types::traits::FailoverParamTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = FailoverReplicationGroupRequestType {failover_param, };
-        let path = format!("/sms/VasaProvider/{moId}/FailoverReplicationGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "FailoverReplicationGroup_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Prepare to fail over the specified replication groups.
@@ -101,11 +98,8 @@ impl VasaProvider {
     /// ***SmsReplicationFault***: if an error is encountered while processing the request.
     pub async fn prepare_failover_replication_group_task(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PrepareFailoverReplicationGroupRequestType {group_id, };
-        let path = format!("/sms/VasaProvider/{moId}/PrepareFailoverReplicationGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "PrepareFailoverReplicationGroup_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Promotes the replication groups currently *INTEST*
@@ -151,11 +145,8 @@ impl VasaProvider {
     /// ***SmsReplicationFault***: if an error is encountered while processing the request.
     pub async fn promote_replication_group_task(&self, promote_param: &crate::types::structs::PromoteParam) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PromoteReplicationGroupRequestType {promote_param, };
-        let path = format!("/sms/VasaProvider/{moId}/PromoteReplicationGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "PromoteReplicationGroup_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query for the currently active alarms known to this VASA provider.
@@ -193,14 +184,9 @@ impl VasaProvider {
     /// query request.
     pub async fn query_active_alarm(&self, alarm_filter: Option<&crate::types::structs::AlarmFilter>) -> Result<Option<crate::types::structs::AlarmResult>> {
         let input = QueryActiveAlarmRequestType {alarm_filter, };
-        let path = format!("/sms/VasaProvider/{moId}/QueryActiveAlarm", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "VasaProvider", &self.mo_id, "QueryActiveAlarm", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::AlarmResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -247,14 +233,9 @@ impl VasaProvider {
     /// the query request.
     pub async fn query_point_in_time_replica(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>, query_param: Option<&crate::types::structs::QueryPointInTimeReplicaParam>) -> Result<Option<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>> {
         let input = QueryPointInTimeReplicaRequestType {group_id, query_param, };
-        let path = format!("/sms/VasaProvider/{moId}/QueryPointInTimeReplica", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "VasaProvider", &self.mo_id, "QueryPointInTimeReplica", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -262,11 +243,8 @@ impl VasaProvider {
     /// 
     /// ***Required privileges:*** StorageViews.View
     pub async fn query_provider_info(&self) -> Result<Box<dyn crate::types::traits::SmsProviderInfoTrait>> {
-        let path = format!("/sms/VasaProvider/{moId}/QueryProviderInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::SmsProviderInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "QueryProviderInfo", None).await?;
+        let result: Box<dyn crate::types::traits::SmsProviderInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query for the replication group details.
@@ -316,14 +294,9 @@ impl VasaProvider {
     /// the query request.
     pub async fn query_replication_group(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>) -> Result<Option<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>> {
         let input = QueryReplicationGroupRequestType {group_id, };
-        let path = format!("/sms/VasaProvider/{moId}/QueryReplicationGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "VasaProvider", &self.mo_id, "QueryReplicationGroup", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -367,14 +340,9 @@ impl VasaProvider {
     /// the query request.
     pub async fn query_replication_peer(&self, fault_domain_id: Option<&[Box<dyn crate::types::traits::FaultDomainIdTrait>]>) -> Result<Option<Vec<crate::types::structs::QueryReplicationPeerResult>>> {
         let input = QueryReplicationPeerRequestType {fault_domain_id, };
-        let path = format!("/sms/VasaProvider/{moId}/QueryReplicationPeer", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "VasaProvider", &self.mo_id, "QueryReplicationPeer", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::QueryReplicationPeerResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -403,11 +371,8 @@ impl VasaProvider {
     /// ***ProviderConnectionFailed***: if an error is encountered while reconnecting to
     /// the provider.
     pub async fn vasa_provider_reconnect_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/sms/VasaProvider/{moId}/VasaProviderReconnect_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "VasaProviderReconnect_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Refresh a CA signed certificate for the provider.
@@ -428,11 +393,8 @@ impl VasaProvider {
     /// ***CertificateRefreshFailed***: if an error is encountered while refreshing
     /// CA signed certificate for the provider.
     pub async fn vasa_provider_refresh_certificate_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/sms/VasaProvider/{moId}/VasaProviderRefreshCertificate_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "VasaProviderRefreshCertificate_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Initiate replication in the reverse way, making the currently
@@ -474,11 +436,8 @@ impl VasaProvider {
     /// ***SmsReplicationFault***: if an error is encountered while processing the request.
     pub async fn reverse_replicate_group_task(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReverseReplicateGroupRequestType {group_id, };
-        let path = format!("/sms/VasaProvider/{moId}/ReverseReplicateGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "ReverseReplicateGroup_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Revoke CA signed certificate of the provider.
@@ -498,11 +457,8 @@ impl VasaProvider {
     /// ***CertificateRevocationFailed***: if an error is encountered while revoking CA signed
     /// certificate of the provider.
     pub async fn vasa_provider_revoke_certificate_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/sms/VasaProvider/{moId}/VasaProviderRevokeCertificate_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "VasaProviderRevokeCertificate_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Issue a sync for the given Storage Array.
@@ -527,11 +483,8 @@ impl VasaProvider {
     /// provider.
     pub async fn vasa_provider_sync_task(&self, array_id: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VasaProviderSyncRequestType {array_id, };
-        let path = format!("/sms/VasaProvider/{moId}/VasaProviderSync_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "VasaProviderSync_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Synchronize the data between source and replica for the specified
@@ -578,11 +531,8 @@ impl VasaProvider {
     /// individually (i.e. maxBatchSize = 1).
     pub async fn sync_replication_group_task(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>, pit_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SyncReplicationGroupRequestType {group_id, pit_name, };
-        let path = format!("/sms/VasaProvider/{moId}/SyncReplicationGroup_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "SyncReplicationGroup_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Start a test failover for the specified replication groups.
@@ -625,11 +575,8 @@ impl VasaProvider {
     /// ***SmsReplicationFault***: if an error is encountered while processing the request.
     pub async fn test_failover_replication_group_start_task(&self, test_failover_param: &crate::types::structs::TestFailoverParam) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = TestFailoverReplicationGroupStartRequestType {test_failover_param, };
-        let path = format!("/sms/VasaProvider/{moId}/TestFailoverReplicationGroupStart_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "TestFailoverReplicationGroupStart_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Stop the ongoing test failover.
@@ -681,11 +628,8 @@ impl VasaProvider {
     /// ***NotSupportedByProvider***: if the provider does not support force operation.
     pub async fn test_failover_replication_group_stop_task(&self, group_id: Option<&[crate::types::structs::ReplicationGroupId]>, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = TestFailoverReplicationGroupStopRequestType {group_id, force, };
-        let path = format!("/sms/VasaProvider/{moId}/TestFailoverReplicationGroupStop_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "VasaProvider", &self.mo_id, "TestFailoverReplicationGroupStop_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

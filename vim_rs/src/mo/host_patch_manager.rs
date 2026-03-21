@@ -63,11 +63,8 @@ impl HostPatchManager {
     /// exception as xml string.
     pub async fn check_host_patch_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckHostPatchRequestType {meta_urls, bundle_urls, spec, };
-        let path = format!("/HostPatchManager/{moId}/CheckHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostPatchManager", &self.mo_id, "CheckHostPatch_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated method is deprecated, use *HostPatchManager.InstallHostPatchV2_Task* instead.
@@ -142,11 +139,8 @@ impl HostPatchManager {
     /// ***TaskInProgress***: if there is already a patch installation in progress.
     pub async fn install_host_patch_task(&self, repository: &crate::types::structs::HostPatchManagerLocator, update_id: &str, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstallHostPatchRequestType {repository, update_id, force, };
-        let path = format!("/HostPatchManager/{moId}/InstallHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostPatchManager", &self.mo_id, "InstallHostPatch_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -195,11 +189,8 @@ impl HostPatchManager {
     /// exception as xml string.
     pub async fn install_host_patch_v_2_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, vib_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstallHostPatchV2RequestType {meta_urls, bundle_urls, vib_urls, spec, };
-        let path = format!("/HostPatchManager/{moId}/InstallHostPatchV2_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostPatchManager", &self.mo_id, "InstallHostPatchV2_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -233,11 +224,8 @@ impl HostPatchManager {
     /// exception as xml string.
     pub async fn query_host_patch_task(&self, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = QueryHostPatchRequestType {spec, };
-        let path = format!("/HostPatchManager/{moId}/QueryHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostPatchManager", &self.mo_id, "QueryHostPatch_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of VI API 4.0, use *HostPatchManager.ScanHostPatchV2_Task*.
@@ -292,11 +280,8 @@ impl HostPatchManager {
     /// specific details.
     pub async fn scan_host_patch_task(&self, repository: &crate::types::structs::HostPatchManagerLocator, update_id: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ScanHostPatchRequestType {repository, update_id, };
-        let path = format!("/HostPatchManager/{moId}/ScanHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostPatchManager", &self.mo_id, "ScanHostPatch_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -345,11 +330,8 @@ impl HostPatchManager {
     /// specific details.
     pub async fn scan_host_patch_v_2_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ScanHostPatchV2RequestType {meta_urls, bundle_urls, spec, };
-        let path = format!("/HostPatchManager/{moId}/ScanHostPatchV2_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostPatchManager", &self.mo_id, "ScanHostPatchV2_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -396,11 +378,8 @@ impl HostPatchManager {
     /// exception as xml string.
     pub async fn stage_host_patch_task(&self, meta_urls: Option<&[String]>, bundle_urls: Option<&[String]>, vib_urls: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StageHostPatchRequestType {meta_urls, bundle_urls, vib_urls, spec, };
-        let path = format!("/HostPatchManager/{moId}/StageHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostPatchManager", &self.mo_id, "StageHostPatch_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 8.0u3, and there is no replacement available.
@@ -438,11 +417,8 @@ impl HostPatchManager {
     /// exception as xml string.
     pub async fn uninstall_host_patch_task(&self, bulletin_ids: Option<&[String]>, spec: Option<&crate::types::structs::HostPatchManagerPatchManagerOperationSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UninstallHostPatchRequestType {bulletin_ids, spec, };
-        let path = format!("/HostPatchManager/{moId}/UninstallHostPatch_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostPatchManager", &self.mo_id, "UninstallHostPatch_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

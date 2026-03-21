@@ -130,11 +130,8 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_add_witness_host(&self, cluster: &crate::types::structs::ManagedObjectReference, witness_host: &crate::types::structs::ManagedObjectReference, preferred_fd: &str, disk_mapping: Option<&crate::types::structs::VsanHostDiskMapping>, metadata_mode: Option<bool>, storage_pool_spec: Option<&crate::types::structs::VsanAddStoragePoolDiskSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcAddWitnessHostRequestType {cluster, witness_host, preferred_fd, disk_mapping, metadata_mode, storage_pool_spec, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcAddWitnessHost", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VSANVcAddWitnessHost", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This API is used to convert a batch of traditional vSAN clusters into
@@ -193,11 +190,8 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_add_witness_host_for_clusters(&self, config_spec: &crate::types::structs::VsanVcStretchedClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcAddWitnessHostForClustersRequestType {config_spec, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VsanVcAddWitnessHostForClusters", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VsanVcAddWitnessHostForClusters", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This API is used to convert a traditional vSAN cluster to
@@ -288,11 +282,8 @@ impl VimClusterVsanVcStretchedClusterSystem {
     ///    ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_convert_to_stretched_cluster(&self, cluster: &crate::types::structs::ManagedObjectReference, fault_domain_config: &crate::types::structs::VimClusterVsanStretchedClusterFaultDomainConfig, witness_host: &crate::types::structs::ManagedObjectReference, preferred_fd: &str, disk_mapping: Option<&crate::types::structs::VsanHostDiskMapping>, storage_pool_spec: Option<&crate::types::structs::VsanAddStoragePoolDiskSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcConvertToStretchedClusterRequestType {cluster, fault_domain_config, witness_host, preferred_fd, disk_mapping, storage_pool_spec, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcConvertToStretchedCluster", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VSANVcConvertToStretchedCluster", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query configuration of preferred Fault Domain of specified cluster.
@@ -325,14 +316,9 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_get_preferred_fault_domain(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<crate::types::structs::VimClusterVsanPreferredFaultDomainInfo>> {
         let input = VsanVcGetPreferredFaultDomainRequestType {cluster, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcGetPreferredFaultDomain", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VSANVcGetPreferredFaultDomain", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VimClusterVsanPreferredFaultDomainInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -364,14 +350,9 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_get_witness_hosts(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VimClusterVsanWitnessHostInfo>>> {
         let input = VsanVcGetWitnessHostsRequestType {cluster, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcGetWitnessHosts", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VSANVcGetWitnessHosts", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VimClusterVsanWitnessHostInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -396,11 +377,8 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_is_witness_host(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = VsanVcIsWitnessHostRequestType {host, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcIsWitnessHost", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VSANVcIsWitnessHost", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return whether the host is a virtual appliance witness host
@@ -427,14 +405,9 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_is_witness_virtual_appliance(&self, hosts: &[crate::types::structs::ManagedObjectReference]) -> Result<Option<Vec<crate::types::structs::VsanHostVirtualApplianceInfo>>> {
         let input = VsanIsWitnessVirtualApplianceRequestType {hosts, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANIsWitnessVirtualAppliance", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VSANIsWitnessVirtualAppliance", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanHostVirtualApplianceInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -483,11 +456,8 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***NotSupported***: If this API is not supported on current platform.
     pub async fn query_shared_witness_compatibility(&self, shared_witness_host: &crate::types::structs::ManagedObjectReference, robo_clusters: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::VsanSharedWitnessCompatibilityResult> {
         let input = QuerySharedWitnessCompatibilityRequestType {shared_witness_host, robo_clusters, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/QuerySharedWitnessCompatibility", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanSharedWitnessCompatibilityResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "QuerySharedWitnessCompatibility", Some(&input)).await?;
+        let result: crate::types::structs::VsanSharedWitnessCompatibilityResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query cluster runtime information for each cluster associated to given
@@ -520,14 +490,9 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***NotSupported***: If this API is not supported on current platform.
     pub async fn query_shared_witness_cluster_info(&self, witness_host: &crate::types::structs::ManagedObjectReference, skip_components_count: Option<bool>) -> Result<Option<Vec<crate::types::structs::ClusterRuntimeInfo>>> {
         let input = QuerySharedWitnessClusterInfoRequestType {witness_host, skip_components_count, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/QuerySharedWitnessClusterInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "QuerySharedWitnessClusterInfo", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ClusterRuntimeInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -586,11 +551,8 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_remove_witness_host(&self, cluster: &crate::types::structs::ManagedObjectReference, witness_host: Option<&crate::types::structs::ManagedObjectReference>, witness_address: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcRemoveWitnessHostRequestType {cluster, witness_host, witness_address, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcRemoveWitnessHost", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VSANVcRemoveWitnessHost", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Replace witness host for all specified vSAN stretched clusters.
@@ -653,11 +615,8 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_replace_witness_host_for_clusters(&self, config_spec: &crate::types::structs::VsanVcStretchedClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcReplaceWitnessHostForClustersRequestType {config_spec, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VsanVcReplaceWitnessHostForClusters", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VsanVcReplaceWitnessHostForClusters", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query hosts' capabilities of supporting vSAN stretched cluster,
@@ -700,14 +659,9 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_retrieve_stretched_cluster_vc_capability(&self, cluster: &crate::types::structs::ManagedObjectReference, verify_all_connected: Option<bool>) -> Result<Option<Vec<crate::types::structs::VimClusterVsanStretchedClusterCapability>>> {
         let input = VsanVcRetrieveStretchedClusterVcCapabilityRequestType {cluster, verify_all_connected, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcRetrieveStretchedClusterVcCapability", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VSANVcRetrieveStretchedClusterVcCapability", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VimClusterVsanStretchedClusterCapability>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -748,11 +702,8 @@ impl VimClusterVsanVcStretchedClusterSystem {
     /// ***VsanFault***: If any unexpected runtime fault is met.
     pub async fn vsan_vc_set_preferred_fault_domain(&self, cluster: &crate::types::structs::ManagedObjectReference, preferred_fd: &str, witness_host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcSetPreferredFaultDomainRequestType {cluster, preferred_fd, witness_host, };
-        let path = format!("/vsan/VimClusterVsanVcStretchedClusterSystem/{moId}/VSANVcSetPreferredFaultDomain", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcStretchedClusterSystem", &self.mo_id, "VSANVcSetPreferredFaultDomain", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

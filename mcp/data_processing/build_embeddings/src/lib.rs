@@ -97,9 +97,9 @@ pub fn generate_embeddings(api_data: &ApiData, model_cache_dir: &Path) -> Result
     // CoreML needs smaller batches: the CPU-fallback BFC arena allocates
     // exponentially and OOM-kills the process at batch size 256.
     #[cfg(feature = "coreml")]
-    const BATCH_SIZE: usize = 32;
-    #[cfg(not(feature = "coreml"))]
     const BATCH_SIZE: usize = 256;
+    #[cfg(not(feature = "coreml"))]
+    const BATCH_SIZE: usize = 4096;
     let total = texts.len();
     let num_batches = total.div_ceil(BATCH_SIZE);
     info!("Generating embeddings for {total} items in {num_batches} batches (batch size: {BATCH_SIZE})...");

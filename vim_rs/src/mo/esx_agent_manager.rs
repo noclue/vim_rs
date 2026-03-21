@@ -85,11 +85,8 @@ impl EsxAgentManager {
     /// downloaded.
     pub async fn create_agency(&self, agency_config_info: &crate::types::structs::AgencyConfigInfo, initial_goal_state: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateAgencyRequestType {agency_config_info, initial_goal_state, };
-        let path = format!("/eam/EsxAgentManager/{moId}/CreateAgency", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("eam", "EsxAgentManager", &self.mo_id, "CreateAgency", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 9.0. Please refer to vLCM Image APIs.
@@ -105,11 +102,8 @@ impl EsxAgentManager {
     ///
     /// Currently configured policy.
     pub async fn get_maintenance_mode_policy(&self) -> Result<String> {
-        let path = format!("/eam/EsxAgentManager/{moId}/GetMaintenanceModePolicy", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("eam", "EsxAgentManager", &self.mo_id, "GetMaintenanceModePolicy", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated use *EsxAgentManager.agency* instead.
@@ -131,14 +125,9 @@ impl EsxAgentManager {
     /// 
     /// Refers instances of *Agency*.
     pub async fn query_agency(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/eam/EsxAgentManager/{moId}/QueryAgency", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("eam", "EsxAgentManager", &self.mo_id, "QueryAgency", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -162,14 +151,9 @@ impl EsxAgentManager {
     /// issue keys refers to issues that this entity does not have.
     pub async fn query_issue(&self, issue_key: Option<&[i32]>) -> Result<Option<Vec<Box<dyn crate::types::traits::IssueTrait>>>> {
         let input = QueryIssueRequestType {issue_key, };
-        let path = format!("/eam/EsxAgentManager/{moId}/QueryIssue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("eam", "EsxAgentManager", &self.mo_id, "QueryIssue", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::IssueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -197,14 +181,9 @@ impl EsxAgentManager {
     /// resolved just prior to calling <code>resolve</code> or if an issue is currenly not resolvable.
     pub async fn resolve(&self, issue_key: &[i32]) -> Result<Option<Vec<i32>>> {
         let input = ResolveRequestType {issue_key, };
-        let path = format!("/eam/EsxAgentManager/{moId}/Resolve", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("eam", "EsxAgentManager", &self.mo_id, "Resolve", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -224,9 +203,7 @@ impl EsxAgentManager {
     /// 
     /// See also *Issue*.
     pub async fn resolve_all(&self) -> Result<()> {
-        let path = format!("/eam/EsxAgentManager/{moId}/ResolveAll", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "EsxAgentManager", &self.mo_id, "ResolveAll", None).await
     }
     /// Deprecated presence of unknown VMs is no more acceptable.
     /// 
@@ -238,9 +215,7 @@ impl EsxAgentManager {
     /// 
     /// Requires view privileges.
     pub async fn scan_for_unknown_agent_vm(&self) -> Result<()> {
-        let path = format!("/eam/EsxAgentManager/{moId}/ScanForUnknownAgentVm", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "EsxAgentManager", &self.mo_id, "ScanForUnknownAgentVm", None).await
     }
     /// Deprecated as of vSphere 9.0. Please refer to vLCM Image APIs.
     /// 
@@ -257,9 +232,7 @@ impl EsxAgentManager {
     /// The policy to use.
     pub async fn set_maintenance_mode_policy(&self, policy: &str) -> Result<()> {
         let input = SetMaintenanceModePolicyRequestType {policy, };
-        let path = format!("/eam/EsxAgentManager/{moId}/SetMaintenanceModePolicy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "EsxAgentManager", &self.mo_id, "SetMaintenanceModePolicy", Some(&input)).await
     }
     /// Deprecated as of vSphere 9.0. Please refer to vLCM APIs.
     /// 
@@ -280,14 +253,9 @@ impl EsxAgentManager {
     /// 
     /// Refers instances of *Agency*.
     pub async fn agency(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/eam/EsxAgentManager/{moId}/agency", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("eam", "EsxAgentManager", &self.mo_id, "agency").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -303,14 +271,9 @@ impl EsxAgentManager {
     /// 
     /// Requires view privileges.
     pub async fn issue(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::IssueTrait>>>> {
-        let path = format!("/eam/EsxAgentManager/{moId}/issue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("eam", "EsxAgentManager", &self.mo_id, "issue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::IssueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

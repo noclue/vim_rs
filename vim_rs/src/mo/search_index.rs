@@ -55,11 +55,8 @@ impl SearchIndex {
     /// Refers instances of *ManagedEntity*.
     pub async fn find_all_by_dns_name(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let input = FindAllByDnsNameRequestType {datacenter, dns_name, vm_search, };
-        let path = format!("/SearchIndex/{moId}/FindAllByDnsName", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::ManagedObjectReference> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SearchIndex", &self.mo_id, "FindAllByDnsName", Some(&input)).await?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Finds all virtual machines or hosts by IP address, where the IP address is
@@ -95,11 +92,8 @@ impl SearchIndex {
     /// Refers instances of *ManagedEntity*.
     pub async fn find_all_by_ip(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let input = FindAllByIpRequestType {datacenter, ip, vm_search, };
-        let path = format!("/SearchIndex/{moId}/FindAllByIp", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::ManagedObjectReference> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SearchIndex", &self.mo_id, "FindAllByIp", Some(&input)).await?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Finds all virtual machines or hosts by UUID.
@@ -139,11 +133,8 @@ impl SearchIndex {
     /// Refers instances of *ManagedEntity*.
     pub async fn find_all_by_uuid(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
         let input = FindAllByUuidRequestType {datacenter, uuid, vm_search, instance_uuid, };
-        let path = format!("/SearchIndex/{moId}/FindAllByUuid", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::ManagedObjectReference> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SearchIndex", &self.mo_id, "FindAllByUuid", Some(&input)).await?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Finds a virtual machine by its location on a datastore.
@@ -174,14 +165,9 @@ impl SearchIndex {
     /// the specified datastore does not exist on the specified datacenter.
     pub async fn find_by_datastore_path(&self, datacenter: &crate::types::structs::ManagedObjectReference, path: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByDatastorePathRequestType {datacenter, path, };
-        let path = format!("/SearchIndex/{moId}/FindByDatastorePath", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "SearchIndex", &self.mo_id, "FindByDatastorePath", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -217,14 +203,9 @@ impl SearchIndex {
     /// Refers instance of *ManagedEntity*.
     pub async fn find_by_dns_name(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, dns_name: &str, vm_search: bool) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByDnsNameRequestType {datacenter, dns_name, vm_search, };
-        let path = format!("/SearchIndex/{moId}/FindByDnsName", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "SearchIndex", &self.mo_id, "FindByDnsName", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -253,14 +234,9 @@ impl SearchIndex {
     /// Refers instance of *ManagedEntity*.
     pub async fn find_by_inventory_path(&self, inventory_path: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByInventoryPathRequestType {inventory_path, };
-        let path = format!("/SearchIndex/{moId}/FindByInventoryPath", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "SearchIndex", &self.mo_id, "FindByInventoryPath", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -299,14 +275,9 @@ impl SearchIndex {
     /// Refers instance of *ManagedEntity*.
     pub async fn find_by_ip(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, ip: &str, vm_search: bool) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByIpRequestType {datacenter, ip, vm_search, };
-        let path = format!("/SearchIndex/{moId}/FindByIp", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "SearchIndex", &self.mo_id, "FindByIp", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -346,14 +317,9 @@ impl SearchIndex {
     /// Refers instance of *ManagedEntity*.
     pub async fn find_by_uuid(&self, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: &str, vm_search: bool, instance_uuid: Option<bool>) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindByUuidRequestType {datacenter, uuid, vm_search, instance_uuid, };
-        let path = format!("/SearchIndex/{moId}/FindByUuid", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "SearchIndex", &self.mo_id, "FindByUuid", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -385,14 +351,9 @@ impl SearchIndex {
     /// Refers instance of *ManagedEntity*.
     pub async fn find_child(&self, entity: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = FindChildRequestType {entity, name, };
-        let path = format!("/SearchIndex/{moId}/FindChild", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "SearchIndex", &self.mo_id, "FindChild", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

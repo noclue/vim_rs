@@ -29,8 +29,7 @@ anyhow = "1.0"
 log = "0.4"
 env_logger = "0.11"
 
-# Optional: for utils (connection helper)
-# utils = { path = "path/to/utils" }
+# Optional: share connect() via a local library crate (see examples/snippets `lib.rs`)
 "#;
 
     // Scan for all .rs files in examples subdirectories
@@ -41,10 +40,12 @@ env_logger = "0.11"
     {
         let path = entry.path();
 
-        // Skip the utils lib and vtui (it's a large TUI app)
-        if path.to_string_lossy().replace("\\", "/").contains("/utils/")
-            || path.to_string_lossy().replace("\\", "/").contains("/vtui/")
-            || path.to_string_lossy().replace("\\", "/").contains("/target/") {
+        // Skip snippets library root (connection helper only), vtui (large TUI app), build artifacts
+        let p = path.to_string_lossy().replace('\\', "/");
+        if p.contains("/snippets/src/lib.rs")
+            || p.contains("/vtui/")
+            || p.contains("/target/")
+        {
             continue;
         }
 
@@ -82,7 +83,14 @@ env_logger = "0.11"
             .to_string();
 
         // Determine category based on path and content
-        let category = if path.to_string_lossy().contains("macro_examples") {
+        let category = if matches!(
+            name.as_str(),
+            "retrieve_host_info"
+                | "retrieve_ds_hosts"
+                | "print_vm_addresses"
+                | "retrieve_recent_task"
+                | "vm_events"
+        ) {
             "macro_usage"
         } else if name.contains("property_collector") || source_code.contains("PropertyCollector") {
             "property_collector"

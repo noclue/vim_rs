@@ -34,11 +34,8 @@ impl HostVsanHealthSystem {
     ///
     /// ***VsanFault***: when CLOMD is not alive.
     pub async fn vsan_host_clomd_liveness(&self) -> Result<bool> {
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostClomdLiveness", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostClomdLiveness", None).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.7.
@@ -64,11 +61,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_cleanup_vmdk_load_test(&self, runname: &str, specs: Option<&[crate::types::structs::VsanVmdkLoadTestSpec]>) -> Result<String> {
         let input = VsanHostCleanupVmdkLoadTestRequestType {runname, specs, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostCleanupVmdkLoadTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostCleanupVmdkLoadTest", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Perform VM creation test on localhost.
@@ -89,11 +83,8 @@ impl HostVsanHealthSystem {
     /// ***VsanFault***:
     pub async fn vsan_host_create_vm_health_test(&self, timeout: i32) -> Result<crate::types::structs::VsanHostCreateVmHealthTestResult> {
         let input = VsanHostCreateVmHealthTestRequestType {timeout, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostCreateVmHealthTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanHostCreateVmHealthTestResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostCreateVmHealthTest", Some(&input)).await?;
+        let result: crate::types::structs::VsanHostCreateVmHealthTestResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0.
@@ -122,11 +113,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_flash_scsi_controller_firmware_task(&self, spec: &crate::types::structs::VsanHclFirmwareUpdateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanFlashScsiControllerFirmwareRequestType {spec, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanFlashScsiControllerFirmware_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanFlashScsiControllerFirmware_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Fetch HCL information about all devices in use by vSAN.
@@ -151,11 +139,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_get_hcl_info(&self, include_vendor_info: Option<bool>, vsan_esa_eligible_disks_only: Option<bool>) -> Result<crate::types::structs::VsanHostHclInfo> {
         let input = VsanGetHclInfoRequestType {include_vendor_info, vsan_esa_eligible_disks_only, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanGetHclInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanHostHclInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanGetHclInfo", Some(&input)).await?;
+        let result: crate::types::structs::VsanHostHclInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the network related information of the host for health check.
@@ -170,11 +155,8 @@ impl HostVsanHealthSystem {
     ///
     /// Failure
     pub async fn vsan_get_network_diagnostics_health_info(&self) -> Result<crate::types::structs::VsanNetworkDiagnosticsHealthInfo> {
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanGetNetworkDiagnosticsHealthInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanNetworkDiagnosticsHealthInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanGetNetworkDiagnosticsHealthInfo", None).await?;
+        let result: crate::types::structs::VsanNetworkDiagnosticsHealthInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve information of proactive rebalance on this host
@@ -189,11 +171,8 @@ impl HostVsanHealthSystem {
     ///
     /// Failure
     pub async fn vsan_get_proactive_rebalance_info(&self) -> Result<crate::types::structs::VsanProactiveRebalanceInfoEx> {
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanGetProactiveRebalanceInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanProactiveRebalanceInfoEx = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanGetProactiveRebalanceInfo", None).await?;
+        let result: crate::types::structs::VsanProactiveRebalanceInfoEx = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.7.
@@ -219,11 +198,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_prepare_vmdk_load_test(&self, runname: &str, specs: &[crate::types::structs::VsanVmdkLoadTestSpec]) -> Result<String> {
         let input = VsanHostPrepareVmdkLoadTestRequestType {runname, specs, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostPrepareVmdkLoadTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostPrepareVmdkLoadTest", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query advanced configuration on host
@@ -254,14 +230,9 @@ impl HostVsanHealthSystem {
     /// ***NotFound***: the path is not found
     pub async fn vsan_host_query_adv_cfg(&self, options: &[String], include_all_adv_options: Option<bool>, non_default_only: Option<bool>) -> Result<Option<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>> {
         let input = VsanHostQueryAdvCfgRequestType {options, include_all_adv_options, non_default_only, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryAdvCfg", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryAdvCfg", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -288,11 +259,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_query_check_limits(&self, spec: Option<&crate::types::structs::VsanHostQueryCheckLimitsSpec>) -> Result<crate::types::structs::VsanLimitHealthResult> {
         let input = VsanHostQueryCheckLimitsRequestType {spec, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryCheckLimits", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanLimitHealthResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryCheckLimits", Some(&input)).await?;
+        let result: crate::types::structs::VsanLimitHealthResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the encryption health summary on the host.
@@ -307,11 +275,8 @@ impl HostVsanHealthSystem {
     ///
     /// Failure
     pub async fn vsan_host_query_encryption_health_summary(&self) -> Result<crate::types::structs::VsanEncryptionHealthSummary> {
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryEncryptionHealthSummary", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanEncryptionHealthSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryEncryptionHealthSummary", None).await?;
+        let result: crate::types::structs::VsanEncryptionHealthSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the file service health summary on the host.
@@ -329,11 +294,8 @@ impl HostVsanHealthSystem {
     ///
     /// Failure
     pub async fn vsan_host_query_file_service_health_summary(&self) -> Result<crate::types::structs::VsanFileServiceHealthSummary> {
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryFileServiceHealthSummary", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanFileServiceHealthSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryFileServiceHealthSummary", None).await?;
+        let result: crate::types::structs::VsanFileServiceHealthSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the host's maintenance mode and vSAN node decommission state.
@@ -348,11 +310,8 @@ impl HostVsanHealthSystem {
     ///
     /// Failure
     pub async fn vsan_query_host_emm_state(&self) -> Result<crate::types::structs::VsanHostEmmSummary> {
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanQueryHostEMMState", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanHostEmmSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanQueryHostEMMState", None).await?;
+        let result: crate::types::structs::VsanHostEmmSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query host info by host uuid.
@@ -377,11 +336,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_query_host_info_by_uuids(&self, uuids: &[String]) -> Result<Vec<crate::types::structs::VsanQueryResultHostInfo>> {
         let input = VsanHostQueryHostInfoByUuidsRequestType {uuids, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryHostInfoByUuids", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanQueryResultHostInfo> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryHostInfoByUuids", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanQueryResultHostInfo> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the object health status
@@ -424,11 +380,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_query_object_health_summary(&self, obj_uuids: Option<&[String]>, include_obj_uuids: Option<bool>, local_host_only: Option<bool>, include_non_compliance_obj_detail: Option<bool>, spec: Option<&crate::types::structs::VsanHealthQuerySpec>) -> Result<crate::types::structs::VsanObjectOverallHealth> {
         let input = VsanHostQueryObjectHealthSummaryRequestType {obj_uuids, include_obj_uuids, local_host_only, include_non_compliance_obj_detail, spec, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryObjectHealthSummary", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanObjectOverallHealth = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryObjectHealthSummary", Some(&input)).await?;
+        let result: crate::types::structs::VsanObjectOverallHealth = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the physical disks health summary on the host
@@ -443,11 +396,8 @@ impl HostVsanHealthSystem {
     ///
     /// Failure
     pub async fn vsan_host_query_physical_disk_health_summary(&self) -> Result<crate::types::structs::VsanPhysicalDiskHealthSummary> {
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryPhysicalDiskHealthSummary", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanPhysicalDiskHealthSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryPhysicalDiskHealthSummary", None).await?;
+        let result: crate::types::structs::VsanPhysicalDiskHealthSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Run the network performance test client side program to act as the
@@ -484,11 +434,8 @@ impl HostVsanHealthSystem {
     /// version.
     pub async fn vsan_host_query_run_iperf_client(&self, multicast: bool, server_ip: &str, duration_sec: Option<i32>, spec: Option<&crate::types::structs::VsanIperfClientSpec>) -> Result<crate::types::structs::VsanNetworkLoadTestResult> {
         let input = VsanHostQueryRunIperfClientRequestType {multicast, server_ip, duration_sec, spec, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryRunIperfClient", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanNetworkLoadTestResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryRunIperfClient", Some(&input)).await?;
+        let result: crate::types::structs::VsanNetworkLoadTestResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Run the network performance test server side program to act as the
@@ -518,11 +465,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_query_run_iperf_server(&self, multicast: bool, server_ip: Option<&str>, duration_sec: Option<i32>) -> Result<crate::types::structs::VsanNetworkLoadTestResult> {
         let input = VsanHostQueryRunIperfServerRequestType {multicast, server_ip, duration_sec, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryRunIperfServer", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanNetworkLoadTestResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryRunIperfServer", Some(&input)).await?;
+        let result: crate::types::structs::VsanNetworkLoadTestResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the physical disks S.M.A.R.T.
@@ -548,11 +492,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_query_smart_stats(&self, disks: Option<&[String]>, include_all_disks: Option<bool>) -> Result<crate::types::structs::VsanSmartStatsHostSummary> {
         let input = VsanHostQuerySmartStatsRequestType {disks, include_all_disks, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQuerySmartStats", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanSmartStatsHostSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQuerySmartStats", Some(&input)).await?;
+        let result: crate::types::structs::VsanSmartStatsHostSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Queries all network settings required to perform a cluster wide network health
@@ -590,11 +531,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_query_verify_network_settings(&self, peers: Option<&[String]>, robo_stretched_cluster_witnesses: Option<&[String]>, v_motion_peers: Option<&[String]>, spec: Option<&crate::types::structs::VsanHealthQuerySpec>) -> Result<crate::types::structs::VsanNetworkHealthResult> {
         let input = VsanHostQueryVerifyNetworkSettingsRequestType {peers, robo_stretched_cluster_witnesses, v_motion_peers, spec, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryVerifyNetworkSettings", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanNetworkHealthResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryVerifyNetworkSettings", Some(&input)).await?;
+        let result: crate::types::structs::VsanNetworkHealthResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return a string which represents vSAN version number for the querying host.
@@ -618,11 +556,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_query_health_system_version(&self, display_version: Option<bool>) -> Result<String> {
         let input = VsanHostQueryHealthSystemVersionRequestType {display_version, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostQueryHealthSystemVersion", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostQueryHealthSystemVersion", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// When the health check for vSAN object health test detects issues,
@@ -651,11 +586,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_repair_immediate_objects(&self, uuids: Option<&[String]>, repair_type: Option<&str>) -> Result<crate::types::structs::VsanRepairObjectsResult> {
         let input = VsanHostRepairImmediateObjectsRequestType {uuids, repair_type, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostRepairImmediateObjects", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanRepairObjectsResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostRepairImmediateObjects", Some(&input)).await?;
+        let result: crate::types::structs::VsanRepairObjectsResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.7.
@@ -684,11 +616,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_host_run_vmdk_load_test(&self, runname: &str, duration_sec: i32, specs: &[crate::types::structs::VsanVmdkLoadTestSpec]) -> Result<Vec<crate::types::structs::VsanVmdkLoadTestResult>> {
         let input = VsanHostRunVmdkLoadTestRequestType {runname, duration_sec, specs, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanHostRunVmdkLoadTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanVmdkLoadTestResult> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanHostRunVmdkLoadTest", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanVmdkLoadTestResult> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Initiate proactive rebalance on target host
@@ -729,11 +658,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_start_proactive_rebalance(&self, time_span: Option<i32>, variance_threshold: Option<f32>, time_threshold: Option<i32>, rate_threshold: Option<i32>) -> Result<bool> {
         let input = VsanStartProactiveRebalanceRequestType {time_span, variance_threshold, time_threshold, rate_threshold, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanStartProactiveRebalance", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanStartProactiveRebalance", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Stop proactive rebalance on target host
@@ -749,11 +675,8 @@ impl HostVsanHealthSystem {
     ///
     /// Failure
     pub async fn vsan_stop_proactive_rebalance(&self) -> Result<bool> {
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanStopProactiveRebalance", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanStopProactiveRebalance", None).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Waiting until the change of current vSAN health generation ID or timed out.
@@ -777,11 +700,8 @@ impl HostVsanHealthSystem {
     /// Failure
     pub async fn vsan_wait_for_vsan_health_generation_id_change(&self, timeout: i32) -> Result<bool> {
         let input = VsanWaitForVsanHealthGenerationIdChangeRequestType {timeout, };
-        let path = format!("/vsan/HostVsanHealthSystem/{moId}/VsanWaitForVsanHealthGenerationIdChange", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "HostVsanHealthSystem", &self.mo_id, "VsanWaitForVsanHealthGenerationIdChange", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

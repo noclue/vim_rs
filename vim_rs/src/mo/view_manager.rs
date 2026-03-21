@@ -146,11 +146,8 @@ impl ViewManager {
     /// Refers instance of *ContainerView*.
     pub async fn create_container_view(&self, container: &crate::types::structs::ManagedObjectReference, r#type: Option<&[String]>, recursive: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateContainerViewRequestType {container, r#type, recursive, };
-        let path = format!("/ViewManager/{moId}/CreateContainerView", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ViewManager", &self.mo_id, "CreateContainerView", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create a new *InventoryView* managed object for this session.
@@ -161,11 +158,8 @@ impl ViewManager {
     ///
     /// Refers instance of *InventoryView*.
     pub async fn create_inventory_view(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/ViewManager/{moId}/CreateInventoryView", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ViewManager", &self.mo_id, "CreateInventoryView", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create a *ListView* object for this session.
@@ -189,11 +183,8 @@ impl ViewManager {
     /// Refers instance of *ListView*.
     pub async fn create_list_view(&self, obj: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateListViewRequestType {obj, };
-        let path = format!("/ViewManager/{moId}/CreateListView", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ViewManager", &self.mo_id, "CreateListView", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create a *ListView* object for this session.
@@ -216,11 +207,8 @@ impl ViewManager {
     /// Refers instance of *ListView*.
     pub async fn create_list_view_from_view(&self, view: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateListViewFromViewRequestType {view, };
-        let path = format!("/ViewManager/{moId}/CreateListViewFromView", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ViewManager", &self.mo_id, "CreateListViewFromView", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// An array of view references.
@@ -234,14 +222,9 @@ impl ViewManager {
     ///
     /// Refers instances of *View*.
     pub async fn view_list(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ViewManager/{moId}/viewList", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ViewManager", &self.mo_id, "viewList").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

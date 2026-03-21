@@ -35,11 +35,8 @@ impl ResourcePlanningManager {
     /// rows.
     pub async fn estimate_database_size(&self, db_size_param: &crate::types::structs::DatabaseSizeParam) -> Result<crate::types::structs::DatabaseSizeEstimate> {
         let input = EstimateDatabaseSizeRequestType {db_size_param, };
-        let path = format!("/ResourcePlanningManager/{moId}/EstimateDatabaseSize", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::DatabaseSizeEstimate = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ResourcePlanningManager", &self.mo_id, "EstimateDatabaseSize", Some(&input)).await?;
+        let result: crate::types::structs::DatabaseSizeEstimate = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -24,9 +24,7 @@ impl Task {
     /// New description for task
     pub async fn set_task_description(&self, description: &crate::types::structs::LocalizableMessage) -> Result<()> {
         let input = SetTaskDescriptionRequestType {description, };
-        let path = format!("/Task/{moId}/SetTaskDescription", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "Task", &self.mo_id, "SetTaskDescription", Some(&input)).await
     }
     /// Sets percentage done for this task and recalculates overall
     /// percentage done.
@@ -51,9 +49,7 @@ impl Task {
     /// versions behave as described above, and never throw this fault.
     pub async fn update_progress(&self, percent_done: i32) -> Result<()> {
         let input = UpdateProgressRequestType {percent_done, };
-        let path = format!("/Task/{moId}/UpdateProgress", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "Task", &self.mo_id, "UpdateProgress", Some(&input)).await
     }
     /// Cancels a running or queued task.
     /// 
@@ -74,9 +70,7 @@ impl Task {
     /// 
     /// ***InvalidState***: If the task is already canceled or completed.
     pub async fn cancel_task(&self) -> Result<()> {
-        let path = format!("/Task/{moId}/CancelTask", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "Task", &self.mo_id, "CancelTask", None).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -94,9 +88,7 @@ impl Task {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/Task/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "Task", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Sets task state and optionally sets results or fault,
     /// as appropriate for state
@@ -124,9 +116,7 @@ impl Task {
     /// result or fault incorrectly
     pub async fn set_task_state(&self, state: crate::types::enums::TaskInfoStateEnum, result: Option<crate::types::vim_any::VimAny>, fault: Option<&crate::types::structs::MethodFault>) -> Result<()> {
         let input = SetTaskStateRequestType {state, result, fault, };
-        let path = format!("/Task/{moId}/SetTaskState", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "Task", &self.mo_id, "SetTaskState", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -134,24 +124,17 @@ impl Task {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/Task/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Task", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Detailed information about this task.
     pub async fn info(&self) -> Result<crate::types::structs::TaskInfo> {
-        let path = format!("/Task/{moId}/info", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::TaskInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "Task", &self.mo_id, "info").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
+        let result: crate::types::structs::TaskInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// List of custom field values.
@@ -162,14 +145,9 @@ impl Task {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/Task/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Task", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

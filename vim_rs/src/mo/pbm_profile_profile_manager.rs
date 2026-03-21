@@ -114,9 +114,7 @@ impl PbmProfileProfileManager {
     /// privilege on the given datastores.
     pub async fn pbm_assign_default_requirement_profile(&self, profile: &crate::types::structs::PbmProfileId, datastores: &[crate::types::structs::PbmPlacementHub]) -> Result<()> {
         let input = PbmAssignDefaultRequirementProfileRequestType {profile, datastores, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmAssignDefaultRequirementProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmAssignDefaultRequirementProfile", Some(&input)).await
     }
     /// Creates a capability-based storage profile.
     /// 
@@ -162,11 +160,8 @@ impl PbmProfileProfileManager {
     /// ***PbmDuplicateName***: if a profile with the same name already exists.
     pub async fn pbm_create(&self, create_spec: &crate::types::structs::PbmCapabilityProfileCreateSpec) -> Result<crate::types::structs::PbmProfileId> {
         let input = PbmCreateRequestType {create_spec, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmCreate", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::PbmProfileId = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmCreate", Some(&input)).await?;
+        let result: crate::types::structs::PbmProfileId = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deletes one or more profiles.
@@ -197,14 +192,9 @@ impl PbmProfileProfileManager {
     ///   with an entity.
     pub async fn pbm_delete(&self, profile_id: &[crate::types::structs::PbmProfileId]) -> Result<Option<Vec<crate::types::structs::PbmProfileOperationOutcome>>> {
         let input = PbmDeleteRequestType {profile_id, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmDelete", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmDelete", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmProfileOperationOutcome>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -244,14 +234,9 @@ impl PbmProfileProfileManager {
     /// (*PbmCapabilityMetadataPerCategory*.*PbmCapabilityMetadataPerCategory.subCategory*).
     pub async fn pbm_fetch_capability_metadata(&self, resource_type: Option<&crate::types::structs::PbmProfileResourceType>, vendor_uuid: Option<&str>) -> Result<Option<Vec<crate::types::structs::PbmCapabilityMetadataPerCategory>>> {
         let input = PbmFetchCapabilityMetadataRequestType {resource_type, vendor_uuid, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFetchCapabilityMetadata", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmFetchCapabilityMetadata", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmCapabilityMetadataPerCategory>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -285,14 +270,9 @@ impl PbmProfileProfileManager {
     /// ***InvalidArgument***: If input lineOfServices has unknown/invalid line of service.
     pub async fn pbm_fetch_capability_schema(&self, vendor_uuid: Option<&str>, line_of_service: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::PbmCapabilitySchema>>> {
         let input = PbmFetchCapabilitySchemaRequestType {vendor_uuid, line_of_service, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFetchCapabilitySchema", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmFetchCapabilitySchema", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmCapabilitySchema>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -304,14 +284,9 @@ impl PbmProfileProfileManager {
     ///
     /// Array of resource types.
     pub async fn pbm_fetch_resource_type(&self) -> Result<Option<Vec<crate::types::structs::PbmProfileResourceType>>> {
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFetchResourceType", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmFetchResourceType", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmProfileResourceType>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -333,14 +308,9 @@ impl PbmProfileProfileManager {
     /// Vendor and namespace information.
     pub async fn pbm_fetch_vendor_info(&self, resource_type: Option<&crate::types::structs::PbmProfileResourceType>) -> Result<Option<Vec<crate::types::structs::PbmCapabilityVendorResourceTypeInfo>>> {
         let input = PbmFetchVendorInfoRequestType {resource_type, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFetchVendorInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmFetchVendorInfo", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmCapabilityVendorResourceTypeInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -375,14 +345,9 @@ impl PbmProfileProfileManager {
     /// ***InvalidArgument***: If the datastores argument contains a non-datastore, example storage pod.
     pub async fn pbm_find_applicable_default_profile(&self, datastores: &[crate::types::structs::PbmPlacementHub]) -> Result<Option<Vec<Box<dyn crate::types::traits::PbmProfileTrait>>>> {
         let input = PbmFindApplicableDefaultProfileRequestType {datastores, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmFindApplicableDefaultProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmFindApplicableDefaultProfile", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::PbmProfileTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -409,14 +374,9 @@ impl PbmProfileProfileManager {
     /// ***PbmFault***: If there is an internal service error.
     pub async fn pbm_query_associated_entities(&self, profiles: Option<&[crate::types::structs::PbmProfileId]>) -> Result<Option<Vec<crate::types::structs::PbmQueryProfileResult>>> {
         let input = PbmQueryAssociatedEntitiesRequestType {profiles, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryAssociatedEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmQueryAssociatedEntities", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmQueryProfileResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -444,14 +404,9 @@ impl PbmProfileProfileManager {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_query_associated_entity(&self, profile: &crate::types::structs::PbmProfileId, entity_type: Option<&str>) -> Result<Option<Vec<crate::types::structs::PbmServerObjectRef>>> {
         let input = PbmQueryAssociatedEntityRequestType {profile, entity_type, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryAssociatedEntity", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmQueryAssociatedEntity", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmServerObjectRef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -474,14 +429,9 @@ impl PbmProfileProfileManager {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_query_associated_profile(&self, entity: &crate::types::structs::PbmServerObjectRef) -> Result<Option<Vec<crate::types::structs::PbmProfileId>>> {
         let input = PbmQueryAssociatedProfileRequestType {entity, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryAssociatedProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmQueryAssociatedProfile", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmProfileId>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -507,14 +457,9 @@ impl PbmProfileProfileManager {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_query_associated_profiles(&self, entities: &[crate::types::structs::PbmServerObjectRef]) -> Result<Option<Vec<crate::types::structs::PbmQueryProfileResult>>> {
         let input = PbmQueryAssociatedProfilesRequestType {entities, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryAssociatedProfiles", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmQueryAssociatedProfiles", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmQueryProfileResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -544,14 +489,9 @@ impl PbmProfileProfileManager {
     /// ***PbmFault***: Internal service error.
     pub async fn pbm_query_default_requirement_profile(&self, hub: &crate::types::structs::PbmPlacementHub) -> Result<Option<crate::types::structs::PbmProfileId>> {
         let input = PbmQueryDefaultRequirementProfileRequestType {hub, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryDefaultRequirementProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmQueryDefaultRequirementProfile", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::PbmProfileId>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -585,11 +525,8 @@ impl PbmProfileProfileManager {
     /// ***PbmFault***: Internal service error.
     pub async fn pbm_query_default_requirement_profiles(&self, datastores: &[crate::types::structs::PbmPlacementHub]) -> Result<Vec<crate::types::structs::PbmDefaultProfileInfo>> {
         let input = PbmQueryDefaultRequirementProfilesRequestType {datastores, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryDefaultRequirementProfiles", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::PbmDefaultProfileInfo> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmQueryDefaultRequirementProfiles", Some(&input)).await?;
+        let result: Vec<crate::types::structs::PbmDefaultProfileInfo> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns requirement profile ids or resource profile ids, or both.
@@ -617,14 +554,9 @@ impl PbmProfileProfileManager {
     /// resourceType or profileCategory.
     pub async fn pbm_query_profile(&self, resource_type: &crate::types::structs::PbmProfileResourceType, profile_category: Option<&str>) -> Result<Option<Vec<crate::types::structs::PbmProfileId>>> {
         let input = PbmQueryProfileRequestType {resource_type, profile_category, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQueryProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmQueryProfile", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmProfileId>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -655,14 +587,9 @@ impl PbmProfileProfileManager {
     /// if storage container does not support the profile.
     pub async fn pbm_query_space_stats_for_storage_container(&self, datastore: &crate::types::structs::PbmServerObjectRef, capability_profile_id: Option<&[crate::types::structs::PbmProfileId]>) -> Result<Option<Vec<crate::types::structs::PbmDatastoreSpaceStatistics>>> {
         let input = PbmQuerySpaceStatsForStorageContainerRequestType {datastore, capability_profile_id, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmQuerySpaceStatsForStorageContainer", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmQuerySpaceStatsForStorageContainer", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmDatastoreSpaceStatistics>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -678,17 +605,13 @@ impl PbmProfileProfileManager {
     /// Profile to reset.
     pub async fn pbm_reset_default_requirement_profile(&self, profile: Option<&crate::types::structs::PbmProfileId>) -> Result<()> {
         let input = PbmResetDefaultRequirementProfileRequestType {profile, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmResetDefaultRequirementProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmResetDefaultRequirementProfile", Some(&input)).await
     }
     /// Resets the system pre-created VSAN default profile to factory defaults.
     /// 
     /// ***Required privileges:*** StorageProfile.Update
     pub async fn pbm_reset_v_san_default_profile(&self) -> Result<()> {
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmResetVSanDefaultProfile", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmResetVSanDefaultProfile", None).await
     }
     /// Returns one or more storage profiles.
     /// 
@@ -708,11 +631,8 @@ impl PbmProfileProfileManager {
     /// ***InvalidArgument***: if the Server does not recognize any of the profileIds.
     pub async fn pbm_retrieve_content(&self, profile_ids: &[crate::types::structs::PbmProfileId]) -> Result<Vec<Box<dyn crate::types::traits::PbmProfileTrait>>> {
         let input = PbmRetrieveContentRequestType {profile_ids, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmRetrieveContent", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<Box<dyn crate::types::traits::PbmProfileTrait>> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmRetrieveContent", Some(&input)).await?;
+        let result: Vec<Box<dyn crate::types::traits::PbmProfileTrait>> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Updates a storage profile.
@@ -734,9 +654,7 @@ impl PbmProfileProfileManager {
     /// ***PbmFaultProfileStorageFault***: in case of internal service error.
     pub async fn pbm_update(&self, profile_id: &crate::types::structs::PbmProfileId, update_spec: &crate::types::structs::PbmCapabilityProfileUpdateSpec) -> Result<()> {
         let input = PbmUpdateRequestType {profile_id, update_spec, };
-        let path = format!("/pbm/PbmProfileProfileManager/{moId}/PbmUpdate", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmUpdate", Some(&input)).await
     }
 }
 struct PbmAssignDefaultRequirementProfileRequestType<'a> {

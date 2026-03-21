@@ -39,11 +39,8 @@ impl VsanClusterMgmtInternalSystem {
     /// ***NotFound***: when specified cluster doesn't exist.
     pub async fn vsan_remediate_vsan_cluster(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanRemediateVsanClusterRequestType {cluster, };
-        let path = format!("/vsan/VsanClusterMgmtInternalSystem/{moId}/VsanRemediateVsanCluster", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanClusterMgmtInternalSystem", &self.mo_id, "VsanRemediateVsanCluster", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Remediate a single standalone host.
@@ -73,11 +70,8 @@ impl VsanClusterMgmtInternalSystem {
     /// ***NotFound***: when specified host doesn't exist.
     pub async fn vsan_remediate_vsan_host(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanRemediateVsanHostRequestType {host, };
-        let path = format!("/vsan/VsanClusterMgmtInternalSystem/{moId}/VsanRemediateVsanHost", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanClusterMgmtInternalSystem", &self.mo_id, "VsanRemediateVsanHost", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

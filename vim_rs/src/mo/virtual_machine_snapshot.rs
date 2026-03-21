@@ -45,11 +45,8 @@ impl VirtualMachineSnapshot {
     /// 
     /// ***FileFault***: if there is an error accessing the virtual machine files.
     pub async fn export_snapshot(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/VirtualMachineSnapshot/{moId}/ExportSnapshot", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineSnapshot", &self.mo_id, "ExportSnapshot", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removes this snapshot and deletes any associated storage.
@@ -77,11 +74,8 @@ impl VirtualMachineSnapshot {
     /// ***TaskInProgress***: if the virtual machine is busy.
     pub async fn remove_snapshot_task(&self, remove_children: bool, consolidate: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveSnapshotRequestType {remove_children, consolidate, };
-        let path = format!("/VirtualMachineSnapshot/{moId}/RemoveSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineSnapshot", &self.mo_id, "RemoveSnapshot_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Rename this snapshot with either a new name or a new description or both.
@@ -114,9 +108,7 @@ impl VirtualMachineSnapshot {
     /// is not available.
     pub async fn rename_snapshot(&self, name: Option<&str>, description: Option<&str>) -> Result<()> {
         let input = RenameSnapshotRequestType {name, description, };
-        let path = format!("/VirtualMachineSnapshot/{moId}/RenameSnapshot", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualMachineSnapshot", &self.mo_id, "RenameSnapshot", Some(&input)).await
     }
     /// Change the execution state of the virtual machine to the state of this snapshot.
     /// 
@@ -174,11 +166,8 @@ impl VirtualMachineSnapshot {
     /// filesystem.
     pub async fn revert_to_snapshot_task(&self, host: Option<&crate::types::structs::ManagedObjectReference>, suppress_power_on: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertToSnapshotRequestType {host, suppress_power_on, };
-        let path = format!("/VirtualMachineSnapshot/{moId}/RevertToSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineSnapshot", &self.mo_id, "RevertToSnapshot_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Assigns a value to a custom field.
@@ -197,9 +186,7 @@ impl VirtualMachineSnapshot {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/VirtualMachineSnapshot/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualMachineSnapshot", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -207,14 +194,9 @@ impl VirtualMachineSnapshot {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/VirtualMachineSnapshot/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -224,14 +206,9 @@ impl VirtualMachineSnapshot {
     ///
     /// Refers instances of *VirtualMachineSnapshot*.
     pub async fn child_snapshot(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/VirtualMachineSnapshot/{moId}/childSnapshot", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "childSnapshot").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -242,11 +219,9 @@ impl VirtualMachineSnapshot {
     /// chain that represents the disk at this given snapshot. The fileInfo.fileLayout
     /// field is not set.
     pub async fn config(&self) -> Result<crate::types::structs::VirtualMachineConfigInfo> {
-        let path = format!("/VirtualMachineSnapshot/{moId}/config", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VirtualMachineConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "config").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::VirtualMachineConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// List of custom field values.
@@ -257,14 +232,9 @@ impl VirtualMachineSnapshot {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/VirtualMachineSnapshot/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -274,11 +244,9 @@ impl VirtualMachineSnapshot {
     ///
     /// Refers instance of *VirtualMachine*.
     pub async fn vm(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/VirtualMachineSnapshot/{moId}/vm", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "vm").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property vm was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -50,11 +50,8 @@ impl ScheduledTaskManager {
     /// ***InvalidArgument***: if the specification is invalid.
     pub async fn create_scheduled_task(&self, entity: &crate::types::structs::ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateScheduledTaskRequestType {entity, spec, };
-        let path = format!("/ScheduledTaskManager/{moId}/CreateScheduledTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ScheduledTaskManager", &self.mo_id, "CreateScheduledTask", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a scheduled task.
@@ -86,11 +83,8 @@ impl ScheduledTaskManager {
     /// ***InvalidArgument***: if the specification is invalid.
     pub async fn create_object_scheduled_task(&self, obj: &crate::types::structs::ManagedObjectReference, spec: &dyn crate::types::traits::ScheduledTaskSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateObjectScheduledTaskRequestType {obj, spec, };
-        let path = format!("/ScheduledTaskManager/{moId}/CreateObjectScheduledTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ScheduledTaskManager", &self.mo_id, "CreateObjectScheduledTask", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Available scheduled tasks defined on the entity.
@@ -112,14 +106,9 @@ impl ScheduledTaskManager {
     /// Refers instances of *ScheduledTask*.
     pub async fn retrieve_entity_scheduled_task(&self, entity: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = RetrieveEntityScheduledTaskRequestType {entity, };
-        let path = format!("/ScheduledTaskManager/{moId}/RetrieveEntityScheduledTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ScheduledTaskManager", &self.mo_id, "RetrieveEntityScheduledTask", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -140,14 +129,9 @@ impl ScheduledTaskManager {
     /// Refers instances of *ScheduledTask*.
     pub async fn retrieve_object_scheduled_task(&self, obj: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = RetrieveObjectScheduledTaskRequestType {obj, };
-        let path = format!("/ScheduledTaskManager/{moId}/RetrieveObjectScheduledTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ScheduledTaskManager", &self.mo_id, "RetrieveObjectScheduledTask", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -155,11 +139,9 @@ impl ScheduledTaskManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn description(&self) -> Result<crate::types::structs::ScheduledTaskDescription> {
-        let path = format!("/ScheduledTaskManager/{moId}/description", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ScheduledTaskDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ScheduledTaskManager", &self.mo_id, "description").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
+        let result: crate::types::structs::ScheduledTaskDescription = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// All available scheduled tasks.
@@ -170,14 +152,9 @@ impl ScheduledTaskManager {
     ///
     /// Refers instances of *ScheduledTask*.
     pub async fn scheduled_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ScheduledTaskManager/{moId}/scheduledTask", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ScheduledTaskManager", &self.mo_id, "scheduledTask").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

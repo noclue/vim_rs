@@ -32,11 +32,8 @@ impl CertificateManager {
     /// Refers instance of *Task*.
     pub async fn cert_mgr_refresh_ca_certificates_and_cr_ls_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CertMgrRefreshCaCertificatesAndCrLsRequestType {host, };
-        let path = format!("/CertificateManager/{moId}/CertMgrRefreshCACertificatesAndCRLs_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "CertificateManager", &self.mo_id, "CertMgrRefreshCACertificatesAndCRLs_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Gets CSRs from the hosts and then gets these certificates signed by the
@@ -56,11 +53,8 @@ impl CertificateManager {
     /// Refers instance of *Task*.
     pub async fn cert_mgr_refresh_certificates_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CertMgrRefreshCertificatesRequestType {host, };
-        let path = format!("/CertificateManager/{moId}/CertMgrRefreshCertificates_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "CertificateManager", &self.mo_id, "CertMgrRefreshCertificates_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Revokes the certificates of some hosts.
@@ -79,11 +73,8 @@ impl CertificateManager {
     /// Refers instance of *Task*.
     pub async fn cert_mgr_revoke_certificates_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CertMgrRevokeCertificatesRequestType {host, };
-        let path = format!("/CertificateManager/{moId}/CertMgrRevokeCertificates_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "CertificateManager", &self.mo_id, "CertMgrRevokeCertificates_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

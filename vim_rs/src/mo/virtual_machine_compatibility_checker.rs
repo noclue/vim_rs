@@ -69,11 +69,8 @@ impl VirtualMachineCompatibilityChecker {
     /// to the same datacenter.
     pub async fn check_compatibility_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckCompatibilityRequestType {vm, host, pool, test_type, };
-        let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckCompatibility_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineCompatibilityChecker", &self.mo_id, "CheckCompatibility_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Tests whether the provided virtual machine can be powered on
@@ -125,11 +122,8 @@ impl VirtualMachineCompatibilityChecker {
     /// to the same datacenter.
     pub async fn check_power_on_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckPowerOnRequestType {vm, host, pool, test_type, };
-        let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckPowerOn_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineCompatibilityChecker", &self.mo_id, "CheckPowerOn_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Tests whether the provided virtual machine specification can be applied
@@ -187,11 +181,8 @@ impl VirtualMachineCompatibilityChecker {
     /// to the same datacenter.
     pub async fn check_vm_config_task(&self, spec: &crate::types::structs::VirtualMachineConfigSpec, vm: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckVmConfigRequestType {spec, vm, host, pool, test_type, };
-        let path = format!("/VirtualMachineCompatibilityChecker/{moId}/CheckVmConfig_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineCompatibilityChecker", &self.mo_id, "CheckVmConfig_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

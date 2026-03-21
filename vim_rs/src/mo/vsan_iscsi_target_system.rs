@@ -45,9 +45,7 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_add_iscsi_initiator_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str) -> Result<()> {
         let input = VsanVitAddIscsiInitiatorGroupRequestType {cluster, initiator_group_name, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiInitiatorGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitAddIscsiInitiatorGroup", Some(&input)).await
     }
     /// Adds iSCSI initiators to one initiator group.  
     /// If the
@@ -78,9 +76,7 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_add_iscsi_initiators_to_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str, initiator_names: &[String]) -> Result<()> {
         let input = VsanVitAddIscsiInitiatorsToGroupRequestType {cluster, initiator_group_name, initiator_names, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiInitiatorsToGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitAddIscsiInitiatorsToGroup", Some(&input)).await
     }
     /// Adds iSCSI initiators or initiator groups to one target.  
     ///   
@@ -112,9 +108,7 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_add_iscsi_initiators_to_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, initiator_names: &[String]) -> Result<()> {
         let input = VsanVitAddIscsiInitiatorsToTargetRequestType {cluster, target_alias, initiator_names, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiInitiatorsToTarget", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitAddIscsiInitiatorsToTarget", Some(&input)).await
     }
     /// Adds iSCSI LUN to specified target.  
     /// If the target
@@ -154,14 +148,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_add_iscsi_lun(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, lun_spec: &crate::types::structs::VsanIscsiLunSpec) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitAddIscsiLunRequestType {cluster, target_alias, lun_spec, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiLUN", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitAddIscsiLUN", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -197,14 +186,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_add_iscsi_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_spec: &crate::types::structs::VsanIscsiTargetSpec) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitAddIscsiTargetRequestType {cluster, target_spec, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiTarget", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitAddIscsiTarget", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -235,9 +219,7 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_add_iscsi_target_to_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str, target_alias: &str) -> Result<()> {
         let input = VsanVitAddIscsiTargetToGroupRequestType {cluster, initiator_group_name, target_alias, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitAddIscsiTargetToGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitAddIscsiTargetToGroup", Some(&input)).await
     }
     /// Edits iSCSI LUN in specified target.  
     /// All properties in
@@ -278,14 +260,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_edit_iscsi_lun(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, lun_spec: &crate::types::structs::VsanIscsiLunSpec) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitEditIscsiLunRequestType {cluster, target_alias, lun_spec, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitEditIscsiLUN", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitEditIscsiLUN", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -325,14 +302,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_edit_iscsi_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_spec: &crate::types::structs::VsanIscsiTargetSpec) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitEditIscsiTargetRequestType {cluster, target_spec, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitEditIscsiTarget", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitEditIscsiTarget", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -363,11 +335,8 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_get_home_object(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VsanObjectInformation> {
         let input = VsanVitGetHomeObjectRequestType {cluster, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetHomeObject", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanObjectInformation = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitGetHomeObject", Some(&input)).await?;
+        let result: crate::types::structs::VsanObjectInformation = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Gets one iSCSI initiator group.  
@@ -397,14 +366,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_get_iscsi_initiator_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str) -> Result<Option<crate::types::structs::VsanIscsiInitiatorGroup>> {
         let input = VsanVitGetIscsiInitiatorGroupRequestType {cluster, initiator_group_name, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiInitiatorGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitGetIscsiInitiatorGroup", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanIscsiInitiatorGroup>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -429,14 +393,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_get_iscsi_initiator_groups(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VsanIscsiInitiatorGroup>>> {
         let input = VsanVitGetIscsiInitiatorGroupsRequestType {cluster, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiInitiatorGroups", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitGetIscsiInitiatorGroups", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIscsiInitiatorGroup>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -470,14 +429,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_get_iscsi_lun(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, lun_id: i32) -> Result<Option<crate::types::structs::VsanIscsiLun>> {
         let input = VsanVitGetIscsiLunRequestType {cluster, target_alias, lun_id, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiLUN", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitGetIscsiLUN", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanIscsiLun>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -509,14 +463,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_get_iscsi_lu_ns(&self, cluster: &crate::types::structs::ManagedObjectReference, target_aliases: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::VsanIscsiLun>>> {
         let input = VsanVitGetIscsiLuNsRequestType {cluster, target_aliases, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiLUNs", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitGetIscsiLUNs", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIscsiLun>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -548,14 +497,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_get_iscsi_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str) -> Result<Option<crate::types::structs::VsanIscsiTarget>> {
         let input = VsanVitGetIscsiTargetRequestType {cluster, target_alias, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiTarget", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitGetIscsiTarget", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanIscsiTarget>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -582,14 +526,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_get_iscsi_targets(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VsanIscsiTarget>>> {
         let input = VsanVitGetIscsiTargetsRequestType {cluster, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitGetIscsiTargets", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitGetIscsiTargets", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIscsiTarget>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -606,11 +545,8 @@ impl VsanIscsiTargetSystem {
     ///
     /// Failure
     pub async fn vsan_vit_query_iscsi_target_service_version(&self) -> Result<String> {
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitQueryIscsiTargetServiceVersion", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitQueryIscsiTargetServiceVersion", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Remediates the iSCSI LUNs which runtime status are not consistent
@@ -647,11 +583,8 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_remediate_iscsi_luns_runtime_status(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanRemediateIscsiLunsRuntimeStatusRequestType {cluster, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanRemediateIscsiLunsRuntimeStatus", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanRemediateIscsiLunsRuntimeStatus", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removes iSCSI initiator group from one cluster.  
@@ -680,9 +613,7 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_remove_iscsi_initiator_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str) -> Result<()> {
         let input = VsanVitRemoveIscsiInitiatorGroupRequestType {cluster, initiator_group_name, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiInitiatorGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitRemoveIscsiInitiatorGroup", Some(&input)).await
     }
     /// Removes iSCSI initiators from one initiator group.  
     /// If the initiator group does not exist, or some of the initiators
@@ -711,9 +642,7 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_remove_iscsi_initiators_from_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str, initiator_names: &[String]) -> Result<()> {
         let input = VsanVitRemoveIscsiInitiatorsFromGroupRequestType {cluster, initiator_group_name, initiator_names, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiInitiatorsFromGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitRemoveIscsiInitiatorsFromGroup", Some(&input)).await
     }
     /// Removes iSCSI initiator or initiator groups from one target.  
     /// If the specified target cannot be found or if the initiators or initiator
@@ -743,9 +672,7 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_remove_iscsi_initiators_from_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, initiator_names: &[String]) -> Result<()> {
         let input = VsanVitRemoveIscsiInitiatorsFromTargetRequestType {cluster, target_alias, initiator_names, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiInitiatorsFromTarget", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitRemoveIscsiInitiatorsFromTarget", Some(&input)).await
     }
     /// Removes iSCSI LUN from this target.  
     /// If
@@ -781,14 +708,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_remove_iscsi_lun(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str, lun_id: i32) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitRemoveIscsiLunRequestType {cluster, target_alias, lun_id, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiLUN", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitRemoveIscsiLUN", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -821,14 +743,9 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_remove_iscsi_target(&self, cluster: &crate::types::structs::ManagedObjectReference, target_alias: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = VsanVitRemoveIscsiTargetRequestType {cluster, target_alias, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiTarget", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitRemoveIscsiTarget", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -859,9 +776,7 @@ impl VsanIscsiTargetSystem {
     /// Failure
     pub async fn vsan_vit_remove_iscsi_target_from_group(&self, cluster: &crate::types::structs::ManagedObjectReference, initiator_group_name: &str, target_alias: &str) -> Result<()> {
         let input = VsanVitRemoveIscsiTargetFromGroupRequestType {cluster, initiator_group_name, target_alias, };
-        let path = format!("/vsan/VsanIscsiTargetSystem/{moId}/VsanVitRemoveIscsiTargetFromGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIscsiTargetSystem", &self.mo_id, "VsanVitRemoveIscsiTargetFromGroup", Some(&input)).await
     }
 }
 struct VsanVitAddIscsiInitiatorGroupRequestType<'a> {

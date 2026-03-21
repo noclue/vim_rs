@@ -115,6 +115,7 @@ fn emit_types(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     emit_ser(&types_folder, vim_model)?;
     emit_de(&types_folder, vim_model)?;
     emit_struct_enum(&types_folder, vim_model)?;
+    emit_api_field_registry(&types_folder, vim_model)?;
     emit_boxed_types(&types_folder, vim_model)?;
 
     emit_enums(&types_folder, vim_model)?;
@@ -189,6 +190,14 @@ fn emit_struct_enum(types_folder: &Path, vim_model: &vim_model::Model) -> Result
     Ok(())
 }
 
+fn emit_api_field_registry(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    let file = std::fs::File::create(types_folder.join("api_field_registry.rs"))
+        .expect("Could not create api_field_registry.rs file");
+    let mut printer = printer::FilePrinter::new(file, None, None);
+    rs_emitter::api_registry::generate_api_field_registry(vim_model, &mut printer)?;
+    Ok(())
+}
+
 fn emit_ser(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     let file = std::fs::File::create(types_folder.join("dyn_serialize.rs"))
         .expect("Could not create dyn_serialize.rs file");
@@ -241,6 +250,12 @@ fn emit_mod_rs(types_folder: &std::path::Path) -> Result<()> {
     p.println("pub mod dyn_serialize;")?;
     p.println("pub mod deserialize;")?;
     p.println("pub mod struct_enum;")?;
+    p.println("#[cfg(feature = \"xml\")]")?;
+    p.println("pub mod api_field_types;")?;
+    p.println("#[cfg(feature = \"xml\")]")?;
+    p.println("pub mod api_field_registry;")?;
+    p.println("#[cfg(feature = \"xml\")]")?;
+    p.println("pub mod api_typed_visitor;")?;
     p.println("pub mod boxed_types;")?;
     p.println("pub mod vim_any;")?;
     p.println("pub mod as_any;")?;

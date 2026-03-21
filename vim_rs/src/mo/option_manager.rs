@@ -54,14 +54,9 @@ impl OptionManager {
     /// given name.
     pub async fn query_options(&self, name: Option<&str>) -> Result<Option<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>> {
         let input = QueryOptionsRequestType {name, };
-        let path = format!("/OptionManager/{moId}/QueryOptions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "OptionManager", &self.mo_id, "QueryOptions", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -94,34 +89,22 @@ impl OptionManager {
     /// invalid value.
     pub async fn update_options(&self, changed_value: &[Box<dyn crate::types::traits::OptionValueTrait>]) -> Result<()> {
         let input = UpdateOptionsRequestType {changed_value, };
-        let path = format!("/OptionManager/{moId}/UpdateOptions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "OptionManager", &self.mo_id, "UpdateOptions", Some(&input)).await
     }
     /// A list of the current settings for the key/value pair options.
     pub async fn setting(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>> {
-        let path = format!("/OptionManager/{moId}/setting", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "OptionManager", &self.mo_id, "setting").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::OptionValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// A list of supported key/value pair options including their
     /// type information.
     pub async fn supported_option(&self) -> Result<Option<Vec<crate::types::structs::OptionDef>>> {
-        let path = format!("/OptionManager/{moId}/supportedOption", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "OptionManager", &self.mo_id, "supportedOption").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::OptionDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

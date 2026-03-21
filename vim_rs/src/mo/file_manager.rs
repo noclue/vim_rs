@@ -64,9 +64,7 @@ impl FileManager {
     /// Failure
     pub async fn change_owner(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, owner: &str) -> Result<()> {
         let input = ChangeOwnerRequestType {name, datacenter, owner, };
-        let path = format!("/FileManager/{moId}/ChangeOwner", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "FileManager", &self.mo_id, "ChangeOwner", Some(&input)).await
     }
     /// Copies the source file or folder to the destination.
     /// 
@@ -170,11 +168,8 @@ impl FileManager {
     /// ***FileFault***: if there is a generic file error
     pub async fn copy_datastore_file_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, destination_name: &str, destination_datacenter: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CopyDatastoreFileRequestType {source_name, source_datacenter, destination_name, destination_datacenter, force, };
-        let path = format!("/FileManager/{moId}/CopyDatastoreFile_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FileManager", &self.mo_id, "CopyDatastoreFile_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deletes the specified file or folder from the datastore.
@@ -234,11 +229,8 @@ impl FileManager {
     /// ***FileFault***: if there is a generic file error
     pub async fn delete_datastore_file_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteDatastoreFileRequestType {name, datacenter, };
-        let path = format!("/FileManager/{moId}/DeleteDatastoreFile_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FileManager", &self.mo_id, "DeleteDatastoreFile_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create a folder using the specified name.
@@ -290,9 +282,7 @@ impl FileManager {
     /// ***FileFault***: if there is a generic file error
     pub async fn make_directory(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, create_parent_directories: Option<bool>) -> Result<()> {
         let input = MakeDirectoryRequestType {name, datacenter, create_parent_directories, };
-        let path = format!("/FileManager/{moId}/MakeDirectory", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "FileManager", &self.mo_id, "MakeDirectory", Some(&input)).await
     }
     /// Moves the source file or folder to the destination.
     /// 
@@ -397,11 +387,8 @@ impl FileManager {
     /// ***FileFault***: if there is a generic file error
     pub async fn move_datastore_file_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, destination_name: &str, destination_datacenter: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveDatastoreFileRequestType {source_name, source_datacenter, destination_name, destination_datacenter, force, };
-        let path = format!("/FileManager/{moId}/MoveDatastoreFile_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FileManager", &self.mo_id, "MoveDatastoreFile_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Fetches as much information as possible for the file path passed in.
@@ -441,11 +428,8 @@ impl FileManager {
     /// would be: /vmfs/volumes/datastore1/vm/vm-flat.vmdk
     pub async fn query_file_lock_info(&self, path: &str, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::FileLockInfoResult> {
         let input = QueryFileLockInfoRequestType {path, host, };
-        let path = format!("/FileManager/{moId}/QueryFileLockInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::FileLockInfoResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FileManager", &self.mo_id, "QueryFileLockInfo", Some(&input)).await?;
+        let result: crate::types::structs::FileLockInfoResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

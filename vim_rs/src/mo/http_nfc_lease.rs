@@ -75,9 +75,7 @@ impl HttpNfcLease {
     /// ***InvalidState***: if the lease has already been aborted.
     pub async fn http_nfc_lease_abort(&self, fault: Option<&crate::types::structs::MethodFault>) -> Result<()> {
         let input = HttpNfcLeaseAbortRequestType {fault, };
-        let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseAbort", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HttpNfcLease", &self.mo_id, "HttpNfcLeaseAbort", Some(&input)).await
     }
     /// Completes the import/export and releases this lease.
     /// 
@@ -96,9 +94,7 @@ impl HttpNfcLease {
     /// ***InvalidState***: if the lease has already been completed or
     /// aborted.
     pub async fn http_nfc_lease_complete(&self) -> Result<()> {
-        let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseComplete", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HttpNfcLease", &self.mo_id, "HttpNfcLeaseComplete", None).await
     }
     /// Gets the download manifest for this lease.
     ///
@@ -106,14 +102,9 @@ impl HttpNfcLease {
     ///
     /// Failure
     pub async fn http_nfc_lease_get_manifest(&self) -> Result<Option<Vec<crate::types::structs::HttpNfcLeaseManifestEntry>>> {
-        let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseGetManifest", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HttpNfcLease", &self.mo_id, "HttpNfcLeaseGetManifest", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HttpNfcLeaseManifestEntry>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -140,14 +131,9 @@ impl HttpNfcLease {
     /// ***InvalidState***: if the lease has already been aborted.
     pub async fn http_nfc_lease_probe_urls(&self, files: Option<&[crate::types::structs::HttpNfcLeaseSourceFile]>, timeout: Option<i32>) -> Result<Option<Vec<crate::types::structs::HttpNfcLeaseProbeResult>>> {
         let input = HttpNfcLeaseProbeUrlsRequestType {files, timeout, };
-        let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseProbeUrls", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HttpNfcLease", &self.mo_id, "HttpNfcLeaseProbeUrls", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HttpNfcLeaseProbeResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -170,9 +156,7 @@ impl HttpNfcLease {
     /// detected data transfer progress.
     pub async fn http_nfc_lease_progress(&self, percent: i32) -> Result<()> {
         let input = HttpNfcLeaseProgressRequestType {percent, };
-        let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseProgress", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HttpNfcLease", &self.mo_id, "HttpNfcLeaseProgress", Some(&input)).await
     }
     /// Upgrades current lease from push to pull mode.
     ///
@@ -193,11 +177,8 @@ impl HttpNfcLease {
     /// ***InvalidState***: if the lease has already been aborted.
     pub async fn http_nfc_lease_pull_from_urls_task(&self, files: Option<&[crate::types::structs::HttpNfcLeaseSourceFile]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = HttpNfcLeasePullFromUrlsRequestType {files, };
-        let path = format!("/HttpNfcLease/{moId}/HttpNfcLeasePullFromUrls_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HttpNfcLease", &self.mo_id, "HttpNfcLeasePullFromUrls_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Sets desired checksum algorithm per each file that will be returned in
@@ -217,31 +198,22 @@ impl HttpNfcLease {
     /// Failure
     pub async fn http_nfc_lease_set_manifest_checksum_type(&self, device_urls_to_checksum_types: Option<&[crate::types::structs::KeyValue]>) -> Result<()> {
         let input = HttpNfcLeaseSetManifestChecksumTypeRequestType {device_urls_to_checksum_types, };
-        let path = format!("/HttpNfcLease/{moId}/HttpNfcLeaseSetManifestChecksumType", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HttpNfcLease", &self.mo_id, "HttpNfcLeaseSetManifestChecksumType", Some(&input)).await
     }
     /// Current supported capabilities by this lease
     /// See *HttpNfcLeaseCapabilities*
     pub async fn capabilities(&self) -> Result<crate::types::structs::HttpNfcLeaseCapabilities> {
-        let path = format!("/HttpNfcLease/{moId}/capabilities", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HttpNfcLeaseCapabilities = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "capabilities").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capabilities was empty".to_string()))?;
+        let result: crate::types::structs::HttpNfcLeaseCapabilities = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// If the lease is in the error state, this property contains the
     /// error that caused the lease to be aborted.
     pub async fn error(&self) -> Result<Option<crate::types::structs::MethodFault>> {
-        let path = format!("/HttpNfcLease/{moId}/error", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "error").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::MethodFault>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -250,14 +222,9 @@ impl HttpNfcLease {
     /// The
     /// info property is only valid when the lease is in the ready state.
     pub async fn info(&self) -> Result<Option<crate::types::structs::HttpNfcLeaseInfo>> {
-        let path = format!("/HttpNfcLease/{moId}/info", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "info").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HttpNfcLeaseInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -266,31 +233,25 @@ impl HttpNfcLease {
     /// 
     /// Clients can use this to track overall progress.
     pub async fn initialize_progress(&self) -> Result<i32> {
-        let path = format!("/HttpNfcLease/{moId}/initializeProgress", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "initializeProgress").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property initializeProgress was empty".to_string()))?;
+        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Current mode of the lease.
     /// 
     /// See *HttpNfcLeaseMode_enum* for possible values.
     pub async fn mode(&self) -> Result<String> {
-        let path = format!("/HttpNfcLease/{moId}/mode", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "mode").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property mode was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The current state of the lease.
     pub async fn state(&self) -> Result<crate::types::enums::HttpNfcLeaseStateEnum> {
-        let path = format!("/HttpNfcLease/{moId}/state", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::HttpNfcLeaseStateEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "state").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property state was empty".to_string()))?;
+        let result: crate::types::enums::HttpNfcLeaseStateEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Provides progress information (0-100 percent) for current transfer.
@@ -298,11 +259,9 @@ impl HttpNfcLease {
     /// Transfer covers download, upload and pull scenario.
     /// Can be externally updated by progress method.
     pub async fn transfer_progress(&self) -> Result<i32> {
-        let path = format!("/HttpNfcLease/{moId}/transferProgress", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "transferProgress").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property transferProgress was empty".to_string()))?;
+        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

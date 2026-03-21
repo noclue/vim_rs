@@ -95,11 +95,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_attach_disk_task(&self, id: &crate::types::structs::Id, vm: &crate::types::structs::ManagedObjectReference, controller_key: Option<i32>, unit_number: Option<i32>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmAttachDiskRequestType {id, vm, controller_key, unit_number, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmAttachDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmAttachDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Attach a tag to a virtual storage object.
@@ -125,9 +122,7 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_attach_tag_to_v_storage_object(&self, id: &crate::types::structs::Id, category: &str, tag: &str) -> Result<()> {
         let input = VslmAttachTagToVStorageObjectRequestType {id, category, tag, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmAttachTagToVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmAttachTagToVStorageObject", Some(&input)).await
     }
     /// Clear control flags on VStorageObject.
     /// 
@@ -161,9 +156,7 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_clear_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, control_flags: Option<&[String]>) -> Result<()> {
         let input = VslmClearVStorageObjectControlFlagsRequestType {id, control_flags, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmClearVStorageObjectControlFlags", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmClearVStorageObjectControlFlags", Some(&input)).await
     }
     /// Clone a virtual storage object.
     /// 
@@ -201,11 +194,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_clone_v_storage_object_task(&self, id: &crate::types::structs::Id, spec: &crate::types::structs::VslmCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmCloneVStorageObjectRequestType {id, spec, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCloneVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmCloneVStorageObject_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create a virtual disk, which is a storage object with
@@ -248,11 +238,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_create_disk_task(&self, spec: &crate::types::structs::VslmCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmCreateDiskRequestType {spec, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCreateDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmCreateDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new Disk from given snapshot of a VStorageObject.
@@ -306,11 +293,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_create_disk_from_snapshot_task(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmCreateDiskFromSnapshotRequestType {id, snapshot_id, name, profile, crypto, path, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCreateDiskFromSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmCreateDiskFromSnapshot_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a snapshot of a given VStorageObject.
@@ -344,11 +328,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_create_snapshot_task(&self, id: &crate::types::structs::Id, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmCreateSnapshotRequestType {id, description, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmCreateSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmCreateSnapshot_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
@@ -382,11 +363,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_delete_snapshot_task(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmDeleteSnapshotRequestType {id, snapshot_id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmDeleteSnapshot_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmDeleteSnapshot_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Delete a virtual storage object and its associated backings.
@@ -434,11 +412,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_delete_v_storage_object_task(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmDeleteVStorageObjectRequestType {id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmDeleteVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmDeleteVStorageObject_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Detach a tag from a virtual storage object.
@@ -464,9 +439,7 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_detach_tag_from_v_storage_object(&self, id: &crate::types::structs::Id, category: &str, tag: &str) -> Result<()> {
         let input = VslmDetachTagFromVStorageObjectRequestType {id, category, tag, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmDetachTagFromVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmDetachTagFromVStorageObject", Some(&input)).await
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
     /// *disk*, to the new
@@ -521,11 +494,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_extend_disk_task(&self, id: &crate::types::structs::Id, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmExtendDiskRequestType {id, new_capacity_in_mb, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmExtendDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmExtendDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Inflate a sparse or thin-provisioned virtual disk up to the full size.
@@ -571,11 +541,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_inflate_disk_task(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmInflateDiskRequestType {id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmInflateDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmInflateDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Lists all tags attached to virtual storage object.
@@ -597,14 +564,9 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_list_tags_attached_to_v_storage_object(&self, id: &crate::types::structs::Id) -> Result<Option<Vec<crate::types::structs::VslmTagEntry>>> {
         let input = VslmListTagsAttachedToVStorageObjectRequestType {id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmListTagsAttachedToVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmListTagsAttachedToVStorageObject", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmTagEntry>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -629,14 +591,9 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_list_v_storage_objects_attached_to_tag(&self, category: &str, tag: &str) -> Result<Option<Vec<crate::types::structs::Id>>> {
         let input = VslmListVStorageObjectsAttachedToTagRequestType {category, tag, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmListVStorageObjectsAttachedToTag", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmListVStorageObjectsAttachedToTag", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Id>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -672,14 +629,9 @@ impl VslmVStorageObjectManager {
     /// order and matching the query.
     pub async fn vslm_list_v_storage_object_for_spec(&self, query: Option<&[crate::types::structs::VslmVsoVStorageObjectQuerySpec]>, max_result: i32) -> Result<Option<crate::types::structs::VslmVsoVStorageObjectQueryResult>> {
         let input = VslmListVStorageObjectForSpecRequestType {query, max_result, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmListVStorageObjectForSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmListVStorageObjectForSpec", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VslmVsoVStorageObjectQueryResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -746,11 +698,8 @@ impl VslmVStorageObjectManager {
     /// disk or changeId is invalid.
     pub async fn vslm_query_changed_disk_areas(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id, start_offset: i64, change_id: &str) -> Result<crate::types::structs::DiskChangeInfo> {
         let input = VslmQueryChangedDiskAreasRequestType {id, snapshot_id, start_offset, change_id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmQueryChangedDiskAreas", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::DiskChangeInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmQueryChangedDiskAreas", Some(&input)).await?;
+        let result: crate::types::structs::DiskChangeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Gets the synchronization status of the Global Catalog.
@@ -762,14 +711,9 @@ impl VslmVStorageObjectManager {
     /// check if the Global Catalog is making progress on bringing a datastore's
     /// information up to date.
     pub async fn vslm_query_global_catalog_sync_status(&self) -> Result<Option<Vec<crate::types::structs::VslmDatastoreSyncStatus>>> {
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmQueryGlobalCatalogSyncStatus", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmQueryGlobalCatalogSyncStatus", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmDatastoreSyncStatus>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -791,14 +735,9 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_query_global_catalog_sync_status_for_datastore(&self, datastore_url: &str) -> Result<Option<crate::types::structs::VslmDatastoreSyncStatus>> {
         let input = VslmQueryGlobalCatalogSyncStatusForDatastoreRequestType {datastore_url, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmQueryGlobalCatalogSyncStatusForDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmQueryGlobalCatalogSyncStatusForDatastore", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VslmDatastoreSyncStatus>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -825,11 +764,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_reconcile_datastore_inventory_task(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmReconcileDatastoreInventoryRequestType {datastore, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmReconcileDatastoreInventory_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmReconcileDatastoreInventory_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Promote a virtual disk to a First Class Disk.
@@ -869,11 +805,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_register_disk(&self, path: &str, name: Option<&str>) -> Result<crate::types::structs::VStorageObject> {
         let input = VslmRegisterDiskRequestType {path, name, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRegisterDisk", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VStorageObject = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRegisterDisk", Some(&input)).await?;
+        let result: crate::types::structs::VStorageObject = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Relocate a virtual storage object.
@@ -915,11 +848,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_relocate_v_storage_object_task(&self, id: &crate::types::structs::Id, spec: &crate::types::structs::VslmRelocateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmRelocateVStorageObjectRequestType {id, spec, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRelocateVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRelocateVStorageObject_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Rename a virtual storage object.
@@ -960,9 +890,7 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_rename_v_storage_object(&self, id: &crate::types::structs::Id, name: &str) -> Result<()> {
         let input = VslmRenameVStorageObjectRequestType {id, name, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRenameVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRenameVStorageObject", Some(&input)).await
     }
     /// Retrieves snapshot disk details of a given snapshot.
     ///
@@ -989,11 +917,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_retrieve_snapshot_details(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::VStorageObjectSnapshotDetails> {
         let input = VslmRetrieveSnapshotDetailsRequestType {id, snapshot_id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveSnapshotDetails", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VStorageObjectSnapshotDetails = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRetrieveSnapshotDetails", Some(&input)).await?;
+        let result: crate::types::structs::VStorageObjectSnapshotDetails = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves snapshot information of a given VStorageObject.
@@ -1020,11 +945,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_retrieve_snapshot_info(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::VStorageObjectSnapshotInfo> {
         let input = VslmRetrieveSnapshotInfoRequestType {id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveSnapshotInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VStorageObjectSnapshotInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRetrieveSnapshotInfo", Some(&input)).await?;
+        let result: crate::types::structs::VStorageObjectSnapshotInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve FCD infrastructure object SBPM policy on given datastore.
@@ -1057,14 +979,9 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_retrieve_v_storage_infrastructure_object_policy(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>> {
         let input = VslmRetrieveVStorageInfrastructureObjectPolicyRequestType {datastore, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageInfrastructureObjectPolicy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRetrieveVStorageInfrastructureObjectPolicy", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmInfrastructureObjectPolicy>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1094,11 +1011,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_retrieve_v_storage_object(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::VStorageObject> {
         let input = VslmRetrieveVStorageObjectRequestType {id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObject", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VStorageObject = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRetrieveVStorageObject", Some(&input)).await?;
+        let result: crate::types::structs::VStorageObject = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve vm associations for each virtual storage object in the query.
@@ -1114,14 +1028,9 @@ impl VslmVStorageObjectManager {
     /// to vm associations mapping.
     pub async fn vslm_retrieve_v_storage_object_associations(&self, ids: Option<&[crate::types::structs::Id]>) -> Result<Option<Vec<crate::types::structs::VslmVsoVStorageObjectAssociations>>> {
         let input = VslmRetrieveVStorageObjectAssociationsRequestType {ids, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectAssociations", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRetrieveVStorageObjectAssociations", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmVsoVStorageObjectAssociations>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1158,14 +1067,9 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_retrieve_v_storage_object_metadata(&self, id: &crate::types::structs::Id, snapshot_id: Option<&crate::types::structs::Id>, prefix: Option<&str>) -> Result<Option<Vec<crate::types::structs::KeyValue>>> {
         let input = VslmRetrieveVStorageObjectMetadataRequestType {id, snapshot_id, prefix, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectMetadata", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRetrieveVStorageObjectMetadata", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::KeyValue>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1204,11 +1108,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_retrieve_v_storage_object_metadata_value(&self, id: &crate::types::structs::Id, snapshot_id: Option<&crate::types::structs::Id>, key: &str) -> Result<String> {
         let input = VslmRetrieveVStorageObjectMetadataValueRequestType {id, snapshot_id, key, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectMetadataValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRetrieveVStorageObjectMetadataValue", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve a virtual storage object state.
@@ -1238,11 +1139,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_retrieve_v_storage_object_state(&self, id: &crate::types::structs::Id) -> Result<crate::types::structs::VStorageObjectStateInfo> {
         let input = VslmRetrieveVStorageObjectStateRequestType {id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjectState", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VStorageObjectStateInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRetrieveVStorageObjectState", Some(&input)).await?;
+        let result: crate::types::structs::VStorageObjectStateInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves details of a list of virtual storage objects from cache.
@@ -1262,14 +1160,9 @@ impl VslmVStorageObjectManager {
     /// storage objects corresponding to the input.
     pub async fn vslm_retrieve_v_storage_objects(&self, ids: Option<&[crate::types::structs::Id]>) -> Result<Option<Vec<crate::types::structs::VslmVsoVStorageObjectResult>>> {
         let input = VslmRetrieveVStorageObjectsRequestType {ids, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRetrieveVStorageObjects", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRetrieveVStorageObjects", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VslmVsoVStorageObjectResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1321,11 +1214,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_revert_v_storage_object_task(&self, id: &crate::types::structs::Id, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmRevertVStorageObjectRequestType {id, snapshot_id, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmRevertVStorageObject_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmRevertVStorageObject_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Schedules reconcile of the inventory info of virtual storage objects on
@@ -1354,9 +1244,7 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_schedule_reconcile_datastore_inventory(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = VslmScheduleReconcileDatastoreInventoryRequestType {datastore, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmScheduleReconcileDatastoreInventory", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmScheduleReconcileDatastoreInventory", Some(&input)).await
     }
     /// Set control flags on VStorageObject.
     /// 
@@ -1390,9 +1278,7 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_set_v_storage_object_control_flags(&self, id: &crate::types::structs::Id, control_flags: Option<&[String]>) -> Result<()> {
         let input = VslmSetVStorageObjectControlFlagsRequestType {id, control_flags, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmSetVStorageObjectControlFlags", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmSetVStorageObjectControlFlags", Some(&input)).await
     }
     /// Assigns specified SBPM policy to the given FCD infrastructure object.
     /// 
@@ -1427,11 +1313,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_update_v_storage_infrastructure_object_policy_task(&self, spec: &crate::types::structs::VslmInfrastructureObjectPolicySpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmUpdateVStorageInfrastructureObjectPolicyRequestType {spec, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVStorageInfrastructureObjectPolicy_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmUpdateVStorageInfrastructureObjectPolicy_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Update the storage crypto on a virtual storage object.
@@ -1473,11 +1356,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_update_vstorage_object_crypto_task(&self, id: &crate::types::structs::Id, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, disks_crypto: Option<&crate::types::structs::DiskCryptoSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmUpdateVstorageObjectCryptoRequestType {id, profile, disks_crypto, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVstorageObjectCrypto_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmUpdateVstorageObjectCrypto_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Update metadata KV pairs to a virtual storage object.
@@ -1528,11 +1408,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_update_v_storage_object_metadata_task(&self, id: &crate::types::structs::Id, metadata: Option<&[crate::types::structs::KeyValue]>, delete_keys: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmUpdateVStorageObjectMetadataRequestType {id, metadata, delete_keys, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVStorageObjectMetadata_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmUpdateVStorageObjectMetadata_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Update the storage policy on a virtual storage object.
@@ -1571,11 +1448,8 @@ impl VslmVStorageObjectManager {
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_update_vstorage_object_policy_task(&self, id: &crate::types::structs::Id, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VslmUpdateVstorageObjectPolicyRequestType {id, profile, };
-        let path = format!("/vslm/VslmVStorageObjectManager/{moId}/VslmUpdateVstorageObjectPolicy_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmVStorageObjectManager", &self.mo_id, "VslmUpdateVstorageObjectPolicy_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

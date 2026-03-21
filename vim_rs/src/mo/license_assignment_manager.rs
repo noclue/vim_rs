@@ -22,14 +22,9 @@ impl LicenseAssignmentManager {
     /// ID of the entity. E.g. HostSystem.
     pub async fn query_assigned_licenses(&self, entity_id: Option<&str>) -> Result<Option<Vec<crate::types::structs::LicenseAssignmentManagerLicenseAssignment>>> {
         let input = QueryAssignedLicensesRequestType {entity_id, };
-        let path = format!("/LicenseAssignmentManager/{moId}/QueryAssignedLicenses", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "LicenseAssignmentManager", &self.mo_id, "QueryAssignedLicenses", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::LicenseAssignmentManagerLicenseAssignment>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -47,9 +42,7 @@ impl LicenseAssignmentManager {
     /// Failure
     pub async fn remove_assigned_license(&self, entity_id: &str) -> Result<()> {
         let input = RemoveAssignedLicenseRequestType {entity_id, };
-        let path = format!("/LicenseAssignmentManager/{moId}/RemoveAssignedLicense", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "LicenseAssignmentManager", &self.mo_id, "RemoveAssignedLicense", Some(&input)).await
     }
     /// Update the license associated with an entity
     /// 
@@ -75,11 +68,8 @@ impl LicenseAssignmentManager {
     /// Failure
     pub async fn update_assigned_license(&self, entity: &str, license_key: &str, entity_display_name: Option<&str>) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = UpdateAssignedLicenseRequestType {entity, license_key, entity_display_name, };
-        let path = format!("/LicenseAssignmentManager/{moId}/UpdateAssignedLicense", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::LicenseManagerLicenseInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "LicenseAssignmentManager", &self.mo_id, "UpdateAssignedLicense", Some(&input)).await?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -32,9 +32,7 @@ impl CryptoManager {
     /// are incorrect.
     pub async fn add_key(&self, key: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = AddKeyRequestType {key, };
-        let path = format!("/CryptoManager/{moId}/AddKey", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CryptoManager", &self.mo_id, "AddKey", Some(&input)).await
     }
     /// Add multiple existing keys.
     /// 
@@ -54,14 +52,9 @@ impl CryptoManager {
     /// ***InvalidState***: in case the host is not Crypto Safe
     pub async fn add_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyPlain]>) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = AddKeysRequestType {keys, };
-        let path = format!("/CryptoManager/{moId}/AddKeys", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "CryptoManager", &self.mo_id, "AddKeys", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoKeyResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -84,14 +77,9 @@ impl CryptoManager {
     /// List of known keys.
     pub async fn list_keys(&self, limit: Option<i32>) -> Result<Option<Vec<crate::types::structs::CryptoKeyId>>> {
         let input = ListKeysRequestType {limit, };
-        let path = format!("/CryptoManager/{moId}/ListKeys", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "CryptoManager", &self.mo_id, "ListKeys", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoKeyId>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -118,9 +106,7 @@ impl CryptoManager {
     /// and "force" is false.
     pub async fn remove_key(&self, key: &crate::types::structs::CryptoKeyId, force: bool) -> Result<()> {
         let input = RemoveKeyRequestType {key, force, };
-        let path = format!("/CryptoManager/{moId}/RemoveKey", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CryptoManager", &self.mo_id, "RemoveKey", Some(&input)).await
     }
     /// Remove multiple keys (only the UUID is needed to remove).
     /// 
@@ -137,24 +123,17 @@ impl CryptoManager {
     /// \[in\] Remove the key even if in use. Always successful.
     pub async fn remove_keys(&self, keys: Option<&[crate::types::structs::CryptoKeyId]>, force: bool) -> Result<Option<Vec<crate::types::structs::CryptoKeyResult>>> {
         let input = RemoveKeysRequestType {keys, force, };
-        let path = format!("/CryptoManager/{moId}/RemoveKeys", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "CryptoManager", &self.mo_id, "RemoveKeys", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CryptoKeyResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Indicate if the encryption feature is enabled.
     pub async fn enabled(&self) -> Result<bool> {
-        let path = format!("/CryptoManager/{moId}/enabled", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "CryptoManager", &self.mo_id, "enabled").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property enabled was empty".to_string()))?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

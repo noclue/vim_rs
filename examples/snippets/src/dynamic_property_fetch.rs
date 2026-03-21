@@ -14,16 +14,20 @@
 //! - You need maximum flexibility in property access
 //!
 //! In this example:
-//! 1. We connect to vSphere using the utils::connect helper
+//! 1. We connect to vSphere using the shared `snippets::connect` helper
 //! 2. We fetch the "permission" property from the root folder
 //! 3. We deserialize it as a JSON value for inspection
 //!
 //! **Note**: For production code with well-defined property sets, prefer using
 //! the `vim_retrievable!` macro as shown in other examples, as it provides
 //! type safety and better performance for bulk operations.
+//!
+//! ## Typical uses
+//!
+//! Ad-hoc inspection, prototyping new property paths, and handling rarely used fields without defining a macro struct.
 
 use log::info;
-use utils::connect;
+use snippets::connect;
 
 #[tokio::main]
 async fn main() -> anyhow::Result<()> {

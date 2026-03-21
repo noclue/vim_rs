@@ -96,9 +96,7 @@ impl HostDatastoreBrowser {
     /// ***InvalidArgument***: if fileInfo is not a valid FileInfo type.
     pub async fn delete_file(&self, datastore_path: &str) -> Result<()> {
         let input = DeleteFileRequestType {datastore_path, };
-        let path = format!("/HostDatastoreBrowser/{moId}/DeleteFile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDatastoreBrowser", &self.mo_id, "DeleteFile", Some(&input)).await
     }
     /// Returns the information for the files that match the given search criteria as a
     /// SearchResults object.
@@ -137,11 +135,8 @@ impl HostDatastoreBrowser {
     /// found.
     pub async fn search_datastore_task(&self, datastore_path: &str, search_spec: Option<&crate::types::structs::HostDatastoreBrowserSearchSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SearchDatastoreRequestType {datastore_path, search_spec, };
-        let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastore_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreBrowser", &self.mo_id, "SearchDatastore_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns the information for the files that match the given search criteria as a
@@ -179,11 +174,8 @@ impl HostDatastoreBrowser {
     /// found.
     pub async fn search_datastore_sub_folders_task(&self, datastore_path: &str, search_spec: Option<&crate::types::structs::HostDatastoreBrowserSearchSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SearchDatastoreSubFoldersRequestType {datastore_path, search_spec, };
-        let path = format!("/HostDatastoreBrowser/{moId}/SearchDatastoreSubFolders_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreBrowser", &self.mo_id, "SearchDatastoreSubFolders_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Set of datastores that can be searched on this DatastoreBrowser.
@@ -199,14 +191,9 @@ impl HostDatastoreBrowser {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/HostDatastoreBrowser/{moId}/datastore", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostDatastoreBrowser", &self.mo_id, "datastore").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -225,14 +212,9 @@ impl HostDatastoreBrowser {
     /// supported. Clients should consult this list to avoid querying for types of virtual
     /// machine components that are not supported.
     pub async fn supported_type(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::FileQueryTrait>>>> {
-        let path = format!("/HostDatastoreBrowser/{moId}/supportedType", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostDatastoreBrowser", &self.mo_id, "supportedType").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::FileQueryTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

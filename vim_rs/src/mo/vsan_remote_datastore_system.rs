@@ -49,11 +49,8 @@ impl VsanRemoteDatastoreSystem {
     /// ***VsanFault***: Other vSAN related faults.
     pub async fn vsan_create_datastore_source(&self, datastore_source: &crate::types::structs::VsanHciMeshDatastoreSource) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanCreateDatastoreSourceRequestType {datastore_source, };
-        let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanCreateDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanRemoteDatastoreSystem", &self.mo_id, "VsanCreateDatastoreSource", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroy an existing Datastore Source configuration.
@@ -88,11 +85,8 @@ impl VsanRemoteDatastoreSystem {
     /// ***VsanFault***: Other vSAN related faults.
     pub async fn vsan_destroy_datastore_source(&self, datastore_source: &crate::types::structs::VsanHciMeshDatastoreSource) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanDestroyDatastoreSourceRequestType {datastore_source, };
-        let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanDestroyDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanRemoteDatastoreSystem", &self.mo_id, "VsanDestroyDatastoreSource", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Checks mount compatibility of a vSAN datastore with given vSAN cluster.
@@ -126,11 +120,8 @@ impl VsanRemoteDatastoreSystem {
     /// Pre-check results of a client cluster mounting server vSAN datastore.
     pub async fn mount_precheck(&self, cluster: &crate::types::structs::ManagedObjectReference, datastore: &crate::types::structs::ManagedObjectReference, server_cluster_info: Option<&crate::types::structs::VcRemoteVsanServerClusterInfo>) -> Result<Box<dyn crate::types::traits::VsanMountPrecheckResultTrait>> {
         let input = MountPrecheckRequestType {cluster, datastore, server_cluster_info, };
-        let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/MountPrecheck", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanRemoteDatastoreSystem", &self.mo_id, "MountPrecheck", Some(&input)).await?;
+        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Run prechecks for a Datastore Source.
@@ -164,11 +155,8 @@ impl VsanRemoteDatastoreSystem {
     /// ***VsanFault***: Other vSAN related faults.
     pub async fn vsan_precheck_datastore_source(&self, datastore_source: &crate::types::structs::VsanHciMeshDatastoreSource, operation: Option<&str>) -> Result<crate::types::structs::VsanDatastoreSourcePrecheckResult> {
         let input = VsanPrecheckDatastoreSourceRequestType {datastore_source, operation, };
-        let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanPrecheckDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanDatastoreSourcePrecheckResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanRemoteDatastoreSystem", &self.mo_id, "VsanPrecheckDatastoreSource", Some(&input)).await?;
+        let result: crate::types::structs::VsanDatastoreSourcePrecheckResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query Datastore Source information for specified remote vCenters.
@@ -194,14 +182,9 @@ impl VsanRemoteDatastoreSystem {
     /// ***VsanFault***: vSAN related faults.
     pub async fn vsan_query_datastore_source(&self, vc_hosts: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::VsanHciMeshDatastoreSource>>> {
         let input = VsanQueryDatastoreSourceRequestType {vc_hosts, };
-        let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanQueryDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanRemoteDatastoreSystem", &self.mo_id, "VsanQueryDatastoreSource", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanHciMeshDatastoreSource>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -245,14 +228,9 @@ impl VsanRemoteDatastoreSystem {
     /// ***VsanFault***: vSAN related faults.
     pub async fn vsan_query_hci_mesh_datastores(&self, query_specs: Option<&[crate::types::structs::VsanXvcQuerySpec]>, extra_vc_infos: Option<&[Box<dyn crate::types::traits::VsanRemoteVcInfoTrait>]>) -> Result<Option<Vec<crate::types::structs::VsanXvcQueryResultSet>>> {
         let input = VsanQueryHciMeshDatastoresRequestType {query_specs, extra_vc_infos, };
-        let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanQueryHciMeshDatastores", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanRemoteDatastoreSystem", &self.mo_id, "VsanQueryHciMeshDatastores", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanXvcQueryResultSet>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -284,11 +262,8 @@ impl VsanRemoteDatastoreSystem {
     /// ***VsanFault***: vSAN related faults.
     pub async fn remote_vc_mount_precheck(&self, cluster: &crate::types::structs::ManagedObjectReference, xvc_datastore: &crate::types::structs::VsanXvcDatastoreInfo) -> Result<Box<dyn crate::types::traits::VsanMountPrecheckResultTrait>> {
         let input = RemoteVcMountPrecheckRequestType {cluster, xvc_datastore, };
-        let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/RemoteVcMountPrecheck", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanRemoteDatastoreSystem", &self.mo_id, "RemoteVcMountPrecheck", Some(&input)).await?;
+        let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Update the configuration of an existing Datastore Source.
@@ -325,11 +300,8 @@ impl VsanRemoteDatastoreSystem {
     /// ***VsanFault***: Other vSAN related faults.
     pub async fn vsan_update_datastore_source(&self, datastore_source: &crate::types::structs::VsanHciMeshDatastoreSource) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanUpdateDatastoreSourceRequestType {datastore_source, };
-        let path = format!("/vsan/VsanRemoteDatastoreSystem/{moId}/VsanUpdateDatastoreSource", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanRemoteDatastoreSystem", &self.mo_id, "VsanUpdateDatastoreSource", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

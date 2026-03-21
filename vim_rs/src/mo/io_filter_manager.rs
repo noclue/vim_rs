@@ -48,11 +48,8 @@ impl IoFilterManager {
     /// ***InvalidArgument***: if cluster is not a vLCM cluster.
     pub async fn initiate_transition_to_vlcm_task(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InitiateTransitionToVlcmRequestType {cluster, };
-        let path = format!("/IoFilterManager/{moId}/InitiateTransitionToVLCM_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IoFilterManager", &self.mo_id, "InitiateTransitionToVLCM_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Install an IO Filter on a compute resource.
@@ -99,11 +96,8 @@ impl IoFilterManager {
     /// been installed.
     pub async fn install_io_filter_task(&self, vib_url: &str, comp_res: &crate::types::structs::ManagedObjectReference, vib_ssl_trust: Option<&dyn crate::types::traits::IoFilterManagerSslTrustTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InstallIoFilterRequestType {vib_url, comp_res, vib_ssl_trust, };
-        let path = format!("/IoFilterManager/{moId}/InstallIoFilter_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IoFilterManager", &self.mo_id, "InstallIoFilter_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return the list of virtual disks that use an IO Filter installed on
@@ -133,11 +127,8 @@ impl IoFilterManager {
     /// not installed on the cluster.
     pub async fn query_disks_using_filter(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<Vec<crate::types::structs::VirtualDiskId>> {
         let input = QueryDisksUsingFilterRequestType {filter_id, comp_res, };
-        let path = format!("/IoFilterManager/{moId}/QueryDisksUsingFilter", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VirtualDiskId> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IoFilterManager", &self.mo_id, "QueryDisksUsingFilter", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VirtualDiskId> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return the information for the IO Filters that are installed on the cluster.
@@ -159,14 +150,9 @@ impl IoFilterManager {
     /// on the compute resource.
     pub async fn query_io_filter_info(&self, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ClusterIoFilterInfo>>> {
         let input = QueryIoFilterInfoRequestType {comp_res, };
-        let path = format!("/IoFilterManager/{moId}/QueryIoFilterInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "IoFilterManager", &self.mo_id, "QueryIoFilterInfo", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ClusterIoFilterInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -196,11 +182,8 @@ impl IoFilterManager {
     /// not installed on the cluster.
     pub async fn query_io_filter_issues(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::IoFilterQueryIssueResult> {
         let input = QueryIoFilterIssuesRequestType {filter_id, comp_res, };
-        let path = format!("/IoFilterManager/{moId}/QueryIoFilterIssues", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::IoFilterQueryIssueResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IoFilterManager", &self.mo_id, "QueryIoFilterIssues", Some(&input)).await?;
+        let result: crate::types::structs::IoFilterQueryIssueResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Resolve the errors occurred during an installation/uninstallation/upgrade
@@ -242,11 +225,8 @@ impl IoFilterManager {
     /// not installed on the cluster.
     pub async fn resolve_installation_errors_on_cluster_task(&self, filter_id: &str, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResolveInstallationErrorsOnClusterRequestType {filter_id, cluster, };
-        let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnCluster_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IoFilterManager", &self.mo_id, "ResolveInstallationErrorsOnCluster_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Resolve the errors occurred during an installation/uninstallation/upgrade
@@ -288,11 +268,8 @@ impl IoFilterManager {
     /// not installed on the cluster.
     pub async fn resolve_installation_errors_on_host_task(&self, filter_id: &str, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResolveInstallationErrorsOnHostRequestType {filter_id, host, };
-        let path = format!("/IoFilterManager/{moId}/ResolveInstallationErrorsOnHost_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IoFilterManager", &self.mo_id, "ResolveInstallationErrorsOnHost_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Uninstall an IO Filter from a compute resource.
@@ -336,11 +313,8 @@ impl IoFilterManager {
     /// on the cluster.
     pub async fn uninstall_io_filter_task(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UninstallIoFilterRequestType {filter_id, comp_res, };
-        let path = format!("/IoFilterManager/{moId}/UninstallIoFilter_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IoFilterManager", &self.mo_id, "UninstallIoFilter_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Upgrade an IO Filter on a compute resource.
@@ -394,11 +368,8 @@ impl IoFilterManager {
     /// on the cluster.
     pub async fn upgrade_io_filter_task(&self, filter_id: &str, comp_res: &crate::types::structs::ManagedObjectReference, vib_url: &str, vib_ssl_trust: Option<&dyn crate::types::traits::IoFilterManagerSslTrustTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpgradeIoFilterRequestType {filter_id, comp_res, vib_url, vib_ssl_trust, };
-        let path = format!("/IoFilterManager/{moId}/UpgradeIoFilter_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IoFilterManager", &self.mo_id, "UpgradeIoFilter_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

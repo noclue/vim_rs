@@ -38,9 +38,7 @@ impl HostFirewallSystem {
     /// ruleset.
     pub async fn disable_ruleset(&self, id: &str) -> Result<()> {
         let input = DisableRulesetRequestType {id, };
-        let path = format!("/HostFirewallSystem/{moId}/DisableRuleset", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostFirewallSystem", &self.mo_id, "DisableRuleset", Some(&input)).await
     }
     /// Opens the firewall ports belonging to the specified ruleset.
     /// 
@@ -62,18 +60,14 @@ impl HostFirewallSystem {
     /// ruleset.
     pub async fn enable_ruleset(&self, id: &str) -> Result<()> {
         let input = EnableRulesetRequestType {id, };
-        let path = format!("/HostFirewallSystem/{moId}/EnableRuleset", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostFirewallSystem", &self.mo_id, "EnableRuleset", Some(&input)).await
     }
     /// Refresh the firewall information and settings to pick up any changes
     /// made directly on the host.
     /// 
     /// ***Required privileges:*** Host.Config.NetService
     pub async fn refresh_firewall(&self) -> Result<()> {
-        let path = format!("/HostFirewallSystem/{moId}/RefreshFirewall", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostFirewallSystem", &self.mo_id, "RefreshFirewall", None).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -91,9 +85,7 @@ impl HostFirewallSystem {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/HostFirewallSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostFirewallSystem", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Updates the default firewall policy; unset fields are left unchanged.
     /// 
@@ -105,9 +97,7 @@ impl HostFirewallSystem {
     /// -
     pub async fn update_default_policy(&self, default_policy: &crate::types::structs::HostFirewallDefaultPolicy) -> Result<()> {
         let input = UpdateDefaultPolicyRequestType {default_policy, };
-        let path = format!("/HostFirewallSystem/{moId}/UpdateDefaultPolicy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostFirewallSystem", &self.mo_id, "UpdateDefaultPolicy", Some(&input)).await
     }
     /// Update the firewall ruleset specification.
     /// 
@@ -128,9 +118,7 @@ impl HostFirewallSystem {
     /// ***HostConfigFault***: if the update of the ruleset failed.
     pub async fn update_ruleset(&self, id: &str, spec: &crate::types::structs::HostFirewallRulesetRulesetSpec) -> Result<()> {
         let input = UpdateRulesetRequestType {id, spec, };
-        let path = format!("/HostFirewallSystem/{moId}/UpdateRuleset", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostFirewallSystem", &self.mo_id, "UpdateRuleset", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -138,27 +126,17 @@ impl HostFirewallSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/HostFirewallSystem/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostFirewallSystem", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Firewall configuration.
     pub async fn firewall_info(&self) -> Result<Option<crate::types::structs::HostFirewallInfo>> {
-        let path = format!("/HostFirewallSystem/{moId}/firewallInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostFirewallSystem", &self.mo_id, "firewallInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostFirewallInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -170,14 +148,9 @@ impl HostFirewallSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostFirewallSystem/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostFirewallSystem", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

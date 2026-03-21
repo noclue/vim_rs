@@ -56,9 +56,7 @@ impl HostAccessManager {
     /// ***UserNotFound***: if the specified user is not found.
     pub async fn change_access_mode(&self, principal: &str, is_group: bool, access_mode: crate::types::enums::HostAccessModeEnum) -> Result<()> {
         let input = ChangeAccessModeRequestType {principal, is_group, access_mode, };
-        let path = format!("/HostAccessManager/{moId}/ChangeAccessMode", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostAccessManager", &self.mo_id, "ChangeAccessMode", Some(&input)).await
     }
     /// Changes the lockdown state of the ESXi host.
     /// 
@@ -126,9 +124,7 @@ impl HostAccessManager {
     /// permissions to perform the operation.
     pub async fn change_lockdown_mode(&self, mode: crate::types::enums::HostLockdownModeEnum) -> Result<()> {
         let input = ChangeLockdownModeRequestType {mode, };
-        let path = format!("/HostAccessManager/{moId}/ChangeLockdownMode", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostAccessManager", &self.mo_id, "ChangeLockdownMode", Some(&input)).await
     }
     /// Get the list of users which are exceptions for lockdown mode.
     /// 
@@ -141,14 +137,9 @@ impl HostAccessManager {
     /// the list of users which will not lose their permissions when
     /// the host enters lockdown mode.
     pub async fn query_lockdown_exceptions(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/HostAccessManager/{moId}/QueryLockdownExceptions", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostAccessManager", &self.mo_id, "QueryLockdownExceptions", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -168,14 +159,9 @@ impl HostAccessManager {
     ///
     /// the list of local system users.
     pub async fn query_system_users(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/HostAccessManager/{moId}/QuerySystemUsers", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostAccessManager", &self.mo_id, "QuerySystemUsers", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -191,14 +177,9 @@ impl HostAccessManager {
     ///
     /// a list of AccessEntry objects.
     pub async fn retrieve_host_access_control_entries(&self) -> Result<Option<Vec<crate::types::structs::HostAccessControlEntry>>> {
-        let path = format!("/HostAccessManager/{moId}/RetrieveHostAccessControlEntries", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostAccessManager", &self.mo_id, "RetrieveHostAccessControlEntries", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostAccessControlEntry>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -234,9 +215,7 @@ impl HostAccessManager {
     /// ***UserNotFound***: if one of the specified users is not found.
     pub async fn update_lockdown_exceptions(&self, users: Option<&[String]>) -> Result<()> {
         let input = UpdateLockdownExceptionsRequestType {users, };
-        let path = format!("/HostAccessManager/{moId}/UpdateLockdownExceptions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostAccessManager", &self.mo_id, "UpdateLockdownExceptions", Some(&input)).await
     }
     /// Update the list of local system users.
     /// 
@@ -258,19 +237,15 @@ impl HostAccessManager {
     /// ***UserNotFound***: If one of the specified users is not found.
     pub async fn update_system_users(&self, users: Option<&[String]>) -> Result<()> {
         let input = UpdateSystemUsersRequestType {users, };
-        let path = format!("/HostAccessManager/{moId}/UpdateSystemUsers", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostAccessManager", &self.mo_id, "UpdateSystemUsers", Some(&input)).await
     }
     /// Current lockdown state of the host.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn lockdown_mode(&self) -> Result<crate::types::enums::HostLockdownModeEnum> {
-        let path = format!("/HostAccessManager/{moId}/lockdownMode", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::HostLockdownModeEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostAccessManager", &self.mo_id, "lockdownMode").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property lockdownMode was empty".to_string()))?;
+        let result: crate::types::enums::HostLockdownModeEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

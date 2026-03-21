@@ -53,9 +53,7 @@ impl TenantTenantManager {
     /// of the service provider inventory.
     pub async fn mark_service_provider_entities(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = MarkServiceProviderEntitiesRequestType {entity, };
-        let path = format!("/TenantTenantManager/{moId}/MarkServiceProviderEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "TenantTenantManager", &self.mo_id, "MarkServiceProviderEntities", Some(&input)).await
     }
     /// Retrieves the list of tenant management entities.
     /// 
@@ -67,14 +65,9 @@ impl TenantTenantManager {
     /// 
     /// Refers instances of *ManagedEntity*.
     pub async fn retrieve_service_provider_entities(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/TenantTenantManager/{moId}/RetrieveServiceProviderEntities", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "TenantTenantManager", &self.mo_id, "RetrieveServiceProviderEntities", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -104,9 +97,7 @@ impl TenantTenantManager {
     /// ***ManagedObjectNotFound***: if any of the entities doesn't exist.
     pub async fn unmark_service_provider_entities(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = UnmarkServiceProviderEntitiesRequestType {entity, };
-        let path = format!("/TenantTenantManager/{moId}/UnmarkServiceProviderEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "TenantTenantManager", &self.mo_id, "UnmarkServiceProviderEntities", Some(&input)).await
     }
 }
 struct MarkServiceProviderEntitiesRequestType<'a> {

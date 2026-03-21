@@ -51,41 +51,142 @@ pub type Result<T> = std::result::Result<T, Error>;
 /// A boxed future used by the object-safe `VimClient` trait.
 pub type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
 
+/// Transport protocol used by a `VimClient` instance.
+#[derive(Debug, Clone, Copy, PartialEq, Eq)]
+pub enum Transport {
+    Json,
+    #[cfg(feature = "xml")]
+    Soap,
+}
+
 /// Object-safe client abstraction for generated managed-object stubs (`crate::mo::*`).
 ///
-/// This trait intentionally mirrors the subset of `Client` used by the generated bindings.
-/// It is **object-safe** so managed objects can store `Arc<dyn VimClient>`, enabling
-/// wrappers/mocks for testing and instrumentation.
+/// The trait exposes high-level operations that are transport-agnostic.
+/// Generated MO proxies call these methods and then use the free `unmarshal`
+/// function for deserialization, keyed on `transport()`.
 pub trait VimClient: Send + Sync {
     /// Access vSphere `ServiceContent` (root managed object references).
     fn service_content(&self) -> &ServiceContent;
 
-    /// Prepare GET request.
-    fn get_request(&self, path: &str) -> reqwest::RequestBuilder;
+    /// The transport protocol this client uses.
+    fn transport(&self) -> Transport;
 
-    /// Prepare POST request with a JSON payload.
-    fn post_json(&self, path: &str, payload: &dyn miniserde::Serialize) -> reqwest::RequestBuilder;
+    /// API version string (negotiated release for JSON, about.api_version for SOAP).
+    fn api_release(&self) -> String;
 
-    /// Prepare POST request without a body.
-    fn post_bare(&self, path: &str) -> reqwest::RequestBuilder;
-
-    /// Execute a request and return the raw response body.
-    ///
-    /// We return `Bytes` (not `Vec<u8>`) to avoid an extra copy of the response body.
-    fn execute_bytes<'a>(&'a self, req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<Bytes>>;
-
-    /// Execute a request and return an optional JSON value (empty body -> `None`).
-    fn execute_option_bytes<'a>(
+    /// Invoke a method and return the response body bytes.
+    fn invoke<'a>(
         &'a self,
-        req: reqwest::RequestBuilder,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<Bytes>>;
+
+    /// Invoke a method that may return an empty body (`None`).
+    fn invoke_optional<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<Option<Bytes>>>;
 
-    /// Execute a request that returns no response body.
-    fn execute_void<'a>(&'a self, req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<()>>;
+    /// Invoke a void method (no response body expected).
+    fn invoke_void<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<()>>;
+
+    /// Fetch a single property by name, returning the raw wire bytes (or `None`).
+    ///
+    /// Managed-object stubs call this and then [`unmarshal`] with [`Self::transport`].
+    /// Application code typically uses [`Client::fetch_property`] on the public facade instead.
+    fn fetch_property_raw<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        property: &'a str,
+    ) -> BoxFuture<'a, Result<Option<Bytes>>>;
+}
+
+/// Deserialize response bytes according to the transport format.
+///
+/// This is a free function (not a trait method) so that it can be generic on `T`
+/// without breaking object-safety of `VimClient`.
+pub fn unmarshal<T: miniserde::Deserialize>(transport: Transport, bytes: &[u8]) -> Result<T> {
+    let text = std::str::from_utf8(bytes)
+        .map_err(|e| Error::ParseError(e.to_string()))?;
+    match transport {
+        Transport::Json => miniserde::json::from_str(text)
+            .map_err(|_| Error::ParseError(format!(
+                "JSON deserialization failed for {}", std::any::type_name::<T>()))),
+        #[cfg(feature = "xml")]
+        Transport::Soap => {
+            // Method responses are SOAP envelopes with `<returnval>`; property fetch returns raw object XML.
+            crate::xml::soap::vim_response(text)
+                .or_else(|_| crate::xml::de::from_xml(text))
+                .map_err(|_| Error::ParseError(format!(
+                    "XML deserialization failed for {}", std::any::type_name::<T>())))
+        },
+    }
+}
+
+/// Deserialize results encoded as a **list of sibling** `<returnval>` elements per item (SOAP) or
+/// the equivalent JSON array (JSON).
+///
+/// vSphere uses this shape for paginated reads such as *ReadNextEvents*, *ReadPreviousEvents*,
+/// *QueryEvents*, *ReadNextTasks*, *ReadPreviousTasks*, and *ReadNextTasksByViewSpec*. For those
+/// APIs, do **not** use [`unmarshal`] with `Vec<…>` on SOAP: [`unmarshal`] only drives the first
+/// `<returnval>` via [`crate::xml::soap::vim_response`].
+pub fn unmarshal_array<U: miniserde::Deserialize>(
+    transport: Transport,
+    bytes: &[u8],
+) -> Result<Vec<U>> {
+    let text = std::str::from_utf8(bytes)
+        .map_err(|e| Error::ParseError(e.to_string()))?;
+    match transport {
+        Transport::Json => miniserde::json::from_str(text).map_err(|_| {
+            Error::ParseError(format!(
+                "JSON deserialization failed for Vec<{}>",
+                std::any::type_name::<U>()
+            ))
+        }),
+        #[cfg(feature = "xml")]
+        Transport::Soap => crate::xml::soap::vim_response_list(text).map_err(|_| {
+            Error::ParseError(format!(
+                "XML deserialization failed for Vec<{}>",
+                std::any::type_name::<U>()
+            ))
+        }),
+    }
 }
 
 /// Convenience handle type used by generated bindings.
 pub type VimClientHandle = Arc<dyn VimClient>;
+
+/// Transport selection for [`ClientBuilder::build`].
+///
+/// Requires the `xml` feature for `Soap` and `Auto` variants.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum TransportMode {
+    /// Use the VI JSON API (vCenter only). This is the default.
+    #[default]
+    Json,
+    /// Use SOAP/XML transport (works on both ESXi and vCenter).
+    #[cfg(feature = "xml")]
+    Soap,
+    /// Auto-detect: try the Hello System API (JSON). If it fails, fall back to SOAP.
+    #[cfg(feature = "xml")]
+    Auto,
+}
 
 pub struct ClientBuilder {
     server_address: String,
@@ -98,6 +199,7 @@ pub struct ClientBuilder {
     user_name: Option<String>,
     password: Option<String>,
     locale: Option<String>,
+    transport_mode: TransportMode,
 }
 
 impl ClientBuilder {
@@ -116,7 +218,14 @@ impl ClientBuilder {
             user_name: None,
             password: None,
             locale: None,
+            transport_mode: TransportMode::default(),
         }
+    }
+
+    /// Set the transport mode. Requires the `xml` feature for `Soap` and `Auto`.
+    pub fn transport(mut self, mode: TransportMode) -> Self {
+        self.transport_mode = mode;
+        self
     }
 
     /// Set the compatible API releases. The default is set from the openapi spec. If `api_release`
@@ -189,8 +298,24 @@ impl ClientBuilder {
         self
     }
 
-    /// Build the client instance
+    /// Build a connected [`Client`] facade for the configured [`TransportMode`].
+    ///
+    /// - **Json** (default): VI JSON API via Hello System negotiation (unless `api_release` is set).
+    /// - **Soap** (`xml` feature): SOAP/XML to `/sdk`.
+    /// - **Auto** (`xml` feature): Hello System first; falls back to SOAP if unavailable.
     pub async fn build(self) -> Result<Arc<Client>> {
+        #[cfg(feature = "xml")]
+        {
+            match self.transport_mode {
+                TransportMode::Soap => return Self::build_soap_facade(self).await,
+                TransportMode::Auto => return Self::build_auto_facade(self).await,
+                TransportMode::Json => {}
+            }
+        }
+        Self::build_json(self).await
+    }
+
+    async fn build_json(self) -> Result<Arc<Client>> {
         let http_client = match self.http_client {
             Some(client) => client,
             None => {
@@ -239,7 +364,7 @@ impl ClientBuilder {
 
         let base_url = format!("https://{}/sdk/vim25/{}", self.server_address, api_release);
 
-        let bootstrap = Arc::new(Client {
+        let bootstrap = Arc::new(JsonClient {
             http_client: http_client.clone(),
             session_key: session_key.clone(),
             api_release: api_release.clone(),
@@ -254,7 +379,7 @@ impl ClientBuilder {
         trace!("ServiceInstance content: {:?}", content);
 
         let sm_id = content.session_manager.as_ref().map(|moid| moid.value.clone());
-        let client = Arc::new(Client {
+        let json = Arc::new(JsonClient {
             http_client: http_client.clone(),
             session_key: session_key.clone(),
             api_release: api_release.clone(),
@@ -263,17 +388,200 @@ impl ClientBuilder {
             service_content: Some(content),
         });
 
-
         if let (Some(ref sm_id), Some(ref user_name), Some(ref password)) = (sm_id, self.user_name, self.password) {
-            let sm = mo::SessionManager::new(client.clone(), sm_id);
+            let sm = mo::SessionManager::new(json.clone(), sm_id);
             let session = sm.login(user_name, password, self.locale.as_deref()).await?;
             debug!("Session created for: {:?}", session.user_name);
         }
-        Ok(client)
+        Ok(Arc::new(Client { inner: json }))
+    }
+
+    #[cfg(feature = "xml")]
+    async fn build_soap_facade(self) -> Result<Arc<Client>> {
+        let http_client = match self.http_client {
+            Some(client) => client,
+            None => {
+                let mut builder = reqwest::ClientBuilder::new()
+                    .cookie_store(true);
+                if let Some(insecure) = self.insecure {
+                    builder = builder.danger_accept_invalid_certs(insecure)
+                                     .danger_accept_invalid_hostnames(insecure);
+                }
+                builder.build()?
+            },
+        };
+        let ua = user_agent(self.app_name.as_deref(), self.app_version.as_deref());
+        let api_release = match self.api_release {
+            Some(release) => release.clone(),
+            None => API_RELEASE.to_string(),
+        };
+        let mut soap = crate::xml::client::SoapClient::new(
+            http_client, &self.server_address, &api_release, &ua,
+        );
+        soap.bootstrap().await?;
+
+        let sm_id = soap.service_content().session_manager.as_ref().map(|m| m.value.clone());
+        let soap = Arc::new(soap);
+
+        if let (Some(ref sm_id), Some(ref user_name), Some(ref password)) = (sm_id, self.user_name, self.password) {
+            let sm = mo::SessionManager::new(soap.clone(), sm_id);
+            let session = sm.login(user_name, password, self.locale.as_deref()).await?;
+            debug!("SOAP session created for: {:?}", session.user_name);
+        }
+        Ok(Arc::new(Client { inner: soap }))
+    }
+
+    #[cfg(feature = "xml")]
+    async fn build_auto_facade(self) -> Result<Arc<Client>> {
+        let ua = user_agent(self.app_name.as_deref(), self.app_version.as_deref());
+        let http_client_for_probe = {
+            let mut builder = reqwest::ClientBuilder::new();
+            if let Some(insecure) = self.insecure {
+                builder = builder.danger_accept_invalid_certs(insecure)
+                                 .danger_accept_invalid_hostnames(insecure);
+            }
+            builder.build()?
+        };
+
+        let releases = self.compatible_api_releases.clone()
+            .unwrap_or_else(|| COMPATIBLE_API_RELEASES.iter().map(|s| s.to_string()).collect());
+        let hello_url = format!("https://{}/api/vcenter/system?action=hello", self.server_address);
+        let spec = HelloSpec { api_releases: &releases };
+        let json_body = miniserde::json::to_string(&spec);
+
+        let hello_ok = match http_client_for_probe
+            .post(&hello_url)
+            .header("Content-Type", "application/json")
+            .header("User-Agent", &ua)
+            .body(json_body)
+            .send()
+            .await
+        {
+            Ok(res) if res.status().is_success() => {
+                let body = res.text().await.unwrap_or_default();
+                miniserde::json::from_str::<HelloResult>(&body)
+                    .ok()
+                    .filter(|r| !r.api_release.is_empty())
+            }
+            _ => None,
+        };
+
+        if hello_ok.is_some() {
+            debug!("Auto mode: Hello API succeeded, using JSON transport");
+            Self::build_json(self.transport(TransportMode::Json)).await
+        } else {
+            debug!("Auto mode: Hello API unavailable, falling back to SOAP");
+            Self::build_soap_facade(self).await
+        }
     }
 }
 
+/// User-facing session handle: **only** the public methods that existed on `Client` in vim_rs **0.4.0**
+/// (`service_content`, `api_release`, `fetch_property`), independent of wire format.
+///
+/// Internally holds an [`Arc`] to a [`VimClient`] implementation (crate-private JSON or SOAP
+/// client). Logout runs when the last strong reference to that inner client is dropped.
 pub struct Client {
+    inner: Arc<dyn VimClient>,
+}
+
+impl Client {
+    /// Get the VIM service instance content. This is the main part of the VI JSON API that contains
+    /// the core virtualization objects and services. There are additional storage APIs under VSAN,
+    /// PBM, VSLM and SMS. There is also ESX Agent Manager API for managing agent virtual machines.
+    pub fn service_content(&self) -> &ServiceContent {
+        self.inner.service_content()
+    }
+
+    /// Get the currently used API release. This may be lower than `API_RELEASE` and should be used
+    /// to downgrade client expectations. For example if client is using library 8.0.3.0 with
+    /// vCenter 8.0.1.0 the negotiated release will be 8.0.1.0 and the client should not call APIs
+    /// or set parameters that are only available in 8.0.3.0.
+    pub fn api_release(&self) -> String {
+        self.inner.api_release()
+    }
+
+    /// Fetch a managed object property by name into the requested type.
+    ///
+    /// Works for both JSON and SOAP transports (via [`unmarshal`] and the inner client’s
+    /// [`VimClient::transport`]).
+    pub async fn fetch_property<T>(&self, obj: ManagedObjectReference, property: &str) -> Result<T>
+    where
+        T: miniserde::Deserialize,
+    {
+        let type_name: &str = obj.r#type.as_str();
+        let id = &obj.value;
+        let bytes_opt = self
+            .inner
+            .fetch_property_raw("", type_name, id, property)
+            .await?;
+        let bytes = bytes_opt.ok_or_else(|| {
+            Error::ParseError(format!("property {property} was empty"))
+        })?;
+        unmarshal(self.inner.transport(), &bytes)
+    }
+}
+
+impl VimClient for Client {
+    fn service_content(&self) -> &ServiceContent {
+        self.inner.service_content()
+    }
+
+    fn transport(&self) -> Transport {
+        self.inner.transport()
+    }
+
+    fn api_release(&self) -> String {
+        self.inner.api_release()
+    }
+
+    fn invoke<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<Bytes>> {
+        self.inner.invoke(svc, mo_type, mo_id, method_name, params)
+    }
+
+    fn invoke_optional<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+        self.inner
+            .invoke_optional(svc, mo_type, mo_id, method_name, params)
+    }
+
+    fn invoke_void<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<()>> {
+        self.inner.invoke_void(svc, mo_type, mo_id, method_name, params)
+    }
+
+    fn fetch_property_raw<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        property: &'a str,
+    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+        self.inner
+            .fetch_property_raw(svc, mo_type, mo_id, property)
+    }
+}
+
+pub(crate) struct JsonClient {
     http_client: reqwest::Client,
     session_key: Arc<RwLock<Option<String>>>,
     api_release: String,
@@ -282,44 +590,19 @@ pub struct Client {
     service_content: Option<ServiceContent>,
 }
 
-/// Client for the VI JSON API that handles basic HTTP requests and authentication headers.
-/// 
-/// The client is responsible for managing the session key header and logging out the session when
-/// the client is dropped.
-impl Client {
-
-    /// Get the VIM service instance content. This is the main part of the VI JSON API that contains
-    /// the core virtualization objects and services. There are additional storage APIs under VSAN,
-    /// PBM, VSLM and SMS. There is also ESX Agent Manager API for managing agent virtual machines.
-    pub fn service_content(&self) -> &ServiceContent {
-        // Safe to unwrap as the service_content is set during construction
-        self.service_content.as_ref().unwrap()
+/// VI JSON API implementation (Hello + `/sdk/vim25/{release}`). Crate-private; users hold [`Client`].
+///
+/// Manages the session key header and logs out when the last [`Arc`] to this value is dropped.
+impl JsonClient {
+    pub(crate) fn service_content(&self) -> &ServiceContent {
+        self.service_content.as_ref().expect("JsonClient missing ServiceContent")
     }
 
-    /// Get the currently used API release. This may be lower than `API_RELEASE` and should be used
-    /// to downgrade client expectations. For example if client is using library 8.0.3.0 with
-    /// vCenter 8.0.1.0 the negotiated release will be 8.0.1.0 and the client should not call APIs
-    /// or set parameters that are only available in 8.0.3.0.
-    pub fn api_release(&self) -> String {
+    pub(crate) fn api_release(&self) -> String {
         self.api_release.clone()
     }
 
-    /// Fetch a managed object property by name into user provided type. This method can be used
-    /// with [`miniserde::json::Value`] to fetch the property as a dynamic JSON value. This enables
-    /// lightweight albeit unsafe approach to explore the API and extract relevant pieces of data.
-    pub async fn fetch_property<T>(&self, obj: ManagedObjectReference, property: &str) -> Result<T>
-    where
-        T: miniserde::Deserialize
-    {
-        let type_name: &str = obj.r#type.as_str();
-        let id = &obj.value;
-        let path = format!("/{type_name}/{id}/{property}");
-        let req = self.get_request(&path);
-        self.execute(req).await
-    }
-
-    /// Prepare GET request
-    pub(crate) fn get_request(&self, path: &str) -> reqwest::RequestBuilder
+    fn get_request(&self, path: &str) -> reqwest::RequestBuilder
     {
         debug!("GET request: {}", path);
         let url = format!("{}{}", self.base_url, path);
@@ -334,20 +617,35 @@ impl Client {
         self.http_client.post(&url)
     }
 
-    /// Execute a request that returns a response body
-    pub(crate) async fn execute<T>(&self, mut req: reqwest::RequestBuilder) -> Result<T>
-    where T: miniserde::Deserialize
-    {
-        req = self.prepare(req).await;
-        let res = req.send().await?;
-        let res = self.process_response(res).await?;
-        let body = res.text().await?;
-        let content: T = miniserde::json::from_str(&body)
-            .map_err(|_| Error::ParseError(format!("Failed to parse {}", std::any::type_name::<T>())))?;
-        Ok(content)
+    fn build_post_request(
+        &self,
+        svc: &str,
+        mo_type: &str,
+        mo_id: &str,
+        method_name: &str,
+        params: Option<&(dyn miniserde::Serialize + Send + Sync)>,
+    ) -> reqwest::RequestBuilder {
+        let path =  if svc.is_empty() {
+            format!("/{mo_type}/{mo_id}/{method_name}")
+        } else {
+            format!("/{svc}/{mo_type}/{mo_id}/{method_name}")
+        };
+        match params {
+            Some(payload) => {
+                debug!("POST request: {}", path);
+                let json_body = miniserde::json::to_string(payload);
+                if log::log_enabled!(log::Level::Trace) {
+                    trace!("POST payload: {}", json_body);
+                }
+                let url = format!("{}{}", self.base_url, path);
+                self.http_client
+                    .post(&url)
+                    .header("Content-Type", "application/json")
+                    .body(json_body)
+            }
+            None => self.post_bare(&path),
+        }
     }
-
-
 
     /// Execute a request that does not return a response body
     pub(crate) async fn execute_void(&self, mut req: reqwest::RequestBuilder) -> Result<()>
@@ -386,69 +684,107 @@ impl Client {
     }
 }
 
-impl VimClient for Client {
+impl VimClient for JsonClient {
     fn service_content(&self) -> &ServiceContent {
-        Client::service_content(self)
+        JsonClient::service_content(self)
     }
 
-    fn get_request(&self, path: &str) -> reqwest::RequestBuilder {
-        Client::get_request(self, path)
+    fn transport(&self) -> Transport {
+        Transport::Json
     }
 
-    fn post_json(&self, path: &str, payload: &dyn miniserde::Serialize) -> reqwest::RequestBuilder {
-        debug!("POST request: {}", path);
-        let json_body = miniserde::json::to_string(payload);
-        // Avoid logging the payload unless TRACE is enabled (can be huge).
-        if log::log_enabled!(log::Level::Trace) {
-            trace!("POST payload: {}", json_body);
-        };
-        let url = format!("{}{}", self.base_url, path);
-        self.http_client
-            .post(&url)
-            .header("Content-Type", "application/json")
-            .body(json_body)
+    fn api_release(&self) -> String {
+        JsonClient::api_release(self)
     }
 
-    fn post_bare(&self, path: &str) -> reqwest::RequestBuilder {
-        Client::post_bare(self, path)
-    }
-
-    fn execute_bytes<'a>(&'a self, mut req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<Bytes>> {
+    fn invoke<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<Bytes>> {
         Box::pin(async move {
-            req = self.prepare(req).await;
+            let req = self.build_post_request(svc, mo_type, mo_id, method_name, params);
+            let req = self.prepare(req).await;
             let res = req.send().await?;
             let res = self.process_response(res).await?;
             let bytes = res.bytes().await?;
+            if log::log_enabled!(log::Level::Trace) {
+                let body = String::from_utf8_lossy(&bytes);
+                trace!("JSON response from {}/{}: {}...", mo_type, method_name, &body[..body.len().min(2000)]);
+            }
             Ok(bytes)
         })
     }
 
-    fn execute_option_bytes<'a>(
+    fn invoke_optional<'a>(
         &'a self,
-        mut req: reqwest::RequestBuilder,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<Option<Bytes>>> {
         Box::pin(async move {
-            req = self.prepare(req).await;
+            let req = self.build_post_request(svc, mo_type, mo_id, method_name, params);
+            let req = self.prepare(req).await;
             let res = req.send().await?;
             let res = self.process_response(res).await?;
             let bytes = res.bytes().await?;
-            if bytes.is_empty() {
-                Ok(None)
-            } else {
-                Ok(Some(bytes))
+            if log::log_enabled!(log::Level::Trace) && !bytes.is_empty() {
+                let body = String::from_utf8_lossy(&bytes);
+                trace!("JSON response from {}/{}: {}...", mo_type, method_name, &body[..body.len().min(2000)]);
             }
+            if bytes.is_empty() { Ok(None) } else { Ok(Some(bytes)) }
         })
     }
 
-    fn execute_void<'a>(&'a self, req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<()>> {
-        Box::pin(async move { Client::execute_void(self, req).await })
+    fn invoke_void<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<()>> {
+        Box::pin(async move {
+            let req = self.build_post_request(svc, mo_type, mo_id, method_name, params);
+            JsonClient::execute_void(self, req).await
+        })
+    }
+
+    fn fetch_property_raw<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        property: &'a str,
+    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+        Box::pin(async move {
+            let path = if svc.is_empty() {
+                format!("/{mo_type}/{mo_id}/{property}")
+            } else {
+                format!("/{svc}/{mo_type}/{mo_id}/{property}")
+            };
+            let req = self.get_request(&path);
+            let req = self.prepare(req).await;
+            let res = req.send().await?;
+            let res = self.process_response(res).await?;
+            let bytes = res.bytes().await?;
+            if log::log_enabled!(log::Level::Trace) && !bytes.is_empty() {
+                let body = String::from_utf8_lossy(&bytes);
+                trace!("JSON fetch_property_raw {}/{}: {}...", mo_type, property, &body[..body.len().min(2000)]);
+            }
+            if bytes.is_empty() { Ok(None) } else { Ok(Some(bytes)) }
+        })
     }
 }
 
 
-/// Task called asynchronously during drop of the VimClient instance to logout the session if one
-/// was created.
-impl Drop for Client {
+/// Log out the JSON session when the last strong reference to this [`JsonClient`] is dropped.
+impl Drop for JsonClient {
     fn drop(&mut self) {
         debug!("Disposing VIM client.");
 

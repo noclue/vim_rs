@@ -18,7 +18,7 @@ impl miniserde::Deserialize for Box<dyn DataObjectTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DataObjectTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DataObjectTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DataObject"),
             __out: &mut self.out,
         }))
     }
@@ -10734,7 +10734,7 @@ impl miniserde::Deserialize for Box<dyn AgencyScopeTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn AgencyScopeTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(AgencyScopeTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("AgencyScope"),
             __out: &mut self.out,
         }))
     }
@@ -10816,7 +10816,7 @@ impl miniserde::Deserialize for Box<dyn AgentSslTrustTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn AgentSslTrustTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(AgentSslTrustTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("AgentSslTrust"),
             __out: &mut self.out,
         }))
     }
@@ -10894,7 +10894,7 @@ impl miniserde::Deserialize for Box<dyn AgentStoragePolicyTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn AgentStoragePolicyTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(AgentStoragePolicyTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("AgentStoragePolicy"),
             __out: &mut self.out,
         }))
     }
@@ -10989,7 +10989,7 @@ impl miniserde::Deserialize for Box<dyn EamObjectRuntimeInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn EamObjectRuntimeInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(EamObjectRuntimeInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("EamObjectRuntimeInfo"),
             __out: &mut self.out,
         }))
     }
@@ -11171,7 +11171,7 @@ impl miniserde::Deserialize for Box<dyn IssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn IssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(IssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("Issue"),
             __out: &mut self.out,
         }))
     }
@@ -11821,7 +11821,7 @@ impl miniserde::Deserialize for Box<dyn AgencyIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn AgencyIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(AgencyIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("AgencyIssue"),
             __out: &mut self.out,
         }))
     }
@@ -12441,7 +12441,7 @@ impl miniserde::Deserialize for Box<dyn AgentIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn AgentIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(AgentIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("AgentIssue"),
             __out: &mut self.out,
         }))
     }
@@ -12853,7 +12853,7 @@ impl miniserde::Deserialize for Box<dyn VibIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VibIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VibIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VibIssue"),
             __out: &mut self.out,
         }))
     }
@@ -13016,7 +13016,7 @@ impl miniserde::Deserialize for Box<dyn VibNotInstalledTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VibNotInstalledTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VibNotInstalledTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VibNotInstalled"),
             __out: &mut self.out,
         }))
     }
@@ -13121,7 +13121,7 @@ impl miniserde::Deserialize for Box<dyn VmIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmIssue"),
             __out: &mut self.out,
         }))
     }
@@ -13323,7 +13323,7 @@ impl miniserde::Deserialize for Box<dyn VmDeployedTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmDeployedTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmDeployedTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmDeployed"),
             __out: &mut self.out,
         }))
     }
@@ -13424,7 +13424,7 @@ impl miniserde::Deserialize for Box<dyn VmPoweredOffTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmPoweredOffTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmPoweredOffTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmPoweredOff"),
             __out: &mut self.out,
         }))
     }
@@ -13525,7 +13525,7 @@ impl miniserde::Deserialize for Box<dyn VmNotDeployedTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmNotDeployedTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmNotDeployedTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmNotDeployed"),
             __out: &mut self.out,
         }))
     }
@@ -13681,7 +13681,7 @@ impl miniserde::Deserialize for Box<dyn NoAgentVmDatastoreTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn NoAgentVmDatastoreTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(NoAgentVmDatastoreTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("NoAgentVmDatastore"),
             __out: &mut self.out,
         }))
     }
@@ -13771,7 +13771,7 @@ impl miniserde::Deserialize for Box<dyn NoAgentVmNetworkTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn NoAgentVmNetworkTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(NoAgentVmNetworkTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("NoAgentVmNetwork"),
             __out: &mut self.out,
         }))
     }
@@ -13860,7 +13860,7 @@ impl miniserde::Deserialize for Box<dyn PersonalityAgentPmIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PersonalityAgentPmIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PersonalityAgentPmIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PersonalityAgentPmIssue"),
             __out: &mut self.out,
         }))
     }
@@ -13952,7 +13952,7 @@ impl miniserde::Deserialize for Box<dyn ClusterAgentAgentIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterAgentAgentIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterAgentAgentIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterAgentAgentIssue"),
             __out: &mut self.out,
         }))
     }
@@ -14152,7 +14152,7 @@ impl miniserde::Deserialize for Box<dyn ClusterAgentVmIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterAgentVmIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterAgentVmIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterAgentVmIssue"),
             __out: &mut self.out,
         }))
     }
@@ -14312,7 +14312,7 @@ impl miniserde::Deserialize for Box<dyn ClusterAgentVmPoweredOffTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterAgentVmPoweredOffTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterAgentVmPoweredOffTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterAgentVmPoweredOff"),
             __out: &mut self.out,
         }))
     }
@@ -14407,7 +14407,7 @@ impl miniserde::Deserialize for Box<dyn ClusterAgentVmNotDeployedTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterAgentVmNotDeployedTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterAgentVmNotDeployedTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterAgentVmNotDeployed"),
             __out: &mut self.out,
         }))
     }
@@ -14514,7 +14514,7 @@ impl miniserde::Deserialize for Box<dyn IntegrityAgencyVumIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn IntegrityAgencyVumIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(IntegrityAgencyVumIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("IntegrityAgencyVumIssue"),
             __out: &mut self.out,
         }))
     }
@@ -14615,7 +14615,7 @@ impl miniserde::Deserialize for Box<dyn PersonalityAgencyPmIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PersonalityAgencyPmIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PersonalityAgencyPmIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PersonalityAgencyPmIssue"),
             __out: &mut self.out,
         }))
     }
@@ -14734,7 +14734,7 @@ impl miniserde::Deserialize for Box<dyn PersonalityAgencyDepotIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PersonalityAgencyDepotIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PersonalityAgencyDepotIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PersonalityAgencyDepotIssue"),
             __out: &mut self.out,
         }))
     }
@@ -14834,7 +14834,7 @@ impl miniserde::Deserialize for Box<dyn HostIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostIssue"),
             __out: &mut self.out,
         }))
     }
@@ -14909,7 +14909,7 @@ impl miniserde::Deserialize for Box<dyn SolutionsHookAcknowledgeConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn SolutionsHookAcknowledgeConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SolutionsHookAcknowledgeConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SolutionsHookAcknowledgeConfig"),
             __out: &mut self.out,
         }))
     }
@@ -14973,7 +14973,7 @@ impl miniserde::Deserialize for Box<dyn SolutionsStoragePolicyTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn SolutionsStoragePolicyTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SolutionsStoragePolicyTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SolutionsStoragePolicy"),
             __out: &mut self.out,
         }))
     }
@@ -15037,7 +15037,7 @@ impl miniserde::Deserialize for Box<dyn SolutionsTypeSpecificSolutionConfigTrait
 impl miniserde::de::Visitor for Place<Box<dyn SolutionsTypeSpecificSolutionConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SolutionsTypeSpecificSolutionConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SolutionsTypeSpecificSolutionConfig"),
             __out: &mut self.out,
         }))
     }
@@ -15106,7 +15106,7 @@ impl miniserde::Deserialize for Box<dyn SolutionsVmSourceTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn SolutionsVmSourceTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SolutionsVmSourceTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SolutionsVmSource"),
             __out: &mut self.out,
         }))
     }
@@ -15170,7 +15170,7 @@ impl miniserde::Deserialize for Box<dyn VibVibServicesSslTrustTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VibVibServicesSslTrustTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VibVibServicesSslTrustTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VibVibServicesSslTrust"),
             __out: &mut self.out,
         }))
     }
@@ -15263,7 +15263,7 @@ impl miniserde::Deserialize for Box<dyn PbmCapabilityTypeInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PbmCapabilityTypeInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PbmCapabilityTypeInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PbmCapabilityTypeInfo"),
             __out: &mut self.out,
         }))
     }
@@ -15352,7 +15352,7 @@ impl miniserde::Deserialize for Box<dyn PbmLineOfServiceInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PbmLineOfServiceInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PbmLineOfServiceInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PbmLineOfServiceInfo"),
             __out: &mut self.out,
         }))
     }
@@ -15432,7 +15432,7 @@ impl miniserde::Deserialize for Box<dyn PbmPlacementMatchingResourcesTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PbmPlacementMatchingResourcesTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PbmPlacementMatchingResourcesTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PbmPlacementMatchingResources"),
             __out: &mut self.out,
         }))
     }
@@ -15499,7 +15499,7 @@ impl miniserde::Deserialize for Box<dyn PbmPlacementRequirementTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PbmPlacementRequirementTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PbmPlacementRequirementTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PbmPlacementRequirement"),
             __out: &mut self.out,
         }))
     }
@@ -15578,7 +15578,7 @@ impl miniserde::Deserialize for Box<dyn PbmCapabilityConstraintsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PbmCapabilityConstraintsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PbmCapabilityConstraintsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PbmCapabilityConstraints"),
             __out: &mut self.out,
         }))
     }
@@ -15672,7 +15672,7 @@ impl miniserde::Deserialize for Box<dyn PbmProfileTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PbmProfileTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PbmProfileTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PbmProfile"),
             __out: &mut self.out,
         }))
     }
@@ -15773,7 +15773,7 @@ impl miniserde::Deserialize for Box<dyn PbmCapabilityProfileTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PbmCapabilityProfileTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PbmCapabilityProfileTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PbmCapabilityProfile"),
             __out: &mut self.out,
         }))
     }
@@ -15865,7 +15865,7 @@ impl miniserde::Deserialize for Box<dyn SmsProviderInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn SmsProviderInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SmsProviderInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SmsProviderInfo"),
             __out: &mut self.out,
         }))
     }
@@ -15955,7 +15955,7 @@ impl miniserde::Deserialize for Box<dyn SmsProviderSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn SmsProviderSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SmsProviderSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SmsProviderSpec"),
             __out: &mut self.out,
         }))
     }
@@ -16046,7 +16046,7 @@ impl miniserde::Deserialize for Box<dyn StoragePortTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn StoragePortTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(StoragePortTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("StoragePort"),
             __out: &mut self.out,
         }))
     }
@@ -16140,7 +16140,7 @@ impl miniserde::Deserialize for Box<dyn DeviceIdTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DeviceIdTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DeviceIdTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DeviceId"),
             __out: &mut self.out,
         }))
     }
@@ -16246,7 +16246,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineIdTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineIdTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineIdTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineId"),
             __out: &mut self.out,
         }))
     }
@@ -16339,7 +16339,7 @@ impl miniserde::Deserialize for Box<dyn FailoverParamTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn FailoverParamTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(FailoverParamTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("FailoverParam"),
             __out: &mut self.out,
         }))
     }
@@ -16433,7 +16433,7 @@ impl miniserde::Deserialize for Box<dyn GroupInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn GroupInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(GroupInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("GroupInfo"),
             __out: &mut self.out,
         }))
     }
@@ -16533,7 +16533,7 @@ impl miniserde::Deserialize for Box<dyn GroupOperationResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn GroupOperationResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(GroupOperationResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("GroupOperationResult"),
             __out: &mut self.out,
         }))
     }
@@ -16664,7 +16664,7 @@ impl miniserde::Deserialize for Box<dyn TargetGroupMemberInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn TargetGroupMemberInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(TargetGroupMemberInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("TargetGroupMemberInfo"),
             __out: &mut self.out,
         }))
     }
@@ -16752,7 +16752,7 @@ impl miniserde::Deserialize for Box<dyn ClusterComputeResourceValidationResultBa
 impl miniserde::de::Visitor for Place<Box<dyn ClusterComputeResourceValidationResultBaseTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterComputeResourceValidationResultBaseTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterComputeResourceValidationResultBase"),
             __out: &mut self.out,
         }))
     }
@@ -16853,7 +16853,7 @@ impl miniserde::Deserialize for Box<dyn ComputeResourceConfigInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ComputeResourceConfigInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ComputeResourceConfigInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ComputeResourceConfigInfo"),
             __out: &mut self.out,
         }))
     }
@@ -16947,7 +16947,7 @@ impl miniserde::Deserialize for Box<dyn ComputeResourceConfigSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ComputeResourceConfigSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ComputeResourceConfigSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ComputeResourceConfigSpec"),
             __out: &mut self.out,
         }))
     }
@@ -17036,7 +17036,7 @@ impl miniserde::Deserialize for Box<dyn ComputeResourceSummaryTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ComputeResourceSummaryTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ComputeResourceSummaryTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ComputeResourceSummary"),
             __out: &mut self.out,
         }))
     }
@@ -17134,7 +17134,7 @@ impl miniserde::Deserialize for Box<dyn CustomFieldValueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CustomFieldValueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CustomFieldValueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CustomFieldValue"),
             __out: &mut self.out,
         }))
     }
@@ -17226,7 +17226,7 @@ impl miniserde::Deserialize for Box<dyn DatastoreInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DatastoreInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DatastoreInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DatastoreInfo"),
             __out: &mut self.out,
         }))
     }
@@ -17354,7 +17354,7 @@ impl miniserde::Deserialize for Box<dyn DescriptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DescriptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DescriptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("Description"),
             __out: &mut self.out,
         }))
     }
@@ -17500,7 +17500,7 @@ impl miniserde::Deserialize for Box<dyn ElementDescriptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ElementDescriptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ElementDescriptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ElementDescription"),
             __out: &mut self.out,
         }))
     }
@@ -17616,7 +17616,7 @@ impl miniserde::Deserialize for Box<dyn TypeDescriptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn TypeDescriptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(TypeDescriptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("TypeDescription"),
             __out: &mut self.out,
         }))
     }
@@ -17690,7 +17690,7 @@ impl miniserde::Deserialize for Box<dyn DirectPathProfileManagerCapacityQuerySpe
 impl miniserde::de::Visitor for Place<Box<dyn DirectPathProfileManagerCapacityQuerySpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DirectPathProfileManagerCapacityQuerySpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DirectPathProfileManagerCapacityQuerySpec"),
             __out: &mut self.out,
         }))
     }
@@ -17770,7 +17770,7 @@ impl miniserde::Deserialize for Box<dyn DirectPathProfileManagerCapacityResultTr
 impl miniserde::de::Visitor for Place<Box<dyn DirectPathProfileManagerCapacityResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DirectPathProfileManagerCapacityResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DirectPathProfileManagerCapacityResult"),
             __out: &mut self.out,
         }))
     }
@@ -17851,7 +17851,7 @@ impl miniserde::Deserialize for Box<dyn DirectPathProfileManagerDirectPathConfig
 impl miniserde::de::Visitor for Place<Box<dyn DirectPathProfileManagerDirectPathConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DirectPathProfileManagerDirectPathConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DirectPathProfileManagerDirectPathConfig"),
             __out: &mut self.out,
         }))
     }
@@ -17932,7 +17932,7 @@ impl miniserde::Deserialize for Box<dyn DirectPathProfileManagerTargetEntityTrai
 impl miniserde::de::Visitor for Place<Box<dyn DirectPathProfileManagerTargetEntityTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DirectPathProfileManagerTargetEntityTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DirectPathProfileManagerTargetEntity"),
             __out: &mut self.out,
         }))
     }
@@ -18020,7 +18020,7 @@ impl miniserde::Deserialize for Box<dyn DvsConfigInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsConfigInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsConfigInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsConfigInfo"),
             __out: &mut self.out,
         }))
     }
@@ -18118,7 +18118,7 @@ impl miniserde::Deserialize for Box<dyn DvsConfigSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsConfigSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsConfigSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsConfigSpec"),
             __out: &mut self.out,
         }))
     }
@@ -18219,7 +18219,7 @@ impl miniserde::Deserialize for Box<dyn DvsFeatureCapabilityTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsFeatureCapabilityTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsFeatureCapabilityTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsFeatureCapability"),
             __out: &mut self.out,
         }))
     }
@@ -18310,7 +18310,7 @@ impl miniserde::Deserialize for Box<dyn DvsHealthCheckConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsHealthCheckConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsHealthCheckConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsHealthCheckConfig"),
             __out: &mut self.out,
         }))
     }
@@ -18413,7 +18413,7 @@ impl miniserde::Deserialize for Box<dyn VMwareDvsHealthCheckConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VMwareDvsHealthCheckConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VMwareDvsHealthCheckConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VMwareDvsHealthCheckConfig"),
             __out: &mut self.out,
         }))
     }
@@ -18497,7 +18497,7 @@ impl miniserde::Deserialize for Box<dyn DvsHealthCheckCapabilityTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsHealthCheckCapabilityTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsHealthCheckCapabilityTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsHealthCheckCapability"),
             __out: &mut self.out,
         }))
     }
@@ -18569,7 +18569,7 @@ impl miniserde::Deserialize for Box<dyn DvsUplinkPortPolicyTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsUplinkPortPolicyTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsUplinkPortPolicyTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsUplinkPortPolicy"),
             __out: &mut self.out,
         }))
     }
@@ -18633,7 +18633,7 @@ impl miniserde::Deserialize for Box<dyn HbrReplicationTargetSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HbrReplicationTargetSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HbrReplicationTargetSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HbrReplicationTargetSpec"),
             __out: &mut self.out,
         }))
     }
@@ -18725,7 +18725,7 @@ impl miniserde::Deserialize for Box<dyn ImportSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ImportSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ImportSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ImportSpec"),
             __out: &mut self.out,
         }))
     }
@@ -18829,7 +18829,7 @@ impl miniserde::Deserialize for Box<dyn InheritablePolicyTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn InheritablePolicyTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(InheritablePolicyTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("InheritablePolicy"),
             __out: &mut self.out,
         }))
     }
@@ -19081,7 +19081,7 @@ impl miniserde::Deserialize for Box<dyn DvsFilterConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsFilterConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsFilterConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsFilterConfig"),
             __out: &mut self.out,
         }))
     }
@@ -19219,7 +19219,7 @@ impl miniserde::Deserialize for Box<dyn DvsTrafficFilterConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsTrafficFilterConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsTrafficFilterConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsTrafficFilterConfig"),
             __out: &mut self.out,
         }))
     }
@@ -19317,7 +19317,7 @@ impl miniserde::Deserialize for Box<dyn VmwareDistributedVirtualSwitchVlanSpecTr
 impl miniserde::de::Visitor for Place<Box<dyn VmwareDistributedVirtualSwitchVlanSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmwareDistributedVirtualSwitchVlanSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmwareDistributedVirtualSwitchVlanSpec"),
             __out: &mut self.out,
         }))
     }
@@ -19413,7 +19413,7 @@ impl miniserde::Deserialize for Box<dyn IoFilterInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn IoFilterInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(IoFilterInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("IoFilterInfo"),
             __out: &mut self.out,
         }))
     }
@@ -19491,7 +19491,7 @@ impl miniserde::Deserialize for Box<dyn IoFilterManagerSslTrustTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn IoFilterManagerSslTrustTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(IoFilterManagerSslTrustTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("IoFilterManagerSslTrust"),
             __out: &mut self.out,
         }))
     }
@@ -19570,7 +19570,7 @@ impl miniserde::Deserialize for Box<dyn LicenseSourceTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn LicenseSourceTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(LicenseSourceTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("LicenseSource"),
             __out: &mut self.out,
         }))
     }
@@ -19663,7 +19663,7 @@ impl miniserde::Deserialize for Box<dyn NegatableExpressionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn NegatableExpressionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(NegatableExpressionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("NegatableExpression"),
             __out: &mut self.out,
         }))
     }
@@ -19821,7 +19821,7 @@ impl miniserde::Deserialize for Box<dyn IpAddressTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn IpAddressTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(IpAddressTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("IpAddress"),
             __out: &mut self.out,
         }))
     }
@@ -19925,7 +19925,7 @@ impl miniserde::Deserialize for Box<dyn MacAddressTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn MacAddressTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(MacAddressTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("MacAddress"),
             __out: &mut self.out,
         }))
     }
@@ -20031,7 +20031,7 @@ impl miniserde::Deserialize for Box<dyn DvsIpPortTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsIpPortTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsIpPortTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsIpPort"),
             __out: &mut self.out,
         }))
     }
@@ -20130,7 +20130,7 @@ impl miniserde::Deserialize for Box<dyn NetworkSummaryTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn NetworkSummaryTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(NetworkSummaryTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("NetworkSummary"),
             __out: &mut self.out,
         }))
     }
@@ -20214,7 +20214,7 @@ impl miniserde::Deserialize for Box<dyn OvfManagerCommonParamsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn OvfManagerCommonParamsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(OvfManagerCommonParamsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("OvfManagerCommonParams"),
             __out: &mut self.out,
         }))
     }
@@ -20319,7 +20319,7 @@ impl miniserde::Deserialize for Box<dyn OvfCreateImportSpecParamsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn OvfCreateImportSpecParamsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(OvfCreateImportSpecParamsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("OvfCreateImportSpecParams"),
             __out: &mut self.out,
         }))
     }
@@ -20409,7 +20409,7 @@ impl miniserde::Deserialize for Box<dyn PerfEntityMetricBaseTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PerfEntityMetricBaseTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PerfEntityMetricBaseTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PerfEntityMetricBase"),
             __out: &mut self.out,
         }))
     }
@@ -20508,7 +20508,7 @@ impl miniserde::Deserialize for Box<dyn PerfMetricSeriesTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PerfMetricSeriesTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PerfMetricSeriesTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PerfMetricSeries"),
             __out: &mut self.out,
         }))
     }
@@ -20603,7 +20603,7 @@ impl miniserde::Deserialize for Box<dyn ResourcePoolSummaryTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ResourcePoolSummaryTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ResourcePoolSummaryTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ResourcePoolSummary"),
             __out: &mut self.out,
         }))
     }
@@ -20678,7 +20678,7 @@ impl miniserde::Deserialize for Box<dyn SddcBaseTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn SddcBaseTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SddcBaseTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SddcBase"),
             __out: &mut self.out,
         }))
     }
@@ -20743,7 +20743,7 @@ impl miniserde::Deserialize for Box<dyn SelectionSetTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn SelectionSetTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SelectionSetTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SelectionSet"),
             __out: &mut self.out,
         }))
     }
@@ -20824,7 +20824,7 @@ impl miniserde::Deserialize for Box<dyn ServiceLocatorCredentialTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ServiceLocatorCredentialTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ServiceLocatorCredentialTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ServiceLocatorCredential"),
             __out: &mut self.out,
         }))
     }
@@ -20898,7 +20898,7 @@ impl miniserde::Deserialize for Box<dyn SessionManagerServiceRequestSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn SessionManagerServiceRequestSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SessionManagerServiceRequestSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SessionManagerServiceRequestSpec"),
             __out: &mut self.out,
         }))
     }
@@ -20971,7 +20971,7 @@ impl miniserde::Deserialize for Box<dyn TaskManagerTaskViewSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn TaskManagerTaskViewSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(TaskManagerTaskViewSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("TaskManagerTaskViewSpec"),
             __out: &mut self.out,
         }))
     }
@@ -21044,7 +21044,7 @@ impl miniserde::Deserialize for Box<dyn TaskReasonTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn TaskReasonTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(TaskReasonTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("TaskReason"),
             __out: &mut self.out,
         }))
     }
@@ -21143,7 +21143,7 @@ impl miniserde::Deserialize for Box<dyn UserSearchResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn UserSearchResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(UserSearchResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("UserSearchResult"),
             __out: &mut self.out,
         }))
     }
@@ -21231,7 +21231,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDiskSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDiskSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDiskSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDiskSpec"),
             __out: &mut self.out,
         }))
     }
@@ -21338,7 +21338,7 @@ impl miniserde::Deserialize for Box<dyn FileBackedVirtualDiskSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn FileBackedVirtualDiskSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(FileBackedVirtualDiskSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("FileBackedVirtualDiskSpec"),
             __out: &mut self.out,
         }))
     }
@@ -21429,7 +21429,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineConnectionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineConnectionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineConnectionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineConnection"),
             __out: &mut self.out,
         }))
     }
@@ -21497,7 +21497,7 @@ impl miniserde::Deserialize for Box<dyn VsanComparatorTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanComparatorTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanComparatorTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanComparator"),
             __out: &mut self.out,
         }))
     }
@@ -21586,7 +21586,7 @@ impl miniserde::Deserialize for Box<dyn VsanResourceConstraintTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanResourceConstraintTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanResourceConstraintTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanResourceConstraint"),
             __out: &mut self.out,
         }))
     }
@@ -21683,7 +21683,7 @@ impl miniserde::Deserialize for Box<dyn VsanUpgradeSystemPreflightCheckIssueTrai
 impl miniserde::de::Visitor for Place<Box<dyn VsanUpgradeSystemPreflightCheckIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanUpgradeSystemPreflightCheckIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanUpgradeSystemPreflightCheckIssue"),
             __out: &mut self.out,
         }))
     }
@@ -21909,7 +21909,7 @@ impl miniserde::Deserialize for Box<dyn VsanUpgradeSystemPreflightCheckResultTra
 impl miniserde::de::Visitor for Place<Box<dyn VsanUpgradeSystemPreflightCheckResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanUpgradeSystemPreflightCheckResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanUpgradeSystemPreflightCheckResult"),
             __out: &mut self.out,
         }))
     }
@@ -21996,7 +21996,7 @@ impl miniserde::Deserialize for Box<dyn VsanUpgradeSystemUpgradeHistoryItemTrait
 impl miniserde::de::Visitor for Place<Box<dyn VsanUpgradeSystemUpgradeHistoryItemTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanUpgradeSystemUpgradeHistoryItemTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanUpgradeSystemUpgradeHistoryItem"),
             __out: &mut self.out,
         }))
     }
@@ -22098,7 +22098,7 @@ impl miniserde::Deserialize for Box<dyn VsanUpgradeSystemUpgradeStatusTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanUpgradeSystemUpgradeStatusTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanUpgradeSystemUpgradeStatusTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanUpgradeSystemUpgradeStatus"),
             __out: &mut self.out,
         }))
     }
@@ -22175,7 +22175,7 @@ impl miniserde::Deserialize for Box<dyn ActionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ActionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ActionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("Action"),
             __out: &mut self.out,
         }))
     }
@@ -22259,7 +22259,7 @@ impl miniserde::Deserialize for Box<dyn AlarmActionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn AlarmActionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(AlarmActionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("AlarmAction"),
             __out: &mut self.out,
         }))
     }
@@ -22331,7 +22331,7 @@ impl miniserde::Deserialize for Box<dyn AlarmExpressionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn AlarmExpressionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(AlarmExpressionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("AlarmExpression"),
             __out: &mut self.out,
         }))
     }
@@ -22431,7 +22431,7 @@ impl miniserde::Deserialize for Box<dyn AlarmSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn AlarmSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(AlarmSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("AlarmSpec"),
             __out: &mut self.out,
         }))
     }
@@ -22525,7 +22525,7 @@ impl miniserde::Deserialize for Box<dyn ClusterActionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterActionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterActionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterAction"),
             __out: &mut self.out,
         }))
     }
@@ -22644,7 +22644,7 @@ impl miniserde::Deserialize for Box<dyn ClusterDasAdmissionControlInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterDasAdmissionControlInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterDasAdmissionControlInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterDasAdmissionControlInfo"),
             __out: &mut self.out,
         }))
     }
@@ -22746,7 +22746,7 @@ impl miniserde::Deserialize for Box<dyn ClusterDasAdmissionControlPolicyTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterDasAdmissionControlPolicyTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterDasAdmissionControlPolicyTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterDasAdmissionControlPolicy"),
             __out: &mut self.out,
         }))
     }
@@ -22846,7 +22846,7 @@ impl miniserde::Deserialize for Box<dyn ClusterDasAdvancedRuntimeInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterDasAdvancedRuntimeInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterDasAdvancedRuntimeInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterDasAdvancedRuntimeInfo"),
             __out: &mut self.out,
         }))
     }
@@ -22917,7 +22917,7 @@ impl miniserde::Deserialize for Box<dyn ClusterDasDataTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterDasDataTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterDasDataTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterDasData"),
             __out: &mut self.out,
         }))
     }
@@ -22982,7 +22982,7 @@ impl miniserde::Deserialize for Box<dyn ClusterDasHostInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterDasHostInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterDasHostInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterDasHostInfo"),
             __out: &mut self.out,
         }))
     }
@@ -23071,7 +23071,7 @@ impl miniserde::Deserialize for Box<dyn ClusterDrsFaultsFaultsByVmTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterDrsFaultsFaultsByVmTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterDrsFaultsFaultsByVmTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterDrsFaultsFaultsByVm"),
             __out: &mut self.out,
         }))
     }
@@ -23173,7 +23173,7 @@ impl miniserde::Deserialize for Box<dyn ClusterGroupInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterGroupInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterGroupInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterGroupInfo"),
             __out: &mut self.out,
         }))
     }
@@ -23339,7 +23339,7 @@ impl miniserde::Deserialize for Box<dyn ClusterRuleInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterRuleInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterRuleInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterRuleInfo"),
             __out: &mut self.out,
         }))
     }
@@ -23466,7 +23466,7 @@ impl miniserde::Deserialize for Box<dyn ClusterSlotPolicyTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterSlotPolicyTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterSlotPolicyTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterSlotPolicy"),
             __out: &mut self.out,
         }))
     }
@@ -23549,7 +23549,7 @@ impl miniserde::Deserialize for Box<dyn VsanClusterHealthLinkBaseTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanClusterHealthLinkBaseTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanClusterHealthLinkBaseTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanClusterHealthLinkBase"),
             __out: &mut self.out,
         }))
     }
@@ -23647,7 +23647,7 @@ impl miniserde::Deserialize for Box<dyn VsanClusterHealthResultBaseTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanClusterHealthResultBaseTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanClusterHealthResultBaseTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanClusterHealthResultBase"),
             __out: &mut self.out,
         }))
     }
@@ -23744,7 +23744,7 @@ impl miniserde::Deserialize for Box<dyn VimClusterVsanFaultDomainSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VimClusterVsanFaultDomainSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VimClusterVsanFaultDomainSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VimClusterVsanFaultDomainSpec"),
             __out: &mut self.out,
         }))
     }
@@ -23850,7 +23850,7 @@ impl miniserde::Deserialize for Box<dyn VsanHealthActionBaseTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanHealthActionBaseTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanHealthActionBaseTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanHealthActionBase"),
             __out: &mut self.out,
         }))
     }
@@ -23958,7 +23958,7 @@ impl miniserde::Deserialize for Box<dyn VsanIscsiLunCommonInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiLunCommonInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanIscsiLunCommonInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanIscsiLunCommonInfo"),
             __out: &mut self.out,
         }))
     }
@@ -24052,7 +24052,7 @@ impl miniserde::Deserialize for Box<dyn VsanIscsiTargetBasicInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiTargetBasicInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanIscsiTargetBasicInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanIscsiTargetBasicInfo"),
             __out: &mut self.out,
         }))
     }
@@ -24152,7 +24152,7 @@ impl miniserde::Deserialize for Box<dyn VsanIscsiTargetCommonInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiTargetCommonInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanIscsiTargetCommonInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanIscsiTargetCommonInfo"),
             __out: &mut self.out,
         }))
     }
@@ -24256,7 +24256,7 @@ impl miniserde::Deserialize for Box<dyn VsanIscsiTargetServiceConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiTargetServiceConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanIscsiTargetServiceConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanIscsiTargetServiceConfig"),
             __out: &mut self.out,
         }))
     }
@@ -24327,7 +24327,7 @@ impl miniserde::Deserialize for Box<dyn CnsAccessControlSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsAccessControlSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsAccessControlSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsAccessControlSpec"),
             __out: &mut self.out,
         }))
     }
@@ -24427,7 +24427,7 @@ impl miniserde::Deserialize for Box<dyn CnsBackingObjectDetailsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsBackingObjectDetailsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsBackingObjectDetailsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsBackingObjectDetails"),
             __out: &mut self.out,
         }))
     }
@@ -24534,7 +24534,7 @@ impl miniserde::Deserialize for Box<dyn CnsFileBackingDetailsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsFileBackingDetailsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsFileBackingDetailsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsFileBackingDetails"),
             __out: &mut self.out,
         }))
     }
@@ -24605,7 +24605,7 @@ impl miniserde::Deserialize for Box<dyn CnsBaseCreateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsBaseCreateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsBaseCreateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsBaseCreateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -24681,7 +24681,7 @@ impl miniserde::Deserialize for Box<dyn CnsFileCreateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsFileCreateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsFileCreateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsFileCreateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -24769,7 +24769,7 @@ impl miniserde::Deserialize for Box<dyn CnsEntityMetadataTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsEntityMetadataTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsEntityMetadataTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsEntityMetadata"),
             __out: &mut self.out,
         }))
     }
@@ -24866,7 +24866,7 @@ impl miniserde::Deserialize for Box<dyn CnsQueryFilterTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsQueryFilterTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsQueryFilterTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsQueryFilter"),
             __out: &mut self.out,
         }))
     }
@@ -24963,7 +24963,7 @@ impl miniserde::Deserialize for Box<dyn CnsVolumeOperationResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsVolumeOperationResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsVolumeOperationResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsVolumeOperationResult"),
             __out: &mut self.out,
         }))
     }
@@ -25064,7 +25064,7 @@ impl miniserde::Deserialize for Box<dyn CnsVolumeRelocateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsVolumeRelocateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsVolumeRelocateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsVolumeRelocateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -25137,7 +25137,7 @@ impl miniserde::Deserialize for Box<dyn CnsVolumeSourceTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CnsVolumeSourceTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CnsVolumeSourceTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CnsVolumeSource"),
             __out: &mut self.out,
         }))
     }
@@ -25232,7 +25232,7 @@ impl miniserde::Deserialize for Box<dyn DvPortSettingTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvPortSettingTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvPortSettingTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvPortSetting"),
             __out: &mut self.out,
         }))
     }
@@ -25329,7 +25329,7 @@ impl miniserde::Deserialize for Box<dyn DvPortgroupPolicyTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvPortgroupPolicyTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvPortgroupPolicyTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvPortgroupPolicy"),
             __out: &mut self.out,
         }))
     }
@@ -25416,7 +25416,7 @@ impl miniserde::Deserialize for Box<dyn DistributedVirtualSwitchManagerHostDvsFi
 impl miniserde::de::Visitor for Place<Box<dyn DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DistributedVirtualSwitchManagerHostDvsFilterSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DistributedVirtualSwitchManagerHostDvsFilterSpec"),
             __out: &mut self.out,
         }))
     }
@@ -25499,7 +25499,7 @@ impl miniserde::Deserialize for Box<dyn DvsFilterSpecConnecteeSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsFilterSpecConnecteeSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsFilterSpecConnecteeSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsFilterSpecConnecteeSpec"),
             __out: &mut self.out,
         }))
     }
@@ -25574,7 +25574,7 @@ impl miniserde::Deserialize for Box<dyn DvsFilterSpecVlanSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsFilterSpecVlanSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsFilterSpecVlanSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsFilterSpecVlanSpec"),
             __out: &mut self.out,
         }))
     }
@@ -25658,7 +25658,7 @@ impl miniserde::Deserialize for Box<dyn DistributedVirtualSwitchHostMemberBackin
 impl miniserde::de::Visitor for Place<Box<dyn DistributedVirtualSwitchHostMemberBackingTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DistributedVirtualSwitchHostMemberBackingTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DistributedVirtualSwitchHostMemberBacking"),
             __out: &mut self.out,
         }))
     }
@@ -25742,7 +25742,7 @@ impl miniserde::Deserialize for Box<dyn HostMemberHealthCheckResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostMemberHealthCheckResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostMemberHealthCheckResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostMemberHealthCheckResult"),
             __out: &mut self.out,
         }))
     }
@@ -25849,7 +25849,7 @@ impl miniserde::Deserialize for Box<dyn HostMemberUplinkHealthCheckResultTrait> 
 impl miniserde::de::Visitor for Place<Box<dyn HostMemberUplinkHealthCheckResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostMemberUplinkHealthCheckResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostMemberUplinkHealthCheckResult"),
             __out: &mut self.out,
         }))
     }
@@ -25935,7 +25935,7 @@ impl miniserde::Deserialize for Box<dyn DvsNetworkRuleActionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsNetworkRuleActionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsNetworkRuleActionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsNetworkRuleAction"),
             __out: &mut self.out,
         }))
     }
@@ -26061,7 +26061,7 @@ impl miniserde::Deserialize for Box<dyn DvsNetworkRuleQualifierTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsNetworkRuleQualifierTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsNetworkRuleQualifierTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsNetworkRuleQualifier"),
             __out: &mut self.out,
         }))
     }
@@ -26162,7 +26162,7 @@ impl miniserde::Deserialize for Box<dyn CryptoManagerKmipCryptoKeyStatusKeyInfoT
 impl miniserde::de::Visitor for Place<Box<dyn CryptoManagerKmipCryptoKeyStatusKeyInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CryptoManagerKmipCryptoKeyStatusKeyInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CryptoManagerKmipCryptoKeyStatusKeyInfo"),
             __out: &mut self.out,
         }))
     }
@@ -26249,7 +26249,7 @@ impl miniserde::Deserialize for Box<dyn CryptoSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CryptoSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CryptoSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CryptoSpec"),
             __out: &mut self.out,
         }))
     }
@@ -26346,7 +26346,7 @@ impl miniserde::Deserialize for Box<dyn CryptoSpecNoOpTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CryptoSpecNoOpTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CryptoSpecNoOpTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CryptoSpecNoOp"),
             __out: &mut self.out,
         }))
     }
@@ -26416,7 +26416,7 @@ impl miniserde::Deserialize for Box<dyn KmipClusterInfoKeyInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn KmipClusterInfoKeyInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(KmipClusterInfoKeyInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("KmipClusterInfoKeyInfo"),
             __out: &mut self.out,
         }))
     }
@@ -26498,7 +26498,7 @@ impl miniserde::Deserialize for Box<dyn KmipServerSpecKeySpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn KmipServerSpecKeySpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(KmipServerSpecKeySpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("KmipServerSpecKeySpec"),
             __out: &mut self.out,
         }))
     }
@@ -26568,7 +26568,7 @@ impl miniserde::Deserialize for Box<dyn EventArgumentTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn EventArgumentTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(EventArgumentTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("EventArgument"),
             __out: &mut self.out,
         }))
     }
@@ -26707,7 +26707,7 @@ impl miniserde::Deserialize for Box<dyn EntityEventArgumentTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn EntityEventArgumentTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(EntityEventArgumentTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("EntityEventArgument"),
             __out: &mut self.out,
         }))
     }
@@ -26844,7 +26844,7 @@ impl miniserde::Deserialize for Box<dyn EventManagerEventViewSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn EventManagerEventViewSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(EventManagerEventViewSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("EventManagerEventViewSpec"),
             __out: &mut self.out,
         }))
     }
@@ -26933,7 +26933,7 @@ impl miniserde::Deserialize for Box<dyn HostAuthenticationStoreInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostAuthenticationStoreInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostAuthenticationStoreInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostAuthenticationStoreInfo"),
             __out: &mut self.out,
         }))
     }
@@ -27038,7 +27038,7 @@ impl miniserde::Deserialize for Box<dyn HostDirectoryStoreInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostDirectoryStoreInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostDirectoryStoreInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostDirectoryStoreInfo"),
             __out: &mut self.out,
         }))
     }
@@ -27127,7 +27127,7 @@ impl miniserde::Deserialize for Box<dyn HostDatastoreConnectInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostDatastoreConnectInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostDatastoreConnectInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostDatastoreConnectInfo"),
             __out: &mut self.out,
         }))
     }
@@ -27222,7 +27222,7 @@ impl miniserde::Deserialize for Box<dyn HostConnectInfoNetworkInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostConnectInfoNetworkInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostConnectInfoNetworkInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostConnectInfoNetworkInfo"),
             __out: &mut self.out,
         }))
     }
@@ -27309,7 +27309,7 @@ impl miniserde::Deserialize for Box<dyn HostDataTransportConnectionInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostDataTransportConnectionInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostDataTransportConnectionInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostDataTransportConnectionInfo"),
             __out: &mut self.out,
         }))
     }
@@ -27399,7 +27399,7 @@ impl miniserde::Deserialize for Box<dyn FileInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn FileInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(FileInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("FileInfo"),
             __out: &mut self.out,
         }))
     }
@@ -27531,7 +27531,7 @@ impl miniserde::Deserialize for Box<dyn VmConfigFileInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmConfigFileInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmConfigFileInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmConfigFileInfo"),
             __out: &mut self.out,
         }))
     }
@@ -27607,7 +27607,7 @@ impl miniserde::Deserialize for Box<dyn FileQueryTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn FileQueryTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(FileQueryTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("FileQuery"),
             __out: &mut self.out,
         }))
     }
@@ -27725,7 +27725,7 @@ impl miniserde::Deserialize for Box<dyn VmConfigFileQueryTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmConfigFileQueryTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmConfigFileQueryTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmConfigFileQuery"),
             __out: &mut self.out,
         }))
     }
@@ -27809,7 +27809,7 @@ impl miniserde::Deserialize for Box<dyn HostDeviceTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostDeviceTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostDeviceTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostDevice"),
             __out: &mut self.out,
         }))
     }
@@ -27940,7 +27940,7 @@ impl miniserde::Deserialize for Box<dyn ScsiLunTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ScsiLunTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ScsiLunTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ScsiLun"),
             __out: &mut self.out,
         }))
     }
@@ -28024,7 +28024,7 @@ impl miniserde::Deserialize for Box<dyn HostDigestInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostDigestInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostDigestInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostDigestInfo"),
             __out: &mut self.out,
         }))
     }
@@ -28131,7 +28131,7 @@ impl miniserde::Deserialize for Box<dyn HostDnsConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostDnsConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostDnsConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostDnsConfig"),
             __out: &mut self.out,
         }))
     }
@@ -28228,7 +28228,7 @@ impl miniserde::Deserialize for Box<dyn HostFileSystemVolumeTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostFileSystemVolumeTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostFileSystemVolumeTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostFileSystemVolume"),
             __out: &mut self.out,
         }))
     }
@@ -28363,7 +28363,7 @@ impl miniserde::Deserialize for Box<dyn HostHardwareElementInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostHardwareElementInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostHardwareElementInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostHardwareElementInfo"),
             __out: &mut self.out,
         }))
     }
@@ -28441,7 +28441,7 @@ impl miniserde::Deserialize for Box<dyn HostHbaCreateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostHbaCreateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostHbaCreateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostHbaCreateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -28534,7 +28534,7 @@ impl miniserde::Deserialize for Box<dyn HostHostBusAdapterTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostHostBusAdapterTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostHostBusAdapterTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostHostBusAdapter"),
             __out: &mut self.out,
         }))
     }
@@ -28675,7 +28675,7 @@ impl miniserde::Deserialize for Box<dyn HostFibreChannelHbaTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostFibreChannelHbaTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostFibreChannelHbaTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostFibreChannelHba"),
             __out: &mut self.out,
         }))
     }
@@ -28773,7 +28773,7 @@ impl miniserde::Deserialize for Box<dyn HostIpConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostIpConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostIpConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostIpConfig"),
             __out: &mut self.out,
         }))
     }
@@ -28880,7 +28880,7 @@ impl miniserde::Deserialize for Box<dyn HostIpRouteConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostIpRouteConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostIpRouteConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostIpRouteConfig"),
             __out: &mut self.out,
         }))
     }
@@ -28982,7 +28982,7 @@ impl miniserde::Deserialize for Box<dyn HostAccountSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostAccountSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostAccountSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostAccountSpec"),
             __out: &mut self.out,
         }))
     }
@@ -29080,7 +29080,7 @@ impl miniserde::Deserialize for Box<dyn HostMultipathInfoLogicalUnitPolicyTrait>
 impl miniserde::de::Visitor for Place<Box<dyn HostMultipathInfoLogicalUnitPolicyTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostMultipathInfoLogicalUnitPolicyTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostMultipathInfoLogicalUnitPolicy"),
             __out: &mut self.out,
         }))
     }
@@ -29171,7 +29171,7 @@ impl miniserde::Deserialize for Box<dyn HostNvmeSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostNvmeSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostNvmeSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostNvmeSpec"),
             __out: &mut self.out,
         }))
     }
@@ -29250,7 +29250,7 @@ impl miniserde::Deserialize for Box<dyn HostNvmeTransportParametersTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostNvmeTransportParametersTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostNvmeTransportParametersTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostNvmeTransportParameters"),
             __out: &mut self.out,
         }))
     }
@@ -29346,7 +29346,7 @@ impl miniserde::Deserialize for Box<dyn HostPciPassthruConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostPciPassthruConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostPciPassthruConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostPciPassthruConfig"),
             __out: &mut self.out,
         }))
     }
@@ -29435,7 +29435,7 @@ impl miniserde::Deserialize for Box<dyn HostPciPassthruInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostPciPassthruInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostPciPassthruInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostPciPassthruInfo"),
             __out: &mut self.out,
         }))
     }
@@ -29520,7 +29520,7 @@ impl miniserde::Deserialize for Box<dyn PhysicalNicHintTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PhysicalNicHintTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PhysicalNicHintTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PhysicalNicHint"),
             __out: &mut self.out,
         }))
     }
@@ -29597,7 +29597,7 @@ impl miniserde::Deserialize for Box<dyn HostRdmaDeviceBackingTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostRdmaDeviceBackingTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostRdmaDeviceBackingTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostRdmaDeviceBacking"),
             __out: &mut self.out,
         }))
     }
@@ -29679,7 +29679,7 @@ impl miniserde::Deserialize for Box<dyn HostSriovDevicePoolInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostSriovDevicePoolInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostSriovDevicePoolInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostSriovDevicePoolInfo"),
             __out: &mut self.out,
         }))
     }
@@ -29771,7 +29771,7 @@ impl miniserde::Deserialize for Box<dyn HostSystemSwapConfigurationSystemSwapOpt
 impl miniserde::de::Visitor for Place<Box<dyn HostSystemSwapConfigurationSystemSwapOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostSystemSwapConfigurationSystemSwapOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostSystemSwapConfigurationSystemSwapOption"),
             __out: &mut self.out,
         }))
     }
@@ -29869,7 +29869,7 @@ impl miniserde::Deserialize for Box<dyn HostTargetTransportTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostTargetTransportTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostTargetTransportTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostTargetTransport"),
             __out: &mut self.out,
         }))
     }
@@ -29995,7 +29995,7 @@ impl miniserde::Deserialize for Box<dyn HostFibreChannelTargetTransportTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostFibreChannelTargetTransportTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostFibreChannelTargetTransportTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostFibreChannelTargetTransport"),
             __out: &mut self.out,
         }))
     }
@@ -30086,7 +30086,7 @@ impl miniserde::Deserialize for Box<dyn HostTpmEventDetailsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostTpmEventDetailsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostTpmEventDetailsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostTpmEventDetails"),
             __out: &mut self.out,
         }))
     }
@@ -30224,7 +30224,7 @@ impl miniserde::Deserialize for Box<dyn HostTpmBootSecurityOptionEventDetailsTra
 impl miniserde::de::Visitor for Place<Box<dyn HostTpmBootSecurityOptionEventDetailsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostTpmBootSecurityOptionEventDetailsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostTpmBootSecurityOptionEventDetails"),
             __out: &mut self.out,
         }))
     }
@@ -30312,7 +30312,7 @@ impl miniserde::Deserialize for Box<dyn HostVirtualSwitchBridgeTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostVirtualSwitchBridgeTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostVirtualSwitchBridgeTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostVirtualSwitchBridge"),
             __out: &mut self.out,
         }))
     }
@@ -30405,7 +30405,7 @@ impl miniserde::Deserialize for Box<dyn VmfsDatastoreBaseOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmfsDatastoreBaseOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmfsDatastoreBaseOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmfsDatastoreBaseOption"),
             __out: &mut self.out,
         }))
     }
@@ -30510,7 +30510,7 @@ impl miniserde::Deserialize for Box<dyn VmfsDatastoreSingleExtentOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmfsDatastoreSingleExtentOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmfsDatastoreSingleExtentOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmfsDatastoreSingleExtentOption"),
             __out: &mut self.out,
         }))
     }
@@ -30604,7 +30604,7 @@ impl miniserde::Deserialize for Box<dyn VmfsDatastoreSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmfsDatastoreSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmfsDatastoreSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmfsDatastoreSpec"),
             __out: &mut self.out,
         }))
     }
@@ -30702,7 +30702,7 @@ impl miniserde::Deserialize for Box<dyn VsanHclCommonDeviceInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanHclCommonDeviceInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanHclCommonDeviceInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanHclCommonDeviceInfo"),
             __out: &mut self.out,
         }))
     }
@@ -30790,7 +30790,7 @@ impl miniserde::Deserialize for Box<dyn NetBiosConfigInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn NetBiosConfigInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(NetBiosConfigInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("NetBiosConfigInfo"),
             __out: &mut self.out,
         }))
     }
@@ -30885,7 +30885,7 @@ impl miniserde::Deserialize for Box<dyn ArrayUpdateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ArrayUpdateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ArrayUpdateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ArrayUpdateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -31067,7 +31067,7 @@ impl miniserde::Deserialize for Box<dyn OptionTypeTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn OptionTypeTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(OptionTypeTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("OptionType"),
             __out: &mut self.out,
         }))
     }
@@ -31195,7 +31195,7 @@ impl miniserde::Deserialize for Box<dyn OptionValueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn OptionValueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(OptionValueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("OptionValue"),
             __out: &mut self.out,
         }))
     }
@@ -31286,7 +31286,7 @@ impl miniserde::Deserialize for Box<dyn ApplyProfileTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ApplyProfileTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ApplyProfileTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ApplyProfile"),
             __out: &mut self.out,
         }))
     }
@@ -31612,7 +31612,7 @@ impl miniserde::Deserialize for Box<dyn DvsVNicProfileTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DvsVNicProfileTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DvsVNicProfileTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DvsVNicProfile"),
             __out: &mut self.out,
         }))
     }
@@ -31706,7 +31706,7 @@ impl miniserde::Deserialize for Box<dyn PortGroupProfileTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PortGroupProfileTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PortGroupProfileTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PortGroupProfile"),
             __out: &mut self.out,
         }))
     }
@@ -31814,7 +31814,7 @@ impl miniserde::Deserialize for Box<dyn ProfileExpressionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ProfileExpressionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ProfileExpressionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ProfileExpression"),
             __out: &mut self.out,
         }))
     }
@@ -31912,7 +31912,7 @@ impl miniserde::Deserialize for Box<dyn PolicyOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn PolicyOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(PolicyOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("PolicyOption"),
             __out: &mut self.out,
         }))
     }
@@ -32002,7 +32002,7 @@ impl miniserde::Deserialize for Box<dyn ProfilePolicyOptionMetadataTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ProfilePolicyOptionMetadataTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ProfilePolicyOptionMetadataTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ProfilePolicyOptionMetadata"),
             __out: &mut self.out,
         }))
     }
@@ -32095,7 +32095,7 @@ impl miniserde::Deserialize for Box<dyn ProfileConfigInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ProfileConfigInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ProfileConfigInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ProfileConfigInfo"),
             __out: &mut self.out,
         }))
     }
@@ -32190,7 +32190,7 @@ impl miniserde::Deserialize for Box<dyn ProfileCreateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ProfileCreateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ProfileCreateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ProfileCreateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -32328,7 +32328,7 @@ impl miniserde::Deserialize for Box<dyn ProfileSerializedCreateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ProfileSerializedCreateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ProfileSerializedCreateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ProfileSerializedCreateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -32417,7 +32417,7 @@ impl miniserde::Deserialize for Box<dyn ClusterProfileCreateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterProfileCreateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterProfileCreateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterProfileCreateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -32520,7 +32520,7 @@ impl miniserde::Deserialize for Box<dyn ClusterProfileConfigSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ClusterProfileConfigSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ClusterProfileConfigSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ClusterProfileConfigSpec"),
             __out: &mut self.out,
         }))
     }
@@ -32617,7 +32617,7 @@ impl miniserde::Deserialize for Box<dyn HostProfileConfigSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostProfileConfigSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostProfileConfigSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostProfileConfigSpec"),
             __out: &mut self.out,
         }))
     }
@@ -32712,7 +32712,7 @@ impl miniserde::Deserialize for Box<dyn ProfileExecuteResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ProfileExecuteResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ProfileExecuteResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ProfileExecuteResult"),
             __out: &mut self.out,
         }))
     }
@@ -32799,7 +32799,7 @@ impl miniserde::Deserialize for Box<dyn AnswerFileCreateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn AnswerFileCreateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(AnswerFileCreateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("AnswerFileCreateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -32875,7 +32875,7 @@ impl miniserde::Deserialize for Box<dyn HostProfilesEntityCustomizationsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HostProfilesEntityCustomizationsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HostProfilesEntityCustomizationsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HostProfilesEntityCustomizations"),
             __out: &mut self.out,
         }))
     }
@@ -32960,7 +32960,7 @@ impl miniserde::Deserialize for Box<dyn ScheduledTaskSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn ScheduledTaskSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(ScheduledTaskSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("ScheduledTaskSpec"),
             __out: &mut self.out,
         }))
     }
@@ -33074,7 +33074,7 @@ impl miniserde::Deserialize for Box<dyn TaskSchedulerTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn TaskSchedulerTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(TaskSchedulerTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("TaskScheduler"),
             __out: &mut self.out,
         }))
     }
@@ -33212,7 +33212,7 @@ impl miniserde::Deserialize for Box<dyn RecurrentTaskSchedulerTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn RecurrentTaskSchedulerTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(RecurrentTaskSchedulerTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("RecurrentTaskScheduler"),
             __out: &mut self.out,
         }))
     }
@@ -33339,7 +33339,7 @@ impl miniserde::Deserialize for Box<dyn HourlyTaskSchedulerTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn HourlyTaskSchedulerTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(HourlyTaskSchedulerTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("HourlyTaskScheduler"),
             __out: &mut self.out,
         }))
     }
@@ -33462,7 +33462,7 @@ impl miniserde::Deserialize for Box<dyn DailyTaskSchedulerTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn DailyTaskSchedulerTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(DailyTaskSchedulerTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("DailyTaskScheduler"),
             __out: &mut self.out,
         }))
     }
@@ -33571,7 +33571,7 @@ impl miniserde::Deserialize for Box<dyn MonthlyTaskSchedulerTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn MonthlyTaskSchedulerTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(MonthlyTaskSchedulerTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("MonthlyTaskScheduler"),
             __out: &mut self.out,
         }))
     }
@@ -33666,7 +33666,7 @@ impl miniserde::Deserialize for Box<dyn VmConfigInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmConfigInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmConfigInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmConfigInfo"),
             __out: &mut self.out,
         }))
     }
@@ -33764,7 +33764,7 @@ impl miniserde::Deserialize for Box<dyn VmConfigSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VmConfigSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VmConfigSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VmConfigSpec"),
             __out: &mut self.out,
         }))
     }
@@ -33854,7 +33854,7 @@ impl miniserde::Deserialize for Box<dyn NodeDeploymentSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn NodeDeploymentSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(NodeDeploymentSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("NodeDeploymentSpec"),
             __out: &mut self.out,
         }))
     }
@@ -33942,7 +33942,7 @@ impl miniserde::Deserialize for Box<dyn NodeNetworkSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn NodeNetworkSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(NodeNetworkSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("NodeNetworkSpec"),
             __out: &mut self.out,
         }))
     }
@@ -34027,7 +34027,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineBaseIndependentFilterSpecT
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineBaseIndependentFilterSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineBaseIndependentFilterSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineBaseIndependentFilterSpec"),
             __out: &mut self.out,
         }))
     }
@@ -34107,7 +34107,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineBootOptionsBootableDeviceT
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineBootOptionsBootableDeviceTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineBootOptionsBootableDeviceTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineBootOptionsBootableDevice"),
             __out: &mut self.out,
         }))
     }
@@ -34192,7 +34192,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineDeviceRuntimeInfoDeviceRun
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineDeviceRuntimeInfoDeviceRuntimeStateTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineDeviceRuntimeInfoDeviceRuntimeState"),
             __out: &mut self.out,
         }))
     }
@@ -34290,7 +34290,7 @@ impl miniserde::Deserialize for Box<dyn FaultToleranceConfigInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn FaultToleranceConfigInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(FaultToleranceConfigInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("FaultToleranceConfigInfo"),
             __out: &mut self.out,
         }))
     }
@@ -34384,7 +34384,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineGuestQuiesceSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineGuestQuiesceSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineGuestQuiesceSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineGuestQuiesceSpec"),
             __out: &mut self.out,
         }))
     }
@@ -34465,7 +34465,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineProfileSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineProfileSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineProfileSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineProfileSpec"),
             __out: &mut self.out,
         }))
     }
@@ -34555,7 +34555,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineSriovDevicePoolInfoTrait> 
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineSriovDevicePoolInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineSriovDevicePoolInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineSriovDevicePoolInfo"),
             __out: &mut self.out,
         }))
     }
@@ -34640,7 +34640,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineTargetInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineTargetInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineTargetInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineTargetInfo"),
             __out: &mut self.out,
         }))
     }
@@ -34869,7 +34869,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineDiskDeviceInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineDiskDeviceInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineDiskDeviceInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineDiskDeviceInfo"),
             __out: &mut self.out,
         }))
     }
@@ -34962,7 +34962,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachinePciPassthroughInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachinePciPassthroughInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachinePciPassthroughInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachinePciPassthroughInfo"),
             __out: &mut self.out,
         }))
     }
@@ -35060,7 +35060,7 @@ impl miniserde::Deserialize for Box<dyn VirtualMachineVirtualDeviceGroupsDeviceG
 impl miniserde::de::Visitor for Place<Box<dyn VirtualMachineVirtualDeviceGroupsDeviceGroupTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualMachineVirtualDeviceGroupsDeviceGroupTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualMachineVirtualDeviceGroupsDeviceGroup"),
             __out: &mut self.out,
         }))
     }
@@ -35140,7 +35140,7 @@ impl miniserde::Deserialize for Box<dyn CustomizationIdentitySettingsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CustomizationIdentitySettingsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CustomizationIdentitySettingsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CustomizationIdentitySettings"),
             __out: &mut self.out,
         }))
     }
@@ -35228,7 +35228,7 @@ impl miniserde::Deserialize for Box<dyn CustomizationIpGeneratorTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CustomizationIpGeneratorTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CustomizationIpGeneratorTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CustomizationIpGenerator"),
             __out: &mut self.out,
         }))
     }
@@ -35316,7 +35316,7 @@ impl miniserde::Deserialize for Box<dyn CustomizationIpV6GeneratorTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CustomizationIpV6GeneratorTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CustomizationIpV6GeneratorTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CustomizationIpV6Generator"),
             __out: &mut self.out,
         }))
     }
@@ -35413,7 +35413,7 @@ impl miniserde::Deserialize for Box<dyn CustomizationNameTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CustomizationNameTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CustomizationNameTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CustomizationName"),
             __out: &mut self.out,
         }))
     }
@@ -35505,7 +35505,7 @@ impl miniserde::Deserialize for Box<dyn CustomizationOptionsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn CustomizationOptionsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(CustomizationOptionsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("CustomizationOptions"),
             __out: &mut self.out,
         }))
     }
@@ -35608,7 +35608,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDevice"),
             __out: &mut self.out,
         }))
     }
@@ -35982,7 +35982,7 @@ impl miniserde::Deserialize for Box<dyn VirtualControllerTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualControllerTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualControllerTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualController"),
             __out: &mut self.out,
         }))
     }
@@ -36165,7 +36165,7 @@ impl miniserde::Deserialize for Box<dyn VirtualSataControllerTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualSataControllerTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualSataControllerTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualSataController"),
             __out: &mut self.out,
         }))
     }
@@ -36264,7 +36264,7 @@ impl miniserde::Deserialize for Box<dyn VirtualScsiControllerTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualScsiControllerTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualScsiControllerTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualScsiController"),
             __out: &mut self.out,
         }))
     }
@@ -36381,7 +36381,7 @@ impl miniserde::Deserialize for Box<dyn VirtualEthernetCardTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualEthernetCardTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualEthernetCardTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualEthernetCard"),
             __out: &mut self.out,
         }))
     }
@@ -36522,7 +36522,7 @@ impl miniserde::Deserialize for Box<dyn VirtualVmxnetTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualVmxnetTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualVmxnetTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualVmxnet"),
             __out: &mut self.out,
         }))
     }
@@ -36633,7 +36633,7 @@ impl miniserde::Deserialize for Box<dyn VirtualVmxnet3Trait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualVmxnet3Trait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualVmxnet3TraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualVmxnet3"),
             __out: &mut self.out,
         }))
     }
@@ -36732,7 +36732,7 @@ impl miniserde::Deserialize for Box<dyn VirtualSoundCardTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualSoundCardTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualSoundCardTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualSoundCard"),
             __out: &mut self.out,
         }))
     }
@@ -36829,7 +36829,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceBackingInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceBackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceBackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceBackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -37109,7 +37109,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceDeviceBackingInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceDeviceBackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceDeviceBackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceDeviceBackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -37298,7 +37298,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDiskRawDiskVer2BackingInfoTrait> 
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDiskRawDiskVer2BackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDiskRawDiskVer2BackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDiskRawDiskVer2BackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -37397,7 +37397,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceFileBackingInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceFileBackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceFileBackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceFileBackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -37563,7 +37563,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDevicePipeBackingInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDevicePipeBackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDevicePipeBackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDevicePipeBackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -37667,7 +37667,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceRemoteDeviceBackingInfoTrai
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceRemoteDeviceBackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceRemoteDeviceBackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceRemoteDeviceBackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -37784,7 +37784,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceUriBackingInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceUriBackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceUriBackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceUriBackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -37869,7 +37869,7 @@ impl miniserde::Deserialize for Box<dyn VirtualPciPassthroughPluginBackingInfoTr
 impl miniserde::de::Visitor for Place<Box<dyn VirtualPciPassthroughPluginBackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualPciPassthroughPluginBackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualPciPassthroughPluginBackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -37951,7 +37951,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceBusSlotInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceBusSlotInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceBusSlotInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceBusSlotInfo"),
             __out: &mut self.out,
         }))
     }
@@ -38050,7 +38050,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDevicePciBusSlotInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDevicePciBusSlotInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDevicePciBusSlotInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDevicePciBusSlotInfo"),
             __out: &mut self.out,
         }))
     }
@@ -38147,7 +38147,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceOption"),
             __out: &mut self.out,
         }))
     }
@@ -38506,7 +38506,7 @@ impl miniserde::Deserialize for Box<dyn VirtualControllerOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualControllerOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualControllerOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualControllerOption"),
             __out: &mut self.out,
         }))
     }
@@ -38681,7 +38681,7 @@ impl miniserde::Deserialize for Box<dyn VirtualSataControllerOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualSataControllerOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualSataControllerOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualSataControllerOption"),
             __out: &mut self.out,
         }))
     }
@@ -38772,7 +38772,7 @@ impl miniserde::Deserialize for Box<dyn VirtualScsiControllerOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualScsiControllerOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualScsiControllerOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualScsiControllerOption"),
             __out: &mut self.out,
         }))
     }
@@ -38879,7 +38879,7 @@ impl miniserde::Deserialize for Box<dyn VirtualEthernetCardOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualEthernetCardOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualEthernetCardOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualEthernetCardOption"),
             __out: &mut self.out,
         }))
     }
@@ -39010,7 +39010,7 @@ impl miniserde::Deserialize for Box<dyn VirtualVmxnetOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualVmxnetOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualVmxnetOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualVmxnetOption"),
             __out: &mut self.out,
         }))
     }
@@ -39111,7 +39111,7 @@ impl miniserde::Deserialize for Box<dyn VirtualVmxnet3OptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualVmxnet3OptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualVmxnet3OptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualVmxnet3Option"),
             __out: &mut self.out,
         }))
     }
@@ -39200,7 +39200,7 @@ impl miniserde::Deserialize for Box<dyn VirtualSoundCardOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualSoundCardOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualSoundCardOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualSoundCardOption"),
             __out: &mut self.out,
         }))
     }
@@ -39301,7 +39301,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceBackingOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceBackingOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceBackingOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceBackingOption"),
             __out: &mut self.out,
         }))
     }
@@ -39659,7 +39659,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceDeviceBackingOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceDeviceBackingOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceDeviceBackingOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceDeviceBackingOption"),
             __out: &mut self.out,
         }))
     }
@@ -39851,7 +39851,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDiskRawDiskVer2BackingOptionTrait
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDiskRawDiskVer2BackingOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDiskRawDiskVer2BackingOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDiskRawDiskVer2BackingOption"),
             __out: &mut self.out,
         }))
     }
@@ -39939,7 +39939,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceFileBackingOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceFileBackingOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceFileBackingOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceFileBackingOption"),
             __out: &mut self.out,
         }))
     }
@@ -40082,7 +40082,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDevicePipeBackingOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDevicePipeBackingOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDevicePipeBackingOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDevicePipeBackingOption"),
             __out: &mut self.out,
         }))
     }
@@ -40176,7 +40176,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceRemoteDeviceBackingOptionTr
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceRemoteDeviceBackingOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceRemoteDeviceBackingOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceRemoteDeviceBackingOption"),
             __out: &mut self.out,
         }))
     }
@@ -40282,7 +40282,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceUriBackingOptionTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceUriBackingOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceUriBackingOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceUriBackingOption"),
             __out: &mut self.out,
         }))
     }
@@ -40371,7 +40371,7 @@ impl miniserde::Deserialize for Box<dyn VirtualPciPassthroughPluginBackingOption
 impl miniserde::de::Visitor for Place<Box<dyn VirtualPciPassthroughPluginBackingOptionTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualPciPassthroughPluginBackingOptionTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualPciPassthroughPluginBackingOption"),
             __out: &mut self.out,
         }))
     }
@@ -40473,7 +40473,7 @@ impl miniserde::Deserialize for Box<dyn VirtualDeviceConfigSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VirtualDeviceConfigSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VirtualDeviceConfigSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VirtualDeviceConfigSpec"),
             __out: &mut self.out,
         }))
     }
@@ -40545,7 +40545,7 @@ impl miniserde::Deserialize for Box<dyn GuestAuthSubjectTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn GuestAuthSubjectTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(GuestAuthSubjectTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("GuestAuthSubject"),
             __out: &mut self.out,
         }))
     }
@@ -40639,7 +40639,7 @@ impl miniserde::Deserialize for Box<dyn GuestFileAttributesTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn GuestFileAttributesTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(GuestFileAttributesTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("GuestFileAttributes"),
             __out: &mut self.out,
         }))
     }
@@ -40744,7 +40744,7 @@ impl miniserde::Deserialize for Box<dyn GuestAuthenticationTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn GuestAuthenticationTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(GuestAuthenticationTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("GuestAuthentication"),
             __out: &mut self.out,
         }))
     }
@@ -40849,7 +40849,7 @@ impl miniserde::Deserialize for Box<dyn GuestProgramSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn GuestProgramSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(GuestProgramSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("GuestProgramSpec"),
             __out: &mut self.out,
         }))
     }
@@ -40919,7 +40919,7 @@ impl miniserde::Deserialize for Box<dyn GuestRegValueDataSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn GuestRegValueDataSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(GuestRegValueDataSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("GuestRegValueDataSpec"),
             __out: &mut self.out,
         }))
     }
@@ -41036,7 +41036,7 @@ impl miniserde::Deserialize for Box<dyn FaultDomainIdTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn FaultDomainIdTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(FaultDomainIdTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("FaultDomainId"),
             __out: &mut self.out,
         }))
     }
@@ -41256,7 +41256,7 @@ impl miniserde::Deserialize for Box<dyn VsanDataEfficiencyConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanDataEfficiencyConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanDataEfficiencyConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanDataEfficiencyConfig"),
             __out: &mut self.out,
         }))
     }
@@ -41356,7 +41356,7 @@ impl miniserde::Deserialize for Box<dyn VsanDatastoreConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanDatastoreConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanDatastoreConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanDatastoreConfig"),
             __out: &mut self.out,
         }))
     }
@@ -41456,7 +41456,7 @@ impl miniserde::Deserialize for Box<dyn VsanDatastoreSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanDatastoreSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanDatastoreSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanDatastoreSpec"),
             __out: &mut self.out,
         }))
     }
@@ -41545,7 +41545,7 @@ impl miniserde::Deserialize for Box<dyn VsanDirectoryServerConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanDirectoryServerConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanDirectoryServerConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanDirectoryServerConfig"),
             __out: &mut self.out,
         }))
     }
@@ -41632,7 +41632,7 @@ impl miniserde::Deserialize for Box<dyn EntityResourceCheckDetailsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn EntityResourceCheckDetailsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(EntityResourceCheckDetailsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("EntityResourceCheckDetails"),
             __out: &mut self.out,
         }))
     }
@@ -41793,7 +41793,7 @@ impl miniserde::Deserialize for Box<dyn VsanDiskResourceCheckResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanDiskResourceCheckResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanDiskResourceCheckResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanDiskResourceCheckResult"),
             __out: &mut self.out,
         }))
     }
@@ -41883,7 +41883,7 @@ impl miniserde::Deserialize for Box<dyn VsanResourceCheckResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanResourceCheckResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanResourceCheckResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanResourceCheckResult"),
             __out: &mut self.out,
         }))
     }
@@ -41986,7 +41986,7 @@ impl miniserde::Deserialize for Box<dyn VsanResourceCheckComponentResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanResourceCheckComponentResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanResourceCheckComponentResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanResourceCheckComponentResult"),
             __out: &mut self.out,
         }))
     }
@@ -42085,7 +42085,7 @@ impl miniserde::Deserialize for Box<dyn VsanMountPrecheckItemTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanMountPrecheckItemTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanMountPrecheckItemTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanMountPrecheckItem"),
             __out: &mut self.out,
         }))
     }
@@ -42187,7 +42187,7 @@ impl miniserde::Deserialize for Box<dyn VsanMountPrecheckResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanMountPrecheckResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanMountPrecheckResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanMountPrecheckResult"),
             __out: &mut self.out,
         }))
     }
@@ -42284,7 +42284,7 @@ impl miniserde::Deserialize for Box<dyn VsanRemoteVcInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanRemoteVcInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanRemoteVcInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanRemoteVcInfo"),
             __out: &mut self.out,
         }))
     }
@@ -42377,7 +42377,7 @@ impl miniserde::Deserialize for Box<dyn VsanResourceCheckTaskDetailsTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanResourceCheckTaskDetailsTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanResourceCheckTaskDetailsTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanResourceCheckTaskDetails"),
             __out: &mut self.out,
         }))
     }
@@ -42477,7 +42477,7 @@ impl miniserde::Deserialize for Box<dyn VsanIscsiVipConfigSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanIscsiVipConfigSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanIscsiVipConfigSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanIscsiVipConfigSpec"),
             __out: &mut self.out,
         }))
     }
@@ -42550,7 +42550,7 @@ impl miniserde::Deserialize for Box<dyn VsanConfigBaseIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanConfigBaseIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanConfigBaseIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanConfigBaseIssue"),
             __out: &mut self.out,
         }))
     }
@@ -42619,7 +42619,7 @@ impl miniserde::Deserialize for Box<dyn VsanNetworkConfigBaseIssueTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanNetworkConfigBaseIssueTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanNetworkConfigBaseIssueTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanNetworkConfigBaseIssue"),
             __out: &mut self.out,
         }))
     }
@@ -42740,7 +42740,7 @@ impl miniserde::Deserialize for Box<dyn VsanClusterConfigInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanClusterConfigInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanClusterConfigInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanClusterConfigInfo"),
             __out: &mut self.out,
         }))
     }
@@ -42843,7 +42843,7 @@ impl miniserde::Deserialize for Box<dyn VsanHostConfigInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanHostConfigInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanHostConfigInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanHostConfigInfo"),
             __out: &mut self.out,
         }))
     }
@@ -42944,7 +42944,7 @@ impl miniserde::Deserialize for Box<dyn VsanHostConfigInfoNetworkInfoPortConfigT
 impl miniserde::de::Visitor for Place<Box<dyn VsanHostConfigInfoNetworkInfoPortConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanHostConfigInfoNetworkInfoPortConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanHostConfigInfoNetworkInfoPortConfig"),
             __out: &mut self.out,
         }))
     }
@@ -43035,7 +43035,7 @@ impl miniserde::Deserialize for Box<dyn VsanHostDiskResultTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanHostDiskResultTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanHostDiskResultTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanHostDiskResult"),
             __out: &mut self.out,
         }))
     }
@@ -43139,7 +43139,7 @@ impl miniserde::Deserialize for Box<dyn VsanHostIpConfigTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VsanHostIpConfigTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VsanHostIpConfigTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VsanHostIpConfig"),
             __out: &mut self.out,
         }))
     }
@@ -43224,7 +43224,7 @@ impl miniserde::Deserialize for Box<dyn BaseConfigInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn BaseConfigInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(BaseConfigInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("BaseConfigInfo"),
             __out: &mut self.out,
         }))
     }
@@ -43309,7 +43309,7 @@ impl miniserde::Deserialize for Box<dyn BaseConfigInfoBackingInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn BaseConfigInfoBackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(BaseConfigInfoBackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("BaseConfigInfoBackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -43408,7 +43408,7 @@ impl miniserde::Deserialize for Box<dyn BaseConfigInfoFileBackingInfoTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn BaseConfigInfoFileBackingInfoTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(BaseConfigInfoFileBackingInfoTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("BaseConfigInfoFileBackingInfo"),
             __out: &mut self.out,
         }))
     }
@@ -43504,7 +43504,7 @@ impl miniserde::Deserialize for Box<dyn VslmCreateSpecBackingSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VslmCreateSpecBackingSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VslmCreateSpecBackingSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VslmCreateSpecBackingSpec"),
             __out: &mut self.out,
         }))
     }
@@ -43594,7 +43594,7 @@ impl miniserde::Deserialize for Box<dyn VslmMigrateSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VslmMigrateSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VslmMigrateSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VslmMigrateSpec"),
             __out: &mut self.out,
         }))
     }
@@ -43704,7 +43704,7 @@ impl miniserde::Deserialize for Box<dyn SelectionSpecTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn SelectionSpecTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(SelectionSpecTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("SelectionSpec"),
             __out: &mut self.out,
         }))
     }
@@ -43777,7 +43777,7 @@ impl miniserde::Deserialize for Box<dyn VslmTaskReasonTrait> {
 impl miniserde::de::Visitor for Place<Box<dyn VslmTaskReasonTrait>> {
     fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
         Ok(Box::new(VslmTaskReasonTraitBoxBuilder {
-            core: super::mini_de_static::PolyCore::new(),
+            core: super::mini_de_static::PolyCore::with_default("VslmTaskReason"),
             __out: &mut self.out,
         }))
     }

@@ -47,14 +47,9 @@ impl TaskManager {
     /// parameters.
     pub async fn read_next_tasks_by_view_spec(&self, view_spec: &dyn crate::types::traits::TaskManagerTaskViewSpecTrait, filter_spec: &crate::types::structs::TaskFilterSpec, info_filter_spec: Option<&crate::types::structs::TaskInfoFilterSpec>) -> Result<Option<Vec<crate::types::structs::TaskInfo>>> {
         let input = ReadNextTasksByViewSpecRequestType {view_spec, filter_spec, info_filter_spec, };
-        let path = format!("/TaskManager/{moId}/ReadNextTasksByViewSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "TaskManager", &self.mo_id, "ReadNextTasksByViewSpec", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::TaskInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -88,11 +83,8 @@ impl TaskManager {
     /// ***NotSupported***: if called directly on a host.
     pub async fn create_collector_for_tasks(&self, filter: &crate::types::structs::TaskFilterSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateCollectorForTasksRequestType {filter, };
-        let path = format!("/TaskManager/{moId}/CreateCollectorForTasks", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "TaskManager", &self.mo_id, "CreateCollectorForTasks", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a *TaskHistoryCollector*, a
@@ -130,11 +122,8 @@ impl TaskManager {
     /// ***NotSupported***: if called directly on a host.
     pub async fn create_collector_with_info_filter_for_tasks(&self, filter: &crate::types::structs::TaskFilterSpec, info_filter: Option<&crate::types::structs::TaskInfoFilterSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateCollectorWithInfoFilterForTasksRequestType {filter, info_filter, };
-        let path = format!("/TaskManager/{moId}/CreateCollectorWithInfoFilterForTasks", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "TaskManager", &self.mo_id, "CreateCollectorWithInfoFilterForTasks", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new *Task*, specifying the object with which
@@ -176,11 +165,8 @@ impl TaskManager {
     /// *TaskInfo* data object describing the new task
     pub async fn create_task(&self, obj: &crate::types::structs::ManagedObjectReference, task_type_id: &str, initiated_by: Option<&str>, cancelable: bool, parent_task_key: Option<&str>, activation_id: Option<&str>) -> Result<crate::types::structs::TaskInfo> {
         let input = CreateTaskRequestType {obj, task_type_id, initiated_by, cancelable, parent_task_key, activation_id, };
-        let path = format!("/TaskManager/{moId}/CreateTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::TaskInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "TaskManager", &self.mo_id, "CreateTask", Some(&input)).await?;
+        let result: crate::types::structs::TaskInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Locale-specific, static strings that describe *Task*
@@ -188,11 +174,9 @@ impl TaskManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn description(&self) -> Result<crate::types::structs::TaskDescription> {
-        let path = format!("/TaskManager/{moId}/description", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::TaskDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "TaskManager", &self.mo_id, "description").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
+        let result: crate::types::structs::TaskDescription = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Maximum number of *TaskHistoryCollector*
@@ -200,11 +184,9 @@ impl TaskManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn max_collector(&self) -> Result<i32> {
-        let path = format!("/TaskManager/{moId}/maxCollector", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "TaskManager", &self.mo_id, "maxCollector").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property maxCollector was empty".to_string()))?;
+        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A list of *Task* managed objects that completed recently,
@@ -237,14 +219,9 @@ impl TaskManager {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/TaskManager/{moId}/recentTask", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "TaskManager", &self.mo_id, "recentTask").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

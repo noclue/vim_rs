@@ -39,14 +39,9 @@ impl ServiceManager {
     /// considered a match.
     pub async fn query_service_list(&self, service_name: Option<&str>, location: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::ServiceManagerServiceInfo>>> {
         let input = QueryServiceListRequestType {service_name, location, };
-        let path = format!("/ServiceManager/{moId}/QueryServiceList", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ServiceManager", &self.mo_id, "QueryServiceList", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ServiceManagerServiceInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -54,14 +49,9 @@ impl ServiceManager {
     /// 
     /// ***Required privileges:*** Global.ServiceManagers
     pub async fn service(&self) -> Result<Option<Vec<crate::types::structs::ServiceManagerServiceInfo>>> {
-        let path = format!("/ServiceManager/{moId}/service", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ServiceManager", &self.mo_id, "service").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ServiceManagerServiceInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

@@ -72,14 +72,9 @@ impl EnvironmentBrowser {
     /// is returned.
     pub async fn query_config_option(&self, key: Option<&str>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::VirtualMachineConfigOption>> {
         let input = QueryConfigOptionRequestType {key, host, };
-        let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOption", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "EnvironmentBrowser", &self.mo_id, "QueryConfigOption", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VirtualMachineConfigOption>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -87,14 +82,9 @@ impl EnvironmentBrowser {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn query_config_option_descriptor(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>> {
-        let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOptionDescriptor", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "EnvironmentBrowser", &self.mo_id, "QueryConfigOptionDescriptor", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -135,14 +125,9 @@ impl EnvironmentBrowser {
     /// not found for the given host, null is returned.
     pub async fn query_config_option_ex(&self, spec: Option<&crate::types::structs::EnvironmentBrowserConfigOptionQuerySpec>) -> Result<Option<crate::types::structs::VirtualMachineConfigOption>> {
         let input = QueryConfigOptionExRequestType {spec, };
-        let path = format!("/EnvironmentBrowser/{moId}/QueryConfigOptionEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "EnvironmentBrowser", &self.mo_id, "QueryConfigOptionEx", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VirtualMachineConfigOption>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -178,14 +163,9 @@ impl EnvironmentBrowser {
     /// null is returned.
     pub async fn query_config_target(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::ConfigTarget>> {
         let input = QueryConfigTargetRequestType {host, };
-        let path = format!("/EnvironmentBrowser/{moId}/QueryConfigTarget", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "EnvironmentBrowser", &self.mo_id, "QueryConfigTarget", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ConfigTarget>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -219,14 +199,9 @@ impl EnvironmentBrowser {
     /// no hosts, null is returned.
     pub async fn query_target_capabilities(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::HostCapability>> {
         let input = QueryTargetCapabilitiesRequestType {host, };
-        let path = format!("/EnvironmentBrowser/{moId}/QueryTargetCapabilities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "EnvironmentBrowser", &self.mo_id, "QueryTargetCapabilities", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostCapability>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -238,14 +213,9 @@ impl EnvironmentBrowser {
     ///
     /// Refers instance of *HostDatastoreBrowser*.
     pub async fn datastore_browser(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/EnvironmentBrowser/{moId}/datastoreBrowser", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "EnvironmentBrowser", &self.mo_id, "datastoreBrowser").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

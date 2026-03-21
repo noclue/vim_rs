@@ -65,11 +65,8 @@ impl HostNvdimmSystem {
     /// ***HostConfigFault***: for any other failure.
     pub async fn create_nvdimm_namespace_task(&self, create_spec: &crate::types::structs::NvdimmNamespaceCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateNvdimmNamespaceRequestType {create_spec, };
-        let path = format!("/HostNvdimmSystem/{moId}/CreateNvdimmNamespace_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostNvdimmSystem", &self.mo_id, "CreateNvdimmNamespace_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create persistent memory mode nvd namespace from information passed
@@ -118,11 +115,8 @@ impl HostNvdimmSystem {
     /// ***HostConfigFault***: for any other failure.
     pub async fn create_nvdimm_p_mem_namespace_task(&self, create_spec: &crate::types::structs::NvdimmPMemNamespaceCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateNvdimmPMemNamespaceRequestType {create_spec, };
-        let path = format!("/HostNvdimmSystem/{moId}/CreateNvdimmPMemNamespace_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostNvdimmSystem", &self.mo_id, "CreateNvdimmPMemNamespace_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Delete all block mode namespaces in the system.
@@ -163,11 +157,8 @@ impl HostNvdimmSystem {
     /// 
     /// ***HostConfigFault***: for any other failure.
     pub async fn delete_nvdimm_block_namespaces_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/HostNvdimmSystem/{moId}/DeleteNvdimmBlockNamespaces_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostNvdimmSystem", &self.mo_id, "DeleteNvdimmBlockNamespaces_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Delete nvd namespace whose uuid matches passed parameter.
@@ -210,11 +201,8 @@ impl HostNvdimmSystem {
     /// ***HostConfigFault***: for any other failure.
     pub async fn delete_nvdimm_namespace_task(&self, delete_spec: &crate::types::structs::NvdimmNamespaceDeleteSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteNvdimmNamespaceRequestType {delete_spec, };
-        let path = format!("/HostNvdimmSystem/{moId}/DeleteNvdimmNamespace_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostNvdimmSystem", &self.mo_id, "DeleteNvdimmNamespace_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Host NVDIMM information.
@@ -233,11 +221,9 @@ impl HostNvdimmSystem {
     ///
     /// Return set of all NVDIMM related information.
     pub async fn nvdimm_system_info(&self) -> Result<crate::types::structs::NvdimmSystemInfo> {
-        let path = format!("/HostNvdimmSystem/{moId}/nvdimmSystemInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::NvdimmSystemInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNvdimmSystem", &self.mo_id, "nvdimmSystemInfo").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property nvdimmSystemInfo was empty".to_string()))?;
+        let result: crate::types::structs::NvdimmSystemInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -79,14 +79,9 @@ impl PbmComplianceManager {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_check_compliance(&self, entities: &[crate::types::structs::PbmServerObjectRef], profile: Option<&crate::types::structs::PbmProfileId>) -> Result<Option<Vec<crate::types::structs::PbmComplianceResult>>> {
         let input = PbmCheckComplianceRequestType {entities, profile, };
-        let path = format!("/pbm/PbmComplianceManager/{moId}/PbmCheckCompliance", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmComplianceManager", &self.mo_id, "PbmCheckCompliance", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -132,14 +127,9 @@ impl PbmComplianceManager {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_check_rollup_compliance(&self, entity: &[crate::types::structs::PbmServerObjectRef]) -> Result<Option<Vec<crate::types::structs::PbmRollupComplianceResult>>> {
         let input = PbmCheckRollupComplianceRequestType {entity, };
-        let path = format!("/pbm/PbmComplianceManager/{moId}/PbmCheckRollupCompliance", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmComplianceManager", &self.mo_id, "PbmCheckRollupCompliance", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmRollupComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -182,14 +172,9 @@ impl PbmComplianceManager {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_fetch_compliance_result(&self, entities: &[crate::types::structs::PbmServerObjectRef], profile: Option<&crate::types::structs::PbmProfileId>) -> Result<Option<Vec<crate::types::structs::PbmComplianceResult>>> {
         let input = PbmFetchComplianceResultRequestType {entities, profile, };
-        let path = format!("/pbm/PbmComplianceManager/{moId}/PbmFetchComplianceResult", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmComplianceManager", &self.mo_id, "PbmFetchComplianceResult", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -226,14 +211,9 @@ impl PbmComplianceManager {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_fetch_rollup_compliance_result(&self, entity: &[crate::types::structs::PbmServerObjectRef]) -> Result<Option<Vec<crate::types::structs::PbmRollupComplianceResult>>> {
         let input = PbmFetchRollupComplianceResultRequestType {entity, };
-        let path = format!("/pbm/PbmComplianceManager/{moId}/PbmFetchRollupComplianceResult", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmComplianceManager", &self.mo_id, "PbmFetchRollupComplianceResult", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmRollupComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -257,14 +237,9 @@ impl PbmComplianceManager {
     /// ***PbmFault***: If there is an internal service error.
     pub async fn pbm_query_by_rollup_compliance_status(&self, status: &str) -> Result<Option<Vec<crate::types::structs::PbmServerObjectRef>>> {
         let input = PbmQueryByRollupComplianceStatusRequestType {status, };
-        let path = format!("/pbm/PbmComplianceManager/{moId}/PbmQueryByRollupComplianceStatus", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmComplianceManager", &self.mo_id, "PbmQueryByRollupComplianceStatus", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmServerObjectRef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

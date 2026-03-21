@@ -63,14 +63,9 @@ impl PbmPlacementSolver {
     ///   *PbmCompatibilityCheckFault* for non-vvol datastores.
     pub async fn pbm_check_compatibility(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, profile: &crate::types::structs::PbmProfileId) -> Result<Option<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>> {
         let input = PbmCheckCompatibilityRequestType {hubs_to_search, profile, };
-        let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmCheckCompatibility", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmPlacementSolver", &self.mo_id, "PbmCheckCompatibility", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -111,14 +106,9 @@ impl PbmPlacementSolver {
     ///   *PbmCompatibilityCheckFault*.
     pub async fn pbm_check_compatibility_with_spec(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, profile_spec: &crate::types::structs::PbmCapabilityProfileCreateSpec) -> Result<Option<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>> {
         let input = PbmCheckCompatibilityWithSpecRequestType {hubs_to_search, profile_spec, };
-        let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmCheckCompatibilityWithSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmPlacementSolver", &self.mo_id, "PbmCheckCompatibilityWithSpec", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -177,14 +167,9 @@ impl PbmPlacementSolver {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_check_requirements(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, placement_subject_ref: Option<&crate::types::structs::PbmServerObjectRef>, placement_subject_requirement: Option<&[Box<dyn crate::types::traits::PbmPlacementRequirementTrait>]>) -> Result<Option<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>> {
         let input = PbmCheckRequirementsRequestType {hubs_to_search, placement_subject_ref, placement_subject_requirement, };
-        let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmCheckRequirements", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmPlacementSolver", &self.mo_id, "PbmCheckRequirements", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementCompatibilityResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -225,14 +210,9 @@ impl PbmPlacementSolver {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_query_matching_hub(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, profile: &crate::types::structs::PbmProfileId) -> Result<Option<Vec<crate::types::structs::PbmPlacementHub>>> {
         let input = PbmQueryMatchingHubRequestType {hubs_to_search, profile, };
-        let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmQueryMatchingHub", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmPlacementSolver", &self.mo_id, "PbmQueryMatchingHub", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementHub>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -267,14 +247,9 @@ impl PbmPlacementSolver {
     /// ***PbmFault***: If there is an internal server error.
     pub async fn pbm_query_matching_hub_with_spec(&self, hubs_to_search: Option<&[crate::types::structs::PbmPlacementHub]>, create_spec: &crate::types::structs::PbmCapabilityProfileCreateSpec) -> Result<Option<Vec<crate::types::structs::PbmPlacementHub>>> {
         let input = PbmQueryMatchingHubWithSpecRequestType {hubs_to_search, create_spec, };
-        let path = format!("/pbm/PbmPlacementSolver/{moId}/PbmQueryMatchingHubWithSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmPlacementSolver", &self.mo_id, "PbmQueryMatchingHubWithSpec", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmPlacementHub>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

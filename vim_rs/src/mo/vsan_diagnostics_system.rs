@@ -52,11 +52,8 @@ impl VsanDiagnosticsSystem {
     /// ***VsanFault***: if internal vSAN error hit.
     pub async fn create_io_trip_analyzer_recurrences(&self, cluster: &crate::types::structs::ManagedObjectReference, recurrences: &[crate::types::structs::VsanIoTripAnalyzerRecurrence]) -> Result<Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence>> {
         let input = CreateIoTripAnalyzerRecurrencesRequestType {cluster, recurrences, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/CreateIOTripAnalyzerRecurrences", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanDiagnosticsSystem", &self.mo_id, "CreateIOTripAnalyzerRecurrences", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Edit the IO trip analyzer recurrences with the given configuration.
@@ -90,11 +87,8 @@ impl VsanDiagnosticsSystem {
     /// ***VsanFault***: if internal vSAN error hit.
     pub async fn edit_io_trip_analyzer_recurrences(&self, cluster: &crate::types::structs::ManagedObjectReference, recurrences: &[crate::types::structs::VsanIoTripAnalyzerRecurrence]) -> Result<Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence>> {
         let input = EditIoTripAnalyzerRecurrencesRequestType {cluster, recurrences, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/EditIOTripAnalyzerRecurrences", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanDiagnosticsSystem", &self.mo_id, "EditIOTripAnalyzerRecurrences", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanIoTripAnalyzerRecurrence> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the IO trip analyzer scheduler configurations for the given cluster.
@@ -118,14 +112,9 @@ impl VsanDiagnosticsSystem {
     /// ***VsanFault***: if internal vSAN error hit.
     pub async fn get_io_trip_analyzer_scheduler_config(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<crate::types::structs::VsanIoTripAnalyzerConfig>> {
         let input = GetIoTripAnalyzerSchedulerConfigRequestType {cluster, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/GetIOTripAnalyzerSchedulerConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanDiagnosticsSystem", &self.mo_id, "GetIOTripAnalyzerSchedulerConfig", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanIoTripAnalyzerConfig>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -167,14 +156,9 @@ impl VsanDiagnosticsSystem {
     /// Failure
     pub async fn vsan_get_thresholds(&self, cluster: &crate::types::structs::ManagedObjectReference, entity_type: Option<&str>, metric: Option<&str>) -> Result<Option<Vec<crate::types::structs::VsanDiagnosticsThreshold>>> {
         let input = VsanGetThresholdsRequestType {cluster, entity_type, metric, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/VsanGetThresholds", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanDiagnosticsSystem", &self.mo_id, "VsanGetThresholds", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanDiagnosticsThreshold>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -205,14 +189,9 @@ impl VsanDiagnosticsSystem {
     /// the vSAN performance service is disabled.
     pub async fn query_io_diagnostics_instances(&self, query_spec: &crate::types::structs::VsanIoDiagnosticsInstanceQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanIoDiagnosticsInstance>>> {
         let input = QueryIoDiagnosticsInstancesRequestType {query_spec, cluster, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/QueryIODiagnosticsInstances", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanDiagnosticsSystem", &self.mo_id, "QueryIODiagnosticsInstances", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIoDiagnosticsInstance>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -244,14 +223,9 @@ impl VsanDiagnosticsSystem {
     /// the vSAN performance service is disabled.
     pub async fn query_io_diagnostics_stats(&self, instance_name: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanIoDiagnosticsTargetStats>>> {
         let input = QueryIoDiagnosticsStatsRequestType {instance_name, cluster, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/QueryIODiagnosticsStats", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanDiagnosticsSystem", &self.mo_id, "QueryIODiagnosticsStats", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIoDiagnosticsTargetStats>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -280,14 +254,9 @@ impl VsanDiagnosticsSystem {
     /// Failure
     pub async fn vsan_query_network_diagnostics(&self, cluster: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanNetworkDiagnostics>>> {
         let input = VsanQueryNetworkDiagnosticsRequestType {cluster, host, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/VsanQueryNetworkDiagnostics", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanDiagnosticsSystem", &self.mo_id, "VsanQueryNetworkDiagnostics", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanNetworkDiagnostics>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -314,9 +283,7 @@ impl VsanDiagnosticsSystem {
     /// ***VsanFault***: if internal vSAN error hit.
     pub async fn remove_io_trip_analyzer_recurrences(&self, cluster: &crate::types::structs::ManagedObjectReference, names: &[String]) -> Result<()> {
         let input = RemoveIoTripAnalyzerRecurrencesRequestType {cluster, names, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/RemoveIOTripAnalyzerRecurrences", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanDiagnosticsSystem", &self.mo_id, "RemoveIOTripAnalyzerRecurrences", Some(&input)).await
     }
     /// Set the threshold.
     /// 
@@ -344,9 +311,7 @@ impl VsanDiagnosticsSystem {
     /// Failure
     pub async fn vsan_set_thresholds(&self, cluster: &crate::types::structs::ManagedObjectReference, thresholds: Option<&[crate::types::structs::VsanDiagnosticsThreshold]>) -> Result<()> {
         let input = VsanSetThresholdsRequestType {cluster, thresholds, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/VsanSetThresholds", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanDiagnosticsSystem", &self.mo_id, "VsanSetThresholds", Some(&input)).await
     }
     /// Set the policy of the vSAN namespace object that hold the vSAN trace files.
     /// 
@@ -384,11 +349,8 @@ impl VsanDiagnosticsSystem {
     /// ***VsanFault***: if the caller doesn't have the required privilege
     pub async fn vsan_set_trace_object_policy(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, trace_object_uuid: &str, profile: Option<&dyn crate::types::traits::VirtualMachineProfileSpecTrait>) -> Result<bool> {
         let input = VsanSetTraceObjectPolicyRequestType {cluster, trace_object_uuid, profile, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/VsanSetTraceObjectPolicy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanDiagnosticsSystem", &self.mo_id, "VsanSetTraceObjectPolicy", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Start IO diagnostics task against the given targets running on vSAN datastore.
@@ -430,11 +392,8 @@ impl VsanDiagnosticsSystem {
     /// if the pre-check tests failed.
     pub async fn start_io_diagnostics_task(&self, targets: &[crate::types::structs::VsanIoDiagnosticsTarget], cluster: Option<&crate::types::structs::ManagedObjectReference>, duration: Option<i64>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartIoDiagnosticsTaskRequestType {targets, cluster, duration, };
-        let path = format!("/vsan/VsanDiagnosticsSystem/{moId}/StartIODiagnosticsTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanDiagnosticsSystem", &self.mo_id, "StartIODiagnosticsTask", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

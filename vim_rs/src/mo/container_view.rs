@@ -35,9 +35,7 @@ impl ContainerView {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn destroy_view(&self) -> Result<()> {
-        let path = format!("/ContainerView/{moId}/DestroyView", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ContainerView", &self.mo_id, "DestroyView", None).await
     }
     /// The Folder, Datacenter, ComputeResource, ResourcePool, or HostSystem instance
     /// that provides the objects that the view presents.
@@ -46,11 +44,9 @@ impl ContainerView {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn container(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/ContainerView/{moId}/container", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "container").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property container was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Whether to include only the immediate children of the container instance,
@@ -60,11 +56,9 @@ impl ContainerView {
     /// For information about recursive behavior, see the description of
     /// *ViewManager.CreateContainerView*.
     pub async fn recursive(&self) -> Result<bool> {
-        let path = format!("/ContainerView/{moId}/recursive", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "recursive").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property recursive was empty".to_string()))?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// An optional list of types to be applied to the set of objects in the view.
@@ -72,27 +66,17 @@ impl ContainerView {
     /// The list of types indicates objects that are included in the view.
     /// If empty, all types are included.
     pub async fn r#type(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/ContainerView/{moId}/type", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "type").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// The list of references to objects mapped by this view.
     pub async fn view(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ContainerView/{moId}/view", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "view").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

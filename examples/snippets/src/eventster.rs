@@ -17,13 +17,17 @@
 //! The example includes a utility function to determine the event type ID based on
 //! different event class structures, demonstrating how to handle the polymorphic
 //! nature of vSphere events.
+//!
+//! ## Typical uses
+//!
+//! Audit trails, alerting on selected event types, and correlating infrastructure changes over time.
 
 use anyhow::{Error, Result};
 use chrono::{Duration as ChronoDuration, Utc};
 use log::info;
 use std::{env, sync::Arc};
 use tokio::time::sleep;
-use utils::connect;
+use snippets::connect;
 use vim_rs::core::client::Client;
 use vim_rs::mo::EventManager;
 use vim_rs::types::struct_enum::StructType;

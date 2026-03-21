@@ -46,14 +46,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_array(&self, provider_id: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::StorageArray>>> {
         let input = QueryArrayRequestType {provider_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryArray", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryArray", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageArray>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -80,14 +75,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_array_associated_with_lun(&self, canonical_name: &str) -> Result<Option<crate::types::structs::StorageArray>> {
         let input = QueryArrayAssociatedWithLunRequestType {canonical_name, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryArrayAssociatedWithLun", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryArrayAssociatedWithLun", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::StorageArray>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -117,14 +107,9 @@ impl SmsStorageManager {
     /// ***QueryExecutionFault***: if an error is encountered while processing the query request.
     pub async fn query_associated_backing_storage_pool(&self, entity_id: Option<&str>, entity_type: Option<&str>) -> Result<Option<Vec<crate::types::structs::BackingStoragePool>>> {
         let input = QueryAssociatedBackingStoragePoolRequestType {entity_id, entity_type, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryAssociatedBackingStoragePool", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryAssociatedBackingStoragePool", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::BackingStoragePool>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -154,11 +139,8 @@ impl SmsStorageManager {
     /// ***QueryExecutionFault***: if an error is encountered while processing the query request.
     pub async fn query_datastore_backing_pool_mapping(&self, datastore: &[crate::types::structs::ManagedObjectReference]) -> Result<Vec<crate::types::structs::DatastoreBackingPoolMapping>> {
         let input = QueryDatastoreBackingPoolMappingRequestType {datastore, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryDatastoreBackingPoolMapping", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::DatastoreBackingPoolMapping> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsStorageManager", &self.mo_id, "QueryDatastoreBackingPoolMapping", Some(&input)).await?;
+        let result: Vec<crate::types::structs::DatastoreBackingPoolMapping> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the capability for the given datastore.
@@ -186,14 +168,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_datastore_capability(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<crate::types::structs::StorageCapability>> {
         let input = QueryDatastoreCapabilityRequestType {datastore, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryDatastoreCapability", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryDatastoreCapability", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::StorageCapability>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -231,11 +208,8 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_drs_migration_capability_for_performance(&self, src_datastore: &crate::types::structs::ManagedObjectReference, dst_datastore: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = QueryDrsMigrationCapabilityForPerformanceRequestType {src_datastore, dst_datastore, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryDrsMigrationCapabilityForPerformance", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsStorageManager", &self.mo_id, "QueryDrsMigrationCapabilityForPerformance", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of SMS API 5.0.
@@ -266,11 +240,8 @@ impl SmsStorageManager {
     /// ***QueryExecutionFault***: if an error is encountered while processing the query request.
     pub async fn query_drs_migration_capability_for_performance_ex(&self, datastore: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::DrsMigrationCapabilityResult> {
         let input = QueryDrsMigrationCapabilityForPerformanceExRequestType {datastore, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryDrsMigrationCapabilityForPerformanceEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::DrsMigrationCapabilityResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsStorageManager", &self.mo_id, "QueryDrsMigrationCapabilityForPerformanceEx", Some(&input)).await?;
+        let result: crate::types::structs::DrsMigrationCapabilityResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query for fault domains based on the query spec.
@@ -299,14 +270,9 @@ impl SmsStorageManager {
     /// query request.
     pub async fn query_fault_domain(&self, filter: Option<&crate::types::structs::FaultDomainFilter>) -> Result<Option<Vec<Box<dyn crate::types::traits::FaultDomainIdTrait>>>> {
         let input = QueryFaultDomainRequestType {filter, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryFaultDomain", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryFaultDomain", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::FaultDomainIdTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -333,14 +299,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_file_system_associated_with_array(&self, array_id: &str) -> Result<Option<Vec<crate::types::structs::StorageFileSystem>>> {
         let input = QueryFileSystemAssociatedWithArrayRequestType {array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryFileSystemAssociatedWithArray", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryFileSystemAssociatedWithArray", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageFileSystem>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -372,14 +333,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_host_associated_with_lun(&self, scsi_3_id: &str, array_id: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryHostAssociatedWithLunRequestType {scsi_3_id, array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryHostAssociatedWithLun", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryHostAssociatedWithLun", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -406,14 +362,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_lun_associated_with_array(&self, array_id: &str) -> Result<Option<Vec<crate::types::structs::StorageLun>>> {
         let input = QueryLunAssociatedWithArrayRequestType {array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryLunAssociatedWithArray", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryLunAssociatedWithArray", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageLun>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -444,14 +395,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_lun_associated_with_port(&self, port_id: &str, array_id: &str) -> Result<Option<Vec<crate::types::structs::StorageLun>>> {
         let input = QueryLunAssociatedWithPortRequestType {port_id, array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryLunAssociatedWithPort", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryLunAssociatedWithPort", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageLun>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -484,14 +430,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_nfs_datastore_associated_with_file_system(&self, file_system_id: &str, array_id: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = QueryNfsDatastoreAssociatedWithFileSystemRequestType {file_system_id, array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryNfsDatastoreAssociatedWithFileSystem", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryNfsDatastoreAssociatedWithFileSystem", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -518,14 +459,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_port_associated_with_array(&self, array_id: &str) -> Result<Option<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>> {
         let input = QueryPortAssociatedWithArrayRequestType {array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryPortAssociatedWithArray", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryPortAssociatedWithArray", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -555,14 +491,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_port_associated_with_lun(&self, scsi_3_id: &str, array_id: &str) -> Result<Option<Box<dyn crate::types::traits::StoragePortTrait>>> {
         let input = QueryPortAssociatedWithLunRequestType {scsi_3_id, array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryPortAssociatedWithLun", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryPortAssociatedWithLun", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::StoragePortTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -593,14 +524,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_port_associated_with_processor(&self, processor_id: &str, array_id: &str) -> Result<Option<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>> {
         let input = QueryPortAssociatedWithProcessorRequestType {processor_id, array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryPortAssociatedWithProcessor", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryPortAssociatedWithProcessor", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::StoragePortTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -627,14 +553,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_processor_associated_with_array(&self, array_id: &str) -> Result<Option<Vec<crate::types::structs::StorageProcessor>>> {
         let input = QueryProcessorAssociatedWithArrayRequestType {array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryProcessorAssociatedWithArray", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryProcessorAssociatedWithArray", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StorageProcessor>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -654,14 +575,9 @@ impl SmsStorageManager {
     /// ***QueryExecutionFault***: if an error is encountered while processing the
     /// query request.
     pub async fn query_provider(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryProvider", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryProvider", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -701,14 +617,9 @@ impl SmsStorageManager {
     /// ***QueryExecutionFault***: if an error is encountered while processing the query request.
     pub async fn query_replication_group_info(&self, rg_filter: &crate::types::structs::ReplicationGroupFilter) -> Result<Option<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>> {
         let input = QueryReplicationGroupInfoRequestType {rg_filter, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryReplicationGroupInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryReplicationGroupInfo", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::GroupOperationResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -735,14 +646,9 @@ impl SmsStorageManager {
     /// ***QueryExecutionFault***: if an error is encountered while processing the query request.
     pub async fn query_storage_container(&self, container_spec: Option<&crate::types::structs::StorageContainerSpec>) -> Result<Option<crate::types::structs::StorageContainerResult>> {
         let input = QueryStorageContainerRequestType {container_spec, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryStorageContainer", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryStorageContainer", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::StorageContainerResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -774,14 +680,9 @@ impl SmsStorageManager {
     /// processing the query request.
     pub async fn query_vmfs_datastore_associated_with_lun(&self, scsi_3_id: &str, array_id: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = QueryVmfsDatastoreAssociatedWithLunRequestType {scsi_3_id, array_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/QueryVmfsDatastoreAssociatedWithLun", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsStorageManager", &self.mo_id, "QueryVmfsDatastoreAssociatedWithLun", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -808,11 +709,8 @@ impl SmsStorageManager {
     /// root certificates and CRLs for any provider.
     pub async fn sms_refresh_ca_certificates_and_cr_ls_task(&self, provider_id: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SmsRefreshCaCertificatesAndCrLsRequestType {provider_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/SmsRefreshCACertificatesAndCRLs_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsStorageManager", &self.mo_id, "SmsRefreshCACertificatesAndCRLs_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Register the provider and issue a sync operation on it.
@@ -842,11 +740,8 @@ impl SmsStorageManager {
     /// is thrown if the provider identifies itself with an untrusted certificate.
     pub async fn register_provider_task(&self, provider_spec: &dyn crate::types::traits::SmsProviderSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterProviderRequestType {provider_spec, };
-        let path = format!("/sms/SmsStorageManager/{moId}/RegisterProvider_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsStorageManager", &self.mo_id, "RegisterProvider_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Unregister the provider.
@@ -874,11 +769,8 @@ impl SmsStorageManager {
     /// during unregister provider.
     pub async fn unregister_provider_task(&self, provider_id: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UnregisterProviderRequestType {provider_id, };
-        let path = format!("/sms/SmsStorageManager/{moId}/UnregisterProvider_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsStorageManager", &self.mo_id, "UnregisterProvider_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Upgrade VASA Provider registered to vCenter/SMS to maximum common version supported by both
@@ -901,11 +793,8 @@ impl SmsStorageManager {
     /// ***SmsFault***: If there is any error encountered while processing request
     pub async fn upgrade_vasa_provider_task(&self, upgrade_spec: &crate::types::structs::VasaProviderUpgradeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpgradeVasaProviderRequestType {upgrade_spec, };
-        let path = format!("/sms/SmsStorageManager/{moId}/UpgradeVASAProvider_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsStorageManager", &self.mo_id, "UpgradeVASAProvider_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

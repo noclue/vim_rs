@@ -161,9 +161,7 @@ impl GuestAliasManager {
     /// different user.
     pub async fn add_guest_alias(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str, map_cert: bool, base_64_cert: &str, alias_info: &crate::types::structs::GuestAuthAliasInfo) -> Result<()> {
         let input = AddGuestAliasRequestType {vm, auth, username, map_cert, base_64_cert, alias_info, };
-        let path = format!("/GuestAliasManager/{moId}/AddGuestAlias", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestAliasManager", &self.mo_id, "AddGuestAlias", Some(&input)).await
     }
     /// Lists the
     /// *GuestAliases*
@@ -219,14 +217,9 @@ impl GuestAliasManager {
     /// guest agent configuration.
     pub async fn list_guest_aliases(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str) -> Result<Option<Vec<crate::types::structs::GuestAliases>>> {
         let input = ListGuestAliasesRequestType {vm, auth, username, };
-        let path = format!("/GuestAliasManager/{moId}/ListGuestAliases", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "GuestAliasManager", &self.mo_id, "ListGuestAliases", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestAliases>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -281,14 +274,9 @@ impl GuestAliasManager {
     /// guest agent configuration.
     pub async fn list_guest_mapped_aliases(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<Option<Vec<crate::types::structs::GuestMappedAliases>>> {
         let input = ListGuestMappedAliasesRequestType {vm, auth, };
-        let path = format!("/GuestAliasManager/{moId}/ListGuestMappedAliases", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "GuestAliasManager", &self.mo_id, "ListGuestMappedAliases", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestMappedAliases>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -358,9 +346,7 @@ impl GuestAliasManager {
     /// guest agent configuration.
     pub async fn remove_guest_alias(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str, base_64_cert: &str, subject: &dyn crate::types::traits::GuestAuthSubjectTrait) -> Result<()> {
         let input = RemoveGuestAliasRequestType {vm, auth, username, base_64_cert, subject, };
-        let path = format!("/GuestAliasManager/{moId}/RemoveGuestAlias", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestAliasManager", &self.mo_id, "RemoveGuestAlias", Some(&input)).await
     }
     /// Removes a VMware SSO Server's certificate and all
     /// associated aliases from the guest so it
@@ -426,9 +412,7 @@ impl GuestAliasManager {
     /// guest agent configuration.
     pub async fn remove_guest_alias_by_cert(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, username: &str, base_64_cert: &str) -> Result<()> {
         let input = RemoveGuestAliasByCertRequestType {vm, auth, username, base_64_cert, };
-        let path = format!("/GuestAliasManager/{moId}/RemoveGuestAliasByCert", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestAliasManager", &self.mo_id, "RemoveGuestAliasByCert", Some(&input)).await
     }
 }
 struct AddGuestAliasRequestType<'a> {

@@ -48,14 +48,9 @@ impl VsanSpaceReportSystem {
     /// Failure
     pub async fn vsan_query_entity_space_usage(&self, cluster: &crate::types::structs::ManagedObjectReference, query_spec: &crate::types::structs::VsanSpaceQuerySpec) -> Result<Option<Vec<crate::types::structs::VsanEntitySpaceUsage>>> {
         let input = VsanQueryEntitySpaceUsageRequestType {cluster, query_spec, };
-        let path = format!("/vsan/VsanSpaceReportSystem/{moId}/VsanQueryEntitySpaceUsage", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanSpaceReportSystem", &self.mo_id, "VsanQueryEntitySpaceUsage", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanEntitySpaceUsage>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -101,11 +96,8 @@ impl VsanSpaceReportSystem {
     /// Failure
     pub async fn vsan_query_space_usage(&self, cluster: &crate::types::structs::ManagedObjectReference, storage_policies: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, whatif_capacity_only: Option<bool>) -> Result<crate::types::structs::VsanSpaceUsage> {
         let input = VsanQuerySpaceUsageRequestType {cluster, storage_policies, whatif_capacity_only, };
-        let path = format!("/vsan/VsanSpaceReportSystem/{moId}/VsanQuerySpaceUsage", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanSpaceUsage = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSpaceReportSystem", &self.mo_id, "VsanQuerySpaceUsage", Some(&input)).await?;
+        let result: crate::types::structs::VsanSpaceUsage = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the space usage including the space usage overview and the space usage
@@ -137,11 +129,8 @@ impl VsanSpaceReportSystem {
     /// if the querySpec contains invalid datastore type.
     pub async fn query_vsan_managed_storage_space_usage(&self, cluster: &crate::types::structs::ManagedObjectReference, query_spec: &crate::types::structs::QueryVsanManagedStorageSpaceUsageSpec) -> Result<Vec<crate::types::structs::VsanSpaceUsageWithDatastoreType>> {
         let input = QueryVsanManagedStorageSpaceUsageRequestType {cluster, query_spec, };
-        let path = format!("/vsan/VsanSpaceReportSystem/{moId}/QueryVsanManagedStorageSpaceUsage", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanSpaceUsageWithDatastoreType> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSpaceReportSystem", &self.mo_id, "QueryVsanManagedStorageSpaceUsage", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanSpaceUsageWithDatastoreType> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

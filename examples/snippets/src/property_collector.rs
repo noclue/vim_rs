@@ -18,8 +18,12 @@
 //! analyzers, and reporting tools that need to collect specific properties from vSphere inventory
 //! objects.
 //!
-//! A more concise and maintainable implementation of the same functionality can be achieved using
-//! the `vim_macros` library. See the `macros_examples` module for an example of how to use it.
+//! ## Typical uses
+//!
+//! Inventory reporting, learning manual PropertyCollector specs, and comparing macro-based retrieval to explicit API use.
+//!
+//! For the same inventory-wide VM property access with less boilerplate, see the `vim_retrievable!`
+//! examples in this crate (for example `retrieve_host_info` and `print_vm_addresses`).
 
 use std::env;
 use vim_rs::mo::{AlarmManager, ContainerView, PropertyCollector, ViewManager};
@@ -27,7 +31,7 @@ use vim_rs::types::structs::{self, SelectionSpec};
 
 use anyhow::Result;
 use log::{debug, info};
-use utils::connect;
+use snippets::connect;
 use vim_rs::types::boxed_types::ValueElements;
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::ManagedObjectReference;

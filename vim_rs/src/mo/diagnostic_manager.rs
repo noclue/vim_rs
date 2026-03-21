@@ -35,9 +35,7 @@ impl DiagnosticManager {
     /// The string to be used.
     pub async fn emit_syslog_mark(&self, message: &str) -> Result<()> {
         let input = EmitSyslogMarkRequestType {message, };
-        let path = format!("/DiagnosticManager/{moId}/EmitSyslogMark", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "DiagnosticManager", &self.mo_id, "EmitSyslogMark", Some(&input)).await
     }
     /// Retrieve audit records from their storage on the specified host.
     /// 
@@ -70,11 +68,8 @@ impl DiagnosticManager {
     /// the issues.
     pub async fn fetch_audit_records(&self, token: Option<&str>) -> Result<crate::types::structs::DiagnosticManagerAuditRecordResult> {
         let input = FetchAuditRecordsRequestType {token, };
-        let path = format!("/DiagnosticManager/{moId}/FetchAuditRecords", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::DiagnosticManagerAuditRecordResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "DiagnosticManager", &self.mo_id, "FetchAuditRecords", Some(&input)).await?;
+        let result: crate::types::structs::DiagnosticManagerAuditRecordResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns part of a log file.
@@ -127,11 +122,8 @@ impl DiagnosticManager {
     /// accessed at the present time.
     pub async fn browse_diagnostic_log(&self, host: Option<&crate::types::structs::ManagedObjectReference>, key: &str, start: Option<i32>, lines: Option<i32>) -> Result<crate::types::structs::DiagnosticManagerLogHeader> {
         let input = BrowseDiagnosticLogRequestType {host, key, start, lines, };
-        let path = format!("/DiagnosticManager/{moId}/BrowseDiagnosticLog", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::DiagnosticManagerLogHeader = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "DiagnosticManager", &self.mo_id, "BrowseDiagnosticLog", Some(&input)).await?;
+        let result: crate::types::structs::DiagnosticManagerLogHeader = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated since version 5.0 M/N it is recommended to use the CGI
@@ -190,11 +182,8 @@ impl DiagnosticManager {
     /// support bundle.
     pub async fn generate_log_bundles_task(&self, include_default: bool, host: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = GenerateLogBundlesRequestType {include_default, host, };
-        let path = format!("/DiagnosticManager/{moId}/GenerateLogBundles_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "DiagnosticManager", &self.mo_id, "GenerateLogBundles_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns a list of diagnostic files for a given system.
@@ -213,14 +202,9 @@ impl DiagnosticManager {
     /// Refers instance of *HostSystem*.
     pub async fn query_descriptions(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::DiagnosticManagerLogDescriptor>>> {
         let input = QueryDescriptionsRequestType {host, };
-        let path = format!("/DiagnosticManager/{moId}/QueryDescriptions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DiagnosticManager", &self.mo_id, "QueryDescriptions", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DiagnosticManagerLogDescriptor>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

@@ -44,14 +44,9 @@ impl Datacenter {
     /// Information about the set of hosts to query.
     pub async fn batch_query_connect_info(&self, host_specs: Option<&[crate::types::structs::HostConnectSpec]>) -> Result<Option<Vec<crate::types::structs::DatacenterBasicConnectInfo>>> {
         let input = BatchQueryConnectInfoRequestType {host_specs, };
-        let path = format!("/Datacenter/{moId}/BatchQueryConnectInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "Datacenter", &self.mo_id, "BatchQueryConnectInfo", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DatacenterBasicConnectInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -77,11 +72,8 @@ impl Datacenter {
     ///
     /// Failure
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/Datacenter/{moId}/Destroy_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "Datacenter", &self.mo_id, "Destroy_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Powers on multiple virtual machines in a data center.
@@ -130,11 +122,8 @@ impl Datacenter {
     /// Refers instance of *Task*.
     pub async fn power_on_multi_vm_task(&self, vm: &[crate::types::structs::ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerOnMultiVmRequestType {vm, option, };
-        let path = format!("/Datacenter/{moId}/PowerOnMultiVM_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "Datacenter", &self.mo_id, "PowerOnMultiVM_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The list of possible choices for
@@ -145,14 +134,9 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn query_datacenter_config_option_descriptor(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>> {
-        let path = format!("/Datacenter/{moId}/queryDatacenterConfigOptionDescriptor", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "Datacenter", &self.mo_id, "queryDatacenterConfigOptionDescriptor", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VirtualMachineConfigOptionDescriptor>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -221,11 +205,8 @@ impl Datacenter {
     /// for computing certificate thumbprints.
     pub async fn query_connection_info(&self, hostname: &str, port: i32, username: &str, password: &str, ssl_thumbprint: Option<&str>, ssl_certificate: Option<&str>) -> Result<crate::types::structs::HostConnectInfo> {
         let input = QueryConnectionInfoRequestType {hostname, port, username, password, ssl_thumbprint, ssl_certificate, };
-        let path = format!("/Datacenter/{moId}/QueryConnectionInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostConnectInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "Datacenter", &self.mo_id, "QueryConnectionInfo", Some(&input)).await?;
+        let result: crate::types::structs::HostConnectInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This method provides a way of getting basic information about a host
@@ -250,11 +231,8 @@ impl Datacenter {
     /// all needed connection parameters.
     pub async fn query_connection_info_via_spec(&self, spec: &crate::types::structs::HostConnectSpec) -> Result<crate::types::structs::HostConnectInfo> {
         let input = QueryConnectionInfoViaSpecRequestType {spec, };
-        let path = format!("/Datacenter/{moId}/QueryConnectionInfoViaSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostConnectInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "Datacenter", &self.mo_id, "QueryConnectionInfoViaSpec", Some(&input)).await?;
+        let result: crate::types::structs::HostConnectInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Change the datacenter configuration.
@@ -284,11 +262,8 @@ impl Datacenter {
     /// Refers instance of *Task*.
     pub async fn reconfigure_datacenter_task(&self, spec: &crate::types::structs::DatacenterConfigSpec, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDatacenterRequestType {spec, modify, };
-        let path = format!("/Datacenter/{moId}/ReconfigureDatacenter_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "Datacenter", &self.mo_id, "ReconfigureDatacenter_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reload the entity state.
@@ -306,9 +281,7 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn reload(&self) -> Result<()> {
-        let path = format!("/Datacenter/{moId}/Reload", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "Datacenter", &self.mo_id, "Reload", None).await
     }
     /// Renames this managed entity.
     /// 
@@ -340,11 +313,8 @@ impl Datacenter {
     /// ***InvalidName***: If the new name is not a valid entity name.
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
-        let path = format!("/Datacenter/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "Datacenter", &self.mo_id, "Rename_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Assigns a value to a custom field.
@@ -363,9 +333,7 @@ impl Datacenter {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/Datacenter/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "Datacenter", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -373,14 +341,9 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let path = format!("/Datacenter/{moId}/alarmActionsEnabled", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "alarmActionsEnabled").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<bool>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -390,14 +353,9 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/Datacenter/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -409,14 +367,9 @@ impl Datacenter {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let path = format!("/Datacenter/{moId}/configIssue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "configIssue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Event>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -445,36 +398,27 @@ impl Datacenter {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/Datacenter/{moId}/configStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "configStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Configuration of the datacenter.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn configuration(&self) -> Result<crate::types::structs::DatacenterConfigInfo> {
-        let path = format!("/Datacenter/{moId}/configuration", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::DatacenterConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "configuration").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configuration was empty".to_string()))?;
+        let result: crate::types::structs::DatacenterConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/Datacenter/{moId}/customValue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "customValue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -485,14 +429,9 @@ impl Datacenter {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/Datacenter/{moId}/datastore", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "datastore").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -507,11 +446,9 @@ impl Datacenter {
     ///
     /// Refers instance of *Folder*.
     pub async fn datastore_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/Datacenter/{moId}/datastoreFolder", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "datastoreFolder").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property datastoreFolder was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A set of alarm states for alarms that apply to this managed entity.
@@ -525,14 +462,9 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/Datacenter/{moId}/declaredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "declaredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -606,14 +538,9 @@ impl Datacenter {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/Datacenter/{moId}/disabledMethod", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "disabledMethod").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -621,14 +548,9 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let path = format!("/Datacenter/{moId}/effectiveRole", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "effectiveRole").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -643,11 +565,9 @@ impl Datacenter {
     ///
     /// Refers instance of *Folder*.
     pub async fn host_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/Datacenter/{moId}/hostFolder", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "hostFolder").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property hostFolder was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Name of this entity, unique relative to its parent.
@@ -660,11 +580,9 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let path = format!("/Datacenter/{moId}/name", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "name").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A collection of references to the network objects
@@ -674,14 +592,9 @@ impl Datacenter {
     ///
     /// Refers instances of *Network*.
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/Datacenter/{moId}/network", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "network").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -700,11 +613,9 @@ impl Datacenter {
     ///
     /// Refers instance of *Folder*.
     pub async fn network_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/Datacenter/{moId}/networkFolder", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "networkFolder").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property networkFolder was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// General health of this managed entity.
@@ -728,11 +639,9 @@ impl Datacenter {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/Datacenter/{moId}/overallStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "overallStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -747,27 +656,17 @@ impl Datacenter {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/Datacenter/{moId}/parent", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "parent").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let path = format!("/Datacenter/{moId}/permission", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "permission").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -797,14 +696,9 @@ impl Datacenter {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/Datacenter/{moId}/recentTask", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "recentTask").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -814,14 +708,9 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let path = format!("/Datacenter/{moId}/tag", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "tag").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Tag>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -840,14 +729,9 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/Datacenter/{moId}/triggeredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "triggeredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -859,14 +743,9 @@ impl Datacenter {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/Datacenter/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -886,11 +765,9 @@ impl Datacenter {
     ///
     /// Refers instance of *Folder*.
     pub async fn vm_folder(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/Datacenter/{moId}/vmFolder", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "vmFolder").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property vmFolder was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

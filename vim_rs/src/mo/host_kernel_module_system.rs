@@ -35,25 +35,17 @@ impl HostKernelModuleSystem {
     /// ***NotFound***: if the kernel module does not exist on the host.
     pub async fn query_configured_module_option_string(&self, name: &str) -> Result<String> {
         let input = QueryConfiguredModuleOptionStringRequestType {name, };
-        let path = format!("/HostKernelModuleSystem/{moId}/QueryConfiguredModuleOptionString", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostKernelModuleSystem", &self.mo_id, "QueryConfiguredModuleOptionString", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the set of modules on the host.
     /// 
     /// ***Required privileges:*** Host.Config.Settings
     pub async fn query_modules(&self) -> Result<Option<Vec<crate::types::structs::KernelModuleInfo>>> {
-        let path = format!("/HostKernelModuleSystem/{moId}/QueryModules", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostKernelModuleSystem", &self.mo_id, "QueryModules", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::KernelModuleInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -75,9 +67,7 @@ impl HostKernelModuleSystem {
     /// ***NotFound***: if the kernel module does not exist on the host.
     pub async fn update_module_option_string(&self, name: &str, options: &str) -> Result<()> {
         let input = UpdateModuleOptionStringRequestType {name, options, };
-        let path = format!("/HostKernelModuleSystem/{moId}/UpdateModuleOptionString", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostKernelModuleSystem", &self.mo_id, "UpdateModuleOptionString", Some(&input)).await
     }
 }
 struct QueryConfiguredModuleOptionStringRequestType<'a> {

@@ -59,11 +59,8 @@ impl VsanClusterPowerSystem {
     /// some hosts are disconnected when starting to power off.
     pub async fn perform_cluster_power_action(&self, cluster: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::PerformClusterPowerActionSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformClusterPowerActionRequestType {cluster, spec, };
-        let path = format!("/vsan/VsanClusterPowerSystem/{moId}/PerformClusterPowerAction", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanClusterPowerSystem", &self.mo_id, "PerformClusterPowerAction", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the ClusterPowerContext.
@@ -82,11 +79,8 @@ impl VsanClusterPowerSystem {
     /// ClusterPowerContext
     pub async fn query_cluster_power_context(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ClusterPowerContext> {
         let input = QueryClusterPowerContextRequestType {cluster, };
-        let path = format!("/vsan/VsanClusterPowerSystem/{moId}/QueryClusterPowerContext", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ClusterPowerContext = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanClusterPowerSystem", &self.mo_id, "QueryClusterPowerContext", Some(&input)).await?;
+        let result: crate::types::structs::ClusterPowerContext = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Update the current cluster power status.
@@ -116,11 +110,8 @@ impl VsanClusterPowerSystem {
     /// power action task.
     pub async fn update_cluster_power_status(&self, cluster: &crate::types::structs::ManagedObjectReference, status: &str) -> Result<bool> {
         let input = UpdateClusterPowerStatusRequestType {cluster, status, };
-        let path = format!("/vsan/VsanClusterPowerSystem/{moId}/UpdateClusterPowerStatus", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanClusterPowerSystem", &self.mo_id, "UpdateClusterPowerStatus", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

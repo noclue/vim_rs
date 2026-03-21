@@ -49,7 +49,7 @@ impl<'a> ManagedObjectEmitter<'a> {
             .println("use crate::core::client::{VimClient, Result};")?;
         Ok(())
     }
-    
+
     fn emit_mo_struct(&mut self) -> Result<()> {
         emit_description(self.printer, &self.mo.description)?;
         let struct_name = to_type_name(&self.mo.name);
@@ -145,63 +145,109 @@ impl<'a> ManagedObjectEmitter<'a> {
             self.printer.newline()?;
         }
 
-        self.printer.println(&format!(
-            r#"let path = format!("{}", moId = &self.mo_id);"#,
-            method.path
-        ))?;
+
+        // TODO We should use &self.mo.name and &method.name to obtain the mo type and method/property name.
+        // Problem is for properties method.name is capitalized because of the "getProperty" convention and so it is incorrect.
+        // Thus we resort to path parsing
+
+        // Paths have the form "/{moType}/{moId}/{MethodOrProp}"for vim 
+        // or "/{Service}/{moType}/{moId}/{MethodOrProp}" for other services -
+        // eam, pbm, sms, vslm, vsan.
+        let path_parts: Vec<&str> = method.path.trim_start_matches('/').split('/').collect();
+        let (service_name, mo_type_name, method_or_prop) = match path_parts.as_slice() {
+            // "/{MoType}/{moId}/MethodOrProp" (vim): no service prefix
+            [mo_type_name, "{moId}", method_or_prop] => ("", *mo_type_name, *method_or_prop),
+            // "/{Service}/{MoType}/{moId}/MethodOrProp" (eam/pbm/sms/vslm/vsan)
+            [service, mo_type_name, "{moId}", method_or_prop] => (*service, *mo_type_name, *method_or_prop),
+            _ => ("", "", ""),
+        };
 
         match method.http_method {
             HttpMethod::Get => {
-                self.printer
-                    .println("let req = self.client.get_request(&path);")?;
+                // Property access via fetch_property_raw
+                match &method.output {
+                    Some(_) => {
+                        let output_dt = method.output.as_ref().unwrap();
+                        let res_type = self.tdf.to_rust_field_type(output_dt)?;
+                        self.printer.println(&format!(
+                            "let bytes_opt = self.client.fetch_property_raw(\"{service_name}\", \"{mo_type_name}\", &self.mo_id, \"{method_or_prop}\").await?;"
+                        ))?;
+                        if method.optional_response {
+                            self.printer.println("match bytes_opt {")?;
+                            self.printer.indent();
+                            let decode_b =
+                                mo_soap_response_unmarshal_expr(output_dt, "b");
+                            self.printer.println(&format!(
+                                "Some(ref b) => Ok(Some({decode_b}?)),"
+                            ))?;
+                            self.printer.println("None => Ok(None),")?;
+                            self.printer.dedent();
+                            self.printer.println("}")?;
+                        } else {
+                            self.printer.println(&format!(
+                                "let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError(\"property {method_or_prop} was empty\".to_string()))?;"
+                            ))?;
+                            let decode_bytes =
+                                mo_soap_response_unmarshal_expr(output_dt, "&bytes");
+                            self.printer.println(&format!(
+                                "let result: {res_type} = {decode_bytes}?;"
+                            ))?;
+                            self.printer.println("Ok(result)")?;
+                        }
+                    }
+                    None => {
+                        // Void GET is unusual but handle gracefully
+                        self.printer.println(&format!(
+                            "let _ = self.client.fetch_property_raw(\"\", \"{mo_type_name}\", &self.mo_id, \"{method_or_prop}\").await?;"
+                        ))?;
+                        self.printer.println("Ok(())")?;
+                    }
+                }
             }
             HttpMethod::Post => {
-                if request_type.is_some() {
-                    self.printer
-                        .println("let req = self.client.post_json(&path, &input);")?;
+                let params_arg = if request_type.is_some() {
+                    "Some(&input)"
                 } else {
-                    self.printer
-                        .println("let req = self.client.post_bare(&path);")?;
+                    "None"
+                };
+                match &method.output {
+                    Some(_) => {
+                        let res_type = self
+                            .tdf
+                            .to_rust_field_type(method.output.as_ref().unwrap())?;
+                        let output_dt = method.output.as_ref().unwrap();
+                        if method.optional_response {
+                            self.printer.println(&format!(
+                                "let bytes_opt = self.client.invoke_optional(\"{service_name}\", \"{mo_type_name}\", &self.mo_id, \"{method_or_prop}\", {params_arg}).await?;"
+                            ))?;
+                            self.printer.println("match bytes_opt {")?;
+                            self.printer.indent();
+                            let decode_b =
+                                mo_soap_response_unmarshal_expr(output_dt, "b");
+                            self.printer.println(&format!(
+                                "Some(ref b) => Ok(Some({decode_b}?)),"
+                            ))?;
+                            self.printer.println("None => Ok(None),")?;
+                            self.printer.dedent();
+                            self.printer.println("}")?;
+                        } else {
+                            self.printer.println(&format!(
+                                "let bytes = self.client.invoke(\"{service_name}\", \"{mo_type_name}\", &self.mo_id, \"{method_or_prop}\", {params_arg}).await?;"
+                            ))?;
+                            let decode_bytes =
+                                mo_soap_response_unmarshal_expr(output_dt, "&bytes");
+                            self.printer.println(&format!(
+                                "let result: {res_type} = {decode_bytes}?;"
+                            ))?;
+                            self.printer.println("Ok(result)")?;
+                        }
+                    }
+                    None => {
+                        self.printer.println(&format!(
+                            "self.client.invoke_void(\"{service_name}\", \"{mo_type_name}\", &self.mo_id, \"{method_or_prop}\", {params_arg}).await"
+                        ))?;
+                    }
                 }
-            }
-        }
-
-        match &method.output {
-            Some(_) => {
-                let res_type = self.tdf.to_rust_field_type(method.output.as_ref().unwrap())?;
-                if method.optional_response {
-                    self.printer
-                        .println("let bytes_opt = self.client.execute_option_bytes(req).await?;")?;
-                    self.printer.println("match bytes_opt {")?;
-                    self.printer.indent();
-                    self.printer.println("Some(bytes) => {")?;
-                    self.printer.indent();
-                    self.printer.println(
-                        "let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;"
-                    )?;
-                    self.printer.println(&format!(
-                        "Ok(Some(miniserde::json::from_str::<{res_type}>(text).map_err(|_| crate::core::client::VimError::ParseError(\"miniserde deserialization failed\".to_string()))?))"
-                    ))?;
-                    self.printer.dedent();
-                    self.printer.println("}")?;
-                    self.printer.println("None => Ok(None),")?;
-                    self.printer.dedent();
-                    self.printer.println("}")?;
-                } else {
-                    self.printer
-                        .println("let bytes = self.client.execute_bytes(req).await?;")?;
-                    self.printer.println(
-                        "let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;"
-                    )?;
-                    self.printer.println(&format!(
-                        "let result: {res_type} = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError(\"miniserde deserialization failed\".to_string()))?;"
-                    ))?;
-                    self.printer.println("Ok(result)")?;
-                }
-            }
-            None => {
-                self.printer
-                    .println("self.client.execute_void(req).await")?;
             }
         }
         self.printer.dedent();
@@ -337,13 +383,11 @@ impl<'a> ManagedObjectEmitter<'a> {
 
         // Serializer struct
         let ser_lt = if has_lifetime { "<'b, 'a>" } else { "<'b>" };
-        self.printer.println(&format!(
-            "struct {ser_name}{ser_lt} {{"
-        ))?;
+        self.printer
+            .println(&format!("struct {ser_name}{ser_lt} {{"))?;
         self.printer.indent();
-        self.printer.println(&format!(
-            "data: &'b {struct_name}{lt},"
-        ))?;
+        self.printer
+            .println(&format!("data: &'b {struct_name}{lt},"))?;
         self.printer.println("seq: usize,")?;
         self.printer.dedent();
         self.printer.println("}")?;
@@ -433,6 +477,25 @@ impl<'a> ManagedObjectEmitter<'a> {
         }
         false
     }
+}
+
+/// SOAP bodies that deserialize to `Vec<Event>` or `Vec<TaskInfo>` often use repeated sibling
+/// `<returnval>` elements (not a single wrapper). That applies to some **POST** method results
+/// (*ReadNextEvents*, *ReadNextTasks*, …) and to **GET** property values whose type is an array of
+/// those structs (e.g. `configIssue`). Emit `unmarshal_array` in those cases;
+/// other array-of-struct properties keep `unmarshal` (single `<returnval>` subtree).
+fn mo_soap_response_unmarshal_expr(output: &DataType, bytes_arg: &str) -> String {
+    match output {
+        DataType::Array(_) => {
+            return format!(
+                "crate::core::client::unmarshal_array(self.client.transport(), {bytes_arg})"
+            );
+        }
+        _ => {}
+    }
+    format!(
+        "crate::core::client::unmarshal(self.client.transport(), {bytes_arg})"
+    )
 }
 
 fn get_request_type<'a>(

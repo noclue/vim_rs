@@ -32,9 +32,7 @@ impl HostVFlashManager {
     /// ***ResourceInUse***: The contained VFFS volume is being used.
     pub async fn host_config_v_flash_cache(&self, spec: &crate::types::structs::HostVFlashManagerVFlashCacheConfigSpec) -> Result<()> {
         let input = HostConfigVFlashCacheRequestType {spec, };
-        let path = format!("/HostVFlashManager/{moId}/HostConfigVFlashCache", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVFlashManager", &self.mo_id, "HostConfigVFlashCache", Some(&input)).await
     }
     /// Configure vFlash resource on the host by attaching to a backend VFFS volume.
     /// 
@@ -52,9 +50,7 @@ impl HostVFlashManager {
     /// ***ResourceInUse***: The contained VFFS volume is being used.
     pub async fn host_configure_v_flash_resource(&self, spec: &crate::types::structs::HostVFlashManagerVFlashResourceConfigSpec) -> Result<()> {
         let input = HostConfigureVFlashResourceRequestType {spec, };
-        let path = format!("/HostVFlashManager/{moId}/HostConfigureVFlashResource", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVFlashManager", &self.mo_id, "HostConfigureVFlashResource", Some(&input)).await
     }
     /// Configure vFlash resource on a list of SSD disks.
     /// 
@@ -92,11 +88,8 @@ impl HostVFlashManager {
     /// batch operation fails.
     pub async fn configure_v_flash_resource_ex_task(&self, device_path: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureVFlashResourceExRequestType {device_path, };
-        let path = format!("/HostVFlashManager/{moId}/ConfigureVFlashResourceEx_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVFlashManager", &self.mo_id, "ConfigureVFlashResourceEx_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve the default supported configuration for a given vFlash module
@@ -121,11 +114,8 @@ impl HostVFlashManager {
     /// retrieved.
     pub async fn host_get_v_flash_module_default_config(&self, v_flash_module: &str) -> Result<crate::types::structs::VirtualDiskVFlashCacheConfigInfo> {
         let input = HostGetVFlashModuleDefaultConfigRequestType {v_flash_module, };
-        let path = format!("/HostVFlashManager/{moId}/HostGetVFlashModuleDefaultConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VirtualDiskVFlashCacheConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVFlashManager", &self.mo_id, "HostGetVFlashModuleDefaultConfig", Some(&input)).await?;
+        let result: crate::types::structs::VirtualDiskVFlashCacheConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Remove vFlash resource on the host by destroying the contained VFFS volume.
@@ -142,20 +132,13 @@ impl HostVFlashManager {
     /// 
     /// ***ResourceInUse***: The contained VFFS volume is being used.
     pub async fn host_remove_v_flash_resource(&self) -> Result<()> {
-        let path = format!("/HostVFlashManager/{moId}/HostRemoveVFlashResource", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVFlashManager", &self.mo_id, "HostRemoveVFlashResource", None).await
     }
     /// Host vFlash configuration information.
     pub async fn v_flash_config_info(&self) -> Result<Option<crate::types::structs::HostVFlashManagerVFlashConfigInfo>> {
-        let path = format!("/HostVFlashManager/{moId}/vFlashConfigInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostVFlashManager", &self.mo_id, "vFlashConfigInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostVFlashManagerVFlashConfigInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

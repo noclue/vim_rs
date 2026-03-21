@@ -66,11 +66,8 @@ impl VirtualMachineGuestCustomizationManager {
     /// ***CustomizationFault***: if a customization error occurs.
     pub async fn abort_customization_task(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AbortCustomizationRequestType {vm, auth, };
-        let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/AbortCustomization_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineGuestCustomizationManager", &self.mo_id, "AbortCustomization_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Customize a running virtual machine.
@@ -127,11 +124,8 @@ impl VirtualMachineGuestCustomizationManager {
     /// ***CustomizationFault***: if a customization error occurs.
     pub async fn customize_guest_task(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, spec: &crate::types::structs::CustomizationSpec, config_params: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CustomizeGuestRequestType {vm, auth, spec, config_params, };
-        let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/CustomizeGuest_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineGuestCustomizationManager", &self.mo_id, "CustomizeGuest_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Start the network service in the guest, e.g.
@@ -181,11 +175,8 @@ impl VirtualMachineGuestCustomizationManager {
     /// ***CustomizationFault***: if a customization error occurs.
     pub async fn start_guest_network_task(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartGuestNetworkRequestType {vm, auth, };
-        let path = format!("/VirtualMachineGuestCustomizationManager/{moId}/StartGuestNetwork_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineGuestCustomizationManager", &self.mo_id, "StartGuestNetwork_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -19,6 +19,38 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [UNRELEASED]
 
+### Added
+
+- Experimental opt-in `xml` cargo feature for SOAP/XML transport against the VIM APIs.
+- `ClientBuilder::transport(TransportMode)` to select `Json` (default), `Soap`, or `Auto`.
+
+### Changed
+
+- Public API remains aligned with `0.4.0`; the only intended user-facing API addition is the
+  builder `transport()` option.
+- `TransportMode::Auto` first probes the vCenter Hello System JSON API and falls back to SOAP/XML
+  when that API is unavailable, which allows direct ESXi connections.
+- When XML transport is used, Hello System negotiation is skipped. `client.api_release()` therefore
+  reflects the build-time/library release behavior rather than a negotiated remote capability level.
+  Use `client.service_content().about.api_version` when making decisions about server capability.
+- Enabling `xml` increases release binary size by about 500 KB and increases debug build times by
+  roughly 30-40%. Disabling the feature returns functionality, build times, and executable sizes to
+  `0.4.0` levels.
+- The XML changes also affect polymorphic JSON deserialization: if you manually deserialize such
+  JSON while the `xml` feature is enabled, `_typeName` must appear before subtype fields.
+- **Examples workspace** (`examples/`): consolidated runnable samples into the `snippets` crate.
+  The former `macro_examples` binaries (`retrieve_host_info`, `retrieve_ds_hosts`, `vm_events`,
+  `print_vm_addresses`, `retrieve_recent_task`) are now `snippets` binaries; the shared
+  `connect()` helper lives in `snippets` as a small library (`snippets::connect`). Removed the
+  separate `utils` and `macro_examples` workspace members. Run with
+  `cargo run -p snippets --bin <name>` from `examples/`; see `examples/README.md` for the full list.
+
+### Known limitations
+
+- XML transport currently supports only the VIM APIs. Other APIs such as VSAN, SPBM/PBM, SMS, VSLM,
+  and EAM will return errors when used over XML transport.
+- XML support is currently an experimental hack. If it fails, enable `trace` logging for `vim_rs`
+  and capture the failing request/response packets for debugging.
 
 ## [0.4.0] - 3.3.2026: The efficincy overhaul
 

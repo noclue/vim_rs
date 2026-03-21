@@ -81,11 +81,8 @@ impl GuestAuthManager {
     /// was not accepted.
     pub async fn acquire_credentials_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, requested_auth: &dyn crate::types::traits::GuestAuthenticationTrait, session_id: Option<i64>) -> Result<Box<dyn crate::types::traits::GuestAuthenticationTrait>> {
         let input = AcquireCredentialsInGuestRequestType {vm, requested_auth, session_id, };
-        let path = format!("/GuestAuthManager/{moId}/AcquireCredentialsInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::GuestAuthenticationTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "GuestAuthManager", &self.mo_id, "AcquireCredentialsInGuest", Some(&input)).await?;
+        let result: Box<dyn crate::types::traits::GuestAuthenticationTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Releases session data and resources associated with
@@ -138,9 +135,7 @@ impl GuestAuthManager {
     /// was not accepted.
     pub async fn release_credentials_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<()> {
         let input = ReleaseCredentialsInGuestRequestType {vm, auth, };
-        let path = format!("/GuestAuthManager/{moId}/ReleaseCredentialsInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestAuthManager", &self.mo_id, "ReleaseCredentialsInGuest", Some(&input)).await
     }
     /// Validates the *GuestAuthentication* credentials.
     /// 
@@ -190,9 +185,7 @@ impl GuestAuthManager {
     /// was not accepted.
     pub async fn validate_credentials_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait) -> Result<()> {
         let input = ValidateCredentialsInGuestRequestType {vm, auth, };
-        let path = format!("/GuestAuthManager/{moId}/ValidateCredentialsInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestAuthManager", &self.mo_id, "ValidateCredentialsInGuest", Some(&input)).await
     }
 }
 struct AcquireCredentialsInGuestRequestType<'a> {

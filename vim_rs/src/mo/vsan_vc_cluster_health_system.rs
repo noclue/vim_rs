@@ -58,11 +58,8 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_attach_vsan_support_bundle_to_sr(&self, cluster: &crate::types::structs::ManagedObjectReference, sr_number: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanAttachVsanSupportBundleToSrRequestType {cluster, sr_number, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanAttachVsanSupportBundleToSr", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanAttachVsanSupportBundleToSr", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0.
@@ -93,11 +90,8 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***: if run directly on an ESX Server host.
     pub async fn vsan_download_and_install_vendor_tool_task(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanDownloadAndInstallVendorToolRequestType {cluster, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanDownloadAndInstallVendorTool_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanDownloadAndInstallVendorTool_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0.
@@ -131,11 +125,8 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_download_hcl_file_task(&self, sha_1_sums: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanDownloadHclFileRequestType {sha_1_sums, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanDownloadHclFile_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanDownloadHclFile_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the HCL driver/firmware constraints for PCIe devices used by vSAN in the
@@ -170,11 +161,8 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_get_hcl_constraints(&self, cluster: &crate::types::structs::ManagedObjectReference, release: &str) -> Result<crate::types::structs::VsanHclReleaseConstraint> {
         let input = VsanGetHclConstraintsRequestType {cluster, release, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanGetHclConstraints", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanHclReleaseConstraint = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanGetHclConstraints", Some(&input)).await?;
+        let result: crate::types::structs::VsanHclReleaseConstraint = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Fetch HCL information including the HCL DB status in general and all devices
@@ -212,11 +200,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_vc_cluster_get_hcl_info(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, include_hosts_result: Option<bool>, include_vendor_info: Option<bool>, esx_release: Option<&str>, query_spec: Option<&crate::types::structs::VsanHclQuerySpec>) -> Result<crate::types::structs::VsanClusterHclInfo> {
         let input = VsanVcClusterGetHclInfoRequestType {cluster, include_hosts_result, include_vendor_info, esx_release, query_spec, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanVcClusterGetHclInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanClusterHclInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanVcClusterGetHclInfo", Some(&input)).await?;
+        let result: crate::types::structs::VsanClusterHclInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the vSAN recommendation of ESXi releases to update for a cluster, and
@@ -258,14 +243,9 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_get_release_recommendation(&self, cluster: &crate::types::structs::ManagedObjectReference, minor: &[String], major: &[String]) -> Result<Option<Vec<crate::types::structs::VsanHclReleaseConstraint>>> {
         let input = VsanGetReleaseRecommendationRequestType {cluster, minor, major, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanGetReleaseRecommendation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanGetReleaseRecommendation", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanHclReleaseConstraint>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -300,14 +280,9 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_get_disk_hcl_constraints(&self, release: Option<&str>, disk_models: Option<&[crate::types::structs::VsanDiskModelInfo]>) -> Result<Option<Vec<crate::types::structs::VsanHclDiskConstraint>>> {
         let input = VsanGetDiskHclConstraintsRequestType {release, disk_models, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanGetDiskHclConstraints", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanGetDiskHclConstraints", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanHclDiskConstraint>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -342,11 +317,8 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***: The API on host level is not supported.
     pub async fn vsan_get_hcl_info_for_eligible_disks(&self, query_spec: &crate::types::structs::VsanHclQuerySpec) -> Result<crate::types::structs::VsanClusterHclInfo> {
         let input = VsanGetHclInfoForEligibleDisksRequestType {query_spec, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanGetHclInfoForEligibleDisks", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanClusterHclInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanGetHclInfoForEligibleDisks", Some(&input)).await?;
+        let result: crate::types::structs::VsanClusterHclInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the user configured silent health check list of the cluster.
@@ -380,14 +352,9 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_health_get_vsan_cluster_silent_checks(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<String>>> {
         let input = VsanHealthGetVsanClusterSilentChecksRequestType {cluster, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthGetVsanClusterSilentChecks", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthGetVsanClusterSilentChecks", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -417,11 +384,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_health_is_rebalance_running(&self, cluster: &crate::types::structs::ManagedObjectReference, target_hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<bool> {
         let input = VsanHealthIsRebalanceRunningRequestType {cluster, target_hosts, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthIsRebalanceRunning", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthIsRebalanceRunning", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0.
@@ -447,9 +411,7 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_purge_hcl_files(&self, sha_1_sums: &[String]) -> Result<()> {
         let input = VsanPurgeHclFilesRequestType {sha_1_sums, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanPurgeHclFiles", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanPurgeHclFiles", Some(&input)).await
     }
     /// Query basic info of all supported health checks
     /// 
@@ -463,11 +425,8 @@ impl VsanVcClusterHealthSystem {
     ///
     /// Failure
     pub async fn vsan_query_all_supported_health_checks(&self) -> Result<Vec<crate::types::structs::VsanClusterHealthCheckInfo>> {
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryAllSupportedHealthChecks", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanClusterHealthCheckInfo> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryAllSupportedHealthChecks", None).await?;
+        let result: Vec<crate::types::structs::VsanClusterHealthCheckInfo> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the historical attach to SR operation result for the vCenter cluster.
@@ -501,14 +460,9 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_query_attach_to_sr_history(&self, cluster: &crate::types::structs::ManagedObjectReference, count: Option<i32>, task_id: Option<&str>) -> Result<Option<Vec<crate::types::structs::VsanAttachToSrOperation>>> {
         let input = VsanQueryAttachToSrHistoryRequestType {cluster, count, task_id, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryAttachToSrHistory", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryAttachToSrHistory", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanAttachToSrOperation>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -549,14 +503,9 @@ impl VsanVcClusterHealthSystem {
     /// perform the operation.
     pub async fn vsan_query_vc_cluster_create_vm_health_history_test(&self, cluster: &crate::types::structs::ManagedObjectReference, count: Option<i32>, datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanClusterCreateVmHealthTestResult>>> {
         let input = VsanQueryVcClusterCreateVmHealthHistoryTestRequestType {cluster, count, datastore, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterCreateVmHealthHistoryTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterCreateVmHealthHistoryTest", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanClusterCreateVmHealthTestResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -599,11 +548,8 @@ impl VsanVcClusterHealthSystem {
     /// with remote datastore in hostlevel call.
     pub async fn vsan_query_vc_cluster_create_vm_health_test(&self, cluster: &crate::types::structs::ManagedObjectReference, timeout: i32, datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::VsanClusterCreateVmHealthTestResult> {
         let input = VsanQueryVcClusterCreateVmHealthTestRequestType {cluster, timeout, datastore, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterCreateVmHealthTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanClusterCreateVmHealthTestResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterCreateVmHealthTest", Some(&input)).await?;
+        let result: crate::types::structs::VsanClusterCreateVmHealthTestResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Perform a cluster wide health check across all types of health checks.
@@ -706,11 +652,8 @@ impl VsanVcClusterHealthSystem {
     /// any unexpected runtime error.
     pub async fn vsan_query_vc_cluster_health_summary(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, vm_create_timeout: Option<i32>, obj_uuids: Option<&[String]>, include_obj_uuids: Option<bool>, fields: Option<&[String]>, fetch_from_cache: Option<bool>, perspective: Option<&str>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>, spec: Option<&crate::types::structs::VsanClusterHealthQuerySpec>) -> Result<crate::types::structs::VsanClusterHealthSummary> {
         let input = VsanQueryVcClusterHealthSummaryRequestType {cluster, vm_create_timeout, obj_uuids, include_obj_uuids, fields, fetch_from_cache, perspective, hosts, spec, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterHealthSummary", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanClusterHealthSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterHealthSummary", Some(&input)).await?;
+        let result: crate::types::structs::VsanClusterHealthSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// An asynchronous API to perform all of cluster wide health checks including
@@ -762,11 +705,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_query_vc_cluster_health_summary_task(&self, cluster: &crate::types::structs::ManagedObjectReference, hosts: Option<&[crate::types::structs::ManagedObjectReference]>, include_data_protection_health: Option<bool>, include_online_health: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanQueryVcClusterHealthSummaryTaskRequestType {cluster, hosts, include_data_protection_health, include_online_health, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterHealthSummaryTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterHealthSummaryTask", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// It queries vSAN cluster historical health information based
@@ -807,14 +747,9 @@ impl VsanVcClusterHealthSystem {
     /// smaller than the start time.
     pub async fn vsan_query_cluster_historical_health(&self, spec: &crate::types::structs::VsanHistoricalHealthQuerySpec) -> Result<Option<Vec<crate::types::structs::VsanClusterHealthSummary>>> {
         let input = VsanQueryClusterHistoricalHealthRequestType {spec, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryClusterHistoricalHealth", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryClusterHistoricalHealth", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanClusterHealthSummary>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -850,14 +785,9 @@ impl VsanVcClusterHealthSystem {
     /// the operation.
     pub async fn vsan_query_vc_cluster_network_perf_history_test(&self, cluster: &crate::types::structs::ManagedObjectReference, count: Option<i32>, spec: Option<&crate::types::structs::VsanClusterNetworkPerfTaskSpec>) -> Result<Option<Vec<crate::types::structs::VsanClusterNetworkLoadTestResult>>> {
         let input = VsanQueryVcClusterNetworkPerfHistoryTestRequestType {cluster, count, spec, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterNetworkPerfHistoryTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterNetworkPerfHistoryTest", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanClusterNetworkLoadTestResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -894,11 +824,8 @@ impl VsanVcClusterHealthSystem {
     /// ***InvalidArgument***: Exception for invalid input arguments.
     pub async fn vsan_query_vc_cluster_network_perf_task(&self, cluster: &crate::types::structs::ManagedObjectReference, spec: Option<&crate::types::structs::VsanClusterNetworkPerfTaskSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanQueryVcClusterNetworkPerfTaskRequestType {cluster, spec, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterNetworkPerfTask", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterNetworkPerfTask", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the vSAN network performance and checks if it meets the bandwidth
@@ -963,11 +890,8 @@ impl VsanVcClusterHealthSystem {
     /// version.
     pub async fn vsan_query_vc_cluster_network_perf_test(&self, cluster: &crate::types::structs::ManagedObjectReference, multicast: bool, duration_sec: Option<i32>) -> Result<crate::types::structs::VsanClusterNetworkLoadTestResult> {
         let input = VsanQueryVcClusterNetworkPerfTestRequestType {cluster, multicast, duration_sec, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterNetworkPerfTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanClusterNetworkLoadTestResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterNetworkPerfTest", Some(&input)).await?;
+        let result: crate::types::structs::VsanClusterNetworkLoadTestResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.7.
@@ -1003,14 +927,9 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_query_vc_cluster_vmdk_load_history_test(&self, cluster: &crate::types::structs::ManagedObjectReference, count: Option<i32>, task_id: Option<&str>) -> Result<Option<Vec<crate::types::structs::VsanClusterVmdkLoadTestResult>>> {
         let input = VsanQueryVcClusterVmdkLoadHistoryTestRequestType {cluster, count, task_id, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterVmdkLoadHistoryTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterVmdkLoadHistoryTest", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanClusterVmdkLoadTestResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1028,11 +947,8 @@ impl VsanVcClusterHealthSystem {
     ///
     /// Failure
     pub async fn vsan_query_vc_cluster_vmdk_workload_types(&self) -> Result<Vec<crate::types::structs::VsanStorageWorkloadType>> {
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterVmdkWorkloadTypes", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanStorageWorkloadType> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterVmdkWorkloadTypes", None).await?;
+        let result: Vec<crate::types::structs::VsanStorageWorkloadType> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the vSAN file service health on all the hosts in the specified
@@ -1069,14 +985,9 @@ impl VsanVcClusterHealthSystem {
     /// if the cluster is not found.
     pub async fn vsan_cluster_query_file_service_health_summary(&self, cluster: &crate::types::structs::ManagedObjectReference, include_file_server_health: Option<bool>, include_file_share_health: Option<bool>) -> Result<Option<crate::types::structs::VsanClusterFileServiceHealthSummary>> {
         let input = VsanClusterQueryFileServiceHealthSummaryRequestType {cluster, include_file_server_health, include_file_share_health, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanClusterQueryFileServiceHealthSummary", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanClusterQueryFileServiceHealthSummary", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanClusterFileServiceHealthSummary>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1103,11 +1014,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_query_vc_cluster_smart_stats_summary(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Vec<crate::types::structs::VsanSmartStatsHostSummary>> {
         let input = VsanQueryVcClusterSmartStatsSummaryRequestType {cluster, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterSmartStatsSummary", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanSmartStatsHostSummary> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterSmartStatsSummary", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanSmartStatsHostSummary> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Querying version information of vSAN health service installed on all the hosts
@@ -1133,11 +1041,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_vc_cluster_query_verify_health_system_versions(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VsanClusterHealthSystemVersionResult> {
         let input = VsanVcClusterQueryVerifyHealthSystemVersionsRequestType {cluster, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanVcClusterQueryVerifyHealthSystemVersions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanClusterHealthSystemVersionResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanVcClusterQueryVerifyHealthSystemVersions", Some(&input)).await?;
+        let result: crate::types::structs::VsanClusterHealthSystemVersionResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the periodical vSAN health check interval (in minutes) for the cluster.
@@ -1166,11 +1071,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_health_query_vsan_cluster_health_check_interval(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<i32> {
         let input = VsanHealthQueryVsanClusterHealthCheckIntervalRequestType {cluster, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthQueryVsanClusterHealthCheckInterval", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthQueryVsanClusterHealthCheckInterval", Some(&input)).await?;
+        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the vSAN cluster health system configuration for the cluster
@@ -1194,11 +1096,8 @@ impl VsanVcClusterHealthSystem {
     /// The vSAN cluster health service configuration
     pub async fn vsan_health_query_vsan_cluster_health_config(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VsanClusterHealthConfigs> {
         let input = VsanHealthQueryVsanClusterHealthConfigRequestType {cluster, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthQueryVsanClusterHealthConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanClusterHealthConfigs = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthQueryVsanClusterHealthConfig", Some(&input)).await?;
+        let result: crate::types::structs::VsanClusterHealthConfigs = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the extended attributes for vSAN cluster objects.
@@ -1224,14 +1123,9 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_query_vc_cluster_obj_ext_attrs(&self, cluster: &crate::types::structs::ManagedObjectReference, uuids: &[String]) -> Result<Option<Vec<crate::types::structs::VsanClusterObjectExtAttrs>>> {
         let input = VsanQueryVcClusterObjExtAttrsRequestType {cluster, uuids, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanQueryVcClusterObjExtAttrs", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanQueryVcClusterObjExtAttrs", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanClusterObjectExtAttrs>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1247,11 +1141,8 @@ impl VsanVcClusterHealthSystem {
     ///
     /// The vSAN proxy configuration
     pub async fn vsan_health_query_vsan_proxy_config(&self) -> Result<crate::types::structs::VsanClusterTelemetryProxyConfig> {
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthQueryVsanProxyConfig", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanClusterTelemetryProxyConfig = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthQueryVsanProxyConfig", None).await?;
+        let result: crate::types::structs::VsanClusterTelemetryProxyConfig = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Proactive rebalance the vSAN objects on the cluster hosts based
@@ -1287,11 +1178,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_rebalance_cluster(&self, cluster: &crate::types::structs::ManagedObjectReference, target_hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanRebalanceClusterRequestType {cluster, target_hosts, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanRebalanceCluster", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanRebalanceCluster", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Repair the absent or degraded vSAN object immediately under
@@ -1327,11 +1215,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_health_repair_cluster_objects_immediate(&self, cluster: &crate::types::structs::ManagedObjectReference, uuids: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanHealthRepairClusterObjectsImmediateRequestType {cluster, uuids, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthRepairClusterObjectsImmediate", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthRepairClusterObjectsImmediate", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.7.
@@ -1381,11 +1266,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_vc_cluster_run_vmdk_load_test(&self, cluster: &crate::types::structs::ManagedObjectReference, runname: &str, duration_sec: Option<i32>, specs: Option<&[crate::types::structs::VsanVmdkLoadTestSpec]>, action: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVcClusterRunVmdkLoadTestRequestType {cluster, runname, duration_sec, specs, action, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanVcClusterRunVmdkLoadTest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanVcClusterRunVmdkLoadTest", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Collecting vSAN telemetry for the given vCenter cluster and send to VMware
@@ -1411,9 +1293,7 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_health_send_vsan_telemetry(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = VsanHealthSendVsanTelemetryRequestType {cluster, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthSendVsanTelemetry", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthSendVsanTelemetry", Some(&input)).await
     }
     /// Set the vSAN health log level which will be taken effect immediately.
     /// 
@@ -1437,9 +1317,7 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_health_set_log_level(&self, level: Option<&str>) -> Result<()> {
         let input = VsanHealthSetLogLevelRequestType {level, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthSetLogLevel", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthSetLogLevel", Some(&input)).await
     }
     /// Set the periodical vSAN health check interval (in minutes) for the cluster.
     /// 
@@ -1476,9 +1354,7 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_health_set_vsan_cluster_health_check_interval(&self, cluster: &crate::types::structs::ManagedObjectReference, vsan_cluster_health_check_interval: i32) -> Result<()> {
         let input = VsanHealthSetVsanClusterHealthCheckIntervalRequestType {cluster, vsan_cluster_health_check_interval, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthSetVsanClusterHealthCheckInterval", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthSetVsanClusterHealthCheckInterval", Some(&input)).await
     }
     /// Set silent health check list of the cluster.
     /// 
@@ -1533,11 +1409,8 @@ impl VsanVcClusterHealthSystem {
     /// ***VsanFault***:
     pub async fn vsan_health_set_vsan_cluster_silent_checks(&self, cluster: &crate::types::structs::ManagedObjectReference, add_silent_checks: Option<&[String]>, remove_silent_checks: Option<&[String]>) -> Result<bool> {
         let input = VsanHealthSetVsanClusterSilentChecksRequestType {cluster, add_silent_checks, remove_silent_checks, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthSetVsanClusterSilentChecks", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthSetVsanClusterSilentChecks", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Set the vSAN clsuter CEIP (Customer Experience Improvement Program)
@@ -1562,9 +1435,7 @@ impl VsanVcClusterHealthSystem {
     /// The vSAN cluster CEIP configuration
     pub async fn vsan_health_set_vsan_cluster_telemetry_config(&self, cluster: &crate::types::structs::ManagedObjectReference, vsan_cluster_health_config: &crate::types::structs::VsanClusterHealthConfigs) -> Result<()> {
         let input = VsanHealthSetVsanClusterTelemetryConfigRequestType {cluster, vsan_cluster_health_config, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthSetVsanClusterTelemetryConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthSetVsanClusterTelemetryConfig", Some(&input)).await
     }
     /// This API can help to build up the mapping from the hardware infomation to
     /// the vSAN VCG entry.
@@ -1590,11 +1461,8 @@ impl VsanVcClusterHealthSystem {
     /// ***VsanFault***: If an unexpected error happened during the process.
     pub async fn set_vsan_vcg_mapping_for_hw_devices(&self, spec: &crate::types::structs::VsanHwToVcgInfoMappingSpec) -> Result<bool> {
         let input = SetVsanVcgMappingForHwDevicesRequestType {spec, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/SetVsanVcgMappingForHwDevices", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "SetVsanVcgMappingForHwDevices", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Stop proactive rebalance the vSAN objects on the cluster hosts
@@ -1625,11 +1493,8 @@ impl VsanVcClusterHealthSystem {
     /// Failure
     pub async fn vsan_stop_rebalance_cluster(&self, cluster: &crate::types::structs::ManagedObjectReference, target_hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanStopRebalanceClusterRequestType {cluster, target_hosts, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanStopRebalanceCluster", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanStopRebalanceCluster", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Test the vSAN proxy configuration, which is used for downloading,
@@ -1658,11 +1523,8 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_health_test_vsan_cluster_telemetry_proxy(&self, proxy_config: &crate::types::structs::VsanClusterTelemetryProxyConfig) -> Result<bool> {
         let input = VsanHealthTestVsanClusterTelemetryProxyRequestType {proxy_config, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthTestVsanClusterTelemetryProxy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthTestVsanClusterTelemetryProxy", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Update the cluster datastore default policy recommendation for this cluster.
@@ -1692,11 +1554,8 @@ impl VsanVcClusterHealthSystem {
     /// policy, such as spbm not available
     pub async fn vsan_health_update_default_ds_policy_recommendation(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanHealthUpdateDefaultDsPolicyRecommendationRequestType {cluster, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanHealthUpdateDefaultDSPolicyRecommendation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthUpdateDefaultDSPolicyRecommendation", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Downloads the HCL database from the VMware official website
@@ -1729,11 +1588,8 @@ impl VsanVcClusterHealthSystem {
     /// ***NotSupported***:
     pub async fn vsan_vc_update_hcl_db_from_web(&self, url: Option<&str>) -> Result<bool> {
         let input = VsanVcUpdateHclDbFromWebRequestType {url, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanVcUpdateHclDbFromWeb", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanVcUpdateHclDbFromWeb", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Upload a DB file in JSON format.
@@ -1760,11 +1616,8 @@ impl VsanVcClusterHealthSystem {
     /// ***VsanFault***:
     pub async fn vsan_vc_upload_hcl_db(&self, db: &str) -> Result<bool> {
         let input = VsanVcUploadHclDbRequestType {db, };
-        let path = format!("/vsan/VsanVcClusterHealthSystem/{moId}/VsanVcUploadHclDb", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanVcUploadHclDb", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

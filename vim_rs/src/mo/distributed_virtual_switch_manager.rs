@@ -59,14 +59,9 @@ impl DistributedVirtualSwitchManager {
     /// of hosts, or hosts that might or might not be a DVS member.
     pub async fn query_dvs_check_compatibility(&self, host_container: &crate::types::structs::DistributedVirtualSwitchManagerHostContainer, dvs_product_spec: Option<&crate::types::structs::DistributedVirtualSwitchManagerDvsProductSpec>, host_filter_spec: Option<&[Box<dyn crate::types::traits::DistributedVirtualSwitchManagerHostDvsFilterSpecTrait>]>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualSwitchManagerCompatibilityResult>>> {
         let input = QueryDvsCheckCompatibilityRequestType {host_container, dvs_product_spec, host_filter_spec, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsCheckCompatibility", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "QueryDvsCheckCompatibility", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DistributedVirtualSwitchManagerCompatibilityResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -104,11 +99,8 @@ impl DistributedVirtualSwitchManager {
     /// ***BackupBlobWriteFailure***: if failed to create backup config blob.
     pub async fn dvs_manager_export_entity_task(&self, selection_set: &[Box<dyn crate::types::traits::SelectionSetTrait>]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsManagerExportEntityRequestType {selection_set, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerExportEntity_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "DistributedVirtualSwitchManager", &self.mo_id, "DVSManagerExportEntity_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Import the configuration of entities specified in
@@ -145,11 +137,8 @@ impl DistributedVirtualSwitchManager {
     /// ***DvsFault***: if operation fails on any host.
     pub async fn dvs_manager_import_entity_task(&self, entity_backup: &[crate::types::structs::EntityBackupConfig], import_type: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsManagerImportEntityRequestType {entity_backup, import_type, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerImportEntity_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "DistributedVirtualSwitchManager", &self.mo_id, "DVSManagerImportEntity_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns the portgroup identified by the key within the specified VDS
@@ -177,14 +166,9 @@ impl DistributedVirtualSwitchManager {
     /// ***NotSupported***: If the operation is not supported.
     pub async fn dvs_manager_lookup_dv_port_group(&self, switch_uuid: &str, portgroup_key: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = DvsManagerLookupDvPortGroupRequestType {switch_uuid, portgroup_key, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/DVSManagerLookupDvPortGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "DVSManagerLookupDvPortGroup", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -222,14 +206,9 @@ impl DistributedVirtualSwitchManager {
     /// Refers instances of *HostSystem*.
     pub async fn query_compatible_host_for_existing_dvs(&self, container: &crate::types::structs::ManagedObjectReference, recursive: bool, dvs: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryCompatibleHostForExistingDvsRequestType {container, recursive, dvs, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryCompatibleHostForExistingDvs", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "QueryCompatibleHostForExistingDvs", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -262,14 +241,9 @@ impl DistributedVirtualSwitchManager {
     /// Refers instances of *HostSystem*.
     pub async fn query_compatible_host_for_new_dvs(&self, container: &crate::types::structs::ManagedObjectReference, recursive: bool, switch_product_spec: Option<&crate::types::structs::DistributedVirtualSwitchProductSpec>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryCompatibleHostForNewDvsRequestType {container, recursive, switch_product_spec, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryCompatibleHostForNewDvs", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "QueryCompatibleHostForNewDvs", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -287,14 +261,9 @@ impl DistributedVirtualSwitchManager {
     /// DistributedVirtualSwitch creation.
     pub async fn query_dvs_compatible_host_spec(&self, switch_product_spec: Option<&crate::types::structs::DistributedVirtualSwitchProductSpec>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualSwitchHostProductSpec>>> {
         let input = QueryDvsCompatibleHostSpecRequestType {switch_product_spec, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsCompatibleHostSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "QueryDvsCompatibleHostSpec", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DistributedVirtualSwitchHostProductSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -320,14 +289,9 @@ impl DistributedVirtualSwitchManager {
     /// Refers instance of *DistributedVirtualSwitch*.
     pub async fn query_compatible_vmnics_from_hosts(&self, hosts: Option<&[crate::types::structs::ManagedObjectReference]>, dvs: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::DvsManagerPhysicalNicsList>>> {
         let input = QueryCompatibleVmnicsFromHostsRequestType {hosts, dvs, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryCompatibleVmnicsFromHosts", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "QueryCompatibleVmnicsFromHosts", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DvsManagerPhysicalNicsList>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -352,11 +316,8 @@ impl DistributedVirtualSwitchManager {
     /// Refers instance of *DistributedVirtualSwitch*.
     pub async fn query_dvs_config_target(&self, host: Option<&crate::types::structs::ManagedObjectReference>, dvs: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::DvsManagerDvsConfigTarget> {
         let input = QueryDvsConfigTargetRequestType {host, dvs, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsConfigTarget", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::DvsManagerDvsConfigTarget = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "DistributedVirtualSwitchManager", &self.mo_id, "QueryDvsConfigTarget", Some(&input)).await?;
+        let result: crate::types::structs::DvsManagerDvsConfigTarget = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This operation indicates which version-specific DVS features are
@@ -372,14 +333,9 @@ impl DistributedVirtualSwitchManager {
     /// DistributedVirtualSwitch creation.
     pub async fn query_dvs_feature_capability(&self, switch_product_spec: Option<&crate::types::structs::DistributedVirtualSwitchProductSpec>) -> Result<Option<Box<dyn crate::types::traits::DvsFeatureCapabilityTrait>>> {
         let input = QueryDvsFeatureCapabilityRequestType {switch_product_spec, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsFeatureCapability", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "QueryDvsFeatureCapability", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::DvsFeatureCapabilityTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -397,14 +353,9 @@ impl DistributedVirtualSwitchManager {
     /// *DistributedVirtualSwitch*.
     pub async fn query_supported_network_offload_spec(&self, switch_product_spec: &crate::types::structs::DistributedVirtualSwitchProductSpec) -> Result<Option<Vec<crate::types::structs::DistributedVirtualSwitchNetworkOffloadSpec>>> {
         let input = QuerySupportedNetworkOffloadSpecRequestType {switch_product_spec, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QuerySupportedNetworkOffloadSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "QuerySupportedNetworkOffloadSpec", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DistributedVirtualSwitchNetworkOffloadSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -421,14 +372,9 @@ impl DistributedVirtualSwitchManager {
     /// If unset, return all supported versions.
     pub async fn query_available_dvs_spec(&self, recommended: Option<bool>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualSwitchProductSpec>>> {
         let input = QueryAvailableDvsSpecRequestType {recommended, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryAvailableDvsSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "QueryAvailableDvsSpec", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DistributedVirtualSwitchProductSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -450,14 +396,9 @@ impl DistributedVirtualSwitchManager {
     /// ***NotFound***: If a switch with the UUID doesn't exist.
     pub async fn query_dvs_by_uuid(&self, uuid: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = QueryDvsByUuidRequestType {uuid, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/QueryDvsByUuid", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "QueryDvsByUuid", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -484,11 +425,8 @@ impl DistributedVirtualSwitchManager {
     /// ***DvsFault***: if operation fails on any host or if there are other update failures.
     pub async fn rectify_dvs_on_host_task(&self, hosts: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RectifyDvsOnHostRequestType {hosts, };
-        let path = format!("/DistributedVirtualSwitchManager/{moId}/RectifyDvsOnHost_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "DistributedVirtualSwitchManager", &self.mo_id, "RectifyDvsOnHost_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

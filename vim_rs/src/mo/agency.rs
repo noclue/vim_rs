@@ -96,11 +96,8 @@ impl Agency {
     /// ***InvalidArgument***: Thrown if issue typeId is unknown.
     pub async fn add_issue(&self, issue: &dyn crate::types::traits::IssueTrait) -> Result<Box<dyn crate::types::traits::IssueTrait>> {
         let input = AddIssueRequestType {issue, };
-        let path = format!("/eam/Agency/{moId}/AddIssue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::IssueTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("eam", "Agency", &self.mo_id, "AddIssue", Some(&input)).await?;
+        let result: Box<dyn crate::types::traits::IssueTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroys this Agency.
@@ -114,9 +111,7 @@ impl Agency {
     /// 
     /// Requires modify privileges.
     pub async fn destroy_agency(&self) -> Result<()> {
-        let path = format!("/eam/Agency/{moId}/DestroyAgency", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "Agency", &self.mo_id, "DestroyAgency", None).await
     }
     /// Deprecated its definition is not consistent across agent VMs and VIBs.
     /// It is impossible to be defined since there is no corresponding
@@ -131,9 +126,7 @@ impl Agency {
     /// 
     /// Requires modify privileges.
     pub async fn agency_disable(&self) -> Result<()> {
-        let path = format!("/eam/Agency/{moId}/Agency_Disable", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "Agency", &self.mo_id, "Agency_Disable", None).await
     }
     /// Deprecated since agencies are always created as enabled. In addition,
     /// enabling already uninstalled agency is not supported.
@@ -144,9 +137,7 @@ impl Agency {
     /// 
     /// Requires modify privileges.
     pub async fn agency_enable(&self) -> Result<()> {
-        let path = format!("/eam/Agency/{moId}/Agency_Enable", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "Agency", &self.mo_id, "Agency_Enable", None).await
     }
     /// Deprecated use *Agency.agent* instead.
     /// 
@@ -158,14 +149,9 @@ impl Agency {
     ///
     /// Refers instances of *Agent*.
     pub async fn query_agent(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/eam/Agency/{moId}/QueryAgent", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("eam", "Agency", &self.mo_id, "QueryAgent", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -182,11 +168,8 @@ impl Agency {
     ///
     /// The configuration of this <code>Agency</code>.
     pub async fn query_config(&self) -> Result<crate::types::structs::AgencyConfigInfo> {
-        let path = format!("/eam/Agency/{moId}/QueryConfig", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::AgencyConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("eam", "Agency", &self.mo_id, "QueryConfig", None).await?;
+        let result: crate::types::structs::AgencyConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Current issues that have been detected for this entity.
@@ -209,14 +192,9 @@ impl Agency {
     /// issue keys refers to issues that this entity does not have.
     pub async fn query_issue(&self, issue_key: Option<&[i32]>) -> Result<Option<Vec<Box<dyn crate::types::traits::IssueTrait>>>> {
         let input = QueryIssueRequestType {issue_key, };
-        let path = format!("/eam/Agency/{moId}/QueryIssue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("eam", "Agency", &self.mo_id, "QueryIssue", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::IssueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -230,11 +208,8 @@ impl Agency {
     ///
     /// The runtime information.
     pub async fn agency_query_runtime(&self) -> Result<Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait>> {
-        let path = format!("/eam/Agency/{moId}/AgencyQueryRuntime", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("eam", "Agency", &self.mo_id, "AgencyQueryRuntime", None).await?;
+        let result: Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated use *Agency.solutionId* instead.
@@ -252,11 +227,8 @@ impl Agency {
     ///
     /// The solution ID.
     pub async fn query_solution_id(&self) -> Result<String> {
-        let path = format!("/eam/Agency/{moId}/QuerySolutionId", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("eam", "Agency", &self.mo_id, "QuerySolutionId", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated use automatically provisioned VMs and register hooks to have
@@ -286,11 +258,8 @@ impl Agency {
     /// ***ManagedObjectNotFound***: Thrown if agentVm does not exist in vCenter.
     pub async fn register_agent_vm(&self, agent_vm: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterAgentVmRequestType {agent_vm, };
-        let path = format!("/eam/Agency/{moId}/RegisterAgentVm", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("eam", "Agency", &self.mo_id, "RegisterAgentVm", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Resolves the issues specified in the input.
@@ -317,14 +286,9 @@ impl Agency {
     /// resolved just prior to calling <code>resolve</code> or if an issue is currenly not resolvable.
     pub async fn resolve(&self, issue_key: &[i32]) -> Result<Option<Vec<i32>>> {
         let input = ResolveRequestType {issue_key, };
-        let path = format!("/eam/Agency/{moId}/Resolve", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("eam", "Agency", &self.mo_id, "Resolve", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -344,9 +308,7 @@ impl Agency {
     /// 
     /// See also *Issue*.
     pub async fn resolve_all(&self) -> Result<()> {
-        let path = format!("/eam/Agency/{moId}/ResolveAll", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "Agency", &self.mo_id, "ResolveAll", None).await
     }
     /// Sets the goal state of this <code>Agency</code> to
     /// <code>uninstalled</code>.
@@ -362,9 +324,7 @@ impl Agency {
     /// 
     /// Requires modify privileges.
     pub async fn uninstall(&self) -> Result<()> {
-        let path = format!("/eam/Agency/{moId}/Uninstall", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "Agency", &self.mo_id, "Uninstall", None).await
     }
     /// Deprecated use automatically provisioned VMs and register hooks to have
     /// control post provisioning and power on.
@@ -385,9 +345,7 @@ impl Agency {
     /// Refers instance of *VirtualMachine*.
     pub async fn unregister_agent_vm(&self, agent_vm: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = UnregisterAgentVmRequestType {agent_vm, };
-        let path = format!("/eam/Agency/{moId}/UnregisterAgentVm", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "Agency", &self.mo_id, "UnregisterAgentVm", Some(&input)).await
     }
     /// Updates the agency configuration used by this <code>Agency</code> to
     /// deploy agents and VIBs.
@@ -416,9 +374,7 @@ impl Agency {
     /// downloaded.
     pub async fn update(&self, config: &crate::types::structs::AgencyConfigInfo) -> Result<()> {
         let input = UpdateRequestType {config, };
-        let path = format!("/eam/Agency/{moId}/Update", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "Agency", &self.mo_id, "Update", Some(&input)).await
     }
     /// An array of agents deployed by this agent manager.
     /// 
@@ -428,14 +384,9 @@ impl Agency {
     ///
     /// Refers instances of *Agent*.
     pub async fn agent(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/eam/Agency/{moId}/agent", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "agent").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -450,11 +401,9 @@ impl Agency {
     ///
     /// The configuration of this <code>Agency</code>.
     pub async fn config(&self) -> Result<crate::types::structs::AgencyConfigInfo> {
-        let path = format!("/eam/Agency/{moId}/config", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::AgencyConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "config").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::AgencyConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The principal name of the user that owns this <code>Agency</code>.
@@ -468,14 +417,9 @@ impl Agency {
     ///
     /// the owner's principal name
     pub async fn owner(&self) -> Result<Option<String>> {
-        let path = format!("/eam/Agency/{moId}/owner", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "owner").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -487,11 +431,9 @@ impl Agency {
     ///
     /// The runtime information.
     pub async fn runtime(&self) -> Result<Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait>> {
-        let path = format!("/eam/Agency/{moId}/runtime", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "runtime").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The ID of the solution that owns this <code>Agency</code>.
@@ -507,11 +449,9 @@ impl Agency {
     ///
     /// The solution ID.
     pub async fn solution_id(&self) -> Result<String> {
-        let path = format!("/eam/Agency/{moId}/solutionId", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "solutionId").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property solutionId was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -176,6 +176,7 @@ fn test_vapp_property_fault_with_args() {
     match result {
         Ok(fault) => {
             println!("Successfully parsed fault with args: {:?}", fault);
+            assert!(fault.extra_fields_.get("label").is_some());
         }
         Err(e) => {
             println!("Failed to parse: {:?}", e);
@@ -212,6 +213,25 @@ fn test_array_of_virtual_ethernet_card() {
     // Verify it's the right variant
     if let ValueElements::ArrayOfVirtualEthernetCard(cards) = value {
         assert_eq!(cards.len(), 2);
+    } else {
+        panic!("Expected ArrayOfVirtualEthernetCard variant");
+    }
+}
+
+
+#[test]
+fn test_array_of_virtual_ethernet_card_empty() {
+    let json = r#"{
+        "_typeName": "ArrayOfVirtualEthernetCard",
+        "_value": []
+    }"#;
+    
+    let value: ValueElements = miniserde::json::from_str(json).unwrap();
+    println!("Array deserialized successfully");
+    
+    // Verify it's the right variant
+    if let ValueElements::ArrayOfVirtualEthernetCard(cards) = value {
+        assert!(cards.is_empty());
     } else {
         panic!("Expected ArrayOfVirtualEthernetCard variant");
     }

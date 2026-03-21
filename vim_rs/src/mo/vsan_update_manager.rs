@@ -71,11 +71,8 @@ impl VsanUpdateManager {
     /// Failure
     pub async fn vsan_vib_install_task(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, vib_specs: Option<&[crate::types::structs::VsanVibSpec]>, scan_results: Option<&[crate::types::structs::VsanVibScanResult]>, firmware_specs: Option<&[crate::types::structs::VsanHclFirmwareUpdateSpec]>, maintenance_spec: Option<&crate::types::structs::HostMaintenanceSpec>, rolling: Option<bool>, no_sig_check: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVibInstallRequestType {cluster, vib_specs, scan_results, firmware_specs, maintenance_spec, rolling, no_sig_check, };
-        let path = format!("/vsan/VsanUpdateManager/{moId}/VsanVibInstall_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanUpdateManager", &self.mo_id, "VsanVibInstall_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Performs pre-flight checks for a VIB install.
@@ -101,11 +98,8 @@ impl VsanUpdateManager {
     /// Failure
     pub async fn vsan_vib_install_preflight_check(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::VsanVibInstallPreflightStatus> {
         let input = VsanVibInstallPreflightCheckRequestType {cluster, };
-        let path = format!("/vsan/VsanUpdateManager/{moId}/VsanVibInstallPreflightCheck", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanVibInstallPreflightStatus = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanUpdateManager", &self.mo_id, "VsanVibInstallPreflightCheck", Some(&input)).await?;
+        let result: crate::types::structs::VsanVibInstallPreflightStatus = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Takes a list of VIBs and a list of hosts, and determines which VIBs would
@@ -137,14 +131,9 @@ impl VsanUpdateManager {
     /// Failure
     pub async fn vsan_vib_scan(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, vib_specs: &[crate::types::structs::VsanVibSpec]) -> Result<Option<Vec<crate::types::structs::VsanVibScanResult>>> {
         let input = VsanVibScanRequestType {cluster, vib_specs, };
-        let path = format!("/vsan/VsanUpdateManager/{moId}/VsanVibScan", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanUpdateManager", &self.mo_id, "VsanVibScan", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanVibScanResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

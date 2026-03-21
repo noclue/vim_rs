@@ -27,14 +27,9 @@ impl HostBootDeviceSystem {
     /// The returned *HostBootDeviceInfo* data object also contains
     /// the key of the current boot device.
     pub async fn query_boot_devices(&self) -> Result<Option<crate::types::structs::HostBootDeviceInfo>> {
-        let path = format!("/HostBootDeviceSystem/{moId}/QueryBootDevices", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostBootDeviceSystem", &self.mo_id, "QueryBootDevices", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostBootDeviceInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -49,9 +44,7 @@ impl HostBootDeviceSystem {
     /// *HostBootDevice* from which the host will boot.
     pub async fn update_boot_device(&self, key: &str) -> Result<()> {
         let input = UpdateBootDeviceRequestType {key, };
-        let path = format!("/HostBootDeviceSystem/{moId}/UpdateBootDevice", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostBootDeviceSystem", &self.mo_id, "UpdateBootDevice", Some(&input)).await
     }
 }
 struct UpdateBootDeviceRequestType<'a> {

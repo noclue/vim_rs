@@ -26,9 +26,7 @@ impl HostAutoStartManager {
     /// 
     /// ***Required privileges:*** Host.Config.AutoStart
     pub async fn auto_start_power_off(&self) -> Result<()> {
-        let path = format!("/HostAutoStartManager/{moId}/AutoStartPowerOff", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostAutoStartManager", &self.mo_id, "AutoStartPowerOff", None).await
     }
     /// Powers-on virtual machines according to the current AutoStart configuration.
     /// 
@@ -37,9 +35,7 @@ impl HostAutoStartManager {
     /// 
     /// ***Required privileges:*** Host.Config.AutoStart
     pub async fn auto_start_power_on(&self) -> Result<()> {
-        let path = format!("/HostAutoStartManager/{moId}/AutoStartPowerOn", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostAutoStartManager", &self.mo_id, "AutoStartPowerOn", None).await
     }
     /// Changes the power-on or power-off sequence and system defaults.
     /// 
@@ -67,16 +63,12 @@ impl HostAutoStartManager {
     /// List of changes to defaults and auto-start/auto-stop order.
     pub async fn reconfigure_autostart(&self, spec: &crate::types::structs::HostAutoStartManagerConfig) -> Result<()> {
         let input = ReconfigureAutostartRequestType {spec, };
-        let path = format!("/HostAutoStartManager/{moId}/ReconfigureAutostart", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostAutoStartManager", &self.mo_id, "ReconfigureAutostart", Some(&input)).await
     }
     pub async fn config(&self) -> Result<crate::types::structs::HostAutoStartManagerConfig> {
-        let path = format!("/HostAutoStartManager/{moId}/config", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostAutoStartManagerConfig = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostAutoStartManager", &self.mo_id, "config").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::HostAutoStartManagerConfig = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

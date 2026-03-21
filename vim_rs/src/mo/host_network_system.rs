@@ -40,9 +40,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn add_port_group(&self, portgrp: &crate::types::structs::HostPortGroupSpec) -> Result<()> {
         let input = AddPortGroupRequestType {portgrp, };
-        let path = format!("/HostNetworkSystem/{moId}/AddPortGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "AddPortGroup", Some(&input)).await
     }
     /// Adds a virtual service console network adapter.
     /// 
@@ -80,11 +78,8 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn add_service_console_virtual_nic(&self, portgroup: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<String> {
         let input = AddServiceConsoleVirtualNicRequestType {portgroup, nic, };
-        let path = format!("/HostNetworkSystem/{moId}/AddServiceConsoleVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostNetworkSystem", &self.mo_id, "AddServiceConsoleVirtualNic", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Adds a virtual host/VMkernel network adapter.
@@ -129,11 +124,8 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn add_virtual_nic(&self, portgroup: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<String> {
         let input = AddVirtualNicRequestType {portgroup, nic, };
-        let path = format!("/HostNetworkSystem/{moId}/AddVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostNetworkSystem", &self.mo_id, "AddVirtualNic", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Adds a new virtual switch to the system with the given name.
@@ -171,9 +163,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn add_virtual_switch(&self, vswitch_name: &str, spec: Option<&crate::types::structs::HostVirtualSwitchSpec>) -> Result<()> {
         let input = AddVirtualSwitchRequestType {vswitch_name, spec, };
-        let path = format!("/HostNetworkSystem/{moId}/AddVirtualSwitch", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "AddVirtualSwitch", Some(&input)).await
     }
     /// Requests network hint information for a physical network adapter.
     /// 
@@ -206,14 +196,9 @@ impl HostNetworkSystem {
     /// ***HostConfigFault***: for all other configuration failures.
     pub async fn query_network_hint(&self, device: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::PhysicalNicHintInfo>>> {
         let input = QueryNetworkHintRequestType {device, };
-        let path = format!("/HostNetworkSystem/{moId}/QueryNetworkHint", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostNetworkSystem", &self.mo_id, "QueryNetworkHint", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PhysicalNicHintInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -222,9 +207,7 @@ impl HostNetworkSystem {
     /// 
     /// ***Required privileges:*** Host.Config.Network
     pub async fn refresh_network_system(&self) -> Result<()> {
-        let path = format!("/HostNetworkSystem/{moId}/RefreshNetworkSystem", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "RefreshNetworkSystem", None).await
     }
     /// Removes port group from the virtual switch.
     /// 
@@ -248,9 +231,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn remove_port_group(&self, pg_name: &str) -> Result<()> {
         let input = RemovePortGroupRequestType {pg_name, };
-        let path = format!("/HostNetworkSystem/{moId}/RemovePortGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "RemovePortGroup", Some(&input)).await
     }
     /// Removes a virtual service console network adapter.
     /// 
@@ -278,9 +259,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn remove_service_console_virtual_nic(&self, device: &str) -> Result<()> {
         let input = RemoveServiceConsoleVirtualNicRequestType {device, };
-        let path = format!("/HostNetworkSystem/{moId}/RemoveServiceConsoleVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "RemoveServiceConsoleVirtualNic", Some(&input)).await
     }
     /// Removes a virtual host/VMkernel network adapter.
     /// 
@@ -301,9 +280,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn remove_virtual_nic(&self, device: &str) -> Result<()> {
         let input = RemoveVirtualNicRequestType {device, };
-        let path = format!("/HostNetworkSystem/{moId}/RemoveVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "RemoveVirtualNic", Some(&input)).await
     }
     /// Removes an existing virtual switch from the system.
     /// 
@@ -327,9 +304,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn remove_virtual_switch(&self, vswitch_name: &str) -> Result<()> {
         let input = RemoveVirtualSwitchRequestType {vswitch_name, };
-        let path = format!("/HostNetworkSystem/{moId}/RemoveVirtualSwitch", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "RemoveVirtualSwitch", Some(&input)).await
     }
     /// Restart the service console virtual network adapter interface.
     /// 
@@ -359,9 +334,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn restart_service_console_virtual_nic(&self, device: &str) -> Result<()> {
         let input = RestartServiceConsoleVirtualNicRequestType {device, };
-        let path = format!("/HostNetworkSystem/{moId}/RestartServiceConsoleVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "RestartServiceConsoleVirtualNic", Some(&input)).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -379,9 +352,7 @@ impl HostNetworkSystem {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/HostNetworkSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Launch DPU(Data Processing Unit) failover for a given distributed virtual switch.
     /// 
@@ -409,9 +380,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn start_dpu_failover(&self, dvs_name: &str, target_dpu_alias: Option<&str>) -> Result<()> {
         let input = StartDpuFailoverRequestType {dvs_name, target_dpu_alias, };
-        let path = format!("/HostNetworkSystem/{moId}/startDpuFailover", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "startDpuFailover", Some(&input)).await
     }
     /// Applies the IP route configuration for the service console.
     /// 
@@ -434,9 +403,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn update_console_ip_route_config(&self, config: &dyn crate::types::traits::HostIpRouteConfigTrait) -> Result<()> {
         let input = UpdateConsoleIpRouteConfigRequestType {config, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdateConsoleIpRouteConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "UpdateConsoleIpRouteConfig", Some(&input)).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This API only works on the default NetStackInstance.
@@ -467,9 +434,7 @@ impl HostNetworkSystem {
     /// ***HostConfigFault***: for all other configuration failures.
     pub async fn update_dns_config(&self, config: &dyn crate::types::traits::HostDnsConfigTrait) -> Result<()> {
         let input = UpdateDnsConfigRequestType {config, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdateDnsConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "UpdateDnsConfig", Some(&input)).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This API only works on the default NetStackInstance.
@@ -495,9 +460,7 @@ impl HostNetworkSystem {
     /// ***HostConfigFault***: for all other configuration failures.
     pub async fn update_ip_route_config(&self, config: &dyn crate::types::traits::HostIpRouteConfigTrait) -> Result<()> {
         let input = UpdateIpRouteConfigRequestType {config, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdateIpRouteConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "UpdateIpRouteConfig", Some(&input)).await
     }
     /// Deprecated as of vSphere API 5.5, which is moved to
     /// each NetStackInstance. This API only works on the default NetStackInstance.
@@ -520,9 +483,7 @@ impl HostNetworkSystem {
     /// ***HostConfigFault***: for all other configuration failures.
     pub async fn update_ip_route_table_config(&self, config: &crate::types::structs::HostIpRouteTableConfig) -> Result<()> {
         let input = UpdateIpRouteTableConfigRequestType {config, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdateIpRouteTableConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "UpdateIpRouteTableConfig", Some(&input)).await
     }
     /// Applies the network configuration.
     /// 
@@ -605,11 +566,8 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn update_network_config(&self, config: &crate::types::structs::HostNetworkConfig, change_mode: &str) -> Result<crate::types::structs::HostNetworkConfigResult> {
         let input = UpdateNetworkConfigRequestType {config, change_mode, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdateNetworkConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostNetworkConfigResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostNetworkSystem", &self.mo_id, "UpdateNetworkConfig", Some(&input)).await?;
+        let result: crate::types::structs::HostNetworkConfigResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Configures link speed and duplexity.
@@ -644,9 +602,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn update_physical_nic_link_speed(&self, device: &str, link_speed: Option<&crate::types::structs::PhysicalNicLinkInfo>) -> Result<()> {
         let input = UpdatePhysicalNicLinkSpeedRequestType {device, link_speed, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdatePhysicalNicLinkSpeed", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "UpdatePhysicalNicLinkSpeed", Some(&input)).await
     }
     /// Reconfigures a port group on the virtual switch.
     /// 
@@ -677,9 +633,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn update_port_group(&self, pg_name: &str, portgrp: &crate::types::structs::HostPortGroupSpec) -> Result<()> {
         let input = UpdatePortGroupRequestType {pg_name, portgrp, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdatePortGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "UpdatePortGroup", Some(&input)).await
     }
     /// Configures the IP configuration for a virtual service console network
     /// adapter.
@@ -718,9 +672,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn update_service_console_virtual_nic(&self, device: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<()> {
         let input = UpdateServiceConsoleVirtualNicRequestType {device, nic, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdateServiceConsoleVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "UpdateServiceConsoleVirtualNic", Some(&input)).await
     }
     /// Configures virtual host/VMkernel network adapter.
     /// 
@@ -760,9 +712,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn update_virtual_nic(&self, device: &str, nic: &crate::types::structs::HostVirtualNicSpec) -> Result<()> {
         let input = UpdateVirtualNicRequestType {device, nic, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualNic", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "UpdateVirtualNic", Some(&input)).await
     }
     /// Updates the properties of the virtual switch.
     /// 
@@ -811,9 +761,7 @@ impl HostNetworkSystem {
     /// maintenance mode has been configured to block this operation.
     pub async fn update_virtual_switch(&self, vswitch_name: &str, spec: &crate::types::structs::HostVirtualSwitchSpec) -> Result<()> {
         let input = UpdateVirtualSwitchRequestType {vswitch_name, spec, };
-        let path = format!("/HostNetworkSystem/{moId}/UpdateVirtualSwitch", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostNetworkSystem", &self.mo_id, "UpdateVirtualSwitch", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -821,27 +769,17 @@ impl HostNetworkSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/HostNetworkSystem/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Capability vector indicating the available product features.
     pub async fn capabilities(&self) -> Result<Option<crate::types::structs::HostNetCapabilities>> {
-        let path = format!("/HostNetworkSystem/{moId}/capabilities", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "capabilities").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostNetCapabilities>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -852,14 +790,9 @@ impl HostNetworkSystem {
     /// set only if
     /// IP routing can be configured for the service console.
     pub async fn console_ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
-        let path = format!("/HostNetworkSystem/{moId}/consoleIpRouteConfig", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "consoleIpRouteConfig").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -868,14 +801,9 @@ impl HostNetworkSystem {
     /// 
     /// Client-side DNS configuration.
     pub async fn dns_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostDnsConfigTrait>>> {
-        let path = format!("/HostNetworkSystem/{moId}/dnsConfig", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "dnsConfig").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::HostDnsConfigTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -884,14 +812,9 @@ impl HostNetworkSystem {
     /// 
     /// The IP route configuration.
     pub async fn ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
-        let path = format!("/HostNetworkSystem/{moId}/ipRouteConfig", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "ipRouteConfig").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -903,27 +826,17 @@ impl HostNetworkSystem {
     /// 
     /// See also *HostNetworkInfo*.
     pub async fn network_config(&self) -> Result<Option<crate::types::structs::HostNetworkConfig>> {
-        let path = format!("/HostNetworkSystem/{moId}/networkConfig", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "networkConfig").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostNetworkConfig>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// The network configuration and runtime information.
     pub async fn network_info(&self) -> Result<Option<crate::types::structs::HostNetworkInfo>> {
-        let path = format!("/HostNetworkSystem/{moId}/networkInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "networkInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostNetworkInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -931,14 +844,9 @@ impl HostNetworkSystem {
     /// 
     /// The offload capabilities available on this server.
     pub async fn offload_capabilities(&self) -> Result<Option<crate::types::structs::HostNetOffloadCapabilities>> {
-        let path = format!("/HostNetworkSystem/{moId}/offloadCapabilities", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "offloadCapabilities").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostNetOffloadCapabilities>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -950,14 +858,9 @@ impl HostNetworkSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostNetworkSystem/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

@@ -31,30 +31,24 @@ impl HostPowerSystem {
     /// ***HostConfigFault***: for any other failure.
     pub async fn configure_power_policy(&self, key: i32) -> Result<()> {
         let input = ConfigurePowerPolicyRequestType {key, };
-        let path = format!("/HostPowerSystem/{moId}/ConfigurePowerPolicy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostPowerSystem", &self.mo_id, "ConfigurePowerPolicy", Some(&input)).await
     }
     /// Power system capabilities object.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn capability(&self) -> Result<crate::types::structs::PowerSystemCapability> {
-        let path = format!("/HostPowerSystem/{moId}/capability", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::PowerSystemCapability = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostPowerSystem", &self.mo_id, "capability").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capability was empty".to_string()))?;
+        let result: crate::types::structs::PowerSystemCapability = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Power system state info object.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn info(&self) -> Result<crate::types::structs::PowerSystemInfo> {
-        let path = format!("/HostPowerSystem/{moId}/info", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::PowerSystemInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostPowerSystem", &self.mo_id, "info").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
+        let result: crate::types::structs::PowerSystemInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

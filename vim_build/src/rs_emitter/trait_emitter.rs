@@ -1,9 +1,7 @@
 use crate::printer::Printer;
 use crate::rs_emitter::common::emit_description_with_paths;
 use crate::rs_emitter::errors::{Error, Result};
-use crate::rs_emitter::{
-    parent_field_name, to_field_name, to_type_name,
-};
+use crate::rs_emitter::{parent_field_name, to_field_name, to_type_name};
 use crate::vim_model::{EmitMode, Model, Struct};
 use std::ops::Deref;
 pub struct TraitEmitter<'a> {
@@ -172,9 +170,8 @@ impl<'a> TraitEmitter<'a> {
             "impl miniserde::Deserialize for Box<dyn {struct_name}Trait> {{"
         ))?;
         self.printer.indent();
-        self.printer.println(
-            "fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {"
-        )?;
+        self.printer
+            .println("fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {")?;
         self.printer.indent();
         self.printer.println("Place::new(out)")?;
         self.printer.dedent();
@@ -189,14 +186,15 @@ impl<'a> TraitEmitter<'a> {
         ))?;
         self.printer.indent();
         self.printer.println(
-            "fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {"
+            "fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {",
         )?;
         self.printer.indent();
-        self.printer.println(&format!(
-            "Ok(Box::new({struct_name}TraitBoxBuilder {{"
-        ))?;
+        self.printer
+            .println(&format!("Ok(Box::new({struct_name}TraitBoxBuilder {{"))?;
         self.printer.indent();
-        self.printer.println("core: super::mini_de_static::PolyCore::new(),")?;
+        self.printer.println(&format!(
+            "core: super::mini_de_static::PolyCore::with_default(\"{struct_name}\"),"
+        ))?;
         self.printer.println("__out: &mut self.out,")?;
         self.printer.dedent();
         self.printer.println("}))")?;
@@ -207,11 +205,11 @@ impl<'a> TraitEmitter<'a> {
         self.printer.newline()?;
 
         // TraitBoxBuilder struct -- uses PolyCore directly to avoid self-referential issues
-        self.printer.println(&format!(
-            "struct {struct_name}TraitBoxBuilder<'a> {{"
-        ))?;
+        self.printer
+            .println(&format!("struct {struct_name}TraitBoxBuilder<'a> {{"))?;
         self.printer.indent();
-        self.printer.println("core: super::mini_de_static::PolyCore,")?;
+        self.printer
+            .println("core: super::mini_de_static::PolyCore,")?;
         self.printer.println(&format!(
             "__out: &'a mut Option<Box<dyn {struct_name}Trait>>,"
         ))?;
@@ -236,13 +234,11 @@ impl<'a> TraitEmitter<'a> {
         self.printer
             .println("fn finish(&mut self) -> miniserde::Result<()> {")?;
         self.printer.indent();
-        self.printer.println(
-            "match self.core.finish(super::deserialize::lookup_type)? {"
-        )?;
+        self.printer
+            .println("match self.core.finish(super::deserialize::lookup_type)? {")?;
         self.printer.indent();
-        self.printer.println(&format!(
-            "super::vim_any::VimAny::Object(obj) => {{"
-        ))?;
+        self.printer
+            .println(&format!("super::vim_any::VimAny::Object(obj) => {{"))?;
         self.printer.indent();
         self.printer.println(&format!(
             "*self.__out = Some(<dyn {struct_name}Trait>::from_box(obj).map_err(|_| miniserde::Error)?);"
@@ -250,8 +246,7 @@ impl<'a> TraitEmitter<'a> {
         self.printer.println("Ok(())")?;
         self.printer.dedent();
         self.printer.println("}")?;
-        self.printer
-            .println("_ => Err(miniserde::Error),")?;
+        self.printer.println("_ => Err(miniserde::Error),")?;
         self.printer.dedent();
         self.printer.println("}")?;
         self.printer.dedent();

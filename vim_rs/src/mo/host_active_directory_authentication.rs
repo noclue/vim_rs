@@ -29,9 +29,7 @@ impl HostActiveDirectoryAuthentication {
     /// ***HostConfigFault***: if the host configuration prevents smart card
     /// authentication from being disabled.
     pub async fn disable_smart_card_authentication(&self) -> Result<()> {
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/DisableSmartCardAuthentication", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostActiveDirectoryAuthentication", &self.mo_id, "DisableSmartCardAuthentication", None).await
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
     /// 
@@ -50,9 +48,7 @@ impl HostActiveDirectoryAuthentication {
     /// ***HostConfigFault***: if the host configuration prevents smart card
     /// authentication from being enabled.
     pub async fn enable_smart_card_authentication(&self) -> Result<()> {
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/EnableSmartCardAuthentication", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostActiveDirectoryAuthentication", &self.mo_id, "EnableSmartCardAuthentication", None).await
     }
     /// Import the CAM server's certificate to the local store of vmwauth.
     /// 
@@ -81,11 +77,8 @@ impl HostActiveDirectoryAuthentication {
     /// ***ActiveDirectoryFault***: for any problem that is not handled with a more specific fault.
     pub async fn import_certificate_for_cam_task(&self, cert_path: &str, cam_server: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ImportCertificateForCamRequestType {cert_path, cam_server, };
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/ImportCertificateForCAM_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostActiveDirectoryAuthentication", &self.mo_id, "ImportCertificateForCAM_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
@@ -105,9 +98,7 @@ impl HostActiveDirectoryAuthentication {
     /// certificate from being installed.
     pub async fn install_smart_card_trust_anchor(&self, cert: &str) -> Result<()> {
         let input = InstallSmartCardTrustAnchorRequestType {cert, };
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/InstallSmartCardTrustAnchor", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostActiveDirectoryAuthentication", &self.mo_id, "InstallSmartCardTrustAnchor", Some(&input)).await
     }
     /// Adds the host to an Active Directory domain.
     /// 
@@ -164,11 +155,8 @@ impl HostActiveDirectoryAuthentication {
     /// ***TaskInProgress***: if the *HostActiveDirectoryAuthentication* object is busy.
     pub async fn join_domain_task(&self, domain_name: &str, user_name: &str, password: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = JoinDomainRequestType {domain_name, user_name, password, };
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomain_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostActiveDirectoryAuthentication", &self.mo_id, "JoinDomain_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Adds the host to an Active Directory domain through CAM service.
@@ -227,11 +215,8 @@ impl HostActiveDirectoryAuthentication {
     /// ***TaskInProgress***: if the *HostActiveDirectoryAuthentication* object is busy.
     pub async fn join_domain_with_cam_task(&self, domain_name: &str, cam_server: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = JoinDomainWithCamRequestType {domain_name, cam_server, };
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/JoinDomainWithCAM_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostActiveDirectoryAuthentication", &self.mo_id, "JoinDomainWithCAM_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removes the host from the Active Directory domain to which it belongs.
@@ -265,11 +250,8 @@ impl HostActiveDirectoryAuthentication {
     /// ***TaskInProgress***: if the ActiveDirectoryAuthentication object is busy.
     pub async fn leave_current_domain_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = LeaveCurrentDomainRequestType {force, };
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/LeaveCurrentDomain_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostActiveDirectoryAuthentication", &self.mo_id, "LeaveCurrentDomain_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
@@ -287,14 +269,9 @@ impl HostActiveDirectoryAuthentication {
     /// ***HostConfigFault***: if the host configuration prevents the
     /// certificates from being listed.
     pub async fn list_smart_card_trust_anchors(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/ListSmartCardTrustAnchors", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostActiveDirectoryAuthentication", &self.mo_id, "ListSmartCardTrustAnchors", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -318,9 +295,7 @@ impl HostActiveDirectoryAuthentication {
     /// certificate from being removed.
     pub async fn remove_smart_card_trust_anchor(&self, issuer: &str, serial: &str) -> Result<()> {
         let input = RemoveSmartCardTrustAnchorRequestType {issuer, serial, };
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/RemoveSmartCardTrustAnchor", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostActiveDirectoryAuthentication", &self.mo_id, "RemoveSmartCardTrustAnchor", Some(&input)).await
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
     /// 
@@ -344,9 +319,7 @@ impl HostActiveDirectoryAuthentication {
     /// certificate from being removed.
     pub async fn remove_smart_card_trust_anchor_by_fingerprint(&self, fingerprint: &str, digest: &str) -> Result<()> {
         let input = RemoveSmartCardTrustAnchorByFingerprintRequestType {fingerprint, digest, };
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/RemoveSmartCardTrustAnchorByFingerprint", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostActiveDirectoryAuthentication", &self.mo_id, "RemoveSmartCardTrustAnchorByFingerprint", Some(&input)).await
     }
     /// Remove a smart card trust anchor certificate from the system
     /// 
@@ -365,9 +338,7 @@ impl HostActiveDirectoryAuthentication {
     /// certificate from being removed.
     pub async fn remove_smart_card_trust_anchor_certificate(&self, certificate: &str) -> Result<()> {
         let input = RemoveSmartCardTrustAnchorCertificateRequestType {certificate, };
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/RemoveSmartCardTrustAnchorCertificate", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostActiveDirectoryAuthentication", &self.mo_id, "RemoveSmartCardTrustAnchorCertificate", Some(&input)).await
     }
     /// Deprecated as of vSphere API 8.0U3, and there is no replacement for it.
     /// 
@@ -382,17 +353,13 @@ impl HostActiveDirectoryAuthentication {
     /// then all existing trust anchors are removed.
     pub async fn replace_smart_card_trust_anchors(&self, certs: Option<&[String]>) -> Result<()> {
         let input = ReplaceSmartCardTrustAnchorsRequestType {certs, };
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/ReplaceSmartCardTrustAnchors", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostActiveDirectoryAuthentication", &self.mo_id, "ReplaceSmartCardTrustAnchors", Some(&input)).await
     }
     /// Information about the authentication store.
     pub async fn info(&self) -> Result<Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait>> {
-        let path = format!("/HostActiveDirectoryAuthentication/{moId}/info", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostActiveDirectoryAuthentication", &self.mo_id, "info").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

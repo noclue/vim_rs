@@ -46,17 +46,13 @@ impl VslmSessionManager {
     /// could not be validated.
     pub async fn vslm_login_by_token(&self, delegated_token_xml: &str) -> Result<()> {
         let input = VslmLoginByTokenRequestType {delegated_token_xml, };
-        let path = format!("/vslm/VslmSessionManager/{moId}/VslmLoginByToken", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmSessionManager", &self.mo_id, "VslmLoginByToken", Some(&input)).await
     }
     /// Logs out of the VSLM Service.
     /// 
     /// ***Required privileges:*** StoragLifecycle.View
     pub async fn vslm_logout(&self) -> Result<()> {
-        let path = format!("/vslm/VslmSessionManager/{moId}/VslmLogout", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmSessionManager", &self.mo_id, "VslmLogout", None).await
     }
 }
 struct VslmLoginByTokenRequestType<'a> {

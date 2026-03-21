@@ -78,11 +78,8 @@ impl ServiceInstance {
     ///
     /// The date and time on the server.
     pub async fn current_time(&self) -> Result<String> {
-        let path = format!("/ServiceInstance/{moId}/CurrentTime", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ServiceInstance", &self.mo_id, "CurrentTime", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -123,14 +120,9 @@ impl ServiceInstance {
     /// compatibility, it is omitted from the return list.
     pub async fn query_v_motion_compatibility(&self, vm: &crate::types::structs::ManagedObjectReference, host: &[crate::types::structs::ManagedObjectReference], compatibility: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::HostVMotionCompatibility>>> {
         let input = QueryVMotionCompatibilityRequestType {vm, host, compatibility, };
-        let path = format!("/ServiceInstance/{moId}/QueryVMotionCompatibility", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ServiceInstance", &self.mo_id, "QueryVMotionCompatibility", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostVMotionCompatibility>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -143,25 +135,17 @@ impl ServiceInstance {
     /// The properties belonging to the service instance,
     /// including various object managers.
     pub async fn retrieve_service_content(&self) -> Result<crate::types::structs::ServiceContent> {
-        let path = format!("/ServiceInstance/{moId}/RetrieveServiceContent", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ServiceContent = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ServiceInstance", &self.mo_id, "RetrieveServiceContent", None).await?;
+        let result: crate::types::structs::ServiceContent = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Component information for bundled products
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn retrieve_product_components(&self) -> Result<Option<Vec<crate::types::structs::ProductComponentInfo>>> {
-        let path = format!("/ServiceInstance/{moId}/RetrieveProductComponents", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ServiceInstance", &self.mo_id, "RetrieveProductComponents", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ProductComponentInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -237,14 +221,9 @@ impl ServiceInstance {
     /// mode in order to be considered as a potential target host.
     pub async fn validate_migration(&self, vm: &[crate::types::structs::ManagedObjectReference], state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>, pool: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = ValidateMigrationRequestType {vm, state, test_type, pool, host, };
-        let path = format!("/ServiceInstance/{moId}/ValidateMigration", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ServiceInstance", &self.mo_id, "ValidateMigration", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Event>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -252,11 +231,9 @@ impl ServiceInstance {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn capability(&self) -> Result<crate::types::structs::Capability> {
-        let path = format!("/ServiceInstance/{moId}/capability", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::Capability = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ServiceInstance", &self.mo_id, "capability").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capability was empty".to_string()))?;
+        let result: crate::types::structs::Capability = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The properties of the ServiceInstance managed object.
@@ -274,11 +251,9 @@ impl ServiceInstance {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn content(&self) -> Result<crate::types::structs::ServiceContent> {
-        let path = format!("/ServiceInstance/{moId}/content", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ServiceContent = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ServiceInstance", &self.mo_id, "content").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property content was empty".to_string()))?;
+        let result: crate::types::structs::ServiceContent = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Contains the time most recently obtained from the server.
@@ -293,11 +268,9 @@ impl ServiceInstance {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn server_clock(&self) -> Result<String> {
-        let path = format!("/ServiceInstance/{moId}/serverClock", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ServiceInstance", &self.mo_id, "serverClock").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property serverClock was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

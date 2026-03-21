@@ -62,11 +62,8 @@ impl ProfileComplianceManager {
     /// Refers instance of *Task*.
     pub async fn check_compliance_task(&self, profile: Option<&[crate::types::structs::ManagedObjectReference]>, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckComplianceRequestType {profile, entity, };
-        let path = format!("/ProfileComplianceManager/{moId}/CheckCompliance_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ProfileComplianceManager", &self.mo_id, "CheckCompliance_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Clear the saved ComplianceResult based on profile and entity filtering criteria.
@@ -87,9 +84,7 @@ impl ProfileComplianceManager {
     /// Refers instances of *ManagedEntity*.
     pub async fn clear_compliance_status(&self, profile: Option<&[crate::types::structs::ManagedObjectReference]>, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = ClearComplianceStatusRequestType {profile, entity, };
-        let path = format!("/ProfileComplianceManager/{moId}/ClearComplianceStatus", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ProfileComplianceManager", &self.mo_id, "ClearComplianceStatus", Some(&input)).await
     }
     /// Query the compliance status based on Profile and Entity filter.
     /// 
@@ -117,14 +112,9 @@ impl ProfileComplianceManager {
     /// a new ComplianceCheck will not be triggered.
     pub async fn query_compliance_status(&self, profile: Option<&[crate::types::structs::ManagedObjectReference]>, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<crate::types::structs::ComplianceResult>>> {
         let input = QueryComplianceStatusRequestType {profile, entity, };
-        let path = format!("/ProfileComplianceManager/{moId}/QueryComplianceStatus", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ProfileComplianceManager", &self.mo_id, "QueryComplianceStatus", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ComplianceResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -144,14 +134,9 @@ impl ProfileComplianceManager {
     /// Refers instance of *Profile*.
     pub async fn query_expression_metadata(&self, expression_name: Option<&[String]>, profile: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ProfileExpressionMetadata>>> {
         let input = QueryExpressionMetadataRequestType {expression_name, profile, };
-        let path = format!("/ProfileComplianceManager/{moId}/QueryExpressionMetadata", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ProfileComplianceManager", &self.mo_id, "QueryExpressionMetadata", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ProfileExpressionMetadata>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

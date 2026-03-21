@@ -15,6 +15,7 @@ exclude = ["target/*", "**/*.rs.bk"]
 
 [features]
 defaults = []
+xml = ["dep:quick-xml", "reqwest/cookies"]
 
 [dependencies]
 base64 = "0.22"
@@ -23,6 +24,7 @@ env_logger = "0.11"
 indexmap = "2.9"
 log = "0.4"
 miniserde = "0.1"
+quick-xml = { version = "0.39", optional = true }
 reqwest = { version = "0.12" }
 thiserror = "2.0"
 tokio = { version = "1.44", features = ["rt-multi-thread", "macros", "sync"] }

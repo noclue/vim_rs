@@ -46,14 +46,9 @@ impl PbmReplicationManager {
     /// ***PbmFault***: If there is an internal service error.
     pub async fn pbm_query_replication_groups(&self, entities: Option<&[crate::types::structs::PbmServerObjectRef]>) -> Result<Option<Vec<crate::types::structs::PbmQueryReplicationGroupResult>>> {
         let input = PbmQueryReplicationGroupsRequestType {entities, };
-        let path = format!("/pbm/PbmReplicationManager/{moId}/PbmQueryReplicationGroups", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("pbm", "PbmReplicationManager", &self.mo_id, "PbmQueryReplicationGroups", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PbmQueryReplicationGroupResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

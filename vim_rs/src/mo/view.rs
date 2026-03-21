@@ -36,8 +36,6 @@ impl View {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn destroy_view(&self) -> Result<()> {
-        let path = format!("/View/{moId}/DestroyView", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "View", &self.mo_id, "DestroyView", None).await
     }
 }

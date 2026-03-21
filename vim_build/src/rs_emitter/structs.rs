@@ -581,7 +581,7 @@ impl<'a> TypesEmitter<'a> {
         enum DeserFieldKind {
             Normal,
             Binary,
-            TraitObject { trait_name: String },
+            TraitObject { trait_name: String, base_type_name: String },
         }
         struct DeserField {
             field_name: String,
@@ -610,6 +610,7 @@ impl<'a> TypesEmitter<'a> {
                                     "super::traits::{}Trait",
                                     to_type_name(ref_name)
                                 ),
+                                base_type_name: ref_name.clone(),
                             }
                         } else {
                             DeserFieldKind::Normal
@@ -691,6 +692,11 @@ impl<'a> TypesEmitter<'a> {
             self.printer.println("extra_fields_: std::collections::HashMap<String, miniserde::json::Value>,")?;
             self.printer.println("current_extra_key: Option<String>,")?;
             self.printer.println("current_extra_value: Option<miniserde::json::Value>,")?;
+            self.printer.println("#[cfg(feature = \"xml\")]")?;
+            self.printer.println("resolved_type: Option<struct_enum::StructType>,")?;
+            self.printer.println("#[cfg(feature = \"xml\")]")?;
+            self.printer
+                .println("api_extra_visitor: super::api_typed_visitor::ApiTypedValueVisitor,")?;
         }
         self.printer.println(&format!(
             "__out: Option<&'a mut Option<{struct_name}>>,"
@@ -718,8 +724,17 @@ impl<'a> TypesEmitter<'a> {
         self.printer.indent();
         self.printer.println(&format!("{fields_name} {{"))?;
         self.printer.indent();
-        for i in 0..deser_fields.len() {
-            self.printer.println(&format!("f{i}: None,"))?;
+        for (i, f) in deser_fields.iter().enumerate() {
+            match &f.kind {
+                DeserFieldKind::TraitObject { base_type_name, .. } => {
+                    self.printer.println(&format!(
+                        "f{i}: Some(VimObjectHolder {{ out: None, default_type_name: Some(\"{base_type_name}\") }}),"
+                    ))?;
+                }
+                _ => {
+                    self.printer.println(&format!("f{i}: None,"))?;
+                }
+            }
         }
         if is_pruned {
             self.printer.println("type_,")?;
@@ -727,6 +742,12 @@ impl<'a> TypesEmitter<'a> {
             self.printer.println("extra_fields_: std::collections::HashMap::new(),")?;
             self.printer.println("current_extra_key: None,")?;
             self.printer.println("current_extra_value: None,")?;
+            self.printer.println("#[cfg(feature = \"xml\")]")?;
+            self.printer.println("resolved_type: type_,")?;
+            self.printer.println("#[cfg(feature = \"xml\")]")?;
+            self.printer.println(
+                "api_extra_visitor: super::api_typed_visitor::ApiTypedValueVisitor::new(),",
+            )?;
         }
         self.printer.println("__out: None,")?;
         self.printer.dedent();
@@ -749,8 +770,20 @@ impl<'a> TypesEmitter<'a> {
         self.printer.indent();
         self.printer.println(&format!("{fields_name} {{"))?;
         self.printer.indent();
-        for i in 0..deser_fields.len() {
-            self.printer.println(&format!("f{i}: None,"))?;
+        for (i, f) in deser_fields.iter().enumerate() {
+            match &f.kind {
+                DeserFieldKind::TraitObject { base_type_name, .. } => {
+                    self.printer.println(&format!(
+                        "f{i}: Some(VimObjectHolder {{ out: None, default_type_name: Some(\"{base_type_name}\") }}),"
+                    ))?;
+                }
+                // _ if f.is_array => {
+                //     self.printer.println(&format!("f{i}: Some(Vec::new()),"))?;
+                // }
+                _ => {
+                    self.printer.println(&format!("f{i}: None,"))?;
+                }
+            }
         }
         if is_pruned {
             self.printer.println("type_: None,")?;
@@ -758,6 +791,12 @@ impl<'a> TypesEmitter<'a> {
             self.printer.println("extra_fields_: std::collections::HashMap::new(),")?;
             self.printer.println("current_extra_key: None,")?;
             self.printer.println("current_extra_value: None,")?;
+            self.printer.println("#[cfg(feature = \"xml\")]")?;
+            self.printer.println("resolved_type: None,")?;
+            self.printer.println("#[cfg(feature = \"xml\")]")?;
+            self.printer.println(
+                "api_extra_visitor: super::api_typed_visitor::ApiTypedValueVisitor::new(),",
+            )?;
         }
         self.printer.println("__out: Some(out),")?;
         self.printer.dedent();
@@ -770,7 +809,25 @@ impl<'a> TypesEmitter<'a> {
         if is_pruned {
             self.printer.println("fn shift_extra(&mut self) {")?;
             self.printer.indent();
-            self.printer.println("if let (Some(k), Some(v)) = (self.current_extra_key.take(), self.current_extra_value.take()) {")?;
+            self.printer.println("#[cfg(feature = \"xml\")]")?;
+            self.printer.println("{")?;
+            self.printer.indent();
+            self.printer.println("if self.resolved_type.is_none() {")?;
+            self.printer.indent();
+            self.printer.println("if let Some(tn) = self.type_name.as_deref() {")?;
+            self.printer.indent();
+            self.printer.println("self.resolved_type = struct_enum::StructType::from_str(tn);")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.println("#[cfg(feature = \"xml\")]")?;
+            self.printer.println("let value = self.current_extra_value.take().or_else(|| self.api_extra_visitor.take_value());")?;
+            self.printer.println("#[cfg(not(feature = \"xml\"))]")?;
+            self.printer.println("let value = self.current_extra_value.take();")?;
+            self.printer.println("if let (Some(k), Some(v)) = (self.current_extra_key.take(), value) {")?;
             self.printer.indent();
             self.printer.println("self.extra_fields_.insert(k, v);")?;
             self.printer.dedent();
@@ -806,7 +863,7 @@ impl<'a> TypesEmitter<'a> {
                         ))?;
                     }
                 }
-                DeserFieldKind::TraitObject { trait_name } => {
+                DeserFieldKind::TraitObject { trait_name, .. } => {
                     if f.optional {
                         self.printer.println(&format!(
                             "let {}: {} = if let Some(holder) = self.f{i}.take() {{",
@@ -986,12 +1043,22 @@ impl<'a> TypesEmitter<'a> {
             )?;
         }
 
+        let is_mor = vim_type.name == "ManagedObjectReference";
         for (i, f) in deser_fields.iter().enumerate() {
             let ser_name = &f.ser_name;
+            let key_pattern = if is_mor {
+                match ser_name.as_str() {
+                    "type" => r##""type" | "@type""##.to_string(),
+                    "value" => r##""value" | "#text""##.to_string(),
+                    _ => format!("\"{ser_name}\""),
+                }
+            } else {
+                format!("\"{ser_name}\"")
+            };
             match &f.kind {
                 DeserFieldKind::Binary | DeserFieldKind::TraitObject { .. } | DeserFieldKind::Normal => {
                     self.printer.println(&format!(
-                        "\"{ser_name}\" => Ok(miniserde::Deserialize::begin(&mut self.f{i})),"
+                        "{key_pattern} => Ok(miniserde::Deserialize::begin(&mut self.f{i})),"
                     ))?;
                 }
             }
@@ -1001,6 +1068,22 @@ impl<'a> TypesEmitter<'a> {
             self.printer.println("_ => {")?;
             self.printer.indent();
             self.printer.println("self.current_extra_key = Some(key.to_owned());")?;
+            self.printer.println("#[cfg(feature = \"xml\")]")?;
+            self.printer.println("{")?;
+            self.printer.indent();
+            self.printer.println("let st = self.resolved_type.or(self.type_);")?;
+            self.printer.println("if let Some(st) = st {")?;
+            self.printer.indent();
+            self.printer.println("if let Some(ft) = super::api_field_registry::lookup_api_field(st, key) {")?;
+            self.printer.indent();
+            self.printer.println("self.api_extra_visitor.reset(ft);")?;
+            self.printer.println("return Ok(&mut self.api_extra_visitor);")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
+            self.printer.dedent();
+            self.printer.println("}")?;
             self.printer.println("Ok(miniserde::Deserialize::begin(&mut self.current_extra_value))")?;
             self.printer.dedent();
             self.printer.println("}")?;

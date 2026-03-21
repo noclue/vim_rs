@@ -1,30 +1,70 @@
 # vim_rs usage examples
-This workspace contains examples of how to use the vim_rs library.
 
-The examples are arranged in a Rust workspace to facilitate faster build time and thus faster
-development and testing.
+This workspace contains runnable examples for the `vim_rs` crate. The **`snippets`** package holds many small binaries; **`vtui`** is a separate terminal UI demo (unchanged layout).
 
-To build the examples, run the following command:
+Build everything from this directory:
+
 ```bash
 cargo build
 ```
-To run the examples you need to set the following environment variables:
-- `VIM_SERVER` - FQDN of a vCenter server version 8.0.2 or later.
-- `VIM_USERNAME` - Username to authenticate with the vCenter server.
-- `VIM_PASSWORD` - Password to authenticate with the vCenter server.
-- `RUST_LOG` - Log level for the examples. Set to `debug` to see all example logs. Set to `trace` 
-to see all communication logs.
-- `COMPUTE_RESOURCE` - name of a host or cluster to be used in env_browser sample
 
-To run the examples, run the following command:
+Run a specific example:
+
 ```bash
-cargo run --bin <example_name>
+cargo run -p snippets --bin <example_name>
 ```
-Where `<example_name>` is the name of the example you want to run.
 
-The examples are:
-- `env_browser` - demonstrates how to obtain VM provisioning options on specific compute resource (host or cluster)
-- `eventster` - retrieves events from the vCenter server.
-- `mac_monitor` - monitors the MAC and IP addresses of a VM over time using PropertyCollector::WaitForUpdates` API.
-- `perf_metrics` - retrieves Virtual Machine performance metrics from the vCenter server.
-- `property_collector` - retrieves Virtual Machine properties from the vCenter server using container view to select all virtual machines in the root folder.
+For `vtui`:
+
+```bash
+cargo run -p vtui
+```
+
+## Environment variables
+
+Most snippets expect:
+
+| Variable | Purpose |
+|----------|---------|
+| `VIM_SERVER` | vCenter or ESXi hostname or URL (passed to `ClientBuilder`) |
+| `VIM_USERNAME` | Login user |
+| `VIM_PASSWORD` | Login password |
+| `RUST_LOG` | Log level (`info`, `debug`, `trace`, …). Use `trace` for full wire-level `vim_rs` logs. |
+| `VIM_PROTOCOL` | Communication protocol. Valid values are 'auto', 'json', or 'soap'. Default is 'auto'. |
+
+Optional / example-specific:
+
+| Variable | Used by |
+|----------|---------|
+| `COMPUTE_RESOURCE` | `env_browser` — display name of a cluster or standalone host (`ComputeResource`) |
+| `DATASTORE` | `retrieve_ds_hosts` — datastore id (e.g. `datastore-107001`) |
+| `VM_INVENTORY_PATH` | `vm_ip`, `vm_rename`, `vm_toggle_wol` — inventory path to a VM |
+| `NEW_VM_NAME` | `vm_rename` — new display name |
+
+A `.env` file in the working directory is loaded automatically by the shared `snippets::connect` helper when present.
+
+## Snippets (`cargo run -p snippets --bin …`)
+
+| Binary | Summary |
+|--------|---------|
+| `dynamic_property_fetch` | `Client::fetch_property` for arbitrary properties (here: root folder `permission` as JSON). |
+| `env_browser` | `EnvironmentBrowser` / config descriptors for a named `ComputeResource`. |
+| `eventster` | `EventManager` + `EventHistoryCollector`: recent events with filtering. |
+| `mac_monitor` | `WaitForUpdates`-style cache: track VM NIC MACs and guest IPs (~30s demo). |
+| `perf_metrics` | `PerformanceManager`: counter map, container view of VMs, per-VM stats sample. |
+| `print_vm_addresses` | All VMs: guest net vs hardware NICs (`vim_retrievable!`). |
+| `property_collector` | Manual `PropertyCollector` + `ContainerView` for VM names; optional `AlarmManager` sample. |
+| `retrieve_ds_hosts` | Hosts mounted on a datastore (`vim_retrievable!`). |
+| `retrieve_host_info` | All hosts under root: health, version, CPU/memory/uptime (`vim_retrievable!`). |
+| `retrieve_recent_task` | Custom traversal from `TaskManager` to `recentTask` (`vim_retrievable!`). |
+| `root_objects` | `RootObjects`: VIM + EAM/PBM/VSLM/SMS “about” style probes. |
+| `vm_events` | `vim_updatable!` + property cache: VM create/update/remove for 60s. |
+| `vm_ip` | `SearchIndex` + `vim_retrievable!` for `guest.ip_address` on one VM path. |
+| `vm_rename` | Rename VM display name via `rename_task` + `TaskTracker`. |
+| `vm_toggle_wol` | Toggle Wake-on-LAN on all vNICs: devices, reconfig task, `TaskTracker`. |
+
+Source files live under `snippets/src/`; each file’s module docs describe APIs and env vars in more detail.
+
+## vtui
+
+Interactive Ratatui browser for inventory and properties. See `vtui/README.md`. Build with `cargo run -p vtui` from this workspace.

@@ -71,11 +71,8 @@ impl LicenseManager {
     /// Returns information about the license specified in licenseKey.
     pub async fn add_license(&self, license_key: &str, labels: Option<&[crate::types::structs::KeyValue]>) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = AddLicenseRequestType {license_key, labels, };
-        let path = format!("/LicenseManager/{moId}/AddLicense", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::LicenseManagerLicenseInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "LicenseManager", &self.mo_id, "AddLicense", Some(&input)).await?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -107,11 +104,8 @@ impl LicenseManager {
     /// potentially because the hardware configuration does not support it.
     pub async fn check_license_feature(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: &str) -> Result<bool> {
         let input = CheckLicenseFeatureRequestType {host, feature_key, };
-        let path = format!("/LicenseManager/{moId}/CheckLicenseFeature", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "LicenseManager", &self.mo_id, "CheckLicenseFeature", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use *LicenseManager.UpdateLicense*
@@ -158,9 +152,7 @@ impl LicenseManager {
     /// ***NotEnoughLicenses***: if the new license source does not have enough licenses.
     pub async fn configure_license_source(&self, host: Option<&crate::types::structs::ManagedObjectReference>, license_source: &dyn crate::types::traits::LicenseSourceTrait) -> Result<()> {
         let input = ConfigureLicenseSourceRequestType {host, license_source, };
-        let path = format!("/LicenseManager/{moId}/ConfigureLicenseSource", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "LicenseManager", &self.mo_id, "ConfigureLicenseSource", Some(&input)).await
     }
     /// Decodes licensing information on the license specified.
     /// 
@@ -176,11 +168,8 @@ impl LicenseManager {
     /// Returns information about the license specified in licenseKey.
     pub async fn decode_license(&self, license_key: &str) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = DecodeLicenseRequestType {license_key, };
-        let path = format!("/LicenseManager/{moId}/DecodeLicense", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::LicenseManagerLicenseInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "LicenseManager", &self.mo_id, "DecodeLicense", Some(&input)).await?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -213,11 +202,8 @@ impl LicenseManager {
     /// ***InvalidState***: If the feature is in use.
     pub async fn disable_feature(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: &str) -> Result<bool> {
         let input = DisableFeatureRequestType {host, feature_key, };
-        let path = format!("/LicenseManager/{moId}/DisableFeature", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "LicenseManager", &self.mo_id, "DisableFeature", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -251,11 +237,8 @@ impl LicenseManager {
     /// potentially because the hardware configuration does not support it.
     pub async fn enable_feature(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: &str) -> Result<bool> {
         let input = EnableFeatureRequestType {host, feature_key, };
-        let path = format!("/LicenseManager/{moId}/EnableFeature", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "LicenseManager", &self.mo_id, "EnableFeature", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -274,14 +257,9 @@ impl LicenseManager {
     /// Refers instance of *HostSystem*.
     pub async fn query_license_source_availability(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::LicenseAvailabilityInfo>>> {
         let input = QueryLicenseSourceAvailabilityRequestType {host, };
-        let path = format!("/LicenseManager/{moId}/QueryLicenseSourceAvailability", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "LicenseManager", &self.mo_id, "QueryLicenseSourceAvailability", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::LicenseAvailabilityInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -301,14 +279,9 @@ impl LicenseManager {
     /// Refers instance of *HostSystem*.
     pub async fn query_supported_features(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::LicenseFeatureInfo>>> {
         let input = QuerySupportedFeaturesRequestType {host, };
-        let path = format!("/LicenseManager/{moId}/QuerySupportedFeatures", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "LicenseManager", &self.mo_id, "QuerySupportedFeatures", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::LicenseFeatureInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -336,11 +309,8 @@ impl LicenseManager {
     /// Refers instance of *HostSystem*.
     pub async fn query_license_usage(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::LicenseUsageInfo> {
         let input = QueryLicenseUsageRequestType {host, };
-        let path = format!("/LicenseManager/{moId}/QueryLicenseUsage", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::LicenseUsageInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "LicenseManager", &self.mo_id, "QueryLicenseUsage", Some(&input)).await?;
+        let result: crate::types::structs::LicenseUsageInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removed a license's label.
@@ -356,9 +326,7 @@ impl LicenseManager {
     /// A label key.
     pub async fn remove_license_label(&self, license_key: &str, label_key: &str) -> Result<()> {
         let input = RemoveLicenseLabelRequestType {license_key, label_key, };
-        let path = format!("/LicenseManager/{moId}/RemoveLicenseLabel", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "LicenseManager", &self.mo_id, "RemoveLicenseLabel", Some(&input)).await
     }
     /// Remove license from the available set.
     /// 
@@ -370,9 +338,7 @@ impl LicenseManager {
     /// A licenses. E.g. a serial license.
     pub async fn remove_license(&self, license_key: &str) -> Result<()> {
         let input = RemoveLicenseRequestType {license_key, };
-        let path = format!("/LicenseManager/{moId}/RemoveLicense", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "LicenseManager", &self.mo_id, "RemoveLicense", Some(&input)).await
     }
     /// Deprecated as of vSphere API 4.0, use
     /// *LicenseAssignmentManager.QueryAssignedLicenses* instead.
@@ -410,9 +376,7 @@ impl LicenseManager {
     /// potentially because the hardware configuration does not support it.
     pub async fn set_license_edition(&self, host: Option<&crate::types::structs::ManagedObjectReference>, feature_key: Option<&str>) -> Result<()> {
         let input = SetLicenseEditionRequestType {host, feature_key, };
-        let path = format!("/LicenseManager/{moId}/SetLicenseEdition", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "LicenseManager", &self.mo_id, "SetLicenseEdition", Some(&input)).await
     }
     /// Update a license's label.
     /// 
@@ -432,9 +396,7 @@ impl LicenseManager {
     /// Value for the label.
     pub async fn update_license_label(&self, license_key: &str, label_key: &str, label_value: &str) -> Result<()> {
         let input = UpdateLicenseLabelRequestType {license_key, label_key, label_value, };
-        let path = format!("/LicenseManager/{moId}/UpdateLicenseLabel", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "LicenseManager", &self.mo_id, "UpdateLicenseLabel", Some(&input)).await
     }
     /// Updates the available licenses to the one provided in licenseKey.
     /// 
@@ -460,35 +422,25 @@ impl LicenseManager {
     /// Returns information about the license specified in licenseKey.
     pub async fn update_license(&self, license_key: &str, labels: Option<&[crate::types::structs::KeyValue]>) -> Result<crate::types::structs::LicenseManagerLicenseInfo> {
         let input = UpdateLicenseRequestType {license_key, labels, };
-        let path = format!("/LicenseManager/{moId}/UpdateLicense", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::LicenseManagerLicenseInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "LicenseManager", &self.mo_id, "UpdateLicense", Some(&input)).await?;
+        let result: crate::types::structs::LicenseManagerLicenseInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, this property is not used by the system.
     /// 
     /// Return current diagnostic information.
     pub async fn diagnostics(&self) -> Result<Option<crate::types::structs::LicenseDiagnostics>> {
-        let path = format!("/LicenseManager/{moId}/diagnostics", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "diagnostics").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::LicenseDiagnostics>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// ***Required privileges:*** System.Read
     pub async fn evaluation(&self) -> Result<crate::types::structs::LicenseManagerEvaluationInfo> {
-        let path = format!("/LicenseManager/{moId}/evaluation", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::LicenseManagerEvaluationInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "evaluation").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property evaluation was empty".to_string()))?;
+        let result: crate::types::structs::LicenseManagerEvaluationInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *LicenseManager.QuerySupportedFeatures*
@@ -496,14 +448,9 @@ impl LicenseManager {
     /// 
     /// The list of features that can be licensed.
     pub async fn feature_info(&self) -> Result<Option<Vec<crate::types::structs::LicenseFeatureInfo>>> {
-        let path = format!("/LicenseManager/{moId}/featureInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "featureInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::LicenseFeatureInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -515,14 +462,9 @@ impl LicenseManager {
     ///
     /// Refers instance of *LicenseAssignmentManager*.
     pub async fn license_assignment_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/LicenseManager/{moId}/licenseAssignmentManager", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "licenseAssignmentManager").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -537,20 +479,16 @@ impl LicenseManager {
     /// no edition is set the property is set to the empty string ("").
     /// To set the edition use *LicenseManager.SetLicenseEdition*.
     pub async fn licensed_edition(&self) -> Result<String> {
-        let path = format!("/LicenseManager/{moId}/licensedEdition", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "licensedEdition").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property licensedEdition was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get information about all the licenses available.
     pub async fn licenses(&self) -> Result<Vec<crate::types::structs::LicenseManagerLicenseInfo>> {
-        let path = format!("/LicenseManager/{moId}/licenses", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::LicenseManagerLicenseInfo> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "licenses").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property licenses was empty".to_string()))?;
+        let result: Vec<crate::types::structs::LicenseManagerLicenseInfo> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -558,11 +496,9 @@ impl LicenseManager {
     /// 
     /// Set or return a data object type of LocalLicense or LicenseServer.
     pub async fn source(&self) -> Result<Box<dyn crate::types::traits::LicenseSourceTrait>> {
-        let path = format!("/LicenseManager/{moId}/source", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::LicenseSourceTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "source").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property source was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::LicenseSourceTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, this property is not used.
@@ -572,11 +508,9 @@ impl LicenseManager {
     /// License sources that are LocalSource
     /// are always available.
     pub async fn source_available(&self) -> Result<bool> {
-        let path = format!("/LicenseManager/{moId}/sourceAvailable", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "sourceAvailable").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property sourceAvailable was empty".to_string()))?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

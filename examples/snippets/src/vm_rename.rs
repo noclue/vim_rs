@@ -15,13 +15,17 @@
 //! - This **only** changes the vCenter inventory name (UI display name).
 //! - It does **not** change guest OS hostname, DNS, or datastore file/folder names.
 //! - Requires `VirtualMachine.Config.Rename` privilege.
+//!
+//! ## Typical uses
+//!
+//! Scripted renames after clone workflows, aligning display names with CMDB records, and batch cleanup of inventory labels.
 
 use anyhow::{Context, Result};
 use log::info;
 use tokio::time::sleep;
 use std::env;
 use std::time::Duration;
-use utils::connect;
+use snippets::connect;
 use vim_rs::mo::{SearchIndex, VirtualMachine};
 use vim_rs::core::tasks::TaskTracker;
 

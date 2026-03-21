@@ -30,9 +30,7 @@ impl HostMemorySystem {
     /// -
     pub async fn reconfigure_service_console_reservation(&self, cfg_bytes: i64) -> Result<()> {
         let input = ReconfigureServiceConsoleReservationRequestType {cfg_bytes, };
-        let path = format!("/HostMemorySystem/{moId}/ReconfigureServiceConsoleReservation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostMemorySystem", &self.mo_id, "ReconfigureServiceConsoleReservation", Some(&input)).await
     }
     /// Updates the virtual machine reservation information.
     /// 
@@ -44,9 +42,7 @@ impl HostMemorySystem {
     /// -
     pub async fn reconfigure_virtual_machine_reservation(&self, spec: &crate::types::structs::VirtualMachineMemoryReservationSpec) -> Result<()> {
         let input = ReconfigureVirtualMachineReservationRequestType {spec, };
-        let path = format!("/HostMemorySystem/{moId}/ReconfigureVirtualMachineReservation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostMemorySystem", &self.mo_id, "ReconfigureVirtualMachineReservation", Some(&input)).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -64,9 +60,7 @@ impl HostMemorySystem {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/HostMemorySystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostMemorySystem", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -74,14 +68,9 @@ impl HostMemorySystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/HostMemorySystem/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostMemorySystem", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -91,14 +80,9 @@ impl HostMemorySystem {
     /// existence of this data object indicates if the service console memory
     /// reservation must be configured for this host.
     pub async fn console_reservation_info(&self) -> Result<Option<crate::types::structs::ServiceConsoleReservationInfo>> {
-        let path = format!("/HostMemorySystem/{moId}/consoleReservationInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostMemorySystem", &self.mo_id, "consoleReservationInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ServiceConsoleReservationInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -110,14 +94,9 @@ impl HostMemorySystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostMemorySystem/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostMemorySystem", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -127,14 +106,9 @@ impl HostMemorySystem {
     /// existence of this data object indicates if the virtual machine memory
     /// reservation must be configured for this host.
     pub async fn virtual_machine_reservation_info(&self) -> Result<Option<crate::types::structs::VirtualMachineMemoryReservationInfo>> {
-        let path = format!("/HostMemorySystem/{moId}/virtualMachineReservationInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostMemorySystem", &self.mo_id, "virtualMachineReservationInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VirtualMachineMemoryReservationInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

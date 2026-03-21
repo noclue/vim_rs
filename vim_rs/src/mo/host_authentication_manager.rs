@@ -60,11 +60,9 @@ impl HostAuthenticationManager {
     }
     /// Information about Active Directory membership.
     pub async fn info(&self) -> Result<crate::types::structs::HostAuthenticationManagerInfo> {
-        let path = format!("/HostAuthenticationManager/{moId}/info", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostAuthenticationManagerInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostAuthenticationManager", &self.mo_id, "info").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
+        let result: crate::types::structs::HostAuthenticationManagerInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// An array that can contain managed object references to local and
@@ -93,11 +91,9 @@ impl HostAuthenticationManager {
     ///
     /// Refers instances of *HostAuthenticationStore*.
     pub async fn supported_store(&self) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/HostAuthenticationManager/{moId}/supportedStore", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::ManagedObjectReference> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostAuthenticationManager", &self.mo_id, "supportedStore").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property supportedStore was empty".to_string()))?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

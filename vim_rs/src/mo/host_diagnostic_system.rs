@@ -51,9 +51,7 @@ impl HostDiagnosticSystem {
     /// partition.
     pub async fn create_diagnostic_partition(&self, spec: &crate::types::structs::HostDiagnosticPartitionCreateSpec) -> Result<()> {
         let input = CreateDiagnosticPartitionRequestType {spec, };
-        let path = format!("/HostDiagnosticSystem/{moId}/CreateDiagnosticPartition", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDiagnosticSystem", &self.mo_id, "CreateDiagnosticPartition", Some(&input)).await
     }
     /// Retrieves a list of available diagnostic partitions.
     /// 
@@ -72,14 +70,9 @@ impl HostDiagnosticSystem {
     /// ***HostConfigFault***: on some internal failure while setting the
     /// active partition.
     pub async fn query_available_partition(&self) -> Result<Option<Vec<crate::types::structs::HostDiagnosticPartition>>> {
-        let path = format!("/HostDiagnosticSystem/{moId}/QueryAvailablePartition", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostDiagnosticSystem", &self.mo_id, "QueryAvailablePartition", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostDiagnosticPartition>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -115,11 +108,8 @@ impl HostDiagnosticSystem {
     /// query information about the disk.
     pub async fn query_partition_create_desc(&self, disk_uuid: &str, diagnostic_type: &str) -> Result<crate::types::structs::HostDiagnosticPartitionCreateDescription> {
         let input = QueryPartitionCreateDescRequestType {disk_uuid, diagnostic_type, };
-        let path = format!("/HostDiagnosticSystem/{moId}/QueryPartitionCreateDesc", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostDiagnosticPartitionCreateDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDiagnosticSystem", &self.mo_id, "QueryPartitionCreateDesc", Some(&input)).await?;
+        let result: crate::types::structs::HostDiagnosticPartitionCreateDescription = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves a list of disks that can be used to contain a diagnostic
@@ -151,14 +141,9 @@ impl HostDiagnosticSystem {
     /// create options.
     pub async fn query_partition_create_options(&self, storage_type: &str, diagnostic_type: &str) -> Result<Option<Vec<crate::types::structs::HostDiagnosticPartitionCreateOption>>> {
         let input = QueryPartitionCreateOptionsRequestType {storage_type, diagnostic_type, };
-        let path = format!("/HostDiagnosticSystem/{moId}/QueryPartitionCreateOptions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostDiagnosticSystem", &self.mo_id, "QueryPartitionCreateOptions", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostDiagnosticPartitionCreateOption>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -186,20 +171,13 @@ impl HostDiagnosticSystem {
     /// active partition.
     pub async fn select_active_partition(&self, partition: Option<&crate::types::structs::HostScsiDiskPartition>) -> Result<()> {
         let input = SelectActivePartitionRequestType {partition, };
-        let path = format!("/HostDiagnosticSystem/{moId}/SelectActivePartition", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDiagnosticSystem", &self.mo_id, "SelectActivePartition", Some(&input)).await
     }
     /// The currently active diagnostic partition.
     pub async fn active_partition(&self) -> Result<Option<crate::types::structs::HostDiagnosticPartition>> {
-        let path = format!("/HostDiagnosticSystem/{moId}/activePartition", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostDiagnosticSystem", &self.mo_id, "activePartition").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostDiagnosticPartition>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

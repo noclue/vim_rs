@@ -21,25 +21,17 @@ impl SmsTask {
     ///
     /// TaskInfo
     pub async fn query_sms_task_info(&self) -> Result<crate::types::structs::SmsTaskInfo> {
-        let path = format!("/sms/SmsTask/{moId}/QuerySmsTaskInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::SmsTaskInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsTask", &self.mo_id, "QuerySmsTaskInfo", None).await?;
+        let result: crate::types::structs::SmsTaskInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the result of the task.
     /// 
     /// ***Required privileges:*** StorageViews.View
     pub async fn query_sms_task_result(&self) -> Result<Option<crate::types::vim_any::VimAny>> {
-        let path = format!("/sms/SmsTask/{moId}/QuerySmsTaskResult", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("sms", "SmsTask", &self.mo_id, "QuerySmsTaskResult", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::vim_any::VimAny>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

@@ -1,20 +1,25 @@
-// ────────────────────────────────────────────────────────────────
-//  examples/get_ip_from_inventory_path.rs
-// ────────────────────────────────────────────────────────────────
+//! # Resolve a VM by inventory path and read guest IP (`vim_retrievable!`)
+//!
+//! 1. Connect with the shared [`connect`](snippets::connect) helper.
+//! 2. Resolve `VM_INVENTORY_PATH` with [`SearchIndex::find_by_inventory_path`](vim_rs::mo::SearchIndex::find_by_inventory_path).
+//! 3. Fetch `guest.ip_address` through `vim_retrievable!` and [`ObjectRetriever`](vim_rs::core::pc_retrieve::ObjectRetriever).
+//!
+//! ## Environment
+//!
+//! - `VM_INVENTORY_PATH` — full path (e.g. `/Datacenter/vm/Folder/MyVM`)
+//!
+//! Guest IP requires VMware Tools (or equivalent) reporting the address; absence is not always an error.
 
 use std::env;
 
 use anyhow::{Context, Result};
 use log::{error, info};
-use utils::connect;
-
+use snippets::connect;
+use vim_rs::core::pc_retrieve::ObjectRetriever;
+use vim_rs::mo::SearchIndex;
+use vim_rs::types::structs::ManagedObjectReference;
 use vim_rs::vim_retrievable;
-use vim_rs::{
-    mo::SearchIndex, types::structs::ManagedObjectReference,
-};
 
-// Define a tiny struct that mirrors the `VirtualMachine` object but
-// only pulls back the `guest.ipAddress` property.
 vim_retrievable! {
     struct VmIpInfo: VirtualMachine {
         ip_address = "guest.ip_address",
@@ -26,16 +31,13 @@ async fn main() -> Result<()> {
     dotenvy::dotenv().ok();
     env_logger::init();
 
-    let client = connect("vm_ip_example", env!("CARGO_PKG_VERSION")).await?;
+    let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
     println!("Connected to {}", client.service_content().about.full_name);
-    info!("✅  Logged in");
+    info!("Logged in");
 
-    // ----- 2️⃣  Resolve inventory path ---------------------------------------
-    // Example path – replace with the one you want to query.
     let inv_path = env::var("VM_INVENTORY_PATH")
         .context("VM_INVENTORY_PATH env var not set (e.g., '/Datacenter/vm/Prod/YourVM')")?;
 
-    // The SearchIndex service is used for *FindByInventoryPath*.
     let search_index = SearchIndex::new(
         client.clone(),
         &client
@@ -57,14 +59,8 @@ async fn main() -> Result<()> {
     let vm_moref = vm_moref_opt.unwrap();
     info!("Found VM: {}", vm_moref.value);
 
-    // ----- 3️⃣  Property collector via vim_retrievable! ---------------------
-    // `ObjectRetriever` is a thin wrapper around the PropertyCollector
-    // that knows how to turn our `VmIpInfo` struct into a filter spec.
-    let retriever = vim_rs::core::pc_retrieve::ObjectRetriever::new(client.clone())?;
+    let retriever = ObjectRetriever::new(client.clone())?;
 
-    // Retrieve *one* VM – the macro expands to a tiny property filter that asks
-    // for `guest.ipAddress`.  The result is automatically deserialized into
-    // `VmIpInfo`.
     let vm_ip = retriever
         .retrieve_objects_from_list::<VmIpInfo>(&[vm_moref])
         .await?;

@@ -107,11 +107,8 @@ impl StoragePod {
     /// on the Folder.
     pub async fn add_standalone_host_task(&self, spec: &crate::types::structs::HostConnectSpec, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool, license: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddStandaloneHostRequestType {spec, comp_res_spec, add_connected, license, };
-        let path = format!("/StoragePod/{moId}/AddStandaloneHost_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "AddStandaloneHost_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Adds a set of new and existing hosts to the cluster.
@@ -168,11 +165,8 @@ impl StoragePod {
     /// Refers instance of *Task*.
     pub async fn batch_add_hosts_to_cluster_task(&self, cluster: &crate::types::structs::ManagedObjectReference, new_hosts: Option<&[crate::types::structs::FolderNewHostSpec]>, existing_hosts: Option<&[crate::types::structs::ManagedObjectReference]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, desired_state: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = BatchAddHostsToClusterRequestType {cluster, new_hosts, existing_hosts, comp_res_spec, desired_state, };
-        let path = format!("/StoragePod/{moId}/BatchAddHostsToCluster_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "BatchAddHostsToCluster_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Adds a list of hosts to inventory, as standalone hosts,
@@ -210,11 +204,8 @@ impl StoragePod {
     /// Refers instance of *Task*.
     pub async fn batch_add_standalone_hosts_task(&self, new_hosts: Option<&[crate::types::structs::FolderNewHostSpec]>, comp_res_spec: Option<&dyn crate::types::traits::ComputeResourceConfigSpecTrait>, add_connected: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = BatchAddStandaloneHostsRequestType {new_hosts, comp_res_spec, add_connected, };
-        let path = format!("/StoragePod/{moId}/BatchAddStandaloneHosts_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "BatchAddStandaloneHosts_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *Folder.CreateClusterEx*.
@@ -255,11 +246,8 @@ impl StoragePod {
     /// "ComputeResource" or "ClusterComputeResource".
     pub async fn create_cluster(&self, name: &str, spec: &crate::types::structs::ClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateClusterRequestType {name, spec, };
-        let path = format!("/StoragePod/{moId}/CreateCluster", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "CreateCluster", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new cluster compute resource in this folder.
@@ -298,11 +286,8 @@ impl StoragePod {
     /// "ComputeResource" or "ClusterComputeResource".
     pub async fn create_cluster_ex(&self, name: &str, spec: &crate::types::structs::ClusterConfigSpecEx) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateClusterExRequestType {name, spec, };
-        let path = format!("/StoragePod/{moId}/CreateClusterEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "CreateClusterEx", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new datacenter with the given name.
@@ -338,11 +323,8 @@ impl StoragePod {
     /// "Datacenter".
     pub async fn create_datacenter(&self, name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDatacenterRequestType {name, };
-        let path = format!("/StoragePod/{moId}/CreateDatacenter", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "CreateDatacenter", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create a *DistributedVirtualSwitch* in the folder according to the
@@ -376,11 +358,8 @@ impl StoragePod {
     /// (*DVSConfigInfo.extensionKey*).
     pub async fn create_dvs_task(&self, spec: &crate::types::structs::DvsCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDvsRequestType {spec, };
-        let path = format!("/StoragePod/{moId}/CreateDVS_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "CreateDVS_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new sub-folder with the specified name.
@@ -415,11 +394,8 @@ impl StoragePod {
     /// ***InvalidName***: if the name is not a valid entity name.
     pub async fn create_folder(&self, name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateFolderRequestType {name, };
-        let path = format!("/StoragePod/{moId}/CreateFolder", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "CreateFolder", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new storage pod in this folder.
@@ -452,11 +428,8 @@ impl StoragePod {
     /// "StoragePod".
     pub async fn create_storage_pod(&self, name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateStoragePodRequestType {name, };
-        let path = format!("/StoragePod/{moId}/CreateStoragePod", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "CreateStoragePod", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new virtual machine in the current folder and attaches it to the
@@ -580,11 +553,8 @@ impl StoragePod {
     /// user does not have Cryptographer.EncryptNew on the folder.
     pub async fn create_vm_task(&self, config: &crate::types::structs::VirtualMachineConfigSpec, pool: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVmRequestType {config, pool, host, };
-        let path = format!("/StoragePod/{moId}/CreateVM_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "CreateVM_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroys this object, deleting its contents and removing it from its parent
@@ -609,11 +579,8 @@ impl StoragePod {
     ///
     /// Failure
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/StoragePod/{moId}/Destroy_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "Destroy_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Moves a set of managed entities into this folder.
@@ -720,11 +687,8 @@ impl StoragePod {
     /// already registered to a host in the destination datacenter.
     pub async fn move_into_folder_task(&self, list: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveIntoFolderRequestType {list, };
-        let path = format!("/StoragePod/{moId}/MoveIntoFolder_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "MoveIntoFolder_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Adds an existing virtual machine to the folder.
@@ -824,11 +788,8 @@ impl StoragePod {
     /// the entities involved.
     pub async fn register_vm_task(&self, path: &str, name: Option<&str>, as_template: bool, pool: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterVmRequestType {path, name, as_template, pool, host, };
-        let path = format!("/StoragePod/{moId}/RegisterVM_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "RegisterVM_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reload the entity state.
@@ -846,9 +807,7 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn reload(&self) -> Result<()> {
-        let path = format!("/StoragePod/{moId}/Reload", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "StoragePod", &self.mo_id, "Reload", None).await
     }
     /// Renames this managed entity.
     /// 
@@ -878,11 +837,8 @@ impl StoragePod {
     /// ***InvalidName***: If the new name is not a valid entity name.
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
-        let path = format!("/StoragePod/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "Rename_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Assigns a value to a custom field.
@@ -901,9 +857,7 @@ impl StoragePod {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/StoragePod/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "StoragePod", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Recursively unregisters all virtual machines and vApps, and destroys
     /// all child virtual machine folders.
@@ -949,11 +903,8 @@ impl StoragePod {
     /// ***NotSupported***: if the *Folder.childType* property of the
     /// folder is not set to "VirtualMachine".
     pub async fn unregister_and_destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/StoragePod/{moId}/UnregisterAndDestroy_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StoragePod", &self.mo_id, "UnregisterAndDestroy_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Whether alarm actions are enabled for this entity.
@@ -962,14 +913,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let path = format!("/StoragePod/{moId}/alarmActionsEnabled", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "alarmActionsEnabled").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<bool>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -979,14 +925,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/StoragePod/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1000,14 +941,9 @@ impl StoragePod {
     ///
     /// Refers instances of *ManagedEntity*.
     pub async fn child_entity(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/StoragePod/{moId}/childEntity", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "childEntity").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1040,14 +976,9 @@ impl StoragePod {
     ///   
     /// ***Required privileges:*** System.View
     pub async fn child_type(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/StoragePod/{moId}/childType", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "childType").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1059,14 +990,9 @@ impl StoragePod {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let path = format!("/StoragePod/{moId}/configIssue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "configIssue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Event>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1095,25 +1021,18 @@ impl StoragePod {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/StoragePod/{moId}/configStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "configStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/StoragePod/{moId}/customValue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "customValue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1128,14 +1047,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/StoragePod/{moId}/declaredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "declaredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1209,14 +1123,9 @@ impl StoragePod {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/StoragePod/{moId}/disabledMethod", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "disabledMethod").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1224,14 +1133,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let path = format!("/StoragePod/{moId}/effectiveRole", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "effectiveRole").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1241,14 +1145,9 @@ impl StoragePod {
     /// 
     /// ***Since:*** vSphere API Release 9.0.0.0
     pub async fn externally_managed_folder_info(&self) -> Result<Option<crate::types::structs::FolderExternallyManagedFolderInfo>> {
-        let path = format!("/StoragePod/{moId}/externallyManagedFolderInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "externallyManagedFolderInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::FolderExternallyManagedFolderInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1262,11 +1161,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let path = format!("/StoragePod/{moId}/name", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "name").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The namespace with which the Folder is associated.
@@ -1278,14 +1175,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn namespace(&self) -> Result<Option<String>> {
-        let path = format!("/StoragePod/{moId}/namespace", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "namespace").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1310,11 +1202,9 @@ impl StoragePod {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/StoragePod/{moId}/overallStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "overallStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -1329,27 +1219,17 @@ impl StoragePod {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/StoragePod/{moId}/parent", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "parent").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let path = format!("/StoragePod/{moId}/permission", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "permission").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1357,14 +1237,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn pod_storage_drs_entry(&self) -> Result<Option<crate::types::structs::PodStorageDrsEntry>> {
-        let path = format!("/StoragePod/{moId}/podStorageDrsEntry", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "podStorageDrsEntry").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::PodStorageDrsEntry>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1394,14 +1269,9 @@ impl StoragePod {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/StoragePod/{moId}/recentTask", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "recentTask").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1409,14 +1279,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn summary(&self) -> Result<Option<crate::types::structs::StoragePodSummary>> {
-        let path = format!("/StoragePod/{moId}/summary", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "summary").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::StoragePodSummary>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1426,14 +1291,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let path = format!("/StoragePod/{moId}/tag", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "tag").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Tag>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1452,14 +1312,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/StoragePod/{moId}/triggeredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "triggeredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1471,14 +1326,9 @@ impl StoragePod {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/StoragePod/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "StoragePod", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

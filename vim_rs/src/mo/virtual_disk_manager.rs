@@ -110,11 +110,8 @@ impl VirtualDiskManager {
     /// ***InvalidDiskFormat***: if the destination's format is not supported.
     pub async fn copy_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&crate::types::structs::ManagedObjectReference>, dest_spec: Option<&dyn crate::types::traits::VirtualDiskSpecTrait>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CopyVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, dest_spec, force, };
-        let path = format!("/VirtualDiskManager/{moId}/CopyVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "CopyVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -160,11 +157,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn create_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, spec: &dyn crate::types::traits::VirtualDiskSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVirtualDiskRequestType {name, datacenter, spec, };
-        let path = format!("/VirtualDiskManager/{moId}/CreateVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "CreateVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -211,11 +205,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn defragment_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DefragmentVirtualDiskRequestType {name, datacenter, };
-        let path = format!("/VirtualDiskManager/{moId}/DefragmentVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "DefragmentVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -263,11 +254,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn delete_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeleteVirtualDiskRequestType {name, datacenter, };
-        let path = format!("/VirtualDiskManager/{moId}/DeleteVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "DeleteVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Explicitly zero out unaccessed parts zeroedthick disk.
@@ -311,11 +299,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn eager_zero_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EagerZeroVirtualDiskRequestType {name, datacenter, };
-        let path = format!("/VirtualDiskManager/{moId}/EagerZeroVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "EagerZeroVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -375,11 +360,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn extend_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, new_capacity_kb: i64, eager_zero: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendVirtualDiskRequestType {name, datacenter, new_capacity_kb, eager_zero, };
-        let path = format!("/VirtualDiskManager/{moId}/ExtendVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "ExtendVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Import an unmanaged-snapshot from Virtual-Volume(VVol) enabled
@@ -424,9 +406,7 @@ impl VirtualDiskManager {
     /// datastore.
     pub async fn import_unmanaged_snapshot(&self, vdisk: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, vvol_id: &str) -> Result<()> {
         let input = ImportUnmanagedSnapshotRequestType {vdisk, datacenter, vvol_id, };
-        let path = format!("/VirtualDiskManager/{moId}/ImportUnmanagedSnapshot", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualDiskManager", &self.mo_id, "ImportUnmanagedSnapshot", Some(&input)).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostInflateDisk_Task* instead.
@@ -471,11 +451,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn inflate_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InflateVirtualDiskRequestType {name, datacenter, };
-        let path = format!("/VirtualDiskManager/{moId}/InflateVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "InflateVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Move a virtual disk and all related files from the source location specified
@@ -540,11 +517,8 @@ impl VirtualDiskManager {
     /// or destination datastore.
     pub async fn move_virtual_disk_task(&self, source_name: &str, source_datacenter: Option<&crate::types::structs::ManagedObjectReference>, dest_name: &str, dest_datacenter: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveVirtualDiskRequestType {source_name, source_datacenter, dest_name, dest_datacenter, force, profile, };
-        let path = format!("/VirtualDiskManager/{moId}/MoveVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "MoveVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return the percentage of fragmentation of the sparse virtual disk.
@@ -587,11 +561,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn query_virtual_disk_fragmentation(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<i32> {
         let input = QueryVirtualDiskFragmentationRequestType {name, datacenter, };
-        let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskFragmentation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "QueryVirtualDiskFragmentation", Some(&input)).await?;
+        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the disk geometry information for the virtual disk.
@@ -628,11 +599,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn query_virtual_disk_geometry(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::HostDiskDimensionsChs> {
         let input = QueryVirtualDiskGeometryRequestType {name, datacenter, };
-        let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskGeometry", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostDiskDimensionsChs = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "QueryVirtualDiskGeometry", Some(&input)).await?;
+        let result: crate::types::structs::HostDiskDimensionsChs = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 6.5, use
@@ -674,11 +642,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn query_virtual_disk_uuid(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<String> {
         let input = QueryVirtualDiskUuidRequestType {name, datacenter, };
-        let path = format!("/VirtualDiskManager/{moId}/QueryVirtualDiskUuid", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "QueryVirtualDiskUuid", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Release a snapshot previously imported with importUnmanagedSnapshot
@@ -707,9 +672,7 @@ impl VirtualDiskManager {
     /// datastore.
     pub async fn release_managed_snapshot(&self, vdisk: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = ReleaseManagedSnapshotRequestType {vdisk, datacenter, };
-        let path = format!("/VirtualDiskManager/{moId}/ReleaseManagedSnapshot", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualDiskManager", &self.mo_id, "ReleaseManagedSnapshot", Some(&input)).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *HostVStorageObjectManager.HostRegisterDisk* to register
@@ -749,9 +712,7 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn set_virtual_disk_uuid(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: &str) -> Result<()> {
         let input = SetVirtualDiskUuidRequestType {name, datacenter, uuid, };
-        let path = format!("/VirtualDiskManager/{moId}/SetVirtualDiskUuid", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualDiskManager", &self.mo_id, "SetVirtualDiskUuid", Some(&input)).await
     }
     /// Deprecated as of vSphere 6.5, use
     /// *VirtualMachine.ShrinkDisk_Task* instead.
@@ -804,11 +765,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn shrink_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, copy: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ShrinkVirtualDiskRequestType {name, datacenter, copy, };
-        let path = format!("/VirtualDiskManager/{moId}/ShrinkVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "ShrinkVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Overwrite all blocks of the virtual disk with zeros.
@@ -851,11 +809,8 @@ impl VirtualDiskManager {
     /// ***InvalidDatastore***: if the operation cannot be performed on the datastore.
     pub async fn zero_fill_virtual_disk_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ZeroFillVirtualDiskRequestType {name, datacenter, };
-        let path = format!("/VirtualDiskManager/{moId}/ZeroFillVirtualDisk_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualDiskManager", &self.mo_id, "ZeroFillVirtualDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -123,8 +123,8 @@ impl miniserde::de::Map for ManagedObjectReferenceFields<'_> {
     fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
         match key {
             "_typeName" => Ok(<dyn miniserde::de::Visitor>::ignore()),
-            "type" => Ok(miniserde::Deserialize::begin(&mut self.f0)),
-            "value" => Ok(miniserde::Deserialize::begin(&mut self.f1)),
+            "type" | "@type" => Ok(miniserde::Deserialize::begin(&mut self.f0)),
+            "value" | "#text" => Ok(miniserde::Deserialize::begin(&mut self.f1)),
             _ => Ok(<dyn miniserde::de::Visitor>::ignore()),
         }
     }
@@ -557,7 +557,7 @@ impl AgencyConfigInfoFields<'_> {
     pub fn new() -> AgencyConfigInfoFields<'static> {
         AgencyConfigInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("AgencyScope") }),
             f2: None,
             f3: None,
             f4: None,
@@ -582,7 +582,7 @@ impl<'a> AgencyConfigInfoFields<'a> {
     fn with_output(out: &'a mut Option<AgencyConfigInfo>) -> Self {
         AgencyConfigInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("AgencyScope") }),
             f2: None,
             f3: None,
             f4: None,
@@ -1507,10 +1507,10 @@ impl AgentConfigInfoFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("AgentSslTrust") }),
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("AgentSslTrust") }),
             f8: None,
             f9: None,
             f10: None,
@@ -1531,10 +1531,10 @@ impl<'a> AgentConfigInfoFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("AgentSslTrust") }),
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("AgentSslTrust") }),
             f8: None,
             f9: None,
             f10: None,
@@ -25281,7 +25281,7 @@ impl SolutionsHookConfigFields<'_> {
     pub fn new() -> SolutionsHookConfigFields<'static> {
         SolutionsHookConfigFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("SolutionsHookAcknowledgeConfig") }),
             f2: None,
             __out: None,
         }
@@ -25292,7 +25292,7 @@ impl<'a> SolutionsHookConfigFields<'a> {
     fn with_output(out: &'a mut Option<SolutionsHookConfig>) -> Self {
         SolutionsHookConfigFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("SolutionsHookAcknowledgeConfig") }),
             f2: None,
             __out: Some(out),
         }
@@ -26116,7 +26116,7 @@ impl SolutionsSolutionConfigFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("SolutionsVMSource") }),
             f4: None,
             f5: None,
             f6: None,
@@ -26125,7 +26125,7 @@ impl SolutionsSolutionConfigFields<'_> {
             f9: None,
             f10: None,
             f11: None,
-            f12: None,
+            f12: Some(VimObjectHolder { out: None, default_type_name: Some("SolutionsTypeSpecificSolutionConfig") }),
             f13: None,
             f14: None,
             __out: None,
@@ -26139,7 +26139,7 @@ impl<'a> SolutionsSolutionConfigFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("SolutionsVMSource") }),
             f4: None,
             f5: None,
             f6: None,
@@ -26148,7 +26148,7 @@ impl<'a> SolutionsSolutionConfigFields<'a> {
             f9: None,
             f10: None,
             f11: None,
-            f12: None,
+            f12: Some(VimObjectHolder { out: None, default_type_name: Some("SolutionsTypeSpecificSolutionConfig") }),
             f13: None,
             f14: None,
             __out: Some(out),
@@ -30262,7 +30262,7 @@ impl PbmCapabilityPropertyMetadataFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityTypeInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -30277,7 +30277,7 @@ impl<'a> PbmCapabilityPropertyMetadataFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityTypeInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -30849,7 +30849,7 @@ impl PbmCapabilitySchemaFields<'_> {
         PbmCapabilitySchemaFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("PbmLineOfServiceInfo") }),
             f3: None,
             f4: None,
             __out: None,
@@ -30862,7 +30862,7 @@ impl<'a> PbmCapabilitySchemaFields<'a> {
         PbmCapabilitySchemaFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("PbmLineOfServiceInfo") }),
             f3: None,
             f4: None,
             __out: Some(out),
@@ -34202,7 +34202,7 @@ pub struct PbmPlacementCapabilityConstraintsRequirementFields<'a> {
 impl PbmPlacementCapabilityConstraintsRequirementFields<'_> {
     pub fn new() -> PbmPlacementCapabilityConstraintsRequirementFields<'static> {
         PbmPlacementCapabilityConstraintsRequirementFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             __out: None,
         }
     }
@@ -34211,7 +34211,7 @@ impl PbmPlacementCapabilityConstraintsRequirementFields<'_> {
 impl<'a> PbmPlacementCapabilityConstraintsRequirementFields<'a> {
     fn with_output(out: &'a mut Option<PbmPlacementCapabilityConstraintsRequirement>) -> Self {
         PbmPlacementCapabilityConstraintsRequirementFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             __out: Some(out),
         }
     }
@@ -34650,7 +34650,7 @@ impl PbmCapabilityProfileCreateSpecFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             __out: None,
         }
     }
@@ -34663,7 +34663,7 @@ impl<'a> PbmCapabilityProfileCreateSpecFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             __out: Some(out),
         }
     }
@@ -34807,7 +34807,7 @@ impl PbmCapabilityProfileUpdateSpecFields<'_> {
         PbmCapabilityProfileUpdateSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             __out: None,
         }
     }
@@ -34818,7 +34818,7 @@ impl<'a> PbmCapabilityProfileUpdateSpecFields<'a> {
         PbmCapabilityProfileUpdateSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             __out: Some(out),
         }
     }
@@ -35336,7 +35336,7 @@ impl PbmDefaultProfileInfoFields<'_> {
     pub fn new() -> PbmDefaultProfileInfoFields<'static> {
         PbmDefaultProfileInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("PbmProfile") }),
             f2: None,
             __out: None,
         }
@@ -35347,7 +35347,7 @@ impl<'a> PbmDefaultProfileInfoFields<'a> {
     fn with_output(out: &'a mut Option<PbmDefaultProfileInfo>) -> Self {
         PbmDefaultProfileInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("PbmProfile") }),
             f2: None,
             __out: Some(out),
         }
@@ -35771,7 +35771,7 @@ impl PbmCapabilityProfileFields<'_> {
             f6: None,
             f7: None,
             f8: None,
-            f9: None,
+            f9: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             f10: None,
             f11: None,
             f12: None,
@@ -35793,7 +35793,7 @@ impl<'a> PbmCapabilityProfileFields<'a> {
             f6: None,
             f7: None,
             f8: None,
-            f9: None,
+            f9: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             f10: None,
             f11: None,
             f12: None,
@@ -36020,7 +36020,7 @@ impl PbmDefaultCapabilityProfileFields<'_> {
             f6: None,
             f7: None,
             f8: None,
-            f9: None,
+            f9: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             f10: None,
             f11: None,
             f12: None,
@@ -36044,7 +36044,7 @@ impl<'a> PbmDefaultCapabilityProfileFields<'a> {
             f6: None,
             f7: None,
             f8: None,
-            f9: None,
+            f9: Some(VimObjectHolder { out: None, default_type_name: Some("PbmCapabilityConstraints") }),
             f10: None,
             f11: None,
             f12: None,
@@ -44753,7 +44753,7 @@ pub struct PolicyAssociationFields<'a> {
 impl PolicyAssociationFields<'_> {
     pub fn new() -> PolicyAssociationFields<'static> {
         PolicyAssociationFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f1: None,
             f2: None,
             __out: None,
@@ -44764,7 +44764,7 @@ impl PolicyAssociationFields<'_> {
 impl<'a> PolicyAssociationFields<'a> {
     fn with_output(out: &'a mut Option<PolicyAssociation>) -> Self {
         PolicyAssociationFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f1: None,
             f2: None,
             __out: Some(out),
@@ -45074,8 +45074,8 @@ impl RecoveredDeviceFields<'_> {
     pub fn new() -> RecoveredDeviceFields<'static> {
         RecoveredDeviceFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f3: None,
             f4: None,
             f5: None,
@@ -45090,8 +45090,8 @@ impl<'a> RecoveredDeviceFields<'a> {
     fn with_output(out: &'a mut Option<RecoveredDevice>) -> Self {
         RecoveredDeviceFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f3: None,
             f4: None,
             f5: None,
@@ -46789,7 +46789,7 @@ impl QueryReplicationGroupSuccessResultFields<'_> {
         QueryReplicationGroupSuccessResultFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("GroupInfo") }),
             __out: None,
         }
     }
@@ -46800,7 +46800,7 @@ impl<'a> QueryReplicationGroupSuccessResultFields<'a> {
         QueryReplicationGroupSuccessResultFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("GroupInfo") }),
             __out: Some(out),
         }
     }
@@ -48182,7 +48182,7 @@ pub struct QueryReplicationPeerResultFields<'a> {
 impl QueryReplicationPeerResultFields<'_> {
     pub fn new() -> QueryReplicationPeerResultFields<'static> {
         QueryReplicationPeerResultFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("FaultDomainId") }),
             f1: None,
             f2: None,
             f3: None,
@@ -48194,7 +48194,7 @@ impl QueryReplicationPeerResultFields<'_> {
 impl<'a> QueryReplicationPeerResultFields<'a> {
     fn with_output(out: &'a mut Option<QueryReplicationPeerResult>) -> Self {
         QueryReplicationPeerResultFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("FaultDomainId") }),
             f1: None,
             f2: None,
             f3: None,
@@ -48601,7 +48601,7 @@ pub struct SourceGroupMemberInfoFields<'a> {
 impl SourceGroupMemberInfoFields<'_> {
     pub fn new() -> SourceGroupMemberInfoFields<'static> {
         SourceGroupMemberInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f1: None,
             __out: None,
         }
@@ -48611,7 +48611,7 @@ impl SourceGroupMemberInfoFields<'_> {
 impl<'a> SourceGroupMemberInfoFields<'a> {
     fn with_output(out: &'a mut Option<SourceGroupMemberInfo>) -> Self {
         SourceGroupMemberInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f1: None,
             __out: Some(out),
         }
@@ -48729,7 +48729,7 @@ pub struct TargetDeviceIdFields<'a> {
 impl TargetDeviceIdFields<'_> {
     pub fn new() -> TargetDeviceIdFields<'static> {
         TargetDeviceIdFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("FaultDomainId") }),
             f1: None,
             __out: None,
         }
@@ -48739,7 +48739,7 @@ impl TargetDeviceIdFields<'_> {
 impl<'a> TargetDeviceIdFields<'a> {
     fn with_output(out: &'a mut Option<TargetDeviceId>) -> Self {
         TargetDeviceIdFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("FaultDomainId") }),
             f1: None,
             __out: Some(out),
         }
@@ -49008,7 +49008,7 @@ impl TargetGroupMemberInfoFields<'_> {
     pub fn new() -> TargetGroupMemberInfoFields<'static> {
         TargetGroupMemberInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f2: None,
             __out: None,
         }
@@ -49019,7 +49019,7 @@ impl<'a> TargetGroupMemberInfoFields<'a> {
     fn with_output(out: &'a mut Option<TargetGroupMemberInfo>) -> Self {
         TargetGroupMemberInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f2: None,
             __out: Some(out),
         }
@@ -49167,9 +49167,9 @@ impl RecoveredTargetGroupMemberInfoFields<'_> {
     pub fn new() -> RecoveredTargetGroupMemberInfoFields<'static> {
         RecoveredTargetGroupMemberInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             __out: None,
         }
     }
@@ -49179,9 +49179,9 @@ impl<'a> RecoveredTargetGroupMemberInfoFields<'a> {
     fn with_output(out: &'a mut Option<RecoveredTargetGroupMemberInfo>) -> Self {
         RecoveredTargetGroupMemberInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("DeviceId") }),
             __out: Some(out),
         }
     }
@@ -50333,7 +50333,7 @@ impl AuthorizationRoleFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f4: None,
             __out: None,
         }
@@ -50346,7 +50346,7 @@ impl<'a> AuthorizationRoleFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f4: None,
             __out: Some(out),
         }
@@ -52105,7 +52105,7 @@ impl ClusterComputeResourceHciConfigSpecFields<'_> {
         ClusterComputeResourceHciConfigSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("SDDCBase") }),
             f3: None,
             __out: None,
         }
@@ -52117,7 +52117,7 @@ impl<'a> ClusterComputeResourceHciConfigSpecFields<'a> {
         ClusterComputeResourceHciConfigSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("SDDCBase") }),
             f3: None,
             __out: Some(out),
         }
@@ -54258,7 +54258,7 @@ impl ClusterConfigInfoExFields<'_> {
             f11: None,
             f12: None,
             f13: None,
-            f14: None,
+            f14: Some(VimObjectHolder { out: None, default_type_name: Some("VsanClusterConfigInfo") }),
             f15: None,
             f16: None,
             f17: None,
@@ -54287,7 +54287,7 @@ impl<'a> ClusterConfigInfoExFields<'a> {
             f11: None,
             f12: None,
             f13: None,
-            f14: None,
+            f14: Some(VimObjectHolder { out: None, default_type_name: Some("VsanClusterConfigInfo") }),
             f15: None,
             f16: None,
             f17: None,
@@ -55184,7 +55184,7 @@ impl ClusterConfigSpecExFields<'_> {
             f16: None,
             f17: None,
             f18: None,
-            f19: None,
+            f19: Some(VimObjectHolder { out: None, default_type_name: Some("VsanClusterConfigInfo") }),
             f20: None,
             f21: None,
             f22: None,
@@ -55219,7 +55219,7 @@ impl<'a> ClusterConfigSpecExFields<'a> {
             f16: None,
             f17: None,
             f18: None,
-            f19: None,
+            f19: Some(VimObjectHolder { out: None, default_type_name: Some("VsanClusterConfigInfo") }),
             f20: None,
             f21: None,
             f22: None,
@@ -56211,7 +56211,7 @@ impl ClusterComputeResourceSummaryFields<'_> {
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasAdmissionControlInfo") }),
             f11: None,
             f12: None,
             f13: None,
@@ -56220,7 +56220,7 @@ impl ClusterComputeResourceSummaryFields<'_> {
             f16: None,
             f17: None,
             f18: None,
-            f19: None,
+            f19: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasData") }),
             f20: None,
             f21: None,
             f22: None,
@@ -56242,7 +56242,7 @@ impl<'a> ClusterComputeResourceSummaryFields<'a> {
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasAdmissionControlInfo") }),
             f11: None,
             f12: None,
             f13: None,
@@ -56251,7 +56251,7 @@ impl<'a> ClusterComputeResourceSummaryFields<'a> {
             f16: None,
             f17: None,
             f18: None,
-            f19: None,
+            f19: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasData") }),
             f20: None,
             f21: None,
             f22: None,
@@ -61543,7 +61543,7 @@ impl OptionDefFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("OptionType") }),
             __out: None,
         }
     }
@@ -61555,7 +61555,7 @@ impl<'a> OptionDefFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("OptionType") }),
             __out: Some(out),
         }
     }
@@ -63213,7 +63213,7 @@ impl DiagnosticManagerLogDescriptorFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             __out: None,
         }
     }
@@ -63227,7 +63227,7 @@ impl<'a> DiagnosticManagerLogDescriptorFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             __out: Some(out),
         }
     }
@@ -63590,7 +63590,7 @@ pub struct DirectPathProfileManagerCapacityQueryByDeviceConfigFields<'a> {
 impl DirectPathProfileManagerCapacityQueryByDeviceConfigFields<'_> {
     pub fn new() -> DirectPathProfileManagerCapacityQueryByDeviceConfigFields<'static> {
         DirectPathProfileManagerCapacityQueryByDeviceConfigFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DirectPathProfileManagerDirectPathConfig") }),
             __out: None,
         }
     }
@@ -63599,7 +63599,7 @@ impl DirectPathProfileManagerCapacityQueryByDeviceConfigFields<'_> {
 impl<'a> DirectPathProfileManagerCapacityQueryByDeviceConfigFields<'a> {
     fn with_output(out: &'a mut Option<DirectPathProfileManagerCapacityQueryByDeviceConfig>) -> Self {
         DirectPathProfileManagerCapacityQueryByDeviceConfigFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DirectPathProfileManagerDirectPathConfig") }),
             __out: Some(out),
         }
     }
@@ -64232,7 +64232,7 @@ pub struct DirectPathProfileManagerCapacityUnknownFields<'a> {
 impl DirectPathProfileManagerCapacityUnknownFields<'_> {
     pub fn new() -> DirectPathProfileManagerCapacityUnknownFields<'static> {
         DirectPathProfileManagerCapacityUnknownFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DirectPathProfileManagerCapacityQuerySpec") }),
             f1: None,
             __out: None,
         }
@@ -64242,7 +64242,7 @@ impl DirectPathProfileManagerCapacityUnknownFields<'_> {
 impl<'a> DirectPathProfileManagerCapacityUnknownFields<'a> {
     fn with_output(out: &'a mut Option<DirectPathProfileManagerCapacityUnknown>) -> Self {
         DirectPathProfileManagerCapacityUnknownFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DirectPathProfileManagerCapacityQuerySpec") }),
             f1: None,
             __out: Some(out),
         }
@@ -64383,7 +64383,7 @@ impl DirectPathProfileManagerCreateSpecFields<'_> {
         DirectPathProfileManagerCreateSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("DirectPathProfileManagerDirectPathConfig") }),
             __out: None,
         }
     }
@@ -64394,7 +64394,7 @@ impl<'a> DirectPathProfileManagerCreateSpecFields<'a> {
         DirectPathProfileManagerCreateSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("DirectPathProfileManagerDirectPathConfig") }),
             __out: Some(out),
         }
     }
@@ -65151,7 +65151,7 @@ impl DirectPathProfileInfoFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DirectPathProfileManagerDirectPathConfig") }),
             __out: None,
         }
     }
@@ -65164,7 +65164,7 @@ impl<'a> DirectPathProfileInfoFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DirectPathProfileManagerDirectPathConfig") }),
             __out: Some(out),
         }
     }
@@ -66121,7 +66121,7 @@ impl DvsCapabilityFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DVSFeatureCapability") }),
             __out: None,
         }
     }
@@ -66134,7 +66134,7 @@ impl<'a> DvsCapabilityFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DVSFeatureCapability") }),
             __out: Some(out),
         }
     }
@@ -66443,9 +66443,9 @@ impl DvsConfigInfoFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSUplinkPortPolicy") }),
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f8: None,
             f9: None,
             f10: None,
@@ -66478,9 +66478,9 @@ impl<'a> DvsConfigInfoFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSUplinkPortPolicy") }),
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f8: None,
             f9: None,
             f10: None,
@@ -66899,9 +66899,9 @@ impl VMwareDvsConfigInfoFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSUplinkPortPolicy") }),
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f8: None,
             f9: None,
             f10: None,
@@ -66945,9 +66945,9 @@ impl<'a> VMwareDvsConfigInfoFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSUplinkPortPolicy") }),
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f8: None,
             f9: None,
             f10: None,
@@ -67395,9 +67395,9 @@ impl DvsConfigSpecFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSUplinkPortPolicy") }),
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f8: None,
             f9: None,
             f10: None,
@@ -67422,9 +67422,9 @@ impl<'a> DvsConfigSpecFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSUplinkPortPolicy") }),
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f8: None,
             f9: None,
             f10: None,
@@ -67842,9 +67842,9 @@ impl VMwareDvsConfigSpecFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSUplinkPortPolicy") }),
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f8: None,
             f9: None,
             f10: None,
@@ -67879,9 +67879,9 @@ impl<'a> VMwareDvsConfigSpecFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSUplinkPortPolicy") }),
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f8: None,
             f9: None,
             f10: None,
@@ -68264,7 +68264,7 @@ pub struct DvsCreateSpecFields<'a> {
 impl DvsCreateSpecFields<'_> {
     pub fn new() -> DvsCreateSpecFields<'static> {
         DvsCreateSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DVSConfigSpec") }),
             f1: None,
             f2: None,
             __out: None,
@@ -68275,7 +68275,7 @@ impl DvsCreateSpecFields<'_> {
 impl<'a> DvsCreateSpecFields<'a> {
     fn with_output(out: &'a mut Option<DvsCreateSpec>) -> Self {
         DvsCreateSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DVSConfigSpec") }),
             f1: None,
             f2: None,
             __out: Some(out),
@@ -68524,7 +68524,7 @@ impl DvsFeatureCapabilityFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSHealthCheckCapability") }),
             f6: None,
             f7: None,
             f8: None,
@@ -68542,7 +68542,7 @@ impl<'a> DvsFeatureCapabilityFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSHealthCheckCapability") }),
             f6: None,
             f7: None,
             f8: None,
@@ -68860,7 +68860,7 @@ impl VMwareDvsFeatureCapabilityFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSHealthCheckCapability") }),
             f6: None,
             f7: None,
             f8: None,
@@ -68889,7 +68889,7 @@ impl<'a> VMwareDvsFeatureCapabilityFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVSHealthCheckCapability") }),
             f6: None,
             f7: None,
             f8: None,
@@ -71939,7 +71939,7 @@ pub struct ExtensionFields<'a> {
 impl ExtensionFields<'_> {
     pub fn new() -> ExtensionFields<'static> {
         ExtensionFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f1: None,
             f2: None,
             f3: None,
@@ -71967,7 +71967,7 @@ impl ExtensionFields<'_> {
 impl<'a> ExtensionFields<'a> {
     fn with_output(out: &'a mut Option<Extension>) -> Self {
         ExtensionFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f1: None,
             f2: None,
             f3: None,
@@ -72170,7 +72170,7 @@ impl ExtensionClientInfoFields<'_> {
     pub fn new() -> ExtensionClientInfoFields<'static> {
         ExtensionClientInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f2: None,
             f3: None,
             f4: None,
@@ -72183,7 +72183,7 @@ impl<'a> ExtensionClientInfoFields<'a> {
     fn with_output(out: &'a mut Option<ExtensionClientInfo>) -> Self {
         ExtensionClientInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f2: None,
             f3: None,
             f4: None,
@@ -73161,7 +73161,7 @@ impl ExtensionServerInfoFields<'_> {
     pub fn new() -> ExtensionServerInfoFields<'static> {
         ExtensionServerInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f2: None,
             f3: None,
             f4: None,
@@ -73176,7 +73176,7 @@ impl<'a> ExtensionServerInfoFields<'a> {
     fn with_output(out: &'a mut Option<ExtensionServerInfo>) -> Self {
         ExtensionServerInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f2: None,
             f3: None,
             f4: None,
@@ -86278,7 +86278,7 @@ pub struct LicenseUsageInfoFields<'a> {
 impl LicenseUsageInfoFields<'_> {
     pub fn new() -> LicenseUsageInfoFields<'static> {
         LicenseUsageInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("LicenseSource") }),
             f1: None,
             f2: None,
             f3: None,
@@ -86290,7 +86290,7 @@ impl LicenseUsageInfoFields<'_> {
 impl<'a> LicenseUsageInfoFields<'a> {
     fn with_output(out: &'a mut Option<LicenseUsageInfo>) -> Self {
         LicenseUsageInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("LicenseSource") }),
             f1: None,
             f2: None,
             f3: None,
@@ -91158,7 +91158,7 @@ pub struct OvfCreateImportSpecResultFields<'a> {
 impl OvfCreateImportSpecResultFields<'_> {
     pub fn new() -> OvfCreateImportSpecResultFields<'static> {
         OvfCreateImportSpecResultFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ImportSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -91170,7 +91170,7 @@ impl OvfCreateImportSpecResultFields<'_> {
 impl<'a> OvfCreateImportSpecResultFields<'a> {
     fn with_output(out: &'a mut Option<OvfCreateImportSpecResult>) -> Self {
         OvfCreateImportSpecResultFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ImportSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -93436,7 +93436,7 @@ pub struct PerfCompositeMetricFields<'a> {
 impl PerfCompositeMetricFields<'_> {
     pub fn new() -> PerfCompositeMetricFields<'static> {
         PerfCompositeMetricFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("PerfEntityMetricBase") }),
             f1: None,
             __out: None,
         }
@@ -93446,7 +93446,7 @@ impl PerfCompositeMetricFields<'_> {
 impl<'a> PerfCompositeMetricFields<'a> {
     fn with_output(out: &'a mut Option<PerfCompositeMetric>) -> Self {
         PerfCompositeMetricFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("PerfEntityMetricBase") }),
             f1: None,
             __out: Some(out),
         }
@@ -93654,9 +93654,9 @@ impl PerfCounterInfoFields<'_> {
     pub fn new() -> PerfCounterInfoFields<'static> {
         PerfCounterInfoFields {
             f0: None,
-            f1: None,
-            f2: None,
-            f3: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f4: None,
             f5: None,
             f6: None,
@@ -93671,9 +93671,9 @@ impl<'a> PerfCounterInfoFields<'a> {
     fn with_output(out: &'a mut Option<PerfCounterInfo>) -> Self {
         PerfCounterInfoFields {
             f0: None,
-            f1: None,
-            f2: None,
-            f3: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f4: None,
             f5: None,
             f6: None,
@@ -98414,8 +98414,8 @@ pub struct VimVsanReconfigSpecFields<'a> {
 impl VimVsanReconfigSpecFields<'_> {
     pub fn new() -> VimVsanReconfigSpecFields<'static> {
         VimVsanReconfigSpecFields {
-            f0: None,
-            f1: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanClusterConfigInfo") }),
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f2: None,
             f3: None,
             f4: None,
@@ -98424,7 +98424,7 @@ impl VimVsanReconfigSpecFields<'_> {
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDatastoreConfig") }),
             f11: None,
             f12: None,
             f13: None,
@@ -98447,8 +98447,8 @@ impl VimVsanReconfigSpecFields<'_> {
 impl<'a> VimVsanReconfigSpecFields<'a> {
     fn with_output(out: &'a mut Option<VimVsanReconfigSpec>) -> Self {
         VimVsanReconfigSpecFields {
-            f0: None,
-            f1: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanClusterConfigInfo") }),
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f2: None,
             f3: None,
             f4: None,
@@ -98457,7 +98457,7 @@ impl<'a> VimVsanReconfigSpecFields<'a> {
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDatastoreConfig") }),
             f11: None,
             f12: None,
             f13: None,
@@ -100189,7 +100189,7 @@ impl ServiceLocatorFields<'_> {
         ServiceLocatorFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ServiceLocatorCredential") }),
             f3: None,
             f4: None,
             __out: None,
@@ -100202,7 +100202,7 @@ impl<'a> ServiceLocatorFields<'a> {
         ServiceLocatorFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ServiceLocatorCredential") }),
             f3: None,
             f4: None,
             __out: Some(out),
@@ -104621,7 +104621,7 @@ impl TaskInfoFields<'_> {
             f12: None,
             f13: None,
             f14: None,
-            f15: None,
+            f15: Some(VimObjectHolder { out: None, default_type_name: Some("TaskReason") }),
             f16: None,
             f17: None,
             f18: None,
@@ -104653,7 +104653,7 @@ impl<'a> TaskInfoFields<'a> {
             f12: None,
             f13: None,
             f14: None,
-            f15: None,
+            f15: Some(VimObjectHolder { out: None, default_type_name: Some("TaskReason") }),
             f16: None,
             f17: None,
             f18: None,
@@ -108828,7 +108828,7 @@ impl FileBackedVirtualDiskSpecFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             f5: None,
             __out: None,
         }
@@ -108842,7 +108842,7 @@ impl<'a> FileBackedVirtualDiskSpecFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             f5: None,
             __out: Some(out),
         }
@@ -109027,7 +109027,7 @@ impl SeSparseVirtualDiskSpecFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             f5: None,
             f6: None,
             __out: None,
@@ -109042,7 +109042,7 @@ impl<'a> SeSparseVirtualDiskSpecFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             f5: None,
             f6: None,
             __out: Some(out),
@@ -111012,7 +111012,7 @@ pub struct VsanJsonFilterRuleFields<'a> {
 impl VsanJsonFilterRuleFields<'_> {
     pub fn new() -> VsanJsonFilterRuleFields<'static> {
         VsanJsonFilterRuleFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanComparator") }),
             f1: None,
             f2: None,
             f3: None,
@@ -111024,7 +111024,7 @@ impl VsanJsonFilterRuleFields<'_> {
 impl<'a> VsanJsonFilterRuleFields<'a> {
     fn with_output(out: &'a mut Option<VsanJsonFilterRule>) -> Self {
         VsanJsonFilterRuleFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanComparator") }),
             f1: None,
             f2: None,
             f3: None,
@@ -111621,7 +111621,7 @@ impl VsanMassCollectorSpecFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VsanResourceConstraint") }),
             __out: None,
         }
     }
@@ -111634,7 +111634,7 @@ impl<'a> VsanMassCollectorSpecFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VsanResourceConstraint") }),
             __out: Some(out),
         }
     }
@@ -116903,7 +116903,7 @@ impl VsanUpgradeSystemUpgradeHistoryPreflightFailFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VsanUpgradeSystemPreflightCheckResult") }),
             __out: None,
         }
     }
@@ -116916,7 +116916,7 @@ impl<'a> VsanUpgradeSystemUpgradeHistoryPreflightFailFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VsanUpgradeSystemPreflightCheckResult") }),
             __out: Some(out),
         }
     }
@@ -118590,7 +118590,7 @@ pub struct AlarmTriggeringActionFields<'a> {
 impl AlarmTriggeringActionFields<'_> {
     pub fn new() -> AlarmTriggeringActionFields<'static> {
         AlarmTriggeringActionFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("Action") }),
             f1: None,
             f2: None,
             f3: None,
@@ -118604,7 +118604,7 @@ impl AlarmTriggeringActionFields<'_> {
 impl<'a> AlarmTriggeringActionFields<'a> {
     fn with_output(out: &'a mut Option<AlarmTriggeringAction>) -> Self {
         AlarmTriggeringActionFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("Action") }),
             f1: None,
             f2: None,
             f3: None,
@@ -120328,8 +120328,8 @@ impl AlarmSpecFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
-            f5: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("AlarmExpression") }),
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("AlarmAction") }),
             f6: None,
             f7: None,
             __out: None,
@@ -120344,8 +120344,8 @@ impl<'a> AlarmSpecFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
-            f5: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("AlarmExpression") }),
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("AlarmAction") }),
             f6: None,
             f7: None,
             __out: Some(out),
@@ -120553,8 +120553,8 @@ impl AlarmInfoFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
-            f5: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("AlarmExpression") }),
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("AlarmAction") }),
             f6: None,
             f7: None,
             f8: None,
@@ -120575,8 +120575,8 @@ impl<'a> AlarmInfoFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
-            f5: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("AlarmExpression") }),
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("AlarmAction") }),
             f6: None,
             f7: None,
             f8: None,
@@ -123435,7 +123435,7 @@ pub struct ClusterActionHistoryFields<'a> {
 impl ClusterActionHistoryFields<'_> {
     pub fn new() -> ClusterActionHistoryFields<'static> {
         ClusterActionHistoryFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterAction") }),
             f1: None,
             __out: None,
         }
@@ -123445,7 +123445,7 @@ impl ClusterActionHistoryFields<'_> {
 impl<'a> ClusterActionHistoryFields<'a> {
     fn with_output(out: &'a mut Option<ClusterActionHistory>) -> Self {
         ClusterActionHistoryFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterAction") }),
             f1: None,
             __out: Some(out),
         }
@@ -125475,7 +125475,7 @@ impl ClusterFailoverLevelAdmissionControlPolicyFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterSlotPolicy") }),
             __out: None,
         }
     }
@@ -125487,7 +125487,7 @@ impl<'a> ClusterFailoverLevelAdmissionControlPolicyFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterSlotPolicy") }),
             __out: Some(out),
         }
     }
@@ -125908,7 +125908,7 @@ pub struct ClusterDasAdvancedRuntimeInfoFields<'a> {
 impl ClusterDasAdvancedRuntimeInfoFields<'_> {
     pub fn new() -> ClusterDasAdvancedRuntimeInfoFields<'static> {
         ClusterDasAdvancedRuntimeInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasHostInfo") }),
             f1: None,
             f2: None,
             __out: None,
@@ -125919,7 +125919,7 @@ impl ClusterDasAdvancedRuntimeInfoFields<'_> {
 impl<'a> ClusterDasAdvancedRuntimeInfoFields<'a> {
     fn with_output(out: &'a mut Option<ClusterDasAdvancedRuntimeInfo>) -> Self {
         ClusterDasAdvancedRuntimeInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasHostInfo") }),
             f1: None,
             f2: None,
             __out: Some(out),
@@ -126128,7 +126128,7 @@ pub struct ClusterDasFailoverLevelAdvancedRuntimeInfoFields<'a> {
 impl ClusterDasFailoverLevelAdvancedRuntimeInfoFields<'_> {
     pub fn new() -> ClusterDasFailoverLevelAdvancedRuntimeInfoFields<'static> {
         ClusterDasFailoverLevelAdvancedRuntimeInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasHostInfo") }),
             f1: None,
             f2: None,
             f3: None,
@@ -126148,7 +126148,7 @@ impl ClusterDasFailoverLevelAdvancedRuntimeInfoFields<'_> {
 impl<'a> ClusterDasFailoverLevelAdvancedRuntimeInfoFields<'a> {
     fn with_output(out: &'a mut Option<ClusterDasFailoverLevelAdvancedRuntimeInfo>) -> Self {
         ClusterDasFailoverLevelAdvancedRuntimeInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasHostInfo") }),
             f1: None,
             f2: None,
             f3: None,
@@ -126767,7 +126767,7 @@ impl ClusterDasConfigInfoFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasAdmissionControlPolicy") }),
             f6: None,
             f7: None,
             f8: None,
@@ -126786,7 +126786,7 @@ impl<'a> ClusterDasConfigInfoFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterDasAdmissionControlPolicy") }),
             f6: None,
             f7: None,
             f8: None,
@@ -140015,7 +140015,7 @@ pub struct VsanClusterConfigFields<'a> {
 impl VsanClusterConfigFields<'_> {
     pub fn new() -> VsanClusterConfigFields<'static> {
         VsanClusterConfigFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanClusterConfigInfo") }),
             f1: None,
             f2: None,
             f3: None,
@@ -140027,7 +140027,7 @@ impl VsanClusterConfigFields<'_> {
 impl<'a> VsanClusterConfigFields<'a> {
     fn with_output(out: &'a mut Option<VsanClusterConfig>) -> Self {
         VsanClusterConfigFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanClusterConfigInfo") }),
             f1: None,
             f2: None,
             f3: None,
@@ -147273,7 +147273,7 @@ pub struct VsanDiskFormatConversionSpecFields<'a> {
 impl VsanDiskFormatConversionSpecFields<'_> {
     pub fn new() -> VsanDiskFormatConversionSpecFields<'static> {
         VsanDiskFormatConversionSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f1: None,
             f2: None,
             f3: None,
@@ -147285,7 +147285,7 @@ impl VsanDiskFormatConversionSpecFields<'_> {
 impl<'a> VsanDiskFormatConversionSpecFields<'a> {
     fn with_output(out: &'a mut Option<VsanDiskFormatConversionSpec>) -> Self {
         VsanDiskFormatConversionSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f1: None,
             f2: None,
             f3: None,
@@ -151277,7 +151277,7 @@ pub struct VsanIscsiHomeObjectSpecFields<'a> {
 impl VsanIscsiHomeObjectSpecFields<'_> {
     pub fn new() -> VsanIscsiHomeObjectSpecFields<'static> {
         VsanIscsiHomeObjectSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f1: None,
             __out: None,
         }
@@ -151287,7 +151287,7 @@ impl VsanIscsiHomeObjectSpecFields<'_> {
 impl<'a> VsanIscsiHomeObjectSpecFields<'a> {
     fn with_output(out: &'a mut Option<VsanIscsiHomeObjectSpec>) -> Self {
         VsanIscsiHomeObjectSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f1: None,
             __out: Some(out),
         }
@@ -151957,7 +151957,7 @@ impl VsanIscsiLunSpecFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f5: None,
             __out: None,
         }
@@ -151971,7 +151971,7 @@ impl<'a> VsanIscsiLunSpecFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f5: None,
             __out: Some(out),
         }
@@ -152933,7 +152933,7 @@ impl VsanIscsiTargetSpecFields<'_> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f7: None,
             __out: None,
         }
@@ -152949,7 +152949,7 @@ impl<'a> VsanIscsiTargetSpecFields<'a> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f7: None,
             __out: Some(out),
         }
@@ -153295,7 +153295,7 @@ impl VsanIscsiTargetServiceSpecFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             __out: None,
         }
     }
@@ -153307,7 +153307,7 @@ impl<'a> VsanIscsiTargetServiceSpecFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             __out: Some(out),
         }
     }
@@ -158785,7 +158785,7 @@ impl VsanPerfsvcConfigFields<'_> {
     pub fn new() -> VsanPerfsvcConfigFields<'static> {
         VsanPerfsvcConfigFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f2: None,
             f3: None,
             __out: None,
@@ -158797,7 +158797,7 @@ impl<'a> VsanPerfsvcConfigFields<'a> {
     fn with_output(out: &'a mut Option<VsanPerfsvcConfig>) -> Self {
         VsanPerfsvcConfigFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f2: None,
             f3: None,
             __out: Some(out),
@@ -161363,7 +161363,7 @@ impl VsanWhatifCapacityFields<'_> {
         VsanWhatifCapacityFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f3: None,
             __out: None,
         }
@@ -161375,7 +161375,7 @@ impl<'a> VsanWhatifCapacityFields<'a> {
         VsanWhatifCapacityFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f3: None,
             __out: Some(out),
         }
@@ -165401,7 +165401,7 @@ impl CnsVolumeFields<'_> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("CnsBackingObjectDetails") }),
             f7: None,
             f8: None,
             f9: None,
@@ -165419,7 +165419,7 @@ impl<'a> CnsVolumeFields<'a> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("CnsBackingObjectDetails") }),
             f7: None,
             f8: None,
             f9: None,
@@ -165911,10 +165911,10 @@ impl CnsVolumeCreateSpecFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("CnsBackingObjectDetails") }),
             f5: None,
-            f6: None,
-            f7: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("CnsBaseCreateSpec") }),
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("CnsVolumeSource") }),
             __out: None,
         }
     }
@@ -165927,10 +165927,10 @@ impl<'a> CnsVolumeCreateSpecFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("CnsBackingObjectDetails") }),
             f5: None,
-            f6: None,
-            f7: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("CnsBaseCreateSpec") }),
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("CnsVolumeSource") }),
             __out: Some(out),
         }
     }
@@ -168404,7 +168404,7 @@ impl DvPortConfigInfoFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f4: None,
             __out: None,
         }
@@ -168417,7 +168417,7 @@ impl<'a> DvPortConfigInfoFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f4: None,
             __out: Some(out),
         }
@@ -168598,7 +168598,7 @@ impl DvPortConfigSpecFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f6: None,
             __out: None,
         }
@@ -168613,7 +168613,7 @@ impl<'a> DvPortConfigSpecFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f6: None,
             __out: Some(out),
         }
@@ -168883,7 +168883,7 @@ impl DvsHostLocalPortInfoFields<'_> {
         DvsHostLocalPortInfoFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f3: None,
             __out: None,
         }
@@ -168895,7 +168895,7 @@ impl<'a> DvsHostLocalPortInfoFields<'a> {
         DvsHostLocalPortInfoFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f3: None,
             __out: Some(out),
         }
@@ -169694,7 +169694,7 @@ impl VMwareDvsPortSettingFields<'_> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("VmwareDistributedVirtualSwitchVlanSpec") }),
             f8: None,
             f9: None,
             f10: None,
@@ -169718,7 +169718,7 @@ impl<'a> VMwareDvsPortSettingFields<'a> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("VmwareDistributedVirtualSwitchVlanSpec") }),
             f8: None,
             f9: None,
             f10: None,
@@ -170227,11 +170227,11 @@ impl DvPortgroupConfigInfoFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f5: None,
             f6: None,
             f7: None,
-            f8: None,
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortgroupPolicy") }),
             f9: None,
             f10: None,
             f11: None,
@@ -170256,11 +170256,11 @@ impl<'a> DvPortgroupConfigInfoFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f5: None,
             f6: None,
             f7: None,
-            f8: None,
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortgroupPolicy") }),
             f9: None,
             f10: None,
             f11: None,
@@ -170643,12 +170643,12 @@ impl DvPortgroupConfigSpecFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f6: None,
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortgroupPolicy") }),
             f11: None,
             f12: None,
             f13: None,
@@ -170670,12 +170670,12 @@ impl<'a> DvPortgroupConfigSpecFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortSetting") }),
             f6: None,
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("DVPortgroupPolicy") }),
             f11: None,
             f12: None,
             f13: None,
@@ -175128,7 +175128,7 @@ impl DistributedVirtualSwitchHostMemberConfigInfoFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("DistributedVirtualSwitchHostMemberBacking") }),
             f4: None,
             f5: None,
             f6: None,
@@ -175146,7 +175146,7 @@ impl<'a> DistributedVirtualSwitchHostMemberConfigInfoFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("DistributedVirtualSwitchHostMemberBacking") }),
             f4: None,
             f5: None,
             f6: None,
@@ -175344,7 +175344,7 @@ impl DistributedVirtualSwitchHostMemberConfigSpecFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("DistributedVirtualSwitchHostMemberBacking") }),
             f4: None,
             f5: None,
             __out: None,
@@ -175358,7 +175358,7 @@ impl<'a> DistributedVirtualSwitchHostMemberConfigSpecFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("DistributedVirtualSwitchHostMemberBacking") }),
             f4: None,
             f5: None,
             __out: Some(out),
@@ -179155,7 +179155,7 @@ impl DvsTrafficRuleFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DvsNetworkRuleAction") }),
             f5: None,
             __out: None,
         }
@@ -179169,7 +179169,7 @@ impl<'a> DvsTrafficRuleFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DvsNetworkRuleAction") }),
             f5: None,
             __out: Some(out),
         }
@@ -180667,11 +180667,11 @@ impl DvsIpNetworkRuleQualifierFields<'_> {
     pub fn new() -> DvsIpNetworkRuleQualifierFields<'static> {
         DvsIpNetworkRuleQualifierFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("IpAddress") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("IpAddress") }),
             f3: None,
-            f4: None,
-            f5: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DvsIpPort") }),
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DvsIpPort") }),
             f6: None,
             __out: None,
         }
@@ -180682,11 +180682,11 @@ impl<'a> DvsIpNetworkRuleQualifierFields<'a> {
     fn with_output(out: &'a mut Option<DvsIpNetworkRuleQualifier>) -> Self {
         DvsIpNetworkRuleQualifierFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("IpAddress") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("IpAddress") }),
             f3: None,
-            f4: None,
-            f5: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("DvsIpPort") }),
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("DvsIpPort") }),
             f6: None,
             __out: Some(out),
         }
@@ -180899,8 +180899,8 @@ impl DvsMacNetworkRuleQualifierFields<'_> {
     pub fn new() -> DvsMacNetworkRuleQualifierFields<'static> {
         DvsMacNetworkRuleQualifierFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("MacAddress") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("MacAddress") }),
             f3: None,
             f4: None,
             __out: None,
@@ -180912,8 +180912,8 @@ impl<'a> DvsMacNetworkRuleQualifierFields<'a> {
     fn with_output(out: &'a mut Option<DvsMacNetworkRuleQualifier>) -> Self {
         DvsMacNetworkRuleQualifierFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("MacAddress") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("MacAddress") }),
             f3: None,
             f4: None,
             __out: Some(out),
@@ -186656,7 +186656,7 @@ impl CryptoManagerKmipCryptoKeyStatusFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoManagerKmipCryptoKeyStatusKeyInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -186671,7 +186671,7 @@ impl<'a> CryptoManagerKmipCryptoKeyStatusFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoManagerKmipCryptoKeyStatusKeyInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -188805,7 +188805,7 @@ impl KmipClusterInfoFields<'_> {
             f6: None,
             f7: None,
             f8: None,
-            f9: None,
+            f9: Some(VimObjectHolder { out: None, default_type_name: Some("KmipClusterInfoKeyInfo") }),
             __out: None,
         }
     }
@@ -188823,7 +188823,7 @@ impl<'a> KmipClusterInfoFields<'a> {
             f6: None,
             f7: None,
             f8: None,
-            f9: None,
+            f9: Some(VimObjectHolder { out: None, default_type_name: Some("KmipClusterInfoKeyInfo") }),
             __out: Some(out),
         }
     }
@@ -189626,7 +189626,7 @@ impl KmipServerSpecFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("KmipServerSpecKeySpec") }),
             __out: None,
         }
     }
@@ -189639,7 +189639,7 @@ impl<'a> KmipServerSpecFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("KmipServerSpecKeySpec") }),
             __out: Some(out),
         }
     }
@@ -190652,6 +190652,10 @@ pub struct EventFields<'a> {
     extra_fields_: std::collections::HashMap<String, miniserde::json::Value>,
     current_extra_key: Option<String>,
     current_extra_value: Option<miniserde::json::Value>,
+    #[cfg(feature = "xml")]
+    resolved_type: Option<struct_enum::StructType>,
+    #[cfg(feature = "xml")]
+    api_extra_visitor: super::api_typed_visitor::ApiTypedValueVisitor,
     __out: Option<&'a mut Option<Event>>,
 }
 
@@ -190676,6 +190680,10 @@ impl EventFields<'_> {
             extra_fields_: std::collections::HashMap::new(),
             current_extra_key: None,
             current_extra_value: None,
+            #[cfg(feature = "xml")]
+            resolved_type: type_,
+            #[cfg(feature = "xml")]
+            api_extra_visitor: super::api_typed_visitor::ApiTypedValueVisitor::new(),
             __out: None,
         }
     }
@@ -190702,12 +190710,28 @@ impl<'a> EventFields<'a> {
             extra_fields_: std::collections::HashMap::new(),
             current_extra_key: None,
             current_extra_value: None,
+            #[cfg(feature = "xml")]
+            resolved_type: None,
+            #[cfg(feature = "xml")]
+            api_extra_visitor: super::api_typed_visitor::ApiTypedValueVisitor::new(),
             __out: Some(out),
         }
     }
 
     fn shift_extra(&mut self) {
-        if let (Some(k), Some(v)) = (self.current_extra_key.take(), self.current_extra_value.take()) {
+        #[cfg(feature = "xml")]
+        {
+            if self.resolved_type.is_none() {
+                if let Some(tn) = self.type_name.as_deref() {
+                    self.resolved_type = struct_enum::StructType::from_str(tn);
+                }
+            }
+        }
+        #[cfg(feature = "xml")]
+        let value = self.current_extra_value.take().or_else(|| self.api_extra_visitor.take_value());
+        #[cfg(not(feature = "xml"))]
+        let value = self.current_extra_value.take();
+        if let (Some(k), Some(v)) = (self.current_extra_key.take(), value) {
             self.extra_fields_.insert(k, v);
         }
     }
@@ -190773,6 +190797,16 @@ impl miniserde::de::Map for EventFields<'_> {
             "changeTag" => Ok(miniserde::Deserialize::begin(&mut self.f12)),
             _ => {
                 self.current_extra_key = Some(key.to_owned());
+                #[cfg(feature = "xml")]
+                {
+                    let st = self.resolved_type.or(self.type_);
+                    if let Some(st) = st {
+                        if let Some(ft) = super::api_field_registry::lookup_api_field(st, key) {
+                            self.api_extra_visitor.reset(ft);
+                            return Ok(&mut self.api_extra_visitor);
+                        }
+                    }
+                }
                 Ok(miniserde::Deserialize::begin(&mut self.current_extra_value))
             }
         }
@@ -193228,7 +193262,7 @@ impl EventArgDescFields<'_> {
         EventArgDescFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: None,
         }
     }
@@ -193239,7 +193273,7 @@ impl<'a> EventArgDescFields<'a> {
         EventArgDescFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: Some(out),
         }
     }
@@ -202922,7 +202956,7 @@ impl HostConfigInfoFields<'_> {
             f43: None,
             f44: None,
             f45: None,
-            f46: None,
+            f46: Some(VimObjectHolder { out: None, default_type_name: Some("VsanHostConfigInfo") }),
             f47: None,
             f48: None,
             f49: None,
@@ -202989,7 +203023,7 @@ impl<'a> HostConfigInfoFields<'a> {
             f43: None,
             f44: None,
             f45: None,
-            f46: None,
+            f46: Some(VimObjectHolder { out: None, default_type_name: Some("VsanHostConfigInfo") }),
             f47: None,
             f48: None,
             f49: None,
@@ -205080,7 +205114,7 @@ pub struct HostConnectInfoNetworkInfoFields<'a> {
 impl HostConnectInfoNetworkInfoFields<'_> {
     pub fn new() -> HostConnectInfoNetworkInfoFields<'static> {
         HostConnectInfoNetworkInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("NetworkSummary") }),
             __out: None,
         }
     }
@@ -205089,7 +205123,7 @@ impl HostConnectInfoNetworkInfoFields<'_> {
 impl<'a> HostConnectInfoNetworkInfoFields<'a> {
     fn with_output(out: &'a mut Option<HostConnectInfoNetworkInfo>) -> Self {
         HostConnectInfoNetworkInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("NetworkSummary") }),
             __out: Some(out),
         }
     }
@@ -205210,7 +205244,7 @@ pub struct HostNewNetworkConnectInfoFields<'a> {
 impl HostNewNetworkConnectInfoFields<'_> {
     pub fn new() -> HostNewNetworkConnectInfoFields<'static> {
         HostNewNetworkConnectInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("NetworkSummary") }),
             __out: None,
         }
     }
@@ -205219,7 +205253,7 @@ impl HostNewNetworkConnectInfoFields<'_> {
 impl<'a> HostNewNetworkConnectInfoFields<'a> {
     fn with_output(out: &'a mut Option<HostNewNetworkConnectInfo>) -> Self {
         HostNewNetworkConnectInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("NetworkSummary") }),
             __out: Some(out),
         }
     }
@@ -219250,7 +219284,7 @@ impl HostFileSystemMountInfoFields<'_> {
     pub fn new() -> HostFileSystemMountInfoFields<'static> {
         HostFileSystemMountInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostFileSystemVolume") }),
             f2: None,
             __out: None,
         }
@@ -219261,7 +219295,7 @@ impl<'a> HostFileSystemMountInfoFields<'a> {
     fn with_output(out: &'a mut Option<HostFileSystemMountInfo>) -> Self {
         HostFileSystemMountInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostFileSystemVolume") }),
             f2: None,
             __out: Some(out),
         }
@@ -223363,7 +223397,7 @@ impl DpuStatusInfoOperationalInfoFields<'_> {
     pub fn new() -> DpuStatusInfoOperationalInfoFields<'static> {
         DpuStatusInfoOperationalInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f2: None,
             f3: None,
             f4: None,
@@ -223376,7 +223410,7 @@ impl<'a> DpuStatusInfoOperationalInfoFields<'a> {
     fn with_output(out: &'a mut Option<DpuStatusInfoOperationalInfo>) -> Self {
         DpuStatusInfoOperationalInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f2: None,
             f3: None,
             f4: None,
@@ -223521,7 +223555,7 @@ impl HostHardwareElementInfoFields<'_> {
     pub fn new() -> HostHardwareElementInfoFields<'static> {
         HostHardwareElementInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: None,
         }
     }
@@ -223531,7 +223565,7 @@ impl<'a> HostHardwareElementInfoFields<'a> {
     fn with_output(out: &'a mut Option<HostHardwareElementInfo>) -> Self {
         HostHardwareElementInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: Some(out),
         }
     }
@@ -223692,7 +223726,7 @@ impl DpuStatusInfoFields<'_> {
     pub fn new() -> DpuStatusInfoFields<'static> {
         DpuStatusInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f2: None,
             f3: None,
             f4: None,
@@ -223705,7 +223739,7 @@ impl<'a> DpuStatusInfoFields<'a> {
     fn with_output(out: &'a mut Option<DpuStatusInfo>) -> Self {
         DpuStatusInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f2: None,
             f3: None,
             f4: None,
@@ -223868,7 +223902,7 @@ impl HostStorageElementInfoFields<'_> {
     pub fn new() -> HostStorageElementInfoFields<'static> {
         HostStorageElementInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f2: None,
             __out: None,
         }
@@ -223879,7 +223913,7 @@ impl<'a> HostStorageElementInfoFields<'a> {
     fn with_output(out: &'a mut Option<HostStorageElementInfo>) -> Self {
         HostStorageElementInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f2: None,
             __out: Some(out),
         }
@@ -227833,7 +227867,7 @@ pub struct HostProxySwitchSpecFields<'a> {
 impl HostProxySwitchSpecFields<'_> {
     pub fn new() -> HostProxySwitchSpecFields<'static> {
         HostProxySwitchSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DistributedVirtualSwitchHostMemberBacking") }),
             __out: None,
         }
     }
@@ -227842,7 +227876,7 @@ impl HostProxySwitchSpecFields<'_> {
 impl<'a> HostProxySwitchSpecFields<'a> {
     fn with_output(out: &'a mut Option<HostProxySwitchSpec>) -> Self {
         HostProxySwitchSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("DistributedVirtualSwitchHostMemberBacking") }),
             __out: Some(out),
         }
     }
@@ -234803,7 +234837,7 @@ pub struct HostLicenseSpecFields<'a> {
 impl HostLicenseSpecFields<'_> {
     pub fn new() -> HostLicenseSpecFields<'static> {
         HostLicenseSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("LicenseSource") }),
             f1: None,
             f2: None,
             f3: None,
@@ -234815,7 +234849,7 @@ impl HostLicenseSpecFields<'_> {
 impl<'a> HostLicenseSpecFields<'a> {
     fn with_output(out: &'a mut Option<HostLicenseSpec>) -> Self {
         HostLicenseSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("LicenseSource") }),
             f1: None,
             f2: None,
             f3: None,
@@ -236550,7 +236584,7 @@ impl HostLowLevelProvisioningManagerVmRecoveryInfoFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("FaultToleranceConfigInfo") }),
             __out: None,
         }
     }
@@ -236562,7 +236596,7 @@ impl<'a> HostLowLevelProvisioningManagerVmRecoveryInfoFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("FaultToleranceConfigInfo") }),
             __out: Some(out),
         }
     }
@@ -238000,7 +238034,7 @@ impl HostMultipathInfoLogicalUnitFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("HostMultipathInfoLogicalUnitPolicy") }),
             f5: None,
             __out: None,
         }
@@ -238014,7 +238048,7 @@ impl<'a> HostMultipathInfoLogicalUnitFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("HostMultipathInfoLogicalUnitPolicy") }),
             f5: None,
             __out: Some(out),
         }
@@ -238874,7 +238908,7 @@ impl HostMultipathInfoPathFields<'_> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("HostTargetTransport") }),
             __out: None,
         }
     }
@@ -238890,7 +238924,7 @@ impl<'a> HostMultipathInfoPathFields<'a> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("HostTargetTransport") }),
             __out: Some(out),
         }
     }
@@ -241230,8 +241264,8 @@ impl HostNetStackInstanceFields<'_> {
         HostNetStackInstanceFields {
             f0: None,
             f1: None,
-            f2: None,
-            f3: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("HostDnsConfig") }),
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
             f4: None,
             f5: None,
             f6: None,
@@ -241247,8 +241281,8 @@ impl<'a> HostNetStackInstanceFields<'a> {
         HostNetStackInstanceFields {
             f0: None,
             f1: None,
-            f2: None,
-            f3: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("HostDnsConfig") }),
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
             f4: None,
             f5: None,
             f6: None,
@@ -241535,9 +241569,9 @@ impl HostNetworkConfigFields<'_> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
-            f7: None,
-            f8: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("HostDnsConfig") }),
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
             f9: None,
             f10: None,
             f11: None,
@@ -241558,9 +241592,9 @@ impl<'a> HostNetworkConfigFields<'a> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
-            f7: None,
-            f8: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("HostDnsConfig") }),
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
             f9: None,
             f10: None,
             f11: None,
@@ -242184,9 +242218,9 @@ impl HostNetworkInfoFields<'_> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
-            f8: None,
-            f9: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("HostDnsConfig") }),
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
+            f9: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
             f10: None,
             f11: None,
             f12: None,
@@ -242213,9 +242247,9 @@ impl<'a> HostNetworkInfoFields<'a> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
-            f8: None,
-            f9: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("HostDnsConfig") }),
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
+            f9: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
             f10: None,
             f11: None,
             f12: None,
@@ -244152,7 +244186,7 @@ impl HostNumericSensorInfoFields<'_> {
     pub fn new() -> HostNumericSensorInfoFields<'static> {
         HostNumericSensorInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f2: None,
             f3: None,
             f4: None,
@@ -244171,7 +244205,7 @@ impl<'a> HostNumericSensorInfoFields<'a> {
     fn with_output(out: &'a mut Option<HostNumericSensorInfo>) -> Self {
         HostNumericSensorInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f2: None,
             f3: None,
             f4: None,
@@ -247132,7 +247166,7 @@ impl HostNvmeDiscoveryLogEntryFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("HostNvmeTransportParameters") }),
             f6: None,
             f7: None,
             __out: None,
@@ -247148,7 +247182,7 @@ impl<'a> HostNvmeDiscoveryLogEntryFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("HostNvmeTransportParameters") }),
             f6: None,
             f7: None,
             __out: Some(out),
@@ -247463,7 +247497,7 @@ impl HostNvmeSpecFields<'_> {
     pub fn new() -> HostNvmeSpecFields<'static> {
         HostNvmeSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostNvmeTransportParameters") }),
             __out: None,
         }
     }
@@ -247473,7 +247507,7 @@ impl<'a> HostNvmeSpecFields<'a> {
     fn with_output(out: &'a mut Option<HostNvmeSpec>) -> Self {
         HostNvmeSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostNvmeTransportParameters") }),
             __out: Some(out),
         }
     }
@@ -247665,7 +247699,7 @@ impl HostNvmeConnectSpecFields<'_> {
     pub fn new() -> HostNvmeConnectSpecFields<'static> {
         HostNvmeConnectSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostNvmeTransportParameters") }),
             f2: None,
             f3: None,
             f4: None,
@@ -247679,7 +247713,7 @@ impl<'a> HostNvmeConnectSpecFields<'a> {
     fn with_output(out: &'a mut Option<HostNvmeConnectSpec>) -> Self {
         HostNvmeConnectSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostNvmeTransportParameters") }),
             f2: None,
             f3: None,
             f4: None,
@@ -247857,7 +247891,7 @@ impl HostNvmeDiscoverSpecFields<'_> {
     pub fn new() -> HostNvmeDiscoverSpecFields<'static> {
         HostNvmeDiscoverSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostNvmeTransportParameters") }),
             f2: None,
             f3: None,
             __out: None,
@@ -247869,7 +247903,7 @@ impl<'a> HostNvmeDiscoverSpecFields<'a> {
     fn with_output(out: &'a mut Option<HostNvmeDiscoverSpec>) -> Self {
         HostNvmeDiscoverSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostNvmeTransportParameters") }),
             f2: None,
             f3: None,
             __out: Some(out),
@@ -250492,7 +250526,7 @@ pub struct HostPathSelectionPolicyOptionFields<'a> {
 impl HostPathSelectionPolicyOptionFields<'_> {
     pub fn new() -> HostPathSelectionPolicyOptionFields<'static> {
         HostPathSelectionPolicyOptionFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: None,
         }
     }
@@ -250501,7 +250535,7 @@ impl HostPathSelectionPolicyOptionFields<'_> {
 impl<'a> HostPathSelectionPolicyOptionFields<'a> {
     fn with_output(out: &'a mut Option<HostPathSelectionPolicyOption>) -> Self {
         HostPathSelectionPolicyOptionFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: Some(out),
         }
     }
@@ -253785,7 +253819,7 @@ pub struct PhysicalNicSpecFields<'a> {
 impl PhysicalNicSpecFields<'_> {
     pub fn new() -> PhysicalNicSpecFields<'static> {
         PhysicalNicSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpConfig") }),
             f1: None,
             f2: None,
             f3: None,
@@ -253797,7 +253831,7 @@ impl PhysicalNicSpecFields<'_> {
 impl<'a> PhysicalNicSpecFields<'a> {
     fn with_output(out: &'a mut Option<PhysicalNicSpec>) -> Self {
         PhysicalNicSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpConfig") }),
             f1: None,
             f2: None,
             f3: None,
@@ -254837,7 +254871,7 @@ impl HostPlugStoreTopologyTargetFields<'_> {
     pub fn new() -> HostPlugStoreTopologyTargetFields<'static> {
         HostPlugStoreTopologyTargetFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostTargetTransport") }),
             __out: None,
         }
     }
@@ -254847,7 +254881,7 @@ impl<'a> HostPlugStoreTopologyTargetFields<'a> {
     fn with_output(out: &'a mut Option<HostPlugStoreTopologyTarget>) -> Self {
         HostPlugStoreTopologyTargetFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostTargetTransport") }),
             __out: Some(out),
         }
     }
@@ -256588,7 +256622,7 @@ impl HostPtpConfigPtpPortFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpConfig") }),
             __out: None,
         }
     }
@@ -256600,7 +256634,7 @@ impl<'a> HostPtpConfigPtpPortFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpConfig") }),
             __out: Some(out),
         }
     }
@@ -256888,7 +256922,7 @@ impl HostRdmaDeviceFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("HostRdmaDeviceBacking") }),
             f5: None,
             f6: None,
             __out: None,
@@ -256903,7 +256937,7 @@ impl<'a> HostRdmaDeviceFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("HostRdmaDeviceBacking") }),
             f5: None,
             f6: None,
             __out: Some(out),
@@ -260805,7 +260839,7 @@ impl HostScsiTopologyTargetFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("HostTargetTransport") }),
             __out: None,
         }
     }
@@ -260817,7 +260851,7 @@ impl<'a> HostScsiTopologyTargetFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("HostTargetTransport") }),
             __out: Some(out),
         }
     }
@@ -263810,7 +263844,7 @@ pub struct HostStorageArrayTypePolicyOptionFields<'a> {
 impl HostStorageArrayTypePolicyOptionFields<'_> {
     pub fn new() -> HostStorageArrayTypePolicyOptionFields<'static> {
         HostStorageArrayTypePolicyOptionFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: None,
         }
     }
@@ -263819,7 +263853,7 @@ impl HostStorageArrayTypePolicyOptionFields<'_> {
 impl<'a> HostStorageArrayTypePolicyOptionFields<'a> {
     fn with_output(out: &'a mut Option<HostStorageArrayTypePolicyOption>) -> Self {
         HostStorageArrayTypePolicyOptionFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: Some(out),
         }
     }
@@ -265947,7 +265981,7 @@ impl HostSystemIdentificationInfoFields<'_> {
     pub fn new() -> HostSystemIdentificationInfoFields<'static> {
         HostSystemIdentificationInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: None,
         }
     }
@@ -265957,7 +265991,7 @@ impl<'a> HostSystemIdentificationInfoFields<'a> {
     fn with_output(out: &'a mut Option<HostSystemIdentificationInfo>) -> Self {
         HostSystemIdentificationInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             __out: Some(out),
         }
     }
@@ -270338,7 +270372,7 @@ impl HostTpmEventLogEntryFields<'_> {
     pub fn new() -> HostTpmEventLogEntryFields<'static> {
         HostTpmEventLogEntryFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostTpmEventDetails") }),
             __out: None,
         }
     }
@@ -270348,7 +270382,7 @@ impl<'a> HostTpmEventLogEntryFields<'a> {
     fn with_output(out: &'a mut Option<HostTpmEventLogEntry>) -> Self {
         HostTpmEventLogEntryFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostTpmEventDetails") }),
             __out: Some(out),
         }
     }
@@ -272854,7 +272888,7 @@ impl HostVMotionInfoFields<'_> {
     pub fn new() -> HostVMotionInfoFields<'static> {
         HostVMotionInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpConfig") }),
             __out: None,
         }
     }
@@ -272864,7 +272898,7 @@ impl<'a> HostVMotionInfoFields<'a> {
     fn with_output(out: &'a mut Option<HostVMotionInfo>) -> Self {
         HostVMotionInfoFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpConfig") }),
             __out: Some(out),
         }
     }
@@ -274168,7 +274202,7 @@ pub struct HostVirtualNicIpRouteSpecFields<'a> {
 impl HostVirtualNicIpRouteSpecFields<'_> {
     pub fn new() -> HostVirtualNicIpRouteSpecFields<'static> {
         HostVirtualNicIpRouteSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
             __out: None,
         }
     }
@@ -274177,7 +274211,7 @@ impl HostVirtualNicIpRouteSpecFields<'_> {
 impl<'a> HostVirtualNicIpRouteSpecFields<'a> {
     fn with_output(out: &'a mut Option<HostVirtualNicIpRouteSpec>) -> Self {
         HostVirtualNicIpRouteSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpRouteConfig") }),
             __out: Some(out),
         }
     }
@@ -274590,7 +274624,7 @@ impl HostVirtualNicSpecFields<'_> {
     pub fn new() -> HostVirtualNicSpecFields<'static> {
         HostVirtualNicSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpConfig") }),
             f2: None,
             f3: None,
             f4: None,
@@ -274612,7 +274646,7 @@ impl<'a> HostVirtualNicSpecFields<'a> {
     fn with_output(out: &'a mut Option<HostVirtualNicSpec>) -> Self {
         HostVirtualNicSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostIpConfig") }),
             f2: None,
             f3: None,
             f4: None,
@@ -276409,7 +276443,7 @@ impl HostVirtualSwitchSpecFields<'_> {
     pub fn new() -> HostVirtualSwitchSpecFields<'static> {
         HostVirtualSwitchSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostVirtualSwitchBridge") }),
             f2: None,
             f3: None,
             __out: None,
@@ -276421,7 +276455,7 @@ impl<'a> HostVirtualSwitchSpecFields<'a> {
     fn with_output(out: &'a mut Option<HostVirtualSwitchSpec>) -> Self {
         HostVirtualSwitchSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("HostVirtualSwitchBridge") }),
             f2: None,
             f3: None,
             __out: Some(out),
@@ -276699,8 +276733,8 @@ pub struct VmfsDatastoreOptionFields<'a> {
 impl VmfsDatastoreOptionFields<'_> {
     pub fn new() -> VmfsDatastoreOptionFields<'static> {
         VmfsDatastoreOptionFields {
-            f0: None,
-            f1: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VmfsDatastoreBaseOption") }),
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VmfsDatastoreSpec") }),
             __out: None,
         }
     }
@@ -276709,8 +276743,8 @@ impl VmfsDatastoreOptionFields<'_> {
 impl<'a> VmfsDatastoreOptionFields<'a> {
     fn with_output(out: &'a mut Option<VmfsDatastoreOption>) -> Self {
         VmfsDatastoreOptionFields {
-            f0: None,
-            f1: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VmfsDatastoreBaseOption") }),
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VmfsDatastoreSpec") }),
             __out: Some(out),
         }
     }
@@ -292042,7 +292076,7 @@ pub struct VsanVmdkLoadTestSpecFields<'a> {
 impl VsanVmdkLoadTestSpecFields<'_> {
     pub fn new() -> VsanVmdkLoadTestSpecFields<'static> {
         VsanVmdkLoadTestSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("FileBackedVirtualDiskSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -292054,7 +292088,7 @@ impl VsanVmdkLoadTestSpecFields<'_> {
 impl<'a> VsanVmdkLoadTestSpecFields<'a> {
     fn with_output(out: &'a mut Option<VsanVmdkLoadTestSpec>) -> Self {
         VsanVmdkLoadTestSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("FileBackedVirtualDiskSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -296840,7 +296874,7 @@ impl ClusterGroupSpecFields<'_> {
         ClusterGroupSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterGroupInfo") }),
             __out: None,
         }
     }
@@ -296851,7 +296885,7 @@ impl<'a> ClusterGroupSpecFields<'a> {
         ClusterGroupSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterGroupInfo") }),
             __out: Some(out),
         }
     }
@@ -297167,7 +297201,7 @@ impl ClusterRuleSpecFields<'_> {
         ClusterRuleSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterRuleInfo") }),
             __out: None,
         }
     }
@@ -297178,7 +297212,7 @@ impl<'a> ClusterRuleSpecFields<'a> {
         ClusterRuleSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("ClusterRuleInfo") }),
             __out: Some(out),
         }
     }
@@ -297662,7 +297696,7 @@ impl StorageDrsOptionSpecFields<'_> {
         StorageDrsOptionSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("OptionValue") }),
             __out: None,
         }
     }
@@ -297673,7 +297707,7 @@ impl<'a> StorageDrsOptionSpecFields<'a> {
         StorageDrsOptionSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("OptionValue") }),
             __out: Some(out),
         }
     }
@@ -313118,7 +313152,7 @@ impl ProfilePolicyFields<'_> {
     pub fn new() -> ProfilePolicyFields<'static> {
         ProfilePolicyFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("PolicyOption") }),
             __out: None,
         }
     }
@@ -313128,7 +313162,7 @@ impl<'a> ProfilePolicyFields<'a> {
     fn with_output(out: &'a mut Option<ProfilePolicy>) -> Self {
         ProfilePolicyFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("PolicyOption") }),
             __out: Some(out),
         }
     }
@@ -320887,7 +320921,7 @@ impl HostProfileManagerHostToConfigSpecMapFields<'_> {
     pub fn new() -> HostProfileManagerHostToConfigSpecMapFields<'static> {
         HostProfileManagerHostToConfigSpecMapFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("AnswerFileCreateSpec") }),
             __out: None,
         }
     }
@@ -320897,7 +320931,7 @@ impl<'a> HostProfileManagerHostToConfigSpecMapFields<'a> {
     fn with_output(out: &'a mut Option<HostProfileManagerHostToConfigSpecMap>) -> Self {
         HostProfileManagerHostToConfigSpecMapFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("AnswerFileCreateSpec") }),
             __out: Some(out),
         }
     }
@@ -321188,8 +321222,8 @@ impl ScheduledTaskSpecFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
-            f4: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("TaskScheduler") }),
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("Action") }),
             f5: None,
             __out: None,
         }
@@ -321202,8 +321236,8 @@ impl<'a> ScheduledTaskSpecFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
-            f4: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("TaskScheduler") }),
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("Action") }),
             f5: None,
             __out: Some(out),
         }
@@ -321443,8 +321477,8 @@ impl ScheduledTaskInfoFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
-            f4: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("TaskScheduler") }),
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("Action") }),
             f5: None,
             f6: None,
             f7: None,
@@ -321469,8 +321503,8 @@ impl<'a> ScheduledTaskInfoFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
-            f4: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("TaskScheduler") }),
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("Action") }),
             f5: None,
             f6: None,
             f7: None,
@@ -325605,7 +325639,7 @@ impl PodDiskLocatorFields<'_> {
         PodDiskLocatorFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
             __out: None,
         }
@@ -325617,7 +325651,7 @@ impl<'a> PodDiskLocatorFields<'a> {
         PodDiskLocatorFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
             __out: Some(out),
         }
@@ -331750,7 +331784,7 @@ impl VchaClusterDeploymentSpecFields<'_> {
     pub fn new() -> VchaClusterDeploymentSpecFields<'static> {
         VchaClusterDeploymentSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("NodeDeploymentSpec") }),
             f2: None,
             f3: None,
             __out: None,
@@ -331762,7 +331796,7 @@ impl<'a> VchaClusterDeploymentSpecFields<'a> {
     fn with_output(out: &'a mut Option<VchaClusterDeploymentSpec>) -> Self {
         VchaClusterDeploymentSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("NodeDeploymentSpec") }),
             f2: None,
             f3: None,
             __out: Some(out),
@@ -331883,7 +331917,7 @@ pub struct VchaClusterNetworkSpecFields<'a> {
 impl VchaClusterNetworkSpecFields<'_> {
     pub fn new() -> VchaClusterNetworkSpecFields<'static> {
         VchaClusterNetworkSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("NodeNetworkSpec") }),
             f1: None,
             __out: None,
         }
@@ -331893,7 +331927,7 @@ impl VchaClusterNetworkSpecFields<'_> {
 impl<'a> VchaClusterNetworkSpecFields<'a> {
     fn with_output(out: &'a mut Option<VchaClusterNetworkSpec>) -> Self {
         VchaClusterNetworkSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("NodeNetworkSpec") }),
             f1: None,
             __out: Some(out),
         }
@@ -335874,9 +335908,9 @@ impl VirtualMachineConfigInfoFields<'_> {
             f41: None,
             f42: None,
             f43: None,
-            f44: None,
+            f44: Some(VimObjectHolder { out: None, default_type_name: Some("FaultToleranceConfigInfo") }),
             f45: None,
-            f46: None,
+            f46: Some(VimObjectHolder { out: None, default_type_name: Some("VmConfigInfo") }),
             f47: None,
             f48: None,
             f49: None,
@@ -335968,9 +336002,9 @@ impl<'a> VirtualMachineConfigInfoFields<'a> {
             f41: None,
             f42: None,
             f43: None,
-            f44: None,
+            f44: Some(VimObjectHolder { out: None, default_type_name: Some("FaultToleranceConfigInfo") }),
             f45: None,
-            f46: None,
+            f46: Some(VimObjectHolder { out: None, default_type_name: Some("VmConfigInfo") }),
             f47: None,
             f48: None,
             f49: None,
@@ -338168,8 +338202,8 @@ impl VirtualMachineConfigSpecFields<'_> {
             f41: None,
             f42: None,
             f43: None,
-            f44: None,
-            f45: None,
+            f44: Some(VimObjectHolder { out: None, default_type_name: Some("VmConfigSpec") }),
+            f45: Some(VimObjectHolder { out: None, default_type_name: Some("FaultToleranceConfigInfo") }),
             f46: None,
             f47: None,
             f48: None,
@@ -338184,7 +338218,7 @@ impl VirtualMachineConfigSpecFields<'_> {
             f57: None,
             f58: None,
             f59: None,
-            f60: None,
+            f60: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             f61: None,
             f62: None,
             f63: None,
@@ -338257,8 +338291,8 @@ impl<'a> VirtualMachineConfigSpecFields<'a> {
             f41: None,
             f42: None,
             f43: None,
-            f44: None,
-            f45: None,
+            f44: Some(VimObjectHolder { out: None, default_type_name: Some("VmConfigSpec") }),
+            f45: Some(VimObjectHolder { out: None, default_type_name: Some("FaultToleranceConfigInfo") }),
             f46: None,
             f47: None,
             f48: None,
@@ -338273,7 +338307,7 @@ impl<'a> VirtualMachineConfigSpecFields<'a> {
             f57: None,
             f58: None,
             f59: None,
-            f60: None,
+            f60: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             f61: None,
             f62: None,
             f63: None,
@@ -340098,7 +340132,7 @@ pub struct VirtualMachineDeviceRuntimeInfoFields<'a> {
 impl VirtualMachineDeviceRuntimeInfoFields<'_> {
     pub fn new() -> VirtualMachineDeviceRuntimeInfoFields<'static> {
         VirtualMachineDeviceRuntimeInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineDeviceRuntimeInfoDeviceRuntimeState") }),
             f1: None,
             __out: None,
         }
@@ -340108,7 +340142,7 @@ impl VirtualMachineDeviceRuntimeInfoFields<'_> {
 impl<'a> VirtualMachineDeviceRuntimeInfoFields<'a> {
     fn with_output(out: &'a mut Option<VirtualMachineDeviceRuntimeInfo>) -> Self {
         VirtualMachineDeviceRuntimeInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineDeviceRuntimeInfoDeviceRuntimeState") }),
             f1: None,
             __out: Some(out),
         }
@@ -340674,7 +340708,7 @@ pub struct VirtualMachineDvxClassInfoFields<'a> {
 impl VirtualMachineDvxClassInfoFields<'_> {
     pub fn new() -> VirtualMachineDvxClassInfoFields<'static> {
         VirtualMachineDvxClassInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f1: None,
             f2: None,
             f3: None,
@@ -340686,7 +340720,7 @@ impl VirtualMachineDvxClassInfoFields<'_> {
 impl<'a> VirtualMachineDvxClassInfoFields<'a> {
     fn with_output(out: &'a mut Option<VirtualMachineDvxClassInfo>) -> Self {
         VirtualMachineDvxClassInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("ElementDescription") }),
             f1: None,
             f2: None,
             f3: None,
@@ -341908,7 +341942,7 @@ pub struct FaultToleranceDiskSpecFields<'a> {
 impl FaultToleranceDiskSpecFields<'_> {
     pub fn new() -> FaultToleranceDiskSpecFields<'static> {
         FaultToleranceDiskSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDevice") }),
             f1: None,
             __out: None,
         }
@@ -341918,7 +341952,7 @@ impl FaultToleranceDiskSpecFields<'_> {
 impl<'a> FaultToleranceDiskSpecFields<'a> {
     fn with_output(out: &'a mut Option<FaultToleranceDiskSpec>) -> Self {
         FaultToleranceDiskSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDevice") }),
             f1: None,
             __out: Some(out),
         }
@@ -345332,7 +345366,7 @@ impl GuestNicInfoFields<'_> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("NetBIOSConfigInfo") }),
             __out: None,
         }
     }
@@ -345348,7 +345382,7 @@ impl<'a> GuestNicInfoFields<'a> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("NetBIOSConfigInfo") }),
             __out: Some(out),
         }
     }
@@ -349909,7 +349943,7 @@ impl VirtualMachineRelocateSpecFields<'_> {
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             __out: None,
         }
     }
@@ -349928,7 +349962,7 @@ impl<'a> VirtualMachineRelocateSpecFields<'a> {
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             __out: Some(out),
         }
     }
@@ -350154,7 +350188,7 @@ impl VirtualMachineRelocateSpecDiskLocatorFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -350169,7 +350203,7 @@ impl<'a> VirtualMachineRelocateSpecDiskLocatorFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -350325,7 +350359,7 @@ impl VirtualMachineRelocateSpecDiskLocatorBackingSpecFields<'_> {
     pub fn new() -> VirtualMachineRelocateSpecDiskLocatorBackingSpecFields<'static> {
         VirtualMachineRelocateSpecDiskLocatorBackingSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             __out: None,
         }
     }
@@ -350335,7 +350369,7 @@ impl<'a> VirtualMachineRelocateSpecDiskLocatorBackingSpecFields<'a> {
     fn with_output(out: &'a mut Option<VirtualMachineRelocateSpecDiskLocatorBackingSpec>) -> Self {
         VirtualMachineRelocateSpecDiskLocatorBackingSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             __out: Some(out),
         }
     }
@@ -353605,7 +353639,7 @@ impl VirtualMachineConfigSummaryFields<'_> {
             f13: None,
             f14: None,
             f15: None,
-            f16: None,
+            f16: Some(VimObjectHolder { out: None, default_type_name: Some("FaultToleranceConfigInfo") }),
             f17: None,
             f18: None,
             f19: None,
@@ -353634,7 +353668,7 @@ impl<'a> VirtualMachineConfigSummaryFields<'a> {
             f13: None,
             f14: None,
             f15: None,
-            f16: None,
+            f16: Some(VimObjectHolder { out: None, default_type_name: Some("FaultToleranceConfigInfo") }),
             f17: None,
             f18: None,
             f19: None,
@@ -356295,7 +356329,7 @@ impl VirtualMachineNetworkInfoFields<'_> {
         VirtualMachineNetworkInfoFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("NetworkSummary") }),
             f3: None,
             __out: None,
         }
@@ -356307,7 +356341,7 @@ impl<'a> VirtualMachineNetworkInfoFields<'a> {
         VirtualMachineNetworkInfoFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("NetworkSummary") }),
             f3: None,
             __out: Some(out),
         }
@@ -356949,7 +356983,7 @@ impl VirtualMachineSriovInfoFields<'_> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineSriovDevicePoolInfo") }),
             __out: None,
         }
     }
@@ -356964,7 +356998,7 @@ impl<'a> VirtualMachineSriovInfoFields<'a> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineSriovDevicePoolInfo") }),
             __out: Some(out),
         }
     }
@@ -360447,7 +360481,7 @@ impl VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDevice") }),
             __out: None,
         }
     }
@@ -360460,7 +360494,7 @@ impl<'a> VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDevice") }),
             __out: Some(out),
         }
     }
@@ -360749,7 +360783,7 @@ impl VirtualMachineVirtualDeviceGroupsDeviceGroupFields<'_> {
     pub fn new() -> VirtualMachineVirtualDeviceGroupsDeviceGroupFields<'static> {
         VirtualMachineVirtualDeviceGroupsDeviceGroupFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             __out: None,
         }
     }
@@ -360759,7 +360793,7 @@ impl<'a> VirtualMachineVirtualDeviceGroupsDeviceGroupFields<'a> {
     fn with_output(out: &'a mut Option<VirtualMachineVirtualDeviceGroupsDeviceGroup>) -> Self {
         VirtualMachineVirtualDeviceGroupsDeviceGroupFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             __out: Some(out),
         }
     }
@@ -360917,7 +360951,7 @@ impl VirtualMachineVirtualDeviceGroupsVendorDeviceGroupFields<'_> {
     pub fn new() -> VirtualMachineVirtualDeviceGroupsVendorDeviceGroupFields<'static> {
         VirtualMachineVirtualDeviceGroupsVendorDeviceGroupFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f2: None,
             __out: None,
         }
@@ -360928,7 +360962,7 @@ impl<'a> VirtualMachineVirtualDeviceGroupsVendorDeviceGroupFields<'a> {
     fn with_output(out: &'a mut Option<VirtualMachineVirtualDeviceGroupsVendorDeviceGroup>) -> Self {
         VirtualMachineVirtualDeviceGroupsVendorDeviceGroupFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
             f2: None,
             __out: Some(out),
         }
@@ -363359,7 +363393,7 @@ pub struct CustomizationIpSettingsFields<'a> {
 impl CustomizationIpSettingsFields<'_> {
     pub fn new() -> CustomizationIpSettingsFields<'static> {
         CustomizationIpSettingsFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationIpGenerator") }),
             f1: None,
             f2: None,
             f3: None,
@@ -363376,7 +363410,7 @@ impl CustomizationIpSettingsFields<'_> {
 impl<'a> CustomizationIpSettingsFields<'a> {
     fn with_output(out: &'a mut Option<CustomizationIpSettings>) -> Self {
         CustomizationIpSettingsFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationIpGenerator") }),
             f1: None,
             f2: None,
             f3: None,
@@ -364182,7 +364216,7 @@ pub struct CustomizationLinuxPrepFields<'a> {
 impl CustomizationLinuxPrepFields<'_> {
     pub fn new() -> CustomizationLinuxPrepFields<'static> {
         CustomizationLinuxPrepFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationName") }),
             f1: None,
             f2: None,
             f3: None,
@@ -364196,7 +364230,7 @@ impl CustomizationLinuxPrepFields<'_> {
 impl<'a> CustomizationLinuxPrepFields<'a> {
     fn with_output(out: &'a mut Option<CustomizationLinuxPrep>) -> Self {
         CustomizationLinuxPrepFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationName") }),
             f1: None,
             f2: None,
             f3: None,
@@ -367407,8 +367441,8 @@ pub struct CustomizationSpecFields<'a> {
 impl CustomizationSpecFields<'_> {
     pub fn new() -> CustomizationSpecFields<'static> {
         CustomizationSpecFields {
-            f0: None,
-            f1: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationOptions") }),
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationIdentitySettings") }),
             f2: None,
             f3: None,
             f4: None,
@@ -367420,8 +367454,8 @@ impl CustomizationSpecFields<'_> {
 impl<'a> CustomizationSpecFields<'a> {
     fn with_output(out: &'a mut Option<CustomizationSpec>) -> Self {
         CustomizationSpecFields {
-            f0: None,
-            f1: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationOptions") }),
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationIdentitySettings") }),
             f2: None,
             f3: None,
             f4: None,
@@ -367585,7 +367619,7 @@ impl CustomizationUserDataFields<'_> {
         CustomizationUserDataFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationName") }),
             f3: None,
             __out: None,
         }
@@ -367597,7 +367631,7 @@ impl<'a> CustomizationUserDataFields<'a> {
         CustomizationUserDataFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("CustomizationName") }),
             f3: None,
             __out: Some(out),
         }
@@ -368368,10 +368402,10 @@ impl VirtualDeviceFields<'_> {
     pub fn new() -> VirtualDeviceFields<'static> {
         VirtualDeviceFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -368385,10 +368419,10 @@ impl<'a> VirtualDeviceFields<'a> {
     fn with_output(out: &'a mut Option<VirtualDevice>) -> Self {
         VirtualDeviceFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -368600,10 +368634,10 @@ impl VirtualCdromFields<'_> {
     pub fn new() -> VirtualCdromFields<'static> {
         VirtualCdromFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -368617,10 +368651,10 @@ impl<'a> VirtualCdromFields<'a> {
     fn with_output(out: &'a mut Option<VirtualCdrom>) -> Self {
         VirtualCdromFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -368856,10 +368890,10 @@ impl VirtualControllerFields<'_> {
     pub fn new() -> VirtualControllerFields<'static> {
         VirtualControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -368875,10 +368909,10 @@ impl<'a> VirtualControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualController>) -> Self {
         VirtualControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -369108,10 +369142,10 @@ impl VirtualIdeControllerFields<'_> {
     pub fn new() -> VirtualIdeControllerFields<'static> {
         VirtualIdeControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -369127,10 +369161,10 @@ impl<'a> VirtualIdeControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualIdeController>) -> Self {
         VirtualIdeControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -369366,10 +369400,10 @@ impl VirtualNvdimmControllerFields<'_> {
     pub fn new() -> VirtualNvdimmControllerFields<'static> {
         VirtualNvdimmControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -369385,10 +369419,10 @@ impl<'a> VirtualNvdimmControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualNvdimmController>) -> Self {
         VirtualNvdimmControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -369637,10 +369671,10 @@ impl VirtualNvmeControllerFields<'_> {
     pub fn new() -> VirtualNvmeControllerFields<'static> {
         VirtualNvmeControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -369657,10 +369691,10 @@ impl<'a> VirtualNvmeControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualNvmeController>) -> Self {
         VirtualNvmeControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -369899,10 +369933,10 @@ impl VirtualPciControllerFields<'_> {
     pub fn new() -> VirtualPciControllerFields<'static> {
         VirtualPciControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -369918,10 +369952,10 @@ impl<'a> VirtualPciControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualPciController>) -> Self {
         VirtualPciControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -370156,10 +370190,10 @@ impl VirtualPs2ControllerFields<'_> {
     pub fn new() -> VirtualPs2ControllerFields<'static> {
         VirtualPs2ControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -370175,10 +370209,10 @@ impl<'a> VirtualPs2ControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualPs2Controller>) -> Self {
         VirtualPs2ControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -370413,10 +370447,10 @@ impl VirtualSataControllerFields<'_> {
     pub fn new() -> VirtualSataControllerFields<'static> {
         VirtualSataControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -370432,10 +370466,10 @@ impl<'a> VirtualSataControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualSataController>) -> Self {
         VirtualSataControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -370670,10 +370704,10 @@ impl VirtualAhciControllerFields<'_> {
     pub fn new() -> VirtualAhciControllerFields<'static> {
         VirtualAhciControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -370689,10 +370723,10 @@ impl<'a> VirtualAhciControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualAhciController>) -> Self {
         VirtualAhciControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -370963,10 +370997,10 @@ impl VirtualScsiControllerFields<'_> {
     pub fn new() -> VirtualScsiControllerFields<'static> {
         VirtualScsiControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -370985,10 +371019,10 @@ impl<'a> VirtualScsiControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualScsiController>) -> Self {
         VirtualScsiControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -371247,10 +371281,10 @@ impl ParaVirtualScsiControllerFields<'_> {
     pub fn new() -> ParaVirtualScsiControllerFields<'static> {
         ParaVirtualScsiControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -371269,10 +371303,10 @@ impl<'a> ParaVirtualScsiControllerFields<'a> {
     fn with_output(out: &'a mut Option<ParaVirtualScsiController>) -> Self {
         ParaVirtualScsiControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -371535,10 +371569,10 @@ impl VirtualBusLogicControllerFields<'_> {
     pub fn new() -> VirtualBusLogicControllerFields<'static> {
         VirtualBusLogicControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -371557,10 +371591,10 @@ impl<'a> VirtualBusLogicControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualBusLogicController>) -> Self {
         VirtualBusLogicControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -371823,10 +371857,10 @@ impl VirtualLsiLogicControllerFields<'_> {
     pub fn new() -> VirtualLsiLogicControllerFields<'static> {
         VirtualLsiLogicControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -371845,10 +371879,10 @@ impl<'a> VirtualLsiLogicControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualLsiLogicController>) -> Self {
         VirtualLsiLogicControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -372111,10 +372145,10 @@ impl VirtualLsiLogicSasControllerFields<'_> {
     pub fn new() -> VirtualLsiLogicSasControllerFields<'static> {
         VirtualLsiLogicSasControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -372133,10 +372167,10 @@ impl<'a> VirtualLsiLogicSasControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualLsiLogicSasController>) -> Self {
         VirtualLsiLogicSasControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -372388,10 +372422,10 @@ impl VirtualSioControllerFields<'_> {
     pub fn new() -> VirtualSioControllerFields<'static> {
         VirtualSioControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -372407,10 +372441,10 @@ impl<'a> VirtualSioControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualSioController>) -> Self {
         VirtualSioControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -372679,10 +372713,10 @@ impl VirtualUsbControllerFields<'_> {
     pub fn new() -> VirtualUsbControllerFields<'static> {
         VirtualUsbControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -372700,10 +372734,10 @@ impl<'a> VirtualUsbControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualUsbController>) -> Self {
         VirtualUsbControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -372957,10 +372991,10 @@ impl VirtualUsbxhciControllerFields<'_> {
     pub fn new() -> VirtualUsbxhciControllerFields<'static> {
         VirtualUsbxhciControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -372977,10 +373011,10 @@ impl<'a> VirtualUsbxhciControllerFields<'a> {
     fn with_output(out: &'a mut Option<VirtualUsbxhciController>) -> Self {
         VirtualUsbxhciControllerFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -373392,10 +373426,10 @@ impl VirtualDiskFields<'_> {
     pub fn new() -> VirtualDiskFields<'static> {
         VirtualDiskFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -373422,10 +373456,10 @@ impl<'a> VirtualDiskFields<'a> {
     fn with_output(out: &'a mut Option<VirtualDisk>) -> Self {
         VirtualDiskFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -373794,10 +373828,10 @@ impl VirtualEthernetCardFields<'_> {
     pub fn new() -> VirtualEthernetCardFields<'static> {
         VirtualEthernetCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -373819,10 +373853,10 @@ impl<'a> VirtualEthernetCardFields<'a> {
     fn with_output(out: &'a mut Option<VirtualEthernetCard>) -> Self {
         VirtualEthernetCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -374110,10 +374144,10 @@ impl VirtualE1000Fields<'_> {
     pub fn new() -> VirtualE1000Fields<'static> {
         VirtualE1000Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -374135,10 +374169,10 @@ impl<'a> VirtualE1000Fields<'a> {
     fn with_output(out: &'a mut Option<VirtualE1000>) -> Self {
         VirtualE1000Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -374430,10 +374464,10 @@ impl VirtualE1000EFields<'_> {
     pub fn new() -> VirtualE1000EFields<'static> {
         VirtualE1000EFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -374455,10 +374489,10 @@ impl<'a> VirtualE1000EFields<'a> {
     fn with_output(out: &'a mut Option<VirtualE1000E>) -> Self {
         VirtualE1000EFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -374750,10 +374784,10 @@ impl VirtualPcNet32Fields<'_> {
     pub fn new() -> VirtualPcNet32Fields<'static> {
         VirtualPcNet32Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -374775,10 +374809,10 @@ impl<'a> VirtualPcNet32Fields<'a> {
     fn with_output(out: &'a mut Option<VirtualPcNet32>) -> Self {
         VirtualPcNet32Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -375104,10 +375138,10 @@ impl VirtualSriovEthernetCardFields<'_> {
     pub fn new() -> VirtualSriovEthernetCardFields<'static> {
         VirtualSriovEthernetCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -375132,10 +375166,10 @@ impl<'a> VirtualSriovEthernetCardFields<'a> {
     fn with_output(out: &'a mut Option<VirtualSriovEthernetCard>) -> Self {
         VirtualSriovEthernetCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -375439,10 +375473,10 @@ impl VirtualVmxnetFields<'_> {
     pub fn new() -> VirtualVmxnetFields<'static> {
         VirtualVmxnetFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -375464,10 +375498,10 @@ impl<'a> VirtualVmxnetFields<'a> {
     fn with_output(out: &'a mut Option<VirtualVmxnet>) -> Self {
         VirtualVmxnetFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -375759,10 +375793,10 @@ impl VirtualVmxnet2Fields<'_> {
     pub fn new() -> VirtualVmxnet2Fields<'static> {
         VirtualVmxnet2Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -375784,10 +375818,10 @@ impl<'a> VirtualVmxnet2Fields<'a> {
     fn with_output(out: &'a mut Option<VirtualVmxnet2>) -> Self {
         VirtualVmxnet2Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -376114,10 +376148,10 @@ impl VirtualVmxnet3Fields<'_> {
     pub fn new() -> VirtualVmxnet3Fields<'static> {
         VirtualVmxnet3Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -376141,10 +376175,10 @@ impl<'a> VirtualVmxnet3Fields<'a> {
     fn with_output(out: &'a mut Option<VirtualVmxnet3>) -> Self {
         VirtualVmxnet3Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -376470,10 +376504,10 @@ impl VirtualVmxnet3VrdmaFields<'_> {
     pub fn new() -> VirtualVmxnet3VrdmaFields<'static> {
         VirtualVmxnet3VrdmaFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -376498,10 +376532,10 @@ impl<'a> VirtualVmxnet3VrdmaFields<'a> {
     fn with_output(out: &'a mut Option<VirtualVmxnet3Vrdma>) -> Self {
         VirtualVmxnet3VrdmaFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -376773,10 +376807,10 @@ impl VirtualFloppyFields<'_> {
     pub fn new() -> VirtualFloppyFields<'static> {
         VirtualFloppyFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -376790,10 +376824,10 @@ impl<'a> VirtualFloppyFields<'a> {
     fn with_output(out: &'a mut Option<VirtualFloppy>) -> Self {
         VirtualFloppyFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377009,10 +377043,10 @@ impl VirtualKeyboardFields<'_> {
     pub fn new() -> VirtualKeyboardFields<'static> {
         VirtualKeyboardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377026,10 +377060,10 @@ impl<'a> VirtualKeyboardFields<'a> {
     fn with_output(out: &'a mut Option<VirtualKeyboard>) -> Self {
         VirtualKeyboardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377263,10 +377297,10 @@ impl VirtualNvdimmFields<'_> {
     pub fn new() -> VirtualNvdimmFields<'static> {
         VirtualNvdimmFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377282,10 +377316,10 @@ impl<'a> VirtualNvdimmFields<'a> {
     fn with_output(out: &'a mut Option<VirtualNvdimm>) -> Self {
         VirtualNvdimmFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377510,10 +377544,10 @@ impl VirtualPciPassthroughFields<'_> {
     pub fn new() -> VirtualPciPassthroughFields<'static> {
         VirtualPciPassthroughFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377527,10 +377561,10 @@ impl<'a> VirtualPciPassthroughFields<'a> {
     fn with_output(out: &'a mut Option<VirtualPciPassthrough>) -> Self {
         VirtualPciPassthroughFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377746,10 +377780,10 @@ impl VirtualParallelPortFields<'_> {
     pub fn new() -> VirtualParallelPortFields<'static> {
         VirtualParallelPortFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377763,10 +377797,10 @@ impl<'a> VirtualParallelPortFields<'a> {
     fn with_output(out: &'a mut Option<VirtualParallelPort>) -> Self {
         VirtualParallelPortFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377982,10 +378016,10 @@ impl VirtualPointingDeviceFields<'_> {
     pub fn new() -> VirtualPointingDeviceFields<'static> {
         VirtualPointingDeviceFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -377999,10 +378033,10 @@ impl<'a> VirtualPointingDeviceFields<'a> {
     fn with_output(out: &'a mut Option<VirtualPointingDevice>) -> Self {
         VirtualPointingDeviceFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -378218,10 +378252,10 @@ impl VirtualPrecisionClockFields<'_> {
     pub fn new() -> VirtualPrecisionClockFields<'static> {
         VirtualPrecisionClockFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -378235,10 +378269,10 @@ impl<'a> VirtualPrecisionClockFields<'a> {
     fn with_output(out: &'a mut Option<VirtualPrecisionClock>) -> Self {
         VirtualPrecisionClockFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -378455,10 +378489,10 @@ impl VirtualScsiPassthroughFields<'_> {
     pub fn new() -> VirtualScsiPassthroughFields<'static> {
         VirtualScsiPassthroughFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -378472,10 +378506,10 @@ impl<'a> VirtualScsiPassthroughFields<'a> {
     fn with_output(out: &'a mut Option<VirtualScsiPassthrough>) -> Self {
         VirtualScsiPassthroughFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -378775,10 +378809,10 @@ impl VirtualSerialPortFields<'_> {
     pub fn new() -> VirtualSerialPortFields<'static> {
         VirtualSerialPortFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -378793,10 +378827,10 @@ impl<'a> VirtualSerialPortFields<'a> {
     fn with_output(out: &'a mut Option<VirtualSerialPort>) -> Self {
         VirtualSerialPortFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -379016,10 +379050,10 @@ impl VirtualSoundCardFields<'_> {
     pub fn new() -> VirtualSoundCardFields<'static> {
         VirtualSoundCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -379033,10 +379067,10 @@ impl<'a> VirtualSoundCardFields<'a> {
     fn with_output(out: &'a mut Option<VirtualSoundCard>) -> Self {
         VirtualSoundCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -379252,10 +379286,10 @@ impl VirtualEnsoniq1371Fields<'_> {
     pub fn new() -> VirtualEnsoniq1371Fields<'static> {
         VirtualEnsoniq1371Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -379269,10 +379303,10 @@ impl<'a> VirtualEnsoniq1371Fields<'a> {
     fn with_output(out: &'a mut Option<VirtualEnsoniq1371>) -> Self {
         VirtualEnsoniq1371Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -379492,10 +379526,10 @@ impl VirtualHdAudioCardFields<'_> {
     pub fn new() -> VirtualHdAudioCardFields<'static> {
         VirtualHdAudioCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -379509,10 +379543,10 @@ impl<'a> VirtualHdAudioCardFields<'a> {
     fn with_output(out: &'a mut Option<VirtualHdAudioCard>) -> Self {
         VirtualHdAudioCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -379732,10 +379766,10 @@ impl VirtualSoundBlaster16Fields<'_> {
     pub fn new() -> VirtualSoundBlaster16Fields<'static> {
         VirtualSoundBlaster16Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -379749,10 +379783,10 @@ impl<'a> VirtualSoundBlaster16Fields<'a> {
     fn with_output(out: &'a mut Option<VirtualSoundBlaster16>) -> Self {
         VirtualSoundBlaster16Fields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -379995,10 +380029,10 @@ impl VirtualTpmFields<'_> {
     pub fn new() -> VirtualTpmFields<'static> {
         VirtualTpmFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -380014,10 +380048,10 @@ impl<'a> VirtualTpmFields<'a> {
     fn with_output(out: &'a mut Option<VirtualTpm>) -> Self {
         VirtualTpmFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -380341,10 +380375,10 @@ impl VirtualUsbFields<'_> {
     pub fn new() -> VirtualUsbFields<'static> {
         VirtualUsbFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -380363,10 +380397,10 @@ impl<'a> VirtualUsbFields<'a> {
     fn with_output(out: &'a mut Option<VirtualUsb>) -> Self {
         VirtualUsbFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -380677,10 +380711,10 @@ impl VirtualMachineVmciDeviceFields<'_> {
     pub fn new() -> VirtualMachineVmciDeviceFields<'static> {
         VirtualMachineVmciDeviceFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -380698,10 +380732,10 @@ impl<'a> VirtualMachineVmciDeviceFields<'a> {
     fn with_output(out: &'a mut Option<VirtualMachineVmciDevice>) -> Self {
         VirtualMachineVmciDeviceFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -380936,10 +380970,10 @@ impl VirtualMachineVmiromFields<'_> {
     pub fn new() -> VirtualMachineVmiromFields<'static> {
         VirtualMachineVmiromFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -380953,10 +380987,10 @@ impl<'a> VirtualMachineVmiromFields<'a> {
     fn with_output(out: &'a mut Option<VirtualMachineVmirom>) -> Self {
         VirtualMachineVmiromFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -381248,10 +381282,10 @@ impl VirtualMachineVideoCardFields<'_> {
     pub fn new() -> VirtualMachineVideoCardFields<'static> {
         VirtualMachineVideoCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -381271,10 +381305,10 @@ impl<'a> VirtualMachineVideoCardFields<'a> {
     fn with_output(out: &'a mut Option<VirtualMachineVideoCard>) -> Self {
         VirtualMachineVideoCardFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -381530,10 +381564,10 @@ impl VirtualWdtFields<'_> {
     pub fn new() -> VirtualWdtFields<'static> {
         VirtualWdtFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -381549,10 +381583,10 @@ impl<'a> VirtualWdtFields<'a> {
     fn with_output(out: &'a mut Option<VirtualWdt>) -> Self {
         VirtualWdtFields {
             f0: None,
-            f1: None,
-            f2: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("Description") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBusSlotInfo") }),
             f5: None,
             f6: None,
             f7: None,
@@ -412352,7 +412386,7 @@ impl VirtualDeviceConfigSpecFields<'_> {
         VirtualDeviceConfigSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDevice") }),
             f3: None,
             f4: None,
             f5: None,
@@ -412367,7 +412401,7 @@ impl<'a> VirtualDeviceConfigSpecFields<'a> {
         VirtualDeviceConfigSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDevice") }),
             f3: None,
             f4: None,
             f5: None,
@@ -412597,7 +412631,7 @@ impl VirtualDiskConfigSpecFields<'_> {
         VirtualDiskConfigSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDevice") }),
             f3: None,
             f4: None,
             f5: None,
@@ -412614,7 +412648,7 @@ impl<'a> VirtualDiskConfigSpecFields<'a> {
         VirtualDiskConfigSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDevice") }),
             f3: None,
             f4: None,
             f5: None,
@@ -412780,7 +412814,7 @@ impl VirtualDeviceConfigSpecBackingSpecFields<'_> {
     pub fn new() -> VirtualDeviceConfigSpecBackingSpecFields<'static> {
         VirtualDeviceConfigSpecBackingSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             __out: None,
         }
     }
@@ -412790,7 +412824,7 @@ impl<'a> VirtualDeviceConfigSpecBackingSpecFields<'a> {
     fn with_output(out: &'a mut Option<VirtualDeviceConfigSpecBackingSpec>) -> Self {
         VirtualDeviceConfigSpecBackingSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             __out: Some(out),
         }
     }
@@ -414908,7 +414942,7 @@ pub struct GuestAuthAliasInfoFields<'a> {
 impl GuestAuthAliasInfoFields<'_> {
     pub fn new() -> GuestAuthAliasInfoFields<'static> {
         GuestAuthAliasInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("GuestAuthSubject") }),
             f1: None,
             __out: None,
         }
@@ -414918,7 +414952,7 @@ impl GuestAuthAliasInfoFields<'_> {
 impl<'a> GuestAuthAliasInfoFields<'a> {
     fn with_output(out: &'a mut Option<GuestAuthAliasInfo>) -> Self {
         GuestAuthAliasInfoFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("GuestAuthSubject") }),
             f1: None,
             __out: Some(out),
         }
@@ -416094,7 +416128,7 @@ impl GuestFileInfoFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("GuestFileAttributes") }),
             __out: None,
         }
     }
@@ -416106,7 +416140,7 @@ impl<'a> GuestFileInfoFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("GuestFileAttributes") }),
             __out: Some(out),
         }
     }
@@ -416254,7 +416288,7 @@ pub struct FileTransferInformationFields<'a> {
 impl FileTransferInformationFields<'_> {
     pub fn new() -> FileTransferInformationFields<'static> {
         FileTransferInformationFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("GuestFileAttributes") }),
             f1: None,
             f2: None,
             __out: None,
@@ -416265,7 +416299,7 @@ impl FileTransferInformationFields<'_> {
 impl<'a> FileTransferInformationFields<'a> {
     fn with_output(out: &'a mut Option<FileTransferInformation>) -> Self {
         FileTransferInformationFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("GuestFileAttributes") }),
             f1: None,
             f2: None,
             __out: Some(out),
@@ -418275,7 +418309,7 @@ impl GuestRegValueSpecFields<'_> {
     pub fn new() -> GuestRegValueSpecFields<'static> {
         GuestRegValueSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("GuestRegValueDataSpec") }),
             __out: None,
         }
     }
@@ -418285,7 +418319,7 @@ impl<'a> GuestRegValueSpecFields<'a> {
     fn with_output(out: &'a mut Option<GuestRegValueSpec>) -> Self {
         GuestRegValueSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("GuestRegValueDataSpec") }),
             __out: Some(out),
         }
     }
@@ -419841,7 +419875,7 @@ pub struct ReplicationGroupIdFields<'a> {
 impl ReplicationGroupIdFields<'_> {
     pub fn new() -> ReplicationGroupIdFields<'static> {
         ReplicationGroupIdFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("FaultDomainId") }),
             f1: None,
             __out: None,
         }
@@ -419851,7 +419885,7 @@ impl ReplicationGroupIdFields<'_> {
 impl<'a> ReplicationGroupIdFields<'a> {
     fn with_output(out: &'a mut Option<ReplicationGroupId>) -> Self {
         ReplicationGroupIdFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("FaultDomainId") }),
             f1: None,
             __out: Some(out),
         }
@@ -423716,7 +423750,7 @@ impl VsanDiskGroupResourceCheckResultFields<'_> {
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDiskResourceCheckResult") }),
             f11: None,
             __out: None,
         }
@@ -423736,7 +423770,7 @@ impl<'a> VsanDiskGroupResourceCheckResultFields<'a> {
             f7: None,
             f8: None,
             f9: None,
-            f10: None,
+            f10: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDiskResourceCheckResult") }),
             f11: None,
             __out: Some(out),
         }
@@ -427192,7 +427226,7 @@ impl VsanFileServiceDomainConfigFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDirectoryServerConfig") }),
             f5: None,
             __out: None,
         }
@@ -427206,7 +427240,7 @@ impl<'a> VsanFileServiceDomainConfigFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDirectoryServerConfig") }),
             f5: None,
             __out: Some(out),
         }
@@ -427773,7 +427807,7 @@ impl VsanFileShareConfigFields<'_> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f6: None,
             f7: None,
             f8: None,
@@ -427792,7 +427826,7 @@ impl<'a> VsanFileShareConfigFields<'a> {
             f2: None,
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualMachineProfileSpec") }),
             f6: None,
             f7: None,
             f8: None,
@@ -429706,7 +429740,7 @@ pub struct VsanHciMeshDatastoreSourceFields<'a> {
 impl VsanHciMeshDatastoreSourceFields<'_> {
     pub fn new() -> VsanHciMeshDatastoreSourceFields<'static> {
         VsanHciMeshDatastoreSourceFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanRemoteVcInfo") }),
             __out: None,
         }
     }
@@ -429715,7 +429749,7 @@ impl VsanHciMeshDatastoreSourceFields<'_> {
 impl<'a> VsanHciMeshDatastoreSourceFields<'a> {
     fn with_output(out: &'a mut Option<VsanHciMeshDatastoreSource>) -> Self {
         VsanHciMeshDatastoreSourceFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanRemoteVcInfo") }),
             __out: Some(out),
         }
     }
@@ -435443,9 +435477,9 @@ impl VsanResourceCheckStatusFields<'_> {
     pub fn new() -> VsanResourceCheckStatusFields<'static> {
         VsanResourceCheckStatusFields {
             f0: None,
-            f1: None,
-            f2: None,
-            f3: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VsanResourceCheckResult") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VsanResourceCheckTaskDetails") }),
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("VsanResourceCheckTaskDetails") }),
             f4: None,
             __out: None,
         }
@@ -435456,9 +435490,9 @@ impl<'a> VsanResourceCheckStatusFields<'a> {
     fn with_output(out: &'a mut Option<VsanResourceCheckStatus>) -> Self {
         VsanResourceCheckStatusFields {
             f0: None,
-            f1: None,
-            f2: None,
-            f3: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VsanResourceCheckResult") }),
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VsanResourceCheckTaskDetails") }),
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("VsanResourceCheckTaskDetails") }),
             f4: None,
             __out: Some(out),
         }
@@ -445832,7 +445866,7 @@ impl VsanPrepareVsanForVcsaSpecFields<'_> {
     pub fn new() -> VsanPrepareVsanForVcsaSpecFields<'static> {
         VsanPrepareVsanForVcsaSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f2: None,
             f3: None,
             f4: None,
@@ -445846,7 +445880,7 @@ impl<'a> VsanPrepareVsanForVcsaSpecFields<'a> {
     fn with_output(out: &'a mut Option<VsanPrepareVsanForVcsaSpec>) -> Self {
         VsanPrepareVsanForVcsaSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f2: None,
             f3: None,
             f4: None,
@@ -447268,7 +447302,7 @@ impl VsanVcPostDeployConfigSpecFields<'_> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f5: None,
             f6: None,
             f7: None,
@@ -447288,7 +447322,7 @@ impl<'a> VsanVcPostDeployConfigSpecFields<'a> {
             f1: None,
             f2: None,
             f3: None,
-            f4: None,
+            f4: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f5: None,
             f6: None,
             f7: None,
@@ -449075,7 +449109,7 @@ impl VsanVnicVdsMigrationSpecFields<'_> {
     pub fn new() -> VsanVnicVdsMigrationSpecFields<'static> {
         VsanVnicVdsMigrationSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             __out: None,
         }
     }
@@ -449085,7 +449119,7 @@ impl<'a> VsanVnicVdsMigrationSpecFields<'a> {
     fn with_output(out: &'a mut Option<VsanVnicVdsMigrationSpec>) -> Self {
         VsanVnicVdsMigrationSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("VirtualDeviceBackingInfo") }),
             __out: Some(out),
         }
     }
@@ -451542,12 +451576,12 @@ impl VsanConfigInfoExFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("VsanIscsiTargetServiceConfig") }),
             f6: None,
             f7: None,
-            f8: None,
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDatastoreConfig") }),
             f9: None,
             f10: None,
             f11: None,
@@ -451576,12 +451610,12 @@ impl<'a> VsanConfigInfoExFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("VsanIscsiTargetServiceConfig") }),
             f6: None,
             f7: None,
-            f8: None,
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDatastoreConfig") }),
             f9: None,
             f10: None,
             f11: None,
@@ -453836,10 +453870,10 @@ impl VsanHostConfigInfoExFields<'_> {
             f5: None,
             f6: None,
             f7: None,
-            f8: None,
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f9: None,
             f10: None,
-            f11: None,
+            f11: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDatastoreConfig") }),
             f12: None,
             f13: None,
             f14: None,
@@ -453867,10 +453901,10 @@ impl<'a> VsanHostConfigInfoExFields<'a> {
             f5: None,
             f6: None,
             f7: None,
-            f8: None,
+            f8: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f9: None,
             f10: None,
-            f11: None,
+            f11: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDatastoreConfig") }),
             f12: None,
             f13: None,
             f14: None,
@@ -454509,7 +454543,7 @@ pub struct VsanHostConfigInfoNetworkInfoPortConfigFields<'a> {
 impl VsanHostConfigInfoNetworkInfoPortConfigFields<'_> {
     pub fn new() -> VsanHostConfigInfoNetworkInfoPortConfigFields<'static> {
         VsanHostConfigInfoNetworkInfoPortConfigFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanHostIpConfig") }),
             f1: None,
             __out: None,
         }
@@ -454519,7 +454553,7 @@ impl VsanHostConfigInfoNetworkInfoPortConfigFields<'_> {
 impl<'a> VsanHostConfigInfoNetworkInfoPortConfigFields<'a> {
     fn with_output(out: &'a mut Option<VsanHostConfigInfoNetworkInfoPortConfig>) -> Self {
         VsanHostConfigInfoNetworkInfoPortConfigFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanHostIpConfig") }),
             f1: None,
             __out: Some(out),
         }
@@ -454681,7 +454715,7 @@ pub struct VsanHostPortConfigExFields<'a> {
 impl VsanHostPortConfigExFields<'_> {
     pub fn new() -> VsanHostPortConfigExFields<'static> {
         VsanHostPortConfigExFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanHostIpConfig") }),
             f1: None,
             f2: None,
             __out: None,
@@ -454692,7 +454726,7 @@ impl VsanHostPortConfigExFields<'_> {
 impl<'a> VsanHostPortConfigExFields<'a> {
     fn with_output(out: &'a mut Option<VsanHostPortConfigEx>) -> Self {
         VsanHostPortConfigExFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VsanHostIpConfig") }),
             f1: None,
             f2: None,
             __out: Some(out),
@@ -455818,7 +455852,7 @@ impl VimVsanHostDiskMapInfoExFields<'_> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f7: None,
             __out: None,
         }
@@ -455834,7 +455868,7 @@ impl<'a> VimVsanHostDiskMapInfoExFields<'a> {
             f3: None,
             f4: None,
             f5: None,
-            f6: None,
+            f6: Some(VimObjectHolder { out: None, default_type_name: Some("VsanDataEfficiencyConfig") }),
             f7: None,
             __out: Some(out),
         }
@@ -463047,7 +463081,7 @@ impl BaseConfigInfoFields<'_> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoBackingInfo") }),
             f8: None,
             f9: None,
             f10: None,
@@ -463066,7 +463100,7 @@ impl<'a> BaseConfigInfoFields<'a> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoBackingInfo") }),
             f8: None,
             f9: None,
             f10: None,
@@ -463317,7 +463351,7 @@ impl VStorageObjectConfigInfoFields<'_> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoBackingInfo") }),
             f8: None,
             f9: None,
             f10: None,
@@ -463341,7 +463375,7 @@ impl<'a> VStorageObjectConfigInfoFields<'a> {
             f4: None,
             f5: None,
             f6: None,
-            f7: None,
+            f7: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoBackingInfo") }),
             f8: None,
             f9: None,
             f10: None,
@@ -463682,7 +463716,7 @@ impl BaseConfigInfoFileBackingInfoFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoFileBackingInfo") }),
             f4: None,
             f5: None,
             __out: None,
@@ -463696,7 +463730,7 @@ impl<'a> BaseConfigInfoFileBackingInfoFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoFileBackingInfo") }),
             f4: None,
             f5: None,
             __out: Some(out),
@@ -463874,7 +463908,7 @@ impl BaseConfigInfoDiskFileBackingInfoFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoFileBackingInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -463889,7 +463923,7 @@ impl<'a> BaseConfigInfoDiskFileBackingInfoFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoFileBackingInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -464077,7 +464111,7 @@ impl BaseConfigInfoRawDiskMappingBackingInfoFields<'_> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoFileBackingInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -464093,7 +464127,7 @@ impl<'a> BaseConfigInfoRawDiskMappingBackingInfoFields<'a> {
             f0: None,
             f1: None,
             f2: None,
-            f3: None,
+            f3: Some(VimObjectHolder { out: None, default_type_name: Some("BaseConfigInfoFileBackingInfo") }),
             f4: None,
             f5: None,
             f6: None,
@@ -464292,10 +464326,10 @@ impl VslmCreateSpecFields<'_> {
         VslmCreateSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VslmCreateSpecBackingSpec") }),
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             f6: None,
             __out: None,
         }
@@ -464307,10 +464341,10 @@ impl<'a> VslmCreateSpecFields<'a> {
         VslmCreateSpecFields {
             f0: None,
             f1: None,
-            f2: None,
+            f2: Some(VimObjectHolder { out: None, default_type_name: Some("VslmCreateSpecBackingSpec") }),
             f3: None,
             f4: None,
-            f5: None,
+            f5: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             f6: None,
             __out: Some(out),
         }
@@ -464920,7 +464954,7 @@ impl DiskCryptoSpecFields<'_> {
     pub fn new() -> DiskCryptoSpecFields<'static> {
         DiskCryptoSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             __out: None,
         }
     }
@@ -464930,7 +464964,7 @@ impl<'a> DiskCryptoSpecFields<'a> {
     fn with_output(out: &'a mut Option<DiskCryptoSpec>) -> Self {
         DiskCryptoSpecFields {
             f0: None,
-            f1: None,
+            f1: Some(VimObjectHolder { out: None, default_type_name: Some("CryptoSpec") }),
             __out: Some(out),
         }
     }
@@ -465496,7 +465530,7 @@ pub struct VslmMigrateSpecFields<'a> {
 impl VslmMigrateSpecFields<'_> {
     pub fn new() -> VslmMigrateSpecFields<'static> {
         VslmMigrateSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VslmCreateSpecBackingSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -465509,7 +465543,7 @@ impl VslmMigrateSpecFields<'_> {
 impl<'a> VslmMigrateSpecFields<'a> {
     fn with_output(out: &'a mut Option<VslmMigrateSpec>) -> Self {
         VslmMigrateSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VslmCreateSpecBackingSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -465694,7 +465728,7 @@ pub struct VslmCloneSpecFields<'a> {
 impl VslmCloneSpecFields<'_> {
     pub fn new() -> VslmCloneSpecFields<'static> {
         VslmCloneSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VslmCreateSpecBackingSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -465710,7 +465744,7 @@ impl VslmCloneSpecFields<'_> {
 impl<'a> VslmCloneSpecFields<'a> {
     fn with_output(out: &'a mut Option<VslmCloneSpec>) -> Self {
         VslmCloneSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VslmCreateSpecBackingSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -465884,7 +465918,7 @@ pub struct VslmRelocateSpecFields<'a> {
 impl VslmRelocateSpecFields<'_> {
     pub fn new() -> VslmRelocateSpecFields<'static> {
         VslmRelocateSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VslmCreateSpecBackingSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -465897,7 +465931,7 @@ impl VslmRelocateSpecFields<'_> {
 impl<'a> VslmRelocateSpecFields<'a> {
     fn with_output(out: &'a mut Option<VslmRelocateSpec>) -> Self {
         VslmRelocateSpecFields {
-            f0: None,
+            f0: Some(VimObjectHolder { out: None, default_type_name: Some("VslmCreateSpecBackingSpec") }),
             f1: None,
             f2: None,
             f3: None,
@@ -471694,7 +471728,7 @@ impl VslmTaskInfoFields<'_> {
             f11: None,
             f12: None,
             f13: None,
-            f14: None,
+            f14: Some(VimObjectHolder { out: None, default_type_name: Some("VslmTaskReason") }),
             f15: None,
             f16: None,
             f17: None,
@@ -471725,7 +471759,7 @@ impl<'a> VslmTaskInfoFields<'a> {
             f11: None,
             f12: None,
             f13: None,
-            f14: None,
+            f14: Some(VimObjectHolder { out: None, default_type_name: Some("VslmTaskReason") }),
             f15: None,
             f16: None,
             f17: None,
@@ -473697,6 +473731,10 @@ pub struct MethodFaultFields<'a> {
     extra_fields_: std::collections::HashMap<String, miniserde::json::Value>,
     current_extra_key: Option<String>,
     current_extra_value: Option<miniserde::json::Value>,
+    #[cfg(feature = "xml")]
+    resolved_type: Option<struct_enum::StructType>,
+    #[cfg(feature = "xml")]
+    api_extra_visitor: super::api_typed_visitor::ApiTypedValueVisitor,
     __out: Option<&'a mut Option<MethodFault>>,
 }
 
@@ -473710,6 +473748,10 @@ impl MethodFaultFields<'_> {
             extra_fields_: std::collections::HashMap::new(),
             current_extra_key: None,
             current_extra_value: None,
+            #[cfg(feature = "xml")]
+            resolved_type: type_,
+            #[cfg(feature = "xml")]
+            api_extra_visitor: super::api_typed_visitor::ApiTypedValueVisitor::new(),
             __out: None,
         }
     }
@@ -473725,12 +473767,28 @@ impl<'a> MethodFaultFields<'a> {
             extra_fields_: std::collections::HashMap::new(),
             current_extra_key: None,
             current_extra_value: None,
+            #[cfg(feature = "xml")]
+            resolved_type: None,
+            #[cfg(feature = "xml")]
+            api_extra_visitor: super::api_typed_visitor::ApiTypedValueVisitor::new(),
             __out: Some(out),
         }
     }
 
     fn shift_extra(&mut self) {
-        if let (Some(k), Some(v)) = (self.current_extra_key.take(), self.current_extra_value.take()) {
+        #[cfg(feature = "xml")]
+        {
+            if self.resolved_type.is_none() {
+                if let Some(tn) = self.type_name.as_deref() {
+                    self.resolved_type = struct_enum::StructType::from_str(tn);
+                }
+            }
+        }
+        #[cfg(feature = "xml")]
+        let value = self.current_extra_value.take().or_else(|| self.api_extra_visitor.take_value());
+        #[cfg(not(feature = "xml"))]
+        let value = self.current_extra_value.take();
+        if let (Some(k), Some(v)) = (self.current_extra_key.take(), value) {
             self.extra_fields_.insert(k, v);
         }
     }
@@ -473763,6 +473821,16 @@ impl miniserde::de::Map for MethodFaultFields<'_> {
             "faultMessage" => Ok(miniserde::Deserialize::begin(&mut self.f1)),
             _ => {
                 self.current_extra_key = Some(key.to_owned());
+                #[cfg(feature = "xml")]
+                {
+                    let st = self.resolved_type.or(self.type_);
+                    if let Some(st) = st {
+                        if let Some(ft) = super::api_field_registry::lookup_api_field(st, key) {
+                            self.api_extra_visitor.reset(ft);
+                            return Ok(&mut self.api_extra_visitor);
+                        }
+                    }
+                }
                 Ok(miniserde::Deserialize::begin(&mut self.current_extra_value))
             }
         }

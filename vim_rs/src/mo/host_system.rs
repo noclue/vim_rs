@@ -32,11 +32,8 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** Host.Cim.CimInteraction
     pub async fn acquire_cim_services_ticket(&self) -> Result<crate::types::structs::HostServiceTicket> {
-        let path = format!("/HostSystem/{moId}/AcquireCimServicesTicket", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostServiceTicket = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "AcquireCimServicesTicket", None).await?;
+        let result: crate::types::structs::HostServiceTicket = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Sets/changes the key to be used for coredump encryption
@@ -63,9 +60,7 @@ impl HostSystem {
     /// the default KMIP server.
     pub async fn configure_crypto_key(&self, key_id: Option<&crate::types::structs::CryptoKeyId>) -> Result<()> {
         let input = ConfigureCryptoKeyRequestType {key_id, };
-        let path = format!("/HostSystem/{moId}/ConfigureCryptoKey", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "ConfigureCryptoKey", Some(&input)).await
     }
     /// Destroys this object, deleting its contents and removing it from its parent
     /// folder (if any).
@@ -89,11 +84,8 @@ impl HostSystem {
     ///
     /// Failure
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/HostSystem/{moId}/Destroy_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "Destroy_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Disconnects from a host and instructs the server to stop sending heartbeats.
@@ -107,11 +99,8 @@ impl HostSystem {
     /// 
     /// Refers instance of *Task*.
     pub async fn disconnect_host_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/HostSystem/{moId}/DisconnectHost_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "DisconnectHost_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Sets/changes the key to be used for coredump encryption
@@ -131,9 +120,7 @@ impl HostSystem {
     /// *incapable* state
     pub async fn enable_crypto(&self, key_plain: &crate::types::structs::CryptoKeyPlain) -> Result<()> {
         let input = EnableCryptoRequestType {key_plain, };
-        let path = format!("/HostSystem/{moId}/EnableCrypto", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "EnableCrypto", Some(&input)).await
     }
     /// Deprecated as of vSphere API 6.0, use
     /// *HostAccessManager.ChangeLockdownMode*.
@@ -162,9 +149,7 @@ impl HostSystem {
     /// ***DisableAdminNotSupported***: If invoked directly on the host or the
     /// host doesn't support this operation.
     pub async fn enter_lockdown_mode(&self) -> Result<()> {
-        let path = format!("/HostSystem/{moId}/EnterLockdownMode", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "EnterLockdownMode", None).await
     }
     /// Puts the host in maintenance mode.
     /// 
@@ -231,11 +216,8 @@ impl HostSystem {
     /// ***RequestCanceled***: if the operation is canceled.
     pub async fn enter_maintenance_mode_task(&self, timeout: i32, evacuate_powered_off_vms: Option<bool>, maintenance_spec: Option<&crate::types::structs::HostMaintenanceSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EnterMaintenanceModeRequestType {timeout, evacuate_powered_off_vms, maintenance_spec, };
-        let path = format!("/HostSystem/{moId}/EnterMaintenanceMode_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "EnterMaintenanceMode_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Puts the host in standby mode, a mode in which the host is in a
@@ -306,11 +288,8 @@ impl HostSystem {
     /// ***RequestCanceled***: if the operation is canceled.
     pub async fn power_down_host_to_stand_by_task(&self, timeout_sec: i32, evacuate_powered_off_vms: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerDownHostToStandByRequestType {timeout_sec, evacuate_powered_off_vms, };
-        let path = format!("/HostSystem/{moId}/PowerDownHostToStandBy_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "PowerDownHostToStandBy_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.0, use
@@ -336,9 +315,7 @@ impl HostSystem {
     /// ***AdminNotDisabled***: If the host's Administrator permission
     /// is not disabled.
     pub async fn exit_lockdown_mode(&self) -> Result<()> {
-        let path = format!("/HostSystem/{moId}/ExitLockdownMode", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "ExitLockdownMode", None).await
     }
     /// Takes the host out of maintenance mode.
     /// 
@@ -369,11 +346,8 @@ impl HostSystem {
     /// ***InvalidState***: if the host is not in maintenance mode.
     pub async fn exit_maintenance_mode_task(&self, timeout: i32) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExitMaintenanceModeRequestType {timeout, };
-        let path = format!("/HostSystem/{moId}/ExitMaintenanceMode_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "ExitMaintenanceMode_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Takes the host out of standby mode.
@@ -422,11 +396,8 @@ impl HostSystem {
     /// ***RequestCanceled***: if the operation is canceled.
     pub async fn power_up_host_from_stand_by_task(&self, timeout_sec: i32) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerUpHostFromStandByRequestType {timeout_sec, };
-        let path = format!("/HostSystem/{moId}/PowerUpHostFromStandBy_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "PowerUpHostFromStandBy_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Prepare the host for receiving sensitive information
@@ -440,19 +411,14 @@ impl HostSystem {
     /// ***InvalidState***: if the host is not in
     /// *incapable* state
     pub async fn prepare_crypto(&self) -> Result<()> {
-        let path = format!("/HostSystem/{moId}/PrepareCrypto", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "PrepareCrypto", None).await
     }
     /// Connection-oriented information about a host.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn query_host_connection_info(&self) -> Result<crate::types::structs::HostConnectInfo> {
-        let path = format!("/HostSystem/{moId}/QueryHostConnectionInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostConnectInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "QueryHostConnectionInfo", None).await?;
+        let result: crate::types::structs::HostConnectInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *HostSystem.QueryMemoryOverheadEx*.
@@ -487,11 +453,8 @@ impl HostSystem {
     /// in bytes.
     pub async fn query_memory_overhead(&self, memory_size: i64, video_ram_size: Option<i32>, num_vcpus: i32) -> Result<i64> {
         let input = QueryMemoryOverheadRequestType {memory_size, video_ram_size, num_vcpus, };
-        let path = format!("/HostSystem/{moId}/QueryMemoryOverhead", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "QueryMemoryOverhead", Some(&input)).await?;
+        let result: i64 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of VI API 6.0, use
@@ -513,11 +476,8 @@ impl HostSystem {
     /// in bytes.
     pub async fn query_memory_overhead_ex(&self, vm_config_info: &crate::types::structs::VirtualMachineConfigInfo) -> Result<i64> {
         let input = QueryMemoryOverheadExRequestType {vm_config_info, };
-        let path = format!("/HostSystem/{moId}/QueryMemoryOverheadEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "QueryMemoryOverheadEx", Some(&input)).await?;
+        let result: i64 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query the path to VMware Tools repository configured on the host.
@@ -535,25 +495,17 @@ impl HostSystem {
     ///
     /// ***HostConfigFault***: if the configuration could not be read.
     pub async fn query_product_locker_location(&self) -> Result<String> {
-        let path = format!("/HostSystem/{moId}/QueryProductLockerLocation", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "QueryProductLockerLocation", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Basic information about TPM attestation state of the host.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn query_tpm_attestation_report(&self) -> Result<Option<crate::types::structs::HostTpmAttestationReport>> {
-        let path = format!("/HostSystem/{moId}/QueryTpmAttestationReport", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostSystem", &self.mo_id, "QueryTpmAttestationReport", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostTpmAttestationReport>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -591,11 +543,8 @@ impl HostSystem {
     /// ***NotSupported***: if the host does not support the reboot operation.
     pub async fn reboot_host_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RebootHostRequestType {force, };
-        let path = format!("/HostSystem/{moId}/RebootHost_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "RebootHost_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reconfigures the host for vSphere HA.
@@ -621,11 +570,8 @@ impl HostSystem {
     /// 
     /// ***DasConfigFault***: if there is a problem reconfiguring the host for HA.
     pub async fn reconfigure_host_for_das_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/HostSystem/{moId}/ReconfigureHostForDAS_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "ReconfigureHostForDAS_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reconnects to a host.
@@ -701,11 +647,8 @@ impl HostSystem {
     /// ***SSLVerifyFault***: if the host certificate could not be authenticated.
     pub async fn reconnect_host_task(&self, cnx_spec: Option<&crate::types::structs::HostConnectSpec>, reconnect_spec: Option<&crate::types::structs::HostSystemReconnectSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconnectHostRequestType {cnx_spec, reconnect_spec, };
-        let path = format!("/HostSystem/{moId}/ReconnectHost_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "ReconnectHost_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reload the entity state.
@@ -723,9 +666,7 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn reload(&self) -> Result<()> {
-        let path = format!("/HostSystem/{moId}/Reload", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "Reload", None).await
     }
     /// Renames this managed entity.
     /// 
@@ -757,22 +698,16 @@ impl HostSystem {
     /// ***InvalidName***: If the new name is not a valid entity name.
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
-        let path = format!("/HostSystem/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "Rename_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return the amount of free EPC memory on the host in bytes.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn retrieve_free_epc_memory(&self) -> Result<i64> {
-        let path = format!("/HostSystem/{moId}/RetrieveFreeEpcMemory", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "RetrieveFreeEpcMemory", None).await?;
+        let result: i64 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return the hardware uptime of the host in seconds.
@@ -783,11 +718,8 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn retrieve_hardware_uptime(&self) -> Result<i64> {
-        let path = format!("/HostSystem/{moId}/RetrieveHardwareUptime", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "RetrieveHardwareUptime", None).await?;
+        let result: i64 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Assigns a value to a custom field.
@@ -806,9 +738,7 @@ impl HostSystem {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/HostSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Shuts down a host.
     /// 
@@ -844,11 +774,8 @@ impl HostSystem {
     /// ***NotSupported***: if the host does not support shutdown.
     pub async fn shutdown_host_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ShutdownHostRequestType {force, };
-        let path = format!("/HostSystem/{moId}/ShutdownHost_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "ShutdownHost_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Update flags that are part of the *HostFlagInfo* object.
@@ -861,9 +788,7 @@ impl HostSystem {
     /// -
     pub async fn update_flags(&self, flag_info: &crate::types::structs::HostFlagInfo) -> Result<()> {
         let input = UpdateFlagsRequestType {flag_info, };
-        let path = format!("/HostSystem/{moId}/UpdateFlags", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "UpdateFlags", Some(&input)).await
     }
     /// Update fields that are part of the *HostIpmiInfo* object.
     /// 
@@ -881,9 +806,7 @@ impl HostSystem {
     /// ***InvalidIpmiMacAddress***: if the supplied MAC address is invalid.
     pub async fn update_ipmi(&self, ipmi_info: &crate::types::structs::HostIpmiInfo) -> Result<()> {
         let input = UpdateIpmiRequestType {ipmi_info, };
-        let path = format!("/HostSystem/{moId}/UpdateIpmi", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "UpdateIpmi", Some(&input)).await
     }
     /// Change and reconfigure the VMware Tools repository on the host.
     /// 
@@ -929,11 +852,8 @@ impl HostSystem {
     /// ***HostConfigFault***: if the configuration could not be written.
     pub async fn update_product_locker_location_task(&self, path: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateProductLockerLocationRequestType {path, };
-        let path = format!("/HostSystem/{moId}/UpdateProductLockerLocation_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostSystem", &self.mo_id, "UpdateProductLockerLocation_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of Vsphere API 6.0. Please, contact VMware Support to get
@@ -949,9 +869,7 @@ impl HostSystem {
     /// -
     pub async fn update_system_resources(&self, resource_info: &crate::types::structs::HostSystemResourceInfo) -> Result<()> {
         let input = UpdateSystemResourcesRequestType {resource_info, };
-        let path = format!("/HostSystem/{moId}/UpdateSystemResources", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "UpdateSystemResources", Some(&input)).await
     }
     /// Update the System Swap Configuration.
     /// 
@@ -966,9 +884,7 @@ impl HostSystem {
     /// configure the system swap functionality.
     pub async fn update_system_swap_configuration(&self, sys_swap_config: &crate::types::structs::HostSystemSwapConfiguration) -> Result<()> {
         let input = UpdateSystemSwapConfigurationRequestType {sys_swap_config, };
-        let path = format!("/HostSystem/{moId}/UpdateSystemSwapConfiguration", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostSystem", &self.mo_id, "UpdateSystemSwapConfiguration", Some(&input)).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -976,40 +892,25 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let path = format!("/HostSystem/{moId}/alarmActionsEnabled", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "alarmActionsEnabled").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<bool>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Host answer file validation result.
     pub async fn answer_file_validation_result(&self) -> Result<Option<crate::types::structs::AnswerFileStatusResult>> {
-        let path = format!("/HostSystem/{moId}/answerFileValidationResult", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "answerFileValidationResult").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::AnswerFileStatusResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Host answer file validation state.
     pub async fn answer_file_validation_state(&self) -> Result<Option<crate::types::structs::AnswerFileStatusResult>> {
-        let path = format!("/HostSystem/{moId}/answerFileValidationState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "answerFileValidationState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::AnswerFileStatusResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1019,14 +920,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/HostSystem/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1035,40 +931,25 @@ impl HostSystem {
     /// This might not be available for a
     /// disconnected host.
     pub async fn capability(&self) -> Result<Option<crate::types::structs::HostCapability>> {
-        let path = format!("/HostSystem/{moId}/capability", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "capability").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostCapability>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// The host profile compliance check result.
     pub async fn compliance_check_result(&self) -> Result<Option<crate::types::structs::ComplianceResult>> {
-        let path = format!("/HostSystem/{moId}/complianceCheckResult", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "complianceCheckResult").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ComplianceResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// The host profile compliance check state.
     pub async fn compliance_check_state(&self) -> Result<Option<crate::types::structs::HostSystemComplianceCheckState>> {
-        let path = format!("/HostSystem/{moId}/complianceCheckState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "complianceCheckState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostSystemComplianceCheckState>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1077,14 +958,9 @@ impl HostSystem {
     /// This might not be available for a disconnected
     /// host.
     pub async fn config(&self) -> Result<Option<crate::types::structs::HostConfigInfo>> {
-        let path = format!("/HostSystem/{moId}/config", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "config").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostConfigInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1096,14 +972,9 @@ impl HostSystem {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let path = format!("/HostSystem/{moId}/configIssue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "configIssue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Event>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1117,11 +988,9 @@ impl HostSystem {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_manager(&self) -> Result<crate::types::structs::HostConfigManager> {
-        let path = format!("/HostSystem/{moId}/configManager", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostConfigManager = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "configManager").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configManager was empty".to_string()))?;
+        let result: crate::types::structs::HostConfigManager = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The configStatus indicates whether or not the system has detected a configuration
@@ -1149,25 +1018,18 @@ impl HostSystem {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/HostSystem/{moId}/configStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "configStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostSystem/{moId}/customValue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "customValue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1180,14 +1042,9 @@ impl HostSystem {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/HostSystem/{moId}/datastore", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "datastore").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1199,11 +1056,9 @@ impl HostSystem {
     ///
     /// Refers instance of *HostDatastoreBrowser*.
     pub async fn datastore_browser(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/HostSystem/{moId}/datastoreBrowser", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "datastoreBrowser").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property datastoreBrowser was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A set of alarm states for alarms that apply to this managed entity.
@@ -1217,14 +1072,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/HostSystem/{moId}/declaredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "declaredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1298,14 +1148,9 @@ impl HostSystem {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/HostSystem/{moId}/disabledMethod", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "disabledMethod").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1313,14 +1158,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let path = format!("/HostSystem/{moId}/effectiveRole", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "effectiveRole").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1329,14 +1169,9 @@ impl HostSystem {
     /// This might not be available for a
     /// disconnected host.
     pub async fn hardware(&self) -> Result<Option<crate::types::structs::HostHardwareInfo>> {
-        let path = format!("/HostSystem/{moId}/hardware", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "hardware").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostHardwareInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1349,11 +1184,9 @@ impl HostSystem {
     /// NOTE:
     /// The values in this property may not be accurate for pre-5.0 hosts when returned by vCenter 5.0
     pub async fn licensable_resource(&self) -> Result<crate::types::structs::HostLicensableResourceInfo> {
-        let path = format!("/HostSystem/{moId}/licensableResource", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostLicensableResourceInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "licensableResource").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property licensableResource was empty".to_string()))?;
+        let result: crate::types::structs::HostLicensableResourceInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Name of this entity, unique relative to its parent.
@@ -1366,11 +1199,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let path = format!("/HostSystem/{moId}/name", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "name").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A collection of references to the subset of network objects in the datacenter that
@@ -1382,14 +1213,9 @@ impl HostSystem {
     ///
     /// Refers instances of *Network*.
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/HostSystem/{moId}/network", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "network").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1414,11 +1240,9 @@ impl HostSystem {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/HostSystem/{moId}/overallStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "overallStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -1433,40 +1257,25 @@ impl HostSystem {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/HostSystem/{moId}/parent", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "parent").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let path = format!("/HostSystem/{moId}/permission", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "permission").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// The host profile precheck-remediation result.
     pub async fn precheck_remediation_result(&self) -> Result<Option<crate::types::structs::ApplyHostProfileConfigurationSpec>> {
-        let path = format!("/HostSystem/{moId}/precheckRemediationResult", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "precheckRemediationResult").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ApplyHostProfileConfigurationSpec>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1496,72 +1305,48 @@ impl HostSystem {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/HostSystem/{moId}/recentTask", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "recentTask").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// The host profile remediation result.
     pub async fn remediation_result(&self) -> Result<Option<crate::types::structs::ApplyHostProfileConfigurationResult>> {
-        let path = format!("/HostSystem/{moId}/remediationResult", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "remediationResult").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ApplyHostProfileConfigurationResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// The host profile remediation state.
     pub async fn remediation_state(&self) -> Result<Option<crate::types::structs::HostSystemRemediationState>> {
-        let path = format!("/HostSystem/{moId}/remediationState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "remediationState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostSystemRemediationState>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Runtime state information about the host such as connection state.
     pub async fn runtime(&self) -> Result<crate::types::structs::HostRuntimeInfo> {
-        let path = format!("/HostSystem/{moId}/runtime", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostRuntimeInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "runtime").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: crate::types::structs::HostRuntimeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Basic information about the host, including connection state.
     pub async fn summary(&self) -> Result<crate::types::structs::HostListSummary> {
-        let path = format!("/HostSystem/{moId}/summary", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostListSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "summary").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
+        let result: crate::types::structs::HostListSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reference for the system resource hierarchy, used for configuring the set of
     /// resources reserved to the system and unavailable to virtual machines.
     pub async fn system_resources(&self) -> Result<Option<crate::types::structs::HostSystemResourceInfo>> {
-        let path = format!("/HostSystem/{moId}/systemResources", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "systemResources").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostSystemResourceInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1571,14 +1356,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let path = format!("/HostSystem/{moId}/tag", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "tag").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Tag>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1597,14 +1377,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/HostSystem/{moId}/triggeredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "triggeredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1616,14 +1391,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostSystem/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1633,14 +1403,9 @@ impl HostSystem {
     ///
     /// Refers instances of *VirtualMachine*.
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/HostSystem/{moId}/vm", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "vm").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

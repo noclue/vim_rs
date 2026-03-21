@@ -28,14 +28,9 @@ impl HostDateTimeSystem {
     ///
     /// List of available timezones on the host.
     pub async fn query_available_time_zones(&self) -> Result<Option<Vec<crate::types::structs::HostDateTimeSystemTimeZone>>> {
-        let path = format!("/HostDateTimeSystem/{moId}/QueryAvailableTimeZones", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostDateTimeSystem", &self.mo_id, "QueryAvailableTimeZones", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostDateTimeSystemTimeZone>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -47,11 +42,8 @@ impl HostDateTimeSystem {
     ///
     /// Current DateTime on the host.
     pub async fn query_date_time(&self) -> Result<String> {
-        let path = format!("/HostDateTimeSystem/{moId}/QueryDateTime", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDateTimeSystem", &self.mo_id, "QueryDateTime", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Refresh the DateTime related settings to pick up any changes that might
@@ -59,9 +51,7 @@ impl HostDateTimeSystem {
     /// 
     /// ***Required privileges:*** Host.Config.DateTime
     pub async fn refresh_date_time_system(&self) -> Result<()> {
-        let path = format!("/HostDateTimeSystem/{moId}/RefreshDateTimeSystem", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDateTimeSystem", &self.mo_id, "RefreshDateTimeSystem", None).await
     }
     /// Run a test to validate current time service configuration is functioning
     /// normally.
@@ -78,14 +68,9 @@ impl HostDateTimeSystem {
     /// The status of the time service on this host based on present time
     /// service configuration.
     pub async fn test_time_service(&self) -> Result<Option<crate::types::structs::HostDateTimeSystemServiceTestResult>> {
-        let path = format!("/HostDateTimeSystem/{moId}/TestTimeService", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostDateTimeSystem", &self.mo_id, "TestTimeService", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostDateTimeSystemServiceTestResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -103,9 +88,7 @@ impl HostDateTimeSystem {
     /// ***HostConfigFault***: if an error occurs.
     pub async fn update_date_time_config(&self, config: &crate::types::structs::HostDateTimeConfig) -> Result<()> {
         let input = UpdateDateTimeConfigRequestType {config, };
-        let path = format!("/HostDateTimeSystem/{moId}/UpdateDateTimeConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDateTimeSystem", &self.mo_id, "UpdateDateTimeConfig", Some(&input)).await
     }
     /// Update the date/time on the host.
     /// 
@@ -124,9 +107,7 @@ impl HostDateTimeSystem {
     /// ***HostConfigFault***: if an error occurs.
     pub async fn update_date_time(&self, date_time: &str) -> Result<()> {
         let input = UpdateDateTimeRequestType {date_time, };
-        let path = format!("/HostDateTimeSystem/{moId}/UpdateDateTime", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDateTimeSystem", &self.mo_id, "UpdateDateTime", Some(&input)).await
     }
     /// The DateTime configuration of the host.
     /// 
@@ -136,11 +117,9 @@ impl HostDateTimeSystem {
     ///
     /// DateTime configuration of the host.
     pub async fn date_time_info(&self) -> Result<crate::types::structs::HostDateTimeInfo> {
-        let path = format!("/HostDateTimeSystem/{moId}/dateTimeInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostDateTimeInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostDateTimeSystem", &self.mo_id, "dateTimeInfo").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property dateTimeInfo was empty".to_string()))?;
+        let result: crate::types::structs::HostDateTimeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

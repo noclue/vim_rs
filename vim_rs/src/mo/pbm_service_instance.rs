@@ -29,22 +29,17 @@ impl PbmServiceInstance {
     /// Service instance properties that provide access to
     /// Storage Policy managed objects.
     pub async fn pbm_retrieve_service_content(&self) -> Result<crate::types::structs::PbmServiceInstanceContent> {
-        let path = format!("/pbm/PbmServiceInstance/{moId}/PbmRetrieveServiceContent", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::PbmServiceInstanceContent = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("pbm", "PbmServiceInstance", &self.mo_id, "PbmRetrieveServiceContent", None).await?;
+        let result: crate::types::structs::PbmServiceInstanceContent = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Contains references to Storage Policy managed objects.
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn content(&self) -> Result<crate::types::structs::PbmServiceInstanceContent> {
-        let path = format!("/pbm/PbmServiceInstance/{moId}/content", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::PbmServiceInstanceContent = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("pbm", "PbmServiceInstance", &self.mo_id, "content").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property content was empty".to_string()))?;
+        let result: crate::types::structs::PbmServiceInstanceContent = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -23,9 +23,7 @@ impl HostServiceSystem {
     /// 
     /// ***Required privileges:*** Host.Config.NetService
     pub async fn refresh_services(&self) -> Result<()> {
-        let path = format!("/HostServiceSystem/{moId}/RefreshServices", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostServiceSystem", &self.mo_id, "RefreshServices", None).await
     }
     /// Restarts the service.
     /// 
@@ -48,9 +46,7 @@ impl HostServiceSystem {
     /// ***HostConfigFault***: for all other failures.
     pub async fn restart_service(&self, id: &str) -> Result<()> {
         let input = RestartServiceRequestType {id, };
-        let path = format!("/HostServiceSystem/{moId}/RestartService", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostServiceSystem", &self.mo_id, "RestartService", Some(&input)).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -68,9 +64,7 @@ impl HostServiceSystem {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/HostServiceSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostServiceSystem", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Starts the service.
     /// 
@@ -93,9 +87,7 @@ impl HostServiceSystem {
     /// ***HostConfigFault***: for all other failures.
     pub async fn start_service(&self, id: &str) -> Result<()> {
         let input = StartServiceRequestType {id, };
-        let path = format!("/HostServiceSystem/{moId}/StartService", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostServiceSystem", &self.mo_id, "StartService", Some(&input)).await
     }
     /// Stops the service.
     /// 
@@ -118,9 +110,7 @@ impl HostServiceSystem {
     /// ***HostConfigFault***: for all other failures.
     pub async fn stop_service(&self, id: &str) -> Result<()> {
         let input = StopServiceRequestType {id, };
-        let path = format!("/HostServiceSystem/{moId}/StopService", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostServiceSystem", &self.mo_id, "StopService", Some(&input)).await
     }
     /// Uninstalls the service.
     /// 
@@ -146,9 +136,7 @@ impl HostServiceSystem {
     /// ***HostConfigFault***: for all other failures.
     pub async fn uninstall_service(&self, id: &str) -> Result<()> {
         let input = UninstallServiceRequestType {id, };
-        let path = format!("/HostServiceSystem/{moId}/UninstallService", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostServiceSystem", &self.mo_id, "UninstallService", Some(&input)).await
     }
     /// Updates the activation policy of the service.
     /// 
@@ -174,9 +162,7 @@ impl HostServiceSystem {
     /// ***HostConfigFault***: for all other failures.
     pub async fn update_service_policy(&self, id: &str, policy: &str) -> Result<()> {
         let input = UpdateServicePolicyRequestType {id, policy, };
-        let path = format!("/HostServiceSystem/{moId}/UpdateServicePolicy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostServiceSystem", &self.mo_id, "UpdateServicePolicy", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -184,24 +170,17 @@ impl HostServiceSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/HostServiceSystem/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostServiceSystem", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Service configuration.
     pub async fn service_info(&self) -> Result<crate::types::structs::HostServiceInfo> {
-        let path = format!("/HostServiceSystem/{moId}/serviceInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostServiceInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostServiceSystem", &self.mo_id, "serviceInfo").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property serviceInfo was empty".to_string()))?;
+        let result: crate::types::structs::HostServiceInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// List of custom field values.
@@ -212,14 +191,9 @@ impl HostServiceSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostServiceSystem/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostServiceSystem", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

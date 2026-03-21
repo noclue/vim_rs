@@ -257,11 +257,13 @@ impl ValuePolyBuilder {
 
 impl miniserde::de::Map for ValuePolyBuilder {
     fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
-        if key == "_value" {
-            Ok(self.deserializer.as_mut())
-        } else {
-            // Ignore other fields (like _typeName)
-            Ok(<dyn miniserde::de::Visitor>::ignore())
+        match key {
+            // `_typeName` is already consumed by PolyCore before ValuePolyBuilder is created.
+            // `_value` is the JSON wrapper key; `#text` is the XML text-content key.
+            // Any other child-element key (e.g. `"string"` in `ArrayOfString`) is also
+            // forwarded so the underlying deserializer can handle sequences via `seq()`.
+            "_typeName" => Ok(<dyn miniserde::de::Visitor>::ignore()),
+            _ => Ok(self.deserializer.as_mut()),
         }
     }
 
@@ -285,6 +287,7 @@ impl PolyBuilder for ValuePolyBuilder {
 /// Callers cast to their required trait after deserialization.
 pub struct VimObjectHolder {
     pub out: Option<Box<dyn super::vim_object_trait::VimObjectTrait>>,
+    pub default_type_name: Option<&'static str>,
 }
 
 // Note: Deserialize and Visitor impls for VimObjectHolder are in the generated
@@ -294,24 +297,27 @@ pub struct VimObjectHolder {
 // Shared Polymorphic State Machine
 // ============================================================================
 
-/// Polymorphic builder mode - shared between VimObjectHolder and VimAny builders
+/// Polymorphic builder mode - shared between VimObjectHolder and VimAny builders.
+///
+/// Two-state machine: `Initial` until the type is resolved, then `Direct`.
+/// Type resolution happens via:
+///   1. `_typeName` key (JSON `_typeName` field or XML `xsi:type` attribute)
+///   2. `default_type_name` (statically known from the schema, e.g. `deviceInfo`
+///      is always `Description` unless overridden by `xsi:type`)
+///
+/// If neither is available when a non-`_typeName` key arrives, deserialization
+/// fails. This matches both protocols: vCenter JSON always emits `_typeName`
+/// first, and ESXi XML has `xsi:type` as an attribute (delivered before children).
 pub enum PolyMode {
-    /// Initial state - haven't seen any fields yet
     Initial,
-    /// Fast path: _typeName was first, using unified PolyBuilder (handles both objects and values)
     Direct { builder: Box<dyn PolyBuilder> },
-    /// Slow path: _typeName was not first, buffering all fields
-    Buffered {
-        buffer: miniserde::json::Object,
-        current_key: Option<String>,
-        current_value: Option<miniserde::json::Value>,
-    },
 }
 
 /// Core polymorphic state machine. Handles key() logic for both builders.
 pub struct PolyCore {
     pub mode: PolyMode,
     pub type_name: Option<String>,
+    pub default_type_name: Option<&'static str>,
 }
 
 impl PolyCore {
@@ -319,11 +325,31 @@ impl PolyCore {
         Self {
             mode: PolyMode::Initial,
             type_name: None,
+            default_type_name: None,
         }
     }
 
+    pub fn with_default(default_type_name: &'static str) -> Self {
+        Self {
+            mode: PolyMode::Initial,
+            type_name: None,
+            default_type_name: Some(default_type_name),
+        }
+    }
+
+    /// Transition from Initial to Direct using a resolved type name.
+    fn resolve<F>(&mut self, name: &str, lookup_type: &F) -> miniserde::Result<()>
+    where
+        F: Fn(&str) -> Option<&'static TypeInfo>,
+    {
+        let type_info = lookup_type(name).ok_or(miniserde::Error)?;
+        self.mode = PolyMode::Direct {
+            builder: type_info.create_poly_builder()?,
+        };
+        Ok(())
+    }
+
     /// Handle a key. Returns the visitor for the value.
-    /// Requires the lookup_type function from generated code.
     pub fn key<F>(
         &mut self,
         key: &str,
@@ -332,110 +358,45 @@ impl PolyCore {
     where
         F: Fn(&str) -> Option<&'static TypeInfo>,
     {
-        // Check if we need to transition from Initial after capturing _typeName
-        if matches!(&self.mode, PolyMode::Initial) {
-            if let Some(type_name) = &self.type_name {
-                let type_info = lookup_type(type_name).ok_or(miniserde::Error)?;
-                let builder = type_info.create_poly_builder()?;
-                self.mode = PolyMode::Direct { builder };
-            }
-        }
-
-        // Handle Initial mode (first field)
-        if matches!(&self.mode, PolyMode::Initial) {
-            if key == "_typeName" {
-                // Fast path: _typeName is first
+        // Ensure we're in Direct mode before delegating
+        if matches!(self.mode, PolyMode::Initial) {
+            if let Some(type_name) = self.type_name.take() {
+                // _typeName was captured on a previous key() call — resolve it now
+                self.resolve(&type_name, &lookup_type)?;
+            } else if key == "_typeName" {
+                // _typeName is the current key — capture its value, stay Initial
                 return Ok(miniserde::de::Deserialize::begin(&mut self.type_name));
+            } else if let Some(default) = self.default_type_name {
+                // Non-_typeName key, no captured type — use schema default
+                self.resolve(default, &lookup_type)?;
             } else {
-                // Slow path: First field is not _typeName, switch to buffering
-                self.mode = PolyMode::Buffered {
-                    buffer: miniserde::json::Object::new(),
-                    current_key: Some(key.to_owned()),
-                    current_value: None,
-                };
+                return Err(miniserde::Error);
             }
         }
 
         match &mut self.mode {
+            PolyMode::Direct { builder } => builder.key(key),
             PolyMode::Initial => unreachable!(),
-            PolyMode::Direct { builder } => {
-                // Delegate to the unified PolyBuilder (handles both objects and values)
-                builder.key(key)
-            }
-            PolyMode::Buffered {
-                buffer,
-                current_key,
-                current_value,
-            } => {
-                // Shift previous field to buffer
-                if let (Some(k), Some(v)) = (current_key.take(), current_value.take()) {
-                    buffer.insert(k, v);
-                }
-                *current_key = Some(key.to_owned());
-                Ok(miniserde::de::Deserialize::begin(current_value))
-            }
         }
     }
 
-    /// Finalize and ensure transition from Initial if needed
-    pub fn prepare_finish<F>(&mut self, lookup_type: F) -> miniserde::Result<()>
-    where
-        F: Fn(&str) -> Option<&'static TypeInfo>,
-    {
-        if matches!(&self.mode, PolyMode::Initial) {
-            if let Some(type_name) = &self.type_name {
-                let type_info = lookup_type(type_name).ok_or(miniserde::Error)?;
-                let builder = type_info.create_poly_builder()?;
-                self.mode = PolyMode::Direct { builder };
-            }
-        }
-        Ok(())
-    }
-
-    /// Finish for VimAny mode (objects or values)
+    /// Finish: resolve type if needed, then finalize the builder.
     pub fn finish<F>(&mut self, lookup_type: F) -> miniserde::Result<VimAny>
     where
         F: Fn(&str) -> Option<&'static TypeInfo>,
     {
-        self.prepare_finish(&lookup_type)?;
+        // If _typeName was the only key (e.g. `{"_typeName":"Foo"}`), resolve now
+        if matches!(&self.mode, PolyMode::Initial) {
+            if let Some(type_name) = self.type_name.take() {
+                self.resolve(&type_name, &lookup_type)?;
+            } else if let Some(default) = self.default_type_name {
+                self.resolve(default, &lookup_type)?;
+            }
+        }
 
         match &mut self.mode {
             PolyMode::Initial => Err(miniserde::Error),
-            PolyMode::Direct { builder } => {
-                // Unified finish via PolyBuilder
-                builder.finish_poly()
-            }
-            PolyMode::Buffered {
-                buffer,
-                current_key,
-                current_value,
-            } => {
-                // Shift last field
-                if let (Some(k), Some(v)) = (current_key.take(), current_value.take()) {
-                    buffer.insert(k, v);
-                }
-
-                let type_name = buffer
-                    .get("_typeName")
-                    .and_then(|v| match v {
-                        miniserde::json::Value::String(s) => Some(s.as_str()),
-                        _ => None,
-                    })
-                    .ok_or(miniserde::Error)?;
-
-                let type_info = lookup_type(type_name).ok_or(miniserde::Error)?;
-
-                // Create unified builder and replay buffered fields to it
-                let mut builder = type_info.create_poly_builder()?;
-                for (key, value) in buffer.iter() {
-                    if key == "_typeName" {
-                        continue;
-                    }
-                    let visitor = builder.key(key)?;
-                    super::mini_helpers::replay_value_to_visitor(value, visitor)?;
-                }
-                builder.finish_poly()
-            }
+            PolyMode::Direct { builder } => builder.finish_poly(),
         }
     }
 }
@@ -447,8 +408,13 @@ pub struct VimObjectHolderBuilder<'a> {
 
 impl<'a> VimObjectHolderBuilder<'a> {
     pub fn new(out: &'a mut Option<VimObjectHolder>) -> Self {
+        let default = out.as_ref().and_then(|h| h.default_type_name);
         Self {
-            core: PolyCore::new(),
+            core: if let Some(dt) = default {
+                PolyCore::with_default(dt)
+            } else {
+                PolyCore::new()
+            },
             __out: out,
         }
     }

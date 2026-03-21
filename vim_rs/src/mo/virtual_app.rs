@@ -102,11 +102,8 @@ impl VirtualApp {
     /// usage policy.
     pub async fn clone_v_app_task(&self, name: &str, target: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VAppCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CloneVAppRequestType {name, target, spec, };
-        let path = format!("/VirtualApp/{moId}/CloneVApp_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "CloneVApp_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new resource pool.
@@ -149,11 +146,8 @@ impl VirtualApp {
     /// InsufficientCpuResourcesFault will be thrown.
     pub async fn create_resource_pool(&self, name: &str, spec: &crate::types::structs::ResourceConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateResourcePoolRequestType {name, spec, };
-        let path = format!("/VirtualApp/{moId}/CreateResourcePool", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "CreateResourcePool", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new vApp container.
@@ -212,11 +206,8 @@ impl VirtualApp {
     /// the supplied in VApp configuration.
     pub async fn create_v_app(&self, name: &str, res_spec: &crate::types::structs::ResourceConfigSpec, config_spec: &crate::types::structs::VAppConfigSpec, vm_folder: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVAppRequestType {name, res_spec, config_spec, vm_folder, };
-        let path = format!("/VirtualApp/{moId}/CreateVApp", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "CreateVApp", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new virtual machine in a vApp container.
@@ -288,11 +279,8 @@ impl VirtualApp {
     /// of a vApp.
     pub async fn create_child_vm_task(&self, config: &crate::types::structs::VirtualMachineConfigSpec, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateChildVmRequestType {config, host, };
-        let path = format!("/VirtualApp/{moId}/CreateChildVM_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "CreateChildVM_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroys this object, deleting its contents and removing it from its parent
@@ -317,11 +305,8 @@ impl VirtualApp {
     ///
     /// Failure
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/VirtualApp/{moId}/Destroy_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "Destroy_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removes all child resource pools recursively.
@@ -340,9 +325,7 @@ impl VirtualApp {
     ///   must be held on this resource pool as well as on any vApps being
     ///   moved.
     pub async fn destroy_children(&self) -> Result<()> {
-        let path = format!("/VirtualApp/{moId}/DestroyChildren", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualApp", &self.mo_id, "DestroyChildren", None).await
     }
     /// Obtains an export lease on this vApp.
     /// 
@@ -374,11 +357,8 @@ impl VirtualApp {
     /// 
     /// ***FileFault***: if there was an error accessing one of the virtual machine files.
     pub async fn export_v_app(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/VirtualApp/{moId}/ExportVApp", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "ExportVApp", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new entity in this resource pool.
@@ -478,11 +458,8 @@ impl VirtualApp {
     /// other virtual machines.
     pub async fn import_v_app(&self, spec: &dyn crate::types::traits::ImportSpecTrait, folder: Option<&crate::types::structs::ManagedObjectReference>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ImportVAppRequestType {spec, folder, host, };
-        let path = format!("/VirtualApp/{moId}/ImportVApp", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "ImportVApp", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Moves a set of resource pools, vApps or virtual machines into this pool.
@@ -536,9 +513,7 @@ impl VirtualApp {
     /// InsufficientMemoryResourcesFault.
     pub async fn move_into_resource_pool(&self, list: &[crate::types::structs::ManagedObjectReference]) -> Result<()> {
         let input = MoveIntoResourcePoolRequestType {list, };
-        let path = format!("/VirtualApp/{moId}/MoveIntoResourcePool", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualApp", &self.mo_id, "MoveIntoResourcePool", Some(&input)).await
     }
     /// Stops this vApp.
     /// 
@@ -577,11 +552,8 @@ impl VirtualApp {
     /// has been specified.
     pub async fn power_off_v_app_task(&self, force: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PowerOffVAppRequestType {force, };
-        let path = format!("/VirtualApp/{moId}/PowerOffVApp_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "PowerOffVApp_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Starts this vApp.
@@ -636,11 +608,8 @@ impl VirtualApp {
     /// ***MissingNetworkIpConfig***: if no network configuration exists for the primary
     /// network for the vApp.
     pub async fn power_on_v_app_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/VirtualApp/{moId}/PowerOnVApp_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "PowerOnVApp_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.5.
@@ -655,11 +624,8 @@ impl VirtualApp {
     ///
     /// *ResourceConfigOption* object.
     pub async fn query_resource_config_option(&self) -> Result<crate::types::structs::ResourceConfigOption> {
-        let path = format!("/VirtualApp/{moId}/QueryResourceConfigOption", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ResourceConfigOption = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "QueryResourceConfigOption", None).await?;
+        let result: crate::types::structs::ResourceConfigOption = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Refreshes the resource usage data that is available in
@@ -673,9 +639,7 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn refresh_runtime(&self) -> Result<()> {
-        let path = format!("/VirtualApp/{moId}/RefreshRuntime", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualApp", &self.mo_id, "RefreshRuntime", None).await
     }
     /// Adds an existing virtual machine to this resource pool or vApp.
     /// 
@@ -752,11 +716,8 @@ impl VirtualApp {
     /// usage policy.
     pub async fn register_child_vm_task(&self, path: &str, name: Option<&str>, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RegisterChildVmRequestType {path, name, host, };
-        let path = format!("/VirtualApp/{moId}/RegisterChildVM_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "RegisterChildVM_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reload the entity state.
@@ -774,9 +735,7 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn reload(&self) -> Result<()> {
-        let path = format!("/VirtualApp/{moId}/Reload", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualApp", &self.mo_id, "Reload", None).await
     }
     /// Renames this managed entity.
     /// 
@@ -808,11 +767,8 @@ impl VirtualApp {
     /// ***InvalidName***: If the new name is not a valid entity name.
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
-        let path = format!("/VirtualApp/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "Rename_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Assigns a value to a custom field.
@@ -831,9 +787,7 @@ impl VirtualApp {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/VirtualApp/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualApp", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Suspends this vApp.
     /// 
@@ -860,11 +814,8 @@ impl VirtualApp {
     /// vApp's current state. For example, if the vApp is in the
     /// process of being started.
     pub async fn suspend_v_app_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/VirtualApp/{moId}/SuspendVApp_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "SuspendVApp_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removes this vApp from the inventory without removing
@@ -885,11 +836,8 @@ impl VirtualApp {
     ///
     /// ***InvalidPowerState***: if the vApp is running.
     pub async fn unregister_v_app_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/VirtualApp/{moId}/unregisterVApp_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualApp", &self.mo_id, "unregisterVApp_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Changes resource configuration of a set of children of this resource pool.
@@ -927,9 +875,7 @@ impl VirtualApp {
     /// InsufficientMemoryResourcesFault will be thrown.
     pub async fn update_child_resource_configuration(&self, spec: &[crate::types::structs::ResourceConfigSpec]) -> Result<()> {
         let input = UpdateChildResourceConfigurationRequestType {spec, };
-        let path = format!("/VirtualApp/{moId}/UpdateChildResourceConfiguration", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualApp", &self.mo_id, "UpdateChildResourceConfiguration", Some(&input)).await
     }
     /// Updates the configuration of the resource pool.
     /// 
@@ -968,9 +914,7 @@ impl VirtualApp {
     /// changeVersion for the configuration.
     pub async fn update_config(&self, name: Option<&str>, config: Option<&crate::types::structs::ResourceConfigSpec>) -> Result<()> {
         let input = UpdateConfigRequestType {name, config, };
-        let path = format!("/VirtualApp/{moId}/UpdateConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualApp", &self.mo_id, "UpdateConfig", Some(&input)).await
     }
     /// Deprecated as of vSphere API 5.1.
     /// 
@@ -1024,9 +968,7 @@ impl VirtualApp {
     /// ***NotSupported***: If the target of the link is not in the same datacenter.
     pub async fn update_linked_children(&self, add_change_set: Option<&[crate::types::structs::VirtualAppLinkInfo]>, remove_set: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = UpdateLinkedChildrenRequestType {add_change_set, remove_set, };
-        let path = format!("/VirtualApp/{moId}/UpdateLinkedChildren", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualApp", &self.mo_id, "UpdateLinkedChildren", Some(&input)).await
     }
     /// Updates the vApp configuration.
     /// 
@@ -1058,9 +1000,7 @@ impl VirtualApp {
     /// property types.
     pub async fn update_v_app_config(&self, spec: &crate::types::structs::VAppConfigSpec) -> Result<()> {
         let input = UpdateVAppConfigRequestType {spec, };
-        let path = format!("/VirtualApp/{moId}/UpdateVAppConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VirtualApp", &self.mo_id, "UpdateVAppConfig", Some(&input)).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -1068,14 +1008,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let path = format!("/VirtualApp/{moId}/alarmActionsEnabled", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "alarmActionsEnabled").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<bool>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1085,14 +1020,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/VirtualApp/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1103,14 +1033,9 @@ impl VirtualApp {
     /// property. To listen for the child configuration change, please create
     /// PropertyCollector filter on the child entities directly.
     pub async fn child_configuration(&self) -> Result<Option<Vec<crate::types::structs::ResourceConfigSpec>>> {
-        let path = format!("/VirtualApp/{moId}/childConfiguration", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "childConfiguration").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ResourceConfigSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1118,24 +1043,17 @@ impl VirtualApp {
     /// 
     /// List of linked children.
     pub async fn child_link(&self) -> Result<Option<Vec<crate::types::structs::VirtualAppLinkInfo>>> {
-        let path = format!("/VirtualApp/{moId}/childLink", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "childLink").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VirtualAppLinkInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Configuration of this resource pool.
     pub async fn config(&self) -> Result<crate::types::structs::ResourceConfigSpec> {
-        let path = format!("/VirtualApp/{moId}/config", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ResourceConfigSpec = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "config").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::ResourceConfigSpec = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Current configuration issues that have been detected for this entity.
@@ -1146,14 +1064,9 @@ impl VirtualApp {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let path = format!("/VirtualApp/{moId}/configIssue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "configIssue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Event>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1182,25 +1095,18 @@ impl VirtualApp {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/VirtualApp/{moId}/configStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "configStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/VirtualApp/{moId}/customValue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "customValue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1213,14 +1119,9 @@ impl VirtualApp {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/VirtualApp/{moId}/datastore", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "datastore").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1235,14 +1136,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/VirtualApp/{moId}/declaredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "declaredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1316,14 +1212,9 @@ impl VirtualApp {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/VirtualApp/{moId}/disabledMethod", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "disabledMethod").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1331,14 +1222,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let path = format!("/VirtualApp/{moId}/effectiveRole", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "effectiveRole").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1352,11 +1238,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let path = format!("/VirtualApp/{moId}/name", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "name").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The namespace with which the ResourcePool is associated.
@@ -1368,14 +1252,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn namespace(&self) -> Result<Option<String>> {
-        let path = format!("/VirtualApp/{moId}/namespace", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "namespace").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1388,14 +1267,9 @@ impl VirtualApp {
     ///
     /// Refers instances of *Network*.
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/VirtualApp/{moId}/network", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "network").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1420,11 +1294,9 @@ impl VirtualApp {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/VirtualApp/{moId}/overallStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "overallStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The ComputeResource to which this set of one or more nested resource pools
@@ -1436,11 +1308,9 @@ impl VirtualApp {
     ///
     /// Refers instance of *ComputeResource*.
     pub async fn owner(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/VirtualApp/{moId}/owner", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "owner").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property owner was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -1455,14 +1325,9 @@ impl VirtualApp {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/VirtualApp/{moId}/parent", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "parent").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1478,14 +1343,9 @@ impl VirtualApp {
     ///
     /// Refers instance of *Folder*.
     pub async fn parent_folder(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/VirtualApp/{moId}/parentFolder", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "parentFolder").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1495,27 +1355,17 @@ impl VirtualApp {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent_v_app(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/VirtualApp/{moId}/parentVApp", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "parentVApp").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let path = format!("/VirtualApp/{moId}/permission", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "permission").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1545,14 +1395,9 @@ impl VirtualApp {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/VirtualApp/{moId}/recentTask", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "recentTask").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1564,14 +1409,9 @@ impl VirtualApp {
     ///
     /// Refers instances of *ResourcePool*.
     pub async fn resource_pool(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/VirtualApp/{moId}/resourcePool", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "resourcePool").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1589,11 +1429,9 @@ impl VirtualApp {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn runtime(&self) -> Result<crate::types::structs::ResourcePoolRuntimeInfo> {
-        let path = format!("/VirtualApp/{moId}/runtime", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ResourcePoolRuntimeInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "runtime").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: crate::types::structs::ResourcePoolRuntimeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Basic information about a resource pool.
@@ -1606,11 +1444,9 @@ impl VirtualApp {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ResourcePoolSummaryTrait>> {
-        let path = format!("/VirtualApp/{moId}/summary", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::ResourcePoolSummaryTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "summary").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::ResourcePoolSummaryTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The set of tags associated with this managed entity.
@@ -1619,14 +1455,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let path = format!("/VirtualApp/{moId}/tag", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "tag").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Tag>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1645,14 +1476,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/VirtualApp/{moId}/triggeredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "triggeredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1660,14 +1486,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn v_app_config(&self) -> Result<Option<crate::types::structs::VAppConfigInfo>> {
-        let path = format!("/VirtualApp/{moId}/vAppConfig", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "vAppConfig").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VAppConfigInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1679,14 +1500,9 @@ impl VirtualApp {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/VirtualApp/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1698,14 +1514,9 @@ impl VirtualApp {
     ///
     /// Refers instances of *VirtualMachine*.
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/VirtualApp/{moId}/vm", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "vm").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

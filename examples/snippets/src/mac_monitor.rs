@@ -19,10 +19,17 @@
 //! - Filtering detected changes to avoid redundant processing
 //! - Handling polymorphic device types using traits
 //! - Proper resource cleanup with Drop implementations
+//!
+//! ## Typical uses
+//!
+//! Network drift detection, IP/MAC reconciliation jobs, and demos of `WaitForUpdates`-style monitoring.
+//!
+//! ## See also
+//!
+//! Ported from the PyVmomi community sample
+//! [monitor_mac_addresses.py](https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/monitor_mac_addresses.py).
 
 // Port of the Python mac_monitor example to Rust
-// Original work: https://github.com/vmware/pyvmomi-community-samples/blob/master/samples/monitor_mac_addresses.py
-
 use std::collections::HashMap;
 use std::time::Instant;
 use std::{env, sync::Arc};
@@ -31,7 +38,7 @@ use vim_rs::types::traits::VirtualEthernetCardTrait;
 
 use anyhow::Result;
 use log::{debug, info};
-use utils::connect;
+use snippets::connect;
 use vim_rs::vim_updatable;
 use vim_rs::core::client::Client;
 use vim_rs::core::pc_cache::{CacheAction, CacheManager, Monitor, ObjectCache, ObjectCacheListener};

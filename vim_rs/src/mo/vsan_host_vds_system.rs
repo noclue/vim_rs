@@ -42,9 +42,7 @@ impl VsanHostVdsSystem {
     /// ***VsanFault***: Any unexpected runtime error.
     pub async fn vsan_complete_migrate_vms_to_vds(&self, job_id: &str, new_state: &str) -> Result<()> {
         let input = VsanCompleteMigrateVmsToVdsRequestType {job_id, new_state, };
-        let path = format!("/vsan/VsanHostVdsSystem/{moId}/VsanCompleteMigrateVmsToVds", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanHostVdsSystem", &self.mo_id, "VsanCompleteMigrateVmsToVds", Some(&input)).await
     }
     /// Make all the VMs on the host to adopt the VDS network.
     /// 
@@ -75,11 +73,8 @@ impl VsanHostVdsSystem {
     /// ***VsanFault***: Any unexpected runtime error.
     pub async fn vsan_migrate_vms_to_vds(&self, vm_config_specs: &[crate::types::structs::VsanVmVdsMigrationSpec], vds_uuid: &str, timeout_sec: i64, revert: Option<bool>) -> Result<String> {
         let input = VsanMigrateVmsToVdsRequestType {vm_config_specs, vds_uuid, timeout_sec, revert, };
-        let path = format!("/vsan/VsanHostVdsSystem/{moId}/VsanMigrateVmsToVds", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanHostVdsSystem", &self.mo_id, "VsanMigrateVmsToVds", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

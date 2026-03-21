@@ -27,9 +27,7 @@ impl HostCpuSchedulerSystem {
     /// 
     /// ***Required privileges:*** Host.Config.HyperThreading
     pub async fn disable_hyper_threading(&self) -> Result<()> {
-        let path = format!("/HostCpuSchedulerSystem/{moId}/DisableHyperThreading", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostCpuSchedulerSystem", &self.mo_id, "DisableHyperThreading", None).await
     }
     /// Treat hyperthreads as schedulable resources the next time the CPU
     /// scheduler starts.
@@ -40,9 +38,7 @@ impl HostCpuSchedulerSystem {
     /// 
     /// ***Required privileges:*** Host.Config.HyperThreading
     pub async fn enable_hyper_threading(&self) -> Result<()> {
-        let path = format!("/HostCpuSchedulerSystem/{moId}/EnableHyperThreading", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostCpuSchedulerSystem", &self.mo_id, "EnableHyperThreading", None).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -60,9 +56,7 @@ impl HostCpuSchedulerSystem {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/HostCpuSchedulerSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostCpuSchedulerSystem", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -70,14 +64,9 @@ impl HostCpuSchedulerSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/HostCpuSchedulerSystem/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -87,14 +76,9 @@ impl HostCpuSchedulerSystem {
     /// 
     /// ***Since:*** vSphere API Release 8.0.3.0
     pub async fn cpu_scheduler_info(&self) -> Result<Option<crate::types::structs::HostCpuSchedulerInfo>> {
-        let path = format!("/HostCpuSchedulerSystem/{moId}/cpuSchedulerInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "cpuSchedulerInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostCpuSchedulerInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -104,14 +88,9 @@ impl HostCpuSchedulerSystem {
     /// existence of this data object type indicates if the CPU scheduler
     /// is capable of scheduling hyperthreads as resources.
     pub async fn hyperthread_info(&self) -> Result<Option<crate::types::structs::HostHyperThreadScheduleInfo>> {
-        let path = format!("/HostCpuSchedulerSystem/{moId}/hyperthreadInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "hyperthreadInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostHyperThreadScheduleInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -123,14 +102,9 @@ impl HostCpuSchedulerSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostCpuSchedulerSystem/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

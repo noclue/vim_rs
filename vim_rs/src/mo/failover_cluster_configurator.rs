@@ -57,11 +57,8 @@ impl FailoverClusterConfigurator {
     /// Refers instance of *Task*.
     pub async fn configure_vcha_task(&self, config_spec: &crate::types::structs::VchaClusterConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureVchaRequestType {config_spec, };
-        let path = format!("/FailoverClusterConfigurator/{moId}/configureVcha_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterConfigurator", &self.mo_id, "configureVcha_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a Passive node in a degraded VCHA Cluster with node location
@@ -88,11 +85,8 @@ impl FailoverClusterConfigurator {
     /// Refers instance of *Task*.
     pub async fn create_passive_node_task(&self, passive_deployment_spec: &crate::types::structs::PassiveNodeDeploymentSpec, source_vc_spec: &crate::types::structs::SourceNodeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreatePassiveNodeRequestType {passive_deployment_spec, source_vc_spec, };
-        let path = format!("/FailoverClusterConfigurator/{moId}/createPassiveNode_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterConfigurator", &self.mo_id, "createPassiveNode_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a Witness node in a degraded VCHA Cluster with node location
@@ -119,11 +113,8 @@ impl FailoverClusterConfigurator {
     /// Refers instance of *Task*.
     pub async fn create_witness_node_task(&self, witness_deployment_spec: &dyn crate::types::traits::NodeDeploymentSpecTrait, source_vc_spec: &crate::types::structs::SourceNodeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateWitnessNodeRequestType {witness_deployment_spec, source_vc_spec, };
-        let path = format!("/FailoverClusterConfigurator/{moId}/createWitnessNode_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterConfigurator", &self.mo_id, "createWitnessNode_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deploys and Configures VCHA on the local vCenter as a single API.
@@ -156,11 +147,8 @@ impl FailoverClusterConfigurator {
     /// Refers instance of *Task*.
     pub async fn deploy_vcha_task(&self, deployment_spec: &crate::types::structs::VchaClusterDeploymentSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DeployVchaRequestType {deployment_spec, };
-        let path = format!("/FailoverClusterConfigurator/{moId}/deployVcha_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterConfigurator", &self.mo_id, "deployVcha_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroys the VCHA cluster setup and removes all VCHA specific
@@ -180,11 +168,8 @@ impl FailoverClusterConfigurator {
     ///
     /// Refers instance of *Task*.
     pub async fn destroy_vcha_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/FailoverClusterConfigurator/{moId}/destroyVcha_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterConfigurator", &self.mo_id, "destroyVcha_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns the configuration information for each node that is part of
@@ -197,11 +182,8 @@ impl FailoverClusterConfigurator {
     /// Returns a data structure specifying configuration for Active,
     /// Passive and Witness node in the Cluster.
     pub async fn get_vcha_config(&self) -> Result<crate::types::structs::VchaClusterConfigInfo> {
-        let path = format!("/FailoverClusterConfigurator/{moId}/getVchaConfig", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VchaClusterConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterConfigurator", &self.mo_id, "getVchaConfig", None).await?;
+        let result: crate::types::structs::VchaClusterConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Prepares the vCenter appliance for a VCHA cluster deployment.
@@ -230,11 +212,8 @@ impl FailoverClusterConfigurator {
     /// Refers instance of *Task*.
     pub async fn prepare_vcha_task(&self, network_spec: &crate::types::structs::VchaClusterNetworkSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PrepareVchaRequestType {network_spec, };
-        let path = format!("/FailoverClusterConfigurator/{moId}/prepareVcha_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterConfigurator", &self.mo_id, "prepareVcha_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A list of method names that must not be called and will throw
@@ -251,14 +230,9 @@ impl FailoverClusterConfigurator {
     /// As with other disabled methods there will be no property updates
     /// on this property when called with non-zero property collector versions.
     pub async fn disabled_configure_method(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/FailoverClusterConfigurator/{moId}/disabledConfigureMethod", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "FailoverClusterConfigurator", &self.mo_id, "disabledConfigureMethod").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

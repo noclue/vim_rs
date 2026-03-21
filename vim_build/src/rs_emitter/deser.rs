@@ -324,7 +324,7 @@ impl DeserializationGenerator<'_> {
         self.printer.println("VimAny::Object(obj) => {")?;
         self.printer.indent();
         self.printer
-            .println("*self.__out = Some(VimObjectHolder { out: Some(obj) });")?;
+            .println("*self.__out = Some(VimObjectHolder { out: Some(obj), default_type_name: self.core.default_type_name });")?;
         self.printer.println("Ok(())")?;
         self.printer.dedent();
         self.printer.println("}")?;

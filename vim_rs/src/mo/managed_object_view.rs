@@ -22,20 +22,13 @@ impl ManagedObjectView {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn destroy_view(&self) -> Result<()> {
-        let path = format!("/ManagedObjectView/{moId}/DestroyView", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ManagedObjectView", &self.mo_id, "DestroyView", None).await
     }
     /// The list of references to objects mapped by this view.
     pub async fn view(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ManagedObjectView/{moId}/view", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ManagedObjectView", &self.mo_id, "view").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

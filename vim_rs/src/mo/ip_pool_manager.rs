@@ -48,11 +48,8 @@ impl IpPoolManager {
     /// address ranges, otherwise the empty string.
     pub async fn allocate_ipv_4_address(&self, dc: &crate::types::structs::ManagedObjectReference, pool_id: i32, allocation_id: &str) -> Result<String> {
         let input = AllocateIpv4AddressRequestType {dc, pool_id, allocation_id, };
-        let path = format!("/IpPoolManager/{moId}/AllocateIpv4Address", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IpPoolManager", &self.mo_id, "AllocateIpv4Address", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Allocates an IPv6 address from an IP pool.
@@ -88,11 +85,8 @@ impl IpPoolManager {
     /// address ranges, otherwise the empty string.
     pub async fn allocate_ipv_6_address(&self, dc: &crate::types::structs::ManagedObjectReference, pool_id: i32, allocation_id: &str) -> Result<String> {
         let input = AllocateIpv6AddressRequestType {dc, pool_id, allocation_id, };
-        let path = format!("/IpPoolManager/{moId}/AllocateIpv6Address", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IpPoolManager", &self.mo_id, "AllocateIpv6Address", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create a new IP pool.
@@ -120,11 +114,8 @@ impl IpPoolManager {
     /// The generated ID for the pool
     pub async fn create_ip_pool(&self, dc: &crate::types::structs::ManagedObjectReference, pool: &crate::types::structs::IpPool) -> Result<i32> {
         let input = CreateIpPoolRequestType {dc, pool, };
-        let path = format!("/IpPoolManager/{moId}/CreateIpPool", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IpPoolManager", &self.mo_id, "CreateIpPool", Some(&input)).await?;
+        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroys an IP pool on the given datacenter.
@@ -152,9 +143,7 @@ impl IpPoolManager {
     /// ***InvalidState***: if the pool is in use and the force flag is false
     pub async fn destroy_ip_pool(&self, dc: &crate::types::structs::ManagedObjectReference, id: i32, force: bool) -> Result<()> {
         let input = DestroyIpPoolRequestType {dc, id, force, };
-        let path = format!("/IpPoolManager/{moId}/DestroyIpPool", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "IpPoolManager", &self.mo_id, "DestroyIpPool", Some(&input)).await
     }
     /// Query IP allocations by IP pool and extension key.
     ///
@@ -178,11 +167,8 @@ impl IpPoolManager {
     /// The resulting list of *IpPoolManagerIpAllocation*.
     pub async fn query_ip_allocations(&self, dc: &crate::types::structs::ManagedObjectReference, pool_id: i32, extension_key: &str) -> Result<Vec<crate::types::structs::IpPoolManagerIpAllocation>> {
         let input = QueryIpAllocationsRequestType {dc, pool_id, extension_key, };
-        let path = format!("/IpPoolManager/{moId}/QueryIPAllocations", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::IpPoolManagerIpAllocation> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "IpPoolManager", &self.mo_id, "QueryIPAllocations", Some(&input)).await?;
+        let result: Vec<crate::types::structs::IpPoolManagerIpAllocation> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return the list of IP pools for a datacenter.
@@ -201,14 +187,9 @@ impl IpPoolManager {
     /// The resulting list of pools.
     pub async fn query_ip_pools(&self, dc: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::IpPool>>> {
         let input = QueryIpPoolsRequestType {dc, };
-        let path = format!("/IpPoolManager/{moId}/QueryIpPools", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "IpPoolManager", &self.mo_id, "QueryIpPools", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::IpPool>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -237,9 +218,7 @@ impl IpPoolManager {
     /// The unique ID for this allocation
     pub async fn release_ip_allocation(&self, dc: &crate::types::structs::ManagedObjectReference, pool_id: i32, allocation_id: &str) -> Result<()> {
         let input = ReleaseIpAllocationRequestType {dc, pool_id, allocation_id, };
-        let path = format!("/IpPoolManager/{moId}/ReleaseIpAllocation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "IpPoolManager", &self.mo_id, "ReleaseIpAllocation", Some(&input)).await
     }
     /// Update an IP pool on a datacenter.
     /// 
@@ -261,9 +240,7 @@ impl IpPoolManager {
     /// The IP pool to update on the server
     pub async fn update_ip_pool(&self, dc: &crate::types::structs::ManagedObjectReference, pool: &crate::types::structs::IpPool) -> Result<()> {
         let input = UpdateIpPoolRequestType {dc, pool, };
-        let path = format!("/IpPoolManager/{moId}/UpdateIpPool", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "IpPoolManager", &self.mo_id, "UpdateIpPool", Some(&input)).await
     }
 }
 struct AllocateIpv4AddressRequestType<'a> {

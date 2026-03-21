@@ -26,9 +26,7 @@ impl ListView {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn destroy_view(&self) -> Result<()> {
-        let path = format!("/ListView/{moId}/DestroyView", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ListView", &self.mo_id, "DestroyView", None).await
     }
     /// Modify the list by giving a delta of entities to add and
     /// entities to remove.
@@ -54,14 +52,9 @@ impl ListView {
     /// A list containing any objects in 'add' that could not be resolved.
     pub async fn modify_list_view(&self, add: Option<&[crate::types::structs::ManagedObjectReference]>, remove: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = ModifyListViewRequestType {add, remove, };
-        let path = format!("/ListView/{moId}/ModifyListView", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ListView", &self.mo_id, "ModifyListView", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -86,14 +79,9 @@ impl ListView {
     /// A list containing any objects in 'obj' that could not be resolved.
     pub async fn reset_list_view(&self, obj: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = ResetListViewRequestType {obj, };
-        let path = format!("/ListView/{moId}/ResetListView", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ListView", &self.mo_id, "ResetListView", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -107,20 +95,13 @@ impl ListView {
     /// Refers instance of *View*.
     pub async fn reset_list_view_from_view(&self, view: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = ResetListViewFromViewRequestType {view, };
-        let path = format!("/ListView/{moId}/ResetListViewFromView", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ListView", &self.mo_id, "ResetListViewFromView", Some(&input)).await
     }
     /// The list of references to objects mapped by this view.
     pub async fn view(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ListView/{moId}/view", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ListView", &self.mo_id, "view").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

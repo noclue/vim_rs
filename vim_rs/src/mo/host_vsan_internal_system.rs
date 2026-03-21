@@ -44,14 +44,9 @@ impl HostVsanInternalSystem {
     /// List of UUIDs successfully abdicated.
     pub async fn abdicate_dom_ownership(&self, uuids: &[String]) -> Result<Option<Vec<String>>> {
         let input = AbdicateDomOwnershipRequestType {uuids, };
-        let path = format!("/HostVsanInternalSystem/{moId}/AbdicateDomOwnership", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostVsanInternalSystem", &self.mo_id, "AbdicateDomOwnership", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -89,11 +84,8 @@ impl HostVsanInternalSystem {
     /// Failure
     pub async fn can_provision_objects(&self, npbs: &[crate::types::structs::VsanNewPolicyBatch], ignore_satisfiability: Option<bool>) -> Result<Vec<crate::types::structs::VsanPolicySatisfiability>> {
         let input = CanProvisionObjectsRequestType {npbs, ignore_satisfiability, };
-        let path = format!("/HostVsanInternalSystem/{moId}/CanProvisionObjects", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanPolicySatisfiability> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "CanProvisionObjects", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanPolicySatisfiability> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Delete VSAN objects.
@@ -125,11 +117,8 @@ impl HostVsanInternalSystem {
     /// Failure
     pub async fn delete_vsan_objects(&self, uuids: &[String], force: Option<bool>) -> Result<Vec<crate::types::structs::HostVsanInternalSystemDeleteVsanObjectsResult>> {
         let input = DeleteVsanObjectsRequestType {uuids, force, };
-        let path = format!("/HostVsanInternalSystem/{moId}/DeleteVsanObjects", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::HostVsanInternalSystemDeleteVsanObjectsResult> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "DeleteVsanObjects", Some(&input)).await?;
+        let result: Vec<crate::types::structs::HostVsanInternalSystemDeleteVsanObjectsResult> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get VSAN object extended attributes.
@@ -157,11 +146,8 @@ impl HostVsanInternalSystem {
     /// Failure
     pub async fn get_vsan_obj_ext_attrs(&self, uuids: &[String]) -> Result<String> {
         let input = GetVsanObjExtAttrsRequestType {uuids, };
-        let path = format!("/HostVsanInternalSystem/{moId}/GetVsanObjExtAttrs", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "GetVsanObjExtAttrs", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query CMMDS directly.
@@ -182,11 +168,8 @@ impl HostVsanInternalSystem {
     /// JSON string with the results
     pub async fn query_cmmds(&self, queries: &[crate::types::structs::HostVsanInternalSystemCmmdsQuery]) -> Result<String> {
         let input = QueryCmmdsRequestType {queries, };
-        let path = format!("/HostVsanInternalSystem/{moId}/QueryCmmds", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "QueryCmmds", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query DOM objects on a given set of physical disks.
@@ -208,11 +191,8 @@ impl HostVsanInternalSystem {
     /// JSON string with the results
     pub async fn query_objects_on_physical_vsan_disk(&self, disks: &[String]) -> Result<String> {
         let input = QueryObjectsOnPhysicalVsanDiskRequestType {disks, };
-        let path = format!("/HostVsanInternalSystem/{moId}/QueryObjectsOnPhysicalVsanDisk", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "QueryObjectsOnPhysicalVsanDisk", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query statistics about physical VSAN disks.
@@ -235,11 +215,8 @@ impl HostVsanInternalSystem {
     /// JSON string with the results
     pub async fn query_physical_vsan_disks(&self, props: Option<&[String]>) -> Result<String> {
         let input = QueryPhysicalVsanDisksRequestType {props, };
-        let path = format!("/HostVsanInternalSystem/{moId}/QueryPhysicalVsanDisks", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "QueryPhysicalVsanDisks", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query information about VSAN DOM objects that are currently syncing data.
@@ -264,11 +241,8 @@ impl HostVsanInternalSystem {
     /// JSON string with the results
     pub async fn query_syncing_vsan_objects(&self, uuids: Option<&[String]>) -> Result<String> {
         let input = QuerySyncingVsanObjectsRequestType {uuids, };
-        let path = format!("/HostVsanInternalSystem/{moId}/QuerySyncingVsanObjects", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "QuerySyncingVsanObjects", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query VSAN object UUIDs by filtering conditions.
@@ -305,14 +279,9 @@ impl HostVsanInternalSystem {
     /// ***VsanFault***: for any unexpected failures.
     pub async fn query_vsan_object_uuids_by_filter(&self, uuids: Option<&[String]>, limit: Option<i32>, version: Option<i32>) -> Result<Option<Vec<String>>> {
         let input = QueryVsanObjectUuidsByFilterRequestType {uuids, limit, version, };
-        let path = format!("/HostVsanInternalSystem/{moId}/QueryVsanObjectUuidsByFilter", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostVsanInternalSystem", &self.mo_id, "QueryVsanObjectUuidsByFilter", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -335,11 +304,8 @@ impl HostVsanInternalSystem {
     /// JSON string with the results
     pub async fn query_vsan_objects(&self, uuids: Option<&[String]>) -> Result<String> {
         let input = QueryVsanObjectsRequestType {uuids, };
-        let path = format!("/HostVsanInternalSystem/{moId}/QueryVsanObjects", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "QueryVsanObjects", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query VSAN system statistics.
@@ -366,11 +332,8 @@ impl HostVsanInternalSystem {
     /// JSON string with the results
     pub async fn query_vsan_statistics(&self, labels: &[String]) -> Result<String> {
         let input = QueryVsanStatisticsRequestType {labels, };
-        let path = format!("/HostVsanInternalSystem/{moId}/QueryVsanStatistics", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "QueryVsanStatistics", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Determine if the given objects can be reconfigured with the given
@@ -409,11 +372,8 @@ impl HostVsanInternalSystem {
     /// Failure
     pub async fn reconfiguration_satisfiable(&self, pcbs: &[crate::types::structs::VsanPolicyChangeBatch], ignore_satisfiability: Option<bool>) -> Result<Vec<crate::types::structs::VsanPolicySatisfiability>> {
         let input = ReconfigurationSatisfiableRequestType {pcbs, ignore_satisfiability, };
-        let path = format!("/HostVsanInternalSystem/{moId}/ReconfigurationSatisfiable", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanPolicySatisfiability> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "ReconfigurationSatisfiable", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanPolicySatisfiability> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reconfigure DOM object.
@@ -436,9 +396,7 @@ impl HostVsanInternalSystem {
     /// VSAN expression formatted policy string.
     pub async fn reconfigure_dom_object(&self, uuid: &str, policy: &str) -> Result<()> {
         let input = ReconfigureDomObjectRequestType {uuid, policy, };
-        let path = format!("/HostVsanInternalSystem/{moId}/ReconfigureDomObject", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVsanInternalSystem", &self.mo_id, "ReconfigureDomObject", Some(&input)).await
     }
     /// Runs diagnostics on VSAN physical disks.
     /// 
@@ -462,11 +420,8 @@ impl HostVsanInternalSystem {
     /// A list of result structures. One per checked disk.
     pub async fn run_vsan_physical_disk_diagnostics(&self, disks: Option<&[String]>) -> Result<Vec<crate::types::structs::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult>> {
         let input = RunVsanPhysicalDiskDiagnosticsRequestType {disks, };
-        let path = format!("/HostVsanInternalSystem/{moId}/RunVsanPhysicalDiskDiagnostics", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostVsanInternalSystem", &self.mo_id, "RunVsanPhysicalDiskDiagnostics", Some(&input)).await?;
+        let result: Vec<crate::types::structs::HostVsanInternalSystemVsanPhysicalDiskDiagnosticsResult> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Upgrade VSAN objects version.
@@ -497,14 +452,9 @@ impl HostVsanInternalSystem {
     /// ***VsanFault***: for any unexpected failures.
     pub async fn upgrade_vsan_objects(&self, uuids: &[String], new_version: i32) -> Result<Option<Vec<crate::types::structs::HostVsanInternalSystemVsanObjectOperationResult>>> {
         let input = UpgradeVsanObjectsRequestType {uuids, new_version, };
-        let path = format!("/HostVsanInternalSystem/{moId}/UpgradeVsanObjects", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostVsanInternalSystem", &self.mo_id, "UpgradeVsanObjects", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostVsanInternalSystemVsanObjectOperationResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

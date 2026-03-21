@@ -52,14 +52,9 @@ impl EventManager {
     /// The events matching the filters.
     pub async fn query_events(&self, filter: &crate::types::structs::EventFilterSpec, event_view_spec: Option<&dyn crate::types::traits::EventManagerEventViewSpecTrait>) -> Result<Option<Vec<crate::types::structs::Event>>> {
         let input = QueryEventsRequestType {filter, event_view_spec, };
-        let path = format!("/EventManager/{moId}/QueryEvents", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "EventManager", &self.mo_id, "QueryEvents", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Event>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -92,11 +87,8 @@ impl EventManager {
     /// event collectors.
     pub async fn create_collector_for_events(&self, filter: &crate::types::structs::EventFilterSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateCollectorForEventsRequestType {filter, };
-        let path = format!("/EventManager/{moId}/CreateCollectorForEvents", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "EventManager", &self.mo_id, "CreateCollectorForEvents", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Logs a user defined event against a particular managed entity.
@@ -116,9 +108,7 @@ impl EventManager {
     /// The message to be logged.
     pub async fn log_user_event(&self, entity: &crate::types::structs::ManagedObjectReference, msg: &str) -> Result<()> {
         let input = LogUserEventRequestType {entity, msg, };
-        let path = format!("/EventManager/{moId}/LogUserEvent", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "EventManager", &self.mo_id, "LogUserEvent", Some(&input)).await
     }
     /// Posts the specified event, optionally associating it with
     /// a task.
@@ -158,9 +148,7 @@ impl EventManager {
     /// ***InvalidEvent***: no longer thrown by this API
     pub async fn post_event(&self, event_to_post: &crate::types::structs::Event, task_info: Option<&crate::types::structs::TaskInfo>) -> Result<()> {
         let input = PostEventRequestType {event_to_post, task_info, };
-        let path = format!("/EventManager/{moId}/PostEvent", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "EventManager", &self.mo_id, "PostEvent", Some(&input)).await
     }
     /// Retrieves the argument meta-data for a given Event type
     /// 
@@ -172,14 +160,9 @@ impl EventManager {
     /// -
     pub async fn retrieve_argument_description(&self, event_type_id: &str) -> Result<Option<Vec<crate::types::structs::EventArgDesc>>> {
         let input = RetrieveArgumentDescriptionRequestType {event_type_id, };
-        let path = format!("/EventManager/{moId}/RetrieveArgumentDescription", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "EventManager", &self.mo_id, "RetrieveArgumentDescription", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::EventArgDesc>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -187,25 +170,18 @@ impl EventManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn description(&self) -> Result<crate::types::structs::EventDescription> {
-        let path = format!("/EventManager/{moId}/description", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::EventDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "EventManager", &self.mo_id, "description").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
+        let result: crate::types::structs::EventDescription = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The latest event that happened on the VirtualCenter server.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn latest_event(&self) -> Result<Option<crate::types::structs::Event>> {
-        let path = format!("/EventManager/{moId}/latestEvent", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "EventManager", &self.mo_id, "latestEvent").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::Event>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -214,11 +190,9 @@ impl EventManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn max_collector(&self) -> Result<i32> {
-        let path = format!("/EventManager/{moId}/maxCollector", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "EventManager", &self.mo_id, "maxCollector").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property maxCollector was empty".to_string()))?;
+        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

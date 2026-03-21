@@ -3,6 +3,9 @@ name = "snippets"
 version = "0.1.0"
 edition = "2024"
 
+[lib]
+path = "src/lib.rs"
+
 [[bin]]
 name = "eventster"
 path = "src/eventster.rs"
@@ -43,13 +46,32 @@ path = "src/vm_rename.rs"
 name = "vm_toggle_wol"
 path = "src/vm_toggle_wol.rs"
 
+[[bin]]
+name = "retrieve_host_info"
+path = "src/retrieve_host_info.rs"
+
+[[bin]]
+name = "retrieve_ds_hosts"
+path = "src/retrieve_ds_hosts.rs"
+
+[[bin]]
+name = "vm_events"
+path = "src/vm_events.rs"
+
+[[bin]]
+name = "print_vm_addresses"
+path = "src/print_vm_addresses.rs"
+
+[[bin]]
+name = "retrieve_recent_task"
+path = "src/retrieve_recent_task.rs"
+
 [dependencies]
 anyhow = "1.0"
 chrono = "0.4"
 env_logger = "0.11"
 log = "0.4"
-utils = { version = "0.1", path = "../utils" }
-tokio = {  version = "1.44", features = ["macros"]}
-vim_rs = { version = "0.4", path = "../../vim_rs", features = ["defaults"] }
+tokio = { version = "1.44", features = ["macros"] }
+vim_rs = { version = "0.4", path = "../../vim_rs", features = ["defaults", "xml"] }
 miniserde = "0.1"
 dotenvy = "0.15"

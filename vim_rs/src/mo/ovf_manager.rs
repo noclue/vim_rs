@@ -125,11 +125,8 @@ impl OvfManager {
     /// ***InvalidState***: if the operation failed due to the current state of the system.
     pub async fn create_descriptor(&self, obj: &crate::types::structs::ManagedObjectReference, cdp: &crate::types::structs::OvfCreateDescriptorParams) -> Result<crate::types::structs::OvfCreateDescriptorResult> {
         let input = CreateDescriptorRequestType {obj, cdp, };
-        let path = format!("/OvfManager/{moId}/CreateDescriptor", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::OvfCreateDescriptorResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "OvfManager", &self.mo_id, "CreateDescriptor", Some(&input)).await?;
+        let result: crate::types::structs::OvfCreateDescriptorResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Validate the OVF descriptor against the hardware supported by the
@@ -182,11 +179,8 @@ impl OvfManager {
     /// ***InvalidState***: if the operation failed due to the current state of the system.
     pub async fn create_import_spec(&self, ovf_descriptor: &str, resource_pool: &crate::types::structs::ManagedObjectReference, datastore: &crate::types::structs::ManagedObjectReference, cisp: &dyn crate::types::traits::OvfCreateImportSpecParamsTrait) -> Result<crate::types::structs::OvfCreateImportSpecResult> {
         let input = CreateImportSpecRequestType {ovf_descriptor, resource_pool, datastore, cisp, };
-        let path = format!("/OvfManager/{moId}/CreateImportSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::OvfCreateImportSpecResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "OvfManager", &self.mo_id, "CreateImportSpec", Some(&input)).await?;
+        let result: crate::types::structs::OvfCreateImportSpecResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Parse the OVF descriptor and return as much information about it as possible
@@ -227,11 +221,8 @@ impl OvfManager {
     /// ***InvalidState***: if the operation failed due to the current state of the system.
     pub async fn parse_descriptor(&self, ovf_descriptor: &str, pdp: &crate::types::structs::OvfParseDescriptorParams) -> Result<crate::types::structs::OvfParseDescriptorResult> {
         let input = ParseDescriptorRequestType {ovf_descriptor, pdp, };
-        let path = format!("/OvfManager/{moId}/ParseDescriptor", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::OvfParseDescriptorResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "OvfManager", &self.mo_id, "ParseDescriptor", Some(&input)).await?;
+        let result: crate::types::structs::OvfParseDescriptorResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Validate that the given OVF can be imported on the host.
@@ -272,11 +263,8 @@ impl OvfManager {
     /// ***InvalidState***: if the operation failed due to the current state of the system.
     pub async fn validate_host(&self, ovf_descriptor: &str, host: &crate::types::structs::ManagedObjectReference, vhp: &crate::types::structs::OvfValidateHostParams) -> Result<crate::types::structs::OvfValidateHostResult> {
         let input = ValidateHostRequestType {ovf_descriptor, host, vhp, };
-        let path = format!("/OvfManager/{moId}/ValidateHost", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::OvfValidateHostResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "OvfManager", &self.mo_id, "ValidateHost", Some(&input)).await?;
+        let result: crate::types::structs::OvfValidateHostResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns an array of *OvfOptionInfo* object that specifies what options the server
@@ -288,14 +276,9 @@ impl OvfManager {
     ///
     /// An instance of *OvfOptionInfo*
     pub async fn ovf_export_option(&self) -> Result<Option<Vec<crate::types::structs::OvfOptionInfo>>> {
-        let path = format!("/OvfManager/{moId}/ovfExportOption", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "OvfManager", &self.mo_id, "ovfExportOption").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::OvfOptionInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -308,14 +291,9 @@ impl OvfManager {
     ///
     /// An instance of *OvfOptionInfo*
     pub async fn ovf_import_option(&self) -> Result<Option<Vec<crate::types::structs::OvfOptionInfo>>> {
-        let path = format!("/OvfManager/{moId}/ovfImportOption", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "OvfManager", &self.mo_id, "ovfImportOption").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::OvfOptionInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

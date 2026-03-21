@@ -74,9 +74,7 @@ impl GuestFileManager {
     /// to guest agent configuration.
     pub async fn change_file_attributes_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, guest_file_path: &str, file_attributes: &dyn crate::types::traits::GuestFileAttributesTrait) -> Result<()> {
         let input = ChangeFileAttributesInGuestRequestType {vm, auth, guest_file_path, file_attributes, };
-        let path = format!("/GuestFileManager/{moId}/ChangeFileAttributesInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestFileManager", &self.mo_id, "ChangeFileAttributesInGuest", Some(&input)).await
     }
     /// Creates a temporary directory.
     /// 
@@ -144,11 +142,8 @@ impl GuestFileManager {
     /// guest agent configuration.
     pub async fn create_temporary_directory_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, prefix: &str, suffix: &str, directory_path: Option<&str>) -> Result<String> {
         let input = CreateTemporaryDirectoryInGuestRequestType {vm, auth, prefix, suffix, directory_path, };
-        let path = format!("/GuestFileManager/{moId}/CreateTemporaryDirectoryInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "GuestFileManager", &self.mo_id, "CreateTemporaryDirectoryInGuest", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a temporary file.
@@ -217,11 +212,8 @@ impl GuestFileManager {
     /// guest agent configuration.
     pub async fn create_temporary_file_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, prefix: &str, suffix: &str, directory_path: Option<&str>) -> Result<String> {
         let input = CreateTemporaryFileInGuestRequestType {vm, auth, prefix, suffix, directory_path, };
-        let path = format!("/GuestFileManager/{moId}/CreateTemporaryFileInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "GuestFileManager", &self.mo_id, "CreateTemporaryFileInGuest", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deletes a directory in the guest OS.
@@ -281,9 +273,7 @@ impl GuestFileManager {
     /// guest agent configuration.
     pub async fn delete_directory_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, directory_path: &str, recursive: bool) -> Result<()> {
         let input = DeleteDirectoryInGuestRequestType {vm, auth, directory_path, recursive, };
-        let path = format!("/GuestFileManager/{moId}/DeleteDirectoryInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestFileManager", &self.mo_id, "DeleteDirectoryInGuest", Some(&input)).await
     }
     /// Deletes a file in the guest OS
     ///
@@ -338,9 +328,7 @@ impl GuestFileManager {
     /// guest agent configuration.
     pub async fn delete_file_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, file_path: &str) -> Result<()> {
         let input = DeleteFileInGuestRequestType {vm, auth, file_path, };
-        let path = format!("/GuestFileManager/{moId}/DeleteFileInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestFileManager", &self.mo_id, "DeleteFileInGuest", Some(&input)).await
     }
     /// Initiates an operation to transfer a file from the guest.
     /// 
@@ -419,11 +407,8 @@ impl GuestFileManager {
     /// to guest agent configuration.
     pub async fn initiate_file_transfer_from_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, guest_file_path: &str) -> Result<crate::types::structs::FileTransferInformation> {
         let input = InitiateFileTransferFromGuestRequestType {vm, auth, guest_file_path, };
-        let path = format!("/GuestFileManager/{moId}/InitiateFileTransferFromGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::FileTransferInformation = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "GuestFileManager", &self.mo_id, "InitiateFileTransferFromGuest", Some(&input)).await?;
+        let result: crate::types::structs::FileTransferInformation = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Initiates an operation to transfer a file to the guest.
@@ -527,11 +512,8 @@ impl GuestFileManager {
     /// guest agent configuration.
     pub async fn initiate_file_transfer_to_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, guest_file_path: &str, file_attributes: &dyn crate::types::traits::GuestFileAttributesTrait, file_size: i64, overwrite: bool) -> Result<String> {
         let input = InitiateFileTransferToGuestRequestType {vm, auth, guest_file_path, file_attributes, file_size, overwrite, };
-        let path = format!("/GuestFileManager/{moId}/InitiateFileTransferToGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "GuestFileManager", &self.mo_id, "InitiateFileTransferToGuest", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns information about files or directories in the guest.
@@ -611,11 +593,8 @@ impl GuestFileManager {
     /// guest agent configuration.
     pub async fn list_files_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, file_path: &str, index: Option<i32>, max_results: Option<i32>, match_pattern: Option<&str>) -> Result<crate::types::structs::GuestListFileInfo> {
         let input = ListFilesInGuestRequestType {vm, auth, file_path, index, max_results, match_pattern, };
-        let path = format!("/GuestFileManager/{moId}/ListFilesInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::GuestListFileInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "GuestFileManager", &self.mo_id, "ListFilesInGuest", Some(&input)).await?;
+        let result: crate::types::structs::GuestListFileInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a directory in the guest OS
@@ -675,9 +654,7 @@ impl GuestFileManager {
     /// guest agent configuration.
     pub async fn make_directory_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, directory_path: &str, create_parent_directories: bool) -> Result<()> {
         let input = MakeDirectoryInGuestRequestType {vm, auth, directory_path, create_parent_directories, };
-        let path = format!("/GuestFileManager/{moId}/MakeDirectoryInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestFileManager", &self.mo_id, "MakeDirectoryInGuest", Some(&input)).await
     }
     /// Moves or renames a directory in the guest.
     ///
@@ -735,9 +712,7 @@ impl GuestFileManager {
     /// guest agent configuration.
     pub async fn move_directory_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, src_directory_path: &str, dst_directory_path: &str) -> Result<()> {
         let input = MoveDirectoryInGuestRequestType {vm, auth, src_directory_path, dst_directory_path, };
-        let path = format!("/GuestFileManager/{moId}/MoveDirectoryInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestFileManager", &self.mo_id, "MoveDirectoryInGuest", Some(&input)).await
     }
     /// Renames a file in the guest.
     ///
@@ -798,9 +773,7 @@ impl GuestFileManager {
     /// guest agent configuration.
     pub async fn move_file_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, src_file_path: &str, dst_file_path: &str, overwrite: bool) -> Result<()> {
         let input = MoveFileInGuestRequestType {vm, auth, src_file_path, dst_file_path, overwrite, };
-        let path = format!("/GuestFileManager/{moId}/MoveFileInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestFileManager", &self.mo_id, "MoveFileInGuest", Some(&input)).await
     }
 }
 struct ChangeFileAttributesInGuestRequestType<'a> {

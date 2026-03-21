@@ -1,11 +1,10 @@
 use std::cmp::Ordering;
-use std::sync::Arc;
 use ratatui::layout::Constraint;
 use ratatui::style::{Color, Style};
 use ratatui::text::Span;
 use ratatui::widgets::{Cell, Row};
 use vim_rs::vim_updatable;
-use vim_rs::core::client::Client;
+use vim_rs::core::client::VimClientHandle;
 use vim_rs::mo::Datastore;
 use vim_rs::types::structs::ManagedObjectReference;
 use crate::resource_browser::formatting;
@@ -141,7 +140,7 @@ impl TabularData for DatastoreDetails {
 
 }
 
-pub async fn get_datastore_hosts(client: Arc<Client>, datastore: &ManagedObjectReference) -> anyhow::Result<Vec<ManagedObjectReference>> {
+pub async fn get_datastore_hosts(client: VimClientHandle, datastore: &ManagedObjectReference) -> anyhow::Result<Vec<ManagedObjectReference>> {
     let ds_stor = Datastore::new(client.clone(), &datastore.value.clone());
     let mount_infos = ds_stor.host().await?;
     let Some(mount_infos) = mount_infos else {

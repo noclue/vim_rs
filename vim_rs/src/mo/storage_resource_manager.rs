@@ -65,11 +65,8 @@ impl StorageResourceManager {
     /// hosts.
     pub async fn configure_datastore_iorm_task(&self, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::StorageIormConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureDatastoreIormRequestType {datastore, spec, };
-        let path = format!("/StorageResourceManager/{moId}/ConfigureDatastoreIORM_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StorageResourceManager", &self.mo_id, "ConfigureDatastoreIORM_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
@@ -92,11 +89,8 @@ impl StorageResourceManager {
     /// configuration option object.
     pub async fn query_iorm_config_option(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::StorageIormConfigOption> {
         let input = QueryIormConfigOptionRequestType {host, };
-        let path = format!("/StorageResourceManager/{moId}/QueryIORMConfigOption", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::StorageIormConfigOption = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StorageResourceManager", &self.mo_id, "QueryIORMConfigOption", Some(&input)).await?;
+        let result: crate::types::structs::StorageIormConfigOption = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Applies a recommendation from the recommendation list that is generated
@@ -125,11 +119,8 @@ impl StorageResourceManager {
     /// Refers instance of *Task*.
     pub async fn apply_storage_drs_recommendation_task(&self, key: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyStorageDrsRecommendationRequestType {key, };
-        let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendation_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StorageResourceManager", &self.mo_id, "ApplyStorageDrsRecommendation_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Applies a recommendation from the recommendation list that is generated
@@ -162,11 +153,8 @@ impl StorageResourceManager {
     /// Refers instance of *Task*.
     pub async fn apply_storage_drs_recommendation_to_pod_task(&self, pod: &crate::types::structs::ManagedObjectReference, key: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ApplyStorageDrsRecommendationToPodRequestType {pod, key, };
-        let path = format!("/StorageResourceManager/{moId}/ApplyStorageDrsRecommendationToPod_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StorageResourceManager", &self.mo_id, "ApplyStorageDrsRecommendationToPod_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Cancels a recommendation.
@@ -182,9 +170,7 @@ impl StorageResourceManager {
     /// The key field of the Recommendation.
     pub async fn cancel_storage_drs_recommendation(&self, key: &[String]) -> Result<()> {
         let input = CancelStorageDrsRecommendationRequestType {key, };
-        let path = format!("/StorageResourceManager/{moId}/CancelStorageDrsRecommendation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "StorageResourceManager", &self.mo_id, "CancelStorageDrsRecommendation", Some(&input)).await
     }
     /// Change the storage DRS configuration for a pod *StoragePod*.
     ///
@@ -218,11 +204,8 @@ impl StorageResourceManager {
     /// Refers instance of *Task*.
     pub async fn configure_storage_drs_for_pod_task(&self, pod: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::StorageDrsConfigSpec, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureStorageDrsForPodRequestType {pod, spec, modify, };
-        let path = format!("/StorageResourceManager/{moId}/ConfigureStorageDrsForPod_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StorageResourceManager", &self.mo_id, "ConfigureStorageDrsForPod_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere8.0 U3, and there is no replacement for it.
@@ -251,14 +234,9 @@ impl StorageResourceManager {
     /// ***NotFound***: if input datastore cannot be found
     pub async fn query_datastore_performance_summary(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::StoragePerformanceSummary>>> {
         let input = QueryDatastorePerformanceSummaryRequestType {datastore, };
-        let path = format!("/StorageResourceManager/{moId}/QueryDatastorePerformanceSummary", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "StorageResourceManager", &self.mo_id, "QueryDatastorePerformanceSummary", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::StoragePerformanceSummary>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -331,11 +309,8 @@ impl StorageResourceManager {
     /// -
     pub async fn recommend_datastores(&self, storage_spec: &crate::types::structs::StoragePlacementSpec) -> Result<crate::types::structs::StoragePlacementResult> {
         let input = RecommendDatastoresRequestType {storage_spec, };
-        let path = format!("/StorageResourceManager/{moId}/RecommendDatastores", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::StoragePlacementResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StorageResourceManager", &self.mo_id, "RecommendDatastores", Some(&input)).await?;
+        let result: crate::types::structs::StoragePlacementResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Make Storage DRS invoke again on the specified pod *StoragePod*
@@ -356,9 +331,7 @@ impl StorageResourceManager {
     /// Refers instance of *StoragePod*.
     pub async fn refresh_storage_drs_recommendation(&self, pod: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = RefreshStorageDrsRecommendationRequestType {pod, };
-        let path = format!("/StorageResourceManager/{moId}/RefreshStorageDrsRecommendation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "StorageResourceManager", &self.mo_id, "RefreshStorageDrsRecommendation", Some(&input)).await
     }
     /// Invoke Storage DRS on a specific pod *StoragePod*
     /// and return a new list of recommendations.
@@ -383,11 +356,8 @@ impl StorageResourceManager {
     /// Failure
     pub async fn refresh_storage_drs_recommendations_for_pod_task(&self, pod: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RefreshStorageDrsRecommendationsForPodRequestType {pod, };
-        let path = format!("/StorageResourceManager/{moId}/RefreshStorageDrsRecommendationsForPod_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "StorageResourceManager", &self.mo_id, "RefreshStorageDrsRecommendationsForPod_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Validate the new storage DRS configuration for a pod
@@ -409,14 +379,9 @@ impl StorageResourceManager {
     /// the storage pod.
     pub async fn validate_storage_pod_config(&self, pod: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::StorageDrsConfigSpec) -> Result<Option<crate::types::structs::MethodFault>> {
         let input = ValidateStoragePodConfigRequestType {pod, spec, };
-        let path = format!("/StorageResourceManager/{moId}/ValidateStoragePodConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "StorageResourceManager", &self.mo_id, "ValidateStoragePodConfig", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::MethodFault>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

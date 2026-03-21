@@ -52,11 +52,8 @@ impl VStorageObjectManagerBase {
     /// ***NotFound***: If specified virtual storage object cannot be found.
     pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
-        let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectCreateSnapshotEx_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VStorageObjectManagerBase", &self.mo_id, "VStorageObjectCreateSnapshotEx_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
@@ -98,11 +95,8 @@ impl VStorageObjectManagerBase {
     /// ***NotFound***: If specified virtual storage object cannot be found.
     pub async fn v_storage_object_delete_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectDeleteSnapshotExRequestType {id, datastore, snapshot_id, };
-        let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectDeleteSnapshotEx_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VStorageObjectManagerBase", &self.mo_id, "VStorageObjectDeleteSnapshotEx_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deletes a given snapshot of a VStorageObject.
@@ -142,11 +136,8 @@ impl VStorageObjectManagerBase {
     /// ***NotFound***: If specified virtual storage object or snapshot cannot be found.
     pub async fn v_storage_object_delete_snapshot_ex_2_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectDeleteSnapshotEx2RequestType {id, datastore, snapshot_id, };
-        let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectDeleteSnapshotEx2_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VStorageObjectManagerBase", &self.mo_id, "VStorageObjectDeleteSnapshotEx2_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Expand the capacity of a virtual disk, which is a storage object with
@@ -205,11 +196,8 @@ impl VStorageObjectManagerBase {
     /// ***TaskInProgress***: If the virtual storage object is busy.
     pub async fn v_storage_object_extend_disk_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, new_capacity_in_mb: i64) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VStorageObjectExtendDiskExRequestType {id, datastore, new_capacity_in_mb, };
-        let path = format!("/VStorageObjectManagerBase/{moId}/VStorageObjectExtendDiskEx_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VStorageObjectManagerBase", &self.mo_id, "VStorageObjectExtendDiskEx_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Rename a virtual storage object.
@@ -248,11 +236,8 @@ impl VStorageObjectManagerBase {
     /// datastore.
     pub async fn rename_v_storage_object_ex(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, name: &str) -> Result<crate::types::structs::VslmVClockInfo> {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
-        let path = format!("/VStorageObjectManagerBase/{moId}/RenameVStorageObjectEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VslmVClockInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VStorageObjectManagerBase", &self.mo_id, "RenameVStorageObjectEx", Some(&input)).await?;
+        let result: crate::types::structs::VslmVClockInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reverts to a given snapshot of a VStorageObject.
@@ -307,11 +292,8 @@ impl VStorageObjectManagerBase {
     /// ***NotFound***: If specified virtual storage object cannot be found.
     pub async fn revert_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RevertVStorageObjectExRequestType {id, datastore, snapshot_id, };
-        let path = format!("/VStorageObjectManagerBase/{moId}/RevertVStorageObjectEx_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VStorageObjectManagerBase", &self.mo_id, "RevertVStorageObjectEx_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

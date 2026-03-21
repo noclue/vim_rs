@@ -73,14 +73,9 @@ impl GuestProcessManager {
     /// guest agent configuration.
     pub async fn list_processes_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, pids: Option<&[i64]>) -> Result<Option<Vec<crate::types::structs::GuestProcessInfo>>> {
         let input = ListProcessesInGuestRequestType {vm, auth, pids, };
-        let path = format!("/GuestProcessManager/{moId}/ListProcessesInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "GuestProcessManager", &self.mo_id, "ListProcessesInGuest", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestProcessInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -147,14 +142,9 @@ impl GuestProcessManager {
     /// guest agent configuration.
     pub async fn read_environment_variable_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, names: Option<&[String]>) -> Result<Option<Vec<String>>> {
         let input = ReadEnvironmentVariableInGuestRequestType {vm, auth, names, };
-        let path = format!("/GuestProcessManager/{moId}/ReadEnvironmentVariableInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "GuestProcessManager", &self.mo_id, "ReadEnvironmentVariableInGuest", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -225,11 +215,8 @@ impl GuestProcessManager {
     /// guest agent configuration.
     pub async fn start_program_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, spec: &dyn crate::types::traits::GuestProgramSpecTrait) -> Result<i64> {
         let input = StartProgramInGuestRequestType {vm, auth, spec, };
-        let path = format!("/GuestProcessManager/{moId}/StartProgramInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "GuestProcessManager", &self.mo_id, "StartProgramInGuest", Some(&input)).await?;
+        let result: i64 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Terminates a process in the guest OS.
@@ -283,9 +270,7 @@ impl GuestProcessManager {
     /// to guest agent configuration.
     pub async fn terminate_process_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, pid: i64) -> Result<()> {
         let input = TerminateProcessInGuestRequestType {vm, auth, pid, };
-        let path = format!("/GuestProcessManager/{moId}/TerminateProcessInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestProcessManager", &self.mo_id, "TerminateProcessInGuest", Some(&input)).await
     }
 }
 struct ListProcessesInGuestRequestType<'a> {

@@ -8,6 +8,7 @@ vim_rs is a Rust SDK for the vSphere API. It provides:
 - Type-safe bindings for vSphere managed objects, data structures, and enums
 - Property collector macros for efficient bulk data retrieval
 - Async client with connection pooling
+- Default VI JSON transport plus an optional experimental SOAP/XML transport
 - Comprehensive error handling
 
 ## Two-Tier Knowledge System
@@ -26,14 +27,13 @@ When building vim_rs applications, use these resources in order:
 
 ### Step 1: Client Connection (ALWAYS USE THIS PATTERN)
 
-Every vim_rs application starts by connecting to vCenter. **Always use this exact pattern:**
+Every vim_rs application starts by connecting with `ClientBuilder`. By default this uses the VI JSON API, which is the preferred transport for vCenter. **Always use this exact baseline pattern unless XML is explicitly needed:**
 
 ```rust
 use anyhow::{Context, Result};
 use std::env;
 use std::sync::Arc;
-use vim_rs::Client;
-use vim_rs:core::ClientBuilder;
+use vim_rs::core::{Client, ClientBuilder};
 
 pub async fn connect(app_name: &str, app_version: &str) -> Result<Arc<Client>> {
     let vc_server = env::var("VIM_SERVER").context("VIM_SERVER env var not set")?;
@@ -69,6 +69,7 @@ async fn main() -> Result<()> {
 - Store credentials in environment variables (VIM_SERVER, VIM_USERNAME, VIM_PASSWORD)
 - Client is thread-safe (`Arc<Client>`)
 - Managed-object stubs store an `Arc<dyn VimClient>` internally; `Client` implements `VimClient`.
+- Default transport is JSON. If you do nothing, behavior stays on the normal vCenter JSON path.
 
 **Dependencies needed:**
 ```toml
@@ -79,6 +80,69 @@ tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
 log = "0.4"
 ```
+
+### Step 1.1: XML Transport (ONLY WHEN YOU ACTUALLY NEED IT)
+
+Enable XML only when the target requires it, most notably for direct ESXi connections. The XML path is **optional and experimental**.
+
+**How to enable it:**
+
+```toml
+[dependencies]
+vim_rs = { version = "0.4", features = ["xml"] }
+anyhow = "1.0"
+tokio = { version = "1.0", features = ["full"] }
+env_logger = "0.11"
+log = "0.4"
+```
+
+**How to select transport:**
+
+```rust
+use anyhow::{Context, Result};
+use std::env;
+use std::sync::Arc;
+use vim_rs::core::{Client, ClientBuilder};
+use vim_rs::core::client::TransportMode;
+
+pub async fn connect_auto(app_name: &str, app_version: &str) -> Result<Arc<Client>> {
+    let vc_server = env::var("VIM_SERVER").context("VIM_SERVER env var not set")?;
+    let username = env::var("VIM_USERNAME").context("VIM_USERNAME env var not set")?;
+    let pwd = env::var("VIM_PASSWORD").context("VIM_PASSWORD env var not set")?;
+
+    let client = ClientBuilder::new(vc_server.as_str())
+        .insecure(true)
+        .basic_authn(username.as_str(), pwd.as_str())
+        .app_details(app_name, app_version)
+        .transport(TransportMode::Auto)
+        .build()
+        .await?;
+
+    Ok(client)
+}
+```
+
+Use `TransportMode::Auto` when the target may be either vCenter or ESXi:
+- It probes the vCenter Hello System JSON API first.
+- If that API is unavailable, it falls back to SOAP/XML automatically.
+
+Use `TransportMode::Soap` when you know you are talking directly to ESXi or you explicitly want SOAP/XML.
+
+**Critical XML caveats:**
+- XML currently works only for the core VIM APIs.
+- VSAN, SPBM/PBM, SMS, VSLM, EAM, and other non-VIM APIs will return errors over XML transport.
+- XML support is experimental. If it fails, turn on `trace` logging for `vim_rs` and capture the failing request/response packets.
+- Enabling `xml` increases release binary size by about 500 KB and increases debug build times by about 30-40%.
+- If the `xml` feature is not enabled, vim_rs returns to `0.4.0` transport, size, and build-time characteristics.
+
+**Versioning caveat with XML:**
+- XML transport does not use Hello System negotiation.
+- `client.api_release()` is therefore not a reliable indicator of remote server capability when XML is active.
+- Use `client.service_content().about.api_version` when you need to reason about server capabilities.
+
+**Deserialization caveat with XML enabled:**
+- If you manually deserialize polymorphic JSON while the `xml` feature is enabled, `_typeName` must appear before subtype-specific fields.
+
 ### Step 2: Call APIs (ALWAYS USE THIS PATTERN)
 
 To call any API on vSphere:

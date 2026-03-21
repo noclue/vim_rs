@@ -31,29 +31,22 @@ impl SimpleCommand {
     /// An arbitrary collection of arguments.
     pub async fn execute_simple_command(&self, arguments: Option<&[String]>) -> Result<String> {
         let input = ExecuteSimpleCommandRequestType {arguments, };
-        let path = format!("/SimpleCommand/{moId}/ExecuteSimpleCommand", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SimpleCommand", &self.mo_id, "ExecuteSimpleCommand", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The encoding type used in the result.
     pub async fn encoding_type(&self) -> Result<crate::types::enums::SimpleCommandEncodingEnum> {
-        let path = format!("/SimpleCommand/{moId}/encodingType", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::SimpleCommandEncodingEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "SimpleCommand", &self.mo_id, "encodingType").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property encodingType was empty".to_string()))?;
+        let result: crate::types::enums::SimpleCommandEncodingEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A description of the service.
     pub async fn entity(&self) -> Result<crate::types::structs::ServiceManagerServiceInfo> {
-        let path = format!("/SimpleCommand/{moId}/entity", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ServiceManagerServiceInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "SimpleCommand", &self.mo_id, "entity").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property entity was empty".to_string()))?;
+        let result: crate::types::structs::ServiceManagerServiceInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -47,11 +47,8 @@ impl HealthUpdateManager {
     /// in the infoIds list.
     pub async fn add_filter(&self, provider_id: &str, filter_name: &str, info_ids: Option<&[String]>) -> Result<String> {
         let input = AddFilterRequestType {provider_id, filter_name, info_ids, };
-        let path = format!("/HealthUpdateManager/{moId}/AddFilter", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HealthUpdateManager", &self.mo_id, "AddFilter", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Add entities on which this filter is configured.
@@ -83,9 +80,7 @@ impl HealthUpdateManager {
     /// ClusterComputeResource.
     pub async fn add_filter_entities(&self, filter_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = AddFilterEntitiesRequestType {filter_id, entities, };
-        let path = format!("/HealthUpdateManager/{moId}/AddFilterEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HealthUpdateManager", &self.mo_id, "AddFilterEntities", Some(&input)).await
     }
     /// The provider monitors additional managed entities.
     /// 
@@ -121,9 +116,7 @@ impl HealthUpdateManager {
     /// the specified provider.
     pub async fn add_monitored_entities(&self, provider_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = AddMonitoredEntitiesRequestType {provider_id, entities, };
-        let path = format!("/HealthUpdateManager/{moId}/AddMonitoredEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HealthUpdateManager", &self.mo_id, "AddMonitoredEntities", Some(&input)).await
     }
     /// Check if the managed entity is monitored by the provider.
     /// 
@@ -152,11 +145,8 @@ impl HealthUpdateManager {
     /// HostSystem.
     pub async fn has_monitored_entity(&self, provider_id: &str, entity: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = HasMonitoredEntityRequestType {provider_id, entity, };
-        let path = format!("/HealthUpdateManager/{moId}/HasMonitoredEntity", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HealthUpdateManager", &self.mo_id, "HasMonitoredEntity", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Verifies if the given provider is registered.
@@ -173,11 +163,8 @@ impl HealthUpdateManager {
     /// True iff the provider is registered.
     pub async fn has_provider(&self, id: &str) -> Result<bool> {
         let input = HasProviderRequestType {id, };
-        let path = format!("/HealthUpdateManager/{moId}/HasProvider", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HealthUpdateManager", &self.mo_id, "HasProvider", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Report a change in health status.
@@ -213,9 +200,7 @@ impl HealthUpdateManager {
     /// \- If there is a HealthUpdate with gray status.
     pub async fn post_health_updates(&self, provider_id: &str, updates: Option<&[crate::types::structs::HealthUpdate]>) -> Result<()> {
         let input = PostHealthUpdatesRequestType {provider_id, updates, };
-        let path = format!("/HealthUpdateManager/{moId}/PostHealthUpdates", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HealthUpdateManager", &self.mo_id, "PostHealthUpdates", Some(&input)).await
     }
     /// Returns the list of entities on which this filter is configured.
     /// 
@@ -237,14 +222,9 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no filter with this id is registered.
     pub async fn query_filter_entities(&self, filter_id: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryFilterEntitiesRequestType {filter_id, };
-        let path = format!("/HealthUpdateManager/{moId}/QueryFilterEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HealthUpdateManager", &self.mo_id, "QueryFilterEntities", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -267,14 +247,9 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no filter with this id is registered.
     pub async fn query_filter_info_ids(&self, filter_id: &str) -> Result<Option<Vec<String>>> {
         let input = QueryFilterInfoIdsRequestType {filter_id, };
-        let path = format!("/HealthUpdateManager/{moId}/QueryFilterInfoIds", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HealthUpdateManager", &self.mo_id, "QueryFilterInfoIds", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -296,14 +271,9 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no provider with this id is registered.
     pub async fn query_filter_list(&self, provider_id: &str) -> Result<Option<Vec<String>>> {
         let input = QueryFilterListRequestType {provider_id, };
-        let path = format!("/HealthUpdateManager/{moId}/QueryFilterList", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HealthUpdateManager", &self.mo_id, "QueryFilterList", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -325,11 +295,8 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no filter with this id is registered.
     pub async fn query_filter_name(&self, filter_id: &str) -> Result<String> {
         let input = QueryFilterNameRequestType {filter_id, };
-        let path = format!("/HealthUpdateManager/{moId}/QueryFilterName", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HealthUpdateManager", &self.mo_id, "QueryFilterName", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns the list of HealthUpdateInfo configured for the given provider.
@@ -350,14 +317,9 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no provider with this id is registered.
     pub async fn query_health_update_infos(&self, provider_id: &str) -> Result<Option<Vec<crate::types::structs::HealthUpdateInfo>>> {
         let input = QueryHealthUpdateInfosRequestType {provider_id, };
-        let path = format!("/HealthUpdateManager/{moId}/QueryHealthUpdateInfos", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HealthUpdateManager", &self.mo_id, "QueryHealthUpdateInfos", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HealthUpdateInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -379,14 +341,9 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no provider with this id is registered.
     pub async fn query_health_updates(&self, provider_id: &str) -> Result<Option<Vec<crate::types::structs::HealthUpdate>>> {
         let input = QueryHealthUpdatesRequestType {provider_id, };
-        let path = format!("/HealthUpdateManager/{moId}/QueryHealthUpdates", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HealthUpdateManager", &self.mo_id, "QueryHealthUpdates", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HealthUpdate>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -410,14 +367,9 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no provider with this id is registered.
     pub async fn query_monitored_entities(&self, provider_id: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryMonitoredEntitiesRequestType {provider_id, };
-        let path = format!("/HealthUpdateManager/{moId}/QueryMonitoredEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HealthUpdateManager", &self.mo_id, "QueryMonitoredEntities", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -429,14 +381,9 @@ impl HealthUpdateManager {
     ///
     /// The list of identifiers of registered providers.
     pub async fn query_provider_list(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/HealthUpdateManager/{moId}/QueryProviderList", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HealthUpdateManager", &self.mo_id, "QueryProviderList", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -458,11 +405,8 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no provider with this id is registered.
     pub async fn query_provider_name(&self, id: &str) -> Result<String> {
         let input = QueryProviderNameRequestType {id, };
-        let path = format!("/HealthUpdateManager/{moId}/QueryProviderName", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HealthUpdateManager", &self.mo_id, "QueryProviderName", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The set of hosts that are in the cluster, but not monitored by
@@ -492,14 +436,9 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no provider with this id is registered.
     pub async fn query_unmonitored_hosts(&self, provider_id: &str, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryUnmonitoredHostsRequestType {provider_id, cluster, };
-        let path = format!("/HealthUpdateManager/{moId}/QueryUnmonitoredHosts", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HealthUpdateManager", &self.mo_id, "QueryUnmonitoredHosts", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -524,11 +463,8 @@ impl HealthUpdateManager {
     /// The identifier for the registered provider.
     pub async fn register_health_update_provider(&self, name: &str, health_update_info: Option<&[crate::types::structs::HealthUpdateInfo]>) -> Result<String> {
         let input = RegisterHealthUpdateProviderRequestType {name, health_update_info, };
-        let path = format!("/HealthUpdateManager/{moId}/RegisterHealthUpdateProvider", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HealthUpdateManager", &self.mo_id, "RegisterHealthUpdateProvider", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removes the specified filter.
@@ -545,9 +481,7 @@ impl HealthUpdateManager {
     /// ***NotFound***: If no filter with this id is registered.
     pub async fn remove_filter(&self, filter_id: &str) -> Result<()> {
         let input = RemoveFilterRequestType {filter_id, };
-        let path = format!("/HealthUpdateManager/{moId}/RemoveFilter", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HealthUpdateManager", &self.mo_id, "RemoveFilter", Some(&input)).await
     }
     /// Remove entities on which this filter is configured.
     /// 
@@ -575,9 +509,7 @@ impl HealthUpdateManager {
     /// is not associated with the specified filter.
     pub async fn remove_filter_entities(&self, filter_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = RemoveFilterEntitiesRequestType {filter_id, entities, };
-        let path = format!("/HealthUpdateManager/{moId}/RemoveFilterEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HealthUpdateManager", &self.mo_id, "RemoveFilterEntities", Some(&input)).await
     }
     /// The provider monitors fewer managed entities.
     /// 
@@ -614,9 +546,7 @@ impl HealthUpdateManager {
     /// monitored by the specified provider.
     pub async fn remove_monitored_entities(&self, provider_id: &str, entities: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = RemoveMonitoredEntitiesRequestType {provider_id, entities, };
-        let path = format!("/HealthUpdateManager/{moId}/RemoveMonitoredEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HealthUpdateManager", &self.mo_id, "RemoveMonitoredEntities", Some(&input)).await
     }
     /// Unregisters the specified provider, if it exists.
     /// 
@@ -638,9 +568,7 @@ impl HealthUpdateManager {
     /// InfraUpdateHa cluster.
     pub async fn unregister_health_update_provider(&self, provider_id: &str) -> Result<()> {
         let input = UnregisterHealthUpdateProviderRequestType {provider_id, };
-        let path = format!("/HealthUpdateManager/{moId}/UnregisterHealthUpdateProvider", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HealthUpdateManager", &self.mo_id, "UnregisterHealthUpdateProvider", Some(&input)).await
     }
 }
 struct AddFilterRequestType<'a> {

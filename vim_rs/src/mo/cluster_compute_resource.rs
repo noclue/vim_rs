@@ -39,9 +39,7 @@ impl ClusterComputeResource {
     ///
     /// Failure
     pub async fn abandon_hci_workflow(&self) -> Result<()> {
-        let path = format!("/ClusterComputeResource/{moId}/AbandonHciWorkflow", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ClusterComputeResource", &self.mo_id, "AbandonHciWorkflow", None).await
     }
     /// Adds a host to the cluster.
     /// 
@@ -130,11 +128,8 @@ impl ClusterComputeResource {
     /// on the Cluster.
     pub async fn add_host_task(&self, spec: &crate::types::structs::HostConnectSpec, as_connected: bool, resource_pool: Option<&crate::types::structs::ManagedObjectReference>, license: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddHostRequestType {spec, as_connected, resource_pool, license, };
-        let path = format!("/ClusterComputeResource/{moId}/AddHost_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "AddHost_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Applies a recommendation from the drsRecommendation or the
@@ -152,9 +147,7 @@ impl ClusterComputeResource {
     /// The key field of the DrsRecommendation or Recommendation.
     pub async fn apply_recommendation(&self, key: &str) -> Result<()> {
         let input = ApplyRecommendationRequestType {key, };
-        let path = format!("/ClusterComputeResource/{moId}/ApplyRecommendation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ClusterComputeResource", &self.mo_id, "ApplyRecommendation", Some(&input)).await
     }
     /// Cancels a recommendation.
     /// 
@@ -166,9 +159,7 @@ impl ClusterComputeResource {
     /// The key field of the Recommendation.
     pub async fn cancel_recommendation(&self, key: &str) -> Result<()> {
         let input = CancelRecommendationRequestType {key, };
-        let path = format!("/ClusterComputeResource/{moId}/CancelRecommendation", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ClusterComputeResource", &self.mo_id, "CancelRecommendation", Some(&input)).await
     }
     /// Configures the cluster.
     /// 
@@ -217,11 +208,8 @@ impl ClusterComputeResource {
     /// Refers instance of *Task*.
     pub async fn configure_hci_task(&self, cluster_spec: &crate::types::structs::ClusterComputeResourceHciConfigSpec, host_inputs: Option<&[crate::types::structs::ClusterComputeResourceHostConfigurationInput]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureHciRequestType {cluster_spec, host_inputs, };
-        let path = format!("/ClusterComputeResource/{moId}/ConfigureHCI_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "ConfigureHCI_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroys this object, deleting its contents and removing it from its parent
@@ -246,11 +234,8 @@ impl ClusterComputeResource {
     ///
     /// Failure
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/ClusterComputeResource/{moId}/Destroy_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "Destroy_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Disable network boot support for this compute resource.
@@ -269,11 +254,8 @@ impl ClusterComputeResource {
     /// 
     /// Refers instance of *Task*.
     pub async fn disable_network_boot_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/ClusterComputeResource/{moId}/DisableNetworkBoot_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "DisableNetworkBoot_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Enable network boot in the specified mode for this compute resource.
@@ -302,11 +284,8 @@ impl ClusterComputeResource {
     /// Refers instance of *Task*.
     pub async fn enable_network_boot_task(&self, network_boot_mode: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = EnableNetworkBootRequestType {network_boot_mode, };
-        let path = format!("/ClusterComputeResource/{moId}/EnableNetworkBoot_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "EnableNetworkBoot_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The API takes a list of hosts in the cluster as input, and
@@ -365,11 +344,8 @@ impl ClusterComputeResource {
     /// be evacuated.
     pub async fn cluster_enter_maintenance_mode(&self, host: &[crate::types::structs::ManagedObjectReference], option: Option<&[Box<dyn crate::types::traits::OptionValueTrait>]>, info: Option<&crate::types::structs::ClusterComputeResourceMaintenanceInfo>) -> Result<crate::types::structs::ClusterEnterMaintenanceResult> {
         let input = ClusterEnterMaintenanceModeRequestType {host, option, info, };
-        let path = format!("/ClusterComputeResource/{moId}/ClusterEnterMaintenanceMode", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ClusterEnterMaintenanceResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "ClusterEnterMaintenanceMode", Some(&input)).await?;
+        let result: crate::types::structs::ClusterEnterMaintenanceResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A managed object that controls Enhanced vMotion Compatibility mode for
@@ -381,14 +357,9 @@ impl ClusterComputeResource {
     ///
     /// Refers instance of *ClusterEVCManager*.
     pub async fn evc_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/ClusterComputeResource/{moId}/EvcManager", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ClusterComputeResource", &self.mo_id, "EvcManager", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -431,11 +402,8 @@ impl ClusterComputeResource {
     /// Refers instance of *Task*.
     pub async fn extend_hci_task(&self, host_inputs: Option<&[crate::types::structs::ClusterComputeResourceHostConfigurationInput]>, v_san_config_spec: Option<&dyn crate::types::traits::SddcBaseTrait>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendHciRequestType {host_inputs, v_san_config_spec, };
-        let path = format!("/ClusterComputeResource/{moId}/ExtendHCI_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "ExtendHCI_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Finds all enabled and disabled VM-VM Affinity and Anti-Affinity rules,
@@ -451,14 +419,9 @@ impl ClusterComputeResource {
     /// Refers instance of *VirtualMachine*.
     pub async fn find_rules_for_vm(&self, vm: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterRuleInfoTrait>>>> {
         let input = FindRulesForVmRequestType {vm, };
-        let path = format!("/ClusterComputeResource/{moId}/FindRulesForVm", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ClusterComputeResource", &self.mo_id, "FindRulesForVm", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::ClusterRuleInfoTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -483,11 +446,8 @@ impl ClusterComputeResource {
     /// 6. storageUsedMB: Total storage consumed in all the accessible datastores in
     ///    this cluster.
     pub async fn get_resource_usage(&self) -> Result<crate::types::structs::ClusterResourceUsageSummary> {
-        let path = format!("/ClusterComputeResource/{moId}/GetResourceUsage", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ClusterResourceUsageSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "GetResourceUsage", None).await?;
+        let result: crate::types::structs::ClusterResourceUsageSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere 9.0 with no replacement. In a future release
@@ -509,14 +469,9 @@ impl ClusterComputeResource {
     /// 
     /// Refers instances of *Datastore*.
     pub async fn get_system_v_ms_restricted_datastores(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ClusterComputeResource/{moId}/GetSystemVMsRestrictedDatastores", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ClusterComputeResource", &self.mo_id, "GetSystemVMsRestrictedDatastores", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -588,11 +543,8 @@ impl ClusterComputeResource {
     /// maintenance mode.
     pub async fn move_host_into_task(&self, host: &crate::types::structs::ManagedObjectReference, resource_pool: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveHostIntoRequestType {host, resource_pool, };
-        let path = format!("/ClusterComputeResource/{moId}/MoveHostInto_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "MoveHostInto_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Moves an existing host into a cluster.
@@ -665,11 +617,8 @@ impl ClusterComputeResource {
     /// cluster. See *ClusterFailoverHostAdmissionControlPolicy*.
     pub async fn move_into_task(&self, host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveIntoRequestType {host, };
-        let path = format!("/ClusterComputeResource/{moId}/MoveInto_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "MoveInto_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This method returns a *PlacementResult* object.
@@ -726,11 +675,8 @@ impl ClusterComputeResource {
     ///   not guaranteed to be compatible with the incoming virtual machine.
     pub async fn place_vm(&self, placement_spec: &crate::types::structs::PlacementSpec) -> Result<crate::types::structs::PlacementResult> {
         let input = PlaceVmRequestType {placement_spec, };
-        let path = format!("/ClusterComputeResource/{moId}/PlaceVm", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::PlacementResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "PlaceVm", Some(&input)).await?;
+        let result: crate::types::structs::PlacementResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *Datacenter.PowerOnMultiVM_Task*.
@@ -777,14 +723,9 @@ impl ClusterComputeResource {
     /// An array of HostRecommendation ordered by their rating.
     pub async fn recommend_hosts_for_vm(&self, vm: &crate::types::structs::ManagedObjectReference, pool: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::ClusterHostRecommendation>>> {
         let input = RecommendHostsForVmRequestType {vm, pool, };
-        let path = format!("/ClusterComputeResource/{moId}/RecommendHostsForVm", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ClusterComputeResource", &self.mo_id, "RecommendHostsForVm", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ClusterHostRecommendation>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -817,11 +758,8 @@ impl ClusterComputeResource {
     /// Refers instance of *Task*.
     pub async fn reconfigure_cluster_task(&self, spec: &crate::types::structs::ClusterConfigSpec, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureClusterRequestType {spec, modify, };
-        let path = format!("/ClusterComputeResource/{moId}/ReconfigureCluster_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "ReconfigureCluster_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Change the compute resource configuration.
@@ -853,11 +791,8 @@ impl ClusterComputeResource {
     /// Refers instance of *Task*.
     pub async fn reconfigure_compute_resource_task(&self, spec: &dyn crate::types::traits::ComputeResourceConfigSpecTrait, modify: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureComputeResourceRequestType {spec, modify, };
-        let path = format!("/ClusterComputeResource/{moId}/ReconfigureComputeResource_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "ReconfigureComputeResource_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Make DRS invoke again and return a new list of recommendations.
@@ -869,9 +804,7 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** Host.Inventory.EditCluster
     pub async fn refresh_recommendation(&self) -> Result<()> {
-        let path = format!("/ClusterComputeResource/{moId}/RefreshRecommendation", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ClusterComputeResource", &self.mo_id, "RefreshRecommendation", None).await
     }
     /// Reload the entity state.
     /// 
@@ -888,9 +821,7 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn reload(&self) -> Result<()> {
-        let path = format!("/ClusterComputeResource/{moId}/Reload", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ClusterComputeResource", &self.mo_id, "Reload", None).await
     }
     /// Renames this managed entity.
     /// 
@@ -922,25 +853,17 @@ impl ClusterComputeResource {
     /// ***InvalidName***: If the new name is not a valid entity name.
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
-        let path = format!("/ClusterComputeResource/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "Rename_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve DAS advanced runtime info for this cluster.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn retrieve_das_advanced_runtime_info(&self) -> Result<Option<Box<dyn crate::types::traits::ClusterDasAdvancedRuntimeInfoTrait>>> {
-        let path = format!("/ClusterComputeResource/{moId}/RetrieveDasAdvancedRuntimeInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ClusterComputeResource", &self.mo_id, "RetrieveDasAdvancedRuntimeInfo", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::ClusterDasAdvancedRuntimeInfoTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -977,9 +900,7 @@ impl ClusterComputeResource {
     /// ***InvalidArgument***: if one of the parameters is invalid.
     pub async fn set_crypto_mode(&self, crypto_mode: &str, policy: Option<&crate::types::structs::ClusterComputeResourceCryptoModePolicy>) -> Result<()> {
         let input = SetCryptoModeRequestType {crypto_mode, policy, };
-        let path = format!("/ClusterComputeResource/{moId}/SetCryptoMode", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ClusterComputeResource", &self.mo_id, "SetCryptoMode", Some(&input)).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -997,9 +918,7 @@ impl ClusterComputeResource {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/ClusterComputeResource/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ClusterComputeResource", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Stamp all rules in the cluster with ruleUuid.
     /// 
@@ -1012,11 +931,8 @@ impl ClusterComputeResource {
     ///
     /// Refers instance of *Task*.
     pub async fn stamp_all_rules_with_uuid_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/ClusterComputeResource/{moId}/StampAllRulesWithUuid_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ClusterComputeResource", &self.mo_id, "StampAllRulesWithUuid_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Validate HCI configuration in pre-configure and post-configure use-cases.
@@ -1072,27 +988,17 @@ impl ClusterComputeResource {
     /// Failure
     pub async fn validate_hci_configuration(&self, hci_config_spec: Option<&crate::types::structs::ClusterComputeResourceHciConfigSpec>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Option<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>> {
         let input = ValidateHciConfigurationRequestType {hci_config_spec, hosts, };
-        let path = format!("/ClusterComputeResource/{moId}/ValidateHCIConfiguration", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ClusterComputeResource", &self.mo_id, "ValidateHCIConfiguration", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::ClusterComputeResourceValidationResultBaseTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// The set of actions that have been performed recently.
     pub async fn action_history(&self) -> Result<Option<Vec<crate::types::structs::ClusterActionHistory>>> {
-        let path = format!("/ClusterComputeResource/{moId}/actionHistory", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "actionHistory").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ClusterActionHistory>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1102,14 +1008,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let path = format!("/ClusterComputeResource/{moId}/alarmActionsEnabled", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "alarmActionsEnabled").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<bool>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1119,14 +1020,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/ClusterComputeResource/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1138,14 +1034,9 @@ impl ClusterComputeResource {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let path = format!("/ClusterComputeResource/{moId}/configIssue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "configIssue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Event>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1159,14 +1050,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn config_manager_enabled(&self) -> Result<Option<bool>> {
-        let path = format!("/ClusterComputeResource/{moId}/configManagerEnabled", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "configManagerEnabled").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<bool>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1195,11 +1081,9 @@ impl ClusterComputeResource {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/ClusterComputeResource/{moId}/configStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "configStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *ComputeResource.configurationEx*,
@@ -1207,11 +1091,9 @@ impl ClusterComputeResource {
     /// 
     /// Configuration of the cluster.
     pub async fn configuration(&self) -> Result<crate::types::structs::ClusterConfigInfo> {
-        let path = format!("/ClusterComputeResource/{moId}/configuration", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ClusterConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "configuration").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configuration was empty".to_string()))?;
+        let result: crate::types::structs::ClusterConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Configuration of the compute resource; applies to both standalone hosts
@@ -1220,25 +1102,18 @@ impl ClusterComputeResource {
     /// For a cluster this property will return a
     /// *ClusterConfigInfoEx* object.
     pub async fn configuration_ex(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceConfigInfoTrait>> {
-        let path = format!("/ClusterComputeResource/{moId}/configurationEx", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::ComputeResourceConfigInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "configurationEx").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configurationEx was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::ComputeResourceConfigInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/ClusterComputeResource/{moId}/customValue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "customValue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1254,14 +1129,9 @@ impl ClusterComputeResource {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ClusterComputeResource/{moId}/datastore", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "datastore").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1276,14 +1146,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/ClusterComputeResource/{moId}/declaredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "declaredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1357,14 +1222,9 @@ impl ClusterComputeResource {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/ClusterComputeResource/{moId}/disabledMethod", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "disabledMethod").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1386,14 +1246,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn drs_fault(&self) -> Result<Option<Vec<crate::types::structs::ClusterDrsFaults>>> {
-        let path = format!("/ClusterComputeResource/{moId}/drsFault", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "drsFault").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ClusterDrsFaults>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1405,14 +1260,9 @@ impl ClusterComputeResource {
     /// If DRS is enabled, this returns the set of recommended
     /// migrations from the DRS module.
     pub async fn drs_recommendation(&self) -> Result<Option<Vec<crate::types::structs::ClusterDrsRecommendation>>> {
-        let path = format!("/ClusterComputeResource/{moId}/drsRecommendation", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "drsRecommendation").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ClusterDrsRecommendation>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1420,14 +1270,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let path = format!("/ClusterComputeResource/{moId}/effectiveRole", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "effectiveRole").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1440,28 +1285,18 @@ impl ClusterComputeResource {
     ///
     /// Refers instance of *EnvironmentBrowser*.
     pub async fn environment_browser(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/ClusterComputeResource/{moId}/environmentBrowser", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "environmentBrowser").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// This is applicable to clusters which are configured using the HCI
     /// workflow and contains data related to the workflow and specification.
     pub async fn hci_config(&self) -> Result<Option<crate::types::structs::ClusterComputeResourceHciConfigInfo>> {
-        let path = format!("/ClusterComputeResource/{moId}/hciConfig", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "hciConfig").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ClusterComputeResourceHciConfigInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1476,14 +1311,9 @@ impl ClusterComputeResource {
     ///
     /// Refers instances of *HostSystem*.
     pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ClusterComputeResource/{moId}/host", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "host").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1496,14 +1326,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn lifecycle_managed(&self) -> Result<Option<bool>> {
-        let path = format!("/ClusterComputeResource/{moId}/lifecycleManaged", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "lifecycleManaged").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<bool>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1511,14 +1336,9 @@ impl ClusterComputeResource {
     /// 
     /// This list is populated only when DRS is in automatic mode.
     pub async fn migration_history(&self) -> Result<Option<Vec<crate::types::structs::ClusterDrsMigration>>> {
-        let path = format!("/ClusterComputeResource/{moId}/migrationHistory", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "migrationHistory").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ClusterDrsMigration>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1532,11 +1352,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let path = format!("/ClusterComputeResource/{moId}/name", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "name").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The subset of network objects available in the datacenter that is available in
@@ -1551,14 +1369,9 @@ impl ClusterComputeResource {
     ///
     /// Refers instances of *Network*.
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ClusterComputeResource/{moId}/network", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "network").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1576,14 +1389,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn network_boot_mode(&self) -> Result<Option<String>> {
-        let path = format!("/ClusterComputeResource/{moId}/networkBootMode", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "networkBootMode").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1608,11 +1416,9 @@ impl ClusterComputeResource {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/ClusterComputeResource/{moId}/overallStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "overallStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -1627,27 +1433,17 @@ impl ClusterComputeResource {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/ClusterComputeResource/{moId}/parent", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "parent").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let path = format!("/ClusterComputeResource/{moId}/permission", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "permission").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1677,14 +1473,9 @@ impl ClusterComputeResource {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/ClusterComputeResource/{moId}/recentTask", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "recentTask").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1703,14 +1494,9 @@ impl ClusterComputeResource {
     /// An array of recommendations, with each of them having
     /// one or more actions.
     pub async fn recommendation(&self) -> Result<Option<Vec<crate::types::structs::ClusterRecommendation>>> {
-        let path = format!("/ClusterComputeResource/{moId}/recommendation", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "recommendation").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ClusterRecommendation>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1722,14 +1508,9 @@ impl ClusterComputeResource {
     ///
     /// Refers instance of *ResourcePool*.
     pub async fn resource_pool(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/ClusterComputeResource/{moId}/resourcePool", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "resourcePool").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1738,11 +1519,9 @@ impl ClusterComputeResource {
     /// This information is used on
     /// summary screens and in list views.
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ComputeResourceSummaryTrait>> {
-        let path = format!("/ClusterComputeResource/{moId}/summary", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::ComputeResourceSummaryTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "summary").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::ComputeResourceSummaryTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated do not use this property.
@@ -1753,11 +1532,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Since:*** vSphere API Release 7.0.1.1
     pub async fn summary_ex(&self) -> Result<crate::types::structs::ClusterComputeResourceSummary> {
-        let path = format!("/ClusterComputeResource/{moId}/summaryEx", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ClusterComputeResourceSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "summaryEx").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summaryEx was empty".to_string()))?;
+        let result: crate::types::structs::ClusterComputeResourceSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The set of tags associated with this managed entity.
@@ -1766,14 +1543,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let path = format!("/ClusterComputeResource/{moId}/tag", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "tag").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Tag>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1792,14 +1564,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/ClusterComputeResource/{moId}/triggeredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "triggeredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1811,14 +1578,9 @@ impl ClusterComputeResource {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/ClusterComputeResource/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

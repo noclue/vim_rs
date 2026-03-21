@@ -115,9 +115,7 @@ impl PerformanceManager {
     /// seconds).
     pub async fn create_perf_interval(&self, interval_id: &crate::types::structs::PerfInterval) -> Result<()> {
         let input = CreatePerfIntervalRequestType {interval_id, };
-        let path = format!("/PerformanceManager/{moId}/CreatePerfInterval", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "PerformanceManager", &self.mo_id, "CreatePerfInterval", Some(&input)).await
     }
     /// Retrieves all performance counters for the specified *managed object* generated during a specified
     /// period of time.
@@ -161,14 +159,9 @@ impl PerformanceManager {
     /// *name*.
     pub async fn query_available_perf_metric(&self, entity: &crate::types::structs::ManagedObjectReference, begin_time: Option<&str>, end_time: Option<&str>, interval_id: Option<i32>) -> Result<Option<Vec<crate::types::structs::PerfMetricId>>> {
         let input = QueryAvailablePerfMetricRequestType {entity, begin_time, end_time, interval_id, };
-        let path = format!("/PerformanceManager/{moId}/QueryAvailablePerfMetric", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "PerformanceManager", &self.mo_id, "QueryAvailablePerfMetric", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PerfMetricId>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -207,11 +200,8 @@ impl PerformanceManager {
     /// entities for a single interval.
     pub async fn query_perf_composite(&self, query_spec: &crate::types::structs::PerfQuerySpec) -> Result<crate::types::structs::PerfCompositeMetric> {
         let input = QueryPerfCompositeRequestType {query_spec, };
-        let path = format!("/PerformanceManager/{moId}/QueryPerfComposite", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::PerfCompositeMetric = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "PerformanceManager", &self.mo_id, "QueryPerfComposite", Some(&input)).await?;
+        let result: crate::types::structs::PerfCompositeMetric = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves counter information for the specified list of counter IDs.
@@ -230,14 +220,9 @@ impl PerformanceManager {
     /// specified counterIds.
     pub async fn query_perf_counter(&self, counter_id: &[i32]) -> Result<Option<Vec<crate::types::structs::PerfCounterInfo>>> {
         let input = QueryPerfCounterRequestType {counter_id, };
-        let path = format!("/PerformanceManager/{moId}/QueryPerfCounter", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "PerformanceManager", &self.mo_id, "QueryPerfCounter", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PerfCounterInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -262,11 +247,8 @@ impl PerformanceManager {
     /// for the entity.
     pub async fn query_perf_counter_by_level(&self, level: i32) -> Result<Vec<crate::types::structs::PerfCounterInfo>> {
         let input = QueryPerfCounterByLevelRequestType {level, };
-        let path = format!("/PerformanceManager/{moId}/QueryPerfCounterByLevel", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::PerfCounterInfo> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "PerformanceManager", &self.mo_id, "QueryPerfCounterByLevel", Some(&input)).await?;
+        let result: Vec<crate::types::structs::PerfCounterInfo> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves the *PerfProviderSummary* data object that
@@ -290,11 +272,8 @@ impl PerformanceManager {
     /// both) it generates and the *PerfProviderSummary.refreshRate*.
     pub async fn query_perf_provider_summary(&self, entity: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::PerfProviderSummary> {
         let input = QueryPerfProviderSummaryRequestType {entity, };
-        let path = format!("/PerformanceManager/{moId}/QueryPerfProviderSummary", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::PerfProviderSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "PerformanceManager", &self.mo_id, "QueryPerfProviderSummary", Some(&input)).await?;
+        let result: crate::types::structs::PerfProviderSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves the performance metrics for the specified entity (or entities)
@@ -333,14 +312,9 @@ impl PerformanceManager {
     /// The metric values for the specified entity or entities.
     pub async fn query_perf(&self, query_spec: &[crate::types::structs::PerfQuerySpec]) -> Result<Option<Vec<Box<dyn crate::types::traits::PerfEntityMetricBaseTrait>>>> {
         let input = QueryPerfRequestType {query_spec, };
-        let path = format!("/PerformanceManager/{moId}/QueryPerf", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "PerformanceManager", &self.mo_id, "QueryPerf", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::PerfEntityMetricBaseTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -358,9 +332,7 @@ impl PerformanceManager {
     /// removed.
     pub async fn remove_perf_interval(&self, sample_period: i32) -> Result<()> {
         let input = RemovePerfIntervalRequestType {sample_period, };
-        let path = format!("/PerformanceManager/{moId}/RemovePerfInterval", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "PerformanceManager", &self.mo_id, "RemovePerfInterval", Some(&input)).await
     }
     /// Restores a set of performance counters to the default level of data
     /// collection.
@@ -376,9 +348,7 @@ impl PerformanceManager {
     /// An array of counter ids.
     pub async fn reset_counter_level_mapping(&self, counters: &[i32]) -> Result<()> {
         let input = ResetCounterLevelMappingRequestType {counters, };
-        let path = format!("/PerformanceManager/{moId}/ResetCounterLevelMapping", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "PerformanceManager", &self.mo_id, "ResetCounterLevelMapping", Some(&input)).await
     }
     /// Changes the level of data collection for a set of performance counters.
     /// 
@@ -466,9 +436,7 @@ impl PerformanceManager {
     /// the last entry containing the counterId takes effect.
     pub async fn update_counter_level_mapping(&self, counter_level_map: &[crate::types::structs::PerformanceManagerCounterLevelMapping]) -> Result<()> {
         let input = UpdateCounterLevelMappingRequestType {counter_level_map, };
-        let path = format!("/PerformanceManager/{moId}/UpdateCounterLevelMapping", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "PerformanceManager", &self.mo_id, "UpdateCounterLevelMapping", Some(&input)).await
     }
     /// Modifies VirtualCenter Server's built-in *historical intervals*, within certain limits.
     /// 
@@ -543,19 +511,15 @@ impl PerformanceManager {
     /// properties.
     pub async fn update_perf_interval(&self, interval: &crate::types::structs::PerfInterval) -> Result<()> {
         let input = UpdatePerfIntervalRequestType {interval, };
-        let path = format!("/PerformanceManager/{moId}/UpdatePerfInterval", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "PerformanceManager", &self.mo_id, "UpdatePerfInterval", Some(&input)).await
     }
     /// The static description strings.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn description(&self) -> Result<crate::types::structs::PerformanceDescription> {
-        let path = format!("/PerformanceManager/{moId}/description", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::PerformanceDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "PerformanceManager", &self.mo_id, "description").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
+        let result: crate::types::structs::PerformanceDescription = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A list of *intervals* configured on the
@@ -563,14 +527,9 @@ impl PerformanceManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn historical_interval(&self) -> Result<Option<Vec<crate::types::structs::PerfInterval>>> {
-        let path = format!("/PerformanceManager/{moId}/historicalInterval", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "PerformanceManager", &self.mo_id, "historicalInterval").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PerfInterval>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -578,14 +537,9 @@ impl PerformanceManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn perf_counter(&self) -> Result<Option<Vec<crate::types::structs::PerfCounterInfo>>> {
-        let path = format!("/PerformanceManager/{moId}/perfCounter", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "PerformanceManager", &self.mo_id, "perfCounter").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::PerfCounterInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

@@ -50,22 +50,16 @@ impl FailoverClusterManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn get_vcha_cluster_health(&self) -> Result<crate::types::structs::VchaClusterHealth> {
-        let path = format!("/FailoverClusterManager/{moId}/GetVchaClusterHealth", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VchaClusterHealth = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterManager", &self.mo_id, "GetVchaClusterHealth", None).await?;
+        let result: crate::types::structs::VchaClusterHealth = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns current mode of a VCHA Cluster.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn get_cluster_mode(&self) -> Result<String> {
-        let path = format!("/FailoverClusterManager/{moId}/getClusterMode", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterManager", &self.mo_id, "getClusterMode", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Allows a caller to initiate a failover from Active vCenter Server node
@@ -98,11 +92,8 @@ impl FailoverClusterManager {
     /// Refers instance of *Task*.
     pub async fn initiate_failover_task(&self, planned: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InitiateFailoverRequestType {planned, };
-        let path = format!("/FailoverClusterManager/{moId}/initiateFailover_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterManager", &self.mo_id, "initiateFailover_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// setClusterMode method allows caller to manipulate the mode of a
@@ -134,11 +125,8 @@ impl FailoverClusterManager {
     /// Refers instance of *Task*.
     pub async fn set_cluster_mode_task(&self, mode: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SetClusterModeRequestType {mode, };
-        let path = format!("/FailoverClusterManager/{moId}/setClusterMode_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "FailoverClusterManager", &self.mo_id, "setClusterMode_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// A list of method names that must not be called and will throw
@@ -157,14 +145,9 @@ impl FailoverClusterManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn disabled_cluster_method(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/FailoverClusterManager/{moId}/disabledClusterMethod", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "FailoverClusterManager", &self.mo_id, "disabledClusterMethod").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

@@ -118,7 +118,7 @@ use tokio::time::sleep;
 use vim_rs::types::convert::CastInto as _;
 use std::env;
 use std::time::Duration;
-use utils::connect;
+use snippets::connect;
 use vim_rs::vim_retrievable;
 use vim_rs::core::tasks::TaskTracker;
 use vim_rs::mo::{SearchIndex, VirtualMachine};
@@ -260,7 +260,7 @@ async fn main() -> Result<()> {
     env_logger::init();
     toggle_wol().await?;
     // Yield to run async drop cleanup
-    sleep(Duration::from_millis(10)).await;
+    sleep(Duration::from_millis(100)).await;
 
     Ok(())
 }

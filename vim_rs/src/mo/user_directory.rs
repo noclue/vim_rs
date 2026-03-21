@@ -100,14 +100,9 @@ impl UserDirectory {
     /// arguments refer to entities that do not exist.
     pub async fn retrieve_user_groups(&self, domain: Option<&str>, search_str: &str, belongs_to_group: Option<&str>, belongs_to_user: Option<&str>, exact_match: bool, find_users: bool, find_groups: bool) -> Result<Option<Vec<Box<dyn crate::types::traits::UserSearchResultTrait>>>> {
         let input = RetrieveUserGroupsRequestType {domain, search_str, belongs_to_group, belongs_to_user, exact_match, find_users, find_groups, };
-        let path = format!("/UserDirectory/{moId}/RetrieveUserGroups", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "UserDirectory", &self.mo_id, "RetrieveUserGroups", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::UserSearchResultTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -116,14 +111,9 @@ impl UserDirectory {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn domain_list(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/UserDirectory/{moId}/domainList", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "UserDirectory", &self.mo_id, "domainList").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

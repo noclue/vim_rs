@@ -33,14 +33,9 @@ impl VsanMassCollector {
     /// Failure
     pub async fn vsan_retrieve_properties(&self, mass_collector_specs: &[crate::types::structs::VsanMassCollectorSpec]) -> Result<Option<Vec<crate::types::structs::ObjectContent>>> {
         let input = VsanRetrievePropertiesRequestType {mass_collector_specs, };
-        let path = format!("/vsan/VsanMassCollector/{moId}/VsanRetrieveProperties", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanMassCollector", &self.mo_id, "VsanRetrieveProperties", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ObjectContent>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

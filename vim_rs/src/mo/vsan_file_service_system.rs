@@ -61,11 +61,8 @@ impl VsanFileServiceSystem {
     /// if the domain name already configured in the cluster.
     pub async fn vsan_cluster_create_fs_domain(&self, domain_config: &crate::types::structs::VsanFileServiceDomainConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterCreateFsDomainRequestType {domain_config, cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterCreateFsDomain", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanClusterCreateFsDomain", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a file share in this vSAN cluster.
@@ -103,11 +100,8 @@ impl VsanFileServiceSystem {
     /// in this cluster.
     pub async fn vsan_create_file_share(&self, config: &crate::types::structs::VsanFileShareConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanCreateFileShareRequestType {config, cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanCreateFileShare", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanCreateFileShare", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create a snapshot for a file share in this vSAN cluster.
@@ -140,11 +134,8 @@ impl VsanFileServiceSystem {
     /// in this cluster.
     pub async fn vsan_cluster_create_share_snapshot(&self, config: &crate::types::structs::VsanFileShareSnapshotConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterCreateShareSnapshotRequestType {config, cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterCreateShareSnapshot", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanClusterCreateShareSnapshot", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Downloads a file service OVF file of the specified version from VMware
@@ -170,11 +161,8 @@ impl VsanFileServiceSystem {
     /// not exist as specified in the source URL.
     pub async fn vsan_download_file_service_ovf(&self, download_url: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanDownloadFileServiceOvfRequestType {download_url, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanDownloadFileServiceOvf", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanDownloadFileServiceOvf", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Find a compatible vSAN File Service OVF download URL for the target cluster.
@@ -197,11 +185,8 @@ impl VsanFileServiceSystem {
     /// download URL could be found.
     pub async fn vsan_find_ovf_download_url(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<String> {
         let input = VsanFindOvfDownloadUrlRequestType {cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanFindOvfDownloadUrl", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanFindOvfDownloadUrl", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Perform a preflight check on a cluster for enabling vSAN file service
@@ -258,11 +243,8 @@ impl VsanFileServiceSystem {
     /// Preflight check result.
     pub async fn vsan_perform_file_service_enable_preflight_check(&self, cluster: &crate::types::structs::ManagedObjectReference, domain_config: Option<&crate::types::structs::VsanFileServiceDomainConfig>, network: Option<&crate::types::structs::ManagedObjectReference>, scope: Option<&str>, domain_uuid: Option<&str>) -> Result<crate::types::structs::VsanFileServicePreflightCheckResult> {
         let input = VsanPerformFileServiceEnablePreflightCheckRequestType {cluster, domain_config, network, scope, domain_uuid, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanPerformFileServiceEnablePreflightCheck", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanFileServicePreflightCheckResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanPerformFileServiceEnablePreflightCheck", Some(&input)).await?;
+        let result: crate::types::structs::VsanFileServicePreflightCheckResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Lists all file service domains in the vSAN cluster.
@@ -296,14 +278,9 @@ impl VsanFileServiceSystem {
     /// cluster.
     pub async fn vsan_cluster_query_fs_domains(&self, query_spec: Option<&crate::types::structs::VsanFileServiceDomainQuerySpec>, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanFileServiceDomain>>> {
         let input = VsanClusterQueryFsDomainsRequestType {query_spec, cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterQueryFsDomains", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanClusterQueryFsDomains", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanFileServiceDomain>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -315,14 +292,9 @@ impl VsanFileServiceSystem {
     ///
     /// List of the file services OVFs available in this vCenter.
     pub async fn vsan_query_file_service_ovfs(&self) -> Result<Option<Vec<crate::types::structs::VsanFileServiceOvfSpec>>> {
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanQueryFileServiceOvfs", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanQueryFileServiceOvfs", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanFileServiceOvfSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -353,14 +325,9 @@ impl VsanFileServiceSystem {
     /// if the share does not exist in this cluster.
     pub async fn vsan_cluster_query_share_snapshots(&self, query_spec: &crate::types::structs::VsanFileShareSnapshotQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::VsanFileShareSnapshotQueryResult>> {
         let input = VsanClusterQueryShareSnapshotsRequestType {query_spec, cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterQueryShareSnapshots", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanClusterQueryShareSnapshots", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanFileShareSnapshotQueryResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -399,14 +366,9 @@ impl VsanFileServiceSystem {
     /// if the domain does not exist in this cluster.
     pub async fn vsan_cluster_query_file_shares(&self, query_spec: &crate::types::structs::VsanFileShareQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<crate::types::structs::FileShareQueryResult>> {
         let input = VsanClusterQueryFileSharesRequestType {query_spec, cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterQueryFileShares", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanClusterQueryFileShares", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::FileShareQueryResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -428,11 +390,8 @@ impl VsanFileServiceSystem {
     /// Refers instance of *Task*.
     pub async fn vsan_rebalance_file_service(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanRebalanceFileServiceRequestType {cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanRebalanceFileService", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanRebalanceFileService", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Updates a file service domain in the vSAN cluster.
@@ -484,11 +443,8 @@ impl VsanFileServiceSystem {
     /// if the domain does not exist in this cluster.
     pub async fn vsan_cluster_reconfigure_fs_domain(&self, domain_uuid: &str, domain_config: &crate::types::structs::VsanFileServiceDomainConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>, delete_domain_config_fields: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterReconfigureFsDomainRequestType {domain_uuid, domain_config, cluster, delete_domain_config_fields, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterReconfigureFsDomain", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanClusterReconfigureFsDomain", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reconfigures a file share in this vSAN cluster.
@@ -540,11 +496,8 @@ impl VsanFileServiceSystem {
     /// if the file share does not exist in this cluster.
     pub async fn vsan_reconfigure_file_share(&self, share_uuid: &str, config: &crate::types::structs::VsanFileShareConfig, cluster: Option<&crate::types::structs::ManagedObjectReference>, delete_label_keys: Option<&[String]>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanReconfigureFileShareRequestType {share_uuid, config, cluster, delete_label_keys, force, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanReconfigureFileShare", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanReconfigureFileShare", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removes a file service domain in the vSAN cluster.
@@ -580,11 +533,8 @@ impl VsanFileServiceSystem {
     /// if the domain does not exist in this cluster.
     pub async fn vsan_cluster_remove_fs_domain(&self, domain_uuid: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterRemoveFsDomainRequestType {domain_uuid, cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterRemoveFsDomain", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanClusterRemoveFsDomain", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removes a file share in the domain.
@@ -621,11 +571,8 @@ impl VsanFileServiceSystem {
     /// if the file share does not exist in this cluster.
     pub async fn vsan_cluster_remove_share(&self, share_uuid: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>, force: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterRemoveShareRequestType {share_uuid, cluster, force, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterRemoveShare", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanClusterRemoveShare", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Remove a snapshot of a file share in this vSAN cluster.
@@ -664,11 +611,8 @@ impl VsanFileServiceSystem {
     /// if the snapshot does not exist in this cluster.
     pub async fn vsan_cluster_remove_share_snapshot(&self, share_uuid: &str, snapshot_name: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanClusterRemoveShareSnapshotRequestType {share_uuid, snapshot_name, cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanClusterRemoveShareSnapshot", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanClusterRemoveShareSnapshot", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Upgrade FSVM to latest ovf that is compatible with cluster's host version.
@@ -698,11 +642,8 @@ impl VsanFileServiceSystem {
     /// server, or file service is not running in a valid state.
     pub async fn vsan_upgrade_fsvm(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanUpgradeFsvmRequestType {cluster, };
-        let path = format!("/vsan/VsanFileServiceSystem/{moId}/VsanUpgradeFsvm", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanFileServiceSystem", &self.mo_id, "VsanUpgradeFsvm", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

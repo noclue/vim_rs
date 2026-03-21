@@ -31,9 +31,7 @@ impl VslmTask {
     ///
     /// ***InvalidState***: - if the task is already canceled or completed.
     pub async fn vslm_cancel_task(&self) -> Result<()> {
-        let path = format!("/vslm/VslmTask/{moId}/VslmCancelTask", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vslm", "VslmTask", &self.mo_id, "VslmCancelTask", None).await
     }
     /// Get detailed information about this task.
     ///
@@ -41,23 +39,15 @@ impl VslmTask {
     ///
     /// TaskInfo
     pub async fn vslm_query_info(&self) -> Result<crate::types::structs::VslmTaskInfo> {
-        let path = format!("/vslm/VslmTask/{moId}/VslmQueryInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VslmTaskInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vslm", "VslmTask", &self.mo_id, "VslmQueryInfo", None).await?;
+        let result: crate::types::structs::VslmTaskInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the result of the task.
     pub async fn vslm_query_task_result(&self) -> Result<Option<crate::types::vim_any::VimAny>> {
-        let path = format!("/vslm/VslmTask/{moId}/VslmQueryTaskResult", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vslm", "VslmTask", &self.mo_id, "VslmQueryTaskResult", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::vim_any::VimAny>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

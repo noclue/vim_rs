@@ -80,9 +80,7 @@ impl GuestWindowsRegistryManager {
     /// guest agent configuration.
     pub async fn create_registry_key_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, key_name: &crate::types::structs::GuestRegKeyNameSpec, is_volatile: bool, class_type: Option<&str>) -> Result<()> {
         let input = CreateRegistryKeyInGuestRequestType {vm, auth, key_name, is_volatile, class_type, };
-        let path = format!("/GuestWindowsRegistryManager/{moId}/CreateRegistryKeyInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestWindowsRegistryManager", &self.mo_id, "CreateRegistryKeyInGuest", Some(&input)).await
     }
     /// Delete a registry key.
     ///
@@ -144,9 +142,7 @@ impl GuestWindowsRegistryManager {
     /// guest agent configuration.
     pub async fn delete_registry_key_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, key_name: &crate::types::structs::GuestRegKeyNameSpec, recursive: bool) -> Result<()> {
         let input = DeleteRegistryKeyInGuestRequestType {vm, auth, key_name, recursive, };
-        let path = format!("/GuestWindowsRegistryManager/{moId}/DeleteRegistryKeyInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestWindowsRegistryManager", &self.mo_id, "DeleteRegistryKeyInGuest", Some(&input)).await
     }
     /// Delete a registry value.
     ///
@@ -206,9 +202,7 @@ impl GuestWindowsRegistryManager {
     /// guest agent configuration.
     pub async fn delete_registry_value_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, value_name: &crate::types::structs::GuestRegValueNameSpec) -> Result<()> {
         let input = DeleteRegistryValueInGuestRequestType {vm, auth, value_name, };
-        let path = format!("/GuestWindowsRegistryManager/{moId}/DeleteRegistryValueInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestWindowsRegistryManager", &self.mo_id, "DeleteRegistryValueInGuest", Some(&input)).await
     }
     /// List all registry subkeys for a given registry key.
     ///
@@ -278,14 +272,9 @@ impl GuestWindowsRegistryManager {
     /// guest agent configuration.
     pub async fn list_registry_keys_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, key_name: &crate::types::structs::GuestRegKeyNameSpec, recursive: bool, match_pattern: Option<&str>) -> Result<Option<Vec<crate::types::structs::GuestRegKeyRecordSpec>>> {
         let input = ListRegistryKeysInGuestRequestType {vm, auth, key_name, recursive, match_pattern, };
-        let path = format!("/GuestWindowsRegistryManager/{moId}/ListRegistryKeysInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "GuestWindowsRegistryManager", &self.mo_id, "ListRegistryKeysInGuest", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestRegKeyRecordSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -359,14 +348,9 @@ impl GuestWindowsRegistryManager {
     /// guest agent configuration.
     pub async fn list_registry_values_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, key_name: &crate::types::structs::GuestRegKeyNameSpec, expand_strings: bool, match_pattern: Option<&str>) -> Result<Option<Vec<crate::types::structs::GuestRegValueSpec>>> {
         let input = ListRegistryValuesInGuestRequestType {vm, auth, key_name, expand_strings, match_pattern, };
-        let path = format!("/GuestWindowsRegistryManager/{moId}/ListRegistryValuesInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "GuestWindowsRegistryManager", &self.mo_id, "ListRegistryValuesInGuest", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::GuestRegValueSpec>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -428,9 +412,7 @@ impl GuestWindowsRegistryManager {
     /// guest agent configuration.
     pub async fn set_registry_value_in_guest(&self, vm: &crate::types::structs::ManagedObjectReference, auth: &dyn crate::types::traits::GuestAuthenticationTrait, value: &crate::types::structs::GuestRegValueSpec) -> Result<()> {
         let input = SetRegistryValueInGuestRequestType {vm, auth, value, };
-        let path = format!("/GuestWindowsRegistryManager/{moId}/SetRegistryValueInGuest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "GuestWindowsRegistryManager", &self.mo_id, "SetRegistryValueInGuest", Some(&input)).await
     }
 }
 struct CreateRegistryKeyInGuestRequestType<'a> {

@@ -10,6 +10,7 @@ mod mo;
 pub mod names;
 pub mod ser;
 pub mod struct_enum;
+pub mod api_registry;
 pub(crate) mod structs;
 pub(crate) mod trait_emitter;
 pub mod vim_object;

@@ -46,9 +46,7 @@ impl PropertyCollector {
     /// session by the same *PropertyCollector*.
     pub async fn cancel_retrieve_properties_ex(&self, token: &str) -> Result<()> {
         let input = CancelRetrievePropertiesExRequestType {token, };
-        let path = format!("/PropertyCollector/{moId}/CancelRetrievePropertiesEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "PropertyCollector", &self.mo_id, "CancelRetrievePropertiesEx", Some(&input)).await
     }
     /// Attempts to cancel outstanding calls to *PropertyCollector.WaitForUpdates* or *PropertyCollector.WaitForUpdatesEx* in the current session.
     /// 
@@ -58,9 +56,7 @@ impl PropertyCollector {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn cancel_wait_for_updates(&self) -> Result<()> {
-        let path = format!("/PropertyCollector/{moId}/CancelWaitForUpdates", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "PropertyCollector", &self.mo_id, "CancelWaitForUpdates", None).await
     }
     /// Deprecated as of vSphere API 4.1, use
     /// *PropertyCollector.WaitForUpdatesEx* with a
@@ -98,14 +94,9 @@ impl PropertyCollector {
     /// received but before the update calculation was actually started
     pub async fn check_for_updates(&self, version: Option<&str>) -> Result<Option<crate::types::structs::UpdateSet>> {
         let input = CheckForUpdatesRequestType {version, };
-        let path = format!("/PropertyCollector/{moId}/CheckForUpdates", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "PropertyCollector", &self.mo_id, "CheckForUpdates", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::UpdateSet>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -130,11 +121,8 @@ impl PropertyCollector {
     /// session by the same *PropertyCollector*.
     pub async fn continue_retrieve_properties_ex(&self, token: &str) -> Result<crate::types::structs::RetrieveResult> {
         let input = ContinueRetrievePropertiesExRequestType {token, };
-        let path = format!("/PropertyCollector/{moId}/ContinueRetrievePropertiesEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::RetrieveResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "PropertyCollector", &self.mo_id, "ContinueRetrievePropertiesEx", Some(&input)).await?;
+        let result: crate::types::structs::RetrieveResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new filter for the given set of managed objects.
@@ -174,11 +162,8 @@ impl PropertyCollector {
     /// ***ManagedObjectNotFound***: See *PropertyFilterSpec.reportMissingObjectsInResults*.
     pub async fn create_filter(&self, spec: &crate::types::structs::PropertyFilterSpec, partial_updates: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateFilterRequestType {spec, partial_updates, };
-        let path = format!("/PropertyCollector/{moId}/CreateFilter", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "PropertyCollector", &self.mo_id, "CreateFilter", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new session-specific *PropertyCollector* that can
@@ -230,11 +215,8 @@ impl PropertyCollector {
     /// 
     /// Refers instance of *PropertyCollector*.
     pub async fn create_property_collector(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/PropertyCollector/{moId}/CreatePropertyCollector", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "PropertyCollector", &self.mo_id, "CreatePropertyCollector", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroys this *PropertyCollector*.
@@ -249,9 +231,7 @@ impl PropertyCollector {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn destroy_property_collector(&self) -> Result<()> {
-        let path = format!("/PropertyCollector/{moId}/DestroyPropertyCollector", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "PropertyCollector", &self.mo_id, "DestroyPropertyCollector", None).await
     }
     /// Deprecated as of vSphere API 4.1, use *PropertyCollector.RetrievePropertiesEx*.
     /// 
@@ -292,14 +272,9 @@ impl PropertyCollector {
     /// ***ManagedObjectNotFound***: See *PropertyCollector.CreateFilter*
     pub async fn retrieve_properties(&self, spec_set: &[crate::types::structs::PropertyFilterSpec]) -> Result<Option<Vec<crate::types::structs::ObjectContent>>> {
         let input = RetrievePropertiesRequestType {spec_set, };
-        let path = format!("/PropertyCollector/{moId}/RetrieveProperties", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "PropertyCollector", &self.mo_id, "RetrieveProperties", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ObjectContent>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -345,14 +320,9 @@ impl PropertyCollector {
     /// ***ManagedObjectNotFound***: See *PropertyCollector.CreateFilter*
     pub async fn retrieve_properties_ex(&self, spec_set: &[crate::types::structs::PropertyFilterSpec], options: &crate::types::structs::RetrieveOptions) -> Result<Option<crate::types::structs::RetrieveResult>> {
         let input = RetrievePropertiesExRequestType {spec_set, options, };
-        let path = format!("/PropertyCollector/{moId}/RetrievePropertiesEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "PropertyCollector", &self.mo_id, "RetrievePropertiesEx", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::RetrieveResult>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -387,11 +357,8 @@ impl PropertyCollector {
     /// received
     pub async fn wait_for_updates(&self, version: Option<&str>) -> Result<crate::types::structs::UpdateSet> {
         let input = WaitForUpdatesRequestType {version, };
-        let path = format!("/PropertyCollector/{moId}/WaitForUpdates", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::UpdateSet = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "PropertyCollector", &self.mo_id, "WaitForUpdates", Some(&input)).await?;
+        let result: crate::types::structs::UpdateSet = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Calculate the set of updates for each existing filter in the session.
@@ -438,14 +405,9 @@ impl PropertyCollector {
     /// received
     pub async fn wait_for_updates_ex(&self, version: Option<&str>, options: Option<&crate::types::structs::WaitOptions>) -> Result<Option<crate::types::structs::UpdateSet>> {
         let input = WaitForUpdatesExRequestType {version, options, };
-        let path = format!("/PropertyCollector/{moId}/WaitForUpdatesEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "PropertyCollector", &self.mo_id, "WaitForUpdatesEx", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::UpdateSet>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -458,14 +420,9 @@ impl PropertyCollector {
     ///
     /// Refers instances of *PropertyFilter*.
     pub async fn filter(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/PropertyCollector/{moId}/filter", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "PropertyCollector", &self.mo_id, "filter").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

@@ -40,11 +40,8 @@ impl SessionManager {
     ///
     /// one-time secret ticket string.
     pub async fn acquire_clone_ticket(&self) -> Result<String> {
-        let path = format!("/SessionManager/{moId}/AcquireCloneTicket", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "AcquireCloneTicket", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates and returns a one-time credential that may be used to make the
@@ -77,11 +74,8 @@ impl SessionManager {
     /// certificates will be used to authenticate the host.
     pub async fn acquire_generic_service_ticket(&self, spec: &dyn crate::types::traits::SessionManagerServiceRequestSpecTrait) -> Result<crate::types::structs::SessionManagerGenericServiceTicket> {
         let input = AcquireGenericServiceTicketRequestType {spec, };
-        let path = format!("/SessionManager/{moId}/AcquireGenericServiceTicket", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::SessionManagerGenericServiceTicket = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "AcquireGenericServiceTicket", Some(&input)).await?;
+        let result: crate::types::structs::SessionManagerGenericServiceTicket = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Acquires a one-time ticket for mutual authentication between a server and client.
@@ -125,11 +119,8 @@ impl SessionManager {
     /// ***NotSupported***: if the server does not support this operation.
     pub async fn acquire_local_ticket(&self, user_name: &str) -> Result<crate::types::structs::SessionManagerLocalTicket> {
         let input = AcquireLocalTicketRequestType {user_name, };
-        let path = format!("/SessionManager/{moId}/AcquireLocalTicket", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::SessionManagerLocalTicket = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "AcquireLocalTicket", Some(&input)).await?;
+        let result: crate::types::structs::SessionManagerLocalTicket = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Clone the session specified by the clone ticket and associate it with
@@ -159,11 +150,8 @@ impl SessionManager {
     /// ***NotSupported***: if the server does not support this operation.
     pub async fn clone_session(&self, clone_ticket: &str) -> Result<crate::types::structs::UserSession> {
         let input = CloneSessionRequestType {clone_ticket, };
-        let path = format!("/SessionManager/{moId}/CloneSession", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "CloneSession", Some(&input)).await?;
+        let result: crate::types::structs::UserSession = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Converts current session to impersonate the specified user.
@@ -198,11 +186,8 @@ impl SessionManager {
     /// Failure
     pub async fn impersonate_user(&self, user_name: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = ImpersonateUserRequestType {user_name, locale, };
-        let path = format!("/SessionManager/{moId}/ImpersonateUser", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "ImpersonateUser", Some(&input)).await?;
+        let result: crate::types::structs::UserSession = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Log on to the server.
@@ -249,11 +234,8 @@ impl SessionManager {
     /// ***InvalidLocale***: if the locale is invalid or unknown to the server.
     pub async fn login(&self, user_name: &str, password: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginRequestType {user_name, password, locale, };
-        let path = format!("/SessionManager/{moId}/Login", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "Login", Some(&input)).await?;
+        let result: crate::types::structs::UserSession = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 5.1 for VirtualCenter login use SSO style
@@ -317,11 +299,8 @@ impl SessionManager {
     /// ***NotSupported***: if the service does not support SSPI authentication.
     pub async fn login_by_sspi(&self, base_64_token: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginBySspiRequestType {base_64_token, locale, };
-        let path = format!("/SessionManager/{moId}/LoginBySSPI", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "LoginBySSPI", Some(&input)).await?;
+        let result: crate::types::structs::UserSession = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Log on to the server through token representing principal identity.
@@ -376,11 +355,8 @@ impl SessionManager {
     /// ***InvalidLocale***: if the locale is invalid or unknown to the server.
     pub async fn login_by_token(&self, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginByTokenRequestType {locale, };
-        let path = format!("/SessionManager/{moId}/LoginByToken", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "LoginByToken", Some(&input)).await?;
+        let result: crate::types::structs::UserSession = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use SSO style of login instead
@@ -426,11 +402,8 @@ impl SessionManager {
     /// Failure
     pub async fn login_extension(&self, extension_key: &str, base_64_signed_credentials: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionRequestType {extension_key, base_64_signed_credentials, locale, };
-        let path = format!("/SessionManager/{moId}/LoginExtension", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "LoginExtension", Some(&input)).await?;
+        let result: crate::types::structs::UserSession = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.0, use SSO style of login instead
@@ -477,11 +450,8 @@ impl SessionManager {
     /// ***NoClientCertificate***: if no certificate was used by the client to connect
     pub async fn login_extension_by_certificate(&self, extension_key: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionByCertificateRequestType {extension_key, locale, };
-        let path = format!("/SessionManager/{moId}/LoginExtensionByCertificate", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "LoginExtensionByCertificate", Some(&input)).await?;
+        let result: crate::types::structs::UserSession = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.0, use SSO style of login instead
@@ -531,20 +501,15 @@ impl SessionManager {
     /// ***InvalidClientCertificate***: if the client cerificate fails the verification at the server
     pub async fn login_extension_by_subject_name(&self, extension_key: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionBySubjectNameRequestType {extension_key, locale, };
-        let path = format!("/SessionManager/{moId}/LoginExtensionBySubjectName", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::UserSession = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "LoginExtensionBySubjectName", Some(&input)).await?;
+        let result: crate::types::structs::UserSession = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Log out and terminate the current session.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn logout(&self) -> Result<()> {
-        let path = format!("/SessionManager/{moId}/Logout", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "SessionManager", &self.mo_id, "Logout", None).await
     }
     /// Validates that a currently-active session exists with the specified
     /// sessionID and userName associated with it.
@@ -563,11 +528,8 @@ impl SessionManager {
     /// User name to validate.
     pub async fn session_is_active(&self, session_id: &str, user_name: &str) -> Result<bool> {
         let input = SessionIsActiveRequestType {session_id, user_name, };
-        let path = format!("/SessionManager/{moId}/SessionIsActive", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "SessionIsActive", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Sets the session locale.
@@ -592,9 +554,7 @@ impl SessionManager {
     /// ***InvalidLocale***: if the locale is invalid or unknown to the server.
     pub async fn set_locale(&self, locale: &str) -> Result<()> {
         let input = SetLocaleRequestType {locale, };
-        let path = format!("/SessionManager/{moId}/SetLocale", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "SessionManager", &self.mo_id, "SetLocale", Some(&input)).await
     }
     /// Log off and terminate the provided list of sessions.
     /// 
@@ -619,9 +579,7 @@ impl SessionManager {
     /// the logout method to terminate the current session.
     pub async fn terminate_session(&self, session_id: &[String]) -> Result<()> {
         let input = TerminateSessionRequestType {session_id, };
-        let path = format!("/SessionManager/{moId}/TerminateSession", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "SessionManager", &self.mo_id, "TerminateSession", Some(&input)).await
     }
     /// Updates the system global message.
     /// 
@@ -637,9 +595,7 @@ impl SessionManager {
     /// The message to send. Newline characters may be included.
     pub async fn update_service_message(&self, message: &str) -> Result<()> {
         let input = UpdateServiceMessageRequestType {message, };
-        let path = format!("/SessionManager/{moId}/UpdateServiceMessage", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "SessionManager", &self.mo_id, "UpdateServiceMessage", Some(&input)).await
     }
     /// This property contains information about the client's current session.
     /// 
@@ -647,14 +603,9 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn current_session(&self) -> Result<Option<crate::types::structs::UserSession>> {
-        let path = format!("/SessionManager/{moId}/currentSession", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "currentSession").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::UserSession>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -662,25 +613,18 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn default_locale(&self) -> Result<String> {
-        let path = format!("/SessionManager/{moId}/defaultLocale", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "defaultLocale").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property defaultLocale was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The system global message from the server.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn message(&self) -> Result<Option<String>> {
-        let path = format!("/SessionManager/{moId}/message", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "message").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -688,14 +632,9 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn message_locale_list(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/SessionManager/{moId}/messageLocaleList", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "messageLocaleList").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -703,14 +642,9 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** Sessions.TerminateSession
     pub async fn session_list(&self) -> Result<Option<Vec<crate::types::structs::UserSession>>> {
-        let path = format!("/SessionManager/{moId}/sessionList", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "sessionList").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::UserSession>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -723,14 +657,9 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn supported_locale_list(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/SessionManager/{moId}/supportedLocaleList", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "supportedLocaleList").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

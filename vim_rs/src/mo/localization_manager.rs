@@ -52,14 +52,9 @@ impl LocalizationManager {
     ///
     /// the message catalogs for the current locale
     pub async fn catalog(&self) -> Result<Option<Vec<crate::types::structs::LocalizationManagerMessageCatalog>>> {
-        let path = format!("/LocalizationManager/{moId}/catalog", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "LocalizationManager", &self.mo_id, "catalog").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::LocalizationManagerMessageCatalog>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

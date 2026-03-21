@@ -49,9 +49,7 @@ impl HostLocalAccountManager {
     /// ***AlreadyExists***: if the user is already a member of the target group.
     pub async fn assign_user_to_group(&self, user: &str, group: &str) -> Result<()> {
         let input = AssignUserToGroupRequestType {user, group, };
-        let path = format!("/HostLocalAccountManager/{moId}/AssignUserToGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostLocalAccountManager", &self.mo_id, "AssignUserToGroup", Some(&input)).await
     }
     /// Updates the password of a local user account.
     /// 
@@ -75,9 +73,7 @@ impl HostLocalAccountManager {
     /// ***InvalidLogin***: if the user and oldPassword combination is not valid.
     pub async fn change_password(&self, user: &str, old_password: &str, new_password: &str) -> Result<()> {
         let input = ChangePasswordRequestType {user, old_password, new_password, };
-        let path = format!("/HostLocalAccountManager/{moId}/ChangePassword", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostLocalAccountManager", &self.mo_id, "ChangePassword", Some(&input)).await
     }
     /// Deprecated as of vSphere API 5.1, local user groups are not supported
     /// and group specific methods will throw NotSupported.
@@ -105,9 +101,7 @@ impl HostLocalAccountManager {
     /// ***InvalidArgument***: if group name is in invalid format.
     pub async fn create_group(&self, group: &dyn crate::types::traits::HostAccountSpecTrait) -> Result<()> {
         let input = CreateGroupRequestType {group, };
-        let path = format!("/HostLocalAccountManager/{moId}/CreateGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostLocalAccountManager", &self.mo_id, "CreateGroup", Some(&input)).await
     }
     /// Creates a local user account using the parameters defined in the
     /// *HostLocalAccountManagerAccountSpecification*
@@ -134,9 +128,7 @@ impl HostLocalAccountManager {
     /// invalid format.
     pub async fn create_user(&self, user: &dyn crate::types::traits::HostAccountSpecTrait) -> Result<()> {
         let input = CreateUserRequestType {user, };
-        let path = format!("/HostLocalAccountManager/{moId}/CreateUser", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostLocalAccountManager", &self.mo_id, "CreateUser", Some(&input)).await
     }
     /// Deprecated as of vSphere API 5.1, local user groups are not supported
     /// and group specific methods will throw NotSupported.
@@ -155,9 +147,7 @@ impl HostLocalAccountManager {
     /// ***UserNotFound***: if the specified groupName does not exist.
     pub async fn remove_group(&self, group_name: &str) -> Result<()> {
         let input = RemoveGroupRequestType {group_name, };
-        let path = format!("/HostLocalAccountManager/{moId}/RemoveGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostLocalAccountManager", &self.mo_id, "RemoveGroup", Some(&input)).await
     }
     /// Removes a local user account.
     /// 
@@ -187,9 +177,7 @@ impl HostLocalAccountManager {
     /// ***UserNotFound***: if the specified userName does not exist.
     pub async fn remove_user(&self, user_name: &str) -> Result<()> {
         let input = RemoveUserRequestType {user_name, };
-        let path = format!("/HostLocalAccountManager/{moId}/RemoveUser", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostLocalAccountManager", &self.mo_id, "RemoveUser", Some(&input)).await
     }
     /// Deprecated as of vSphere API 5.1, local user groups are not supported
     /// and group specific methods will throw NotSupported.
@@ -214,9 +202,7 @@ impl HostLocalAccountManager {
     /// user belongs.
     pub async fn unassign_user_from_group(&self, user: &str, group: &str) -> Result<()> {
         let input = UnassignUserFromGroupRequestType {user, group, };
-        let path = format!("/HostLocalAccountManager/{moId}/UnassignUserFromGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostLocalAccountManager", &self.mo_id, "UnassignUserFromGroup", Some(&input)).await
     }
     /// Updates a local user account using the parameters defined in the
     /// *HostLocalAccountManagerAccountSpecification*
@@ -239,9 +225,7 @@ impl HostLocalAccountManager {
     /// ***InvalidArgument***: if new password or description has an invalid format.
     pub async fn update_user(&self, user: &dyn crate::types::traits::HostAccountSpecTrait) -> Result<()> {
         let input = UpdateUserRequestType {user, };
-        let path = format!("/HostLocalAccountManager/{moId}/UpdateUser", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostLocalAccountManager", &self.mo_id, "UpdateUser", Some(&input)).await
     }
 }
 struct AssignUserToGroupRequestType<'a> {

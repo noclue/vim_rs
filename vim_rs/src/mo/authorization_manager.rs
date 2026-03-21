@@ -97,11 +97,8 @@ impl AuthorizationManager {
     /// ***InvalidArgument***: if privIds contains an unknown privilege.
     pub async fn add_authorization_role(&self, name: &str, priv_ids: Option<&[String]>) -> Result<i32> {
         let input = AddAuthorizationRoleRequestType {name, priv_ids, };
-        let path = format!("/AuthorizationManager/{moId}/AddAuthorizationRole", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "AuthorizationManager", &self.mo_id, "AddAuthorizationRole", Some(&input)).await?;
+        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the list of effective privileges for a user,
@@ -126,14 +123,9 @@ impl AuthorizationManager {
     /// the privilege check result for each entity
     pub async fn fetch_user_privilege_on_entities(&self, entities: &[crate::types::structs::ManagedObjectReference], user_name: &str) -> Result<Option<Vec<crate::types::structs::UserPrivilegeResult>>> {
         let input = FetchUserPrivilegeOnEntitiesRequestType {entities, user_name, };
-        let path = format!("/AuthorizationManager/{moId}/FetchUserPrivilegeOnEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "AuthorizationManager", &self.mo_id, "FetchUserPrivilegeOnEntities", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::UserPrivilegeResult>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -167,14 +159,9 @@ impl AuthorizationManager {
     /// The privilege check result.
     pub async fn has_privilege_on_entities(&self, entity: &[crate::types::structs::ManagedObjectReference], session_id: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::EntityPrivilege>>> {
         let input = HasPrivilegeOnEntitiesRequestType {entity, session_id, priv_id, };
-        let path = format!("/AuthorizationManager/{moId}/HasPrivilegeOnEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "AuthorizationManager", &self.mo_id, "HasPrivilegeOnEntities", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::EntityPrivilege>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -208,14 +195,9 @@ impl AuthorizationManager {
     /// privilege.
     pub async fn has_privilege_on_entity(&self, entity: &crate::types::structs::ManagedObjectReference, session_id: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<bool>>> {
         let input = HasPrivilegeOnEntityRequestType {entity, session_id, priv_id, };
-        let path = format!("/AuthorizationManager/{moId}/HasPrivilegeOnEntity", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "AuthorizationManager", &self.mo_id, "HasPrivilegeOnEntity", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<bool>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -250,14 +232,9 @@ impl AuthorizationManager {
     /// the privilege check result
     pub async fn has_user_privilege_on_entities(&self, entities: &[crate::types::structs::ManagedObjectReference], user_name: &str, priv_id: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::EntityPrivilege>>> {
         let input = HasUserPrivilegeOnEntitiesRequestType {entities, user_name, priv_id, };
-        let path = format!("/AuthorizationManager/{moId}/HasUserPrivilegeOnEntities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "AuthorizationManager", &self.mo_id, "HasUserPrivilegeOnEntities", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::EntityPrivilege>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -292,9 +269,7 @@ impl AuthorizationManager {
     /// privilege on the root folder.
     pub async fn merge_permissions(&self, src_role_id: i32, dst_role_id: i32) -> Result<()> {
         let input = MergePermissionsRequestType {src_role_id, dst_role_id, };
-        let path = format!("/AuthorizationManager/{moId}/MergePermissions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "AuthorizationManager", &self.mo_id, "MergePermissions", Some(&input)).await
     }
     /// Removes a permission rule from an entity.
     /// 
@@ -341,9 +316,7 @@ impl AuthorizationManager {
     /// on the entity.
     pub async fn remove_entity_permission(&self, entity: &crate::types::structs::ManagedObjectReference, user: &str, is_group: bool) -> Result<()> {
         let input = RemoveEntityPermissionRequestType {entity, user, is_group, };
-        let path = format!("/AuthorizationManager/{moId}/RemoveEntityPermission", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "AuthorizationManager", &self.mo_id, "RemoveEntityPermission", Some(&input)).await
     }
     /// Removes a role.
     /// 
@@ -368,9 +341,7 @@ impl AuthorizationManager {
     /// ***RemoveFailed***: if failIfUsed is true and the role has permissions.
     pub async fn remove_authorization_role(&self, role_id: i32, fail_if_used: bool) -> Result<()> {
         let input = RemoveAuthorizationRoleRequestType {role_id, fail_if_used, };
-        let path = format!("/AuthorizationManager/{moId}/RemoveAuthorizationRole", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "AuthorizationManager", &self.mo_id, "RemoveAuthorizationRole", Some(&input)).await
     }
     /// Update the entire set of permissions defined on an entity.
     /// 
@@ -441,9 +412,7 @@ impl AuthorizationManager {
     /// the entity.
     pub async fn reset_entity_permissions(&self, entity: &crate::types::structs::ManagedObjectReference, permission: Option<&[crate::types::structs::Permission]>) -> Result<()> {
         let input = ResetEntityPermissionsRequestType {entity, permission, };
-        let path = format!("/AuthorizationManager/{moId}/ResetEntityPermissions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "AuthorizationManager", &self.mo_id, "ResetEntityPermissions", Some(&input)).await
     }
     /// Finds all permissions defined in the system.
     /// 
@@ -452,14 +421,9 @@ impl AuthorizationManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn retrieve_all_permissions(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let path = format!("/AuthorizationManager/{moId}/RetrieveAllPermissions", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "AuthorizationManager", &self.mo_id, "RetrieveAllPermissions", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -489,14 +453,9 @@ impl AuthorizationManager {
     /// defined by parent entities.
     pub async fn retrieve_entity_permissions(&self, entity: &crate::types::structs::ManagedObjectReference, inherited: bool) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let input = RetrieveEntityPermissionsRequestType {entity, inherited, };
-        let path = format!("/AuthorizationManager/{moId}/RetrieveEntityPermissions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "AuthorizationManager", &self.mo_id, "RetrieveEntityPermissions", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -517,14 +476,9 @@ impl AuthorizationManager {
     /// ***NotFound***: if the role does not exist.
     pub async fn retrieve_role_permissions(&self, role_id: i32) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let input = RetrieveRolePermissionsRequestType {role_id, };
-        let path = format!("/AuthorizationManager/{moId}/RetrieveRolePermissions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "AuthorizationManager", &self.mo_id, "RetrieveRolePermissions", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -585,9 +539,7 @@ impl AuthorizationManager {
     /// the entity.
     pub async fn set_entity_permissions(&self, entity: &crate::types::structs::ManagedObjectReference, permission: Option<&[crate::types::structs::Permission]>) -> Result<()> {
         let input = SetEntityPermissionsRequestType {entity, permission, };
-        let path = format!("/AuthorizationManager/{moId}/SetEntityPermissions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "AuthorizationManager", &self.mo_id, "SetEntityPermissions", Some(&input)).await
     }
     /// Updates a role's name or privileges.
     /// 
@@ -629,33 +581,24 @@ impl AuthorizationManager {
     /// root folder.
     pub async fn update_authorization_role(&self, role_id: i32, new_name: &str, priv_ids: Option<&[String]>) -> Result<()> {
         let input = UpdateAuthorizationRoleRequestType {role_id, new_name, priv_ids, };
-        let path = format!("/AuthorizationManager/{moId}/UpdateAuthorizationRole", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "AuthorizationManager", &self.mo_id, "UpdateAuthorizationRole", Some(&input)).await
     }
     /// Static, descriptive strings for system roles and privileges.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn description(&self) -> Result<crate::types::structs::AuthorizationDescription> {
-        let path = format!("/AuthorizationManager/{moId}/description", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::AuthorizationDescription = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "AuthorizationManager", &self.mo_id, "description").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
+        let result: crate::types::structs::AuthorizationDescription = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The list of system-defined privileges.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn privilege_list(&self) -> Result<Option<Vec<crate::types::structs::AuthorizationPrivilege>>> {
-        let path = format!("/AuthorizationManager/{moId}/privilegeList", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "AuthorizationManager", &self.mo_id, "privilegeList").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AuthorizationPrivilege>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -664,14 +607,9 @@ impl AuthorizationManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn role_list(&self) -> Result<Option<Vec<crate::types::structs::AuthorizationRole>>> {
-        let path = format!("/AuthorizationManager/{moId}/roleList", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "AuthorizationManager", &self.mo_id, "roleList").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AuthorizationRole>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

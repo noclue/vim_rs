@@ -1,6 +1,6 @@
 # VMware vSphere API Client for Rust
 
-Rust interface to the VMware vSphere Virtual Infrastructure JSON API, allowing you to manage VMware infrastructure programmatically.
+Rust interface to the VMware vSphere VIM APIs, using the VI JSON API by default and an optional experimental SOAP/XML transport for direct ESXi connectivity.
 
 * **Fully Asynchronous**: Built on tokio runtime for efficient non-blocking operations
 * **Type-Safe**: Comprehensive Rust types for the vSphere API objects
@@ -32,14 +32,14 @@ With the MCP server, your AI assistant can:
 To set up a connection, use a statement like the following:
 
 ```rust
-use vsphere::ClientBuilder;
+use vim_rs::core::ClientBuilder;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
     // Create a client with username and password
-    let client = ClientBuilder::new("https://vcenter.example.com")
+    let client = ClientBuilder::new("vcenter.example.com")
         .basic_authn("administrator@vsphere.local", "password")
-        .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")) // For self-signed certs
+        .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
         .insecure(true) // For self-signed certs
         .build()
         .await?;
@@ -58,6 +58,69 @@ One can set the `reqwest` preconfigured client through the builder's `http_clien
 The `client` above is an `Arc` around the actual client object. Use `.clone()` to pass it around.
 
 If the above goes well, you have a connection to the vCenter server with an initialized session and retrieved service content.
+
+## Optional XML transport
+
+The default transport is VI JSON and behaves like `0.4.0`. XML support is an **optional, experimental**
+feature that must be enabled explicitly and then selected through `ClientBuilder::transport()`.
+
+Enable the feature in `Cargo.toml`:
+
+```toml
+vim_rs = { version = "0.4", features = ["xml"] }
+```
+
+Use `TransportMode::Auto` when the target may be either vCenter or ESXi:
+
+```rust
+use vim_rs::core::ClientBuilder;
+use vim_rs::core::client::TransportMode;
+
+let client = ClientBuilder::new("vc-or-esxi.example.com")
+    .basic_authn("root", "password")
+    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
+    .insecure(true)
+    .transport(TransportMode::Auto)
+    .build()
+    .await?;
+```
+
+Use `TransportMode::Soap` when you know you need direct SOAP/XML, for example against ESXi:
+
+```rust
+use vim_rs::core::ClientBuilder;
+use vim_rs::core::client::TransportMode;
+
+let client = ClientBuilder::new("esxi.example.com")
+    .basic_authn("root", "password")
+    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
+    .insecure(true)
+    .transport(TransportMode::Soap)
+    .build()
+    .await?;
+```
+
+Important caveats:
+
+- XML transport currently works only for the core VIM APIs.
+- Other APIs such as VSAN, SPBM/PBM, SMS, VSLM, and EAM currently return errors over XML.
+- XML support is experimental. If a call fails, enable `trace` logging for `vim_rs` and capture the failing request/response packets.
+- Enabling the `xml` feature increases release binary size by about 500 KB and increases debug build times by about 30-40%.
+- Disabling the `xml` feature restores `0.4.0` transport behavior, build times, and executable size characteristics.
+
+### XML transport caveats
+
+When XML transport is used, vim_rs does **not** use the Hello System API to negotiate the API
+release. Instead, it starts from the release used to build `vim_rs`.
+
+- If the remote server is older than `vim_rs`, it will use the server's latest supported release.
+- If the remote server is newer than `vim_rs`, it falls back to the `vim_rs` release automatically.
+- As a consequence, `client.api_release()` is **not** a reliable capability probe when XML transport is active.
+- To make decisions about remote capabilities, use `client.service_content().about.api_version` instead.
+
+One additional deserialization caveat applies when the `xml` feature is enabled: if you manually
+deserialize polymorphic JSON payloads, the `_typeName` key must appear before subtype-specific
+fields or deserialization can fail.
 
 ## Obtaining Stub for the APIs
 The VIM API is a remote object-oriented API. The functionality is organized in methods of managed objects.
@@ -226,7 +289,7 @@ async fn rename_vm(client: Arc<Client>, vm_ref: ManagedObjectReference, new_name
 
 **1. `wait::<T>()` - Convenient with Deserialization**
 
-Use when you know the expected result type. The result is automatically deserialized using `serde_json`:
+Use when you know the expected result type. The result is automatically deserialized using the active transport (`miniserde` for JSON, SOAP/XML when XML transport is selected):
 
 ```rust
 // For tasks that return no value (like rename, power operations)
@@ -317,7 +380,7 @@ pub struct VirtualEthernetCard {
 
 Let's look at some details. Fields optional in the API use Rust `Option` (e.g., `Option<i32>`) while required fields require a valid value (e.g., `i32`). Arrays are expressed as Rust `Vec`. For fields that have children or can form a cycle, `Box` indirection is used. For fields of polymorphic types, i.e., those that have children, a `dyn *Trait` type is used, which refers to a trait type implemented by all alternative structures (`Option<Box<dyn DescriptionTrait>>`).
 
-Structure types support `serde` JSON serialization and deserialization as well as debug print.
+Structure types support `miniserde` JSON serialization and deserialization as well as debug print.
 
 ### Traits
 
@@ -367,7 +430,7 @@ The `MethodFault` type represents errors that can occur when invoking VIM API me
 The `MethodFault` and `Event` types do not have traits, and no descendant types are generated. Instead, both types receive 2 additional members:
 
 * `type_: Option<StructType>` - holding the discriminator value, e.g., `EventEx`, `NotFound`, etc.
-* `extra_fields_: HashMap<String, serde_json::Value>` - holding any data fields that are not present in the base type, e.g., `eventTypeId`.
+* `extra_fields_: HashMap<String, miniserde::json::Value>` - holding any data fields that are not present in the base type, e.g., `eventTypeId`.
 
 Note that `extra_fields_` content uses the API native names in camelCase convention instead of the Rust-friendly names used throughout `vim_rs`.
 
@@ -415,8 +478,10 @@ See [`examples/snippets/src/vm_toggle_wol.rs`](examples/snippets/src/vm_toggle_w
 Sometimes one will want to convert part of the dynamic-like objects into proper binding. For example, the `managedObject` in the `ExtendedEvent` can be read into `ManagedObjectReference` as follows:
 
 ```rust
+use vim_rs::types::mini_helpers::from_value;
+
 let value = event.extra_fields_["managedObject"].clone();
-let managed_object: ManagedObjectReference = serde_json::from_value(value)?;
+let managed_object: ManagedObjectReference = from_value(value)?;
 ```
 
 # Repo Topology & Maintenance

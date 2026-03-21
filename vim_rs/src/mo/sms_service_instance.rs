@@ -21,11 +21,8 @@ impl SmsServiceInstance {
     ///
     /// AboutInfo information about the system
     pub async fn query_about_info(&self) -> Result<crate::types::structs::SmsAboutInfo> {
-        let path = format!("/sms/SmsServiceInstance/{moId}/QueryAboutInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::SmsAboutInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsServiceInstance", &self.mo_id, "QueryAboutInfo", None).await?;
+        let result: crate::types::structs::SmsAboutInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves SMS Session Manager managed object.
@@ -38,11 +35,8 @@ impl SmsServiceInstance {
     /// 
     /// Refers instance of *SmsSessionManager*.
     pub async fn query_session_manager(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/sms/SmsServiceInstance/{moId}/QuerySessionManager", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsServiceInstance", &self.mo_id, "QuerySessionManager", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves Storage Manager managed object.
@@ -55,11 +49,8 @@ impl SmsServiceInstance {
     /// 
     /// Refers instance of *SmsStorageManager*.
     pub async fn query_storage_manager(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/sms/SmsServiceInstance/{moId}/QueryStorageManager", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("sms", "SmsServiceInstance", &self.mo_id, "QueryStorageManager", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

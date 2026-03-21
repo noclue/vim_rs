@@ -24,9 +24,7 @@ impl HostVMotionSystem {
     ///
     /// ***HostConfigFault***: is a failure occurred
     pub async fn deselect_vnic(&self) -> Result<()> {
-        let path = format!("/HostVMotionSystem/{moId}/DeselectVnic", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVMotionSystem", &self.mo_id, "DeselectVnic", None).await
     }
     /// Select the VirtualNic to be used for VMotion.
     /// 
@@ -44,9 +42,7 @@ impl HostVMotionSystem {
     /// ***HostConfigFault***: for any other failure
     pub async fn select_vnic(&self, device: &str) -> Result<()> {
         let input = SelectVnicRequestType {device, };
-        let path = format!("/HostVMotionSystem/{moId}/SelectVnic", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVMotionSystem", &self.mo_id, "SelectVnic", Some(&input)).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -64,9 +60,7 @@ impl HostVMotionSystem {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/HostVMotionSystem/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVMotionSystem", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Update the IP configuration of VMotion VirtualNic.
     /// 
@@ -86,9 +80,7 @@ impl HostVMotionSystem {
     /// ***HostConfigFault***: for any other failure
     pub async fn update_ip_config(&self, ip_config: &dyn crate::types::traits::HostIpConfigTrait) -> Result<()> {
         let input = UpdateIpConfigRequestType {ip_config, };
-        let path = format!("/HostVMotionSystem/{moId}/UpdateIpConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVMotionSystem", &self.mo_id, "UpdateIpConfig", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -96,40 +88,25 @@ impl HostVMotionSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/HostVMotionSystem/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostVMotionSystem", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// IP configuration of the VMotion VirtualNic.
     pub async fn ip_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpConfigTrait>>> {
-        let path = format!("/HostVMotionSystem/{moId}/ipConfig", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostVMotionSystem", &self.mo_id, "ipConfig").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Box<dyn crate::types::traits::HostIpConfigTrait>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// VMotion network configuration.
     pub async fn net_config(&self) -> Result<Option<crate::types::structs::HostVMotionNetConfig>> {
-        let path = format!("/HostVMotionSystem/{moId}/netConfig", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostVMotionSystem", &self.mo_id, "netConfig").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostVMotionNetConfig>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -141,14 +118,9 @@ impl HostVMotionSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostVMotionSystem/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostVMotionSystem", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

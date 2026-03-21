@@ -41,11 +41,8 @@ impl VsanVdsSystem {
     /// ***VsanFault***: Any unexpected runtime error.
     pub async fn vsan_rollback_vds_to_vss(&self, task: &crate::types::structs::ManagedObjectReference) -> Result<bool> {
         let input = VsanRollbackVdsToVssRequestType {task, };
-        let path = format!("/vsan/VsanVdsSystem/{moId}/VsanRollbackVdsToVss", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVdsSystem", &self.mo_id, "VsanRollbackVdsToVss", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Computes a migration plan to convert the VSS instances per host in
@@ -120,11 +117,8 @@ impl VsanVdsSystem {
     /// configuration are found.
     pub async fn vsan_vds_get_migration_plan(&self, cluster: &crate::types::structs::ManagedObjectReference, vswitch_name: Option<&str>, vds_name: Option<&str>, vmnic_devices: Option<&[String]>, infra_vm: Option<&[crate::types::structs::ManagedObjectReference]>, vds: Option<&crate::types::structs::ManagedObjectReference>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::VsanVdsMigrationPlan> {
         let input = VsanVdsGetMigrationPlanRequestType {cluster, vswitch_name, vds_name, vmnic_devices, infra_vm, vds, hosts, };
-        let path = format!("/vsan/VsanVdsSystem/{moId}/VsanVdsGetMigrationPlan", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanVdsMigrationPlan = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVdsSystem", &self.mo_id, "VsanVdsGetMigrationPlan", Some(&input)).await?;
+        let result: crate::types::structs::VsanVdsMigrationPlan = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Perform a migration to convert the VSS instances per host in
@@ -222,11 +216,8 @@ impl VsanVdsSystem {
     /// configuration are found.
     pub async fn vsan_vds_migrate_vss(&self, cluster: &crate::types::structs::ManagedObjectReference, migration_plan: Option<&crate::types::structs::VsanVdsMigrationPlan>, vswitch_name: Option<&str>, vds_name: Option<&str>, vmnic_devices: Option<&[String]>, infra_vm: Option<&[crate::types::structs::ManagedObjectReference]>, vds: Option<&crate::types::structs::ManagedObjectReference>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVdsMigrateVssRequestType {cluster, migration_plan, vswitch_name, vds_name, vmnic_devices, infra_vm, vds, hosts, };
-        let path = format!("/vsan/VsanVdsSystem/{moId}/VsanVdsMigrateVss", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVdsSystem", &self.mo_id, "VsanVdsMigrateVss", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Perform a migration to convert the VDS instance in the cluster to a newly
@@ -292,11 +283,8 @@ impl VsanVdsSystem {
     /// ***VsanFault***: Any unexpected runtime error.
     pub async fn vsan_vss_migrate_vds(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, hosts: Option<&[crate::types::structs::ManagedObjectReference]>, vds: &crate::types::structs::ManagedObjectReference, vswitch_name: Option<&str>, vmnic_devices: Option<&[String]>, infra_vm: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanVssMigrateVdsRequestType {cluster, hosts, vds, vswitch_name, vmnic_devices, infra_vm, };
-        let path = format!("/vsan/VsanVdsSystem/{moId}/VsanVssMigrateVds", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVdsSystem", &self.mo_id, "VsanVssMigrateVds", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

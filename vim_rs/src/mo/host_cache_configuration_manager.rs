@@ -37,11 +37,8 @@ impl HostCacheConfigurationManager {
     /// Refers instance of *Task*.
     pub async fn configure_host_cache_task(&self, spec: &crate::types::structs::HostCacheConfigurationSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ConfigureHostCacheRequestType {spec, };
-        let path = format!("/HostCacheConfigurationManager/{moId}/ConfigureHostCache_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostCacheConfigurationManager", &self.mo_id, "ConfigureHostCache_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The swap performance configuration for the ESX host.
@@ -51,14 +48,9 @@ impl HostCacheConfigurationManager {
     /// 
     /// ***Required privileges:*** Host.Config.AdvancedConfig
     pub async fn cache_configuration_info(&self) -> Result<Option<Vec<crate::types::structs::HostCacheConfigurationInfo>>> {
-        let path = format!("/HostCacheConfigurationManager/{moId}/cacheConfigurationInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostCacheConfigurationManager", &self.mo_id, "cacheConfigurationInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostCacheConfigurationInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

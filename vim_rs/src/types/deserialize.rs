@@ -18050,7 +18050,7 @@ impl miniserde::de::Map for VimObjectHolderBuilder<'_> {
     fn finish(&mut self) -> miniserde::Result<()> {
         match self.core.finish(lookup_type)? {
             VimAny::Object(obj) => {
-                *self.__out = Some(VimObjectHolder { out: Some(obj) });
+                *self.__out = Some(VimObjectHolder { out: Some(obj), default_type_name: self.core.default_type_name });
                 Ok(())
             }
             VimAny::Value(_) => Err(miniserde::Error),

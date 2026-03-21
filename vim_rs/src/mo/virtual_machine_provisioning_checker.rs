@@ -70,11 +70,8 @@ impl VirtualMachineProvisioningChecker {
     /// configuration information is not available.
     pub async fn check_clone_task(&self, vm: &crate::types::structs::ManagedObjectReference, folder: &crate::types::structs::ManagedObjectReference, name: &str, spec: &crate::types::structs::VirtualMachineCloneSpec, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckCloneRequestType {vm, folder, name, spec, test_type, };
-        let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckClone_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineProvisioningChecker", &self.mo_id, "CheckClone_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Tests the feasibility of a proposed
@@ -118,11 +115,8 @@ impl VirtualMachineProvisioningChecker {
     /// machine configuration information is not available.
     pub async fn check_instant_clone_task(&self, vm: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VirtualMachineInstantCloneSpec, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckInstantCloneRequestType {vm, spec, test_type, };
-        let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckInstantClone_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineProvisioningChecker", &self.mo_id, "CheckInstantClone_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Tests the feasibility of a proposed
@@ -184,11 +178,8 @@ impl VirtualMachineProvisioningChecker {
     /// of the specified virtual machines is not in that power state.
     pub async fn check_migrate_task(&self, vm: &crate::types::structs::ManagedObjectReference, host: Option<&crate::types::structs::ManagedObjectReference>, pool: Option<&crate::types::structs::ManagedObjectReference>, state: Option<crate::types::enums::VirtualMachinePowerStateEnum>, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckMigrateRequestType {vm, host, pool, state, test_type, };
-        let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckMigrate_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineProvisioningChecker", &self.mo_id, "CheckMigrate_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Tests the feasibility of a proposed
@@ -249,11 +240,8 @@ impl VirtualMachineProvisioningChecker {
     /// is not available.
     pub async fn check_relocate_task(&self, vm: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VirtualMachineRelocateSpec, test_type: Option<&[String]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckRelocateRequestType {vm, spec, test_type, };
-        let path = format!("/VirtualMachineProvisioningChecker/{moId}/CheckRelocate_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineProvisioningChecker", &self.mo_id, "CheckRelocate_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Investigates the general VMotion compatibility of a set of virtual machines
@@ -285,11 +273,8 @@ impl VirtualMachineProvisioningChecker {
     /// Refers instance of *Task*.
     pub async fn query_v_motion_compatibility_ex_task(&self, vm: &[crate::types::structs::ManagedObjectReference], host: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = QueryVMotionCompatibilityExRequestType {vm, host, };
-        let path = format!("/VirtualMachineProvisioningChecker/{moId}/QueryVMotionCompatibilityEx_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VirtualMachineProvisioningChecker", &self.mo_id, "QueryVMotionCompatibilityEx_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

@@ -48,9 +48,7 @@ impl VsanIoInsightManager {
     /// ***VsanFault***: If any other unexpected fault is encountered.
     pub async fn delete_io_insight_instance(&self, run_name: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = DeleteIoInsightInstanceRequestType {run_name, cluster, };
-        let path = format!("/vsan/VsanIoInsightManager/{moId}/DeleteIoInsightInstance", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIoInsightManager", &self.mo_id, "DeleteIoInsightInstance", Some(&input)).await
     }
     /// Retrieve all ioinsight instances
     /// *VsanIoInsightInstance* according to the passed in
@@ -82,14 +80,9 @@ impl VsanIoInsightManager {
     /// ***NotFound***: If the stats primary node is not found in target cluster.
     pub async fn query_io_insight_instances(&self, query_spec: &crate::types::structs::VsanIoInsightInstanceQuerySpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanIoInsightInstance>>> {
         let input = QueryIoInsightInstancesRequestType {query_spec, cluster, };
-        let path = format!("/vsan/VsanIoInsightManager/{moId}/QueryIoInsightInstances", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanIoInsightManager", &self.mo_id, "QueryIoInsightInstances", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanIoInsightInstance>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -125,9 +118,7 @@ impl VsanIoInsightManager {
     /// ***VsanFault***: If any other unexpected fault is encountered.
     pub async fn rename_io_insight_instance(&self, old_run_name: &str, new_run_name: &str, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = RenameIoInsightInstanceRequestType {old_run_name, new_run_name, cluster, };
-        let path = format!("/vsan/VsanIoInsightManager/{moId}/RenameIoInsightInstance", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanIoInsightManager", &self.mo_id, "RenameIoInsightInstance", Some(&input)).await
     }
     /// Start ioinsight tool(s) running on the whole vSAN cluster or on the
     /// specified ESXi host(s) for VMs virtual disks I/O performance metrics
@@ -210,11 +201,8 @@ impl VsanIoInsightManager {
     /// ioinsight.
     pub async fn start_io_insight(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, run_name: Option<&str>, duration_sec: Option<i64>, target_hosts: Option<&[crate::types::structs::ManagedObjectReference]>, target_v_ms: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StartIoInsightRequestType {cluster, run_name, duration_sec, target_hosts, target_v_ms, };
-        let path = format!("/vsan/VsanIoInsightManager/{moId}/StartIoInsight", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanIoInsightManager", &self.mo_id, "StartIoInsight", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Stop ioinsight tool(s) running on the ESXi host(s) by given parameters
@@ -279,11 +267,8 @@ impl VsanIoInsightManager {
     /// cluster has no hosts.
     pub async fn stop_io_insight(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>, run_name: Option<&str>, hosts_io_insight_infos: Option<&[crate::types::structs::VsanHostIoInsightInfo]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = StopIoInsightRequestType {cluster, run_name, hosts_io_insight_infos, };
-        let path = format!("/vsan/VsanIoInsightManager/{moId}/StopIoInsight", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanIoInsightManager", &self.mo_id, "StopIoInsight", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

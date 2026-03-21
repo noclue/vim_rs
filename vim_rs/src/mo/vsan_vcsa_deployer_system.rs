@@ -51,14 +51,9 @@ impl VsanVcsaDeployerSystem {
     /// ***VsanFault***: when there are too many tasks running.
     pub async fn vsan_post_config_for_vcsa(&self, spec: &crate::types::structs::VsanVcPostDeployConfigSpec) -> Result<Option<String>> {
         let input = VsanPostConfigForVcsaRequestType {spec, };
-        let path = format!("/vsan/VsanVcsaDeployerSystem/{moId}/VsanPostConfigForVcsa", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcsaDeployerSystem", &self.mo_id, "VsanPostConfigForVcsa", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -89,14 +84,9 @@ impl VsanVcsaDeployerSystem {
     /// ***NotFound***: when specified cluster doesn't exist.
     pub async fn vsan_prepare_vsan_for_vcsa(&self, spec: &crate::types::structs::VsanPrepareVsanForVcsaSpec) -> Result<Option<String>> {
         let input = VsanPrepareVsanForVcsaRequestType {spec, };
-        let path = format!("/vsan/VsanVcsaDeployerSystem/{moId}/VsanPrepareVsanForVcsa", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcsaDeployerSystem", &self.mo_id, "VsanPrepareVsanForVcsa", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -120,11 +110,8 @@ impl VsanVcsaDeployerSystem {
     /// ***NotFound***: when specified cluster doesn't exist.
     pub async fn vsan_vcsa_get_bootstrap_progress(&self, task_id: &[String]) -> Result<Vec<crate::types::structs::VsanVcsaDeploymentProgress>> {
         let input = VsanVcsaGetBootstrapProgressRequestType {task_id, };
-        let path = format!("/vsan/VsanVcsaDeployerSystem/{moId}/VsanVcsaGetBootstrapProgress", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanVcsaDeploymentProgress> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVcsaDeployerSystem", &self.mo_id, "VsanVcsaGetBootstrapProgress", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanVcsaDeploymentProgress> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

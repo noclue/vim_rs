@@ -37,14 +37,9 @@ impl ExtensionManager {
     /// Extension that matches given key, if any.
     pub async fn find_extension(&self, extension_key: &str) -> Result<Option<crate::types::structs::Extension>> {
         let input = FindExtensionRequestType {extension_key, };
-        let path = format!("/ExtensionManager/{moId}/FindExtension", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ExtensionManager", &self.mo_id, "FindExtension", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::Extension>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -62,11 +57,8 @@ impl ExtensionManager {
     /// Public key of VirtualCenter Server, encoded
     /// in PEM (privacy-enhanced mail) format.
     pub async fn get_public_key(&self) -> Result<String> {
-        let path = format!("/ExtensionManager/{moId}/GetPublicKey", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "ExtensionManager", &self.mo_id, "GetPublicKey", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query statistics about IP allocation usage, either system wide or for
@@ -88,14 +80,9 @@ impl ExtensionManager {
     /// List of IP allocation usage.
     pub async fn query_extension_ip_allocation_usage(&self, extension_keys: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::ExtensionManagerIpAllocationUsage>>> {
         let input = QueryExtensionIpAllocationUsageRequestType {extension_keys, };
-        let path = format!("/ExtensionManager/{moId}/QueryExtensionIpAllocationUsage", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ExtensionManager", &self.mo_id, "QueryExtensionIpAllocationUsage", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ExtensionManagerIpAllocationUsage>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -118,14 +105,9 @@ impl ExtensionManager {
     /// Refers instances of *ManagedEntity*.
     pub async fn query_managed_by(&self, extension_key: &str) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
         let input = QueryManagedByRequestType {extension_key, };
-        let path = format!("/ExtensionManager/{moId}/QueryManagedBy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "ExtensionManager", &self.mo_id, "QueryManagedBy", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -139,9 +121,7 @@ impl ExtensionManager {
     /// Extension description to register.
     pub async fn register_extension(&self, extension: &crate::types::structs::Extension) -> Result<()> {
         let input = RegisterExtensionRequestType {extension, };
-        let path = format!("/ExtensionManager/{moId}/RegisterExtension", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ExtensionManager", &self.mo_id, "RegisterExtension", Some(&input)).await
     }
     /// Update the stored authentication certificate for a specified extension.
     /// 
@@ -181,9 +161,7 @@ impl ExtensionManager {
     /// is not registered.
     pub async fn set_extension_certificate(&self, extension_key: &str, certificate_pem: Option<&str>) -> Result<()> {
         let input = SetExtensionCertificateRequestType {extension_key, certificate_pem, };
-        let path = format!("/ExtensionManager/{moId}/SetExtensionCertificate", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ExtensionManager", &self.mo_id, "SetExtensionCertificate", Some(&input)).await
     }
     /// Deprecated as of VI 4.0, use trusted certificates and
     /// *SessionManager.LoginExtensionBySubjectName* or
@@ -207,9 +185,7 @@ impl ExtensionManager {
     /// in PEM (privacy-enhanced mail) format.
     pub async fn set_public_key(&self, extension_key: &str, public_key: &str) -> Result<()> {
         let input = SetPublicKeyRequestType {extension_key, public_key, };
-        let path = format!("/ExtensionManager/{moId}/SetPublicKey", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ExtensionManager", &self.mo_id, "SetPublicKey", Some(&input)).await
     }
     /// Update the stored authentication service account for the specified extension.
     /// 
@@ -252,9 +228,7 @@ impl ExtensionManager {
     /// is not registered or the service account is not found.
     pub async fn set_service_account(&self, extension_key: &str, service_account: &str) -> Result<()> {
         let input = SetServiceAccountRequestType {extension_key, service_account, };
-        let path = format!("/ExtensionManager/{moId}/SetServiceAccount", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ExtensionManager", &self.mo_id, "SetServiceAccount", Some(&input)).await
     }
     /// Unregisters the specified extension if it exists.
     /// 
@@ -271,9 +245,7 @@ impl ExtensionManager {
     /// is not registered.
     pub async fn unregister_extension(&self, extension_key: &str) -> Result<()> {
         let input = UnregisterExtensionRequestType {extension_key, };
-        let path = format!("/ExtensionManager/{moId}/UnregisterExtension", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ExtensionManager", &self.mo_id, "UnregisterExtension", Some(&input)).await
     }
     /// If the key specified in the extension exists,
     /// the existing record is updated.
@@ -299,22 +271,15 @@ impl ExtensionManager {
     /// registered OVF extensions.
     pub async fn update_extension(&self, extension: &crate::types::structs::Extension) -> Result<()> {
         let input = UpdateExtensionRequestType {extension, };
-        let path = format!("/ExtensionManager/{moId}/UpdateExtension", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "ExtensionManager", &self.mo_id, "UpdateExtension", Some(&input)).await
     }
     /// The list of currently registered extensions.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn extension_list(&self) -> Result<Option<Vec<crate::types::structs::Extension>>> {
-        let path = format!("/ExtensionManager/{moId}/extensionList", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "ExtensionManager", &self.mo_id, "extensionList").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Extension>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

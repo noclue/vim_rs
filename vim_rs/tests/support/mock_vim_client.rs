@@ -1,9 +1,13 @@
+//! JSON-oriented `VimClient` test double: records paths like the VI JSON API and scripts
+//! PropertyCollector long-poll behavior. Implements `invoke`, `invoke_optional`, `invoke_void`,
+//! and `fetch_property_raw` (GET-style paths).
+
 use std::sync::{Arc, Mutex};
 
 use bytes::Bytes;
 use tokio::sync::mpsc;
 
-use vim_rs::core::client::{BoxFuture, Error, Result, VimClient};
+use vim_rs::core::client::{BoxFuture, Error, Result, Transport, VimClient};
 use vim_rs::types::structs::ServiceContent;
 use vim_rs::types::enums::MoTypesEnum;
 
@@ -47,13 +51,10 @@ enum CreateListViewBehavior {
 
 /// Scripted `VimClient` used by integration tests.
 ///
-/// This mock uses real `reqwest::RequestBuilder` objects so the production stubs can
-/// build requests normally; `execute_*` intercepts them via `RequestBuilder::build()`
-/// and dispatches based on the request URL path.
+/// Implements `VimClient` and dispatches based on the method/property path
+/// (`/{mo_type}/{mo_id}/{method_name}` or `/{mo_type}/{mo_id}/{property}`), matching VI JSON URL layout.
 pub struct MockVimClient {
     service_content: ServiceContent,
-    http: reqwest::Client,
-    base_url: String,
 
     requests: Mutex<Vec<RecordedRequest>>,
     counters: Mutex<Counters>,
@@ -72,8 +73,6 @@ impl MockVimClient {
     pub fn new(service_content: ServiceContent, pc_rx: mpsc::UnboundedReceiver<PcEvent>) -> Self {
         Self {
             service_content,
-            http: reqwest::Client::new(),
-            base_url: "http://mock.local".to_string(),
             requests: Mutex::new(Vec::new()),
             counters: Mutex::new(Counters::default()),
             pc_rx: tokio::sync::Mutex::new(pc_rx),
@@ -107,10 +106,6 @@ impl MockVimClient {
         *self.block_modify_list_view_at.lock().unwrap() = Some((call_index_1_based, gate));
     }
 
-    fn url_for(&self, path: &str) -> String {
-        format!("{}{}", self.base_url, path)
-    }
-
     fn record(&self, verb: HttpVerb, path: &str) {
         self.requests.lock().unwrap().push(RecordedRequest {
             verb,
@@ -121,16 +116,6 @@ impl MockVimClient {
     fn bump<F: FnOnce(&mut Counters)>(&self, f: F) {
         let mut c = self.counters.lock().unwrap();
         f(&mut c);
-    }
-
-    fn build_path(req: reqwest::RequestBuilder) -> std::result::Result<(HttpVerb, String), Error> {
-        let req = req.build().map_err(Error::ReqwestError)?;
-        let verb = match req.method().as_str() {
-            "GET" => HttpVerb::Get,
-            _ => HttpVerb::Post,
-        };
-        let path = req.url().path().to_string();
-        Ok((verb, path))
     }
 
     async fn handle_void(&self, verb: HttpVerb, path: &str) -> Result<()> {
@@ -181,7 +166,7 @@ impl MockVimClient {
             };
             return Ok(Bytes::from(miniserde::json::to_string(&mor).into_bytes()));
         }
-        Err(Error::ParseError(format!("MockVimClient: unhandled execute_bytes path: {path}")))
+        Err(Error::ParseError(format!("MockVimClient: unhandled invoke path: {path}")))
     }
 
     async fn handle_option_bytes(&self, verb: HttpVerb, path: &str) -> Result<Option<Bytes>> {
@@ -225,42 +210,74 @@ impl VimClient for MockVimClient {
         &self.service_content
     }
 
-    fn get_request(&self, path: &str) -> reqwest::RequestBuilder {
-        self.http.get(self.url_for(path))
+    fn transport(&self) -> Transport {
+        Transport::Json
     }
 
-    fn post_json(&self, path: &str, payload: &dyn miniserde::Serialize) -> reqwest::RequestBuilder {
-        let json_body = miniserde::json::to_string(payload);
-        self.http.post(self.url_for(path))
-            .header("Content-Type", "application/json")
-            .body(json_body)
+    fn api_release(&self) -> String {
+        self.service_content.about.api_version.clone()
     }
 
-    fn post_bare(&self, path: &str) -> reqwest::RequestBuilder {
-        self.http.post(self.url_for(path))
-    }
-
-    fn execute_bytes<'a>(&'a self, req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<Bytes>> {
-        Box::pin(async move {
-            let (verb, path) = Self::build_path(req)?;
-            self.handle_bytes(verb, &path).await
-        })
-    }
-
-    fn execute_option_bytes<'a>(
+    fn invoke<'a>(
         &'a self,
-        req: reqwest::RequestBuilder,
-    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        _params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<Bytes>> {
+        let path = vi_json_path(svc, mo_type, mo_id, method_name);
         Box::pin(async move {
-            let (verb, path) = Self::build_path(req)?;
-            self.handle_option_bytes(verb, &path).await
+            self.handle_bytes(HttpVerb::Post, &path).await
         })
     }
 
-    fn execute_void<'a>(&'a self, req: reqwest::RequestBuilder) -> BoxFuture<'a, Result<()>> {
+    fn invoke_optional<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        _params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+        let path = vi_json_path(svc, mo_type, mo_id, method_name);
         Box::pin(async move {
-            let (verb, path) = Self::build_path(req)?;
-            self.handle_void(verb, &path).await
+            self.handle_option_bytes(HttpVerb::Post, &path).await
         })
+    }
+
+    fn invoke_void<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        method_name: &'a str,
+        _params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
+    ) -> BoxFuture<'a, Result<()>> {
+        let path = vi_json_path(svc, mo_type, mo_id, method_name);
+        Box::pin(async move {
+            self.handle_void(HttpVerb::Post, &path).await
+        })
+    }
+
+    fn fetch_property_raw<'a>(
+        &'a self,
+        svc: &'a str,
+        mo_type: &'a str,
+        mo_id: &'a str,
+        property: &'a str,
+    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+        let path = vi_json_path(svc, mo_type, mo_id, property);
+        Box::pin(async move {
+            self.handle_option_bytes(HttpVerb::Get, &path).await
+        })
+    }
+}
+
+fn vi_json_path(svc: &str, mo_type: &str, mo_id: &str, method_name: &str) -> String {
+    if svc.is_empty() {
+        format!("/{mo_type}/{mo_id}/{method_name}")
+    } else {
+        format!("/{svc}/{mo_type}/{mo_id}/{method_name}")
     }
 }

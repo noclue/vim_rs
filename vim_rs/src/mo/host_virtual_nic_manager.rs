@@ -35,9 +35,7 @@ impl HostVirtualNicManager {
     /// ***HostConfigFault***: for any other failure.
     pub async fn deselect_vnic_for_nic_type(&self, nic_type: &str, device: &str) -> Result<()> {
         let input = DeselectVnicForNicTypeRequestType {nic_type, device, };
-        let path = format!("/HostVirtualNicManager/{moId}/DeselectVnicForNicType", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVirtualNicManager", &self.mo_id, "DeselectVnicForNicType", Some(&input)).await
     }
     /// Get the NetConfig for the specified nicType
     /// 
@@ -55,14 +53,9 @@ impl HostVirtualNicManager {
     /// ***HostConfigFault***: for any other failure.
     pub async fn query_net_config(&self, nic_type: &str) -> Result<Option<crate::types::structs::VirtualNicManagerNetConfig>> {
         let input = QueryNetConfigRequestType {nic_type, };
-        let path = format!("/HostVirtualNicManager/{moId}/QueryNetConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostVirtualNicManager", &self.mo_id, "QueryNetConfig", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VirtualNicManagerNetConfig>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -91,9 +84,7 @@ impl HostVirtualNicManager {
     /// ***HostConfigFault***: for any other failure.
     pub async fn select_vnic_for_nic_type(&self, nic_type: &str, device: &str) -> Result<()> {
         let input = SelectVnicForNicTypeRequestType {nic_type, device, };
-        let path = format!("/HostVirtualNicManager/{moId}/SelectVnicForNicType", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVirtualNicManager", &self.mo_id, "SelectVnicForNicType", Some(&input)).await
     }
     /// Assigns a value to a custom field.
     /// 
@@ -111,9 +102,7 @@ impl HostVirtualNicManager {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/HostVirtualNicManager/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostVirtualNicManager", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// List of custom field definitions that are valid for the object's type.
     /// 
@@ -121,24 +110,17 @@ impl HostVirtualNicManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/HostVirtualNicManager/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostVirtualNicManager", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Network configuration.
     pub async fn info(&self) -> Result<crate::types::structs::HostVirtualNicManagerInfo> {
-        let path = format!("/HostVirtualNicManager/{moId}/info", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostVirtualNicManagerInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostVirtualNicManager", &self.mo_id, "info").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
+        let result: crate::types::structs::HostVirtualNicManagerInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// List of custom field values.
@@ -149,14 +131,9 @@ impl HostVirtualNicManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/HostVirtualNicManager/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostVirtualNicManager", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

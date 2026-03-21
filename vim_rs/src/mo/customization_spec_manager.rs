@@ -39,9 +39,7 @@ impl CustomizationSpecManager {
     /// ***UncustomizableGuest***:
     pub async fn check_customization_resources(&self, guest_os: &str) -> Result<()> {
         let input = CheckCustomizationResourcesRequestType {guest_os, };
-        let path = format!("/CustomizationSpecManager/{moId}/CheckCustomizationResources", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CustomizationSpecManager", &self.mo_id, "CheckCustomizationResources", Some(&input)).await
     }
     /// Creates a new specification.
     /// 
@@ -59,9 +57,7 @@ impl CustomizationSpecManager {
     /// ***CannotDecryptPasswords***:
     pub async fn create_customization_spec(&self, item: &crate::types::structs::CustomizationSpecItem) -> Result<()> {
         let input = CreateCustomizationSpecRequestType {item, };
-        let path = format!("/CustomizationSpecManager/{moId}/CreateCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CustomizationSpecManager", &self.mo_id, "CreateCustomizationSpec", Some(&input)).await
     }
     /// Deletes a specification.
     /// 
@@ -77,9 +73,7 @@ impl CustomizationSpecManager {
     /// ***NotFound***:
     pub async fn delete_customization_spec(&self, name: &str) -> Result<()> {
         let input = DeleteCustomizationSpecRequestType {name, };
-        let path = format!("/CustomizationSpecManager/{moId}/DeleteCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CustomizationSpecManager", &self.mo_id, "DeleteCustomizationSpec", Some(&input)).await
     }
     /// Duplicates a specification.
     /// 
@@ -100,9 +94,7 @@ impl CustomizationSpecManager {
     /// ***AlreadyExists***:
     pub async fn duplicate_customization_spec(&self, name: &str, new_name: &str) -> Result<()> {
         let input = DuplicateCustomizationSpecRequestType {name, new_name, };
-        let path = format!("/CustomizationSpecManager/{moId}/DuplicateCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CustomizationSpecManager", &self.mo_id, "DuplicateCustomizationSpec", Some(&input)).await
     }
     /// Whether or not a specification exists.
     /// 
@@ -114,11 +106,8 @@ impl CustomizationSpecManager {
     /// -
     pub async fn does_customization_spec_exist(&self, name: &str) -> Result<bool> {
         let input = DoesCustomizationSpecExistRequestType {name, };
-        let path = format!("/CustomizationSpecManager/{moId}/DoesCustomizationSpecExist", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "CustomizationSpecManager", &self.mo_id, "DoesCustomizationSpecExist", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Obtains a specification for the given name.
@@ -135,11 +124,8 @@ impl CustomizationSpecManager {
     /// ***NotFound***:
     pub async fn get_customization_spec(&self, name: &str) -> Result<crate::types::structs::CustomizationSpecItem> {
         let input = GetCustomizationSpecRequestType {name, };
-        let path = format!("/CustomizationSpecManager/{moId}/GetCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::CustomizationSpecItem = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "CustomizationSpecManager", &self.mo_id, "GetCustomizationSpec", Some(&input)).await?;
+        let result: crate::types::structs::CustomizationSpecItem = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Whether or not the guest OS is customizable.
@@ -155,11 +141,8 @@ impl CustomizationSpecManager {
     /// OS we intend to check.
     pub async fn is_guest_os_customizable(&self, guest_id: &str) -> Result<bool> {
         let input = IsGuestOsCustomizableRequestType {guest_id, };
-        let path = format!("/CustomizationSpecManager/{moId}/IsGuestOsCustomizable", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "CustomizationSpecManager", &self.mo_id, "IsGuestOsCustomizable", Some(&input)).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Overwrites an existing specification, possibly after retrieving
@@ -186,9 +169,7 @@ impl CustomizationSpecManager {
     /// ***CannotDecryptPasswords***:
     pub async fn overwrite_customization_spec(&self, item: &crate::types::structs::CustomizationSpecItem) -> Result<()> {
         let input = OverwriteCustomizationSpecRequestType {item, };
-        let path = format!("/CustomizationSpecManager/{moId}/OverwriteCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CustomizationSpecManager", &self.mo_id, "OverwriteCustomizationSpec", Some(&input)).await
     }
     /// Renames a specification.
     /// 
@@ -209,9 +190,7 @@ impl CustomizationSpecManager {
     /// ***AlreadyExists***:
     pub async fn rename_customization_spec(&self, name: &str, new_name: &str) -> Result<()> {
         let input = RenameCustomizationSpecRequestType {name, new_name, };
-        let path = format!("/CustomizationSpecManager/{moId}/RenameCustomizationSpec", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CustomizationSpecManager", &self.mo_id, "RenameCustomizationSpec", Some(&input)).await
     }
     /// Converts a specification item to XML text
     /// 
@@ -223,11 +202,8 @@ impl CustomizationSpecManager {
     /// -
     pub async fn customization_spec_item_to_xml(&self, item: &crate::types::structs::CustomizationSpecItem) -> Result<String> {
         let input = CustomizationSpecItemToXmlRequestType {item, };
-        let path = format!("/CustomizationSpecManager/{moId}/CustomizationSpecItemToXml", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "CustomizationSpecManager", &self.mo_id, "CustomizationSpecItemToXml", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Converts an XML string to a specification item
@@ -244,11 +220,8 @@ impl CustomizationSpecManager {
     /// Failure
     pub async fn xml_to_customization_spec_item(&self, spec_item_xml: &str) -> Result<crate::types::structs::CustomizationSpecItem> {
         let input = XmlToCustomizationSpecItemRequestType {spec_item_xml, };
-        let path = format!("/CustomizationSpecManager/{moId}/XmlToCustomizationSpecItem", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::CustomizationSpecItem = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "CustomizationSpecManager", &self.mo_id, "XmlToCustomizationSpecItem", Some(&input)).await?;
+        let result: crate::types::structs::CustomizationSpecItem = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Gets a binary public encryption key that can be used to encrypt
@@ -256,14 +229,9 @@ impl CustomizationSpecManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn encryption_key(&self) -> Result<Option<Vec<i8>>> {
-        let path = format!("/CustomizationSpecManager/{moId}/encryptionKey", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "CustomizationSpecManager", &self.mo_id, "encryptionKey").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i8>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -271,14 +239,9 @@ impl CustomizationSpecManager {
     /// 
     /// ***Required privileges:*** VirtualMachine.Provisioning.ReadCustSpecs
     pub async fn info(&self) -> Result<Option<Vec<crate::types::structs::CustomizationSpecInfo>>> {
-        let path = format!("/CustomizationSpecManager/{moId}/info", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "CustomizationSpecManager", &self.mo_id, "info").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomizationSpecInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

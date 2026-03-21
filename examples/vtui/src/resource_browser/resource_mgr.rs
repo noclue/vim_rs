@@ -1,11 +1,10 @@
 use std::cell::RefCell;
 use std::rc::Rc;
-use std::sync::Arc;
 use anyhow::anyhow;
 use ratatui::Frame;
 use ratatui::layout::Rect;
 use ratatui::widgets::TableState;
-use vim_rs::core::client::Client;
+use vim_rs::core::client::VimClientHandle;
 use vim_rs::core::pc_cache::CacheManager;
 use vim_rs::types::structs::ManagedObjectReference;
 use crate::resource_browser::data_loaders;
@@ -28,7 +27,7 @@ pub struct ResourceManager {
     /// Cache manager for managing object caches.
     cache_mgr: Rc<RefCell<CacheManager>>,
     /// Client for interacting with the vSphere API.
-    client: Arc<Client>,
+    client: VimClientHandle,
     /// Data source for the table view.
     resources: Box<dyn TableDataSource>,
     /// PropertyCollector filter for the current view
@@ -74,7 +73,7 @@ impl ResourceManager {
     /// * `client` - A reference to the vSphere API client.
     /// * `cache_mgr` - A reference to the cache manager for managing object caches.
     pub async fn new(
-        client: Arc<Client>,
+        client: VimClientHandle,
         cache_mgr: Rc<RefCell<CacheManager>>,
         resource_type: ResourceType,
     ) -> anyhow::Result<Self> {
@@ -94,7 +93,7 @@ impl ResourceManager {
 
     pub async fn from_history_record(
         record: HistoryRecord,
-        client: Arc<Client>,
+        client: VimClientHandle,
         cache_mgr: Rc<RefCell<CacheManager>>,
     ) -> anyhow::Result<Self> {
         debug!("Creating resource manager from history record. Resource type: {}", record.resource_type);
@@ -268,7 +267,7 @@ impl ResourceManager {
         }
     }
 
-    async fn load_parent_collection(resource_type: ResourceType, parent_id: &ManagedObjectReference, cache_mgr: Rc<RefCell<CacheManager>>, client: &Arc<Client>) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)> {
+    async fn load_parent_collection(resource_type: ResourceType, parent_id: &ManagedObjectReference, cache_mgr: Rc<RefCell<CacheManager>>, client: &VimClientHandle) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)> {
         match resource_type {
             ResourceType::VirtualMachine => {
                 match parent_id.r#type {
@@ -374,7 +373,7 @@ impl ResourceManager {
         self.apply_new_table_source(resources, filter).await
     }
 
-    async fn load_from_container(resource_type: ResourceType, cache_mgr: Rc<RefCell<CacheManager>>, client: &Arc<Client>) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)> {
+    async fn load_from_container(resource_type: ResourceType, cache_mgr: Rc<RefCell<CacheManager>>, client: &VimClientHandle) -> anyhow::Result<(Box<dyn TableDataSource>, ManagedObjectReference)> {
         let parent = client.service_content().root_folder.clone();
         let (resources, filter) = match resource_type {
             ResourceType::VirtualMachine => {

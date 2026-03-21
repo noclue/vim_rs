@@ -46,11 +46,8 @@ impl HostCertificateManager {
     /// ***HostConfigFault***: if there's a problem generating the CSR.
     pub async fn generate_certificate_signing_request(&self, use_ip_address_as_common_name: bool, spec: Option<&crate::types::structs::HostCertificateManagerCertificateSpec>) -> Result<String> {
         let input = GenerateCertificateSigningRequestRequestType {use_ip_address_as_common_name, spec, };
-        let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequest", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostCertificateManager", &self.mo_id, "GenerateCertificateSigningRequest", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Requests the server to generate a certificate-signing
@@ -80,11 +77,8 @@ impl HostCertificateManager {
     /// ***HostConfigFault***: if there's a problem generating the CSR.
     pub async fn generate_certificate_signing_request_by_dn(&self, distinguished_name: &str, spec: Option<&crate::types::structs::HostCertificateManagerCertificateSpec>) -> Result<String> {
         let input = GenerateCertificateSigningRequestByDnRequestType {distinguished_name, spec, };
-        let path = format!("/HostCertificateManager/{moId}/GenerateCertificateSigningRequestByDn", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostCertificateManager", &self.mo_id, "GenerateCertificateSigningRequestByDn", Some(&input)).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Installs a given SSL certificate on the server.
@@ -105,9 +99,7 @@ impl HostCertificateManager {
     /// or the certificate and key don't match.
     pub async fn install_server_certificate(&self, cert: &str) -> Result<()> {
         let input = InstallServerCertificateRequestType {cert, };
-        let path = format!("/HostCertificateManager/{moId}/InstallServerCertificate", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostCertificateManager", &self.mo_id, "InstallServerCertificate", Some(&input)).await
     }
     /// Fetches the SSL CRLs of Certificate Authorities that are trusted.
     /// 
@@ -121,14 +113,9 @@ impl HostCertificateManager {
     ///
     /// ***HostConfigFault***: if there's a problem with the certificate store.
     pub async fn list_ca_certificate_revocation_lists(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/HostCertificateManager/{moId}/ListCACertificateRevocationLists", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostCertificateManager", &self.mo_id, "ListCACertificateRevocationLists", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -145,14 +132,9 @@ impl HostCertificateManager {
     ///
     /// ***HostConfigFault***: if there's a problem with the certificate store.
     pub async fn list_ca_certificates(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/HostCertificateManager/{moId}/ListCACertificates", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostCertificateManager", &self.mo_id, "ListCACertificates", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -177,9 +159,7 @@ impl HostCertificateManager {
     /// ***Since:*** vSphere API Release 8.0.1.0
     pub async fn notify_affected_services(&self, services: Option<&[String]>) -> Result<()> {
         let input = NotifyAffectedServicesRequestType {services, };
-        let path = format!("/HostCertificateManager/{moId}/NotifyAffectedServices", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostCertificateManager", &self.mo_id, "NotifyAffectedServices", Some(&input)).await
     }
     /// Provisions a given SSL private key on the server for use with a subsequent
     /// SSL certificate installation.
@@ -204,9 +184,7 @@ impl HostCertificateManager {
     /// ***HostConfigFault***: if there's a problem with the input key.
     pub async fn provision_server_private_key(&self, key: &str) -> Result<()> {
         let input = ProvisionServerPrivateKeyRequestType {key, };
-        let path = format!("/HostCertificateManager/{moId}/ProvisionServerPrivateKey", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostCertificateManager", &self.mo_id, "ProvisionServerPrivateKey", Some(&input)).await
     }
     /// Replaces the trusted Certificate Authority (CA)
     /// certificates and Certification Revocation List (CRL)
@@ -233,9 +211,7 @@ impl HostCertificateManager {
     /// or CRLs.
     pub async fn replace_ca_certificates_and_cr_ls(&self, ca_cert: &[String], ca_crl: Option<&[String]>) -> Result<()> {
         let input = ReplaceCaCertificatesAndCrLsRequestType {ca_cert, ca_crl, };
-        let path = format!("/HostCertificateManager/{moId}/ReplaceCACertificatesAndCRLs", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostCertificateManager", &self.mo_id, "ReplaceCACertificatesAndCRLs", Some(&input)).await
     }
     /// the CertificateInfos of all known Certificates on
     /// the host
@@ -244,14 +220,9 @@ impl HostCertificateManager {
     /// 
     /// ***Required privileges:*** Certificate.Manage
     pub async fn retrieve_certificate_info_list(&self) -> Result<Option<Vec<crate::types::structs::HostCertificateManagerCertificateInfo>>> {
-        let path = format!("/HostCertificateManager/{moId}/RetrieveCertificateInfoList", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostCertificateManager", &self.mo_id, "RetrieveCertificateInfoList", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostCertificateManagerCertificateInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -259,11 +230,9 @@ impl HostCertificateManager {
     /// 
     /// ***Required privileges:*** Certificate.Manage
     pub async fn certificate_info(&self) -> Result<crate::types::structs::HostCertificateManagerCertificateInfo> {
-        let path = format!("/HostCertificateManager/{moId}/certificateInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostCertificateManagerCertificateInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostCertificateManager", &self.mo_id, "certificateInfo").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property certificateInfo was empty".to_string()))?;
+        let result: crate::types::structs::HostCertificateManagerCertificateInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

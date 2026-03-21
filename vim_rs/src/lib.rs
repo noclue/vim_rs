@@ -316,3 +316,6 @@ pub mod core;
 pub mod types;
 
 pub mod mo;
+
+#[cfg(feature = "xml")]
+pub mod xml;

@@ -36,9 +36,7 @@ impl VsanVumSystem {
     /// Failure
     pub async fn fetch_iso_depot_cookie(&self, username: &str, password: &str) -> Result<()> {
         let input = FetchIsoDepotCookieRequestType {username, password, };
-        let path = format!("/vsan/VsanVumSystem/{moId}/FetchIsoDepotCookie", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanVumSystem", &self.mo_id, "FetchIsoDepotCookie", Some(&input)).await
     }
     /// Fetch vSAN VUM integration configurable settings
     /// See *VsanVumSystemConfig* for more detail information
@@ -46,11 +44,8 @@ impl VsanVumSystem {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn get_vsan_vum_config(&self) -> Result<crate::types::structs::VsanVumSystemConfig> {
-        let path = format!("/vsan/VsanVumSystem/{moId}/GetVsanVumConfig", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanVumSystemConfig = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVumSystem", &self.mo_id, "GetVsanVumConfig", None).await?;
+        let result: crate::types::structs::VsanVumSystemConfig = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 8.0.
@@ -84,11 +79,8 @@ impl VsanVumSystem {
     /// Failure
     pub async fn vsan_host_update_firmware(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanHostUpdateFirmwareRequestType {host, };
-        let path = format!("/vsan/VsanVumSystem/{moId}/VsanHostUpdateFirmware", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanVumSystem", &self.mo_id, "VsanHostUpdateFirmware", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Upload a release DB in JSON format.
@@ -114,9 +106,7 @@ impl VsanVumSystem {
     /// ***NotSupported***:
     pub async fn vsan_vc_upload_release_db(&self, db: &str) -> Result<()> {
         let input = VsanVcUploadReleaseDbRequestType {db, };
-        let path = format!("/vsan/VsanVumSystem/{moId}/VsanVcUploadReleaseDb", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("vsan", "VsanVumSystem", &self.mo_id, "VsanVcUploadReleaseDb", Some(&input)).await
     }
 }
 struct FetchIsoDepotCookieRequestType<'a> {

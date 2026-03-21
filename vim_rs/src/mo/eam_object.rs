@@ -36,14 +36,9 @@ impl EamObject {
     /// issue keys refers to issues that this entity does not have.
     pub async fn query_issue(&self, issue_key: Option<&[i32]>) -> Result<Option<Vec<Box<dyn crate::types::traits::IssueTrait>>>> {
         let input = QueryIssueRequestType {issue_key, };
-        let path = format!("/eam/EamObject/{moId}/QueryIssue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("eam", "EamObject", &self.mo_id, "QueryIssue", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::IssueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -71,14 +66,9 @@ impl EamObject {
     /// resolved just prior to calling <code>resolve</code> or if an issue is currenly not resolvable.
     pub async fn resolve(&self, issue_key: &[i32]) -> Result<Option<Vec<i32>>> {
         let input = ResolveRequestType {issue_key, };
-        let path = format!("/eam/EamObject/{moId}/Resolve", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("eam", "EamObject", &self.mo_id, "Resolve", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -98,9 +88,7 @@ impl EamObject {
     /// 
     /// See also *Issue*.
     pub async fn resolve_all(&self) -> Result<()> {
-        let path = format!("/eam/EamObject/{moId}/ResolveAll", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("eam", "EamObject", &self.mo_id, "ResolveAll", None).await
     }
 }
 struct QueryIssueRequestType<'a> {

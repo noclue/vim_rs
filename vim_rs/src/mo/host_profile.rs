@@ -119,9 +119,7 @@ impl HostProfile {
     /// 
     /// ***Required privileges:*** Profile.Edit
     pub async fn host_profile_reset_validation_state(&self) -> Result<()> {
-        let path = format!("/HostProfile/{moId}/HostProfileResetValidationState", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostProfile", &self.mo_id, "HostProfileResetValidationState", None).await
     }
     /// Associate a profile with a managed entity.
     /// 
@@ -141,9 +139,7 @@ impl HostProfile {
     /// Refers instances of *ManagedEntity*.
     pub async fn associate_profile(&self, entity: &[crate::types::structs::ManagedObjectReference]) -> Result<()> {
         let input = AssociateProfileRequestType {entity, };
-        let path = format!("/HostProfile/{moId}/AssociateProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostProfile", &self.mo_id, "AssociateProfile", Some(&input)).await
     }
     /// Check compliance of an entity against a Profile.
     /// 
@@ -167,20 +163,15 @@ impl HostProfile {
     /// Refers instance of *Task*.
     pub async fn check_profile_compliance_task(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CheckProfileComplianceRequestType {entity, };
-        let path = format!("/HostProfile/{moId}/CheckProfileCompliance_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostProfile", &self.mo_id, "CheckProfileCompliance_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroy the profile.
     /// 
     /// ***Required privileges:*** Profile.Delete
     pub async fn destroy_profile(&self) -> Result<()> {
-        let path = format!("/HostProfile/{moId}/DestroyProfile", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostProfile", &self.mo_id, "DestroyProfile", None).await
     }
     /// Remove the association between a profile and a managed entity.
     /// 
@@ -199,9 +190,7 @@ impl HostProfile {
     /// Refers instances of *ManagedEntity*.
     pub async fn dissociate_profile(&self, entity: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<()> {
         let input = DissociateProfileRequestType {entity, };
-        let path = format!("/HostProfile/{moId}/DissociateProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostProfile", &self.mo_id, "DissociateProfile", Some(&input)).await
     }
     /// Run the Profile Engine to determine the list of configuration changes
     /// needed for the specified host.
@@ -254,11 +243,8 @@ impl HostProfile {
     /// method.
     pub async fn execute_host_profile(&self, host: &crate::types::structs::ManagedObjectReference, deferred_param: Option<&[crate::types::structs::ProfileDeferredPolicyOptionParameter]>) -> Result<Box<dyn crate::types::traits::ProfileExecuteResultTrait>> {
         let input = ExecuteHostProfileRequestType {host, deferred_param, };
-        let path = format!("/HostProfile/{moId}/ExecuteHostProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::ProfileExecuteResultTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostProfile", &self.mo_id, "ExecuteHostProfile", Some(&input)).await?;
+        let result: Box<dyn crate::types::traits::ProfileExecuteResultTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Export the profile in a serialized form.
@@ -274,11 +260,8 @@ impl HostProfile {
     ///
     /// Serialized form of the profile.
     pub async fn export_profile(&self) -> Result<String> {
-        let path = format!("/HostProfile/{moId}/ExportProfile", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostProfile", &self.mo_id, "ExportProfile", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns the localizable description for the profile.
@@ -289,14 +272,9 @@ impl HostProfile {
     ///
     /// Profile divided into sections containing element descriptions and messages.
     pub async fn retrieve_description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
-        let path = format!("/HostProfile/{moId}/RetrieveDescription", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostProfile", &self.mo_id, "RetrieveDescription", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ProfileDescription>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -317,9 +295,7 @@ impl HostProfile {
     /// the profile.
     pub async fn update_host_profile(&self, config: &dyn crate::types::traits::HostProfileConfigSpecTrait) -> Result<()> {
         let input = UpdateHostProfileRequestType {config, };
-        let path = format!("/HostProfile/{moId}/UpdateHostProfile", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostProfile", &self.mo_id, "UpdateHostProfile", Some(&input)).await
     }
     /// Sets the *HostProfile*.*HostProfile.referenceHost* property.
     /// 
@@ -334,22 +310,15 @@ impl HostProfile {
     /// Refers instance of *HostSystem*.
     pub async fn update_reference_host(&self, host: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = UpdateReferenceHostRequestType {host, };
-        let path = format!("/HostProfile/{moId}/UpdateReferenceHost", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostProfile", &self.mo_id, "UpdateReferenceHost", Some(&input)).await
     }
     /// The latest compliance check time.
     /// 
     /// ***Since:*** vSphere API Release 8.0.1.0
     pub async fn compliance_check_time(&self) -> Result<Option<String>> {
-        let path = format!("/HostProfile/{moId}/complianceCheckTime", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "complianceCheckTime").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -361,45 +330,34 @@ impl HostProfile {
     /// of the profile is <code>unknown</code>.
     /// See *ComplianceResultStatus_enum*.
     pub async fn compliance_status(&self) -> Result<String> {
-        let path = format!("/HostProfile/{moId}/complianceStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "complianceStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property complianceStatus was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Configuration data for the profile.
     /// 
     /// ***Required privileges:*** Profile.Edit
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::ProfileConfigInfoTrait>> {
-        let path = format!("/HostProfile/{moId}/config", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::ProfileConfigInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "config").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::ProfileConfigInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Time at which the profile was created.
     pub async fn created_time(&self) -> Result<String> {
-        let path = format!("/HostProfile/{moId}/createdTime", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "createdTime").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property createdTime was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
     /// Localizable description of the profile
     pub async fn description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
-        let path = format!("/HostProfile/{moId}/description", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "description").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ProfileDescription>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -409,33 +367,24 @@ impl HostProfile {
     ///
     /// Refers instances of *ManagedEntity*.
     pub async fn entity(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/HostProfile/{moId}/entity", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "entity").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Time at which the profile was last modified.
     pub async fn modified_time(&self) -> Result<String> {
-        let path = format!("/HostProfile/{moId}/modifiedTime", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "modifiedTime").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property modifiedTime was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Name of the profile.
     pub async fn name(&self) -> Result<String> {
-        let path = format!("/HostProfile/{moId}/name", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "name").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reference host in use for this host profile.
@@ -450,14 +399,9 @@ impl HostProfile {
     ///
     /// Refers instance of *HostSystem*.
     pub async fn reference_host(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/HostProfile/{moId}/referenceHost", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "referenceHost").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -467,14 +411,9 @@ impl HostProfile {
     /// This object captures the most recent validation
     /// result for the host profile object in case of failure.
     pub async fn validation_failure_info(&self) -> Result<Option<crate::types::structs::HostProfileValidationFailureInfo>> {
-        let path = format!("/HostProfile/{moId}/validationFailureInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "validationFailureInfo").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::HostProfileValidationFailureInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -483,27 +422,17 @@ impl HostProfile {
     /// The values
     /// of the state will be one of *HostProfileValidationState_enum* enumerations.
     pub async fn validation_state(&self) -> Result<Option<String>> {
-        let path = format!("/HostProfile/{moId}/validationState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "validationState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Update time of the validation operation.
     pub async fn validation_state_update_time(&self) -> Result<Option<String>> {
-        let path = format!("/HostProfile/{moId}/validationStateUpdateTime", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostProfile", &self.mo_id, "validationStateUpdateTime").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

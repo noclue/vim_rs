@@ -28,11 +28,8 @@ impl HostFirmwareSystem {
     ///
     /// URL that identifies the location of the backup bundle.
     pub async fn backup_firmware_configuration(&self) -> Result<String> {
-        let path = format!("/HostFirmwareSystem/{moId}/BackupFirmwareConfiguration", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostFirmwareSystem", &self.mo_id, "BackupFirmwareConfiguration", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return the URL on the host to which the configuration bundle must be
@@ -46,11 +43,8 @@ impl HostFirmwareSystem {
     ///
     /// URL that identifies the location for the restore operation.
     pub async fn query_firmware_config_upload_url(&self) -> Result<String> {
-        let path = format!("/HostFirmwareSystem/{moId}/QueryFirmwareConfigUploadURL", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostFirmwareSystem", &self.mo_id, "QueryFirmwareConfigUploadURL", None).await?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reset the configuration to factory defaults.
@@ -66,9 +60,7 @@ impl HostFirmwareSystem {
     ///
     /// ***InvalidState***: if the host is not in maintenance mode.
     pub async fn reset_firmware_to_factory_defaults(&self) -> Result<()> {
-        let path = format!("/HostFirmwareSystem/{moId}/ResetFirmwareToFactoryDefaults", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostFirmwareSystem", &self.mo_id, "ResetFirmwareToFactoryDefaults", None).await
     }
     /// Restore the configuration of the host to that specified in the bundle.
     /// 
@@ -102,9 +94,7 @@ impl HostFirmwareSystem {
     /// ***InvalidBundle***: if the bundle does not have the expected contents.
     pub async fn restore_firmware_configuration(&self, force: bool) -> Result<()> {
         let input = RestoreFirmwareConfigurationRequestType {force, };
-        let path = format!("/HostFirmwareSystem/{moId}/RestoreFirmwareConfiguration", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostFirmwareSystem", &self.mo_id, "RestoreFirmwareConfiguration", Some(&input)).await
     }
 }
 struct RestoreFirmwareConfigurationRequestType {

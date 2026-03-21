@@ -22,11 +22,8 @@ impl VsanResourceCheckSystem {
     }
     /// ***Required privileges:*** System.Read
     pub async fn vsan_host_cancel_resource_check(&self) -> Result<bool> {
-        let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanHostCancelResourceCheck", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: bool = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanResourceCheckSystem", &self.mo_id, "VsanHostCancelResourceCheck", None).await?;
+        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve the status of the latest resource check.
@@ -74,11 +71,8 @@ impl VsanResourceCheckSystem {
     /// the resource check status.
     pub async fn vsan_get_resource_check_status(&self, resource_check_spec: Option<&crate::types::structs::VsanResourceCheckSpec>, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::VsanResourceCheckStatus> {
         let input = VsanGetResourceCheckStatusRequestType {resource_check_spec, cluster, };
-        let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanGetResourceCheckStatus", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanResourceCheckStatus = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanResourceCheckSystem", &self.mo_id, "VsanGetResourceCheckStatus", Some(&input)).await?;
+        let result: crate::types::structs::VsanResourceCheckStatus = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Perform a resource check for given spec.
@@ -140,11 +134,8 @@ impl VsanResourceCheckSystem {
     /// unmounted disk/disk-group.
     pub async fn vsan_perform_resource_check(&self, resource_check_spec: &crate::types::structs::VsanResourceCheckSpec, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerformResourceCheckRequestType {resource_check_spec, cluster, };
-        let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanPerformResourceCheck", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanResourceCheckSystem", &self.mo_id, "VsanPerformResourceCheck", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// ***Required privileges:*** System.Read
@@ -163,11 +154,8 @@ impl VsanResourceCheckSystem {
     /// Failure
     pub async fn vsan_host_perform_resource_check(&self, resource_check_spec: &crate::types::structs::VsanResourceCheckSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanHostPerformResourceCheckRequestType {resource_check_spec, };
-        let path = format!("/vsan/VsanResourceCheckSystem/{moId}/VsanHostPerformResourceCheck", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanResourceCheckSystem", &self.mo_id, "VsanHostPerformResourceCheck", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

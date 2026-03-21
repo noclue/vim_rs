@@ -54,11 +54,8 @@ impl VsanCapabilitySystem {
     /// Failure
     pub async fn vsan_get_capabilities(&self, targets: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<Vec<crate::types::structs::VsanCapability>> {
         let input = VsanGetCapabilitiesRequestType {targets, };
-        let path = format!("/vsan/VsanCapabilitySystem/{moId}/VsanGetCapabilities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanCapability> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanCapabilitySystem", &self.mo_id, "VsanGetCapabilities", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanCapability> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

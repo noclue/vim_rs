@@ -96,9 +96,7 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: if unable to configure the datastore principal.
     pub async fn configure_datastore_principal(&self, user_name: &str, password: Option<&str>) -> Result<()> {
         let input = ConfigureDatastorePrincipalRequestType {user_name, password, };
-        let path = format!("/HostDatastoreSystem/{moId}/ConfigureDatastorePrincipal", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDatastoreSystem", &self.mo_id, "ConfigureDatastorePrincipal", Some(&input)).await
     }
     /// Creates a new local datastore.
     /// 
@@ -128,11 +126,8 @@ impl HostDatastoreSystem {
     /// ***FileNotFound***: if path doesn't exist
     pub async fn create_local_datastore(&self, name: &str, path: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateLocalDatastoreRequestType {name, path, };
-        let path = format!("/HostDatastoreSystem/{moId}/CreateLocalDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreSystem", &self.mo_id, "CreateLocalDatastore", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new network-attached storage datastore.
@@ -167,11 +162,8 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: if unable to mount the NAS volume.
     pub async fn create_nas_datastore(&self, spec: &crate::types::structs::HostNasVolumeSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateNasDatastoreRequestType {spec, };
-        let path = format!("/HostDatastoreSystem/{moId}/CreateNasDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreSystem", &self.mo_id, "CreateNasDatastore", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates a new VMFS datastore.
@@ -202,11 +194,8 @@ impl HostDatastoreSystem {
     /// gather information about the created volume.
     pub async fn create_vmfs_datastore(&self, spec: &crate::types::structs::VmfsDatastoreCreateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVmfsDatastoreRequestType {spec, };
-        let path = format!("/HostDatastoreSystem/{moId}/CreateVmfsDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreSystem", &self.mo_id, "CreateVmfsDatastore", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create a Virtual-Volume based datastore
@@ -235,11 +224,8 @@ impl HostDatastoreSystem {
     /// ***InvalidName***: if name is not valid datastore name
     pub async fn create_vvol_datastore(&self, spec: &crate::types::structs::HostDatastoreSystemVvolDatastoreSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateVvolDatastoreRequestType {spec, };
-        let path = format!("/HostDatastoreSystem/{moId}/CreateVvolDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreSystem", &self.mo_id, "CreateVvolDatastore", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Disable the clustered vmdk support on specified datastore.
@@ -264,9 +250,7 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: if unable to disable clustered vmdk support.
     pub async fn disable_clustered_vmdk_support(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = DisableClusteredVmdkSupportRequestType {datastore, };
-        let path = format!("/HostDatastoreSystem/{moId}/DisableClusteredVmdkSupport", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDatastoreSystem", &self.mo_id, "DisableClusteredVmdkSupport", Some(&input)).await
     }
     /// Enable the clustered vmdk support on specified datastore.
     /// 
@@ -287,9 +271,7 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: if unable to enable clustered vmdk support.
     pub async fn enable_clustered_vmdk_support(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = EnableClusteredVmdkSupportRequestType {datastore, };
-        let path = format!("/HostDatastoreSystem/{moId}/EnableClusteredVmdkSupport", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDatastoreSystem", &self.mo_id, "EnableClusteredVmdkSupport", Some(&input)).await
     }
     /// Increases the capacity of an existing VMFS datastore by expanding
     /// (increasing the size of) an existing extent of the datastore.
@@ -322,11 +304,8 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: if unable to expand the VMFS volume.
     pub async fn expand_vmfs_datastore(&self, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VmfsDatastoreExpandSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExpandVmfsDatastoreRequestType {datastore, spec, };
-        let path = format!("/HostDatastoreSystem/{moId}/ExpandVmfsDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreSystem", &self.mo_id, "ExpandVmfsDatastore", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Increases the capacity of an existing VMFS datastore by adding new
@@ -360,11 +339,8 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: if unable to extend the VMFS volume.
     pub async fn extend_vmfs_datastore(&self, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VmfsDatastoreExtendSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ExtendVmfsDatastoreRequestType {datastore, spec, };
-        let path = format!("/HostDatastoreSystem/{moId}/ExtendVmfsDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreSystem", &self.mo_id, "ExtendVmfsDatastore", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query to list disks that can be used to contain VMFS datastore extents.
@@ -409,14 +385,9 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: if unable to query disk information.
     pub async fn query_available_disks_for_vmfs(&self, datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::HostScsiDisk>>> {
         let input = QueryAvailableDisksForVmfsRequestType {datastore, };
-        let path = format!("/HostDatastoreSystem/{moId}/QueryAvailableDisksForVmfs", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostDatastoreSystem", &self.mo_id, "QueryAvailableDisksForVmfs", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostScsiDisk>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -438,11 +409,8 @@ impl HostDatastoreSystem {
     /// ***NotFound***: if the datastore could not be found.
     pub async fn query_max_queue_depth(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<i64> {
         let input = QueryMaxQueueDepthRequestType {datastore, };
-        let path = format!("/HostDatastoreSystem/{moId}/QueryMaxQueueDepth", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreSystem", &self.mo_id, "QueryMaxQueueDepth", Some(&input)).await?;
+        let result: i64 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get the list of unbound VMFS volumes.
@@ -458,14 +426,9 @@ impl HostDatastoreSystem {
     ///
     /// An array of unbound VMFS datastore
     pub async fn query_unresolved_vmfs_volumes(&self) -> Result<Option<Vec<crate::types::structs::HostUnresolvedVmfsVolume>>> {
-        let path = format!("/HostDatastoreSystem/{moId}/QueryUnresolvedVmfsVolumes", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostDatastoreSystem", &self.mo_id, "QueryUnresolvedVmfsVolumes", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostUnresolvedVmfsVolume>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -503,14 +466,9 @@ impl HostDatastoreSystem {
     /// the device.
     pub async fn query_vmfs_datastore_create_options(&self, device_path: &str, vmfs_major_version: Option<i32>) -> Result<Option<Vec<crate::types::structs::VmfsDatastoreOption>>> {
         let input = QueryVmfsDatastoreCreateOptionsRequestType {device_path, vmfs_major_version, };
-        let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreCreateOptions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostDatastoreSystem", &self.mo_id, "QueryVmfsDatastoreCreateOptions", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VmfsDatastoreOption>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -541,14 +499,9 @@ impl HostDatastoreSystem {
     /// ***NotSupported***: if the host is not an ESX Server.
     pub async fn query_vmfs_datastore_expand_options(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VmfsDatastoreOption>>> {
         let input = QueryVmfsDatastoreExpandOptionsRequestType {datastore, };
-        let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreExpandOptions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostDatastoreSystem", &self.mo_id, "QueryVmfsDatastoreExpandOptions", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VmfsDatastoreOption>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -593,14 +546,9 @@ impl HostDatastoreSystem {
     /// ***NotSupported***: if the host is not an ESX Server.
     pub async fn query_vmfs_datastore_extend_options(&self, datastore: &crate::types::structs::ManagedObjectReference, device_path: &str, suppress_expand_candidates: Option<bool>) -> Result<Option<Vec<crate::types::structs::VmfsDatastoreOption>>> {
         let input = QueryVmfsDatastoreExtendOptionsRequestType {datastore, device_path, suppress_expand_candidates, };
-        let path = format!("/HostDatastoreSystem/{moId}/QueryVmfsDatastoreExtendOptions", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostDatastoreSystem", &self.mo_id, "QueryVmfsDatastoreExtendOptions", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VmfsDatastoreOption>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -629,9 +577,7 @@ impl HostDatastoreSystem {
     /// this datastore and registered on this host.
     pub async fn remove_datastore(&self, datastore: &crate::types::structs::ManagedObjectReference) -> Result<()> {
         let input = RemoveDatastoreRequestType {datastore, };
-        let path = format!("/HostDatastoreSystem/{moId}/RemoveDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDatastoreSystem", &self.mo_id, "RemoveDatastore", Some(&input)).await
     }
     /// Remove one or more datastores.
     /// 
@@ -658,11 +604,8 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: for host configuration failures.
     pub async fn remove_datastore_ex_task(&self, datastore: &[crate::types::structs::ManagedObjectReference]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveDatastoreExRequestType {datastore, };
-        let path = format!("/HostDatastoreSystem/{moId}/RemoveDatastoreEx_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreSystem", &self.mo_id, "RemoveDatastoreEx_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Resignature an unbound VMFS volume.
@@ -717,11 +660,8 @@ impl HostDatastoreSystem {
     /// ***HostConfigFault***: for all other configuration failures.
     pub async fn resignature_unresolved_vmfs_volume_task(&self, resolution_spec: &crate::types::structs::HostUnresolvedVmfsResignatureSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ResignatureUnresolvedVmfsVolumeRequestType {resolution_spec, };
-        let path = format!("/HostDatastoreSystem/{moId}/ResignatureUnresolvedVmfsVolume_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostDatastoreSystem", &self.mo_id, "ResignatureUnresolvedVmfsVolume_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Set max queue depth for a specified NFS datastore.
@@ -747,9 +687,7 @@ impl HostDatastoreSystem {
     /// ***InvalidArgument***: if max queue depth is not within range.
     pub async fn set_max_queue_depth(&self, datastore: &crate::types::structs::ManagedObjectReference, max_qdepth: i64) -> Result<()> {
         let input = SetMaxQueueDepthRequestType {datastore, max_qdepth, };
-        let path = format!("/HostDatastoreSystem/{moId}/SetMaxQueueDepth", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDatastoreSystem", &self.mo_id, "SetMaxQueueDepth", Some(&input)).await
     }
     /// Choose the
     /// *localSwapDatastore*
@@ -785,17 +723,13 @@ impl HostDatastoreSystem {
     /// the host cannot write to the indicated datastore.
     pub async fn update_local_swap_datastore(&self, datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<()> {
         let input = UpdateLocalSwapDatastoreRequestType {datastore, };
-        let path = format!("/HostDatastoreSystem/{moId}/UpdateLocalSwapDatastore", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostDatastoreSystem", &self.mo_id, "UpdateLocalSwapDatastore", Some(&input)).await
     }
     /// Capability vector indicating the available product features.
     pub async fn capabilities(&self) -> Result<crate::types::structs::HostDatastoreSystemCapabilities> {
-        let path = format!("/HostDatastoreSystem/{moId}/capabilities", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostDatastoreSystemCapabilities = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostDatastoreSystem", &self.mo_id, "capabilities").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capabilities was empty".to_string()))?;
+        let result: crate::types::structs::HostDatastoreSystemCapabilities = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// List of datastores on this host.
@@ -806,14 +740,9 @@ impl HostDatastoreSystem {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/HostDatastoreSystem/{moId}/datastore", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostDatastoreSystem", &self.mo_id, "datastore").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

@@ -33,14 +33,9 @@ impl VsanPhoneHomeSystem {
     ///
     /// Failure
     pub async fn query_vsan_cloud_health_status(&self) -> Result<Option<crate::types::structs::VsanCloudHealthStatus>> {
-        let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/QueryVsanCloudHealthStatus", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPhoneHomeSystem", &self.mo_id, "QueryVsanCloudHealthStatus", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VsanCloudHealthStatus>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -74,11 +69,8 @@ impl VsanPhoneHomeSystem {
     /// Failure
     pub async fn vsan_perform_online_health_check(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanPerformOnlineHealthCheckRequestType {cluster, };
-        let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanPerformOnlineHealthCheck", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanPhoneHomeSystem", &self.mo_id, "VsanPerformOnlineHealthCheck", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// It is a VC level API that iterates over all hosts
@@ -120,14 +112,9 @@ impl VsanPhoneHomeSystem {
     /// Failure
     pub async fn vsan_query_lso_mwbsize(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<String>> {
         let input = VsanQueryLsoMwbsizeRequestType {cluster, };
-        let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanQueryLSOMwbsize", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPhoneHomeSystem", &self.mo_id, "VsanQueryLSOMwbsize", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -191,14 +178,9 @@ impl VsanPhoneHomeSystem {
     /// Failure
     pub async fn vsan_query_nvme_critical_warning_stats(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<String>> {
         let input = VsanQueryNvmeCriticalWarningStatsRequestType {cluster, };
-        let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanQueryNvmeCriticalWarningStats", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPhoneHomeSystem", &self.mo_id, "VsanQueryNvmeCriticalWarningStats", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -240,14 +222,9 @@ impl VsanPhoneHomeSystem {
     /// found.
     pub async fn vsan_query_object_snapshots_info(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<String>> {
         let input = VsanQueryObjectSnapshotsInfoRequestType {cluster, };
-        let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanQueryObjectSnapshotsInfo", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPhoneHomeSystem", &self.mo_id, "VsanQueryObjectSnapshotsInfo", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -282,14 +259,9 @@ impl VsanPhoneHomeSystem {
     /// Failure
     pub async fn vsan_query_zdom_scrubber_data(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<String>> {
         let input = VsanQueryZdomScrubberDataRequestType {cluster, };
-        let path = format!("/vsan/VsanPhoneHomeSystem/{moId}/VsanQueryZdomScrubberData", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPhoneHomeSystem", &self.mo_id, "VsanQueryZdomScrubberData", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<String>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

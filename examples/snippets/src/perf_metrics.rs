@@ -5,7 +5,7 @@
 //! Community Samples project.
 //!
 //! The example demonstrates:
-//
+//!
 //! 1. Connecting to a vCenter Server
 //! 2. Creating a mapping between performance counter names and their IDs
 //! 3. Retrieving all VMs in the inventory using ContainerView
@@ -17,8 +17,16 @@
 //!
 //! This code provides a foundation for building monitoring tools, performance analyzers, or
 //! dashboards that track VM resource utilization in vSphere environments.
+//!
+//! ## Typical uses
+//!
+//! Capacity monitoring, performance baselines, and building blocks for custom metrics exporters.
+//!
+//! ## See also
+//!
+//! Inspired by the PyVmomi sample
+//! [vm_perf_example.py](https://github.com/vmware/pyvmomi-community-samples/blob/ec890d5286c966ddd8fe48f4eedda2e20620610f/samples/vm_perf_example.py).
 
-// See also https://github.com/vmware/pyvmomi-community-samples/blob/ec890d5286c966ddd8fe48f4eedda2e20620610f/samples/vm_perf_example.py#L66
 
 use std::collections::HashMap;
 use std::env;
@@ -28,7 +36,7 @@ use vim_rs::mo::{ContainerView, PerformanceManager, ViewManager};
 use anyhow::{Error, Result};
 use chrono::{Duration as ChronoDuration, Utc};
 use log::{debug, info};
-use utils::connect;
+use snippets::connect;
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::{PerfEntityMetric, PerfMetricId, PerfMetricIntSeries, PerfQuerySpec};
 

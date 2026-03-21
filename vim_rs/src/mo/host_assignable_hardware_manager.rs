@@ -26,11 +26,8 @@ impl HostAssignableHardwareManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn download_description_tree(&self) -> Result<Vec<u8>> {
-        let path = format!("/HostAssignableHardwareManager/{moId}/DownloadDescriptionTree", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<u8> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "HostAssignableHardwareManager", &self.mo_id, "DownloadDescriptionTree", None).await?;
+        let result: Vec<u8> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve PCI Dynamic Passthrough info.
@@ -40,14 +37,9 @@ impl HostAssignableHardwareManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn retrieve_dynamic_passthrough_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineDynamicPassthroughInfo>>> {
-        let path = format!("/HostAssignableHardwareManager/{moId}/RetrieveDynamicPassthroughInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostAssignableHardwareManager", &self.mo_id, "RetrieveDynamicPassthroughInfo", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VirtualMachineDynamicPassthroughInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -59,14 +51,9 @@ impl HostAssignableHardwareManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn retrieve_vendor_device_group_info(&self) -> Result<Option<Vec<crate::types::structs::VirtualMachineVendorDeviceGroupInfo>>> {
-        let path = format!("/HostAssignableHardwareManager/{moId}/RetrieveVendorDeviceGroupInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostAssignableHardwareManager", &self.mo_id, "RetrieveVendorDeviceGroupInfo", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VirtualMachineVendorDeviceGroupInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -86,22 +73,15 @@ impl HostAssignableHardwareManager {
     /// Failure
     pub async fn update_assignable_hardware_config(&self, config: &crate::types::structs::HostAssignableHardwareConfig) -> Result<()> {
         let input = UpdateAssignableHardwareConfigRequestType {config, };
-        let path = format!("/HostAssignableHardwareManager/{moId}/UpdateAssignableHardwareConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostAssignableHardwareManager", &self.mo_id, "UpdateAssignableHardwareConfig", Some(&input)).await
     }
     /// Assignable Hardware bindings
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn binding(&self) -> Result<Option<Vec<crate::types::structs::HostAssignableHardwareBinding>>> {
-        let path = format!("/HostAssignableHardwareManager/{moId}/binding", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostAssignableHardwareManager", &self.mo_id, "binding").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::HostAssignableHardwareBinding>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -109,11 +89,9 @@ impl HostAssignableHardwareManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn config(&self) -> Result<crate::types::structs::HostAssignableHardwareConfig> {
-        let path = format!("/HostAssignableHardwareManager/{moId}/config", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostAssignableHardwareConfig = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostAssignableHardwareManager", &self.mo_id, "config").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::HostAssignableHardwareConfig = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

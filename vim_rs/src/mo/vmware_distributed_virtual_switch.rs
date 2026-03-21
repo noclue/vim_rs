@@ -51,9 +51,7 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn add_network_resource_pool(&self, config_spec: &[crate::types::structs::DvsNetworkResourcePoolConfigSpec]) -> Result<()> {
         let input = AddNetworkResourcePoolRequestType {config_spec, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/AddNetworkResourcePool", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VmwareDistributedVirtualSwitch", &self.mo_id, "AddNetworkResourcePool", Some(&input)).await
     }
     /// Creates a single *DistributedVirtualPortgroup* and adds it
     /// to the distributed virtual switch.
@@ -84,11 +82,8 @@ impl VmwareDistributedVirtualSwitch {
     /// ***InvalidName***: if name of the portgroup is invalid
     pub async fn create_dv_portgroup_task(&self, spec: &crate::types::structs::DvPortgroupConfigSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateDvPortgroupRequestType {spec, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/CreateDVPortgroup_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "CreateDVPortgroup_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates one or more *DistributedVirtualPortgroup*s and adds them to
@@ -122,11 +117,8 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn add_dv_portgroup_task(&self, spec: &[crate::types::structs::DvPortgroupConfigSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = AddDvPortgroupRequestType {spec, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/AddDVPortgroup_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "AddDVPortgroup_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Destroys this object, deleting its contents and removing it from its parent
@@ -151,11 +143,8 @@ impl VmwareDistributedVirtualSwitch {
     ///
     /// Failure
     pub async fn destroy_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Destroy_Task", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "Destroy_Task", None).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Enable/Disable network I/O control on the vSphere Distributed Switch.
@@ -180,9 +169,7 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn enable_network_resource_management(&self, enable: bool) -> Result<()> {
         let input = EnableNetworkResourceManagementRequestType {enable, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/EnableNetworkResourceManagement", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VmwareDistributedVirtualSwitch", &self.mo_id, "EnableNetworkResourceManagement", Some(&input)).await
     }
     /// Return the keys of ports that meet the criteria.
     /// 
@@ -198,14 +185,9 @@ impl VmwareDistributedVirtualSwitch {
     /// returns the keys of all the ports in the switch.
     pub async fn fetch_dv_port_keys(&self, criteria: Option<&crate::types::structs::DistributedVirtualSwitchPortCriteria>) -> Result<Option<Vec<String>>> {
         let input = FetchDvPortKeysRequestType {criteria, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/FetchDVPortKeys", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "VmwareDistributedVirtualSwitch", &self.mo_id, "FetchDVPortKeys", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -220,14 +202,9 @@ impl VmwareDistributedVirtualSwitch {
     /// returns the keys of all the ports in the portgroup.
     pub async fn fetch_dv_ports(&self, criteria: Option<&crate::types::structs::DistributedVirtualSwitchPortCriteria>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualPort>>> {
         let input = FetchDvPortsRequestType {criteria, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/FetchDVPorts", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "VmwareDistributedVirtualSwitch", &self.mo_id, "FetchDVPorts", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DistributedVirtualPort>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -251,14 +228,9 @@ impl VmwareDistributedVirtualSwitch {
     /// ***NotSupported***: If the operation is not supported.
     pub async fn lookup_dv_port_group(&self, portgroup_key: &str) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
         let input = LookupDvPortGroupRequestType {portgroup_key, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/LookupDvPortGroup", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "VmwareDistributedVirtualSwitch", &self.mo_id, "LookupDvPortGroup", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -337,11 +309,8 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn merge_dvs_task(&self, dvs: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MergeDvsRequestType {dvs, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/MergeDvs_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "MergeDvs_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.0.
@@ -380,11 +349,8 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn move_dv_port_task(&self, port_key: &[String], destination_portgroup_key: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = MoveDvPortRequestType {port_key, destination_portgroup_key, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/MoveDVPort_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "MoveDVPort_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This method updates the *DistributedVirtualSwitch* product specifications.
@@ -420,25 +386,17 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn perform_dvs_product_spec_operation_task(&self, operation: &str, product_spec: Option<&crate::types::structs::DistributedVirtualSwitchProductSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformDvsProductSpecOperationRequestType {operation, product_spec, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/PerformDvsProductSpecOperation_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "PerformDvsProductSpecOperation_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Return the used VLAN ID (PVLAN excluded) in the switch.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn query_used_vlan_id_in_dvs(&self) -> Result<Option<Vec<i32>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/QueryUsedVlanIdInDvs", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "VmwareDistributedVirtualSwitch", &self.mo_id, "QueryUsedVlanIdInDvs", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -512,11 +470,8 @@ impl VmwareDistributedVirtualSwitch {
     /// ***VspanDestPortConflict***: if a dvPort is used as desination ports in multiple Distributed Port Mirroring sessions.
     pub async fn reconfigure_dvs_task(&self, spec: &dyn crate::types::traits::DvsConfigSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDvsRequestType {spec, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/ReconfigureDvs_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "ReconfigureDvs_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reconfigure individual ports.
@@ -551,11 +506,8 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn reconfigure_dv_port_task(&self, port: &[crate::types::structs::DvPortConfigSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDvPortRequestType {port, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/ReconfigureDVPort_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "ReconfigureDVPort_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// reconfigure the Virtual NIC network resource pool configuration.
@@ -597,11 +549,8 @@ impl VmwareDistributedVirtualSwitch {
     /// ***ConflictingConfiguration***: if the any property being set is in conflict.
     pub async fn dvs_reconfigure_vm_vnic_network_resource_pool_task(&self, config_spec: &[crate::types::structs::DvsVmVnicResourcePoolConfigSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsReconfigureVmVnicNetworkResourcePoolRequestType {config_spec, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/DvsReconfigureVmVnicNetworkResourcePool_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "DvsReconfigureVmVnicNetworkResourcePool_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 5.0.
@@ -629,11 +578,8 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsFault***: if operation fails on any host or if there are other update failures.
     pub async fn rectify_dvs_host_task(&self, hosts: Option<&[crate::types::structs::ManagedObjectReference]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RectifyDvsHostRequestType {hosts, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RectifyDvsHost_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "RectifyDvsHost_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Refresh port states.
@@ -651,9 +597,7 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsFault***: if operation fails on any host or if there are other update failures.
     pub async fn refresh_dv_port_state(&self, port_keys: Option<&[String]>) -> Result<()> {
         let input = RefreshDvPortStateRequestType {port_keys, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RefreshDVPortState", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VmwareDistributedVirtualSwitch", &self.mo_id, "RefreshDVPortState", Some(&input)).await
     }
     /// Reload the entity state.
     /// 
@@ -670,9 +614,7 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn reload(&self) -> Result<()> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Reload", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VmwareDistributedVirtualSwitch", &self.mo_id, "Reload", None).await
     }
     /// Deprecated as of vSphere API 6.0
     /// Use *DistributedVirtualSwitch.DvsReconfigureVmVnicNetworkResourcePool_Task* instead
@@ -705,9 +647,7 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn remove_network_resource_pool(&self, key: &[String]) -> Result<()> {
         let input = RemoveNetworkResourcePoolRequestType {key, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/RemoveNetworkResourcePool", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VmwareDistributedVirtualSwitch", &self.mo_id, "RemoveNetworkResourcePool", Some(&input)).await
     }
     /// Renames this managed entity.
     /// 
@@ -739,11 +679,8 @@ impl VmwareDistributedVirtualSwitch {
     /// ***InvalidName***: If the new name is not a valid entity name.
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/Rename_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "Rename_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This method determines if the distributed virtual switch configuration
@@ -791,11 +728,8 @@ impl VmwareDistributedVirtualSwitch {
     /// ***DvsFault***: if operation fails.
     pub async fn dvs_rollback_task(&self, entity_backup: Option<&crate::types::structs::EntityBackupConfig>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = DvsRollbackRequestType {entity_backup, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/DVSRollback_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "DVSRollback_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Assigns a value to a custom field.
@@ -814,9 +748,7 @@ impl VmwareDistributedVirtualSwitch {
     /// Value to be assigned to the custom field.
     pub async fn set_custom_value(&self, key: &str, value: &str) -> Result<()> {
         let input = SetCustomValueRequestType {key, value, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/setCustomValue", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VmwareDistributedVirtualSwitch", &self.mo_id, "setCustomValue", Some(&input)).await
     }
     /// Set the capability of the switch.
     /// 
@@ -839,9 +771,7 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn update_dvs_capability(&self, capability: &crate::types::structs::DvsCapability) -> Result<()> {
         let input = UpdateDvsCapabilityRequestType {capability, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDvsCapability", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VmwareDistributedVirtualSwitch", &self.mo_id, "UpdateDvsCapability", Some(&input)).await
     }
     /// Update health check configuration.
     /// 
@@ -865,11 +795,8 @@ impl VmwareDistributedVirtualSwitch {
     /// ***NotSupported***: if health check is not supported on the switch.
     pub async fn update_dvs_health_check_config_task(&self, health_check_config: &[Box<dyn crate::types::traits::DvsHealthCheckConfigTrait>]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateDvsHealthCheckConfigRequestType {health_check_config, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDVSHealthCheckConfig_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "UpdateDVSHealthCheckConfig_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Update Link Aggregation Control Protocol groups.
@@ -898,11 +825,8 @@ impl VmwareDistributedVirtualSwitch {
     /// is not supported on the switch.
     pub async fn update_dvs_lacp_group_config_task(&self, lacp_group_spec: &[crate::types::structs::VMwareDvsLacpGroupSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UpdateDvsLacpGroupConfigRequestType {lacp_group_spec, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateDVSLacpGroupConfig_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "VmwareDistributedVirtualSwitch", &self.mo_id, "UpdateDVSLacpGroupConfig_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.0
@@ -937,9 +861,7 @@ impl VmwareDistributedVirtualSwitch {
     /// *extensionKey*.
     pub async fn update_network_resource_pool(&self, config_spec: &[crate::types::structs::DvsNetworkResourcePoolConfigSpec]) -> Result<()> {
         let input = UpdateNetworkResourcePoolRequestType {config_spec, };
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/UpdateNetworkResourcePool", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "VmwareDistributedVirtualSwitch", &self.mo_id, "UpdateNetworkResourcePool", Some(&input)).await
     }
     /// Whether alarm actions are enabled for this entity.
     /// 
@@ -947,14 +869,9 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/alarmActionsEnabled", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "alarmActionsEnabled").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<bool>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -964,14 +881,9 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/availableField", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "availableField").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -983,20 +895,16 @@ impl VmwareDistributedVirtualSwitch {
     /// *DistributedVirtualSwitch.capability*.*DVSCapability.dvsOperationSupported*
     /// should always be set to false.
     pub async fn capability(&self) -> Result<crate::types::structs::DvsCapability> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/capability", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::DvsCapability = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "capability").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capability was empty".to_string()))?;
+        let result: crate::types::structs::DvsCapability = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Switch configuration data.
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::DvsConfigInfoTrait>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/config", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Box<dyn crate::types::traits::DvsConfigInfoTrait> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "config").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::DvsConfigInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Current configuration issues that have been detected for this entity.
@@ -1007,14 +915,9 @@ impl VmwareDistributedVirtualSwitch {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/configIssue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "configIssue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Event>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1043,25 +946,18 @@ impl VmwareDistributedVirtualSwitch {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/configStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "configStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/customValue", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "customValue").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1076,14 +972,9 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/declaredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "declaredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1157,14 +1048,9 @@ impl VmwareDistributedVirtualSwitch {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/disabledMethod", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "disabledMethod").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<String>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1172,14 +1058,9 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/effectiveRole", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "effectiveRole").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<i32>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1193,11 +1074,9 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/name", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "name").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 6.0
@@ -1208,14 +1087,9 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// Network resource pool information for the switch.
     pub async fn network_resource_pool(&self) -> Result<Option<Vec<crate::types::structs::DvsNetworkResourcePool>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/networkResourcePool", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "networkResourcePool").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::DvsNetworkResourcePool>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1240,11 +1114,9 @@ impl VmwareDistributedVirtualSwitch {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/overallStatus", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "overallStatus").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -1259,27 +1131,17 @@ impl VmwareDistributedVirtualSwitch {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/parent", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "parent").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::ManagedObjectReference>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/permission", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "permission").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Permission>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1289,14 +1151,9 @@ impl VmwareDistributedVirtualSwitch {
     ///
     /// Refers instances of *DistributedVirtualPortgroup*.
     pub async fn portgroup(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/portgroup", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "portgroup").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1326,37 +1183,25 @@ impl VmwareDistributedVirtualSwitch {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/recentTask", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "recentTask").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::ManagedObjectReference>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Runtime information of the distributed virtual switch.
     pub async fn runtime(&self) -> Result<Option<crate::types::structs::DvsRuntimeInfo>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/runtime", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "runtime").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::DvsRuntimeInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
     /// Summary of the switch.
     pub async fn summary(&self) -> Result<crate::types::structs::DvsSummary> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/summary", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::DvsSummary = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "summary").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
+        let result: crate::types::structs::DvsSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// The set of tags associated with this managed entity.
@@ -1365,14 +1210,9 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/tag", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "tag").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::Tag>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1391,14 +1231,9 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/triggeredAlarmState", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "triggeredAlarmState").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::AlarmState>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -1407,11 +1242,9 @@ impl VmwareDistributedVirtualSwitch {
     /// Unique across vCenter Server
     /// inventory and instances.
     pub async fn uuid(&self) -> Result<String> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/uuid", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: String = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "uuid").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property uuid was empty".to_string()))?;
+        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// List of custom field values.
@@ -1422,14 +1255,9 @@ impl VmwareDistributedVirtualSwitch {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let path = format!("/VmwareDistributedVirtualSwitch/{moId}/value", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "VmwareDistributedVirtualSwitch", &self.mo_id, "value").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

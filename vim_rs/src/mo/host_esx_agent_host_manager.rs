@@ -32,19 +32,15 @@ impl HostEsxAgentHostManager {
     /// ***HostConfigFault***: if an error occurs.
     pub async fn esx_agent_host_manager_update_config(&self, config_info: &crate::types::structs::HostEsxAgentHostManagerConfigInfo) -> Result<()> {
         let input = EsxAgentHostManagerUpdateConfigRequestType {config_info, };
-        let path = format!("/HostEsxAgentHostManager/{moId}/EsxAgentHostManagerUpdateConfig", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostEsxAgentHostManager", &self.mo_id, "EsxAgentHostManagerUpdateConfig", Some(&input)).await
     }
     /// Configuration of agent virtual machine resources
     /// 
     /// ***Required privileges:*** Host.Config.Settings
     pub async fn config_info(&self) -> Result<crate::types::structs::HostEsxAgentHostManagerConfigInfo> {
-        let path = format!("/HostEsxAgentHostManager/{moId}/configInfo", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HostEsxAgentHostManagerConfigInfo = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostEsxAgentHostManager", &self.mo_id, "configInfo").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configInfo was empty".to_string()))?;
+        let result: crate::types::structs::HostEsxAgentHostManagerConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

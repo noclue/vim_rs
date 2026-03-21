@@ -116,11 +116,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_attach_volume(&self, attach_specs: &[crate::types::structs::CnsVolumeAttachDetachSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsAttachVolumeRequestType {attach_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsAttachVolume", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsAttachVolume", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Modify the ACL configurations for existing volumes.
@@ -165,11 +162,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for any other authorization failure scenrios.
     pub async fn cns_configure_volume_ac_ls(&self, acl_config_specs: &[crate::types::structs::CnsVolumeAclConfigureSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsConfigureVolumeAcLsRequestType {acl_config_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsConfigureVolumeACLs", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsConfigureVolumeACLs", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Creates container volume with given specifications.
@@ -233,11 +227,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_create_volume(&self, create_specs: &[crate::types::structs::CnsVolumeCreateSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsCreateVolumeRequestType {create_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsCreateVolume", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsCreateVolume", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Create snapshots of given volumes
@@ -284,11 +275,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_create_snapshots(&self, snapshot_specs: &[crate::types::structs::CnsSnapshotCreateSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsCreateSnapshotsRequestType {snapshot_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsCreateSnapshots", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsCreateSnapshots", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Deletes given container volumes.
@@ -355,11 +343,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_delete_volume(&self, volume_ids: &[crate::types::structs::CnsVolumeId], delete_disk: bool) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsDeleteVolumeRequestType {volume_ids, delete_disk, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDeleteVolume", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsDeleteVolume", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Delete snapshots with given volumeIds and snapshotIds.
@@ -400,11 +385,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_delete_snapshots(&self, snapshot_delete_specs: &[crate::types::structs::CnsSnapshotDeleteSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsDeleteSnapshotsRequestType {snapshot_delete_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDeleteSnapshots", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsDeleteSnapshots", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Detaches volumes(block volumes only) and makes those volumes unavailable
@@ -461,11 +443,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_detach_volume(&self, detach_specs: &[crate::types::structs::CnsVolumeAttachDetachSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsDetachVolumeRequestType {detach_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsDetachVolume", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsDetachVolume", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Extend the capacity for the container volumes.
@@ -514,11 +493,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_extend_volume(&self, extend_specs: &[crate::types::structs::CnsVolumeExtendSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsExtendVolumeRequestType {extend_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsExtendVolume", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsExtendVolume", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns container volumes matching criteria set in the filter.
@@ -563,11 +539,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenarios
     pub async fn cns_query_volume(&self, filter: &dyn crate::types::traits::CnsQueryFilterTrait, selection: Option<&crate::types::structs::CnsQuerySelection>) -> Result<crate::types::structs::CnsQueryResult> {
         let input = CnsQueryVolumeRequestType {filter, selection, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsQueryVolume", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::CnsQueryResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsQueryVolume", Some(&input)).await?;
+        let result: crate::types::structs::CnsQueryResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Returns container volumes matching criteria set in the filter.
@@ -615,11 +588,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenarios
     pub async fn cns_query_async(&self, filter: &dyn crate::types::traits::CnsQueryFilterTrait, selection: Option<&crate::types::structs::CnsQuerySelection>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsQueryAsyncRequestType {filter, selection, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsQueryAsync", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsQueryAsync", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Reconfigures the volume with the storage policy.
@@ -658,11 +628,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_reconfig_volume_policy(&self, volume_policy_reconfig_specs: Option<&[crate::types::structs::CnsVolumePolicyReconfigSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsReconfigVolumePolicyRequestType {volume_policy_reconfig_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsReconfigVolumePolicy", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsReconfigVolumePolicy", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Relocate container volume from the current source datastore to another
@@ -731,11 +698,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_relocate_volume(&self, relocate_specs: &[Box<dyn crate::types::traits::CnsVolumeRelocateSpecTrait>]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsRelocateVolumeRequestType {relocate_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsRelocateVolume", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsRelocateVolume", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Updates volume metadata, namely labels and container cluster information for the
@@ -788,11 +752,8 @@ impl CnsVolumeManager {
     /// ***CnsFault***: Thrown for all other failure scenario.
     pub async fn cns_update_volume_metadata(&self, update_specs: &[crate::types::structs::CnsVolumeMetadataUpdateSpec]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsUpdateVolumeMetadataRequestType {update_specs, };
-        let path = format!("/vsan/CnsVolumeManager/{moId}/CnsUpdateVolumeMetadata", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsUpdateVolumeMetadata", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

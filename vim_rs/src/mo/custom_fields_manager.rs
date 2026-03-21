@@ -51,11 +51,8 @@ impl CustomFieldsManager {
     /// ***InvalidPrivilege***: if a specified privilege is not defined.
     pub async fn add_custom_field_def(&self, name: &str, mo_type: Option<&str>, field_def_policy: Option<&crate::types::structs::PrivilegePolicyDef>, field_policy: Option<&crate::types::structs::PrivilegePolicyDef>) -> Result<crate::types::structs::CustomFieldDef> {
         let input = AddCustomFieldDefRequestType {name, mo_type, field_def_policy, field_policy, };
-        let path = format!("/CustomFieldsManager/{moId}/AddCustomFieldDef", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::CustomFieldDef = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "CustomFieldsManager", &self.mo_id, "AddCustomFieldDef", Some(&input)).await?;
+        let result: crate::types::structs::CustomFieldDef = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Removes a custom field.
@@ -71,9 +68,7 @@ impl CustomFieldsManager {
     /// The unique key for the field definition.
     pub async fn remove_custom_field_def(&self, key: i32) -> Result<()> {
         let input = RemoveCustomFieldDefRequestType {key, };
-        let path = format!("/CustomFieldsManager/{moId}/RemoveCustomFieldDef", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CustomFieldsManager", &self.mo_id, "RemoveCustomFieldDef", Some(&input)).await
     }
     /// Renames a custom field.
     /// 
@@ -94,9 +89,7 @@ impl CustomFieldsManager {
     /// ***DuplicateName***: if a custom field with the name already exists.
     pub async fn rename_custom_field_def(&self, key: i32, name: &str) -> Result<()> {
         let input = RenameCustomFieldDefRequestType {key, name, };
-        let path = format!("/CustomFieldsManager/{moId}/RenameCustomFieldDef", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CustomFieldsManager", &self.mo_id, "RenameCustomFieldDef", Some(&input)).await
     }
     /// Assigns a value to a custom field on an entity.
     ///
@@ -114,9 +107,7 @@ impl CustomFieldsManager {
     /// -
     pub async fn set_field(&self, entity: &crate::types::structs::ManagedObjectReference, key: i32, value: &str) -> Result<()> {
         let input = SetFieldRequestType {entity, key, value, };
-        let path = format!("/CustomFieldsManager/{moId}/SetField", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "CustomFieldsManager", &self.mo_id, "SetField", Some(&input)).await
     }
     /// List of custom fields defined on this server.
     /// 
@@ -125,14 +116,9 @@ impl CustomFieldsManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let path = format!("/CustomFieldsManager/{moId}/field", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.fetch_property_raw("", "CustomFieldsManager", &self.mo_id, "field").await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::CustomFieldDef>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }

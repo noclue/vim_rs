@@ -47,11 +47,8 @@ impl OverheadMemoryManager {
     /// ***ManagedObjectNotFound***: If the inventory objects cannot be found.
     pub async fn lookup_vm_overhead_memory(&self, vm: &crate::types::structs::ManagedObjectReference, host: &crate::types::structs::ManagedObjectReference) -> Result<i64> {
         let input = LookupVmOverheadMemoryRequestType {vm, host, };
-        let path = format!("/OverheadMemoryManager/{moId}/LookupVmOverheadMemory", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i64 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("", "OverheadMemoryManager", &self.mo_id, "LookupVmOverheadMemory", Some(&input)).await?;
+        let result: i64 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

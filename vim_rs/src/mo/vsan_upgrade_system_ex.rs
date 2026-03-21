@@ -111,11 +111,8 @@ impl VsanUpgradeSystemEx {
     /// in progress
     pub async fn perform_vsan_upgrade_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, perform_object_upgrade: Option<bool>, downgrade_format: Option<bool>, allow_reduced_redundancy: Option<bool>, exclude_hosts: Option<&[crate::types::structs::ManagedObjectReference]>, spec: Option<&crate::types::structs::VsanDiskFormatConversionSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformVsanUpgradeExRequestType {cluster, perform_object_upgrade, downgrade_format, allow_reduced_redundancy, exclude_hosts, spec, };
-        let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/PerformVsanUpgradeEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanUpgradeSystemEx", &self.mo_id, "PerformVsanUpgradeEx", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Perform an upgrade preflight check on a cluster asynchronously.
@@ -154,11 +151,8 @@ impl VsanUpgradeSystemEx {
     /// in progress
     pub async fn perform_vsan_upgrade_preflight_async_check_task(&self, cluster: &crate::types::structs::ManagedObjectReference, downgrade_format: Option<bool>, spec: Option<&crate::types::structs::VsanDiskFormatConversionSpec>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = PerformVsanUpgradePreflightAsyncCheckRequestType {cluster, downgrade_format, spec, };
-        let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/PerformVsanUpgradePreflightAsyncCheck_Task", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanUpgradeSystemEx", &self.mo_id, "PerformVsanUpgradePreflightAsyncCheck_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Perform an upgrade preflight check on a cluster.
@@ -212,11 +206,8 @@ impl VsanUpgradeSystemEx {
     /// Preflight check result.
     pub async fn perform_vsan_upgrade_preflight_check_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, downgrade_format: Option<bool>, spec: Option<&crate::types::structs::VsanDiskFormatConversionSpec>) -> Result<crate::types::structs::VsanDiskFormatConversionCheckResult> {
         let input = PerformVsanUpgradePreflightCheckExRequestType {cluster, downgrade_format, spec, };
-        let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/PerformVsanUpgradePreflightCheckEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanDiskFormatConversionCheckResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanUpgradeSystemEx", &self.mo_id, "PerformVsanUpgradePreflightCheckEx", Some(&input)).await?;
+        let result: crate::types::structs::VsanDiskFormatConversionCheckResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve the latest status of a running, or the previously completed,
@@ -239,11 +230,8 @@ impl VsanUpgradeSystemEx {
     /// Status
     pub async fn vsan_query_upgrade_status_ex(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VsanUpgradeStatusEx> {
         let input = VsanQueryUpgradeStatusExRequestType {cluster, };
-        let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/VsanQueryUpgradeStatusEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanUpgradeStatusEx = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanUpgradeSystemEx", &self.mo_id, "VsanQueryUpgradeStatusEx", Some(&input)).await?;
+        let result: crate::types::structs::VsanUpgradeStatusEx = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Process a scan and retrieve the highest vSAN disk format
@@ -269,11 +257,8 @@ impl VsanUpgradeSystemEx {
     /// int To present the highest supported disk format version.
     pub async fn retrieve_supported_vsan_format_version(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<i32> {
         let input = RetrieveSupportedVsanFormatVersionRequestType {cluster, };
-        let path = format!("/vsan/VsanUpgradeSystemEx/{moId}/RetrieveSupportedVsanFormatVersion", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: i32 = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanUpgradeSystemEx", &self.mo_id, "RetrieveSupportedVsanFormatVersion", Some(&input)).await?;
+        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

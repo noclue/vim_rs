@@ -19,14 +19,9 @@ impl HostHealthStatusSystem {
     /// 
     /// ***Required privileges:*** Host.Config.Settings
     pub async fn fetch_system_event_log(&self) -> Result<Option<Vec<crate::types::structs::SystemEventInfo>>> {
-        let path = format!("/HostHealthStatusSystem/{moId}/FetchSystemEventLog", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("", "HostHealthStatusSystem", &self.mo_id, "FetchSystemEventLog", None).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::SystemEventInfo>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -34,17 +29,13 @@ impl HostHealthStatusSystem {
     /// 
     /// ***Required privileges:*** Host.Config.Settings
     pub async fn clear_system_event_log(&self) -> Result<()> {
-        let path = format!("/HostHealthStatusSystem/{moId}/ClearSystemEventLog", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostHealthStatusSystem", &self.mo_id, "ClearSystemEventLog", None).await
     }
     /// Refresh the available runtime hardware health information.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn refresh_health_status_system(&self) -> Result<()> {
-        let path = format!("/HostHealthStatusSystem/{moId}/RefreshHealthStatusSystem", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostHealthStatusSystem", &self.mo_id, "RefreshHealthStatusSystem", None).await
     }
     /// Resets the state of the sensors of the IPMI subsystem.
     /// 
@@ -55,16 +46,12 @@ impl HostHealthStatusSystem {
     /// 
     /// ***Required privileges:*** Host.Config.Settings
     pub async fn reset_system_health_info(&self) -> Result<()> {
-        let path = format!("/HostHealthStatusSystem/{moId}/ResetSystemHealthInfo", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        self.client.execute_void(req).await
+        self.client.invoke_void("", "HostHealthStatusSystem", &self.mo_id, "ResetSystemHealthInfo", None).await
     }
     pub async fn runtime(&self) -> Result<crate::types::structs::HealthSystemRuntime> {
-        let path = format!("/HostHealthStatusSystem/{moId}/runtime", moId = &self.mo_id);
-        let req = self.client.get_request(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::HealthSystemRuntime = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes_opt = self.client.fetch_property_raw("", "HostHealthStatusSystem", &self.mo_id, "runtime").await?;
+        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: crate::types::structs::HealthSystemRuntime = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

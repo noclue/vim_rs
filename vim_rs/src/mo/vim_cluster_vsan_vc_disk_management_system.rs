@@ -64,11 +64,8 @@ impl VimClusterVsanVcDiskManagementSystem {
     ///    pool is eligible for vSAN ESA;
     pub async fn vsan_add_storage_pool_disk(&self, specs: Option<&[crate::types::structs::VsanAddStoragePoolDiskSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanAddStoragePoolDiskRequestType {specs, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/VsanAddStoragePoolDisk", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "VsanAddStoragePoolDisk", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This API can be used to delete a single or multiple disks from storage pool.
@@ -97,11 +94,8 @@ impl VimClusterVsanVcDiskManagementSystem {
     /// ***VsanFault***: If any error happens during storage pool removal stage.
     pub async fn vsan_delete_storage_pool_disk(&self, cluster: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VsanDeleteStoragePoolDiskSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanDeleteStoragePoolDiskRequestType {cluster, spec, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/VsanDeleteStoragePoolDisk", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "VsanDeleteStoragePoolDisk", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This API is used to create new vSAN disk groups or attach
@@ -148,11 +142,8 @@ impl VimClusterVsanVcDiskManagementSystem {
     ///    is eligible for vSAN;
     pub async fn initialize_disk_mappings(&self, spec: &crate::types::structs::VimVsanHostDiskMappingCreationSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = InitializeDiskMappingsRequestType {spec, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/InitializeDiskMappings", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "InitializeDiskMappings", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve logical capacity, logical capacity used, physical capacity, physical
@@ -173,11 +164,8 @@ impl VimClusterVsanVcDiskManagementSystem {
     /// Failure
     pub async fn query_cluster_data_efficiency_capacity_state(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::VimVsanDataEfficiencyCapacityState> {
         let input = QueryClusterDataEfficiencyCapacityStateRequestType {cluster, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/QueryClusterDataEfficiencyCapacityState", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VimVsanDataEfficiencyCapacityState = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "QueryClusterDataEfficiencyCapacityState", Some(&input)).await?;
+        let result: crate::types::structs::VimVsanDataEfficiencyCapacityState = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get detailed information of vSAN disk groups managed by specified host,
@@ -209,14 +197,9 @@ impl VimClusterVsanVcDiskManagementSystem {
     /// 3. Any unexpected runtime error;
     pub async fn query_disk_mappings(&self, host: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VimVsanHostDiskMapInfoEx>>> {
         let input = QueryDiskMappingsRequestType {host, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/QueryDiskMappings", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "QueryDiskMappings", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VimVsanHostDiskMapInfoEx>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -262,14 +245,9 @@ impl VimClusterVsanVcDiskManagementSystem {
     /// 3. Any unexpected runtime error;
     pub async fn query_vsan_managed_disks(&self, host: &crate::types::structs::ManagedObjectReference, filter_spec: Option<&crate::types::structs::VimVsanHostQueryVsanDisksSpec>) -> Result<Option<crate::types::structs::VimVsanHostVsanManagedDisksInfo>> {
         let input = QueryVsanManagedDisksRequestType {host, filter_spec, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/QueryVsanManagedDisks", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "QueryVsanManagedDisks", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<crate::types::structs::VimVsanHostVsanManagedDisksInfo>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -318,11 +296,8 @@ impl VimClusterVsanVcDiskManagementSystem {
     ///    status;
     pub async fn rebuild_disk_mapping(&self, host: &crate::types::structs::ManagedObjectReference, mapping: &crate::types::structs::VsanHostDiskMapping, maintenance_spec: &crate::types::structs::HostMaintenanceSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RebuildDiskMappingRequestType {host, mapping, maintenance_spec, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RebuildDiskMapping", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "RebuildDiskMapping", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Remove vSAN capacity-tier disk(s) from use in a vSAN cluster with the
@@ -386,11 +361,8 @@ impl VimClusterVsanVcDiskManagementSystem {
     /// of VsanFault) will be thrown instead.
     pub async fn remove_disk_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, disks: &[crate::types::structs::HostScsiDisk], maintenance_spec: &crate::types::structs::HostMaintenanceSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveDiskExRequestType {cluster, disks, maintenance_spec, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RemoveDiskEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "RemoveDiskEx", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Remove vSAN disk mapping(s) from use in a vSAN cluster with the
@@ -434,11 +406,8 @@ impl VimClusterVsanVcDiskManagementSystem {
     /// disk mapping(s) removal stage.
     pub async fn remove_disk_mapping_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, mappings: &[crate::types::structs::VsanHostDiskMapping], maintenance_spec: &crate::types::structs::HostMaintenanceSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RemoveDiskMappingExRequestType {cluster, mappings, maintenance_spec, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RemoveDiskMappingEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "RemoveDiskMappingEx", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieve capabilities for hosts reside in specified cluster,
@@ -464,14 +433,9 @@ impl VimClusterVsanVcDiskManagementSystem {
     /// Failure
     pub async fn retrieve_all_flash_capabilities(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<Vec<crate::types::structs::VimVsanHostVsanHostCapability>>> {
         let input = RetrieveAllFlashCapabilitiesRequestType {cluster, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/RetrieveAllFlashCapabilities", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "RetrieveAllFlashCapabilities", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VimVsanHostVsanHostCapability>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -516,11 +480,8 @@ impl VimClusterVsanVcDiskManagementSystem {
     /// disk mapping(s) unmount stage.
     pub async fn unmount_disk_mapping_ex(&self, cluster: &crate::types::structs::ManagedObjectReference, mappings: &[crate::types::structs::VsanHostDiskMapping], maintenance_spec: &crate::types::structs::HostMaintenanceSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = UnmountDiskMappingExRequestType {cluster, mappings, maintenance_spec, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/UnmountDiskMappingEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "UnmountDiskMappingEx", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// This API can be used to unmount a single or multiple disks from the storage
@@ -557,11 +518,8 @@ impl VimClusterVsanVcDiskManagementSystem {
     /// disk unmount stage.
     pub async fn vsan_unmount_storage_pool_disks(&self, cluster: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VsanDeleteStoragePoolDiskSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanUnmountStoragePoolDisksRequestType {cluster, spec, };
-        let path = format!("/vsan/VimClusterVsanVcDiskManagementSystem/{moId}/VsanUnmountStoragePoolDisks", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VimClusterVsanVcDiskManagementSystem", &self.mo_id, "VsanUnmountStoragePoolDisks", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }

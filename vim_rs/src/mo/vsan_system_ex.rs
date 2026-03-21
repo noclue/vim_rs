@@ -41,11 +41,8 @@ impl VsanSystemEx {
     /// abort wipe return status.
     pub async fn vsan_host_abort_wipe_disk(&self, disks: &[String]) -> Result<Vec<crate::types::structs::VsanHostAbortWipeDiskStatus>> {
         let input = VsanHostAbortWipeDiskRequestType {disks, };
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanHostAbortWipeDisk", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanHostAbortWipeDiskStatus> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSystemEx", &self.mo_id, "VsanHostAbortWipeDisk", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanHostAbortWipeDiskStatus> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query system information of ESXi such as name, type, version, build type
@@ -57,11 +54,8 @@ impl VsanSystemEx {
     ///
     /// VsanAboutInfoEx
     pub async fn vsan_get_about_info_ex(&self) -> Result<crate::types::structs::VsanHostAboutInfoEx> {
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanGetAboutInfoEx", moId = &self.mo_id);
-        let req = self.client.post_bare(&path);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanHostAboutInfoEx = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSystemEx", &self.mo_id, "VsanGetAboutInfoEx", None).await?;
+        let result: crate::types::structs::VsanHostAboutInfoEx = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Get vSAN runtime stats of vSAN host.
@@ -88,11 +82,8 @@ impl VsanSystemEx {
     /// vim.vsan.host.RuntimeStats
     pub async fn vsan_host_get_runtime_stats(&self, stats: Option<&[String]>, cluster_uuid: Option<&str>) -> Result<crate::types::structs::VsanHostRuntimeStats> {
         let input = VsanHostGetRuntimeStatsRequestType {stats, cluster_uuid, };
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanHostGetRuntimeStats", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanHostRuntimeStats = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSystemEx", &self.mo_id, "VsanHostGetRuntimeStats", Some(&input)).await?;
+        let result: crate::types::structs::VsanHostRuntimeStats = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query vSAN DRS stats of this host and all vSAN VMs registered
@@ -130,11 +121,8 @@ impl VsanSystemEx {
     /// *VsanHostDrsStats*
     pub async fn vsan_query_host_drs_stats(&self, host_uuids: Option<&[String]>, vms: Option<&[String]>, host_index: Option<i32>) -> Result<crate::types::structs::VsanHostDrsStats> {
         let input = VsanQueryHostDrsStatsRequestType {host_uuids, vms, host_index, };
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanQueryHostDrsStats", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanHostDrsStats = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSystemEx", &self.mo_id, "VsanQueryHostDrsStats", Some(&input)).await?;
+        let result: crate::types::structs::VsanHostDrsStats = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query this host's current runtime status for the VSAN service.
@@ -155,14 +143,9 @@ impl VsanSystemEx {
     /// information for the vSAN service.
     pub async fn vsan_query_host_status_ex(&self, cluster_uuids: Option<&[String]>) -> Result<Option<Vec<crate::types::structs::VsanHostClusterStatus>>> {
         let input = VsanQueryHostStatusExRequestType {cluster_uuids, };
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanQueryHostStatusEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes_opt = self.client.execute_option_bytes(req).await?;
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanSystemEx", &self.mo_id, "VsanQueryHostStatusEx", Some(&input)).await?;
         match bytes_opt {
-            Some(bytes) => {
-                let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-                Ok(Some(miniserde::json::from_str::<Vec<crate::types::structs::VsanHostClusterStatus>>(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?))
-            }
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
         }
     }
@@ -196,11 +179,8 @@ impl VsanSystemEx {
     /// vim.vsan.host.VsanSyncingObjectQueryResult.
     pub async fn vsan_query_syncing_vsan_objects(&self, uuids: Option<&[String]>, start: Option<i32>, limit: Option<i32>, include_summary: Option<bool>) -> Result<crate::types::structs::VsanHostVsanObjectSyncQueryResult> {
         let input = VsanQuerySyncingVsanObjectsRequestType {uuids, start, limit, include_summary, };
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanQuerySyncingVsanObjects", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanHostVsanObjectSyncQueryResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSystemEx", &self.mo_id, "VsanQuerySyncingVsanObjects", Some(&input)).await?;
+        let result: crate::types::structs::VsanHostVsanObjectSyncQueryResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query what it takes for an entity(disk group or host) to be evacuated in
@@ -233,11 +213,8 @@ impl VsanSystemEx {
     /// Failure
     pub async fn vsan_query_what_if_evacuation_result(&self, evac_entity_uuid: &str) -> Result<crate::types::structs::VsanWhatIfEvacResult> {
         let input = VsanQueryWhatIfEvacuationResultRequestType {evac_entity_uuid, };
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanQueryWhatIfEvacuationResult", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::VsanWhatIfEvacResult = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSystemEx", &self.mo_id, "VsanQueryWhatIfEvacuationResult", Some(&input)).await?;
+        let result: crate::types::structs::VsanWhatIfEvacResult = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Query disk level information for securely wipe disk.
@@ -259,11 +236,8 @@ impl VsanSystemEx {
     /// Failure
     pub async fn vsan_host_query_wipe_disk(&self, disks: &[String]) -> Result<Vec<crate::types::structs::VsanHostWipeDiskStatus>> {
         let input = VsanHostQueryWipeDiskRequestType {disks, };
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanHostQueryWipeDisk", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: Vec<crate::types::structs::VsanHostWipeDiskStatus> = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSystemEx", &self.mo_id, "VsanHostQueryWipeDisk", Some(&input)).await?;
+        let result: Vec<crate::types::structs::VsanHostWipeDiskStatus> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Unmount vSAN diskgroup, which stops using specified vSAN diskgroup
@@ -314,11 +288,8 @@ impl VsanSystemEx {
     /// Failure
     pub async fn vsan_unmount_disk_mapping_ex(&self, mappings: &[crate::types::structs::VsanHostDiskMapping], maintenance_spec: Option<&crate::types::structs::HostMaintenanceSpec>, timeout: Option<i32>, evac_reason: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanUnmountDiskMappingExRequestType {mappings, maintenance_spec, timeout, evac_reason, };
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanUnmountDiskMappingEx", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSystemEx", &self.mo_id, "VsanUnmountDiskMappingEx", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Initiate task for securely wipe disk.
@@ -349,11 +320,8 @@ impl VsanSystemEx {
     /// \* *MethodFault* for specific disk fault information.
     pub async fn vsan_host_wipe_disk(&self, disks: &[String]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = VsanHostWipeDiskRequestType {disks, };
-        let path = format!("/vsan/VsanSystemEx/{moId}/VsanHostWipeDisk", moId = &self.mo_id);
-        let req = self.client.post_json(&path, &input);
-        let bytes = self.client.execute_bytes(req).await?;
-        let text = std::str::from_utf8(bytes.as_ref()).map_err(|e| crate::core::client::VimError::ParseError(e.to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = miniserde::json::from_str(text).map_err(|_| crate::core::client::VimError::ParseError("miniserde deserialization failed".to_string()))?;
+        let bytes = self.client.invoke("vsan", "VsanSystemEx", &self.mo_id, "VsanHostWipeDisk", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
 }
