@@ -19,6 +19,11 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [UNRELEASED]
 
+### Added
+
+- 'vim_macros' supports `ManagedEntity`. It is sometimes useful to select fields from the base `ManagedEntity` type. This allows to select common properties like `name`, `parent` etc. irrespective of the actual type.
+- `inventory_path` example is added. Invneotry paths are convinient way to address objects in VMware infrastructure. This example provides way to fetch the inventory path wiht a single PropertyCollector call. Logic is borrowed from `govmomi` project.
+
 ## [0.4.1] - 2026-03-21
 
 ### Added

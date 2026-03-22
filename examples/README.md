@@ -40,6 +40,7 @@ Optional / example-specific:
 | `DATASTORE` | `retrieve_ds_hosts` — datastore id (e.g. `datastore-107001`) |
 | `VM_INVENTORY_PATH` | `vm_ip`, `vm_rename`, `vm_toggle_wol` — inventory path to a VM |
 | `NEW_VM_NAME` | `vm_rename` — new display name |
+| `MO_REF` | `inventory_path` — managed object to resolve, as `Type:id` (only the first `:` separates type from id; e.g. `VirtualMachine:vm-42`) |
 
 A `.env` file in the working directory is loaded automatically by the shared `snippets::connect` helper when present.
 
@@ -50,6 +51,7 @@ A `.env` file in the working directory is loaded automatically by the shared `sn
 | `dynamic_property_fetch` | `Client::fetch_property` for arbitrary properties (here: root folder `permission` as JSON). |
 | `env_browser` | `EnvironmentBrowser` / config descriptors for a named `ComputeResource`. |
 | `eventster` | `EventManager` + `EventHistoryCollector`: recent events with filtering. |
+| `inventory_path` | Resolve inventory path from `MO_REF`. Uses **One** `RetrievePropertiesEx` (govmomi `mo.Ancestors` shape). Prints path to stdout. |
 | `mac_monitor` | `WaitForUpdates`-style cache: track VM NIC MACs and guest IPs (~30s demo). |
 | `perf_metrics` | `PerformanceManager`: counter map, container view of VMs, per-VM stats sample. |
 | `print_vm_addresses` | All VMs: guest net vs hardware NICs (`vim_retrievable!`). |

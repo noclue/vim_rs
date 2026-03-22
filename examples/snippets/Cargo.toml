@@ -66,6 +66,10 @@ path = "src/print_vm_addresses.rs"
 name = "retrieve_recent_task"
 path = "src/retrieve_recent_task.rs"
 
+[[bin]]
+name = "inventory_path"
+path = "src/inventory_path.rs"
+
 [dependencies]
 anyhow = "1.0"
 chrono = "0.4"

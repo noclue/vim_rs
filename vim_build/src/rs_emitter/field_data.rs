@@ -64,6 +64,7 @@ static INVENTORY_TYPES: &[&str] = &[
     "VirtualApp",
     // Add other useful types here
     "Task",
+    "ManagedEntity",
 ];
 
 #[derive(Clone, Debug)]
