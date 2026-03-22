@@ -11,6 +11,16 @@ pub enum VimAny {
     Value(ValueElements),
 }
 
+impl VimAny {
+    /// Moves the inner value into a `Box<dyn std::any::Any>` for downcasting.
+    pub fn into_any(self) -> Box<dyn std::any::Any> {
+        match self {
+            VimAny::Object(obj) => obj.as_any_box(),
+            VimAny::Value(ve) => ve.into_any(),
+        }
+    }
+}
+
 impl miniserde::Serialize for VimAny {
     fn begin(&self) -> miniserde::ser::Fragment<'_> {
         match self {

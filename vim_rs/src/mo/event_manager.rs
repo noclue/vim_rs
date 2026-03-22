@@ -170,18 +170,18 @@ impl EventManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn description(&self) -> Result<crate::types::structs::EventDescription> {
-        let bytes_opt = self.client.fetch_property_raw("", "EventManager", &self.mo_id, "description").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
-        let result: crate::types::structs::EventDescription = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "EventManager", &self.mo_id, "description").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
+        let result: crate::types::structs::EventDescription = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The latest event that happened on the VirtualCenter server.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn latest_event(&self) -> Result<Option<crate::types::structs::Event>> {
-        let bytes_opt = self.client.fetch_property_raw("", "EventManager", &self.mo_id, "latestEvent").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "EventManager", &self.mo_id, "latestEvent").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -190,9 +190,9 @@ impl EventManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn max_collector(&self) -> Result<i32> {
-        let bytes_opt = self.client.fetch_property_raw("", "EventManager", &self.mo_id, "maxCollector").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property maxCollector was empty".to_string()))?;
-        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "EventManager", &self.mo_id, "maxCollector").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property maxCollector was empty".to_string()))?;
+        let result: i32 = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

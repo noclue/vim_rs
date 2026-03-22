@@ -26,9 +26,9 @@ impl GuestOperationsManager {
     ///
     /// Refers instance of *GuestAliasManager*.
     pub async fn alias_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "aliasManager").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "aliasManager").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -41,9 +41,9 @@ impl GuestOperationsManager {
     ///
     /// Refers instance of *GuestAuthManager*.
     pub async fn auth_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "authManager").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "authManager").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -56,9 +56,9 @@ impl GuestOperationsManager {
     ///
     /// Refers instance of *GuestFileManager*.
     pub async fn file_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "fileManager").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "fileManager").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -71,9 +71,9 @@ impl GuestOperationsManager {
     ///
     /// Refers instance of *GuestWindowsRegistryManager*.
     pub async fn guest_windows_registry_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "guestWindowsRegistryManager").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "guestWindowsRegistryManager").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -86,9 +86,9 @@ impl GuestOperationsManager {
     ///
     /// Refers instance of *GuestProcessManager*.
     pub async fn process_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "processManager").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "GuestOperationsManager", &self.mo_id, "processManager").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

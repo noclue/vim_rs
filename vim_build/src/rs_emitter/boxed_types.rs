@@ -24,6 +24,7 @@ impl<'a> BoxedTypesEmitter<'a> {
         self.emit_imports()?;
         self.emit_enum()?;
         self.emit_as_str()?;
+        self.emit_into_any()?;
         self.emit_serialize()?;
         // Note: Deserialize for ValueElements is now generated in deserialize.rs
         Ok(())
@@ -71,6 +72,31 @@ impl<'a> BoxedTypesEmitter<'a> {
                 .unwrap_or(&box_type.name);
             self.printer
                 .println(&format!("ValueElements::{type_name}(_) => \"{str_name}\","))?;
+        }
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.dedent();
+        self.printer.println("}")?;
+        self.printer.newline()?;
+        Ok(())
+    }
+
+    /// Move the inner value into a type-erased box for `std::any::Any` downcasting.
+    fn emit_into_any(&mut self) -> Result<()> {
+        self.printer.println("impl ValueElements {")?;
+        self.printer.indent();
+        self.printer.println("/// Moves the wrapped value into a `Box<dyn std::any::Any>` for downcasting.")?;
+        self.printer.println("pub fn into_any(self) -> Box<dyn std::any::Any> {")?;
+        self.printer.indent();
+        self.printer.println("match self {")?;
+        self.printer.indent();
+        for (_, box_type) in &self.vim_model.any_value_types {
+            let type_name = to_type_name(&box_type.name);
+            self.printer.println(&format!(
+                "ValueElements::{type_name}(v) => Box::new(v),"
+            ))?;
         }
         self.printer.dedent();
         self.printer.println("}")?;

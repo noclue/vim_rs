@@ -229,9 +229,9 @@ impl CustomizationSpecManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn encryption_key(&self) -> Result<Option<Vec<i8>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "CustomizationSpecManager", &self.mo_id, "encryptionKey").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "CustomizationSpecManager", &self.mo_id, "encryptionKey").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -239,9 +239,9 @@ impl CustomizationSpecManager {
     /// 
     /// ***Required privileges:*** VirtualMachine.Provisioning.ReadCustSpecs
     pub async fn info(&self) -> Result<Option<Vec<crate::types::structs::CustomizationSpecInfo>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "CustomizationSpecManager", &self.mo_id, "info").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "CustomizationSpecManager", &self.mo_id, "info").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

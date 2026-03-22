@@ -224,9 +224,9 @@ impl AlarmManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn default_expression(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::AlarmExpressionTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "AlarmManager", &self.mo_id, "defaultExpression").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "AlarmManager", &self.mo_id, "defaultExpression").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -234,9 +234,9 @@ impl AlarmManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn description(&self) -> Result<crate::types::structs::AlarmDescription> {
-        let bytes_opt = self.client.fetch_property_raw("", "AlarmManager", &self.mo_id, "description").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
-        let result: crate::types::structs::AlarmDescription = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "AlarmManager", &self.mo_id, "description").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
+        let result: crate::types::structs::AlarmDescription = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

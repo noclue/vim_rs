@@ -745,9 +745,9 @@ impl ResourcePool {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "alarmActionsEnabled").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "alarmActionsEnabled").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -757,9 +757,9 @@ impl ResourcePool {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -770,17 +770,17 @@ impl ResourcePool {
     /// property. To listen for the child configuration change, please create
     /// PropertyCollector filter on the child entities directly.
     pub async fn child_configuration(&self) -> Result<Option<Vec<crate::types::structs::ResourceConfigSpec>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "childConfiguration").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "childConfiguration").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Configuration of this resource pool.
     pub async fn config(&self) -> Result<crate::types::structs::ResourceConfigSpec> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "config").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
-        let result: crate::types::structs::ResourceConfigSpec = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "config").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::ResourceConfigSpec = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Current configuration issues that have been detected for this entity.
@@ -791,9 +791,9 @@ impl ResourcePool {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "configIssue").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "configIssue").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -822,18 +822,18 @@ impl ResourcePool {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "configStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "configStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "customValue").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "customValue").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -848,9 +848,9 @@ impl ResourcePool {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "declaredAlarmState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "declaredAlarmState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -924,9 +924,9 @@ impl ResourcePool {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "disabledMethod").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "disabledMethod").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -934,9 +934,9 @@ impl ResourcePool {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "effectiveRole").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "effectiveRole").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -950,9 +950,9 @@ impl ResourcePool {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "name").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "name").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The namespace with which the ResourcePool is associated.
@@ -964,9 +964,9 @@ impl ResourcePool {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn namespace(&self) -> Result<Option<String>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "namespace").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "namespace").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -991,9 +991,9 @@ impl ResourcePool {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "overallStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "overallStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The ComputeResource to which this set of one or more nested resource pools
@@ -1005,9 +1005,9 @@ impl ResourcePool {
     ///
     /// Refers instance of *ComputeResource*.
     pub async fn owner(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "owner").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property owner was empty".to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "owner").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property owner was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -1022,17 +1022,17 @@ impl ResourcePool {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "parent").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "parent").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "permission").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "permission").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1062,9 +1062,9 @@ impl ResourcePool {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "recentTask").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "recentTask").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1076,9 +1076,9 @@ impl ResourcePool {
     ///
     /// Refers instances of *ResourcePool*.
     pub async fn resource_pool(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "resourcePool").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "resourcePool").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1096,9 +1096,9 @@ impl ResourcePool {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn runtime(&self) -> Result<crate::types::structs::ResourcePoolRuntimeInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "runtime").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
-        let result: crate::types::structs::ResourcePoolRuntimeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "runtime").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: crate::types::structs::ResourcePoolRuntimeInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Basic information about a resource pool.
@@ -1111,9 +1111,9 @@ impl ResourcePool {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::ResourcePoolSummaryTrait>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "summary").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
-        let result: Box<dyn crate::types::traits::ResourcePoolSummaryTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "summary").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::ResourcePoolSummaryTrait> = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The set of tags associated with this managed entity.
@@ -1122,9 +1122,9 @@ impl ResourcePool {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "tag").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "tag").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1143,9 +1143,9 @@ impl ResourcePool {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "triggeredAlarmState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "triggeredAlarmState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1157,9 +1157,9 @@ impl ResourcePool {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1171,9 +1171,9 @@ impl ResourcePool {
     ///
     /// Refers instances of *VirtualMachine*.
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "vm").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ResourcePool", &self.mo_id, "vm").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

@@ -230,9 +230,9 @@ impl HostCertificateManager {
     /// 
     /// ***Required privileges:*** Certificate.Manage
     pub async fn certificate_info(&self) -> Result<crate::types::structs::HostCertificateManagerCertificateInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostCertificateManager", &self.mo_id, "certificateInfo").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property certificateInfo was empty".to_string()))?;
-        let result: crate::types::structs::HostCertificateManagerCertificateInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostCertificateManager", &self.mo_id, "certificateInfo").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property certificateInfo was empty".to_string()))?;
+        let result: crate::types::structs::HostCertificateManagerCertificateInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

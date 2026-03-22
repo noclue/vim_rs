@@ -38,9 +38,9 @@ impl HostEsxAgentHostManager {
     /// 
     /// ***Required privileges:*** Host.Config.Settings
     pub async fn config_info(&self) -> Result<crate::types::structs::HostEsxAgentHostManagerConfigInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostEsxAgentHostManager", &self.mo_id, "configInfo").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configInfo was empty".to_string()))?;
-        let result: crate::types::structs::HostEsxAgentHostManagerConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostEsxAgentHostManager", &self.mo_id, "configInfo").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configInfo was empty".to_string()))?;
+        let result: crate::types::structs::HostEsxAgentHostManagerConfigInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

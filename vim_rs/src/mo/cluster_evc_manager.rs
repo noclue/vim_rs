@@ -155,17 +155,17 @@ impl ClusterEvcManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterEVCManager", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ClusterEVCManager", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// EVC-related state of the managed cluster.
     pub async fn evc_state(&self) -> Result<crate::types::structs::ClusterEvcManagerEvcState> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterEVCManager", &self.mo_id, "evcState").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property evcState was empty".to_string()))?;
-        let result: crate::types::structs::ClusterEvcManagerEvcState = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ClusterEVCManager", &self.mo_id, "evcState").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property evcState was empty".to_string()))?;
+        let result: crate::types::structs::ClusterEvcManagerEvcState = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Cluster associated with this manager object.
@@ -174,9 +174,9 @@ impl ClusterEvcManager {
     ///
     /// Refers instance of *ClusterComputeResource*.
     pub async fn managed_cluster(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterEVCManager", &self.mo_id, "managedCluster").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property managedCluster was empty".to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ClusterEVCManager", &self.mo_id, "managedCluster").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property managedCluster was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// List of custom field values.
@@ -187,9 +187,9 @@ impl ClusterEvcManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterEVCManager", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ClusterEVCManager", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

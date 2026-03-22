@@ -92,9 +92,9 @@ impl EventHistoryCollector {
     /// The type of the returned filter is determined by the managed object
     /// for which the collector is created.
     pub async fn filter(&self) -> Result<crate::types::vim_any::VimAny> {
-        let bytes_opt = self.client.fetch_property_raw("", "EventHistoryCollector", &self.mo_id, "filter").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property filter was empty".to_string()))?;
-        let result: crate::types::vim_any::VimAny = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "EventHistoryCollector", &self.mo_id, "filter").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property filter was empty".to_string()))?;
+        let result: crate::types::vim_any::VimAny = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Indicates whether the *EventHistoryCollector.latestPage* is initialized.
@@ -104,9 +104,9 @@ impl EventHistoryCollector {
     /// 
     /// ***Since:*** vSphere API Release 8.0.3.0
     pub async fn initialized(&self) -> Result<Option<bool>> {
-        let bytes_opt = self.client.fetch_property_raw("", "EventHistoryCollector", &self.mo_id, "initialized").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "EventHistoryCollector", &self.mo_id, "initialized").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -123,9 +123,9 @@ impl EventHistoryCollector {
     /// While `initialized` is `false` this property will remain empty and once the Collector is initialized it will be populated.
     /// While `initialized` is `true` this property is populated immediately.
     pub async fn latest_page(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "EventHistoryCollector", &self.mo_id, "latestPage").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "EventHistoryCollector", &self.mo_id, "latestPage").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

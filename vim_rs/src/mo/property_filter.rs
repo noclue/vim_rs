@@ -34,16 +34,16 @@ impl PropertyFilter {
     /// true, a change reports only the nested property. If the value is
     /// false, a change reports the enclosing property named in the filter.
     pub async fn partial_updates(&self) -> Result<bool> {
-        let bytes_opt = self.client.fetch_property_raw("", "PropertyFilter", &self.mo_id, "partialUpdates").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property partialUpdates was empty".to_string()))?;
-        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "PropertyFilter", &self.mo_id, "partialUpdates").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property partialUpdates was empty".to_string()))?;
+        let result: bool = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Specifications for this filter.
     pub async fn spec(&self) -> Result<crate::types::structs::PropertyFilterSpec> {
-        let bytes_opt = self.client.fetch_property_raw("", "PropertyFilter", &self.mo_id, "spec").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property spec was empty".to_string()))?;
-        let result: crate::types::structs::PropertyFilterSpec = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "PropertyFilter", &self.mo_id, "spec").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property spec was empty".to_string()))?;
+        let result: crate::types::structs::PropertyFilterSpec = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

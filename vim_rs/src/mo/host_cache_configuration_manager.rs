@@ -48,9 +48,9 @@ impl HostCacheConfigurationManager {
     /// 
     /// ***Required privileges:*** Host.Config.AdvancedConfig
     pub async fn cache_configuration_info(&self) -> Result<Option<Vec<crate::types::structs::HostCacheConfigurationInfo>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostCacheConfigurationManager", &self.mo_id, "cacheConfigurationInfo").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostCacheConfigurationManager", &self.mo_id, "cacheConfigurationInfo").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

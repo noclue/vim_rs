@@ -694,16 +694,16 @@ impl CryptoManagerKmip {
     }
     /// Indicate if the encryption feature is enabled.
     pub async fn enabled(&self) -> Result<bool> {
-        let bytes_opt = self.client.fetch_property_raw("", "CryptoManagerKmip", &self.mo_id, "enabled").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property enabled was empty".to_string()))?;
-        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "CryptoManagerKmip", &self.mo_id, "enabled").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property enabled was empty".to_string()))?;
+        let result: bool = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// A list of registered KMIP servers, grouped by clusters.
     pub async fn kmip_servers(&self) -> Result<Option<Vec<crate::types::structs::KmipClusterInfo>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "CryptoManagerKmip", &self.mo_id, "kmipServers").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "CryptoManagerKmip", &self.mo_id, "kmipServers").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

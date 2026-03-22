@@ -769,17 +769,17 @@ impl HostNetworkSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Capability vector indicating the available product features.
     pub async fn capabilities(&self) -> Result<Option<crate::types::structs::HostNetCapabilities>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "capabilities").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "capabilities").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -790,9 +790,9 @@ impl HostNetworkSystem {
     /// set only if
     /// IP routing can be configured for the service console.
     pub async fn console_ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "consoleIpRouteConfig").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "consoleIpRouteConfig").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -801,9 +801,9 @@ impl HostNetworkSystem {
     /// 
     /// Client-side DNS configuration.
     pub async fn dns_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostDnsConfigTrait>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "dnsConfig").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "dnsConfig").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -812,9 +812,9 @@ impl HostNetworkSystem {
     /// 
     /// The IP route configuration.
     pub async fn ip_route_config(&self) -> Result<Option<Box<dyn crate::types::traits::HostIpRouteConfigTrait>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "ipRouteConfig").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "ipRouteConfig").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -826,17 +826,17 @@ impl HostNetworkSystem {
     /// 
     /// See also *HostNetworkInfo*.
     pub async fn network_config(&self) -> Result<Option<crate::types::structs::HostNetworkConfig>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "networkConfig").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "networkConfig").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// The network configuration and runtime information.
     pub async fn network_info(&self) -> Result<Option<crate::types::structs::HostNetworkInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "networkInfo").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "networkInfo").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -844,9 +844,9 @@ impl HostNetworkSystem {
     /// 
     /// The offload capabilities available on this server.
     pub async fn offload_capabilities(&self) -> Result<Option<crate::types::structs::HostNetOffloadCapabilities>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "offloadCapabilities").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "offloadCapabilities").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -858,9 +858,9 @@ impl HostNetworkSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostNetworkSystem", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

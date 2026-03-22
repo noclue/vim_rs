@@ -384,9 +384,9 @@ impl Agency {
     ///
     /// Refers instances of *Agent*.
     pub async fn agent(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "agent").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "agent").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -401,9 +401,9 @@ impl Agency {
     ///
     /// The configuration of this <code>Agency</code>.
     pub async fn config(&self) -> Result<crate::types::structs::AgencyConfigInfo> {
-        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "config").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
-        let result: crate::types::structs::AgencyConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "config").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::AgencyConfigInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The principal name of the user that owns this <code>Agency</code>.
@@ -417,9 +417,9 @@ impl Agency {
     ///
     /// the owner's principal name
     pub async fn owner(&self) -> Result<Option<String>> {
-        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "owner").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "owner").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -431,9 +431,9 @@ impl Agency {
     ///
     /// The runtime information.
     pub async fn runtime(&self) -> Result<Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait>> {
-        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "runtime").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
-        let result: Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "runtime").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::EamObjectRuntimeInfoTrait> = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The ID of the solution that owns this <code>Agency</code>.
@@ -449,9 +449,9 @@ impl Agency {
     ///
     /// The solution ID.
     pub async fn solution_id(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "solutionId").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property solutionId was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("eam", "Agency", &self.mo_id, "solutionId").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property solutionId was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

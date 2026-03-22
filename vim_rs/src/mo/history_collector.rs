@@ -90,9 +90,9 @@ impl HistoryCollector {
     /// The type of the returned filter is determined by the managed object
     /// for which the collector is created.
     pub async fn filter(&self) -> Result<crate::types::vim_any::VimAny> {
-        let bytes_opt = self.client.fetch_property_raw("", "HistoryCollector", &self.mo_id, "filter").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property filter was empty".to_string()))?;
-        let result: crate::types::vim_any::VimAny = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HistoryCollector", &self.mo_id, "filter").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property filter was empty".to_string()))?;
+        let result: crate::types::vim_any::VimAny = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

@@ -603,9 +603,9 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn current_session(&self) -> Result<Option<crate::types::structs::UserSession>> {
-        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "currentSession").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "currentSession").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -613,18 +613,18 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn default_locale(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "defaultLocale").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property defaultLocale was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "defaultLocale").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property defaultLocale was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The system global message from the server.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn message(&self) -> Result<Option<String>> {
-        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "message").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "message").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -632,9 +632,9 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn message_locale_list(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "messageLocaleList").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "messageLocaleList").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -642,9 +642,9 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** Sessions.TerminateSession
     pub async fn session_list(&self) -> Result<Option<Vec<crate::types::structs::UserSession>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "sessionList").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "sessionList").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -657,9 +657,9 @@ impl SessionManager {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn supported_locale_list(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "supportedLocaleList").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "SessionManager", &self.mo_id, "supportedLocaleList").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

@@ -136,9 +136,9 @@ impl HostVFlashManager {
     }
     /// Host vFlash configuration information.
     pub async fn v_flash_config_info(&self) -> Result<Option<crate::types::structs::HostVFlashManagerVFlashConfigInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostVFlashManager", &self.mo_id, "vFlashConfigInfo").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostVFlashManager", &self.mo_id, "vFlashConfigInfo").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

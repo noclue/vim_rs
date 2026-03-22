@@ -243,9 +243,9 @@ impl DistributedVirtualPortgroup {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "alarmActionsEnabled").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "alarmActionsEnabled").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -255,17 +255,17 @@ impl DistributedVirtualPortgroup {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Configuration of the portgroup.
     pub async fn config(&self) -> Result<crate::types::structs::DvPortgroupConfigInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "config").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
-        let result: crate::types::structs::DvPortgroupConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "config").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::DvPortgroupConfigInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Current configuration issues that have been detected for this entity.
@@ -276,9 +276,9 @@ impl DistributedVirtualPortgroup {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "configIssue").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "configIssue").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -307,18 +307,18 @@ impl DistributedVirtualPortgroup {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "configStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "configStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "customValue").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "customValue").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -333,9 +333,9 @@ impl DistributedVirtualPortgroup {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "declaredAlarmState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "declaredAlarmState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -409,9 +409,9 @@ impl DistributedVirtualPortgroup {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "disabledMethod").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "disabledMethod").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -419,9 +419,9 @@ impl DistributedVirtualPortgroup {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "effectiveRole").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "effectiveRole").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -431,17 +431,17 @@ impl DistributedVirtualPortgroup {
     ///
     /// Refers instances of *HostSystem*.
     pub async fn host(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "host").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "host").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Generated UUID of the portgroup.
     pub async fn key(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "key").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property key was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "key").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property key was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Name of this entity, unique relative to its parent.
@@ -454,9 +454,9 @@ impl DistributedVirtualPortgroup {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "name").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "name").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// General health of this managed entity.
@@ -480,9 +480,9 @@ impl DistributedVirtualPortgroup {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "overallStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "overallStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -497,25 +497,25 @@ impl DistributedVirtualPortgroup {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "parent").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "parent").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "permission").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "permission").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Port keys for the set of ports in the portgroup.
     pub async fn port_keys(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "portKeys").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "portKeys").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -545,17 +545,17 @@ impl DistributedVirtualPortgroup {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "recentTask").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "recentTask").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Properties of a network.
     pub async fn summary(&self) -> Result<Box<dyn crate::types::traits::NetworkSummaryTrait>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "summary").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
-        let result: Box<dyn crate::types::traits::NetworkSummaryTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "summary").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::NetworkSummaryTrait> = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The set of tags associated with this managed entity.
@@ -564,9 +564,9 @@ impl DistributedVirtualPortgroup {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "tag").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "tag").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -585,9 +585,9 @@ impl DistributedVirtualPortgroup {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "triggeredAlarmState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "triggeredAlarmState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -599,9 +599,9 @@ impl DistributedVirtualPortgroup {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -611,9 +611,9 @@ impl DistributedVirtualPortgroup {
     ///
     /// Refers instances of *VirtualMachine*.
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "vm").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualPortgroup", &self.mo_id, "vm").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

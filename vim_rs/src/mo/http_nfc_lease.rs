@@ -203,17 +203,17 @@ impl HttpNfcLease {
     /// Current supported capabilities by this lease
     /// See *HttpNfcLeaseCapabilities*
     pub async fn capabilities(&self) -> Result<crate::types::structs::HttpNfcLeaseCapabilities> {
-        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "capabilities").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capabilities was empty".to_string()))?;
-        let result: crate::types::structs::HttpNfcLeaseCapabilities = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "capabilities").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capabilities was empty".to_string()))?;
+        let result: crate::types::structs::HttpNfcLeaseCapabilities = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// If the lease is in the error state, this property contains the
     /// error that caused the lease to be aborted.
     pub async fn error(&self) -> Result<Option<crate::types::structs::MethodFault>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "error").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "error").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -222,9 +222,9 @@ impl HttpNfcLease {
     /// The
     /// info property is only valid when the lease is in the ready state.
     pub async fn info(&self) -> Result<Option<crate::types::structs::HttpNfcLeaseInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "info").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "info").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -233,25 +233,25 @@ impl HttpNfcLease {
     /// 
     /// Clients can use this to track overall progress.
     pub async fn initialize_progress(&self) -> Result<i32> {
-        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "initializeProgress").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property initializeProgress was empty".to_string()))?;
-        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "initializeProgress").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property initializeProgress was empty".to_string()))?;
+        let result: i32 = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Current mode of the lease.
     /// 
     /// See *HttpNfcLeaseMode_enum* for possible values.
     pub async fn mode(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "mode").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property mode was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "mode").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property mode was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The current state of the lease.
     pub async fn state(&self) -> Result<crate::types::enums::HttpNfcLeaseStateEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "state").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property state was empty".to_string()))?;
-        let result: crate::types::enums::HttpNfcLeaseStateEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "state").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property state was empty".to_string()))?;
+        let result: crate::types::enums::HttpNfcLeaseStateEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Provides progress information (0-100 percent) for current transfer.
@@ -259,9 +259,9 @@ impl HttpNfcLease {
     /// Transfer covers download, upload and pull scenario.
     /// Can be externally updated by progress method.
     pub async fn transfer_progress(&self) -> Result<i32> {
-        let bytes_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "transferProgress").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property transferProgress was empty".to_string()))?;
-        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HttpNfcLease", &self.mo_id, "transferProgress").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property transferProgress was empty".to_string()))?;
+        let result: i32 = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

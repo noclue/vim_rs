@@ -83,9 +83,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -93,9 +93,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn graphics_config(&self) -> Result<Option<crate::types::structs::HostGraphicsConfig>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "graphicsConfig").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "graphicsConfig").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -103,9 +103,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn graphics_info(&self) -> Result<Option<Vec<crate::types::structs::HostGraphicsInfo>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "graphicsInfo").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "graphicsInfo").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -115,9 +115,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn shared_gpu_capabilities(&self) -> Result<Option<Vec<crate::types::structs::HostSharedGpuCapabilities>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "sharedGpuCapabilities").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "sharedGpuCapabilities").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -129,9 +129,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn shared_passthru_gpu_types(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "sharedPassthruGpuTypes").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "sharedPassthruGpuTypes").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -143,9 +143,9 @@ impl HostGraphicsManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostGraphicsManager", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

@@ -243,9 +243,9 @@ impl HostAccessManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn lockdown_mode(&self) -> Result<crate::types::enums::HostLockdownModeEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostAccessManager", &self.mo_id, "lockdownMode").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property lockdownMode was empty".to_string()))?;
-        let result: crate::types::enums::HostLockdownModeEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostAccessManager", &self.mo_id, "lockdownMode").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property lockdownMode was empty".to_string()))?;
+        let result: crate::types::enums::HostLockdownModeEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

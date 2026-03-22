@@ -92,9 +92,9 @@ impl TaskHistoryCollector {
     /// The type of the returned filter is determined by the managed object
     /// for which the collector is created.
     pub async fn filter(&self) -> Result<crate::types::vim_any::VimAny> {
-        let bytes_opt = self.client.fetch_property_raw("", "TaskHistoryCollector", &self.mo_id, "filter").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property filter was empty".to_string()))?;
-        let result: crate::types::vim_any::VimAny = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "TaskHistoryCollector", &self.mo_id, "filter").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property filter was empty".to_string()))?;
+        let result: crate::types::vim_any::VimAny = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The items in the 'viewable latest page'.
@@ -108,9 +108,9 @@ impl TaskHistoryCollector {
     /// The "oldest task" is the one with the oldest creation time. The
     /// tasks in the returned page are unordered.
     pub async fn latest_page(&self) -> Result<Option<Vec<crate::types::structs::TaskInfo>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "TaskHistoryCollector", &self.mo_id, "latestPage").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "TaskHistoryCollector", &self.mo_id, "latestPage").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

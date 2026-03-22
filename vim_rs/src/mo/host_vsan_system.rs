@@ -382,9 +382,9 @@ impl HostVsanSystem {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::VsanHostConfigInfoTrait>> {
-        let bytes_opt = self.client.fetch_property_raw("vsan", "HostVsanSystem", &self.mo_id, "config").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
-        let result: Box<dyn crate::types::traits::VsanHostConfigInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("vsan", "HostVsanSystem", &self.mo_id, "config").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::VsanHostConfigInfoTrait> = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

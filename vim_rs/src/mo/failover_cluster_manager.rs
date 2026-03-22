@@ -145,9 +145,9 @@ impl FailoverClusterManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn disabled_cluster_method(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "FailoverClusterManager", &self.mo_id, "disabledClusterMethod").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "FailoverClusterManager", &self.mo_id, "disabledClusterMethod").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

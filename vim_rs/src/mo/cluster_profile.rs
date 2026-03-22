@@ -138,34 +138,34 @@ impl ClusterProfile {
     /// of the profile is <code>unknown</code>.
     /// See *ComplianceResultStatus_enum*.
     pub async fn compliance_status(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "complianceStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property complianceStatus was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "complianceStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property complianceStatus was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Configuration data for the profile.
     /// 
     /// ***Required privileges:*** Profile.Edit
     pub async fn config(&self) -> Result<Box<dyn crate::types::traits::ProfileConfigInfoTrait>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "config").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
-        let result: Box<dyn crate::types::traits::ProfileConfigInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "config").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::ProfileConfigInfoTrait> = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Time at which the profile was created.
     pub async fn created_time(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "createdTime").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property createdTime was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "createdTime").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property createdTime was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 5.0. use *Profile.RetrieveDescription* instead.
     /// 
     /// Localizable description of the profile
     pub async fn description(&self) -> Result<Option<crate::types::structs::ProfileDescription>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "description").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "description").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -175,24 +175,24 @@ impl ClusterProfile {
     ///
     /// Refers instances of *ManagedEntity*.
     pub async fn entity(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "entity").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "entity").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Time at which the profile was last modified.
     pub async fn modified_time(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "modifiedTime").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property modifiedTime was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "modifiedTime").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property modifiedTime was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Name of the profile.
     pub async fn name(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "name").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ClusterProfile", &self.mo_id, "name").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

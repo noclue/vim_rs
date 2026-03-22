@@ -79,9 +79,9 @@ impl HostAssignableHardwareManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn binding(&self) -> Result<Option<Vec<crate::types::structs::HostAssignableHardwareBinding>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostAssignableHardwareManager", &self.mo_id, "binding").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostAssignableHardwareManager", &self.mo_id, "binding").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -89,9 +89,9 @@ impl HostAssignableHardwareManager {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn config(&self) -> Result<crate::types::structs::HostAssignableHardwareConfig> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostAssignableHardwareManager", &self.mo_id, "config").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
-        let result: crate::types::structs::HostAssignableHardwareConfig = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostAssignableHardwareManager", &self.mo_id, "config").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::HostAssignableHardwareConfig = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

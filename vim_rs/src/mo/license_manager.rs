@@ -430,17 +430,17 @@ impl LicenseManager {
     /// 
     /// Return current diagnostic information.
     pub async fn diagnostics(&self) -> Result<Option<crate::types::structs::LicenseDiagnostics>> {
-        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "diagnostics").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "diagnostics").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// ***Required privileges:*** System.Read
     pub async fn evaluation(&self) -> Result<crate::types::structs::LicenseManagerEvaluationInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "evaluation").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property evaluation was empty".to_string()))?;
-        let result: crate::types::structs::LicenseManagerEvaluationInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "evaluation").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property evaluation was empty".to_string()))?;
+        let result: crate::types::structs::LicenseManagerEvaluationInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Deprecated as of VI API 2.5, use *LicenseManager.QuerySupportedFeatures*
@@ -448,9 +448,9 @@ impl LicenseManager {
     /// 
     /// The list of features that can be licensed.
     pub async fn feature_info(&self) -> Result<Option<Vec<crate::types::structs::LicenseFeatureInfo>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "featureInfo").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "featureInfo").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -462,9 +462,9 @@ impl LicenseManager {
     ///
     /// Refers instance of *LicenseAssignmentManager*.
     pub async fn license_assignment_manager(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "licenseAssignmentManager").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "licenseAssignmentManager").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -479,16 +479,16 @@ impl LicenseManager {
     /// no edition is set the property is set to the empty string ("").
     /// To set the edition use *LicenseManager.SetLicenseEdition*.
     pub async fn licensed_edition(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "licensedEdition").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property licensedEdition was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "licensedEdition").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property licensedEdition was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Get information about all the licenses available.
     pub async fn licenses(&self) -> Result<Vec<crate::types::structs::LicenseManagerLicenseInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "licenses").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property licenses was empty".to_string()))?;
-        let result: Vec<crate::types::structs::LicenseManagerLicenseInfo> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "licenses").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property licenses was empty".to_string()))?;
+        let result: Vec<crate::types::structs::LicenseManagerLicenseInfo> = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use
@@ -496,9 +496,9 @@ impl LicenseManager {
     /// 
     /// Set or return a data object type of LocalLicense or LicenseServer.
     pub async fn source(&self) -> Result<Box<dyn crate::types::traits::LicenseSourceTrait>> {
-        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "source").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property source was empty".to_string()))?;
-        let result: Box<dyn crate::types::traits::LicenseSourceTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "source").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property source was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::LicenseSourceTrait> = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, this property is not used.
@@ -508,9 +508,9 @@ impl LicenseManager {
     /// License sources that are LocalSource
     /// are always available.
     pub async fn source_available(&self) -> Result<bool> {
-        let bytes_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "sourceAvailable").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property sourceAvailable was empty".to_string()))?;
-        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "LicenseManager", &self.mo_id, "sourceAvailable").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property sourceAvailable was empty".to_string()))?;
+        let result: bool = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

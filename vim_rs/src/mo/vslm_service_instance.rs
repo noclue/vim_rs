@@ -38,9 +38,9 @@ impl VslmServiceInstance {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn content(&self) -> Result<crate::types::structs::VslmServiceInstanceContent> {
-        let bytes_opt = self.client.fetch_property_raw("vslm", "VslmServiceInstance", &self.mo_id, "content").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property content was empty".to_string()))?;
-        let result: crate::types::structs::VslmServiceInstanceContent = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("vslm", "VslmServiceInstance", &self.mo_id, "content").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property content was empty".to_string()))?;
+        let result: crate::types::structs::VslmServiceInstanceContent = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

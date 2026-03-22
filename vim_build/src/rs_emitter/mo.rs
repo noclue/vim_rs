@@ -164,33 +164,28 @@ impl<'a> ManagedObjectEmitter<'a> {
 
         match method.http_method {
             HttpMethod::Get => {
-                // Property access via fetch_property_raw
+                // Property access via fetch_property_raw + extract_property (JSON bytes or SOAP VimAny)
                 match &method.output {
                     Some(_) => {
-                        let output_dt = method.output.as_ref().unwrap();
-                        let res_type = self.tdf.to_rust_field_type(output_dt)?;
+                        let res_type = self.tdf.to_rust_field_type(method.output.as_ref().unwrap())?;
                         self.printer.println(&format!(
-                            "let bytes_opt = self.client.fetch_property_raw(\"{service_name}\", \"{mo_type_name}\", &self.mo_id, \"{method_or_prop}\").await?;"
+                            "let pv_opt = self.client.fetch_property_raw(\"{service_name}\", \"{mo_type_name}\", &self.mo_id, \"{method_or_prop}\").await?;"
                         ))?;
                         if method.optional_response {
-                            self.printer.println("match bytes_opt {")?;
+                            self.printer.println("match pv_opt {")?;
                             self.printer.indent();
-                            let decode_b =
-                                mo_soap_response_unmarshal_expr(output_dt, "b");
-                            self.printer.println(&format!(
-                                "Some(ref b) => Ok(Some({decode_b}?)),"
-                            ))?;
+                            self.printer.println(
+                                "Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),",
+                            )?;
                             self.printer.println("None => Ok(None),")?;
                             self.printer.dedent();
                             self.printer.println("}")?;
                         } else {
                             self.printer.println(&format!(
-                                "let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError(\"property {method_or_prop} was empty\".to_string()))?;"
+                                "let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError(\"property {method_or_prop} was empty\".to_string()))?;"
                             ))?;
-                            let decode_bytes =
-                                mo_soap_response_unmarshal_expr(output_dt, "&bytes");
                             self.printer.println(&format!(
-                                "let result: {res_type} = {decode_bytes}?;"
+                                "let result: {res_type} = crate::core::client::extract_property(pv)?;"
                             ))?;
                             self.printer.println("Ok(result)")?;
                         }
@@ -479,11 +474,9 @@ impl<'a> ManagedObjectEmitter<'a> {
     }
 }
 
-/// SOAP bodies that deserialize to `Vec<Event>` or `Vec<TaskInfo>` often use repeated sibling
-/// `<returnval>` elements (not a single wrapper). That applies to some **POST** method results
-/// (*ReadNextEvents*, *ReadNextTasks*, …) and to **GET** property values whose type is an array of
-/// those structs (e.g. `configIssue`). Emit `unmarshal_array` in those cases;
-/// other array-of-struct properties keep `unmarshal` (single `<returnval>` subtree).
+/// SOAP **POST** bodies that deserialize to `Vec<Event>` or `Vec<TaskInfo>` often use repeated
+/// sibling `<returnval>` elements (not a single wrapper). Emit `unmarshal_array` for array return
+/// types; scalars use `unmarshal`. **GET** properties use `extract_property` instead (not this helper).
 fn mo_soap_response_unmarshal_expr(output: &DataType, bytes_arg: &str) -> String {
     match output {
         DataType::Array(_) => {

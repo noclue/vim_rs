@@ -727,9 +727,9 @@ impl HostDatastoreSystem {
     }
     /// Capability vector indicating the available product features.
     pub async fn capabilities(&self) -> Result<crate::types::structs::HostDatastoreSystemCapabilities> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostDatastoreSystem", &self.mo_id, "capabilities").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capabilities was empty".to_string()))?;
-        let result: crate::types::structs::HostDatastoreSystemCapabilities = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostDatastoreSystem", &self.mo_id, "capabilities").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capabilities was empty".to_string()))?;
+        let result: crate::types::structs::HostDatastoreSystemCapabilities = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// List of datastores on this host.
@@ -740,9 +740,9 @@ impl HostDatastoreSystem {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostDatastoreSystem", &self.mo_id, "datastore").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostDatastoreSystem", &self.mo_id, "datastore").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

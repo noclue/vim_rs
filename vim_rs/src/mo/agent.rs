@@ -162,9 +162,9 @@ impl Agent {
     }
     /// The configuration of this <code>Agent</code>.
     pub async fn config(&self) -> Result<crate::types::structs::AgentConfigInfo> {
-        let bytes_opt = self.client.fetch_property_raw("eam", "Agent", &self.mo_id, "config").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
-        let result: crate::types::structs::AgentConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("eam", "Agent", &self.mo_id, "config").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::AgentConfigInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Runtime information for this agent.
@@ -179,9 +179,9 @@ impl Agent {
     ///
     /// This <code>Agent</code>'s runtime information.
     pub async fn runtime(&self) -> Result<crate::types::structs::AgentRuntimeInfo> {
-        let bytes_opt = self.client.fetch_property_raw("eam", "Agent", &self.mo_id, "runtime").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
-        let result: crate::types::structs::AgentRuntimeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("eam", "Agent", &self.mo_id, "runtime").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: crate::types::structs::AgentRuntimeInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

@@ -221,9 +221,9 @@ impl HostNvdimmSystem {
     ///
     /// Return set of all NVDIMM related information.
     pub async fn nvdimm_system_info(&self) -> Result<crate::types::structs::NvdimmSystemInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostNvdimmSystem", &self.mo_id, "nvdimmSystemInfo").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property nvdimmSystemInfo was empty".to_string()))?;
-        let result: crate::types::structs::NvdimmSystemInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostNvdimmSystem", &self.mo_id, "nvdimmSystemInfo").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property nvdimmSystemInfo was empty".to_string()))?;
+        let result: crate::types::structs::NvdimmSystemInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

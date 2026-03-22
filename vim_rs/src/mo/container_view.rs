@@ -44,9 +44,9 @@ impl ContainerView {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn container(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let bytes_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "container").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property container was empty".to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "container").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property container was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Whether to include only the immediate children of the container instance,
@@ -56,9 +56,9 @@ impl ContainerView {
     /// For information about recursive behavior, see the description of
     /// *ViewManager.CreateContainerView*.
     pub async fn recursive(&self) -> Result<bool> {
-        let bytes_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "recursive").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property recursive was empty".to_string()))?;
-        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "recursive").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property recursive was empty".to_string()))?;
+        let result: bool = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// An optional list of types to be applied to the set of objects in the view.
@@ -66,17 +66,17 @@ impl ContainerView {
     /// The list of types indicates objects that are included in the view.
     /// If empty, all types are included.
     pub async fn r#type(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "type").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "type").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// The list of references to objects mapped by this view.
     pub async fn view(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "view").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "ContainerView", &self.mo_id, "view").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

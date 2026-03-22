@@ -2952,9 +2952,9 @@ impl VirtualMachine {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "alarmActionsEnabled").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "alarmActionsEnabled").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -2964,17 +2964,17 @@ impl VirtualMachine {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Information about the runtime capabilities of this virtual machine.
     pub async fn capability(&self) -> Result<crate::types::structs::VirtualMachineCapability> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "capability").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capability was empty".to_string()))?;
-        let result: crate::types::structs::VirtualMachineCapability = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "capability").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capability was empty".to_string()))?;
+        let result: crate::types::structs::VirtualMachineCapability = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Configuration of this virtual machine, including the name and UUID.
@@ -2988,9 +2988,9 @@ impl VirtualMachine {
     /// and is often also unavailable during the initial phases of
     /// virtual machine creation.
     pub async fn config(&self) -> Result<Option<crate::types::structs::VirtualMachineConfigInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "config").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "config").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3002,9 +3002,9 @@ impl VirtualMachine {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "configIssue").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "configIssue").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3033,18 +3033,18 @@ impl VirtualMachine {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "configStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "configStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "customValue").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "customValue").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3057,9 +3057,9 @@ impl VirtualMachine {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "datastore").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "datastore").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3074,9 +3074,9 @@ impl VirtualMachine {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "declaredAlarmState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "declaredAlarmState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3150,9 +3150,9 @@ impl VirtualMachine {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "disabledMethod").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "disabledMethod").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3160,9 +3160,9 @@ impl VirtualMachine {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "effectiveRole").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "effectiveRole").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3177,9 +3177,9 @@ impl VirtualMachine {
     ///
     /// Refers instance of *EnvironmentBrowser*.
     pub async fn environment_browser(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "environmentBrowser").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property environmentBrowser was empty".to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "environmentBrowser").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property environmentBrowser was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Information about VMware Tools and about the virtual machine
@@ -3190,9 +3190,9 @@ impl VirtualMachine {
     /// For powered on machines, this is current information. For powered off machines,
     /// this is the last recorded state before the virtual machine was powered off.
     pub async fn guest(&self) -> Result<Option<crate::types::structs::GuestInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "guest").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "guest").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3207,9 +3207,9 @@ impl VirtualMachine {
     /// The guest heartbeat is a statistics metric. Alarms can be configured on
     /// this metric to trigger emails or other actions.
     pub async fn guest_heartbeat_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "guestHeartbeatStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property guestHeartbeatStatus was empty".to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "guestHeartbeatStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property guestHeartbeatStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Deprecated as of vSphere API 4.0, use *VirtualMachine.layoutEx* instead.
@@ -3223,9 +3223,9 @@ impl VirtualMachine {
     /// 
     /// Detailed information about the files that comprise this virtual machine.
     pub async fn layout(&self) -> Result<Option<crate::types::structs::VirtualMachineFileLayout>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "layout").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "layout").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3240,9 +3240,9 @@ impl VirtualMachine {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn layout_ex(&self) -> Result<Option<crate::types::structs::VirtualMachineFileLayoutEx>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "layoutEx").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "layoutEx").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3256,9 +3256,9 @@ impl VirtualMachine {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "name").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "name").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// A collection of references to the subset of network objects in the datacenter that
@@ -3270,9 +3270,9 @@ impl VirtualMachine {
     ///
     /// Refers instances of *Network*.
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "network").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "network").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3297,9 +3297,9 @@ impl VirtualMachine {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "overallStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "overallStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -3314,9 +3314,9 @@ impl VirtualMachine {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "parent").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "parent").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3326,17 +3326,17 @@ impl VirtualMachine {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent_v_app(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "parentVApp").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "parentVApp").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "permission").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "permission").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3366,9 +3366,9 @@ impl VirtualMachine {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "recentTask").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "recentTask").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3386,9 +3386,9 @@ impl VirtualMachine {
     /// To change the configuration, use
     /// *ResourcePool.UpdateChildResourceConfiguration*.
     pub async fn resource_config(&self) -> Result<Option<crate::types::structs::ResourceConfigSpec>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "resourceConfig").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "resourceConfig").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3405,9 +3405,9 @@ impl VirtualMachine {
     ///
     /// Refers instance of *ResourcePool*.
     pub async fn resource_pool(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "resourcePool").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "resourcePool").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3417,9 +3417,9 @@ impl VirtualMachine {
     ///
     /// Refers instances of *VirtualMachineSnapshot*.
     pub async fn root_snapshot(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "rootSnapshot").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "rootSnapshot").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3430,9 +3430,9 @@ impl VirtualMachine {
     /// - an execution message is pending.
     /// - an event occurs.
     pub async fn runtime(&self) -> Result<crate::types::structs::VirtualMachineRuntimeInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "runtime").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
-        let result: crate::types::structs::VirtualMachineRuntimeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "runtime").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: crate::types::structs::VirtualMachineRuntimeInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Current snapshot and tree.
@@ -3447,9 +3447,9 @@ impl VirtualMachine {
     /// - *revert*
     /// - *removeAllSnapshots*
     pub async fn snapshot(&self) -> Result<Option<crate::types::structs::VirtualMachineSnapshotInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "snapshot").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "snapshot").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3464,9 +3464,9 @@ impl VirtualMachine {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn storage(&self) -> Result<Option<crate::types::structs::VirtualMachineStorageInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "storage").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "storage").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3479,9 +3479,9 @@ impl VirtualMachine {
     /// - alarms
     /// - performance information
     pub async fn summary(&self) -> Result<crate::types::structs::VirtualMachineSummary> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "summary").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
-        let result: crate::types::structs::VirtualMachineSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "summary").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
+        let result: crate::types::structs::VirtualMachineSummary = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The set of tags associated with this managed entity.
@@ -3490,9 +3490,9 @@ impl VirtualMachine {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "tag").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "tag").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3511,9 +3511,9 @@ impl VirtualMachine {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "triggeredAlarmState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "triggeredAlarmState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -3525,9 +3525,9 @@ impl VirtualMachine {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

@@ -230,9 +230,9 @@ impl FailoverClusterConfigurator {
     /// As with other disabled methods there will be no property updates
     /// on this property when called with non-zero property collector versions.
     pub async fn disabled_configure_method(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "FailoverClusterConfigurator", &self.mo_id, "disabledConfigureMethod").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "FailoverClusterConfigurator", &self.mo_id, "disabledConfigureMethod").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

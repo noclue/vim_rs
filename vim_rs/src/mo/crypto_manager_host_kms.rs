@@ -227,9 +227,9 @@ impl CryptoManagerHostKms {
     }
     /// Indicate if the encryption feature is enabled.
     pub async fn enabled(&self) -> Result<bool> {
-        let bytes_opt = self.client.fetch_property_raw("", "CryptoManagerHostKMS", &self.mo_id, "enabled").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property enabled was empty".to_string()))?;
-        let result: bool = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "CryptoManagerHostKMS", &self.mo_id, "enabled").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property enabled was empty".to_string()))?;
+        let result: bool = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

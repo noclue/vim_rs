@@ -892,25 +892,25 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn alarm_actions_enabled(&self) -> Result<Option<bool>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "alarmActionsEnabled").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "alarmActionsEnabled").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Host answer file validation result.
     pub async fn answer_file_validation_result(&self) -> Result<Option<crate::types::structs::AnswerFileStatusResult>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "answerFileValidationResult").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "answerFileValidationResult").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Host answer file validation state.
     pub async fn answer_file_validation_state(&self) -> Result<Option<crate::types::structs::AnswerFileStatusResult>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "answerFileValidationState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "answerFileValidationState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -920,9 +920,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -931,25 +931,25 @@ impl HostSystem {
     /// This might not be available for a
     /// disconnected host.
     pub async fn capability(&self) -> Result<Option<crate::types::structs::HostCapability>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "capability").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "capability").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// The host profile compliance check result.
     pub async fn compliance_check_result(&self) -> Result<Option<crate::types::structs::ComplianceResult>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "complianceCheckResult").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "complianceCheckResult").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// The host profile compliance check state.
     pub async fn compliance_check_state(&self) -> Result<Option<crate::types::structs::HostSystemComplianceCheckState>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "complianceCheckState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "complianceCheckState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -958,9 +958,9 @@ impl HostSystem {
     /// This might not be available for a disconnected
     /// host.
     pub async fn config(&self) -> Result<Option<crate::types::structs::HostConfigInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "config").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "config").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -972,9 +972,9 @@ impl HostSystem {
     /// *configStatus* property provides an overall status
     /// based on these events.
     pub async fn config_issue(&self) -> Result<Option<Vec<crate::types::structs::Event>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "configIssue").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "configIssue").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -988,9 +988,9 @@ impl HostSystem {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_manager(&self) -> Result<crate::types::structs::HostConfigManager> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "configManager").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configManager was empty".to_string()))?;
-        let result: crate::types::structs::HostConfigManager = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "configManager").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configManager was empty".to_string()))?;
+        let result: crate::types::structs::HostConfigManager = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The configStatus indicates whether or not the system has detected a configuration
@@ -1018,18 +1018,18 @@ impl HostSystem {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn config_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "configStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "configStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Custom field values.
     /// 
     /// ***Required privileges:*** System.View
     pub async fn custom_value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "customValue").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "customValue").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1042,9 +1042,9 @@ impl HostSystem {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "datastore").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "datastore").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1056,9 +1056,9 @@ impl HostSystem {
     ///
     /// Refers instance of *HostDatastoreBrowser*.
     pub async fn datastore_browser(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "datastoreBrowser").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property datastoreBrowser was empty".to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "datastoreBrowser").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property datastoreBrowser was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// A set of alarm states for alarms that apply to this managed entity.
@@ -1072,9 +1072,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn declared_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "declaredAlarmState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "declaredAlarmState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1148,9 +1148,9 @@ impl HostSystem {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn disabled_method(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "disabledMethod").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "disabledMethod").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1158,9 +1158,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn effective_role(&self) -> Result<Option<Vec<i32>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "effectiveRole").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "effectiveRole").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1169,9 +1169,9 @@ impl HostSystem {
     /// This might not be available for a
     /// disconnected host.
     pub async fn hardware(&self) -> Result<Option<crate::types::structs::HostHardwareInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "hardware").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "hardware").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1184,9 +1184,9 @@ impl HostSystem {
     /// NOTE:
     /// The values in this property may not be accurate for pre-5.0 hosts when returned by vCenter 5.0
     pub async fn licensable_resource(&self) -> Result<crate::types::structs::HostLicensableResourceInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "licensableResource").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property licensableResource was empty".to_string()))?;
-        let result: crate::types::structs::HostLicensableResourceInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "licensableResource").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property licensableResource was empty".to_string()))?;
+        let result: crate::types::structs::HostLicensableResourceInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Name of this entity, unique relative to its parent.
@@ -1199,9 +1199,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn name(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "name").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "name").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property name was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// A collection of references to the subset of network objects in the datacenter that
@@ -1213,9 +1213,9 @@ impl HostSystem {
     ///
     /// Refers instances of *Network*.
     pub async fn network(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "network").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "network").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1240,9 +1240,9 @@ impl HostSystem {
     /// an empty string for the version parameter. Any other version value will not
     /// produce any property values as no updates are generated.
     pub async fn overall_status(&self) -> Result<crate::types::enums::ManagedEntityStatusEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "overallStatus").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
-        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "overallStatus").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property overallStatus was empty".to_string()))?;
+        let result: crate::types::enums::ManagedEntityStatusEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Parent of this entity.
@@ -1257,25 +1257,25 @@ impl HostSystem {
     ///
     /// Refers instance of *ManagedEntity*.
     pub async fn parent(&self) -> Result<Option<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "parent").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "parent").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// List of permissions defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "permission").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "permission").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// The host profile precheck-remediation result.
     pub async fn precheck_remediation_result(&self) -> Result<Option<crate::types::structs::ApplyHostProfileConfigurationSpec>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "precheckRemediationResult").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "precheckRemediationResult").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1305,48 +1305,48 @@ impl HostSystem {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "recentTask").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "recentTask").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// The host profile remediation result.
     pub async fn remediation_result(&self) -> Result<Option<crate::types::structs::ApplyHostProfileConfigurationResult>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "remediationResult").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "remediationResult").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// The host profile remediation state.
     pub async fn remediation_state(&self) -> Result<Option<crate::types::structs::HostSystemRemediationState>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "remediationState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "remediationState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Runtime state information about the host such as connection state.
     pub async fn runtime(&self) -> Result<crate::types::structs::HostRuntimeInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "runtime").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
-        let result: crate::types::structs::HostRuntimeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "runtime").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: crate::types::structs::HostRuntimeInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Basic information about the host, including connection state.
     pub async fn summary(&self) -> Result<crate::types::structs::HostListSummary> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "summary").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
-        let result: crate::types::structs::HostListSummary = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "summary").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property summary was empty".to_string()))?;
+        let result: crate::types::structs::HostListSummary = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Reference for the system resource hierarchy, used for configuring the set of
     /// resources reserved to the system and unavailable to virtual machines.
     pub async fn system_resources(&self) -> Result<Option<crate::types::structs::HostSystemResourceInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "systemResources").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "systemResources").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1356,9 +1356,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn tag(&self) -> Result<Option<Vec<crate::types::structs::Tag>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "tag").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "tag").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1377,9 +1377,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn triggered_alarm_state(&self) -> Result<Option<Vec<crate::types::structs::AlarmState>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "triggeredAlarmState").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "triggeredAlarmState").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1391,9 +1391,9 @@ impl HostSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -1403,9 +1403,9 @@ impl HostSystem {
     ///
     /// Refers instances of *VirtualMachine*.
     pub async fn vm(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "vm").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "vm").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

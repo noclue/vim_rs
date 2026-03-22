@@ -37,16 +37,16 @@ impl SimpleCommand {
     }
     /// The encoding type used in the result.
     pub async fn encoding_type(&self) -> Result<crate::types::enums::SimpleCommandEncodingEnum> {
-        let bytes_opt = self.client.fetch_property_raw("", "SimpleCommand", &self.mo_id, "encodingType").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property encodingType was empty".to_string()))?;
-        let result: crate::types::enums::SimpleCommandEncodingEnum = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "SimpleCommand", &self.mo_id, "encodingType").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property encodingType was empty".to_string()))?;
+        let result: crate::types::enums::SimpleCommandEncodingEnum = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// A description of the service.
     pub async fn entity(&self) -> Result<crate::types::structs::ServiceManagerServiceInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "SimpleCommand", &self.mo_id, "entity").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property entity was empty".to_string()))?;
-        let result: crate::types::structs::ServiceManagerServiceInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "SimpleCommand", &self.mo_id, "entity").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property entity was empty".to_string()))?;
+        let result: crate::types::structs::ServiceManagerServiceInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

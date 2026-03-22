@@ -60,9 +60,9 @@ impl HostAuthenticationManager {
     }
     /// Information about Active Directory membership.
     pub async fn info(&self) -> Result<crate::types::structs::HostAuthenticationManagerInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostAuthenticationManager", &self.mo_id, "info").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
-        let result: crate::types::structs::HostAuthenticationManagerInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostAuthenticationManager", &self.mo_id, "info").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
+        let result: crate::types::structs::HostAuthenticationManagerInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// An array that can contain managed object references to local and
@@ -91,9 +91,9 @@ impl HostAuthenticationManager {
     ///
     /// Refers instances of *HostAuthenticationStore*.
     pub async fn supported_store(&self) -> Result<Vec<crate::types::structs::ManagedObjectReference>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostAuthenticationManager", &self.mo_id, "supportedStore").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property supportedStore was empty".to_string()))?;
-        let result: Vec<crate::types::structs::ManagedObjectReference> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostAuthenticationManager", &self.mo_id, "supportedStore").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property supportedStore was empty".to_string()))?;
+        let result: Vec<crate::types::structs::ManagedObjectReference> = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

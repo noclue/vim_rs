@@ -49,9 +49,9 @@ impl HostHealthStatusSystem {
         self.client.invoke_void("", "HostHealthStatusSystem", &self.mo_id, "ResetSystemHealthInfo", None).await
     }
     pub async fn runtime(&self) -> Result<crate::types::structs::HealthSystemRuntime> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostHealthStatusSystem", &self.mo_id, "runtime").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
-        let result: crate::types::structs::HealthSystemRuntime = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostHealthStatusSystem", &self.mo_id, "runtime").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property runtime was empty".to_string()))?;
+        let result: crate::types::structs::HealthSystemRuntime = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

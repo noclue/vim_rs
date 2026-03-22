@@ -194,9 +194,9 @@ impl VirtualMachineSnapshot {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -206,9 +206,9 @@ impl VirtualMachineSnapshot {
     ///
     /// Refers instances of *VirtualMachineSnapshot*.
     pub async fn child_snapshot(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "childSnapshot").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "childSnapshot").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -219,9 +219,9 @@ impl VirtualMachineSnapshot {
     /// chain that represents the disk at this given snapshot. The fileInfo.fileLayout
     /// field is not set.
     pub async fn config(&self) -> Result<crate::types::structs::VirtualMachineConfigInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "config").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
-        let result: crate::types::structs::VirtualMachineConfigInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "config").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::VirtualMachineConfigInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// List of custom field values.
@@ -232,9 +232,9 @@ impl VirtualMachineSnapshot {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -244,9 +244,9 @@ impl VirtualMachineSnapshot {
     ///
     /// Refers instance of *VirtualMachine*.
     pub async fn vm(&self) -> Result<crate::types::structs::ManagedObjectReference> {
-        let bytes_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "vm").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property vm was empty".to_string()))?;
-        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "VirtualMachineSnapshot", &self.mo_id, "vm").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property vm was empty".to_string()))?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

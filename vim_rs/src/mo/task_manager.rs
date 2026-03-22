@@ -174,9 +174,9 @@ impl TaskManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn description(&self) -> Result<crate::types::structs::TaskDescription> {
-        let bytes_opt = self.client.fetch_property_raw("", "TaskManager", &self.mo_id, "description").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
-        let result: crate::types::structs::TaskDescription = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "TaskManager", &self.mo_id, "description").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property description was empty".to_string()))?;
+        let result: crate::types::structs::TaskDescription = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Maximum number of *TaskHistoryCollector*
@@ -184,9 +184,9 @@ impl TaskManager {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn max_collector(&self) -> Result<i32> {
-        let bytes_opt = self.client.fetch_property_raw("", "TaskManager", &self.mo_id, "maxCollector").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property maxCollector was empty".to_string()))?;
-        let result: i32 = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "TaskManager", &self.mo_id, "maxCollector").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property maxCollector was empty".to_string()))?;
+        let result: i32 = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// A list of *Task* managed objects that completed recently,
@@ -219,9 +219,9 @@ impl TaskManager {
     ///
     /// Refers instances of *Task*.
     pub async fn recent_task(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "TaskManager", &self.mo_id, "recentTask").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "TaskManager", &self.mo_id, "recentTask").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

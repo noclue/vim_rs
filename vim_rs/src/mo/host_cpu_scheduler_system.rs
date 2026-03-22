@@ -64,9 +64,9 @@ impl HostCpuSchedulerSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -76,9 +76,9 @@ impl HostCpuSchedulerSystem {
     /// 
     /// ***Since:*** vSphere API Release 8.0.3.0
     pub async fn cpu_scheduler_info(&self) -> Result<Option<crate::types::structs::HostCpuSchedulerInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "cpuSchedulerInfo").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "cpuSchedulerInfo").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -88,9 +88,9 @@ impl HostCpuSchedulerSystem {
     /// existence of this data object type indicates if the CPU scheduler
     /// is capable of scheduling hyperthreads as resources.
     pub async fn hyperthread_info(&self) -> Result<Option<crate::types::structs::HostHyperThreadScheduleInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "hyperthreadInfo").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "hyperthreadInfo").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -102,9 +102,9 @@ impl HostCpuSchedulerSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostCpuSchedulerSystem", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

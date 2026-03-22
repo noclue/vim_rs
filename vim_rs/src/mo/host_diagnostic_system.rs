@@ -175,9 +175,9 @@ impl HostDiagnosticSystem {
     }
     /// The currently active diagnostic partition.
     pub async fn active_partition(&self) -> Result<Option<crate::types::structs::HostDiagnosticPartition>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostDiagnosticSystem", &self.mo_id, "activePartition").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostDiagnosticSystem", &self.mo_id, "activePartition").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

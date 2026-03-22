@@ -117,9 +117,9 @@ impl HostDateTimeSystem {
     ///
     /// DateTime configuration of the host.
     pub async fn date_time_info(&self) -> Result<crate::types::structs::HostDateTimeInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostDateTimeSystem", &self.mo_id, "dateTimeInfo").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property dateTimeInfo was empty".to_string()))?;
-        let result: crate::types::structs::HostDateTimeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostDateTimeSystem", &self.mo_id, "dateTimeInfo").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property dateTimeInfo was empty".to_string()))?;
+        let result: crate::types::structs::HostDateTimeInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

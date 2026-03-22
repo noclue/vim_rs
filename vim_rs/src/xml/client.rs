@@ -4,7 +4,8 @@ use bytes::Bytes;
 use log::{debug, trace, warn};
 use miniserde::ser::{Fragment, Map as SerMap, Serialize};
 
-use crate::core::client::{BoxFuture, Error, Result, Transport, VimClient};
+use crate::core::client::{BoxFuture, Error, PropertyValue, Result, Transport, VimClient};
+use crate::types::vim_any::VimAny;
 use crate::types::enums::MoTypesEnum;
 use crate::types::structs::{
     ManagedObjectReference, ObjectSpec, PropertyFilterSpec, PropertySpec, RetrieveOptions,
@@ -220,7 +221,7 @@ impl SoapClient {
         mo_type: &str,
         mo_id: &str,
         property: &str,
-    ) -> Result<Option<Bytes>> {
+    ) -> Result<Option<VimAny>> {
         let pc = self.pc_mor()?.clone();
         let obj = ManagedObjectReference {
             r#type: MoTypesEnum::from_str(mo_type),
@@ -260,8 +261,7 @@ impl SoapClient {
             _ => return Ok(None),
         };
         let val = prop_set.into_iter().next().unwrap().val;
-        let xml_str = super::ser::to_xml(&val, "val");
-        Ok(Some(Bytes::from(xml_str)))
+        Ok(Some(val))
     }
 }
 
@@ -349,12 +349,13 @@ impl VimClient for SoapClient {
         mo_type: &'a str,
         mo_id: &'a str,
         property: &'a str,
-    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+    ) -> BoxFuture<'a, Result<Option<PropertyValue>>> {
         Box::pin(async move {
             if !svc.is_empty() {
                 return Err(Error::ParseError(format!("Service name not supported for SOAP: {}", svc)));
             }
-            self.fetch_property_via_pc(mo_type, mo_id, property).await
+            let maybe = self.fetch_property_via_pc(mo_type, mo_id, property).await?;
+            Ok(maybe.map(PropertyValue::Parsed))
         })
     }
 }

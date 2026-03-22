@@ -16,9 +16,9 @@ impl HostDirectoryStore {
     }
     /// Information about the authentication store.
     pub async fn info(&self) -> Result<Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostDirectoryStore", &self.mo_id, "info").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
-        let result: Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostDirectoryStore", &self.mo_id, "info").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
+        let result: Box<dyn crate::types::traits::HostAuthenticationStoreInfoTrait> = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

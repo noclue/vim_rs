@@ -59,11 +59,49 @@ pub enum Transport {
     Soap,
 }
 
+/// Wire representation of a managed-object property value before it is narrowed to a concrete type.
+///
+/// JSON transport returns raw bytes from the VI JSON API. SOAP transport returns the value already
+/// parsed as [`crate::types::vim_any::VimAny`] from `RetrievePropertiesEx` (no re-serialization).
+#[derive(Debug)]
+pub enum PropertyValue {
+    Json(Bytes),
+    #[cfg(feature = "xml")]
+    Parsed(crate::types::vim_any::VimAny),
+}
+
+/// Narrow a [`PropertyValue`] to `T`: JSON deserializes once; SOAP downcasts the in-memory `VimAny`.
+pub fn extract_property<T: miniserde::Deserialize + 'static>(pv: PropertyValue) -> Result<T> {
+    match pv {
+        PropertyValue::Json(bytes) => {
+            let text = std::str::from_utf8(&bytes)
+                .map_err(|e| Error::ParseError(e.to_string()))?;
+            miniserde::json::from_str(text).map_err(|_| {
+                Error::ParseError(format!(
+                    "JSON property decode failed for {}",
+                    std::any::type_name::<T>()
+                ))
+            })
+        }
+        #[cfg(feature = "xml")]
+        PropertyValue::Parsed(any) => any
+            .into_any()
+            .downcast::<T>()
+            .map(|b| *b)
+            .map_err(|_| {
+                Error::ParseError(format!(
+                    "SOAP property type mismatch for {}",
+                    std::any::type_name::<T>()
+                ))
+            }),
+    }
+}
+
 /// Object-safe client abstraction for generated managed-object stubs (`crate::mo::*`).
 ///
 /// The trait exposes high-level operations that are transport-agnostic.
-/// Generated MO proxies call these methods and then use the free `unmarshal`
-/// function for deserialization, keyed on `transport()`.
+/// Generated MO proxies use [`extract_property`] for GET properties and the free [`unmarshal`] /
+/// [`unmarshal_array`] functions for POST method bodies, keyed on [`Self::transport`].
 pub trait VimClient: Send + Sync {
     /// Access vSphere `ServiceContent` (root managed object references).
     fn service_content(&self) -> &ServiceContent;
@@ -104,17 +142,17 @@ pub trait VimClient: Send + Sync {
         params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<()>>;
 
-    /// Fetch a single property by name, returning the raw wire bytes (or `None`).
+    /// Fetch a single property by name (or `None` if empty).
     ///
-    /// Managed-object stubs call this and then [`unmarshal`] with [`Self::transport`].
-    /// Application code typically uses [`Client::fetch_property`] on the public facade instead.
+    /// Managed-object stubs call [`extract_property`] on the result. Application code typically uses
+    /// [`Client::fetch_property`] on the public facade instead.
     fn fetch_property_raw<'a>(
         &'a self,
         svc: &'a str,
         mo_type: &'a str,
         mo_id: &'a str,
         property: &'a str,
-    ) -> BoxFuture<'a, Result<Option<Bytes>>>;
+    ) -> BoxFuture<'a, Result<Option<PropertyValue>>>;
 }
 
 /// Deserialize response bytes according to the transport format.
@@ -503,22 +541,21 @@ impl Client {
 
     /// Fetch a managed object property by name into the requested type.
     ///
-    /// Works for both JSON and SOAP transports (via [`unmarshal`] and the inner client’s
-    /// [`VimClient::transport`]).
+    /// Works for both JSON and SOAP transports via [`extract_property`].
     pub async fn fetch_property<T>(&self, obj: ManagedObjectReference, property: &str) -> Result<T>
     where
-        T: miniserde::Deserialize,
+        T: miniserde::Deserialize + 'static,
     {
         let type_name: &str = obj.r#type.as_str();
         let id = &obj.value;
-        let bytes_opt = self
+        let pv_opt = self
             .inner
             .fetch_property_raw("", type_name, id, property)
             .await?;
-        let bytes = bytes_opt.ok_or_else(|| {
+        let pv = pv_opt.ok_or_else(|| {
             Error::ParseError(format!("property {property} was empty"))
         })?;
-        unmarshal(self.inner.transport(), &bytes)
+        extract_property(pv)
     }
 }
 
@@ -575,7 +612,7 @@ impl VimClient for Client {
         mo_type: &'a str,
         mo_id: &'a str,
         property: &'a str,
-    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+    ) -> BoxFuture<'a, Result<Option<PropertyValue>>> {
         self.inner
             .fetch_property_raw(svc, mo_type, mo_id, property)
     }
@@ -761,7 +798,7 @@ impl VimClient for JsonClient {
         mo_type: &'a str,
         mo_id: &'a str,
         property: &'a str,
-    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+    ) -> BoxFuture<'a, Result<Option<PropertyValue>>> {
         Box::pin(async move {
             let path = if svc.is_empty() {
                 format!("/{mo_type}/{mo_id}/{property}")
@@ -777,7 +814,11 @@ impl VimClient for JsonClient {
                 let body = String::from_utf8_lossy(&bytes);
                 trace!("JSON fetch_property_raw {}/{}: {}...", mo_type, property, &body[..body.len().min(2000)]);
             }
-            if bytes.is_empty() { Ok(None) } else { Ok(Some(bytes)) }
+            if bytes.is_empty() {
+                Ok(None)
+            } else {
+                Ok(Some(PropertyValue::Json(bytes)))
+            }
         })
     }
 }

@@ -52,9 +52,9 @@ impl LocalizationManager {
     ///
     /// the message catalogs for the current locale
     pub async fn catalog(&self) -> Result<Option<Vec<crate::types::structs::LocalizationManagerMessageCatalog>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "LocalizationManager", &self.mo_id, "catalog").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "LocalizationManager", &self.mo_id, "catalog").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

@@ -37,18 +37,18 @@ impl HostPowerSystem {
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn capability(&self) -> Result<crate::types::structs::PowerSystemCapability> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostPowerSystem", &self.mo_id, "capability").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capability was empty".to_string()))?;
-        let result: crate::types::structs::PowerSystemCapability = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostPowerSystem", &self.mo_id, "capability").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capability was empty".to_string()))?;
+        let result: crate::types::structs::PowerSystemCapability = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Power system state info object.
     /// 
     /// ***Required privileges:*** System.Read
     pub async fn info(&self) -> Result<crate::types::structs::PowerSystemInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostPowerSystem", &self.mo_id, "info").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
-        let result: crate::types::structs::PowerSystemInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostPowerSystem", &self.mo_id, "info").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property info was empty".to_string()))?;
+        let result: crate::types::structs::PowerSystemInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

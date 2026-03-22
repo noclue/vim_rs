@@ -70,6 +70,10 @@ path = "src/retrieve_recent_task.rs"
 name = "inventory_path"
 path = "src/inventory_path.rs"
 
+[[bin]]
+name = "vm_disabled_method_len"
+path = "src/vm_disabled_method_len.rs"
+
 [dependencies]
 anyhow = "1.0"
 chrono = "0.4"

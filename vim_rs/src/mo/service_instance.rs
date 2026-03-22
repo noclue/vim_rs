@@ -231,9 +231,9 @@ impl ServiceInstance {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn capability(&self) -> Result<crate::types::structs::Capability> {
-        let bytes_opt = self.client.fetch_property_raw("", "ServiceInstance", &self.mo_id, "capability").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capability was empty".to_string()))?;
-        let result: crate::types::structs::Capability = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ServiceInstance", &self.mo_id, "capability").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property capability was empty".to_string()))?;
+        let result: crate::types::structs::Capability = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// The properties of the ServiceInstance managed object.
@@ -251,9 +251,9 @@ impl ServiceInstance {
     /// 
     /// ***Required privileges:*** System.Anonymous
     pub async fn content(&self) -> Result<crate::types::structs::ServiceContent> {
-        let bytes_opt = self.client.fetch_property_raw("", "ServiceInstance", &self.mo_id, "content").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property content was empty".to_string()))?;
-        let result: crate::types::structs::ServiceContent = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ServiceInstance", &self.mo_id, "content").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property content was empty".to_string()))?;
+        let result: crate::types::structs::ServiceContent = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Contains the time most recently obtained from the server.
@@ -268,9 +268,9 @@ impl ServiceInstance {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn server_clock(&self) -> Result<String> {
-        let bytes_opt = self.client.fetch_property_raw("", "ServiceInstance", &self.mo_id, "serverClock").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property serverClock was empty".to_string()))?;
-        let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "ServiceInstance", &self.mo_id, "serverClock").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property serverClock was empty".to_string()))?;
+        let result: String = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

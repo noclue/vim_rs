@@ -7,7 +7,7 @@ use std::sync::{Arc, Mutex};
 use bytes::Bytes;
 use tokio::sync::mpsc;
 
-use vim_rs::core::client::{BoxFuture, Error, Result, Transport, VimClient};
+use vim_rs::core::client::{BoxFuture, Error, PropertyValue, Result, Transport, VimClient};
 use vim_rs::types::structs::ServiceContent;
 use vim_rs::types::enums::MoTypesEnum;
 
@@ -266,10 +266,13 @@ impl VimClient for MockVimClient {
         mo_type: &'a str,
         mo_id: &'a str,
         property: &'a str,
-    ) -> BoxFuture<'a, Result<Option<Bytes>>> {
+    ) -> BoxFuture<'a, Result<Option<PropertyValue>>> {
         let path = vi_json_path(svc, mo_type, mo_id, property);
         Box::pin(async move {
-            self.handle_option_bytes(HttpVerb::Get, &path).await
+            Ok(self
+                .handle_option_bytes(HttpVerb::Get, &path)
+                .await?
+                .map(PropertyValue::Json))
         })
     }
 }

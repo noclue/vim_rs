@@ -191,9 +191,9 @@ impl HostDatastoreBrowser {
     ///
     /// Refers instances of *Datastore*.
     pub async fn datastore(&self) -> Result<Option<Vec<crate::types::structs::ManagedObjectReference>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostDatastoreBrowser", &self.mo_id, "datastore").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostDatastoreBrowser", &self.mo_id, "datastore").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -212,9 +212,9 @@ impl HostDatastoreBrowser {
     /// supported. Clients should consult this list to avoid querying for types of virtual
     /// machine components that are not supported.
     pub async fn supported_type(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::FileQueryTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostDatastoreBrowser", &self.mo_id, "supportedType").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostDatastoreBrowser", &self.mo_id, "supportedType").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

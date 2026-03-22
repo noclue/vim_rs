@@ -18,10 +18,11 @@ pub mod de;
 #[cfg(all(test, feature = "xml"))]
 mod tests {
     use super::{de::from_xml, soap};
+    use crate::core::client::{extract_property, PropertyValue};
     use crate::types::boxed_types::ValueElements;
     use crate::types::enums::MoTypesEnum;
     use crate::types::struct_enum::StructType;
-    use crate::types::structs::{Event, ManagedObjectReference, MethodFault, UpdateSet};
+    use crate::types::structs::{Event, ManagedObjectReference, MethodFault, RetrieveResult, UpdateSet};
     use crate::types::vim_any::VimAny;
     use miniserde::json::{Number, Value};
 
@@ -42,6 +43,18 @@ mod tests {
  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
 <soapenv:Body>
 <WaitForUpdatesExResponse xmlns="urn:vim25"><returnval><version>1</version><filterSet><filter type="PropertyFilter">session[521da002-3565-aed7-bfc9-a37573136c0e]52b39f40-3106-c12b-715c-bc09e1862cbf</filter><objectSet><kind>enter</kind><obj type="VirtualMachine">1</obj><changeSet><name>name</name><op>assign</op><val xsi:type="xsd:string">NFS server</val></changeSet><changeSet><name>overallStatus</name><op>assign</op><val xsi:type="ManagedEntityStatus">green</val></changeSet><changeSet><name>runtime.powerState</name><op>assign</op><val xsi:type="VirtualMachinePowerState">poweredOff</val></changeSet></objectSet></filterSet></returnval></WaitForUpdatesExResponse>
+</soapenv:Body>
+</soapenv:Envelope>"#;
+
+    /// `RetrievePropertiesEx` sample: `disabledMethod` as `ArrayOfString` with typed `<string>`
+    /// elements (typical vCenter SOAP).
+    const RETRIEVE_PROPERTIES_EX_DISABLED_METHOD: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+<soapenv:Body>
+<RetrievePropertiesExResponse xmlns="urn:vim25"><returnval><objects><obj type="VirtualMachine">1</obj><propSet><name>disabledMethod</name><val xsi:type="ArrayOfString"><string xsi:type="xsd:string">setCustomValue</string><string xsi:type="xsd:string">PowerOffVM_Task</string></val></propSet></objects></returnval></RetrievePropertiesExResponse>
 </soapenv:Body>
 </soapenv:Envelope>"#;
 
@@ -92,6 +105,31 @@ mod tests {
             VimAny::Value(ValueElements::ArrayOfCustomFieldDef(v)) => assert!(v.is_empty()),
             other => panic!("expected ArrayOfCustomFieldDef, got {:?}", other),
         }
+    }
+
+    /// SOAP property GET: `extract_property` + `PropertyValue::Parsed` (zero re-serialization).
+    #[test]
+    fn extract_property_soap_val_array_of_string() {
+        let xml = r#"<val xsi:type="ArrayOfString"><string xsi:type="xsd:string">a</string><string>b</string></val>"#;
+        let vim_any: VimAny = from_xml(xml).expect("VimAny from property val");
+        let v: Vec<String> =
+            extract_property(PropertyValue::Parsed(vim_any)).expect("Vec<String> from VimAny");
+        assert_eq!(v, vec!["a".to_string(), "b".to_string()]);
+    }
+
+    #[test]
+    fn test_retrieve_result_disabled_method_array_of_string() {
+        let mut result: RetrieveResult = soap::vim_response(RETRIEVE_PROPERTIES_EX_DISABLED_METHOD)
+            .expect("RetrieveResult with disabledMethod ArrayOfString should deserialize");
+        assert_eq!(result.objects.len(), 1);
+        let obj = result.objects.swap_remove(0);
+        let ps = obj.prop_set.expect("prop_set");
+        assert_eq!(ps.len(), 1);
+        assert_eq!(ps[0].name, "disabledMethod");
+        let methods = ps.into_iter().next().expect("one prop").val;
+        let v: Vec<String> =
+            extract_property(PropertyValue::Parsed(methods)).expect("extract_property");
+        assert_eq!(v.as_slice(), ["setCustomValue", "PowerOffVM_Task"]);
     }
 
     #[test]

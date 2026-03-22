@@ -2255,9 +2255,9 @@ impl HostStorageSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn available_field(&self) -> Result<Option<Vec<crate::types::structs::CustomFieldDef>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "availableField").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "availableField").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -2267,9 +2267,9 @@ impl HostStorageSystem {
     /// *FileSystemVolumeInfo* data
     /// object type for more information.
     pub async fn file_system_volume_info(&self) -> Result<crate::types::structs::HostFileSystemVolumeInfo> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "fileSystemVolumeInfo").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property fileSystemVolumeInfo was empty".to_string()))?;
-        let result: crate::types::structs::HostFileSystemVolumeInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "fileSystemVolumeInfo").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property fileSystemVolumeInfo was empty".to_string()))?;
+        let result: crate::types::structs::HostFileSystemVolumeInfo = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// Runtime information about the state of a multipath path.
@@ -2281,17 +2281,17 @@ impl HostStorageSystem {
     /// may be accessible on the *HostMultipathInfo* data object
     /// of the *HostStorageSystem.storageDeviceInfo* property.
     pub async fn multipath_state_info(&self) -> Result<Option<crate::types::structs::HostMultipathStateInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "multipathStateInfo").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "multipathStateInfo").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
     /// Host storage information up to the device level.
     pub async fn storage_device_info(&self) -> Result<Option<crate::types::structs::HostStorageDeviceInfo>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "storageDeviceInfo").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "storageDeviceInfo").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -2301,9 +2301,9 @@ impl HostStorageSystem {
     /// 
     /// For information on datastore paths, see *Datastore*.
     pub async fn system_file(&self) -> Result<Option<Vec<String>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "systemFile").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "systemFile").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }
@@ -2315,9 +2315,9 @@ impl HostStorageSystem {
     /// 
     /// ***Required privileges:*** System.View
     pub async fn value(&self) -> Result<Option<Vec<Box<dyn crate::types::traits::CustomFieldValueTrait>>>> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "value").await?;
-        match bytes_opt {
-            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+        let pv_opt = self.client.fetch_property_raw("", "HostStorageSystem", &self.mo_id, "value").await?;
+        match pv_opt {
+            Some(pv) => Ok(Some(crate::core::client::extract_property(pv)?)),
             None => Ok(None),
         }
     }

@@ -66,9 +66,9 @@ impl HostAutoStartManager {
         self.client.invoke_void("", "HostAutoStartManager", &self.mo_id, "ReconfigureAutostart", Some(&input)).await
     }
     pub async fn config(&self) -> Result<crate::types::structs::HostAutoStartManagerConfig> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostAutoStartManager", &self.mo_id, "config").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
-        let result: crate::types::structs::HostAutoStartManagerConfig = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostAutoStartManager", &self.mo_id, "config").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property config was empty".to_string()))?;
+        let result: crate::types::structs::HostAutoStartManagerConfig = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }

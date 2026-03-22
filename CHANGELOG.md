@@ -23,6 +23,18 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - 'vim_macros' supports `ManagedEntity`. It is sometimes useful to select fields from the base `ManagedEntity` type. This allows to select common properties like `name`, `parent` etc. irrespective of the actual type.
 - `inventory_path` example is added. Invneotry paths are convinient way to address objects in VMware infrastructure. This example provides way to fetch the inventory path wiht a single PropertyCollector call. Logic is borrowed from `govmomi` project.
+- `ValueElements::into_any()` (generated) and `VimAny::into_any()` to move polymorphic values into `Box<dyn std::any::Any>` for downcasting without manual `match` on every `ValueElements` variant.
+- `PropertyValue` enum and `extract_property` in `vim_rs::core::client` for transport-agnostic narrowing of managed-object property fetches (JSON bytes vs. SOAP-parsed `VimAny`).
+
+### Fixed
+
+- SOAP/XML managed-object **property getters** (GET) no longer re-serialize `VimAny` to XML and then decode with the wrong shape (e.g. `Vec<String>` / `disabledMethod`). Property values flow as parsed `VimAny` and are narrowed with a zero-cost `Any` downcast on SOAP. ([#18](https://github.com/noclue/vim_rs/issues/18))
+
+### Changed
+
+- **Breaking:** `VimClient::fetch_property_raw` now returns `Result<Option<PropertyValue>>` instead of `Result<Option<Bytes>>`. JSON clients wrap bytes in `PropertyValue::Json`; SOAP clients use `PropertyValue::Parsed(VimAny)`.
+- **Breaking:** `Client::fetch_property` requires `T: miniserde::Deserialize + 'static`.
+- Generated managed-object property accessors use `extract_property` instead of `unmarshal` / `unmarshal_array` on the GET path; POST method calls are unchanged.
 
 ## [0.4.1] - 2026-03-21
 

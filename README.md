@@ -122,6 +122,14 @@ One additional deserialization caveat applies when the `xml` feature is enabled:
 deserialize polymorphic JSON payloads, the `_typeName` key must appear before subtype-specific
 fields or deserialization can fail.
 
+Managed-object **property reads** over SOAP use `RetrievePropertiesEx` internally: the server
+response is parsed once into `VimAny`, and generated getters (e.g. `VirtualMachine::disabled_method`)
+narrow to the concrete Rust type without an extra XML encode/decode round-trip.
+
+When you work with `VimAny` or `ValueElements` yourself, use `VimAny::into_any()` or
+`ValueElements::into_any()` and `downcast` to recover a concrete `T` instead of matching every
+variant by hand.
+
 ## Obtaining Stub for the APIs
 The VIM API is a remote object-oriented API. The functionality is organized in methods of managed objects.
 

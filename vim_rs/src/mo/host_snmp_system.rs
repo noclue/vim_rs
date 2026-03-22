@@ -40,16 +40,16 @@ impl HostSnmpSystem {
     }
     /// ***Required privileges:*** Global.Settings
     pub async fn configuration(&self) -> Result<crate::types::structs::HostSnmpConfigSpec> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSnmpSystem", &self.mo_id, "configuration").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configuration was empty".to_string()))?;
-        let result: crate::types::structs::HostSnmpConfigSpec = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSnmpSystem", &self.mo_id, "configuration").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property configuration was empty".to_string()))?;
+        let result: crate::types::structs::HostSnmpConfigSpec = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
     /// ***Required privileges:*** Global.Settings
     pub async fn limits(&self) -> Result<crate::types::structs::HostSnmpSystemAgentLimits> {
-        let bytes_opt = self.client.fetch_property_raw("", "HostSnmpSystem", &self.mo_id, "limits").await?;
-        let bytes = bytes_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property limits was empty".to_string()))?;
-        let result: crate::types::structs::HostSnmpSystemAgentLimits = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        let pv_opt = self.client.fetch_property_raw("", "HostSnmpSystem", &self.mo_id, "limits").await?;
+        let pv = pv_opt.ok_or_else(|| crate::core::client::VimError::ParseError("property limits was empty".to_string()))?;
+        let result: crate::types::structs::HostSnmpSystemAgentLimits = crate::core::client::extract_property(pv)?;
         Ok(result)
     }
 }
