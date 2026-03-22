@@ -1,5 +1,14 @@
-//! Print `disabledMethod` array length for the VM in **`MO_REF`** (`Type:id`). Use **`VIM_PROTOCOL=soap`**
-//! with `VIM_SERVER` / `VIM_USERNAME` / `VIM_PASSWORD` for XML-only hosts.
+//! # `disabledMethod` length for a VM (`MO_REF`)
+//!
+//! Uses a generated managed-object **property getter** (`VirtualMachine::disabled_method`): one property
+//! per call, no `PropertyCollector` spec. That is the straightforward way to read a field when you already
+//! have a `Type:id` reference. **`VIM_PROTOCOL`** may be `json`, `soap`, or `auto`—getters work over both
+//! transports.
+//!
+//! ## Environment
+//!
+//! Shared `snippets::connect`: `VIM_SERVER`, `VIM_USERNAME`, `VIM_PASSWORD`, optional `VIM_PROTOCOL`.
+//! **`MO_REF`** — managed object as `Type:id` (split on the **first** `:` only). Example: `VirtualMachine:vm-42`.
 
 use anyhow::Context;
 use snippets::connect;
