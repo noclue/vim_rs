@@ -17,7 +17,9 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   - **Security**: security fixes
 - **Call out breaking changes explicitly** (especially while pre-1.0).
 
-## [UNRELEASED]
+## [Unreleased]
+
+## [0.4.2] - 2026-03-22
 
 ### Added
 
@@ -29,11 +31,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Fixed
 
 - SOAP/XML managed-object **property getters** (GET) no longer re-serialize `VimAny` to XML and then decode with the wrong shape (e.g. `Vec<String>` / `disabledMethod`). Property values flow as parsed `VimAny` and are narrowed with a zero-cost `Any` downcast on SOAP. ([#18](https://github.com/noclue/vim_rs/issues/18))
+- Polymorphic boxed (`xsd:anyType`) deserialization preserves the correct `ValueElements` variant for each VIM discriminator when several wire types map to the same Rust type (for example `dateTime` vs `string`). This fixes `vim_retrievable!` / PropertyCollector handling of `dateTime` fields such as `Task.info.completeTime`, which previously failed with “expected PrimitiveDateTime, got string”. ([#19](https://github.com/noclue/vim_rs/issues/19))
 
 ### Changed
 
-- **Breaking:** `VimClient::fetch_property_raw` now returns `Result<Option<PropertyValue>>` instead of `Result<Option<Bytes>>`. JSON clients wrap bytes in `PropertyValue::Json`; SOAP clients use `PropertyValue::Parsed(VimAny)`.
-- **Breaking:** `Client::fetch_property` requires `T: miniserde::Deserialize + 'static`.
+- `VimClient::fetch_property_raw` now returns `Result<Option<PropertyValue>>` instead of `Result<Option<Bytes>>`. JSON clients wrap bytes in `PropertyValue::Json`; SOAP clients use `PropertyValue::Parsed(VimAny)`. This matters only if you implement `VimClient` yourself; the built-in `Client` / `JsonClient` / `SoapClient` are updated.
+- `Client::fetch_property` requires `T: miniserde::Deserialize + 'static` (needed for SOAP downcasting via `Any`).
 - Generated managed-object property accessors use `extract_property` instead of `unmarshal` / `unmarshal_array` on the GET path; POST method calls are unchanged.
 
 ## [0.4.1] - 2026-03-21
