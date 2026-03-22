@@ -144,6 +144,50 @@ impl<T: miniserde::Deserialize> ValueDeserializer for DelegatingDeserializer<T> 
     }
 }
 
+pub struct SimpleDelegatingDeserializer<T> {
+    pub value: Option<T>,
+    pub wrap: fn(T) -> super::boxed_types::ValueElements,
+}
+
+impl<T> SimpleDelegatingDeserializer<T> {
+    pub fn new(wrap: fn(T) -> super::boxed_types::ValueElements) -> Self {
+        Self { value: None, wrap }
+    }
+}
+
+impl<T: miniserde::Deserialize> miniserde::de::Visitor for SimpleDelegatingDeserializer<T> {
+    fn null(&mut self) -> miniserde::Result<()> {
+        miniserde::Deserialize::begin(&mut self.value).null()
+    }
+    fn boolean(&mut self, b: bool) -> miniserde::Result<()> {
+        miniserde::Deserialize::begin(&mut self.value).boolean(b)
+    }
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        miniserde::Deserialize::begin(&mut self.value).string(s)
+    }
+    fn negative(&mut self, n: i64) -> miniserde::Result<()> {
+        miniserde::Deserialize::begin(&mut self.value).negative(n)
+    }
+    fn nonnegative(&mut self, n: u64) -> miniserde::Result<()> {
+        miniserde::Deserialize::begin(&mut self.value).nonnegative(n)
+    }
+    fn float(&mut self, n: f64) -> miniserde::Result<()> {
+        miniserde::Deserialize::begin(&mut self.value).float(n)
+    }
+    fn seq(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Seq + '_>> {
+        miniserde::Deserialize::begin(&mut self.value).seq()
+    }
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        miniserde::Deserialize::begin(&mut self.value).map()
+    }
+}
+
+impl<T: miniserde::Deserialize> ValueDeserializer for SimpleDelegatingDeserializer<T> {
+    fn finish_value(&mut self) -> miniserde::Result<super::boxed_types::ValueElements> {
+        Ok((self.wrap)(self.value.take().ok_or(miniserde::Error)?))
+    }
+}
+
 // ============================================================================
 // WrapValue trait - defines how each type wraps into ValueElements
 // ============================================================================
@@ -161,6 +205,20 @@ pub fn from_val<T: WrapValue>(
     v: &miniserde::json::Value,
 ) -> miniserde::Result<super::boxed_types::ValueElements> {
     Ok(super::mini_helpers::from_value::<T>(v)?.wrap())
+}
+
+/// Variant-aware helpers for cases where multiple VIM discriminators share the same Rust type.
+pub fn make_deser_with<T: miniserde::Deserialize + 'static>(
+    wrap: fn(T) -> super::boxed_types::ValueElements,
+) -> Box<dyn ValueDeserializer> {
+    Box::new(SimpleDelegatingDeserializer::<T>::new(wrap))
+}
+
+pub fn from_val_with<T: miniserde::Deserialize>(
+    v: &miniserde::json::Value,
+    wrap: fn(T) -> super::boxed_types::ValueElements,
+) -> miniserde::Result<super::boxed_types::ValueElements> {
+    Ok(wrap(super::mini_helpers::from_value::<T>(v)?))
 }
 
 // ============================================================================

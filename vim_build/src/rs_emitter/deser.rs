@@ -41,7 +41,7 @@ impl DeserializationGenerator<'_> {
     pub fn generate_deserialization(&mut self) -> Result<()> {
         self.emit_imports()?;
         self.emit_make_place()?;
-        self.emit_wrap_value_impls()?;
+        self.emit_wrap_value_fns()?;
         self.emit_polymorphic_array_cast_fns()?;
         self.emit_vim_object_holder_impls()?;
         self.emit_type_registry()?;
@@ -55,9 +55,9 @@ impl DeserializationGenerator<'_> {
     fn emit_imports(&mut self) -> Result<()> {
         self.printer.println("use super::mini_de_static::{")?;
         self.printer.indent();
-        self.printer.println("TypeInfo, DelegatingDeserializer, WrapValue,")?;
+        self.printer.println("TypeInfo, DelegatingDeserializer,")?;
         self.printer.println("VimObjectHolder, VimObjectHolderBuilder, VimAnyBuilder,")?;
-        self.printer.println("make_deser, from_val, polymorphic_array_cast,")?;
+        self.printer.println("make_deser_with, from_val_with, polymorphic_array_cast,")?;
         self.printer.dedent();
         self.printer.println("};")?;
         self.printer.println("use super::mini_helpers::from_value;")?;
@@ -75,36 +75,28 @@ impl DeserializationGenerator<'_> {
         Ok(())
     }
 
-    /// Emit WrapValue implementations for primitive/array types used in ValueElements.
-    /// Deduplicate by Rust type to avoid conflicting trait impls.
-    fn emit_wrap_value_impls(&mut self) -> Result<()> {
+    /// Emit per-variant wrapper functions so same-Rust-type values preserve their VIM discriminator.
+    fn emit_wrap_value_fns(&mut self) -> Result<()> {
         self.printer
-            .println("// WrapValue implementations for ValueElements types")?;
-
-        let mut seen_types = std::collections::HashSet::new();
+            .println("// Per-variant wrap functions for ValueElements types")?;
 
         for (_discriminator, box_type) in &self.any_value_types {
             let enum_variant = to_type_name(&box_type.name);
             let rust_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
+            let fn_name = format!("wrap_{}", super::to_field_name(&box_type.name));
 
             // Determine if this is a polymorphic array (trait object array).
-            // Those need special handling via cast functions, not WrapValue.
+            // Those need special handling via cast functions, not direct wrappers.
             if self.is_polymorphic_array_type(&box_type.property_type) {
-                continue; // Handled by emit_polymorphic_array_cast_fns
-            }
-
-            // Skip duplicate Rust types (e.g. multiple array discriminators mapping to Vec<MethodFault>)
-            if !seen_types.insert(rust_type.clone()) {
                 continue;
             }
 
             self.printer.println(&format!(
-                "impl WrapValue for {rust_type} {{"
+                "fn {fn_name}(value: {rust_type}) -> ValueElements {{"
             ))?;
             self.printer.indent();
-            self.printer.println(&format!(
-                "fn wrap(self) -> ValueElements {{ ValueElements::{enum_variant}(self) }}"
-            ))?;
+            self.printer
+                .println(&format!("ValueElements::{enum_variant}(value)"))?;
             self.printer.dedent();
             self.printer.println("}")?;
         }
@@ -272,10 +264,11 @@ impl DeserializationGenerator<'_> {
                     }
                 }
             } else {
-                // Simple value type - use make_deser/from_val
+                // Simple value type - use per-variant wrapper functions
                 let rust_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
+                let fn_name = format!("wrap_{}", super::to_field_name(&box_type.name));
                 let value_expr = format!(
-                    "TypeInfo::Value {{ name: \"{discriminator}\", make_deserializer: make_deser::<{rust_type}>, from_value: from_val::<{rust_type}> }}"
+                    "TypeInfo::Value {{ name: \"{discriminator}\", make_deserializer: || make_deser_with::<{rust_type}>({fn_name}), from_value: |v| from_val_with::<{rust_type}>(v, {fn_name}) }}"
                 );
                 map_builder.entry(discriminator.clone(), &value_expr);
             }

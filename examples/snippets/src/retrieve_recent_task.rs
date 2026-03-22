@@ -19,6 +19,7 @@ vim_retrievable!(
     struct TaskInfo: Task {
         description_id = "info.description_id",
         fault = "info.error",
+        completed = "info.complete_time",
     }
 );
 
