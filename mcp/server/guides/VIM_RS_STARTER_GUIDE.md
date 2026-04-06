@@ -181,6 +181,9 @@ Notes:
 * Property accessors (like `name()`, `runtime()`) return values directly without tasks.
 * The generated stubs store an `Arc<dyn VimClient>` internally. The concrete `Client` implements
   `VimClient`, so passing `client.clone()` works without changes.
+* `RootObjects` and `VsanObjectCatalog` (`vim_rs::core`) also use `VimClientHandle` (`Arc<dyn VimClient>`).
+  You can pass `Arc<Client>` into their constructors via coercion. Their `client()` method returns
+  `VimClientHandle`, not `Arc<Client>`—keep your own `Arc<Client>` if downstream code needs the concrete type.
 
 ### Step 3: Data Retrieval with Property Collector (ALWAYS USE THIS PATTERN)
 

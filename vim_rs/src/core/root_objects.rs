@@ -1,22 +1,20 @@
-use std::sync::Arc;
-use crate::core::client::Client;
+use crate::core::client::VimClientHandle;
 use crate::mo::{CnsVolumeManager, EsxAgentManager, PbmServiceInstance, ServiceInstance, SmsServiceInstance, VimClusterVsanVcDiskManagementSystem, VimClusterVsanVcStretchedClusterSystem, VsanCapabilitySystem, VsanClusterPowerSystem, VsanDiagnosticsSystem, VsanFileServiceSystem, VsanIoInsightManager, VsanIscsiTargetSystem, VsanMassCollector, VsanObjectSystem, VsanPerformanceManager, VsanPhoneHomeSystem, VsanRemoteDatastoreSystem, VsanResourceCheckSystem, VsanSpaceReportSystem, VsanUpgradeSystemEx, VsanVcClusterConfigSystem, VsanVcClusterHealthSystem, VsanVcsaDeployerSystem, VsanVdsSystem, VsanVumSystem, VslmServiceInstance};
 
 /// RootObjects provides access to the root objects of the Virtual Infrastructure JSON API.
 pub struct RootObjects {
-    client: Arc<Client>,
+    client: VimClientHandle,
 }
-
 
 /// The RootObjects struct provides methods to access various root objects in the vSphere environment.
 impl RootObjects {
-    /// Creates a new instance of RootObjects with the provided Client.
-    pub fn new(client: Arc<Client>) -> Self {
+    /// Creates a new instance of RootObjects with the provided [`VimClient`](crate::core::client::VimClient) handle.
+    pub fn new(client: VimClientHandle) -> Self {
         Self { client }
     }
 
-    /// Returns a reference to the Client used by this RootObjects instance.
-    pub fn client(&self) -> Arc<Client> {
+    /// Returns the [`VimClient`](crate::core::client::VimClient) handle used by this RootObjects instance.
+    pub fn client(&self) -> VimClientHandle {
         self.client.clone()
     }
 
@@ -56,17 +54,16 @@ impl RootObjects {
 
 /// The VsanObjectCatalog struct provides methods to access the well vSAN managed objects on vCenter.
 pub struct VsanObjectCatalog {
-    client: Arc<Client>,
+    client: VimClientHandle,
 }
 
 impl VsanObjectCatalog {
-    pub fn new(client: Arc<Client>) -> Self {
+    pub fn new(client: VimClientHandle) -> Self {
         Self { client }
     }
 
-
-    /// Returns a reference to the Client used by this VsanObjectCatalog instance.
-    pub fn client(&self) -> Arc<Client> {
+    /// Returns the [`VimClient`](crate::core::client::VimClient) handle used by this VsanObjectCatalog instance.
+    pub fn client(&self) -> VimClientHandle {
         self.client.clone()
     }
 

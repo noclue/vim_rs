@@ -1,9 +1,8 @@
-use crate::core::client::Client;
+use crate::core::client::VimClientHandle;
 use crate::core::error::{Error, Result};
 use crate::core::pc_helpers::{obj_spec_for_view, BoxableError, Queriable};
 use crate::mo::{PropertyCollector, View, ViewManager};
 use crate::types::structs::{ManagedObjectReference, ObjectContent, ObjectSpec};
-use std::sync::Arc;
 
 /// A trait for objects that can be retrieved using the PropertyCollector utilities. In essence they
 /// provide a `PropertySpec` for the object type and implement TryFrom<ObjectContent> to convert
@@ -21,7 +20,7 @@ impl<T: Queriable + TryFrom<ObjectContent, Error = E>, E: BoxableError> Retrieva
 /// PropertyCollector and ViewManager. It provides methods to retrieve objects from a container or
 /// to retrieve specific objects based on a set of ObjectSpecs.
 pub struct ObjectRetriever {
-    client: Arc<Client>,
+    client: VimClientHandle,
     property_collector: PropertyCollector,
     view_manager: ViewManager,
 }
@@ -30,7 +29,7 @@ impl ObjectRetriever {
     /// Creates a new ObjectRetriever instance. It initializes PropertyCollector and ViewManager
     /// instances using the provided client. It will fail if the client does not have a
     /// view manager.
-    pub fn new(client: Arc<Client>) -> Result<Self> {
+    pub fn new(client: VimClientHandle) -> Result<Self> {
         let pc_mo_id = &client.service_content().property_collector.value;
         let property_collector = PropertyCollector::new(client.clone(), pc_mo_id);
         let Some(view_manager_moref) = &client.service_content().view_manager else {

@@ -19,6 +19,12 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- **BREAKING:** `RootObjects` and `VsanObjectCatalog` now hold `VimClientHandle` (`Arc<dyn VimClient>`) instead of `Arc<Client>`. `RootObjects::new` / `VsanObjectCatalog::new` still accept `Arc<Client>` via coercion to the trait object. `RootObjects::client()` and `VsanObjectCatalog::client()` now return `VimClientHandle`; code that required `Arc<Client>` from those accessors must keep the concrete handle separately or adjust types.
+- `CacheManager::new` and `new_with_property_collector` use `Arc<dyn VimClient>` in their signatures (equivalent to the existing `VimClientHandle` alias).
+- `ObjectRetriever::new` uses `Arc<dyn VimClient>`
+
 ## [0.4.2] - 2026-03-22
 
 ### Added
