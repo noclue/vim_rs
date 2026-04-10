@@ -44,6 +44,8 @@ pub async fn connect(app_name: &str, app_version: &str) -> Result<Arc<Client>> {
         .insecure(true)
         .basic_authn(username.as_str(), pwd.as_str())
         .app_details(app_name, app_version)
+        // Optional: `.wire_logging(vim_rs::WireLoggingMode::Summary)` for transport diagnostics
+        // on targets `vim_rs::wire::json` / `vim_rs::wire::soap` (default is `Off`).
         .build()
         .await?;
 
@@ -70,6 +72,7 @@ async fn main() -> Result<()> {
 - Client is thread-safe (`Arc<Client>`)
 - Managed-object stubs store an `Arc<dyn VimClient>` internally; `Client` implements `VimClient`.
 - Default transport is JSON. If you do nothing, behavior stays on the normal vCenter JSON path.
+- **Wire logging** (`ClientBuilder::wire_logging`) is optional and **defaults to `Off`**. When enabled, use `WireLoggingMode::Summary` first; switch to `Detailed` only if you need full bodies. Logs go to `vim_rs::wire::json` / `vim_rs::wire::soap` at `Debug` (summary) and `Trace` (detailed bodies where allowed). **`SessionManager`** traffic never logs bodies (login/session data stays summary-only). Filter by target (e.g. `RUST_LOG=vim_rs::wire::json=debug`) instead of turning on global `trace` for all of `vim_rs`.
 
 **Dependencies needed:**
 ```toml
@@ -80,6 +83,15 @@ tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
 log = "0.4"
 ```
+
+### Step 1.0: Wire logging (ONLY FOR TRANSPORT DEBUGGING)
+
+Use this when you need to see what the client sends and receives on the wire. It does **not** replace normal application logging.
+
+1. Import `use vim_rs::WireLoggingMode;`.
+2. Start with **`WireLoggingMode::Summary`** on the builder. Summary lines use `log::Level::Debug` on targets `vim_rs::wire::json` and/or `vim_rs::wire::soap`.
+3. If the failure is still unclear, use **`WireLoggingMode::Detailed`**. Full bodies are emitted at `log::Level::Trace` only where allowed; **`SessionManager`** calls remain summary-only (do not expect login/session payload bodies).
+4. Configure your logger by **target**, e.g. `RUST_LOG=vim_rs::wire::json=debug` or `vim_rs::wire::json=trace` — avoid blanket `vim_rs=trace` unless you also want every other diagnostic.
 
 ### Step 1.1: XML Transport (ONLY WHEN YOU ACTUALLY NEED IT)
 
@@ -115,6 +127,7 @@ pub async fn connect_auto(app_name: &str, app_version: &str) -> Result<Arc<Clien
         .basic_authn(username.as_str(), pwd.as_str())
         .app_details(app_name, app_version)
         .transport(TransportMode::Auto)
+        // Optional: `.wire_logging(vim_rs::WireLoggingMode::Summary)` — see Step 1.0
         .build()
         .await?;
 
@@ -131,7 +144,7 @@ Use `TransportMode::Soap` when you know you are talking directly to ESXi or you 
 **Critical XML caveats:**
 - XML currently works only for the core VIM APIs.
 - VSAN, SPBM/PBM, SMS, VSLM, EAM, and other non-VIM APIs will return errors over XML transport.
-- XML support is experimental. If it fails, turn on `trace` logging for `vim_rs` and capture the failing request/response packets.
+- XML support is experimental. If it fails, enable **wire logging** (`ClientBuilder::wire_logging` with `WireLoggingMode::Summary` or `Detailed`) and filter `vim_rs::wire::soap` / `vim_rs::wire::json` (see Step 1.0). Do not rely on generic `trace` for the whole crate as the primary transport capture mechanism.
 - Enabling `xml` increases release binary size by about 500 KB and increases debug build times by about 30-40%.
 - If the `xml` feature is not enabled, vim_rs returns to `0.4.0` transport, size, and build-time characteristics.
 
