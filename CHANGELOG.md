@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-04-10
+
 ### Added
 
 - **Wire logging:** `ClientBuilder::wire_logging` and `WireLoggingMode` for opt-in transport diagnostics on dedicated log targets (`vim_rs::wire::json`, `vim_rs::wire::soap`). Defaults to **`Off`**; no behavior change unless you enable it.
