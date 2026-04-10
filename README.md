@@ -59,6 +59,34 @@ The `client` above is an `Arc` around the actual client object. Use `.clone()` t
 
 If the above goes well, you have a connection to the vCenter server with an initialized session and retrieved service content.
 
+### Wire logging (transport diagnostics)
+
+For troubleshooting HTTP/SOAP request and response traffic, enable **wire logging** on the builder. It is **off by default** and uses dedicated log targets so you can filter transport lines separately from the rest of your application.
+
+```rust
+use vim_rs::core::ClientBuilder;
+use vim_rs::WireLoggingMode;
+
+let client = ClientBuilder::new("vcenter.example.com")
+    .basic_authn("administrator@vsphere.local", "password")
+    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
+    .wire_logging(WireLoggingMode::Summary)
+    .build()
+    .await?;
+```
+
+- **`WireLoggingMode::Off`** — no dedicated wire lines (default).
+- **`WireLoggingMode::Summary`** — metadata only (paths, sizes, HTTP status, duration) at `log::Level::Debug`. Use this first when diagnosing failures.
+- **`WireLoggingMode::Detailed`** — may include full bodies at `log::Level::Trace` for non-session traffic. **`SessionManager`** calls (login, logout, session APIs) never log bodies; they stay summary-only by design.
+
+Wire records use targets **`vim_rs::wire::json`** (VI JSON) and **`vim_rs::wire::soap`** (SOAP/XML). Prefer **target-scoped** filters instead of enabling global `trace` for the whole crate, for example:
+
+- `RUST_LOG=vim_rs::wire::json=debug`
+- `RUST_LOG=vim_rs::wire::soap=debug`
+- `RUST_LOG=vim_rs::wire::json=trace` (detailed JSON bodies, where allowed)
+
+Detailed wire logs can be large; use them for short-lived troubleshooting only.
+
 ## Optional XML transport
 
 The default transport is VI JSON and behaves like `0.4.0`. XML support is an **optional, experimental**
@@ -104,7 +132,7 @@ Important caveats:
 
 - XML transport currently works only for the core VIM APIs.
 - Other APIs such as VSAN, SPBM/PBM, SMS, VSLM, and EAM currently return errors over XML.
-- XML support is experimental. If a call fails, enable `trace` logging for `vim_rs` and capture the failing request/response packets.
+- XML support is experimental. If a call fails, use **wire logging** (`.wire_logging(WireLoggingMode::Summary)` or `Detailed`) and filter `vim_rs::wire::soap` / `vim_rs::wire::json` (see *Wire logging* above). For other library diagnostics, you can still raise the log level for `vim_rs` modules as needed.
 - Enabling the `xml` feature increases release binary size by about 500 KB and increases debug build times by about 30-40%.
 - Disabling the `xml` feature restores `0.4.0` transport behavior, build times, and executable size characteristics.
 

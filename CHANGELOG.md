@@ -19,11 +19,23 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.4.3] - 2026-04-10
+
+### Added
+
+- **Wire logging:** `ClientBuilder::wire_logging` and `WireLoggingMode` for opt-in transport diagnostics on dedicated log targets (`vim_rs::wire::json`, `vim_rs::wire::soap`). Defaults to **`Off`**; no behavior change unless you enable it.
+  - **`WireLoggingMode::Summary`** — request/response metadata (sizes, paths, status, duration) at [`log::Level::Debug`].
+  - **`WireLoggingMode::Detailed`** — may include full request/response bodies at [`log::Level::Trace`] where allowed.
+  - **`SessionManager`** traffic (login, logout, session APIs) never logs bodies in detailed mode; logs stay summary-style with `body_logging=denylisted` / `mode=summary` as applicable.
+  - Import: `use vim_rs::WireLoggingMode;` (also available as `vim_rs::core::WireLoggingMode`).
+  - Typical filters: `RUST_LOG=vim_rs::wire::json=debug`, `vim_rs::wire::soap=debug`; use `=trace` on a target only when you need detailed bodies.
+
 ### Changed
 
 - **BREAKING:** `RootObjects` and `VsanObjectCatalog` now hold `VimClientHandle` (`Arc<dyn VimClient>`) instead of `Arc<Client>`. `RootObjects::new` / `VsanObjectCatalog::new` still accept `Arc<Client>` via coercion to the trait object. `RootObjects::client()` and `VsanObjectCatalog::client()` now return `VimClientHandle`; code that required `Arc<Client>` from those accessors must keep the concrete handle separately or adjust types.
 - `CacheManager::new` and `new_with_property_collector` use `Arc<dyn VimClient>` in their signatures (equivalent to the existing `VimClientHandle` alias).
 - `ObjectRetriever::new` uses `Arc<dyn VimClient>`
+- **Wire logging:** When wire logging is not [`WireLoggingMode::Off`], legacy transport-oriented `trace!` lines that dump request/response payloads are **not** emitted for the same paths (dedicated `vim_rs::wire::*` logs are authoritative). Other library `debug!` / `trace!` diagnostics are unchanged.
 
 ## [0.4.2] - 2026-03-22
 

@@ -1,7 +1,9 @@
 use std::sync::Arc;
+use std::time::Instant;
 
 use tokio::sync::RwLock;
 use super::super::types::structs;
+use super::wire_log;
 use log::{warn, debug, trace};
 
 use bytes::Bytes;
@@ -226,6 +228,40 @@ pub enum TransportMode {
     Auto,
 }
 
+/// Explicit wire capture mode for VI JSON / SOAP traffic.
+///
+/// Emits on log targets `vim_rs::wire::json` and `vim_rs::wire::soap`. Summary metadata uses
+/// [`log::Level::Debug`]; full request/response bodies use [`log::Level::Trace`] when
+/// [`WireLoggingMode::Detailed`] applies and the managed object type is not denylisted.
+///
+/// **Denylist:** traffic for managed object type `SessionManager` (login, logout, session APIs)
+/// never logs bodies, even in detailed mode; emitted lines use summary-style fields and may include
+/// `body_logging=denylisted`.
+///
+/// When any wire mode other than [`WireLoggingMode::Off`] is active, legacy transport `trace!` lines
+/// that duplicate full request/response dumps are suppressed for those paths.
+#[derive(Debug, Clone, Copy, PartialEq, Eq, Default)]
+pub enum WireLoggingMode {
+    /// Default: no dedicated wire log lines; existing library `debug!` / `trace!` behavior unchanged.
+    #[default]
+    Off,
+    /// Request/response metadata only (sizes, paths, status, duration) at [`log::Level::Debug`].
+    Summary,
+    /// Adds full bodies at [`log::Level::Trace`] where allowed (`SessionManager` remains summary-only).
+    Detailed,
+}
+
+impl WireLoggingMode {
+    /// `true` when dedicated wire logs may be emitted (Summary or Detailed).
+    pub const fn is_enabled(self) -> bool {
+        !matches!(self, Self::Off)
+    }
+    /// `true` when full bodies may be logged at [`log::Level::Trace`] (subject to denylist).
+    pub const fn is_detailed(self) -> bool {
+        matches!(self, Self::Detailed)
+    }
+}
+
 pub struct ClientBuilder {
     server_address: String,
     compatible_api_releases: Option<Vec<String>>,
@@ -238,6 +274,7 @@ pub struct ClientBuilder {
     password: Option<String>,
     locale: Option<String>,
     transport_mode: TransportMode,
+    wire_logging: WireLoggingMode,
 }
 
 impl ClientBuilder {
@@ -257,7 +294,19 @@ impl ClientBuilder {
             password: None,
             locale: None,
             transport_mode: TransportMode::default(),
+            wire_logging: WireLoggingMode::default(),
         }
+    }
+
+    /// Opt-in transport logging on dedicated log targets (`vim_rs::wire::json`, `vim_rs::wire::soap`).
+    ///
+    /// Defaults to [`WireLoggingMode::Off`]. Summary records use [`log::Level::Debug`]; full bodies in
+    /// [`WireLoggingMode::Detailed`] use [`log::Level::Trace`] except for `SessionManager` traffic,
+    /// which stays summary-only. Prefer filtering by target (e.g. `RUST_LOG=vim_rs::wire::json=debug`)
+    /// instead of raising global trace for the entire crate.
+    pub fn wire_logging(mut self, mode: WireLoggingMode) -> Self {
+        self.wire_logging = mode;
+        self
     }
 
     /// Set the transport mode. Requires the `xml` feature for `Soap` and `Auto`.
@@ -354,6 +403,7 @@ impl ClientBuilder {
     }
 
     async fn build_json(self) -> Result<Arc<Client>> {
+        let wire_logging = self.wire_logging;
         let http_client = match self.http_client {
             Some(client) => client,
             None => {
@@ -380,13 +430,57 @@ impl ClientBuilder {
                 };
                 let path = format!("https://{}/api/vcenter/system?action=hello", self.server_address);
                 let json_body = miniserde::json::to_string(&spec);
+                let started = Instant::now();
+                if wire_logging.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(wire_logging, "");
+                    let msg = format!(
+                        "wire=json mode={} phase=request kind=negotiate path={} body_bytes={}",
+                        mode_l,
+                        path,
+                        json_body.len()
+                    );
+                    wire_log::log_json_line(wire_logging, "", false, &msg);
+                }
                 let req = http_client.post(&path)
                     .header("Content-Type", "application/json")
                     .header("User-Agent", &user_agent)
                     .body(json_body);
-                let res = req.send().await?;
-                let res = res.error_for_status()?;
-                let body = res.text().await?;
+                let res = match req.send().await {
+                    Ok(r) => r,
+                    Err(e) => {
+                        wire_log::log_json_negotiate_transport_failure(
+                            wire_logging,
+                            &path,
+                            started.elapsed(),
+                            &e,
+                        );
+                        return Err(Error::ReqwestError(e));
+                    }
+                };
+                let status = res.status();
+                // Same classification as `Response::error_for_status()` (4xx/5xx → reqwest::Error).
+                let http_err = res.error_for_status_ref().err();
+                let body = res.text().await.map_err(Error::ReqwestError)?;
+                let elapsed = started.elapsed();
+                if wire_logging.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(wire_logging, "");
+                    let detailed = wire_logging.is_detailed();
+                    let mut msg = format!(
+                        "wire=json mode={} phase=response kind=negotiate path={} status={} body_bytes={} duration_ms={}",
+                        mode_l,
+                        path,
+                        status.as_u16(),
+                        body.len(),
+                        elapsed.as_millis()
+                    );
+                    if detailed {
+                        msg.push_str(&format!(" body={}", body));
+                    }
+                    wire_log::log_json_line(wire_logging, "", detailed, &msg);
+                }
+                if let Some(e) = http_err {
+                    return Err(Error::ReqwestError(e));
+                }
                 let result: HelloResult = miniserde::json::from_str(&body)
                     .map_err(|_| Error::ParseError("Failed to parse HelloResult".to_string()))?;
                 let api_release = result.api_release;
@@ -409,6 +503,7 @@ impl ClientBuilder {
             base_url: base_url.clone(),
             user_agent: user_agent.clone(),
             service_content: None,
+            wire_logging: wire_logging,
         });
 
         let service_instance = mo::ServiceInstance::new(bootstrap.clone(), SERVICE_INSTANCE_MOID);
@@ -424,6 +519,7 @@ impl ClientBuilder {
             base_url: base_url.clone(),
             user_agent: user_agent.clone(),
             service_content: Some(content),
+            wire_logging: wire_logging,
         });
 
         if let (Some(ref sm_id), Some(ref user_name), Some(ref password)) = (sm_id, self.user_name, self.password) {
@@ -454,7 +550,11 @@ impl ClientBuilder {
             None => API_RELEASE.to_string(),
         };
         let mut soap = crate::xml::client::SoapClient::new(
-            http_client, &self.server_address, &api_release, &ua,
+            http_client,
+            &self.server_address,
+            &api_release,
+            &ua,
+            self.wire_logging,
         );
         soap.bootstrap().await?;
 
@@ -471,6 +571,7 @@ impl ClientBuilder {
 
     #[cfg(feature = "xml")]
     async fn build_auto_facade(self) -> Result<Arc<Client>> {
+        let wl = self.wire_logging;
         let ua = user_agent(self.app_name.as_deref(), self.app_version.as_deref());
         let http_client_for_probe = {
             let mut builder = reqwest::ClientBuilder::new();
@@ -486,6 +587,17 @@ impl ClientBuilder {
         let hello_url = format!("https://{}/api/vcenter/system?action=hello", self.server_address);
         let spec = HelloSpec { api_releases: &releases };
         let json_body = miniserde::json::to_string(&spec);
+        let started = Instant::now();
+        if wl.is_enabled() {
+            let mode_l = wire_log::wire_mode_label(wl, "");
+            let msg = format!(
+                "wire=json mode={} phase=request kind=probe path={} body_bytes={}",
+                mode_l,
+                hello_url,
+                json_body.len()
+            );
+            wire_log::log_json_line(wl, "", false, &msg);
+        }
 
         let hello_ok = match http_client_for_probe
             .post(&hello_url)
@@ -495,13 +607,48 @@ impl ClientBuilder {
             .send()
             .await
         {
-            Ok(res) if res.status().is_success() => {
+            Ok(res) => {
+                let status = res.status();
                 let body = res.text().await.unwrap_or_default();
-                miniserde::json::from_str::<HelloResult>(&body)
-                    .ok()
-                    .filter(|r| !r.api_release.is_empty())
+                let elapsed = started.elapsed();
+                if wl.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(wl, "");
+                    let detailed = wl.is_detailed();
+                    let mut msg = format!(
+                        "wire=json mode={} phase=response kind=probe path={} status={} body_bytes={} duration_ms={}",
+                        mode_l,
+                        hello_url,
+                        status.as_u16(),
+                        body.len(),
+                        elapsed.as_millis()
+                    );
+                    if detailed {
+                        msg.push_str(&format!(" body={}", body));
+                    }
+                    wire_log::log_json_line(wl, "", detailed, &msg);
+                }
+                if status.is_success() {
+                    miniserde::json::from_str::<HelloResult>(&body)
+                        .ok()
+                        .filter(|r| !r.api_release.is_empty())
+                } else {
+                    None
+                }
             }
-            _ => None,
+            Err(e) => {
+                if wl.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(wl, "");
+                    let msg = format!(
+                        "wire=json mode={} phase=response kind=probe path={} error=transport body_bytes=0 duration_ms={} detail={}",
+                        mode_l,
+                        hello_url,
+                        started.elapsed().as_millis(),
+                        e
+                    );
+                    wire_log::log_json_line(wl, "", false, &msg);
+                }
+                None
+            }
         };
 
         if hello_ok.is_some() {
@@ -618,6 +765,23 @@ impl VimClient for Client {
     }
 }
 
+pub(crate) struct JsonWireCtx<'a> {
+    pub svc: &'a str,
+    pub mo_type: &'a str,
+    pub mo_id: &'a str,
+    pub name: &'a str,
+    pub path: &'a str,
+    pub is_property_get: bool,
+}
+
+fn json_method_path(svc: &str, mo_type: &str, mo_id: &str, method_name: &str) -> String {
+    if svc.is_empty() {
+        format!("/{mo_type}/{mo_id}/{method_name}")
+    } else {
+        format!("/{svc}/{mo_type}/{mo_id}/{method_name}")
+    }
+}
+
 pub(crate) struct JsonClient {
     http_client: reqwest::Client,
     session_key: Arc<RwLock<Option<String>>>,
@@ -625,6 +789,7 @@ pub(crate) struct JsonClient {
     base_url: String,
     user_agent: String,
     service_content: Option<ServiceContent>,
+    wire_logging: WireLoggingMode,
 }
 
 /// VI JSON API implementation (Hello + `/sdk/vim25/{release}`). Crate-private; users hold [`Client`].
@@ -662,7 +827,7 @@ impl JsonClient {
         method_name: &str,
         params: Option<&(dyn miniserde::Serialize + Send + Sync)>,
     ) -> reqwest::RequestBuilder {
-        let path =  if svc.is_empty() {
+        let path = if svc.is_empty() {
             format!("/{mo_type}/{mo_id}/{method_name}")
         } else {
             format!("/{svc}/{mo_type}/{mo_id}/{method_name}")
@@ -671,7 +836,35 @@ impl JsonClient {
             Some(payload) => {
                 debug!("POST request: {}", path);
                 let json_body = miniserde::json::to_string(payload);
-                if log::log_enabled!(log::Level::Trace) {
+                if self.wire_logging.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(self.wire_logging, mo_type);
+                    let deny = wire_log::body_logging_note(self.wire_logging, mo_type);
+                    let deny_s = deny.unwrap_or("");
+                    let deny_sep = if deny_s.is_empty() { "" } else { " " };
+                    let mut msg = format!(
+                        "wire=json mode={} phase=request svc=\"{}\" mo={} id={} method={} path={} body_bytes={}{}{}",
+                        mode_l,
+                        svc,
+                        mo_type,
+                        mo_id,
+                        method_name,
+                        path,
+                        json_body.len(),
+                        deny_sep,
+                        deny_s
+                    );
+                    if wire_log::bodies_allowed(self.wire_logging, mo_type) {
+                        msg.push_str(&format!(" body={}", json_body));
+                    }
+                    wire_log::log_json_line(
+                        self.wire_logging,
+                        mo_type,
+                        wire_log::bodies_allowed(self.wire_logging, mo_type),
+                        &msg,
+                    );
+                } else if log::log_enabled!(log::Level::Trace)
+                    && !wire_log::suppress_legacy_transport_trace(self.wire_logging)
+                {
                     trace!("POST payload: {}", json_body);
                 }
                 let url = format!("{}{}", self.base_url, path);
@@ -680,16 +873,85 @@ impl JsonClient {
                     .header("Content-Type", "application/json")
                     .body(json_body)
             }
-            None => self.post_bare(&path),
+            None => {
+                if self.wire_logging.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(self.wire_logging, mo_type);
+                    let deny = wire_log::body_logging_note(self.wire_logging, mo_type);
+                    let deny_s = deny.unwrap_or("");
+                    let deny_sep = if deny_s.is_empty() { "" } else { " " };
+                    let msg = format!(
+                        "wire=json mode={} phase=request svc=\"{}\" mo={} id={} method={} path={} body_bytes=0{}{}",
+                        mode_l,
+                        svc,
+                        mo_type,
+                        mo_id,
+                        method_name,
+                        path,
+                        deny_sep,
+                        deny_s
+                    );
+                    wire_log::log_json_line(self.wire_logging, mo_type, false, &msg);
+                }
+                self.post_bare(&path)
+            }
         }
     }
 
     /// Execute a request that does not return a response body
-    pub(crate) async fn execute_void(&self, mut req: reqwest::RequestBuilder) -> Result<()>
-    {
+    pub(crate) async fn execute_void(
+        &self,
+        mut req: reqwest::RequestBuilder,
+        ctx: Option<JsonWireCtx<'_>>,
+        started: Instant,
+    ) -> Result<()> {
         req = self.prepare(req).await;
-        let res = req.send().await?;
-        let _ = self.process_response(res).await?;
+        let res = match req.send().await {
+            Ok(r) => r,
+            Err(e) => {
+                if self.wire_logging.is_enabled() {
+                    if let Some(c) = ctx.as_ref() {
+                        wire_log::log_json_transport_failure(
+                            self.wire_logging,
+                            c.svc,
+                            c.mo_type,
+                            c.mo_id,
+                            c.name,
+                            c.path,
+                            c.is_property_get,
+                            started.elapsed(),
+                            &e,
+                        );
+                    }
+                }
+                return Err(Error::ReqwestError(e));
+            }
+        };
+        let res = self
+            .process_response(res, Some(started), ctx.as_ref())
+            .await?;
+        if self.wire_logging.is_enabled() {
+            if let Some(c) = ctx.as_ref() {
+                let mode_l = wire_log::wire_mode_label(self.wire_logging, c.mo_type);
+                let deny = wire_log::body_logging_note(self.wire_logging, c.mo_type);
+                let deny_s = deny.unwrap_or("");
+                let deny_sep = if deny_s.is_empty() { "" } else { " " };
+                let name_field = format!("method={}", c.name);
+                let msg = format!(
+                    "wire=json mode={} phase=response svc=\"{}\" mo={} id={} {} path={} status={} body_bytes=0 duration_ms={}{}{}",
+                    mode_l,
+                    c.svc,
+                    c.mo_type,
+                    c.mo_id,
+                    name_field,
+                    c.path,
+                    res.status().as_u16(),
+                    started.elapsed().as_millis(),
+                    deny_sep,
+                    deny_s
+                );
+                wire_log::log_json_line(self.wire_logging, c.mo_type, false, &msg);
+            }
+        }
         Ok(())
     }
 
@@ -704,7 +966,12 @@ impl JsonClient {
     }
 
     /// Handle authn header update and error unmarsalling
-    async fn process_response(&self, res: reqwest::Response) -> Result<reqwest::Response> {
+    async fn process_response(
+        &self,
+        res: reqwest::Response,
+        started: Option<Instant>,
+        ctx: Option<&JsonWireCtx<'_>>,
+    ) -> Result<reqwest::Response> {
         if res.status().is_success() && res.headers().contains_key(AUTHN_HEADER) {
             let session_key = res.headers().get(AUTHN_HEADER).unwrap().to_str().map_err(|_| Error::MissingOrInvalidSessionKey)?.to_string();
             let mut key_holder = self.session_key.write().await;
@@ -712,7 +979,24 @@ impl JsonClient {
         }
         if !res.status().is_success() {
             warn!("HTTP error: {}", res.status());
+            let status = res.status();
             let body = res.text().await?;
+            if let (Some(start), Some(c)) = (started, ctx) {
+                if self.wire_logging.is_enabled() {
+                    wire_log::log_json_http_error(
+                        self.wire_logging,
+                        c.svc,
+                        c.mo_type,
+                        c.mo_id,
+                        c.name,
+                        c.path,
+                        c.is_property_get,
+                        status,
+                        &body,
+                        start.elapsed(),
+                    );
+                }
+            }
             let fault: structs::MethodFault = miniserde::json::from_str(&body)
                 .map_err(|_| Error::ParseError(format!("Failed to parse MethodFault from error response: {}", &body[..body.len().min(200)])))?;
             return Err(Error::MethodFault(fault));
@@ -743,14 +1027,79 @@ impl VimClient for JsonClient {
         params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<Bytes>> {
         Box::pin(async move {
+            let path_str = json_method_path(svc, mo_type, mo_id, method_name);
+            let ctx = JsonWireCtx {
+                svc,
+                mo_type,
+                mo_id,
+                name: method_name,
+                path: path_str.as_str(),
+                is_property_get: false,
+            };
+            let started = Instant::now();
             let req = self.build_post_request(svc, mo_type, mo_id, method_name, params);
             let req = self.prepare(req).await;
-            let res = req.send().await?;
-            let res = self.process_response(res).await?;
+            let res = match req.send().await {
+                Ok(r) => r,
+                Err(e) => {
+                    wire_log::log_json_transport_failure(
+                        self.wire_logging,
+                        svc,
+                        mo_type,
+                        mo_id,
+                        method_name,
+                        path_str.as_str(),
+                        false,
+                        started.elapsed(),
+                        &e,
+                    );
+                    return Err(Error::ReqwestError(e));
+                }
+            };
+            let res = self
+                .process_response(res, Some(started), Some(&ctx))
+                .await?;
+            let http_status = res.status();
             let bytes = res.bytes().await?;
-            if log::log_enabled!(log::Level::Trace) {
+            if self.wire_logging.is_enabled() {
+                let mode_l = wire_log::wire_mode_label(self.wire_logging, mo_type);
+                let deny = wire_log::body_logging_note(self.wire_logging, mo_type);
+                let deny_s = deny.unwrap_or("");
+                let deny_sep = if deny_s.is_empty() { "" } else { " " };
+                let body_lossy = wire_log::sanitize_utf8(&bytes);
+                let mut msg = format!(
+                    "wire=json mode={} phase=response svc=\"{}\" mo={} id={} method={} path={} status={} body_bytes={} duration_ms={}{}{}",
+                    mode_l,
+                    svc,
+                    mo_type,
+                    mo_id,
+                    method_name,
+                    path_str,
+                    http_status.as_u16(),
+                    bytes.len(),
+                    started.elapsed().as_millis(),
+                    deny_sep,
+                    deny_s
+                );
+                if wire_log::bodies_allowed(self.wire_logging, mo_type) {
+                    msg.push_str(&format!(" body={}", body_lossy));
+                }
+                wire_log::log_json_line(
+                    self.wire_logging,
+                    mo_type,
+                    wire_log::bodies_allowed(self.wire_logging, mo_type),
+                    &msg,
+                );
+            } else if log::log_enabled!(log::Level::Trace)
+                && !wire_log::suppress_legacy_transport_trace(self.wire_logging)
+            {
                 let body = String::from_utf8_lossy(&bytes);
-                trace!("JSON response from {}/{}: {}...", mo_type, method_name, &body[..body.len().min(2000)]);
+                trace!(
+                    "JSON response from {}/{}: {}...",
+                    mo_type,
+                    method_name,
+                    &body[..body.len().min(2000)]
+                );
             }
             Ok(bytes)
         })
@@ -765,16 +1114,86 @@ impl VimClient for JsonClient {
         params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<Option<Bytes>>> {
         Box::pin(async move {
+            let path_str = json_method_path(svc, mo_type, mo_id, method_name);
+            let ctx = JsonWireCtx {
+                svc,
+                mo_type,
+                mo_id,
+                name: method_name,
+                path: path_str.as_str(),
+                is_property_get: false,
+            };
+            let started = Instant::now();
             let req = self.build_post_request(svc, mo_type, mo_id, method_name, params);
             let req = self.prepare(req).await;
-            let res = req.send().await?;
-            let res = self.process_response(res).await?;
+            let res = match req.send().await {
+                Ok(r) => r,
+                Err(e) => {
+                    wire_log::log_json_transport_failure(
+                        self.wire_logging,
+                        svc,
+                        mo_type,
+                        mo_id,
+                        method_name,
+                        path_str.as_str(),
+                        false,
+                        started.elapsed(),
+                        &e,
+                    );
+                    return Err(Error::ReqwestError(e));
+                }
+            };
+            let res = self
+                .process_response(res, Some(started), Some(&ctx))
+                .await?;
+            let http_status = res.status();
             let bytes = res.bytes().await?;
-            if log::log_enabled!(log::Level::Trace) && !bytes.is_empty() {
+            if self.wire_logging.is_enabled() && !bytes.is_empty() {
+                let mode_l = wire_log::wire_mode_label(self.wire_logging, mo_type);
+                let deny = wire_log::body_logging_note(self.wire_logging, mo_type);
+                let deny_s = deny.unwrap_or("");
+                let deny_sep = if deny_s.is_empty() { "" } else { " " };
+                let body_lossy = wire_log::sanitize_utf8(&bytes);
+                let mut msg = format!(
+                    "wire=json mode={} phase=response svc=\"{}\" mo={} id={} method={} path={} status={} body_bytes={} duration_ms={}{}{}",
+                    mode_l,
+                    svc,
+                    mo_type,
+                    mo_id,
+                    method_name,
+                    path_str,
+                    http_status.as_u16(),
+                    bytes.len(),
+                    started.elapsed().as_millis(),
+                    deny_sep,
+                    deny_s
+                );
+                if wire_log::bodies_allowed(self.wire_logging, mo_type) {
+                    msg.push_str(&format!(" body={}", body_lossy));
+                }
+                wire_log::log_json_line(
+                    self.wire_logging,
+                    mo_type,
+                    wire_log::bodies_allowed(self.wire_logging, mo_type),
+                    &msg,
+                );
+            } else if log::log_enabled!(log::Level::Trace)
+                && !bytes.is_empty()
+                && !wire_log::suppress_legacy_transport_trace(self.wire_logging)
+            {
                 let body = String::from_utf8_lossy(&bytes);
-                trace!("JSON response from {}/{}: {}...", mo_type, method_name, &body[..body.len().min(2000)]);
+                trace!(
+                    "JSON response from {}/{}: {}...",
+                    mo_type,
+                    method_name,
+                    &body[..body.len().min(2000)]
+                );
             }
-            if bytes.is_empty() { Ok(None) } else { Ok(Some(bytes)) }
+            if bytes.is_empty() {
+                Ok(None)
+            } else {
+                Ok(Some(bytes))
+            }
         })
     }
 
@@ -787,8 +1206,18 @@ impl VimClient for JsonClient {
         params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<()>> {
         Box::pin(async move {
+            let path_str = json_method_path(svc, mo_type, mo_id, method_name);
+            let ctx = JsonWireCtx {
+                svc,
+                mo_type,
+                mo_id,
+                name: method_name,
+                path: path_str.as_str(),
+                is_property_get: false,
+            };
+            let started = Instant::now();
             let req = self.build_post_request(svc, mo_type, mo_id, method_name, params);
-            JsonClient::execute_void(self, req).await
+            JsonClient::execute_void(self, req, Some(ctx), started).await
         })
     }
 
@@ -805,14 +1234,97 @@ impl VimClient for JsonClient {
             } else {
                 format!("/{svc}/{mo_type}/{mo_id}/{property}")
             };
+            let ctx = JsonWireCtx {
+                svc,
+                mo_type,
+                mo_id,
+                name: property,
+                path: path.as_str(),
+                is_property_get: true,
+            };
+            let started = Instant::now();
+            if self.wire_logging.is_enabled() {
+                let mode_l = wire_log::wire_mode_label(self.wire_logging, mo_type);
+                let deny = wire_log::body_logging_note(self.wire_logging, mo_type);
+                let deny_s = deny.unwrap_or("");
+                let deny_sep = if deny_s.is_empty() { "" } else { " " };
+                let msg = format!(
+                    "wire=json mode={} phase=request svc=\"{}\" mo={} id={} property={} path={} body_bytes=0{}{}",
+                    mode_l,
+                    svc,
+                    mo_type,
+                    mo_id,
+                    property,
+                    path,
+                    deny_sep,
+                    deny_s
+                );
+                wire_log::log_json_line(self.wire_logging, mo_type, false, &msg);
+            }
             let req = self.get_request(&path);
             let req = self.prepare(req).await;
-            let res = req.send().await?;
-            let res = self.process_response(res).await?;
+            let res = match req.send().await {
+                Ok(r) => r,
+                Err(e) => {
+                    wire_log::log_json_transport_failure(
+                        self.wire_logging,
+                        svc,
+                        mo_type,
+                        mo_id,
+                        property,
+                        path.as_str(),
+                        true,
+                        started.elapsed(),
+                        &e,
+                    );
+                    return Err(Error::ReqwestError(e));
+                }
+            };
+            let res = self
+                .process_response(res, Some(started), Some(&ctx))
+                .await?;
+            let http_status = res.status();
             let bytes = res.bytes().await?;
-            if log::log_enabled!(log::Level::Trace) && !bytes.is_empty() {
+            if self.wire_logging.is_enabled() && !bytes.is_empty() {
+                let mode_l = wire_log::wire_mode_label(self.wire_logging, mo_type);
+                let deny = wire_log::body_logging_note(self.wire_logging, mo_type);
+                let deny_s = deny.unwrap_or("");
+                let deny_sep = if deny_s.is_empty() { "" } else { " " };
+                let body_lossy = wire_log::sanitize_utf8(&bytes);
+                let mut msg = format!(
+                    "wire=json mode={} phase=response svc=\"{}\" mo={} id={} property={} path={} status={} body_bytes={} duration_ms={}{}{}",
+                    mode_l,
+                    svc,
+                    mo_type,
+                    mo_id,
+                    property,
+                    path,
+                    http_status.as_u16(),
+                    bytes.len(),
+                    started.elapsed().as_millis(),
+                    deny_sep,
+                    deny_s
+                );
+                if wire_log::bodies_allowed(self.wire_logging, mo_type) {
+                    msg.push_str(&format!(" body={}", body_lossy));
+                }
+                wire_log::log_json_line(
+                    self.wire_logging,
+                    mo_type,
+                    wire_log::bodies_allowed(self.wire_logging, mo_type),
+                    &msg,
+                );
+            } else if log::log_enabled!(log::Level::Trace)
+                && !bytes.is_empty()
+                && !wire_log::suppress_legacy_transport_trace(self.wire_logging)
+            {
                 let body = String::from_utf8_lossy(&bytes);
-                trace!("JSON fetch_property_raw {}/{}: {}...", mo_type, property, &body[..body.len().min(2000)]);
+                trace!(
+                    "JSON fetch_property_raw {}/{}: {}...",
+                    mo_type,
+                    property,
+                    &body[..body.len().min(2000)]
+                );
             }
             if bytes.is_empty() {
                 Ok(None)
@@ -832,6 +1344,7 @@ impl Drop for JsonClient {
         let session_key = Arc::clone(&self.session_key);
         let http_client = &self.http_client.clone();
         let base_url = self.base_url.clone();
+        let wire_logging = self.wire_logging;
 
         let sm_id = self.service_content.as_ref().and_then(|content| content.session_manager.as_ref().map(|moid| moid.value.clone()));
         let sm_id = match sm_id {
@@ -858,26 +1371,65 @@ impl Drop for JsonClient {
                 let path = format!("{base_url}/SessionManager/{moId}/Logout",
                                     base_url = base_url,
                                     moId = sm_id);
+                if wire_logging.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
+                    let msg = format!(
+                        "wire=json mode={} phase=request kind=logout mo=SessionManager id={} method=Logout path={} body_bytes=0 body_logging=denylisted",
+                        mode_l,
+                        sm_id,
+                        path
+                    );
+                    wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
+                }
                 let req = http_client.post(&path)
                                         .header(AUTHN_HEADER, key);
+                let started = Instant::now();
                 match req.send().await {
                     Ok(resp) => {
                         let status = resp.status();
+                        let body = resp.text().await.unwrap_or_default();
+                        let dur = started.elapsed();
+                        if wire_logging.is_enabled() {
+                            let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
+                            let http_note = if status.is_success() {
+                                ""
+                            } else {
+                                " error=http_failure"
+                            };
+                            let msg = format!(
+                                "wire=json mode={} phase=response kind=logout mo=SessionManager id={} method=Logout status={} body_bytes={} duration_ms={} body_logging=denylisted{}",
+                                mode_l,
+                                sm_id,
+                                status.as_u16(),
+                                body.len(),
+                                dur.as_millis(),
+                                http_note
+                            );
+                            wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
+                        }
                         if status.is_success() {
                             debug!("Session logged out successfully");
                         } else {
-                            match resp.text().await {
-                                Ok(body) => {
-                                    match miniserde::json::from_str::<structs::MethodFault>(&body) {
-                                        Ok(fault) => warn!("Failed to logout session(HTTP code: {}). MethodFault: {:?}", status, fault),
-                                        Err(_) => warn!("Failed to logout session(HTTP code: {}). Cannot parse MethodFault: {}", status, &body[..body.len().min(200)]),
-                                    }
-                                },
-                                Err(e) => warn!("Failed to logout session(HTTP code: {}). Cannot read response: {}", status, e),
+                            match miniserde::json::from_str::<structs::MethodFault>(&body) {
+                                Ok(fault) => warn!("Failed to logout session(HTTP code: {}). MethodFault: {:?}", status, fault),
+                                Err(_) => warn!("Failed to logout session(HTTP code: {}). Cannot parse MethodFault: {}", status, &body[..body.len().min(200)]),
                             }
                         }
-                    },
-                    Err(e) => warn!("Failed to logout session. Cannot execute logout request: {}", e),
+                    }
+                    Err(e) => {
+                        if wire_logging.is_enabled() {
+                            let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
+                            let msg = format!(
+                                "wire=json mode={} phase=response kind=logout mo=SessionManager id={} method=Logout error=transport duration_ms={} body_logging=denylisted detail={}",
+                                mode_l,
+                                sm_id,
+                                started.elapsed().as_millis(),
+                                e
+                            );
+                            wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
+                        }
+                        warn!("Failed to logout session. Cannot execute logout request: {}", e);
+                    }
                 }
             });
         });
@@ -1014,5 +1566,590 @@ impl std::fmt::Debug for HelloResult {
         f.debug_struct("HelloResult")
             .field("api_release", &self.api_release)
             .finish()
+    }
+}
+
+/// Shared by wire-logging transport tests (`core` + `xml` client).
+#[cfg(test)]
+pub(crate) fn test_dead_port_http_client() -> reqwest::Client {
+    #[cfg(feature = "xml")]
+    {
+        return reqwest::Client::builder()
+            .cookie_store(true)
+            .connect_timeout(std::time::Duration::from_millis(500))
+            .timeout(std::time::Duration::from_secs(3))
+            .build()
+            .expect("reqwest test client");
+    }
+    #[cfg(not(feature = "xml"))]
+    {
+        reqwest::Client::builder()
+            .connect_timeout(std::time::Duration::from_millis(500))
+            .timeout(std::time::Duration::from_secs(3))
+            .build()
+            .expect("reqwest test client")
+    }
+}
+
+/// Unbound TCP address used to force `send()` transport failures quickly.
+#[cfg(test)]
+pub(crate) const TEST_WIRE_DEAD_ADDR: &str = "127.0.0.1:65433";
+
+#[cfg(test)]
+pub(crate) fn test_minimal_service_content_for_tests() -> ServiceContent {
+    let json = r#"{
+        "_typeName": "ServiceContent",
+        "rootFolder": {"_typeName":"ManagedObjectReference","type":"Folder","value":"root-1"},
+        "propertyCollector": {"_typeName":"ManagedObjectReference","type":"PropertyCollector","value":"pc-1"},
+        "viewManager": {"_typeName":"ManagedObjectReference","type":"ViewManager","value":"vmgr-1"},
+        "about": {
+            "_typeName":"AboutInfo",
+            "name":"n",
+            "fullName":"f",
+            "vendor":"v",
+            "version":"1",
+            "build":"b",
+            "osType":"o",
+            "productLineId":"p",
+            "apiType":"VirtualCenter",
+            "apiVersion":"1"
+        }
+    }"#;
+    miniserde::json::from_str(json).expect("fixture ServiceContent")
+}
+
+#[cfg(test)]
+pub(crate) fn test_json_client_wire_transport() -> Arc<JsonClient> {
+    let base_url = format!("https://{}/sdk/vim25/{}", TEST_WIRE_DEAD_ADDR, API_RELEASE);
+    Arc::new(JsonClient {
+        http_client: test_dead_port_http_client(),
+        session_key: Arc::new(RwLock::new(None)),
+        api_release: API_RELEASE.to_string(),
+        base_url,
+        user_agent: "wire-transport-test".to_string(),
+        service_content: Some(test_minimal_service_content_for_tests()),
+        wire_logging: WireLoggingMode::Summary,
+    })
+}
+
+/// [`ServiceContent`] with `sessionManager` set (for JSON logout-on-`Drop` tests).
+#[cfg(test)]
+pub(crate) fn test_service_content_with_session_manager_for_tests() -> ServiceContent {
+    let json = r#"{
+        "_typeName": "ServiceContent",
+        "rootFolder": {"_typeName":"ManagedObjectReference","type":"Folder","value":"root-1"},
+        "propertyCollector": {"_typeName":"ManagedObjectReference","type":"PropertyCollector","value":"pc-1"},
+        "viewManager": {"_typeName":"ManagedObjectReference","type":"ViewManager","value":"vmgr-1"},
+        "sessionManager": {"_typeName":"ManagedObjectReference","type":"SessionManager","value":"sm-wire-test"},
+        "about": {
+            "_typeName":"AboutInfo",
+            "name":"n",
+            "fullName":"f",
+            "vendor":"v",
+            "version":"1",
+            "build":"b",
+            "osType":"o",
+            "productLineId":"p",
+            "apiType":"VirtualCenter",
+            "apiVersion":"1"
+        }
+    }"#;
+    miniserde::json::from_str(json).expect("fixture ServiceContent with session manager")
+}
+
+/// JSON VI client pointing at `http_origin` (e.g. `http://127.0.0.1:PORT`) for local stub servers.
+#[cfg(test)]
+pub(crate) fn test_json_client_http_origin(
+    http_origin: &str,
+    session_key: Option<String>,
+) -> Arc<JsonClient> {
+    let base_url = format!("{http_origin}/sdk/vim25/{API_RELEASE}");
+    Arc::new(JsonClient {
+        http_client: reqwest::Client::builder()
+            .timeout(std::time::Duration::from_secs(5))
+            .build()
+            .expect("reqwest test client"),
+        session_key: Arc::new(RwLock::new(session_key)),
+        api_release: API_RELEASE.to_string(),
+        base_url,
+        user_agent: "wire-http-test".to_string(),
+        service_content: Some(test_service_content_with_session_manager_for_tests()),
+        wire_logging: WireLoggingMode::Summary,
+    })
+}
+
+/// Wire logging integration tests: transport failures, HTTP error responses (`log_json_http_error`), and
+/// logout-on-`Drop` paths (JSON + SOAP). Uses a multi-threaded Tokio runtime for every async test because
+/// `JsonClient` / `SoapClient` `Drop` uses `block_in_place` + `block_on`. Serializes tests that share the
+/// global `log` sink and a localhost HTTP stub on a background OS thread for deterministic responses.
+#[cfg(test)]
+mod wire_logging_transport_tests {
+    use std::sync::{Mutex, Once};
+
+    use std::time::Instant;
+
+    use super::super::wire_log;
+    use super::{
+        test_dead_port_http_client, test_json_client_wire_transport, ClientBuilder, Error, JsonClient,
+        VimClient, WireLoggingMode, TEST_WIRE_DEAD_ADDR,
+    };
+    use miniserde::Serialize;
+
+    /// Matches [`crate::core::wire_log::TARGET_SOAP`] without importing the `xml`-gated symbol.
+    const SOAP_WIRE_TARGET: &str = "vim_rs::wire::soap";
+
+    static LOG_INIT: Once = Once::new();
+    static SERIAL: Mutex<()> = Mutex::new(());
+    static WIRE_LINES: Mutex<Vec<String>> = Mutex::new(Vec::new());
+
+    struct CaptureWireLogger;
+
+    impl log::Log for CaptureWireLogger {
+        fn enabled(&self, _: &log::Metadata<'_>) -> bool {
+            true
+        }
+
+        fn log(&self, record: &log::Record<'_>) {
+            let t = record.target();
+            if t == wire_log::TARGET_JSON || t == SOAP_WIRE_TARGET {
+                WIRE_LINES
+                    .lock()
+                    .expect("wire log capture")
+                    .push(record.args().to_string());
+            }
+        }
+
+        fn flush(&self) {}
+    }
+
+    fn init_wire_capture() {
+        LOG_INIT.call_once(|| {
+            let _ = log::set_logger(&CaptureWireLogger);
+            log::set_max_level(log::LevelFilter::Trace);
+        });
+    }
+
+    fn clear_wire_lines() {
+        WIRE_LINES.lock().expect("wire lines").clear();
+    }
+
+    fn joined_wire_output() -> String {
+        WIRE_LINES.lock().expect("wire lines").join("\n")
+    }
+
+    /// Empty JSON object `{}` for `invoke` paths that use a POST body.
+    struct EmptyJsonObject;
+    struct EmptyJsonMap;
+
+    impl Serialize for EmptyJsonObject {
+        fn begin(&self) -> miniserde::ser::Fragment<'_> {
+            miniserde::ser::Fragment::Map(Box::new(EmptyJsonMap))
+        }
+    }
+
+    impl miniserde::ser::Map for EmptyJsonMap {
+        fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn Serialize)> {
+            None
+        }
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_hello_negotiate_and_invoke_paths_log_transport_failure() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        // Hello System negotiation (no fixed api_release → must POST hello).
+        let hello_err = ClientBuilder::new(TEST_WIRE_DEAD_ADDR)
+            .http_client(test_dead_port_http_client())
+            .wire_logging(WireLoggingMode::Summary)
+            .build()
+            .await;
+        assert!(
+            matches!(hello_err.as_ref(), Err(Error::ReqwestError(_))),
+            "expected transport error from hello, got {:?}",
+            hello_err.as_ref().err()
+        );
+        let out = joined_wire_output();
+        assert!(
+            out.contains("phase=request kind=negotiate"),
+            "hello request line missing: {out}"
+        );
+        assert!(
+            out.contains("phase=response kind=negotiate") && out.contains("error=transport"),
+            "hello transport response line missing: {out}"
+        );
+
+        clear_wire_lines();
+        let jc = test_json_client_wire_transport();
+        let empty = EmptyJsonObject;
+
+        let invoke_err = jc
+            .invoke(
+                "",
+                "VirtualMachine",
+                "vm-1",
+                "RefreshStorageInfo",
+                Some(&empty as &(dyn Serialize + Send + Sync)),
+            )
+            .await;
+        assert!(matches!(invoke_err, Err(Error::ReqwestError(_))));
+        let out = joined_wire_output();
+        assert!(
+            out.contains("phase=request") && out.contains("method=RefreshStorageInfo"),
+            "invoke request missing: {out}"
+        );
+        assert!(
+            out.contains("phase=response") && out.contains("error=transport"),
+            "invoke transport response missing: {out}"
+        );
+
+        clear_wire_lines();
+        let opt_err = jc
+            .invoke_optional(
+                "",
+                "VirtualMachine",
+                "vm-1",
+                "SomeMethod",
+                Some(&empty as &(dyn Serialize + Send + Sync)),
+            )
+            .await;
+        assert!(matches!(opt_err, Err(Error::ReqwestError(_))));
+        let out = joined_wire_output();
+        assert!(out.contains("error=transport"), "invoke_optional: {out}");
+
+        clear_wire_lines();
+        let void_err = jc
+            .invoke_void("", "VirtualMachine", "vm-1", "Destroy", None)
+            .await;
+        assert!(matches!(void_err, Err(Error::ReqwestError(_))));
+        let out = joined_wire_output();
+        assert!(
+            out.contains("phase=request") && out.contains("body_bytes=0"),
+            "void request: {out}"
+        );
+        assert!(out.contains("error=transport"), "void transport: {out}");
+
+        clear_wire_lines();
+        let fetch_err = jc
+            .fetch_property_raw("", "VirtualMachine", "vm-1", "name")
+            .await;
+        assert!(matches!(fetch_err, Err(Error::ReqwestError(_))));
+        let out = joined_wire_output();
+        assert!(
+            out.contains("property=name") && out.contains("error=transport"),
+            "fetch_property_raw: {out}"
+        );
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_execute_void_helper_logs_transport_failure() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let jc = test_json_client_wire_transport();
+        let path_str = super::json_method_path("", "Folder", "group-d1", "Destroy");
+        let ctx = super::JsonWireCtx {
+            svc: "",
+            mo_type: "Folder",
+            mo_id: "group-d1",
+            name: "Destroy",
+            path: path_str.as_str(),
+            is_property_get: false,
+        };
+        let started = Instant::now();
+        let req = jc.build_post_request("", "Folder", "group-d1", "Destroy", None);
+        let req = jc.prepare(req).await;
+        let err = JsonClient::execute_void(jc.as_ref(), req, Some(ctx), started).await;
+        assert!(matches!(err, Err(Error::ReqwestError(_))));
+        let out = joined_wire_output();
+        assert!(out.contains("method=Destroy") && out.contains("error=transport"), "{out}");
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_auto_probe_logs_transport_on_hello_send_failure() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let err = ClientBuilder::new(TEST_WIRE_DEAD_ADDR)
+            .http_client(test_dead_port_http_client())
+            .wire_logging(WireLoggingMode::Summary)
+            .transport(super::TransportMode::Auto)
+            .build()
+            .await;
+        assert!(err.is_err(), "expected auto build to fail");
+        let out = joined_wire_output();
+        assert!(
+            out.contains("kind=probe") && out.contains("error=transport"),
+            "auto probe transport line missing: {out}"
+        );
+    }
+
+    /// One-shot HTTP/1.1 stub on a background thread (avoids deadlocks with `Drop` + `block_on`).
+    fn spawn_http_stub_once(status: u16, body: &[u8]) -> (String, std::thread::JoinHandle<()>) {
+        use std::io::{Read, Write};
+        use std::net::TcpListener;
+        use std::thread;
+        use std::time::Duration;
+
+        let listener = TcpListener::bind("127.0.0.1:0").expect("bind http stub");
+        let port = listener.local_addr().expect("stub addr").port();
+        let body = body.to_vec();
+        let h = thread::spawn(move || {
+            let (mut stream, _) = listener.accept().expect("stub accept");
+            let _ = stream.set_read_timeout(Some(Duration::from_secs(5)));
+            let mut buf = vec![0u8; 32768];
+            let _ = stream.read(&mut buf);
+            let status_text = match status {
+                200 => "OK",
+                403 => "Forbidden",
+                500 => "Internal Server Error",
+                503 => "Service Unavailable",
+                _ => "Error",
+            };
+            let head = format!(
+                "HTTP/1.1 {} {}\r\nContent-Type: application/json\r\nContent-Length: {}\r\nConnection: close\r\n\r\n",
+                status,
+                status_text,
+                body.len()
+            );
+            let mut out = head.into_bytes();
+            out.extend_from_slice(&body);
+            let _ = stream.write_all(&out);
+        });
+        (format!("http://127.0.0.1:{port}"), h)
+    }
+
+    /// Minimal [`MethodFault`] JSON (parses via `process_response`).
+    const SAMPLE_FAULT_JSON: &str = r#"{"_typeName":"VAppPropertyFault","id":"x","category":"string","label":"l","type":"string","value":"v"}"#;
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_invoke_non_success_emits_wire_http_error_line() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(500, SAMPLE_FAULT_JSON.as_bytes());
+        let jc = super::test_json_client_http_origin(&origin, Some("sess".into()));
+        let empty = EmptyJsonObject;
+        let err = jc
+            .invoke(
+                "",
+                "VirtualMachine",
+                "vm-1",
+                "SomeMethod",
+                Some(&empty as &(dyn Serialize + Send + Sync)),
+            )
+            .await;
+        assert!(matches!(err, Err(Error::MethodFault(_))));
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(out.contains("phase=request") && out.contains("method=SomeMethod"), "{out}");
+        assert!(
+            out.contains("status=500") && out.contains("phase=response"),
+            "expected log_json_http_error-style line: {out}"
+        );
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_fetch_property_non_success_emits_wire_http_error_line() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(403, SAMPLE_FAULT_JSON.as_bytes());
+        let jc = super::test_json_client_http_origin(&origin, Some("sess".into()));
+        let err = jc
+            .fetch_property_raw("", "HostSystem", "host-9", "name")
+            .await;
+        assert!(matches!(err, Err(Error::MethodFault(_))));
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(out.contains("property=name") && out.contains("status=403"), "{out}");
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_drop_logout_emits_wire_lines_on_http_success() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-drop-ok".into()));
+        drop(jc);
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(out.contains("kind=logout") && out.contains("phase=request"), "{out}");
+        assert!(
+            out.contains("status=200") && !out.contains("error=http_failure"),
+            "{out}"
+        );
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_drop_logout_emits_wire_lines_on_http_non_success() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(503, b"x");
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-drop-bad".into()));
+        drop(jc);
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(
+            out.contains("kind=logout") && out.contains("error=http_failure"),
+            "{out}"
+        );
+        assert!(out.contains("status=503"), "{out}");
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_drop_logout_emits_wire_transport_line() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let origin = format!("http://{}", super::TEST_WIRE_DEAD_ADDR);
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-drop-tr".into()));
+        drop(jc);
+        let out = joined_wire_output();
+        assert!(
+            out.contains("kind=logout") && out.contains("error=transport"),
+            "{out}"
+        );
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn soap_bootstrap_logs_transport_failure() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        use crate::xml::client::SoapClient;
+
+        let mut soap = SoapClient::new(
+            test_dead_port_http_client(),
+            TEST_WIRE_DEAD_ADDR,
+            super::API_RELEASE,
+            "soap-bootstrap-wire-test",
+            WireLoggingMode::Summary,
+        );
+        let err = soap.bootstrap().await;
+        assert!(matches!(err, Err(Error::ReqwestError(_))));
+        let out = joined_wire_output();
+        assert!(
+            out.contains("RetrieveServiceContent")
+                && out.contains("phase=request")
+                && out.contains("error=transport"),
+            "SOAP bootstrap wire: {out}"
+        );
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn soap_invoke_logs_transport_failure() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        use crate::xml::client::soap_test_client_with_service_content;
+
+        let soap = soap_test_client_with_service_content();
+        let err = VimClient::invoke(
+            &soap,
+            "",
+            "VirtualMachine",
+            "vm-wire",
+            "RefreshStorageInfo",
+            None,
+        )
+        .await;
+        assert!(matches!(err, Err(Error::ReqwestError(_))));
+        let out = joined_wire_output();
+        assert!(
+            out.contains("RefreshStorageInfo") && out.contains("error=transport"),
+            "SOAP invoke wire: {out}"
+        );
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn soap_drop_logout_emits_wire_on_http_success() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let endpoint = format!("{}/sdk", origin.trim_end_matches('/'));
+        let soap = crate::xml::client::soap_test_client_for_logout_drop(
+            reqwest::Client::builder()
+                .timeout(std::time::Duration::from_secs(5))
+                .build()
+                .unwrap(),
+            endpoint,
+        );
+        drop(soap);
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(
+            out.contains("wire=soap")
+                && out.contains("kind=logout")
+                && out.contains("status=200")
+                && !out.contains("error=http_failure"),
+            "{out}"
+        );
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn soap_drop_logout_emits_wire_on_http_non_success() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(502, b"err");
+        let endpoint = format!("{}/sdk", origin.trim_end_matches('/'));
+        let soap = crate::xml::client::soap_test_client_for_logout_drop(
+            reqwest::Client::builder()
+                .timeout(std::time::Duration::from_secs(5))
+                .build()
+                .unwrap(),
+            endpoint,
+        );
+        drop(soap);
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(
+            out.contains("error=http_failure") && out.contains("status=502"),
+            "{out}"
+        );
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn soap_drop_logout_emits_wire_transport_line() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let endpoint = format!("http://{}/sdk", super::TEST_WIRE_DEAD_ADDR);
+        let soap = crate::xml::client::soap_test_client_for_logout_drop(
+            reqwest::Client::builder()
+                .timeout(std::time::Duration::from_secs(2))
+                .build()
+                .unwrap(),
+            endpoint,
+        );
+        drop(soap);
+        let out = joined_wire_output();
+        assert!(
+            out.contains("kind=logout") && out.contains("error=transport"),
+            "{out}"
+        );
     }
 }

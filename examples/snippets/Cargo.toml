@@ -80,6 +80,6 @@ chrono = "0.4"
 env_logger = "0.11"
 log = "0.4"
 tokio = { version = "1.44", features = ["macros"] }
-vim_rs = { version = "0.4.2", path = "../../vim_rs", features = ["defaults", "xml"] }
+vim_rs = { version = "0.4.3", path = "../../vim_rs", features = ["defaults", "xml"] }
 miniserde = "0.1"
 dotenvy = "0.15"

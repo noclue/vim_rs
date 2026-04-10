@@ -16,3 +16,6 @@ mcp/data/model_cache/
 **/logs/*.log
 logs/
 **/.DS_Store
+CLAUDE.md
+docs/**
+.cursor/**

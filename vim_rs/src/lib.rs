@@ -313,6 +313,7 @@ pub use vim_macros::vim_retrievable;
 pub use vim_macros::vim_updatable;
 
 pub mod core;
+pub use core::WireLoggingMode;
 pub mod types;
 
 pub mod mo;

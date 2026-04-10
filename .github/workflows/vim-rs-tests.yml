@@ -1,0 +1,47 @@
+name: vim_rs tests
+
+on:
+  pull_request:
+    paths:
+      - "vim_rs/**"
+      - "vim_macros/**"
+      - ".github/workflows/vim-rs-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "vim_rs/**"
+      - "vim_macros/**"
+      - ".github/workflows/vim-rs-tests.yml"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  test:
+    name: cargo test (vim_rs, ${{ matrix.label }})
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - label: default
+            features: ""
+          - label: xml
+            features: "--features xml"
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: actions/cache@v4
+        with:
+          path: |
+            ~/.cargo/registry
+            ~/.cargo/git
+            vim_rs/target
+          key: vim-rs-test-${{ runner.os }}-${{ matrix.label }}-${{ hashFiles('vim_rs/Cargo.lock', 'vim_macros/Cargo.lock') }}
+
+      - name: Run tests
+        working-directory: vim_rs
+        run: cargo test --locked ${{ matrix.features }}
