@@ -1,13 +1,114 @@
 use std::borrow::Cow;
+use std::cell::Cell;
 
+use log::debug;
 use miniserde::de::{Deserialize, Visitor};
 use miniserde::{Error, Result};
 use quick_xml::events::{BytesRef, BytesStart, Event};
-use quick_xml::reader::Reader;
+use quick_xml::name::{NamespaceResolver, ResolveResult};
+use quick_xml::reader::NsReader;
+
+// ============================================================================
+// Deserialize options (tolerant mode)
+// ============================================================================
+
+/// Knobs for [`from_xml_with`] / [`crate::xml::soap::vim_response_with`].
+///
+/// Strict (all-false) is the default and matches the historical behaviour of
+/// [`from_xml`] and [`crate::xml::soap::vim_response`] — enabling the options
+/// here has **no** effect on those strict entry points.
+#[derive(Debug, Clone, Copy, Default)]
+pub struct DeserializeOptions {
+    /// When `true`, element-level `build()`/`finish()` errors are swallowed:
+    /// the offending element is silently dropped and XML streaming continues
+    /// at the next sibling. Useful for papering over malformed producers
+    /// (notably `vcsim`, which omits some required fields such as
+    /// `OptionDef.optionType`).
+    ///
+    /// The tolerance is surgically scoped to the three call sites where the
+    /// XML reader is guaranteed to be positioned *after* the offending
+    /// element's closing tag, so swallowing never leaves the reader in an
+    /// inconsistent position. See [`stream_drive`], [`drive_empty`], and
+    /// [`typed_leaf_via_map`] for the exact locations.
+    pub tolerate_build_errors: bool,
+}
+
+thread_local! {
+    static TOLERATE_BUILD_ERRORS: Cell<bool> = const { Cell::new(false) };
+}
+
+/// RAII guard that installs a new `DeserializeOptions` for the current thread
+/// and restores the previous value on drop. Nested calls stack correctly.
+struct OptionsGuard {
+    prev_tolerate_build_errors: bool,
+}
+
+impl OptionsGuard {
+    fn push(opts: &DeserializeOptions) -> Self {
+        let prev = TOLERATE_BUILD_ERRORS.with(|c| {
+            let p = c.get();
+            c.set(opts.tolerate_build_errors);
+            p
+        });
+        Self { prev_tolerate_build_errors: prev }
+    }
+}
+
+impl Drop for OptionsGuard {
+    fn drop(&mut self) {
+        TOLERATE_BUILD_ERRORS.with(|c| c.set(self.prev_tolerate_build_errors));
+    }
+}
+
+#[inline]
+fn tolerate_build_errors() -> bool {
+    TOLERATE_BUILD_ERRORS.with(|c| c.get())
+}
+
+/// Adapter: invoke `map.finish()` and, when [`DeserializeOptions::tolerate_build_errors`]
+/// is active, swallow the error (logging the element name that was dropped).
+///
+/// Safe to use *only* at the three boundaries documented on
+/// [`DeserializeOptions::tolerate_build_errors`]: caller must guarantee that
+/// the underlying `NsReader` has already consumed the element's End tag, so
+/// that returning `Ok(())` does not leave the stream desynchronized.
+#[inline]
+fn finish_map_or_tolerate(
+    mut map: Box<dyn miniserde::de::Map + '_>,
+    element_hint: &str,
+) -> Result<()> {
+    match map.finish() {
+        Ok(()) => Ok(()),
+        Err(e) => {
+            if tolerate_build_errors() {
+                debug!(
+                    "xml::de: tolerant mode dropped <{}> whose build() failed",
+                    element_hint
+                );
+                Ok(())
+            } else {
+                Err(e)
+            }
+        }
+    }
+}
 
 // ============================================================================
 // xsi:type ↔ _typeName bridging
 // ============================================================================
+
+/// W3C [XML Schema instance namespace](https://www.w3.org/TR/xmlschema-1/#Instance_NS).
+const XML_SCHEMA_INSTANCE_NS: &[u8] = b"http://www.w3.org/2001/XMLSchema-instance";
+
+/// One attribute on a start tag, with namespace resolution for the type discriminator.
+struct XmlAttr {
+    /// Serialized name as in the document (e.g. `xsi:type`, `_XMLSchema-instance:type`, `type`).
+    raw_name: String,
+    value: String,
+    is_xmlns: bool,
+    /// `true` when this attribute expands to `{XML_SCHEMA_INSTANCE_NS}type`.
+    is_schema_instance_type: bool,
+}
 
 /// Strip XML namespace prefix from an xsi:type value to get a clean type name.
 /// `"xsd:string"` → `"string"`, `"VirtualMachine"` → `"VirtualMachine"`.
@@ -23,18 +124,18 @@ fn is_xmlns_attr(name: &str) -> bool {
     name == "xmlns" || name.starts_with("xmlns:")
 }
 
-/// Scan attributes in one pass: extract the `xsi:type` value and count
+/// Scan attributes in one pass: extract the schema-instance `type` value and count
 /// non-xmlns attributes. Avoids allocating a filtered Vec.
-fn find_xsi_type_info(attrs: &[(String, String)]) -> (Option<&str>, usize) {
+fn find_xsi_type_info(attrs: &[XmlAttr]) -> (Option<&str>, usize) {
     let mut xsi_val = None;
     let mut non_ns_count = 0;
-    for (name, value) in attrs {
-        if is_xmlns_attr(name) {
+    for a in attrs {
+        if a.is_xmlns {
             continue;
         }
         non_ns_count += 1;
-        if name == "xsi:type" {
-            xsi_val = Some(value.as_str());
+        if a.is_schema_instance_type {
+            xsi_val = Some(a.value.as_str());
         }
     }
     (xsi_val, non_ns_count)
@@ -86,16 +187,36 @@ fn parse_numeric_char_ref(body: &[u8]) -> Result<char> {
     char::from_u32(code).ok_or(Error)
 }
 
-fn extract_attrs(start: &BytesStart<'_>) -> Result<Vec<(String, String)>> {
+fn extract_attrs(resolver: &NamespaceResolver, start: &BytesStart<'_>) -> Result<Vec<XmlAttr>> {
     start
         .attributes()
         .map(|a| {
             let a = a.map_err(|_| Error)?;
-            let name = std::str::from_utf8(a.key.as_ref())
+            let raw_name = std::str::from_utf8(a.key.as_ref())
                 .map_err(|_| Error)?
                 .to_string();
             let value = a.unescape_value().map_err(|_| Error)?.into_owned();
-            Ok((name, value))
+            let is_xmlns = is_xmlns_attr(&raw_name);
+            let is_schema_instance_type = if is_xmlns {
+                false
+            } else {
+                match resolver.resolve_attribute(a.key) {
+                    (ResolveResult::Bound(ns), local) => {
+                        local.as_ref() == b"type" && ns.0 == XML_SCHEMA_INSTANCE_NS
+                    }
+                    // No `xmlns:xsi` in scope (common in small fixtures): accept conventional `xsi:type`.
+                    (ResolveResult::Unknown(_), local) => {
+                        local.as_ref() == b"type" && raw_name == "xsi:type"
+                    }
+                    _ => false,
+                }
+            };
+            Ok(XmlAttr {
+                raw_name,
+                value,
+                is_xmlns,
+                is_schema_instance_type,
+            })
         })
         .collect()
 }
@@ -118,18 +239,67 @@ pub(crate) fn start_name(start: &BytesStart<'_>) -> Result<String> {
 pub fn from_xml<T: Deserialize>(xml: &str) -> Result<T> {
     let mut out = None;
     let visitor = T::begin(&mut out);
-    let mut reader = Reader::from_str(xml);
+    let mut reader = NsReader::from_str(xml);
     reader.config_mut().trim_text(false);
     stream_root(&mut reader, visitor)?;
     out.ok_or(Error)
 }
 
+/// Like [`from_xml`] but with an explicit [`DeserializeOptions`] scope.
+///
+/// The options are installed in a thread-local for the duration of this call
+/// (via a drop-guard), so nested `from_xml_with` invocations stack correctly
+/// and ordinary [`from_xml`] calls on other threads remain strict.
+///
+/// # Example
+/// ```ignore
+/// let set: UpdateSet = from_xml_with(
+///     xml,
+///     DeserializeOptions { tolerate_build_errors: true },
+/// )?;
+/// ```
+pub fn from_xml_with<T: Deserialize>(xml: &str, opts: DeserializeOptions) -> Result<T> {
+    let _guard = OptionsGuard::push(&opts);
+    from_xml(xml)
+}
+
+/// Run a closure with the given [`DeserializeOptions`] installed on the
+/// current thread. Used by `xml::soap::vim_response_with` to scope the
+/// thread-local from outside this module without exposing the guard type.
+pub fn with_options<T, F: FnOnce() -> T>(opts: DeserializeOptions, f: F) -> T {
+    let _guard = OptionsGuard::push(&opts);
+    f()
+}
+
+/// Client-internal [`from_xml`] dispatcher honoring the `vcsim_compat`
+/// feature gate.
+///
+/// When the `vcsim_compat` feature is enabled, the call is wrapped in a
+/// tolerant-mode scope so that malformed elements are silently dropped
+/// rather than failing the whole deserialize. With the feature off this is
+/// a zero-cost alias for [`from_xml`].
+///
+/// This helper exists to keep the client (`crate::xml::client`,
+/// `crate::core::client::unmarshal`) decoupled from the tolerance plumbing:
+/// end-users only flip a crate feature.
+#[inline]
+pub(crate) fn from_xml_internal<T: Deserialize>(xml: &str) -> Result<T> {
+    #[cfg(feature = "vcsim_compat")]
+    {
+        from_xml_with(xml, DeserializeOptions { tolerate_build_errors: true })
+    }
+    #[cfg(not(feature = "vcsim_compat"))]
+    {
+        from_xml(xml)
+    }
+}
+
 /// Find the root element and drive the visitor from it.
-fn stream_root(reader: &mut Reader<&[u8]>, visitor: &mut dyn Visitor) -> Result<()> {
+fn stream_root(reader: &mut NsReader<&[u8]>, visitor: &mut dyn Visitor) -> Result<()> {
     loop {
         match reader.read_event().map_err(|_| Error)? {
             Event::Start(e) => return stream_drive(reader, &e, visitor),
-            Event::Empty(e) => return drive_empty(&e, visitor),
+            Event::Empty(e) => return drive_empty(reader.resolver(), &e, visitor),
             Event::Eof => return Err(Error),
             _ => continue,
         }
@@ -228,10 +398,11 @@ fn try_empty_map(visitor: &mut dyn Visitor) -> Result<()> {
 /// The function boundary ensures the mutable borrow of `visitor` from
 /// `visitor.map()` is fully released before the caller can use `visitor` again.
 fn typed_leaf_via_map(visitor: &mut dyn Visitor, type_name: &str, text: &str) -> Result<bool> {
-    let mut map = match visitor.map() {
+    let map = match visitor.map() {
         Ok(m) => m,
         Err(_) => return Ok(false),
     };
+    let mut map = map;
     deliver_text(type_name, map.key("_typeName")?)?;
     if !text.trim().is_empty() {
         deliver_text(text, map.key("#text")?)?;
@@ -244,7 +415,10 @@ fn typed_leaf_via_map(visitor: &mut dyn Visitor, type_name: &str, text: &str) ->
             try_deliver_empty_value(&mut *map)?;
         }
     }
-    map.finish()?;
+    // Tolerant boundary: at this point the reader has already consumed the
+    // element's End (or the element was self-closing / text-only and never
+    // had one). Swallowing here drops the value but keeps the stream intact.
+    finish_map_or_tolerate(map, type_name)?;
     Ok(true)
 }
 
@@ -271,7 +445,7 @@ fn try_deliver_empty_value(map: &mut dyn miniserde::de::Map) -> Result<()> {
 /// a child element Start/Empty or the parent's End tag is encountered.
 /// Returns the first non-text child event as a lookahead, or None at End.
 fn accumulate_text(
-    reader: &mut Reader<&[u8]>,
+    reader: &mut NsReader<&[u8]>,
     text: &mut String,
 ) -> Result<Option<(BytesStart<'static>, bool)>> {
     loop {
@@ -292,23 +466,20 @@ fn accumulate_text(
 // Element drivers
 // ============================================================================
 
-/// Emit attributes into an open map visitor: `xsi:type` → `_typeName` first,
+/// Emit attributes into an open map visitor: schema-instance `type` → `_typeName` first,
 /// then remaining non-xmlns attributes as `@name` keys.
-fn emit_attrs_to_map(
-    map: &mut dyn miniserde::de::Map,
-    attrs: &[(String, String)],
-) -> Result<()> {
+fn emit_attrs_to_map(map: &mut dyn miniserde::de::Map, attrs: &[XmlAttr]) -> Result<()> {
     if let Some(xsi) = attrs
         .iter()
-        .find_map(|(n, v)| (n == "xsi:type").then_some(v.as_str()))
+        .find_map(|a| a.is_schema_instance_type.then_some(a.value.as_str()))
     {
         deliver_text(xsi_type_to_type_name(xsi), map.key("_typeName")?)?;
     }
-    for (name, value) in attrs {
-        if name == "xsi:type" || is_xmlns_attr(name) {
+    for a in attrs {
+        if a.is_schema_instance_type || a.is_xmlns {
             continue;
         }
-        deliver_text(value, map.key(&format!("@{}", name))?)?;
+        deliver_text(&a.value, map.key(&format!("@{}", a.raw_name))?)?;
     }
     Ok(())
 }
@@ -318,11 +489,11 @@ fn emit_attrs_to_map(
 /// The reader must be positioned right after the Start tag described by `start`.
 /// On return the reader has consumed through the matching End tag.
 pub(crate) fn stream_drive(
-    reader: &mut Reader<&[u8]>,
+    reader: &mut NsReader<&[u8]>,
     start: &BytesStart<'_>,
     visitor: &mut dyn Visitor,
 ) -> Result<()> {
-    let attrs = extract_attrs(start)?;
+    let attrs = extract_attrs(reader.resolver(), start)?;
     let mut text = String::new();
     let first_child = accumulate_text(reader, &mut text)?;
 
@@ -330,7 +501,7 @@ pub(crate) fn stream_drive(
         return deliver_leaf(&text, visitor);
     }
 
-    // Typed leaf: only `xsi:type` attribute (plus optional xmlns*), no children.
+    // Typed leaf: only schema-instance `type` attribute (plus optional xmlns*), no children.
     // Try the map() route first (needed for VimAny / PolyCore which must see
     // `_typeName` before the value). If map() is rejected, fall back to plain
     // text delivery (e.g. a plain String inside Vec<String>).
@@ -356,12 +527,21 @@ pub(crate) fn stream_drive(
     if let Some((child_start, is_empty)) = first_child {
         stream_children(reader, &mut *map, child_start, is_empty)?;
     }
-    map.finish()
+    // Tolerant boundary. `accumulate_text` and `stream_children` both consume
+    // through the matching End tag, so returning `Ok(())` here on build()
+    // failure leaves the reader correctly positioned at the *next* sibling.
+    // In strict mode this is equivalent to `map.finish()`.
+    let element_hint = start_name(start).unwrap_or_default();
+    finish_map_or_tolerate(map, &element_hint)
 }
 
 /// Drive a miniserde Visitor from a self-closing element (e.g. `<options/>`).
-fn drive_empty(start: &BytesStart<'_>, visitor: &mut dyn Visitor) -> Result<()> {
-    let attrs = extract_attrs(start)?;
+fn drive_empty(
+    resolver: &NamespaceResolver,
+    start: &BytesStart<'_>,
+    visitor: &mut dyn Visitor,
+) -> Result<()> {
+    let attrs = extract_attrs(resolver, start)?;
 
     if attrs.is_empty() {
         return deliver_leaf("", visitor);
@@ -378,18 +558,21 @@ fn drive_empty(start: &BytesStart<'_>, visitor: &mut dyn Visitor) -> Result<()> 
 
     let mut map = visitor.map()?;
     emit_attrs_to_map(&mut *map, &attrs)?;
-    map.finish()
+    // Self-closing element has no body; reader never entered it. Safe to
+    // swallow build() failure under tolerant mode.
+    let element_hint = start_name(start).unwrap_or_default();
+    finish_map_or_tolerate(map, &element_hint)
 }
 
 /// Dispatch to the correct driver based on whether the element is self-closing.
 fn drive_element(
-    reader: &mut Reader<&[u8]>,
+    reader: &mut NsReader<&[u8]>,
     start: &BytesStart<'_>,
     is_empty: bool,
     visitor: &mut dyn Visitor,
 ) -> Result<()> {
     if is_empty {
-        drive_empty(start, visitor)
+        drive_empty(reader.resolver(), start, visitor)
     } else {
         stream_drive(reader, start, visitor)
     }
@@ -402,7 +585,7 @@ fn drive_element(
 /// Process child elements streaming, grouping adjacent same-named elements
 /// into sequences via one-element lookahead.
 fn stream_children(
-    reader: &mut Reader<&[u8]>,
+    reader: &mut NsReader<&[u8]>,
     map: &mut dyn miniserde::de::Map,
     first_start: BytesStart<'static>,
     first_is_empty: bool,
@@ -426,7 +609,7 @@ fn stream_children(
 /// The function boundary ensures the `Box<dyn Seq>` from `seq()` is dropped
 /// before returning, releasing the mutable borrow on visitor.
 fn try_stream_as_seq(
-    reader: &mut Reader<&[u8]>,
+    reader: &mut NsReader<&[u8]>,
     visitor: &mut dyn Visitor,
     name: &str,
     start: &BytesStart<'_>,
@@ -463,7 +646,7 @@ fn try_stream_as_seq(
 /// Returns the next pending child (lookahead from reading past same-named
 /// siblings), or None when the parent's End tag was reached.
 fn try_seq_or_single(
-    reader: &mut Reader<&[u8]>,
+    reader: &mut NsReader<&[u8]>,
     visitor: &mut dyn Visitor,
     name: &str,
     start: &BytesStart<'_>,
@@ -480,7 +663,9 @@ fn try_seq_or_single(
 
 /// Read the next child element from the stream, skipping inter-element
 /// whitespace. Returns None when the parent's End tag is reached.
-fn read_next_child(reader: &mut Reader<&[u8]>) -> Result<Option<(BytesStart<'static>, bool)>> {
+fn read_next_child(
+    reader: &mut NsReader<&[u8]>,
+) -> Result<Option<(BytesStart<'static>, bool)>> {
     loop {
         match reader.read_event().map_err(|_| Error)? {
             Event::Start(e) => return Ok(Some((e.into_owned(), false))),

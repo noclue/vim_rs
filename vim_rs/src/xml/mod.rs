@@ -20,7 +20,7 @@ mod tests {
     use super::{de::from_xml, soap};
     use crate::core::client::{extract_property, PropertyValue};
     use crate::types::boxed_types::ValueElements;
-    use crate::types::enums::MoTypesEnum;
+    use crate::types::enums::{ManagedEntityStatusEnum, MoTypesEnum};
     use crate::types::struct_enum::StructType;
     use crate::types::structs::{Event, ManagedObjectReference, MethodFault, RetrieveResult, UpdateSet};
     use crate::types::vim_any::VimAny;
@@ -34,6 +34,8 @@ mod tests {
     /// From vtui.log: changeSet with val xsi:type="ArrayOfCustomFieldDef" and no children.
     const EMPTY_ARRAY_VAL_WITH_NS: &str = r#"<val xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="ArrayOfCustomFieldDef"></val>"#;
 
+    /// Same as typical `xsi:type`, but **alternate namespace prefix** (govc vcsim style).
+    const TYPED_STRING_VAL_VCSIM_PREFIX: &str = r#"<val xmlns:_XMLSchema-instance="http://www.w3.org/2001/XMLSchema-instance" _XMLSchema-instance:type="xsd:string">probe</val>"#;
 
     /// Successful WaitForUpdatesEx response from vtui.log (VM list view).
     const WAIT_FOR_UPDATES_EX_SUCCESS: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
@@ -105,6 +107,51 @@ mod tests {
             VimAny::Value(ValueElements::ArrayOfCustomFieldDef(v)) => assert!(v.is_empty()),
             other => panic!("expected ArrayOfCustomFieldDef, got {:?}", other),
         }
+    }
+
+    /// Schema-instance `type` must be honored for any namespace **prefix** (`xsi:type` and
+    /// `_XMLSchema-instance:type` are the same attribute in different bindings).
+    #[test]
+    fn test_schema_instance_type_alternate_prefix_same_as_xsi() {
+        let via_alt: VimAny = from_xml(TYPED_STRING_VAL_VCSIM_PREFIX)
+            .expect("vcsim-style schema-instance prefix should deserialize");
+        let via_xsi: VimAny = from_xml(
+            r#"<val xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="xsd:string">probe</val>"#,
+        )
+        .expect("xsi:type control");
+
+        match (&via_alt, &via_xsi) {
+            (
+                VimAny::Value(ValueElements::PrimitiveString(a)),
+                VimAny::Value(ValueElements::PrimitiveString(b)),
+            ) => assert_eq!(a, b),
+            pair => panic!("expected both PrimitiveString, got {:?}", pair),
+        }
+
+        let enum_alt: VimAny = from_xml(
+            r#"<val xmlns:_XMLSchema-instance="http://www.w3.org/2001/XMLSchema-instance" _XMLSchema-instance:type="ManagedEntityStatus">green</val>"#,
+        )
+        .expect("enum with alternate prefix");
+        match enum_alt {
+            VimAny::Value(ValueElements::ManagedEntityStatus(e)) => {
+                assert_eq!(e, ManagedEntityStatusEnum::Green);
+            }
+            other => panic!("expected ManagedEntityStatus, got {:?}", other),
+        }
+    }
+
+    /// Local name `type` with a prefix bound to a URI other than XML Schema instance must not be
+    /// treated as `xsi:type` (namespace resolution, not `*:type` heuristics).
+    #[test]
+    fn test_type_attribute_wrong_namespace_not_schema_instance() {
+        let r = from_xml::<VimAny>(
+            r#"<val xmlns:p="http://example.com/wrong" p:type="xsd:string">x</val>"#,
+        );
+        assert!(
+            r.is_err(),
+            "p:type bound to wrong URI must not coerce to PrimitiveString: {:?}",
+            r.ok()
+        );
     }
 
     /// SOAP property GET: `extract_property` + `PropertyValue::Parsed` (zero re-serialization).
