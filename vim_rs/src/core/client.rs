@@ -11,6 +11,7 @@ use std::future::Future;
 use std::pin::Pin;
 use std::ffi::OsStr;
 use crate::mo;
+use crate::types::struct_enum::StructType;
 use crate::types::structs::{ManagedObjectReference, ServiceContent};
 
 const LIB_NAME: &str = env!("CARGO_PKG_NAME");
@@ -31,10 +32,22 @@ const SERVICE_INSTANCE_MOID: &str = "ServiceInstance";
 
 #[derive(Debug, thiserror::Error)]
 pub enum Error {
+    /// A typed vSphere API fault returned by the server.
+    ///
+    /// For SOAP transport this is produced *only* when the server's
+    /// `<soapenv:Fault>` carries a typed element inside `<detail>`
+    /// (e.g. `RequestCanceled`, `InvalidLogin`, `VAppPropertyFault`). For
+    /// JSON transport this is produced when the error body deserializes as
+    /// a `MethodFault`. Envelope-level SOAP errors that are *not* part of
+    /// the vSphere type hierarchy are surfaced as [`Error::SoapFault`].
     #[error("MethodFault: {0:?}")]
     MethodFault(structs::MethodFault),
     #[error("Reqwest error: {0}")]
     ReqwestError(#[from] reqwest::Error),
+    /// A parse error returned by the server.
+    ///
+    /// This is produced when the server's response is not valid XML or JSON.
+    /// This is also produced when the server's response is a SOAP envelope fault.
     #[error("Parse error: {0}")]
     ParseError(String),
     #[error("Missing or Invalid session key")]
@@ -49,6 +62,39 @@ pub enum Error {
 pub type VimError = Error;
 
 pub type Result<T> = std::result::Result<T, Error>;
+
+/// Returns `true` if `err` is a `RequestCanceled` SOAP fault (for example after
+/// [`crate::mo::PropertyCollector::cancel_wait_for_updates`]).
+#[must_use]
+pub fn is_request_canceled_error(err: &Error) -> bool {
+    matches!(
+        err,
+        Error::MethodFault(f) if f.type_ == Some(StructType::RequestCanceled)
+    )
+}
+
+#[cfg(test)]
+mod is_request_canceled_tests {
+    use super::{is_request_canceled_error, Error};
+    use crate::types::struct_enum::StructType;
+    use crate::types::structs::MethodFault;
+
+    #[test]
+    fn detects_request_canceled_fault() {
+        let err = Error::MethodFault(MethodFault {
+            fault_cause: None,
+            fault_message: None,
+            type_: Some(StructType::RequestCanceled),
+            extra_fields_: Default::default(),
+        });
+        assert!(is_request_canceled_error(&err));
+    }
+
+    #[test]
+    fn rejects_non_fault_errors() {
+        assert!(!is_request_canceled_error(&Error::ParseError("x".into())));
+    }
+}
 
 /// A boxed future used by the object-safe `VimClient` trait.
 pub type BoxFuture<'a, T> = Pin<Box<dyn Future<Output = T> + Send + 'a>>;
@@ -171,8 +217,12 @@ pub fn unmarshal<T: miniserde::Deserialize>(transport: Transport, bytes: &[u8]) 
         #[cfg(feature = "xml")]
         Transport::Soap => {
             // Method responses are SOAP envelopes with `<returnval>`; property fetch returns raw object XML.
-            crate::xml::soap::vim_response(text)
-                .or_else(|_| crate::xml::de::from_xml(text))
+            // Uses the feature-gated tolerant dispatchers: with `vcsim_compat`
+            // enabled, malformed elements are dropped instead of failing the
+            // whole parse; with the feature off this is identical to the
+            // historical strict `vim_response` / `from_xml` path.
+            crate::xml::soap::vim_response_internal(text)
+                .or_else(|_| crate::xml::de::from_xml_internal(text))
                 .map_err(|_| Error::ParseError(format!(
                     "XML deserialization failed for {}", std::any::type_name::<T>())))
         },
@@ -200,7 +250,7 @@ pub fn unmarshal_array<U: miniserde::Deserialize>(
             ))
         }),
         #[cfg(feature = "xml")]
-        Transport::Soap => crate::xml::soap::vim_response_list(text).map_err(|_| {
+        Transport::Soap => crate::xml::soap::vim_response_list_internal(text).map_err(|_| {
             Error::ParseError(format!(
                 "XML deserialization failed for Vec<{}>",
                 std::any::type_name::<U>()

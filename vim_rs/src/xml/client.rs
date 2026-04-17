@@ -12,8 +12,8 @@ use crate::core::client::{BoxFuture, Error, PropertyValue, Result, Transport, Vi
 use crate::types::vim_any::VimAny;
 use crate::types::enums::MoTypesEnum;
 use crate::types::structs::{
-    ManagedObjectReference, ObjectSpec, PropertyFilterSpec, PropertySpec, RetrieveOptions,
-    ServiceContent,
+    ManagedObjectReference, MethodFault, ObjectSpec, PropertyFilterSpec, PropertySpec,
+    RetrieveOptions, ServiceContent,
 };
 const SOAP_ACTION: &str = "urn:vim25/9.1.0.0";
 const CONTENT_TYPE: &str = "text/xml; charset=utf-8";
@@ -123,6 +123,113 @@ fn extract_soap_fault(body: &str) -> Option<String> {
     None
 }
 
+/// Extract a typed [`MethodFault`] from a SOAP fault body by locating the
+/// `<detail>` element and handing its first child element (with `xsi:type`)
+/// to the generic XML deserializer.
+///
+/// Returns `None` if the body is not a SOAP fault, the `<detail>` element is
+/// missing/empty, or the inner fault element fails to deserialize.
+///
+/// SOAP 1.1 puts the typed fault info inside `<detail>` (unqualified in the
+/// SOAP namespace), e.g.:
+///
+/// ```xml
+/// <soapenv:Fault>
+///   <faultcode>ServerFaultCode</faultcode>
+///   <faultstring></faultstring>
+///   <detail>
+///     <RequestCanceledFault xmlns="urn:vim25" xsi:type="RequestCanceled"/>
+///   </detail>
+/// </soapenv:Fault>
+/// ```
+///
+/// The `<faultstring>` is often empty (notably on `vcsim`), so relying on it
+/// to surface a typed fault is not viable. Reading `<detail>` makes
+/// [`crate::core::client::is_request_canceled_error`] work for XML transport.
+fn extract_soap_method_fault(body: &str) -> Option<MethodFault> {
+    use quick_xml::events::Event;
+    use quick_xml::reader::Reader;
+
+    let mut reader = Reader::from_str(body);
+    let mut in_detail = false;
+    let mut inner_depth: i32 = 0;
+    let mut inner_start: Option<usize> = None;
+    let mut inner_end: Option<usize> = None;
+
+    loop {
+        let before = reader.buffer_position() as usize;
+        match reader.read_event() {
+            Ok(Event::Start(e)) => {
+                let local = e.name().local_name();
+                let local_str = std::str::from_utf8(local.as_ref()).unwrap_or("");
+                if !in_detail {
+                    if local_str == "detail" {
+                        in_detail = true;
+                    }
+                } else {
+                    if inner_start.is_none() {
+                        inner_start = Some(before);
+                    }
+                    inner_depth += 1;
+                }
+            }
+            Ok(Event::Empty(_)) if in_detail && inner_start.is_none() => {
+                let after = reader.buffer_position() as usize;
+                inner_start = Some(before);
+                inner_end = Some(after);
+                break;
+            }
+            Ok(Event::End(_)) if in_detail => {
+                if inner_depth == 0 {
+                    break;
+                }
+                inner_depth -= 1;
+                if inner_depth == 0 {
+                    inner_end = Some(reader.buffer_position() as usize);
+                    break;
+                }
+            }
+            Ok(Event::Eof) | Err(_) => break,
+            _ => {}
+        }
+    }
+
+    let (start, end) = (inner_start?, inner_end?);
+    let slice = body.get(start..end)?.trim();
+    if slice.is_empty() {
+        return None;
+    }
+    super::de::from_xml::<MethodFault>(slice).ok()
+}
+
+/// Classify a SOAP HTTP error body into the most specific `Error` variant
+/// that honestly describes the failure:
+///
+/// 1. Typed fault element inside `<detail>` → [`Error::MethodFault`].
+///    This is a genuine vSphere API fault from the VIM hierarchy
+///    (e.g. `RequestCanceled`, `InvalidLogin`, `VAppPropertyFault`), so
+///    `type_` is preserved and matchers like
+///    [`crate::core::client::is_request_canceled_error`] work.
+/// 2. `<faultstring>` only, no typed `<detail>` child → [`Error::SoapFault`].
+///    This is a SOAP 1.1 envelope-level fault (e.g. `VersionMismatch`,
+///    `MustUnderstand`, front-end auth rejection before the API dispatcher
+///    runs, or an infrastructure error). Synthesizing a [`MethodFault`]
+///    here would lie about the value coming from the API.
+/// 3. Neither recognisable → [`Error::ParseError`] — the body isn't a SOAP
+///    fault we can interpret.
+///
+/// `context` is a short prefix used for the `ParseError` fallback so
+/// operators can tell apart bootstrap failures from ordinary method calls.
+fn soap_error_from_body(body: &str, status: reqwest::StatusCode, context: &str) -> Error {
+    if let Some(fault) = extract_soap_method_fault(body) {
+        return Error::MethodFault(fault);
+    }
+    if let Some(faultstring) = extract_soap_fault(body) {
+        return Error::ParseError(faultstring);
+    }
+    Error::ParseError(format!("HTTP {status} ({context}): no SOAP fault recognised"))
+}
+
 // ============================================================================
 // SoapClient
 // ============================================================================
@@ -217,12 +324,13 @@ impl SoapClient {
             );
         }
         if !status.is_success() {
-            let fault_msg = extract_soap_fault(&body).unwrap_or_else(|| format!("HTTP {status}"));
-            return Err(Error::ParseError(format!(
-                "SOAP fault (bootstrap): {fault_msg}"
-            )));
+            let err = soap_error_from_body(&body, status, "bootstrap");
+            if let Error::MethodFault(f) = &err {
+                warn!("SOAP bootstrap fault: typed={:?}", f.type_);
+            }
+            return Err(err);
         }
-        let sc: ServiceContent = super::soap::vim_response(&body)
+        let sc: ServiceContent = super::soap::vim_response_internal(&body)
             .map_err(|_| Error::ParseError("Failed to parse ServiceContent".to_string()))?;
         debug!("SOAP ServiceContent obtained from: {}", sc.about.full_name);
         self.service_content = Some(sc);
@@ -333,9 +441,17 @@ impl SoapClient {
             trace!("SOAP response {} from {}: {}", status, method_name, &body);
         }
         if !status.is_success() {
-            let fault_msg = extract_soap_fault(&body).unwrap_or_else(|| format!("HTTP {status}"));
-            warn!("SOAP fault from {}: {}", method_name, fault_msg);
-            return Err(Error::ParseError(format!("SOAP fault: {fault_msg}")));
+            let err = soap_error_from_body(&body, status, method_name);
+            match &err {
+                Error::MethodFault(f) => {
+                    warn!("SOAP fault from {}: typed={:?}", method_name, f.type_);
+                }
+                Error::ParseError(s) => {
+                    warn!("Parse Error or SOAP envelope fault from {}: {}", method_name, s);
+                }
+                _ => {}
+            }
+            return Err(err);
         }
         Ok(body)
     }
@@ -380,7 +496,7 @@ impl SoapClient {
         };
         let body = self.soap_invoke("RetrievePropertiesEx", "PropertyCollector", &pc.value, Some(&req)).await?;
 
-        let result: crate::types::structs::RetrieveResult = super::soap::vim_response(&body)
+        let result: crate::types::structs::RetrieveResult = super::soap::vim_response_internal(&body)
             .map_err(|_| Error::ParseError("Failed to parse RetrieveResult".to_string()))?;
 
         if result.objects.is_empty() {
@@ -656,6 +772,113 @@ pub(crate) fn soap_test_client_for_logout_drop(
             crate::core::client::test_service_content_with_session_manager_for_tests(),
         ),
         wire_logging: WireLoggingMode::Summary,
+    }
+}
+
+#[cfg(all(test, feature = "xml"))]
+mod fault_extraction_tests {
+    use super::{extract_soap_fault, extract_soap_method_fault};
+    use crate::types::struct_enum::StructType;
+
+    /// Real `vcsim` payload for an interrupted `WaitForUpdatesEx`: empty
+    /// `faultstring`, typed `RequestCanceled` in `<detail>`.
+    const VCSIM_REQUEST_CANCELED: &str = r#"<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><soapenv:Fault><faultcode>ServerFaultCode</faultcode><faultstring></faultstring><detail><RequestCanceledFault xmlns="urn:vim25" xsi:type="RequestCanceled"></RequestCanceledFault></detail></soapenv:Fault></soapenv:Body></soapenv:Envelope>"#;
+
+    #[test]
+    fn extracts_request_canceled_from_vcsim_fault() {
+        let fault = extract_soap_method_fault(VCSIM_REQUEST_CANCELED)
+            .expect("detail/RequestCanceled must parse as MethodFault");
+        assert_eq!(fault.type_, Some(StructType::RequestCanceled));
+    }
+
+    #[test]
+    fn extracts_request_canceled_from_self_closing_detail() {
+        let body = r#"<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><soapenv:Fault><faultcode>ServerFaultCode</faultcode><faultstring/><detail><RequestCanceledFault xmlns="urn:vim25" xsi:type="RequestCanceled"/></detail></soapenv:Fault></soapenv:Body></soapenv:Envelope>"#;
+        let fault = extract_soap_method_fault(body).expect("self-closing fault must parse");
+        assert_eq!(fault.type_, Some(StructType::RequestCanceled));
+    }
+
+    #[test]
+    fn returns_none_when_detail_missing() {
+        let body = r#"<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><soapenv:Fault><faultcode>ServerFaultCode</faultcode><faultstring>boom</faultstring></soapenv:Fault></soapenv:Body></soapenv:Envelope>"#;
+        assert!(extract_soap_method_fault(body).is_none());
+        assert_eq!(extract_soap_fault(body).as_deref(), Some("boom"));
+    }
+
+    #[test]
+    fn returns_none_when_detail_empty() {
+        let body = r#"<soapenv:Envelope xmlns:soapenv="x"><soapenv:Body><soapenv:Fault><faultcode>ServerFaultCode</faultcode><faultstring></faultstring><detail></detail></soapenv:Fault></soapenv:Body></soapenv:Envelope>"#;
+        assert!(extract_soap_method_fault(body).is_none());
+    }
+
+    /// Nested fault inside `<detail>` with children must slice the outer
+    /// element correctly so the inner types survive deserialization.
+    #[test]
+    fn extracts_typed_fault_with_children() {
+        let body = r#"<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><soapenv:Body><soapenv:Fault><faultcode>ServerFaultCode</faultcode><faultstring>missing</faultstring><detail><VAppPropertyFaultFault xmlns="urn:vim25" xsi:type="VAppPropertyFault"><id>config.product.version</id><category>string</category><label>Product Version</label><type>string</type><value>1.0.0</value></VAppPropertyFaultFault></detail></soapenv:Fault></soapenv:Body></soapenv:Envelope>"#;
+        let fault = extract_soap_method_fault(body).expect("typed VAppPropertyFault must parse");
+        assert_eq!(fault.type_, Some(StructType::VAppPropertyFault));
+    }
+
+    /// Faultstring-only body (no typed `<detail>`): SOAP envelope-level
+    /// fault, **not** a vSphere API `MethodFault`. Must surface as
+    /// [`Error::SoapFault`] so callers matching on `MethodFault` don't
+    /// see synthesized values, and `is_request_canceled_error` stays
+    /// strictly scoped to the typed VIM hierarchy.
+    #[test]
+    fn soap_error_faultstring_only_maps_to_soap_envelope_fault() {
+        use super::soap_error_from_body;
+        use crate::core::client::{is_request_canceled_error, Error};
+
+        let body = r#"<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><soapenv:Fault><faultcode>ServerFaultCode</faultcode><faultstring>invalid argument</faultstring></soapenv:Fault></soapenv:Body></soapenv:Envelope>"#;
+        let err = soap_error_from_body(body, reqwest::StatusCode::INTERNAL_SERVER_ERROR, "test");
+        match &err {
+            Error::ParseError(s) => assert_eq!(s, "invalid argument"),
+            other => panic!("expected SoapFault, got {:?}", other),
+        }
+        assert!(
+            !is_request_canceled_error(&err),
+            "envelope-level fault must not match typed VIM fault predicates"
+        );
+    }
+
+    /// Body with neither `<faultstring>` nor `<detail>` → `ParseError`.
+    /// That's the one path where we genuinely cannot characterise the
+    /// failure as a method fault.
+    #[test]
+    fn soap_error_unrecognised_body_maps_to_parse_error() {
+        use super::soap_error_from_body;
+        use crate::core::client::Error;
+
+        let body = "<html><body>Bad Gateway</body></html>";
+        let err = soap_error_from_body(body, reqwest::StatusCode::BAD_GATEWAY, "test");
+        assert!(matches!(err, Error::ParseError(_)));
+    }
+
+    /// Typed fault still yields `MethodFault` with preserved discriminator —
+    /// makes `is_request_canceled_error` work through the unified entry.
+    #[test]
+    fn soap_error_typed_detail_preserves_type() {
+        use super::soap_error_from_body;
+        use crate::core::client::{is_request_canceled_error, Error};
+
+        let err = soap_error_from_body(
+            VCSIM_REQUEST_CANCELED,
+            reqwest::StatusCode::INTERNAL_SERVER_ERROR,
+            "WaitForUpdatesEx",
+        );
+        match &err {
+            Error::MethodFault(f) => {
+                assert_eq!(f.type_, Some(StructType::RequestCanceled));
+            }
+            other => panic!("expected MethodFault(RequestCanceled), got {:?}", other),
+        }
+        assert!(is_request_canceled_error(&err));
     }
 }
 

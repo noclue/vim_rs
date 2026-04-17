@@ -16,6 +16,17 @@ exclude = ["target/*", "**/*.rs.bk"]
 [features]
 defaults = []
 xml = ["dep:quick-xml", "reqwest/cookies"]
+# Compatibility layer for producers that emit malformed SOAP payloads
+# (notably `govc vcsim`, which omits required fields such as
+# `OptionDef.optionType` inside `HostConfigInfo.optionDef`).
+#
+# Off by default. When enabled, client-internal XML deserialization drops
+# elements whose `build()` fails instead of propagating the error, letting
+# the enclosing `Option<Vec<…>>` / `Option<…>` absorb the drop.
+# See `vim_rs::xml::de::DeserializeOptions::tolerate_build_errors` for the
+# exact semantics and for the corresponding opt-in entry points
+# (`from_xml_with`, `vim_response_with`) that do not require this feature.
+vcsim_compat = ["xml"]
 
 [dependencies]
 base64 = "0.22"
