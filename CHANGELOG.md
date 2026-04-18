@@ -23,6 +23,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 - **vim_macros:** A trailing `?` after the property-path string in `vim_retrievable!` and `vim_updatable!` (for example `effective_cpu = "summary.effective_cpu"?`) forces the generated field to `Option<T>` even when the spec marks the property as required. Real servers (notably **vcsim**) sometimes omit such fields; treating them as optional avoids `TryFrom` failing with `missing_required_field` and prevents whole rows from being discarded during one-shot retrieval (`ObjectContent`) or cache hydration / updates (`ObjectUpdate`, including `apply_update`). The marker has no effect when the resolved path is already optional.
 
+### Fixed
+
+- **Property cache / `Monitor::wait_updates`:** After absorbing `RequestCanceled`, a re-armed `WaitForUpdatesEx` can return a snapshot with no `filter_set` (or empty filter updates) but a non-empty version token when filter topology changes (`CreateFilter` / `DestroyPropertyFilter`) are still in flight—**vcsim** is a common trigger; any server that applies filter changes asynchronously can show the same race. Accepting that version made the session look “already synchronized” and could strand a newly registered filter’s initial enter set forever. The monitor now treats the first such response after a cancel as suspicious: it clears the tracked version and retries once within the existing absorbed-cancel budget; a genuinely empty session still converges on the retry.
+
 ## [0.4.3] - 2026-04-10
 
 ### Added
