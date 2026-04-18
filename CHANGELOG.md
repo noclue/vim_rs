@@ -19,6 +19,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **vim_macros:** A trailing `?` after the property-path string in `vim_retrievable!` and `vim_updatable!` (for example `effective_cpu = "summary.effective_cpu"?`) forces the generated field to `Option<T>` even when the spec marks the property as required. Real servers (notably **vcsim**) sometimes omit such fields; treating them as optional avoids `TryFrom` failing with `missing_required_field` and prevents whole rows from being discarded during one-shot retrieval (`ObjectContent`) or cache hydration / updates (`ObjectUpdate`, including `apply_update`). The marker has no effect when the resolved path is already optional.
+
 ## [0.4.3] - 2026-04-10
 
 ### Added

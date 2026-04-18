@@ -130,7 +130,8 @@
 //! vim_retrievable!(
 //!     struct StructName: ManagedObjectType {
 //!         field_name = "property.path",
-//!         another_field = "another.property.path"
+//!         another_field = "another.property.path",
+//!         tolerant = "some.path"?, // optional: force `Option<T>` if the server may omit it
 //!     }
 //! );
 //! ```
@@ -143,6 +144,34 @@
 //! "datastore.length"to obtain the count of datastores attached to a host.
 //!
 //! The same syntax applies to the `vim_updatable!` macro.
+//!
+//! ### Forcing a field to be optional
+//!
+//! A trailing `?` after the property-path string forces the generated field to be
+//! `Option<T>` even when the XSD marks the property as required. The same syntax
+//! works in **`vim_retrievable!`** and **`vim_updatable!`**: both share resolution
+//! and generated `TryFrom` logic, so missing nominally-required properties surface
+//! as `None` instead of failing `TryFrom<vim_rs::types::structs::ObjectContent>`
+//! (retrieval) or `TryFrom<vim_rs::types::structs::ObjectUpdate>` (cache). For
+//! updatable structs, `apply_update` treats forced-optional fields like any other
+//! `Option<T>` (assign `Some(...)`, clear with `None`).
+//!
+//! ```ignore
+//! vim_updatable!(
+//!     struct ClusterDetails: ClusterComputeResource {
+//!         name = "name",
+//!         // XSD-required fields that some servers (notably vcsim) never
+//!         // populate. The `?` tells the macro to type them as `Option<T>`
+//!         // instead of `T` so that missing values do not cause the whole
+//!         // object to be dropped by `TryFrom<ObjectUpdate>`.
+//!         available_cpu = "summary_ex.effective_cpu"?,
+//!         available_memory = "summary_ex.effective_memory"?,
+//!     }
+//! );
+//! ```
+//!
+//! Fields already resolved as `Option<T>` (because the XSD or some ancestor in
+//! the path is optional) are unaffected; `?` is idempotent.
 mod field_data;
 mod resolver;
 
@@ -160,6 +189,11 @@ struct PropertyField {
     name: Ident,
     colon_token: Token![=],
     path: LitStr,
+    /// Trailing `?` after the path forces the generated field to be
+    /// `Option<T>` even when the XSD marks it as required. Useful for
+    /// servers that deviate from the spec (vcsim, older vCenters) where
+    /// a nominally-required property may simply be absent.
+    force_optional: Option<Token![?]>,
 }
 
 #[allow(dead_code)]
@@ -174,10 +208,15 @@ struct VimObjectMacro {
 
 impl Parse for PropertyField {
     fn parse(input: ParseStream) -> Result<Self> {
+        let name: Ident = input.parse()?;
+        let colon_token: Token![=] = input.parse()?;
+        let path: LitStr = input.parse()?;
+        let force_optional: Option<Token![?]> = input.parse()?;
         Ok(PropertyField {
-            name: input.parse()?,
-            colon_token: input.parse()?,
-            path: input.parse()?,
+            name,
+            colon_token,
+            path,
+            force_optional,
         })
     }
 }
@@ -225,6 +264,9 @@ struct FieldInfo<'a> {
 /// the vSphere API. The generated struct will implement the `TryFrom<vim_rs::types::structs::ObjectContent>`
 /// trait, allowing you to convert the output of the `PropertyCollector::retrieve_properties_ex`
 /// into vector of objects from the generated struct.
+///
+/// Optional trailing `?` after a path string forces `Option<T>` for that field even
+/// when the spec marks it required (see crate-level "Forcing a field to be optional").
 #[proc_macro]
 pub fn vim_retrievable(input: TokenStream) -> TokenStream {
     let VimObjectMacro {
@@ -285,6 +327,9 @@ pub fn vim_retrievable(input: TokenStream) -> TokenStream {
 /// the specified properties.
 ///
 /// The generated struct is usable with the `ObjectCache` and `CacheManager` utility objects.
+///
+/// Optional trailing `?` after a path string forces `Option<T>` for that field even
+/// when the spec marks it required (see crate-level "Forcing a field to be optional").
 #[proc_macro]
 pub fn vim_updatable(input: TokenStream) -> TokenStream {
     let VimObjectMacro {
@@ -325,7 +370,7 @@ fn resolve_fields<'a>(
     for property_field in fields {
         let path_str = property_field.path.value();
         let res = resolver::resolve_path(&managed_object_type.to_string(), &path_str);
-        let field_data = match res {
+        let mut field_data = match res {
             Ok(field_type) => field_type,
             Err(e) => {
                 let msg = format!("Error resolving path: {}", e);
@@ -333,6 +378,15 @@ fn resolve_fields<'a>(
                 get_default_field_data()
             }
         };
+        // Caller-side opt-out from XSD required-ness: `field = "path"?` forces
+        // the generated field to be `Option<T>`. Servers that omit the
+        // property (vcsim is the prime offender) then leave the value as
+        // `None` instead of making `TryFrom<ObjectUpdate>` bail with
+        // `missing_required_field`.
+        if property_field.force_optional.is_some() && !field_data.is_optional {
+            field_data.is_optional = true;
+            field_data.data_type = format!("Option<{}>", field_data.data_type);
+        }
         field_infos.push(FieldInfo {
             property_field,
             field_data,
