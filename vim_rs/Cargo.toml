@@ -1,6 +1,6 @@
 [package]
 name = "vim_rs"
-version = "0.4.3"
+version = "0.4.4"
 edition = "2021"
 authors = ["Kiril Karaatanasov <karaatanasov@gmail.com>"]
 license = "Apache-2.0"
@@ -39,7 +39,7 @@ quick-xml = { version = "0.39", optional = true }
 reqwest = { version = "0.12" }
 thiserror = "2.0"
 tokio = { version = "1.44", features = ["rt-multi-thread", "macros", "sync"] }
-vim_macros = { version = "0.4.3", path = "../vim_macros" }
+vim_macros = { version = "0.4.4", path = "../vim_macros" }
 phf = "0.13"
 
 [build-dependencies]

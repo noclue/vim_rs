@@ -19,6 +19,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.4.4] - 2026-04-18
+
 ### Added
 
 - **SOAP/XML (`xml` feature) and `govc vcsim` wire compatibility:**
