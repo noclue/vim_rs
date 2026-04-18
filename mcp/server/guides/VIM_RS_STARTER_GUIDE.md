@@ -1,15 +1,10 @@
 # vim_rs Workflow Guide for LLMs
 
-**CRITICAL: Read this entire guide before writing any vim_rs code. Following this workflow will ensure success on the first try.**
+**How to use this file:** Skim **Steps 1–4** first (connection → calls → retrieval → tasks). Treat **Step 3.5+** (polymorphism, Deref), **Navigation paths**, **MCP tools**, and **Anti-patterns** as lookup sections—do not load them all unless the task needs them.
 
 ## Overview
 
-vim_rs is a Rust SDK for the vSphere API. It provides:
-- Type-safe bindings for vSphere managed objects, data structures, and enums
-- Property collector macros for efficient bulk data retrieval
-- Async client with connection pooling
-- Default VI JSON transport plus an optional experimental SOAP/XML transport
-- Comprehensive error handling
+vim_rs is a Rust SDK for the vSphere API: type-safe MO bindings, `vim_retrievable!` / `ObjectRetriever` for bulk properties, async `ClientBuilder`, default VI JSON plus optional SOAP/XML (`xml` feature).
 
 ## Two-Tier Knowledge System
 
@@ -44,8 +39,7 @@ pub async fn connect(app_name: &str, app_version: &str) -> Result<Arc<Client>> {
         .insecure(true)
         .basic_authn(username.as_str(), pwd.as_str())
         .app_details(app_name, app_version)
-        // Optional: `.wire_logging(vim_rs::WireLoggingMode::Summary)` for transport diagnostics
-        // on targets `vim_rs::wire::json` / `vim_rs::wire::soap` (default is `Off`).
+        // Optional: `.wire_logging(WireLoggingMode::Summary)` — see Step 1.0
         .build()
         .await?;
 
@@ -71,8 +65,8 @@ async fn main() -> Result<()> {
 - Store credentials in environment variables (VIM_SERVER, VIM_USERNAME, VIM_PASSWORD)
 - Client is thread-safe (`Arc<Client>`)
 - Managed-object stubs store an `Arc<dyn VimClient>` internally; `Client` implements `VimClient`.
-- Default transport is JSON. If you do nothing, behavior stays on the normal vCenter JSON path.
-- **Wire logging** (`ClientBuilder::wire_logging`) is optional and **defaults to `Off`**. When enabled, use `WireLoggingMode::Summary` first; switch to `Detailed` only if you need full bodies. Logs go to `vim_rs::wire::json` / `vim_rs::wire::soap` at `Debug` (summary) and `Trace` (detailed bodies where allowed). **`SessionManager`** traffic never logs bodies (login/session data stays summary-only). Filter by target (e.g. `RUST_LOG=vim_rs::wire::json=debug`) instead of turning on global `trace` for all of `vim_rs`.
+- Default transport is JSON unless you set `TransportMode` (Step 1.1).
+- Wire logging: **Step 1.0** only (defaults `Off`; filter by `vim_rs::wire::json` / `soap` targets).
 
 **Dependencies needed:**
 ```toml
@@ -84,14 +78,9 @@ env_logger = "0.11"
 log = "0.4"
 ```
 
-### Step 1.0: Wire logging (ONLY FOR TRANSPORT DEBUGGING)
+### Step 1.0: Wire logging (transport debugging only)
 
-Use this when you need to see what the client sends and receives on the wire. It does **not** replace normal application logging.
-
-1. Import `use vim_rs::WireLoggingMode;`.
-2. Start with **`WireLoggingMode::Summary`** on the builder. Summary lines use `log::Level::Debug` on targets `vim_rs::wire::json` and/or `vim_rs::wire::soap`.
-3. If the failure is still unclear, use **`WireLoggingMode::Detailed`**. Full bodies are emitted at `log::Level::Trace` only where allowed; **`SessionManager`** calls remain summary-only (do not expect login/session payload bodies).
-4. Configure your logger by **target**, e.g. `RUST_LOG=vim_rs::wire::json=debug` or `vim_rs::wire::json=trace` — avoid blanket `vim_rs=trace` unless you also want every other diagnostic.
+`ClientBuilder::wire_logging` — default **`Off`**. Import `WireLoggingMode`; start with **`Summary`** (`Debug` on `vim_rs::wire::json` / `vim_rs::wire::soap`), then **`Detailed`** if needed (`Trace` bodies where allowed; **`SessionManager`** never logs bodies). Prefer `RUST_LOG=vim_rs::wire::json=debug` over blanket `vim_rs=trace`.
 
 ### Step 1.1: XML Transport (ONLY WHEN YOU ACTUALLY NEED IT)
 
@@ -155,6 +144,22 @@ Use `TransportMode::Soap` when you know you are talking directly to ESXi or you 
 
 **Deserialization caveat with XML enabled:**
 - If you manually deserialize polymorphic JSON while the `xml` feature is enabled, `_typeName` must appear before subtype-specific fields.
+
+### Step 1.2: govc vcsim (optional — SOAP/XML simulator)
+
+Use this when integration tests target **[govc vcsim](https://github.com/vmware/govmomi)** over SOAP/XML (`xml` feature + `TransportMode::Soap` or `Auto`). Production vCenter/ESXi usually do not need these knobs.
+
+1. **`vcsim_compat` feature** (requires `xml`): enables tolerant client-internal SOAP unmarshalling so incomplete XML fragments (for example `HostConfigInfo.optionDef` without `optionType`) can be dropped instead of failing the entire response. Scoped helpers such as `vim_rs::xml::de::from_xml_with` exist for explicit control.
+
+   ```toml
+   vim_rs = { version = "0.4", features = ["xml", "vcsim_compat"] }
+   ```
+
+2. **Macro path suffix `?`:** In `vim_retrievable!` and `vim_updatable!`, append `?` to the **quoted** property path string to force `Option<T>` even when the OpenAPI spec marks the property as required—for example `effective_cpu = "summary.quick_stats.overall_cpu_usage"?`. vcsim (and occasionally real hosts) omit “required” fields; without `?`, `TryFrom` fails and whole rows are dropped during retrieval or cache updates.
+
+3. **`CacheManager::set_cancel_wait_on_filter_change(true)`:** vcsim often does not merge newly registered property filters into an in-flight `WaitForUpdatesEx` long poll the way production servers do. When this flag is **true**, filter topology changes issue a best-effort `CancelWaitForUpdates` so the next `Monitor::wait_updates` iteration sees new filters. It defaults to **`false`**. Enable it in vcsim-driven tests that call `add_cache` / `remove_cache` while a monitor loop is running.
+
+4. **Typed cancel faults on SOAP:** For `RequestCanceled` after `cancel_wait_for_updates`, use `vim_rs::core::client::is_request_canceled_error` when matching errors (vcsim often returns an empty SOAP `faultstring`; the library maps typed faults from `<detail>`).
 
 ### Step 2: Call APIs (ALWAYS USE THIS PATTERN)
 
@@ -270,8 +275,17 @@ async fn main() -> Result<()> {
     - ❌ DO NOT use Java style names like "summary.overallStatus"
 - `ObjectRetriever` handles batching automatically (efficient!)
 - Use `retrieve_objects_from_container()` to fetch all objects of a type
+- Use `retrieve_objects_from_list()` when you already have a slice/vec of `ManagedObjectReference`
+- Use **`retrieve_object()`** for a **single** MoRef: one `RetrievePropertiesEx` round trip and **no** `ListView` / `ContainerView` lifecycle (prefer this over `retrieve_objects_from_list(&[one])` for one-off lookups)
+- Optional macro suffix **`?`** after the path string forces `Option<T>` even when the spec marks the field required—see **Step 1.2** (govc vcsim) for when this matters
 - The macro generates `id` field automatically (ManagedObjectReference)
 
+### Quick patterns (`ObjectRetriever`)
+
+- **Filter in memory:** `retrieve_objects_from_container` → `iter().filter(...)`.
+- **One MoRef:** `retrieve_object(&mor).await?` → `Option<T>` (no view).
+- **Several MoRefs:** `retrieve_objects_from_list(&[...]).await?`.
+- **Hierarchy:** define another `vim_retrievable!` type (e.g. `Datacenter`) and `retrieve_objects_from_container(root)`.
 
 ### Step 3.5: Working with Polymorphic Types (CRITICAL)
 
@@ -325,87 +339,15 @@ if let Some(devices) = vm.devices {
 }
 ```
 
-**Key points:**
-- Import `vim_rs::types::convert::CastInto`
-- Import the target trait (e.g., `VirtualEthernetCardTrait`)
-- Use `.as_ref().into_ref()` to get `Option<&dyn TargetTrait>`
-- Use `let Some(...) = ... else { continue }` pattern to handle failed trait cast
-- Access fields directly (e.g., `eth.mac_address`) - no getter methods needed
+#### Method 2: Downcast to a concrete struct
 
-#### Method 2: Downcast to Concrete Struct Type
+When you need one specific type: `device.as_any_ref().downcast_ref::<VirtualE1000>()`.
 
-Use `std::any:Any` `as_any_ref()` and `downcast_ref()` to get a specific struct type:
+#### Method 3: Base fields on any device
 
-```rust
-use vim_rs::types::structs::VirtualE1000;
+`VirtualDeviceTrait` derefs to `VirtualDevice`; use `device.key`, `device.controller_key`, etc.
 
-if let Some(devices) = vm.devices {
-    for device in devices {
-        // Try to downcast to specific VirtualE1000 type
-        if let Some(e1000) = device.as_any_ref().downcast_ref::<VirtualE1000>() {
-            println!("Found E1000 with MAC: {:?}", e1000.mac_address);
-        }
-    }
-}
-```
-
-#### Method 3: Use Direct Field Access via Deref
-
-Structs use compositional inheritance with Deref, allowing direct field access through the inheritance chain:
-
-```rust
-if let Some(devices) = vm.devices {
-    for device in devices {
-        // Access fields directly - Deref provides access to parent fields
-        let key = device.key;
-        let controller_key = device.controller_key;
-        println!("Device {} on controller {:?}", key, controller_key);
-    }
-}
-```
-
-#### Complete Working Example: Collecting MAC Addresses
-
-```rust
-use vim_rs::vim_retrievable;
-use vim_rs::core::pc_retrieve::ObjectRetriever;
-use vim_rs::types::convert::CastInto;
-use vim_rs::types::traits::VirtualEthernetCardTrait;
-
-vim_retrievable!(
-    struct Vm: VirtualMachine {
-        name = "name",
-        devices = "config.hardware.device",
-    }
-);
-
-async fn get_vm_macs(client: Arc<Client>) -> Result<Vec<(String, String)>> {
-    let retriever = ObjectRetriever::new(client.clone())?;
-    let vms: Vec<Vm> = retriever
-        .retrieve_objects_from_container(&client.service_content().root_folder)
-        .await?;
-    
-    let mut results = Vec::new();
-    
-    for vm in vms {
-        if let Some(devices) = vm.devices {
-            for device in devices {
-                // Cast to VirtualEthernetCardTrait
-                let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
-                    continue;
-                };
-                
-                // Access mac_address field directly via Deref
-                if let Some(mac) = &eth.mac_address {
-                    results.push((vm.name.clone(), mac.clone()));
-                }
-            }
-        }
-    }
-    
-    Ok(results)
-}
-```
+**NIC / MAC (most common pitfall):** devices are **`VirtualDeviceTrait`**, not an enum. Do **not** `match` on every NIC struct. Cast once to **`VirtualEthernetCardTrait`** (Option 1) and read `mac_address`.
 
 #### When to Use Which Method
 
@@ -415,15 +357,7 @@ async fn get_vm_macs(client: Arc<Client>) -> Result<Vec<(String, String)>> {
 | Check specific type | Downcast to struct | Find VirtualE1000 specifically |
 | Access base fields | Direct field access | Get device key from any device via `device.key` |
 
-**🔑 Key Takeaway:**
-- Polymorphic types are `Box<dyn SomeTrait>`, not enums
-- Use `.as_ref().into_ref()` to cast between traits
-- Use `.as_any_ref().downcast_ref::<Type>()` to get concrete types
-- Always import `vim_rs::types::convert::CastInto`
-- Access fields directly via Deref (e.g., `device.key`, `eth.mac_address`)
-
-
----
+**Summary:** `Box<dyn Trait>` not enums; `CastInto` + `.as_ref().into_ref()`; `as_any_ref().downcast_ref::<T>()`; fields via Deref (`device.key`, `eth.mac_address`).
 
 ## Step 3.6: Compositional Inheritance — How Structs and Traits Use Deref
 
@@ -479,7 +413,7 @@ let spec = VirtualDeviceConfigSpec {
 
 Enable the `defaults` feature in your `Cargo.toml`:
 ```toml
-vim_rs = { version = "0.3", path = "../../vim_rs", features = ["defaults"] }
+vim_rs = { version = "0.4", features = ["defaults"] }
 ```
 
 Then use `..Default::default()` to fill in optional fields:
@@ -524,435 +458,46 @@ So `device.key` works on `&dyn VirtualDeviceTrait` and `eth.mac_address` works o
 
 Use `get(id="StructName")` in the MCP tools to see if a struct has a parent field.
 
----
+## Step 4: TaskTracker (`*_Task` methods)
 
-## ⚠️ SPECIAL CASE: Getting MAC Addresses from VirtualMachine Devices
-
-**THIS IS THE #1 MOST COMMON MISTAKE - READ CAREFULLY!**
-
-When you retrieve `config.hardware.device` from a VirtualMachine, you get `Vec<Box<dyn VirtualDeviceTrait>>`. This includes disks, controllers, NICs, etc.
-
-**❌ WRONG APPROACH - DON'T DO THIS:**
-```rust
-// ❌ This is what 20B keeps trying - DON'T DO THIS!
-for device in devices {
-    match device.as_any_ref() {
-        Some(v): &VirtualE1000 => v.mac_address.clone(),
-        Some(v): &VirtualE1000E => v.mac_address.clone(),
-        Some(v): &VirtualVmxnet3 => v.mac_address.clone(),
-        // ... listing every single NIC type
-        _ => None,
-    }
-}
-// This won't compile AND you'll miss new NIC types!
-```
-
-**✅ CORRECT APPROACH - DO THIS INSTEAD:**
-```rust
-use vim_rs::types::convert::CastInto;
-use vim_rs::types::traits::VirtualEthernetCardTrait;
-
-for device in devices {
-    // Cast to VirtualEthernetCardTrait - works for ALL ethernet card types!
-    let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
-        continue;  // Not an ethernet card (disk, controller, etc.)
-    };
-    
-    // Access mac_address field directly - works for E1000, E1000e, Vmxnet3, etc.
-    if let Some(mac) = &eth.mac_address {
-        println!("MAC: {}", mac);
-    }
-}
-```
-
-**Remember:**
-- Import `vim_rs::types::convert::CastInto`
-- Import target trait `vim_rs::types::traits::VirtualEthernetCardTrait`
-- Use `device.as_ref().into_ref()` to cast
-- Access `&eth.mac_address` directly (fields available via Deref)
-
----
-
-## Step 4: Awaiting Task Completion with TaskTracker (CRITICAL FOR ASYNC OPERATIONS)
-
-**⚠️ IMPORTANT: Many vSphere operations are ASYNCHRONOUS and return Task references!**
-
-### Understanding vSphere Tasks
-
-Methods ending in `*_Task` (e.g., `power_on_vm_task`, `rename_task`, `reconfigure_vm_task`) return a `ManagedObjectReference` to a `Task` object instead of completing immediately. You MUST wait for these tasks to complete to know if the operation succeeded.
-
-**The WRONG way:**
-```rust
-// ❌ DON'T DO THIS - The operation is NOT complete yet!
-let task_ref = vm.power_on_vm_task(None).await?;
-println!("VM powered on!");  // WRONG - task might still be running!
-```
-
-**The CORRECT way:**
-```rust
-// ✅ DO THIS - Wait for the task to complete
-use vim_rs::core::tasks::TaskTracker;
-
-let task_tracker = TaskTracker::new(client.clone());
-let task_ref = vm.power_on_vm_task(None).await?;
-task_tracker.wait::<()>(task_ref).await?;
-println!("VM powered on!");  // NOW it's actually powered on
-```
-
-### ALWAYS USE THIS PATTERN for Tasks
-
-**Step 1: Create a TaskTracker once and reuse it**
+Methods ending in `*_Task` return a **Task** MoRef; the operation is **not** done until you wait.
 
 ```rust
 use vim_rs::core::tasks::TaskTracker;
 
-// Create once per Client
-let task_tracker = TaskTracker::new(client.clone());
-
-// Reuse for multiple tasks
-task_tracker.wait::<()>(task1_ref).await?;
-task_tracker.wait::<()>(task2_ref).await?;
-```
-
-**Step 2: Call the *_Task method**
-
-```rust
-// Methods ending in *_Task return ManagedObjectReference to a Task
-let task_ref = vm.power_on_vm_task(None).await?;
-let task_ref = vm.rename_task("NewName").await?;
-let task_ref = vm.reconfigure_vm_task(spec).await?;
-```
-
-**Step 3: Wait for completion using one of two APIs**
-
-### API Option 1: `wait::<T>()` - Most Common
-
-Use `wait::<T>()` when you know the expected result type. It automatically deserializes the result.
-
-```rust
-// For tasks that return nothing (most common)
-task_tracker.wait::<()>(task_ref).await?;
-
-// For tasks that return a ManagedObjectReference
-let vm_ref: ManagedObjectReference = task_tracker.wait(task_ref).await?;
-
-// For tasks that return custom data
-let result: CustomType = task_tracker.wait(task_ref).await?;
-```
-
-**Common task return types:**
-- `()` - No return value (rename, power operations, reconfigure, etc.)
-- `ManagedObjectReference` - Created object reference (create VM, clone VM, etc.)
-- Custom types - Depends on the specific operation
-
-### API Option 2: `wait_any()` - Zero-Allocation Path
-
-Use `wait_any()` for maximum efficiency when you want to handle `VimAny` directly:
-
-```rust
-let result: Option<VimAny> = task_tracker.wait_any(task_ref).await?;
-match result {
-    None => println!("Task completed with no return value"),
-    Some(VimAny::Value(v)) => {
-        // Handle primitive/boxed-array result
-        println!("Primitive result: {:?}", v);
-    }
-    Some(VimAny::Object(o)) => {
-        // Handle data object result
-        println!("Object type: {:?}", o.data_type());
-        // Downcast to concrete type if needed
-        if let Some(mor) = o.as_any_ref().downcast_ref::<ManagedObjectReference>() {
-            println!("Created object: {}", mor.value);
-        }
-    }
-}
-```
-
-### Step 5: Common Patterns
-
-**Pattern: Filter objects by property**
-```rust
-let hosts: Vec<Host> = retriever
-    .retrieve_objects_from_container(&client.service_content().root_folder)
-    .await?;
-
-let connected_hosts: Vec<&Host> = hosts
-    .iter()
-    .filter(|h| h.connection_state == Some(HostSystemConnectionState::Connected))
-    .collect();
-```
-
-**Pattern: Retrieve specific object by MoRef**
-```rust
-// If you have a ManagedObjectReference
-let host_ref = /* ... */;
-let hosts: Vec<Host> = retriever
-    .retrieve_objects_from_list(&[host_ref])
-    .await?;
-```
-
-**Pattern: Navigate inventory hierarchy**
-```rust
-// Start from root folder
-let root = &client.service_content().root_folder;
-
-// Get datacenters
-vim_retrievable!(
-    struct Datacenter: Datacenter {
-        name = "name",
-        host_folder = "hostFolder",
-        vm_folder = "vmFolder",
-    }
-);
-
-let datacenters: Vec<Datacenter> = retriever
-    .retrieve_objects_from_container(root)
-    .await?;
-```
-
-## Common Mistakes to Avoid
-
-❌ **DON'T** manually create Client:
-```rust
-// WRONG
-let client = Client { /* manual construction */ };
-```
-
-✅ **DO** use ClientBuilder:
-```rust
-let client = ClientBuilder::new(server)
-                .basic_authn(username.as_str(), pwd.as_str())
-                .build().await?;
-```
-
----
-
-❌ **DON'T** manually construct PropertyCollector specs:
-```rust
-// WRONG - too complex, error-prone
-let spec = PropertySpec { /* manual construction */ };
-```
-
-✅ **DO** use vim_retrievable! macro:
-```rust
-vim_retrievable!(
-    struct VM: VirtualMachine {
-        name = "name",
-        power_state = "runtime.powerState",
-    }
-);
-```
-
----
-
-❌ **DON'T** forget the parent field when constructing child structs:
-```rust
-// WRONG — missing parent field, won't compile
-let spec = TraversalSpec {
-    r#type: "ContainerView".to_string(),
-    path: "view".to_string(),
-    skip: Some(false),
-    select_set: None,
-};
-```
-
-✅ **DO** include the parent field with underscore suffix:
-```rust
-let spec = TraversalSpec {
-    selection_spec_: SelectionSpec { name: Some("...".to_string()) },
-    r#type: "ContainerView".to_string(),
-    path: "view".to_string(),
-    skip: Some(false),
-    select_set: None,
-};
-```
-
----
-
-❌ **DON'T** fetch objects one by one:
-```rust
-// WRONG - N API calls (slow!)
-for vm_ref in vm_refs {
-    let vm = get_vm_properties(&vm_ref).await?;
-}
-```
-
-✅ **DO** use ObjectRetriever for batch fetching:
-```rust
-// RIGHT - 1 API call (fast!)
-let vms: Vec<VM> = retriever
-    .retrieve_objects(&vm_refs)
-    .await?;
-```
-
----
-
-❌ **DON'T** ignore async/await:
-```rust
-// WRONG - won't compile
-fn main() {
-    let client = connect("app", "1.0").await?;
-}
-```
-
-✅ **DO** use #[tokio::main]:
-```rust
-#[tokio::main]
-async fn main() -> Result<()> {
-    let client = connect("app", "1.0").await?;
-    Ok(())
-}
-```
-
----
-
-❌ **DON'T** treat polymorphic types as enums:
-```rust
-// WRONG - VirtualDevice is NOT an enum!
-match device {
-    VirtualHardwareDevice::VirtualEthernetCard(card) => { /* ... */ }
-    _ => {}
-}
-```
-
-✅ **DO** use CastInto trait to work with polymorphic types:
-```rust
-use vim_rs::types::convert::CastInto;
-use vim_rs::types::traits::VirtualEthernetCardTrait;
-
-// Cast trait -> more specific trait
-let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
-    continue;
-};
-// Access fields directly via Deref: eth.mac_address, eth.key, etc.
-```
-
-
-
----
-
-❌ **DON'T** downcast to every NIC type to get MAC addresses:
-```rust
-// WRONG - tedious, error-prone, won't compile
-match device.as_any_ref() {
-    Some(v): &VirtualE1000 => v.mac_address.clone(),
-    Some(v): &VirtualE1000E => v.mac_address.clone(),
-    Some(v): &VirtualVmxnet3 => v.mac_address.clone(),
-    _ => None,
-}
-```
-
-✅ **DO** cast to VirtualEthernetCardTrait once:
-```rust
-use vim_rs::types::convert::CastInto;
-use vim_rs::types::traits::VirtualEthernetCardTrait;
-
-// Cast to trait - works for ALL NIC types!
-let Some(eth): Option<&dyn VirtualEthernetCardTrait> = device.as_ref().into_ref() else {
-    continue;
-};
-// Access mac_address field directly via Deref
-if let Some(mac) = &eth.mac_address {
-    println!("MAC: {}", mac);
-}
-```
-
----
-
-❌ **DON'T** forget to await task completion:
-```rust
-// WRONG - Task might still be running!
-let task_ref = vm.power_on_vm_task(None).await?;
-println!("VM powered on!");  // Operation may not be complete yet!
-```
-
-✅ **DO** use TaskTracker to wait for tasks:
-```rust
-use vim_rs::core::tasks::TaskTracker;
-
-let task_tracker = TaskTracker::new(client.clone());
+let task_tracker = TaskTracker::new(client.clone()); // once per client; reuse in loops
 let task_ref = vm.power_on_vm_task(None).await?;
 task_tracker.wait::<()>(task_ref).await?;
-println!("VM powered on!");  // Now it's actually complete
 ```
 
----
+- **`wait::<T>()`** — deserialize result (`()`, `ManagedObjectReference`, or a concrete result type).
+- **`wait_any()`** — `Option<VimAny>` when you want to avoid extra allocation / handle polymorphic results manually.
 
-❌ **DON'T** create a new TaskTracker for every task:
+Property accessors (e.g. `vm.name().await?`) are **not** tasks—no `TaskTracker`.
+
+## Anti-patterns (dense checklist)
+
+| Wrong | Right |
+|--------|--------|
+| Construct `Client` manually | `ClientBuilder` (Step 1) |
+| Hand-built `PropertyCollector` specs | `vim_retrievable!` + `ObjectRetriever` (Step 3) |
+| N per-object property fetches in a loop | `retrieve_objects_from_list` / `from_container` |
+| `retrieve_objects_from_list(&[one])` for a single MoRef | `retrieve_object` |
+| `#[tokio::main]` missing / `async` missing in `main` | `#[tokio::main] async fn main` |
+| `match device` as if devices were enums | **Step 3.5** — `CastInto` + `VirtualEthernetCardTrait` for NICs |
+| `*_Task` without `TaskTracker::wait` | Step 4 |
+| New `TaskTracker` inside hot loops | One tracker, many `wait` calls |
+| `enum.into()` / `From` for enum → `&str` | **`.as_str()`** on enums and `ValueElements` |
+| `TraversalSpec` without parent field | **Step 3.6** — `selection_spec_: SelectionSpec { ... }` |
+
 ```rust
-// WRONG - inefficient, creates new ListView for each task
-for vm in vms {
-    let tracker = TaskTracker::new(client.clone());  // Don't do this in a loop!
-    let task = vm.power_on_vm_task(None).await?;
-    tracker.wait::<()>(task).await?;
-}
-```
-
-✅ **DO** create once and reuse:
-```rust
-// RIGHT - single TaskTracker for all tasks
-let task_tracker = TaskTracker::new(client.clone());
-for vm in vms {
-    let task = vm.power_on_vm_task(None).await?;
-    task_tracker.wait::<()>(task).await?;
-}
-```
-
----
-
-❌ **DON'T** confuse property accessors with task methods:
-```rust
-// Property accessor - returns value directly, no task
-let name: String = vm.name().await?;
-
-// Task method - returns Task reference, must wait for completion
-let task_ref = vm.rename_task("NewName").await?;
-// ❌ WRONG: Missing task wait!
-```
-
-✅ **DO** understand the difference:
-```rust
-// Property accessor - no TaskTracker needed
-let name: String = vm.name().await?;
-
-// Task method - MUST use TaskTracker
-let task_tracker = TaskTracker::new(client.clone());
-let task_ref = vm.rename_task("NewName").await?;
-task_tracker.wait::<()>(task_ref).await?;  // ✅ Correct!
-```
-
----
-
-❌ **DON'T** use `.into()` or `From::from()` to convert enums to strings:
-```rust
-// WRONG - these implementations have been removed
-let type_str: &'static str = mo_type.into();
-let type_str: &'static str = From::from(&mo_type);
-let type_str = Into::<&str>::into(MoTypesEnum::VirtualMachine);
-```
-
-✅ **DO** use `.as_str()` for enum-to-string conversion:
-```rust
-// Convert enum to string
-let type_str = mo_type.as_str();
-
-// If you need an owned String
-let type_string = mo_type.as_str().to_string();
-
-// Works for all vim_rs enums
-let vm_type = MoTypesEnum::VirtualMachine.as_str();  // "VirtualMachine"
-let status = ManagedEntityStatus::Green.as_str();    // "green"
-
-// ValueElements also has as_str() for VIM API type names
-let value = ValueElements::PrimitiveString("hello".to_string());
-let type_name = value.as_str();  // "string"
-let arr_value = ValueElements::ArrayOfManagedObjectReference(vec![]);
-let arr_type = arr_value.as_str();  // "ArrayOfManagedObjectReference"
+// Enum → string (removed From/Into)
+let s = MoTypesEnum::VirtualMachine.as_str();
 ```
 
 ## Understanding API Navigation Paths
 
-When you use `get()` or `search()`, results for structures and fields include **paths** showing how to reach that type from a managed object. Understanding this notation helps you build property collector queries and navigate the API.
+MCP `get` / `search` results use **paths** (below) to show how to reach a field from a managed object—translate them into **snake_case** `vim_retrievable!` strings.
 
 ### Path Notation
 
@@ -964,42 +509,18 @@ VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard
 |--------|---------|---------|
 | `::` | Scope resolution (property or method on MO) | `VirtualMachine::config` |
 | `.` | Field access | `.hardware.device` |
-| `?` | Optional field (may be None) | `config?` |
+| `?` | Optional field (may be None) in **navigation paths** (MCP / docs) | `config?` |
 | `[*]` | Array iteration | `device[*]` (iterate over devices) |
 | `→` | Downcast to concrete struct | `→VirtualEthernetCard` |
 | `⇒` | Cast to trait (polymorphic) | `⇒VirtualDeviceTrait` |
 | `()` | Method call (vs property) | `::reconfigure_vm()` |
 | `(param)` | Method input parameter | `::reconfigure_vm(spec)` |
 
-### Path Types
+### How paths map to `vim_retrievable!`
 
-**Property paths** (most common for PropertyCollector):
-- `VirtualMachine::config` - Property accessor
-- `VirtualMachine::config.hardware.num_cpu` - Nested property
+Use MCP paths to pick **Rust snake_case** property strings (e.g. `config.hardware.num_cpu`, not JavaCase). `→` / `⇒` mean you will cast (`downcast_ref`) or use `CastInto` (Step 3.5).
 
-**Method paths** (for understanding return types):
-- `VirtualMachine::reconfigure_vm()` - Method return value
-- `VirtualMachine::reconfigure_vm(spec)` - Method input parameter
-
-### How Paths Help You
-
-1. **Build vim_retrievable! property paths**: The path tells you exactly what to put in the macro
-   ```rust
-   vim_retrievable!(
-       struct Vm: VirtualMachine {
-           // Path: VirtualMachine::config.hardware.num_cpu
-           num_cpu = "config.hardware.numCPU",
-       }
-   );
-   ```
-
-2. **Understand polymorphic types**: `→` and `⇒` show when downcasting is needed
-   ```rust
-   // Path: VirtualMachine::config.hardware.device[*]→VirtualEthernetCard
-   // This tells you: iterate device array, then cast to VirtualEthernetCard
-   ```
-
-3. **Handle optional fields**: `?` in paths indicates you need `Option<T>` handling
+**Navigation `?` vs macro `?`:** In MCP trees, `?` means the API field is optional. In `vim_retrievable!`, a trailing `?` on the **quoted** string forces `Option<T>` even when the spec says required (Step 1.2 / vcsim).
 
 ## Quick Reference: Essential Managed Objects
 
@@ -1017,277 +538,23 @@ VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard
 - `Task` - Represents async operations (use `TaskTracker` to wait for completion)
 - `TaskManager` - Task tracking
 - `SessionManager` - Session handling (handled by ClientBuilder)
-- `SearchIndex` - Lookup Virtual Machines, Hosts, Datatores by inventory path, IP, DNS, UUID etc.
+- `SearchIndex` - Lookup VMs, hosts, datastores by inventory path, IP, DNS, UUID, etc.
 
-## MCP Server Tools and Workflows
+## MCP tools (vim_rs MCP server)
 
-### Unified API: Two Core Tools
+| Call | Use |
+|------|-----|
+| `get_starter_guide()` | This document |
+| `search(query, filter=...)` | Discover IDs (`managed_objects`, `methods`, `structures`, `examples`, …) |
+| `get(id=...)` | Full doc: `VirtualMachine`, `VirtualMachine::power_on_vm_task`, `VirtualHardware::device`, `example::…` |
+| `list_property_collector_root_types()` | MO types valid as collector roots |
+| `get_property_tree(managed_object, start_path?)` | Property tree → pick **snake_case** strings for `vim_retrievable!` |
+| `get_property_path(managed_object, property_path)` | One path (VIM wire name vs Rust type) |
 
-The MCP server provides a simple, unified interface:
+Flow: `search` → copy **id** → `get(id)`. For macro paths use `get_property_tree` / `get_property_path` (see *Understanding API Navigation Paths*).
 
-| Tool | Purpose |
-|------|---------|
-| `search(query, filter)` | Find items by natural language query |
-| `get(id)` | Get detailed documentation for any item by ID |
+**App skeleton:** **Step 1** `connect` + **Step 3** `vim_retrievable!` / `ObjectRetriever` + **Step 4** `TaskTracker` only for `*_Task`. Same `Cargo.toml` as Step 1.
 
-Plus specialized tools for property path exploration:
-- `get_starter_guide()` - This guide
-- `get_property_tree(managed_object, start_path)` - View full property tree with types
-- `get_property_path(managed_object, property_path)` - Explore specific property paths
-- `list_property_collector_root_types()` - List available root types
+## Golden rules
 
-### ID Format Reference
-
-Every item has a unique ID you can pass to `get()`:
-
-| Item Type | ID Format | Example |
-|-----------|-----------|---------|
-| Managed Object | `{rust_struct}` | `VirtualMachine` |
-| Method | `{mo}::{method}` | `VirtualMachine::power_on_vm_task` |
-| Structure | `{rust_name}` | `VirtualDevice` |
-| Field | `{struct}::{field}` | `VirtualHardware::device` |
-| Enum | `{rust_name}` | `ManagedEntityStatus` |
-| Trait | `{rust_name}` | `VirtualDeviceTrait` |
-| Example | `example::{name}` | `example::connection_basic` |
-
-### Workflow 1: Start Here - Get the Starter Guide
-**Always call this first when beginning with vim_rs:**
-
-```
-get_starter_guide()
-```
-
-Returns this complete vim_rs starter guide with connection patterns, property collector usage, code snippets, and best practices.
-
----
-
-### Workflow 2: Explore API, Examples, and Documentation
-
-**Step 1: Search semantically** (finds items by meaning, not just keywords)
-```
-search(query="how to power on a virtual machine", limit=10, filter="all")
-```
-
-**Filters available:**
-- `all` - Search everything (default)
-- `managed_objects` - Managed object types (VirtualMachine, HostSystem, etc.)
-- `methods` - API methods
-- `structures` - Data structures/types
-- `fields` - Structure fields
-- `enums` - Enumerations
-- `traits` - Trait definitions
-- `examples` - Code examples
-- `guides` - vSphere/VCF admin documentation
-
-Search results include the **ID** for each item. Use this ID with `get()`.
-
-**Step 2: Get detailed information using the ID from search results:**
-
-```
-get(id="VirtualMachine")                          # Managed object
-get(id="VirtualMachine::power_on_vm_task")        # Method
-get(id="VirtualDevice")                           # Structure  
-get(id="VirtualHardware::device")                 # Field
-get(id="VirtualDeviceTrait")                      # Trait
-get(id="ManagedEntityStatus")                     # Enum
-get(id="example::connection_basic")               # Code example
-```
-
-**Tool Details:**
-
-- **`search(query, limit, filter)`** - Natural language semantic search
-  - Returns: Matching items with IDs, types, and brief summaries
-  - Each result includes the ID needed for `get()`
-  
-- **`get(id)`** - Get comprehensive documentation for any item
-  - Returns: Full details including description, fields/methods, usage examples, related types
-  - Works for all item types (managed objects, methods, structures, fields, enums, traits, examples, guides)
-
----
-
-#### Workflow 3: Build Property Collector Paths
-
-Use these tools to discover valid property paths for `vim_retrievable!` macro:
-
-**Step 1: List available root types**
-```
-list_property_collector_root_types()
-```
-
-Returns all supported managed object types (VirtualMachine, HostSystem, Datacenter, Datastore, ClusterComputeResource, etc.) that can be used as roots in the property collector.
-
-**Step 2: View the full property tree**
-```
-get_property_tree(managed_object="VirtualMachine")
-```
-
-Returns a visual tree of all properties up to 5 levels deep with their Rust types:
-```
-VirtualMachine
-├─config: Option<vim_rs::types::structs::VirtualMachineConfigInfo>
-│ ├─hardware: Option<VirtualHardware>
-│ │ ├─device: Option<Vec<Box<dyn VirtualDeviceTrait>>>
-│ │ ├─memory_mb: i32
-│ │ └─num_cpu: i32
-│ └─name: Option<String>
-├─guest: Option<vim_rs::types::structs::GuestInfo>
-│ ├─ip_address: Option<String>
-│ └─host_name: Option<String>
-└─name: String
-```
-
-You can also start from a specific path to explore a subtree:
-```
-get_property_tree(managed_object="VirtualMachine", start_path="config.hardware")
-```
-
-**Step 3: Get details about a specific property**
-```
-get_property_path(managed_object="VirtualMachine", property_path="guest.ip_address")
-```
-
-Returns detailed information about a property path including:
-- VIM path (e.g., `guest.ipAddress`)
-- Rust type (e.g., `Option<String>`)
-- Documentation
-- Child fields (if it's a complex type)
-- Example usage in `vim_retrievable!` macro
-
-**Examples:**
-```
-# View full property tree for VirtualMachine
-get_property_tree(managed_object="VirtualMachine")
-
-# View subtree starting from config.hardware
-get_property_tree(managed_object="VirtualMachine", start_path="config.hardware")
-
-# Get details about a specific property
-get_property_path(managed_object="VirtualMachine", property_path="guest.ip_address")
-```
-
-This workflow helps you build correct property paths like:
-```rust
-vim_retrievable!(
-    struct MyVirtualMachine: VirtualMachine {
-        name = "name",
-        power_state = "runtime.powerState",
-        ip_address = "guest.ipAddress",
-        num_cpu = "config.hardware.numCPU",
-    }
-);
-```
-
----
-
-### Quick Reference: Task to Tool Mapping
-
-| Task | Tool | Example |
-|------|------|---------|
-| **Getting Started** | `get_starter_guide()` | Learn vim_rs patterns first |
-| **Find anything** | `search(query="...")` | `search(query="power on vm")` |
-| **Find working code** | `search(filter="examples")` | `search(query="create vm", filter="examples")` |
-| **Find admin concepts** | `search(filter="guides")` | `search(query="drs", filter="guides")` |
-| **Get item details** | `get(id="...")` | `get(id="VirtualMachine")` |
-| **Get example code** | `get(id="example::...")` | `get(id="example::property_collector_macro")` |
-| **Understand a type** | `get(id="...")` | `get(id="VirtualMachineConfigSpec")` |
-| **Get method details** | `get(id="Mo::method")` | `get(id="VirtualMachine::power_on_vm_task")` |
-| **Get field details** | `get(id="Struct::field")` | `get(id="VirtualHardware::device")` |
-| **List property roots** | `list_property_collector_root_types()` | See all available managed object types |
-| **View property tree** | `get_property_tree(...)` | `get_property_tree(managed_object="VirtualMachine")` |
-| **Explore subtree** | `get_property_tree(...)` | `get_property_tree(managed_object="VirtualMachine", start_path="config.hardware")` |
-| **Get property details** | `get_property_path(...)` | `get_property_path(managed_object="VirtualMachine", property_path="guest.ip_address")` |
-
-## Complete Minimal Example Template
-
-Use this as a starting point for any vim_rs application:
-
-```rust
-use anyhow::{Context, Result};
-use std::env;
-use std::sync::Arc;
-use log::info;
-use vim_rs::core::{Client, ClientBuilder};
-use vim_rs::core::tasks::TaskTracker;
-use vim_rs::vim_retrievable;
-use vim_rs::core::pc_retrieve::ObjectRetriever;
-
-// 1. Connection helper
-pub async fn connect(app_name: &str, app_version: &str) -> Result<Arc<Client>> {
-    let vc_server = env::var("VIM_SERVER").context("VIM_SERVER env var not set")?;
-    let username = env::var("VIM_USERNAME").context("VIM_USERNAME env var not set")?;
-    let pwd = env::var("VIM_PASSWORD").context("VIM_PASSWORD env var not set")?;
-
-    let client = ClientBuilder::new(vc_server.as_str())
-        .insecure(true)
-        .basic_authn(username.as_str(), pwd.as_str())
-        .app_details(app_name, app_version)
-        .build()
-        .await?;
-
-    info!("Connected to {}", client.service_content().about.full_name);
-    Ok(client)
-}
-
-// 2. Define data structure
-vim_retrievable!(
-    struct MyObject: HostSystem {  // Change type as needed
-        name = "name",
-        // Add more properties here
-    }
-);
-
-// 3. Main logic
-#[tokio::main]
-async fn main() -> Result<()> {
-    env_logger::init();
-
-    // Connect
-    let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
-
-    // Create TaskTracker if you'll be calling *_Task methods
-    let task_tracker = TaskTracker::new(client.clone());
-
-    // Retrieve data
-    let retriever = ObjectRetriever::new(client.clone())?;
-    let objects: Vec<MyObject> = retriever
-        .retrieve_objects_from_container(&client.service_content().root_folder)
-        .await?;
-
-    // Process data
-    for obj in objects {
-        info!("Object: {} ({})", obj.name, obj.id.value);
-        
-        // Example: Call a task method if needed
-        // let task_ref = obj_proxy.some_method_task().await?;
-        // task_tracker.wait::<()>(task_ref).await?;
-    }
-
-    Ok(())
-}
-```
-
-**Cargo.toml dependencies:**
-```toml
-[dependencies]
-vim_rs = "0.4"
-anyhow = "1.0"
-tokio = { version = "1.0", features = ["full"] }
-env_logger = "0.11"
-log = "0.4"
-```
-
-## Summary: The Golden Rules
-
-1. **Always** use `ClientBuilder` for connections
-2. **Always** use `vim_retrievable!` macro for data retrieval
-3. **Always** use `ObjectRetriever` for fetching objects
-4. **Always** use `TaskTracker` to wait for `*_Task` method completion
-5. **Always** create TaskTracker once and reuse it for multiple tasks
-6. **Always** check code examples first before inventing patterns
-7. **Never** manually construct PropertyCollector specs
-8. **Never** fetch objects one-by-one in loops
-9. **Never** forget to await task completion after calling `*_Task` methods
-10. **Never** use `.unwrap()` in production code
-
-
-This workflow ensures your vim_rs code will work correctly on the first try!
+`ClientBuilder` → `vim_retrievable!` + `ObjectRetriever` → `TaskTracker` for `*_Task` (create once, reuse) → `search` / `get` before inventing APIs → **Anti-patterns** table. SOAP tests against **govc vcsim**: **Step 1.2**.
