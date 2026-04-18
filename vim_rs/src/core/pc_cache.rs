@@ -651,6 +651,22 @@ impl Monitor {
     /// should trigger shutdown by dropping the channel that consumes updates rather than via
     /// cancel.
     ///
+    /// # Post-cancel empty-snapshot recovery (vcsim race)
+    ///
+    /// After absorbing a `RequestCanceled`, the re-armed wait races against the caller's
+    /// in-flight `CreateFilter` / `DestroyPropertyFilter`. On `vcsim` (and in theory on any
+    /// server that commits filter topology changes asynchronously), the re-armed wait can
+    /// be evaluated against a snapshot that does *not* yet include the caller's new filter,
+    /// returning `filter_set=None` with a non-empty version token (commonly `"-"`). If we
+    /// advanced `self.version` to that stale token the newly-registered filter's initial
+    /// enter set would be invisible forever (the server would consider the session already
+    /// synchronized). To close the window, immediately after absorbing a `RequestCanceled`
+    /// we treat the *next* wait's "version advanced, but nothing to deliver" response as
+    /// suspicious: we reset the version to `""` and retry once more, charging a slot
+    /// against the same [`Monitor::MAX_ABSORBED_CANCELS`] budget. If the server genuinely
+    /// had nothing to report (e.g. all filters removed) the retry surfaces the same result
+    /// and we accept it.
+    ///
     /// # Deadline shrinking
     ///
     /// When `delay_s > 0`, each internal retry receives only the time budget that remains
@@ -667,6 +683,12 @@ impl Monitor {
         } else {
             None
         };
+
+        // Arms the post-cancel empty-snapshot recovery described in the doc
+        // comment: set by the `RequestCanceled` absorb branch, consumed on the
+        // first `Ok(Some)` that follows regardless of outcome. Prevents
+        // busy-loops when the server legitimately has no filters registered.
+        let mut post_cancel_retry_armed = false;
 
         for absorbed in 0..=Self::MAX_ABSORBED_CANCELS {
             let attempt_delay_s = match total_budget {
@@ -718,6 +740,7 @@ impl Monitor {
                         "Monitor::wait_updates absorbed RequestCanceled, resetting version and re-arming"
                     );
                     self.version.clear();
+                    post_cancel_retry_armed = true;
                     continue;
                 }
                 Err(e) => return Err(e.into()),
@@ -729,6 +752,7 @@ impl Monitor {
                     return Ok(None);
                 }
                 Ok(Some(update_set)) => {
+                    let filter_set_absent = update_set.filter_set.is_none();
                     let filter_ids: Vec<String> = update_set
                         .filter_set
                         .as_ref()
@@ -738,6 +762,33 @@ impl Monitor {
                         "Monitor::wait_updates received version={:?} previous_version={:?} filter_ids={:?}",
                         update_set.version, self.version, filter_ids
                     );
+
+                    // Post-cancel empty-snapshot recovery (see doc comment).
+                    // If we just absorbed a cancel, caller's filter mutation
+                    // is almost certainly in-flight; an empty delivery with
+                    // a non-empty version token means the server snapshot
+                    // raced ahead of `CreateFilter`/`DestroyPropertyFilter`.
+                    // Accepting the version would strand new filters'
+                    // initial enter sets forever, so we reset and retry
+                    // once within the same absorb budget.
+                    if post_cancel_retry_armed
+                        && (filter_set_absent || filter_ids.is_empty())
+                        && !update_set.version.is_empty()
+                    {
+                        warn!(
+                            "Monitor::wait_updates: post-cancel empty snapshot \
+                            (server returned version={:?}, no filter updates) \
+                            likely races a concurrent filter mutation; \
+                            resetting version and retrying once",
+                            update_set.version
+                        );
+                        self.version.clear();
+                        post_cancel_retry_armed = false;
+                        continue;
+                    }
+
+                    // `post_cancel_retry_armed` goes out of scope on
+                    // return; no explicit reset needed here.
                     self.version = update_set.version.clone();
                     return Ok(update_set.filter_set);
                 }
