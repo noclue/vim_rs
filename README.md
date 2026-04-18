@@ -158,6 +158,36 @@ When you work with `VimAny` or `ValueElements` yourself, use `VimAny::into_any()
 `ValueElements::into_any()` and `downcast` to recover a concrete `T` instead of matching every
 variant by hand.
 
+### govc vcsim compatibility
+
+The [`govc`](https://github.com/vmware/govmomi) **vcsim** tool is useful for local integration
+tests. Its SOAP/XML output differs from production vCenter/ESXi in several ways; the items below
+are optional and only matter when you target vcsim over XML.
+
+1. **`vcsim_compat` Cargo feature** (requires `xml`): enables tolerant client-internal SOAP
+   unmarshalling so malformed or incomplete elements (for example `HostConfigInfo.optionDef`
+   without `optionType`) can be dropped instead of failing the whole response. For explicit,
+   scoped parsing you can also use `vim_rs::xml::de::from_xml_with` and related helpers from the
+   same module. Enable with:
+
+   ```toml
+   vim_rs = { version = "0.4", features = ["xml", "vcsim_compat"] }
+   ```
+
+2. **Macro path suffix `?`:** In `vim_retrievable!` and `vim_updatable!`, a trailing `?` after the
+   property path string forces `Option<T>` even when the OpenAPI spec marks the property as
+   required—for example `effective_cpu = "summary.effective_cpu"?`. Simulators (and occasionally
+   real hosts) omit fields the spec calls mandatory; without `?`, `TryFrom` can fail and whole rows
+   are skipped during retrieval or cache updates.
+
+3. **`CacheManager::set_cancel_wait_on_filter_change(true)`:** vcsim often does **not** inject
+   newly registered property filters into an already-running `WaitForUpdatesEx` long poll the way
+   production servers do, so dynamic `add_cache` / `remove_cache` can look “stuck” until the wait
+   times out. When this policy is enabled, filter topology changes issue a best-effort
+   `CancelWaitForUpdates` so the next `Monitor::wait_updates` iteration picks up new filters. It
+   defaults to **`false`**; turn it on for vcsim-driven tests. Production vCenter/ESXi typically do
+   not need it.
+
 ## Obtaining Stub for the APIs
 The VIM API is a remote object-oriented API. The functionality is organized in methods of managed objects.
 
@@ -216,7 +246,7 @@ async fn print_hosts(client: &Client) -> Result<()> {
    let retriever = ObjectRetriever::new(client.clone())?;
 
    // Retrieve all hosts with their properties in a single API call
-   let hosts: Vec<HostInfo> = retriever
+   let hosts: Vec<Host> = retriever
            .retrieve_objects_from_container(&client.service_content().root_folder)
            .await?;
 
@@ -228,8 +258,23 @@ async fn print_hosts(client: &Client) -> Result<()> {
    Ok(())
 }
 ```
-The object retriever also allows to pull objects from list of identifiers through 
+
+The retriever can also load a **single** managed object by reference with
+[`ObjectRetriever::retrieve_object`](https://docs.rs/vim_rs/latest/vim_rs/core/pc_retrieve/struct.ObjectRetriever.html#method.retrieve_object):
+no `ContainerView` / `ListView` is created, so one-off lookups avoid extra view lifecycle and teardown.
+
+```rust
+// After defining `Host` with `vim_retrievable!` as above
+let host_moref: ManagedObjectReference = /* ... */;
+let one: Option<Host> = retriever.retrieve_object(&host_moref).await?;
+```
+
+The object retriever also allows pulling objects from a list of identifiers through
 `retrieve_objects_from_list`.
+
+When you point SOAP/XML at **govc vcsim** (or other quirky producers), see
+[*govc vcsim compatibility*](#govc-vcsim-compatibility) for optional macro path syntax (`?`),
+the `vcsim_compat` feature, and `CacheManager` wait behavior.
 
 ### Continuous Property Monitoring with `vim_updatable`
 
@@ -292,6 +337,11 @@ async fn monitor_vms(client: &Arc<Client>) -> Result<(), Error> {
    Ok(())
 }
 ```
+
+For **govc vcsim**, call `manager.set_cancel_wait_on_filter_change(true)` before the wait loop when
+you add or remove caches while `wait_updates` is long-polling; see
+[govc vcsim compatibility](#govc-vcsim-compatibility).
+
 `CacheManager` provides `add_list_cache` method to monitor a predefined list of objects.
 
 ## Awaiting Task Completion
