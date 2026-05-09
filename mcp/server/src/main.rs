@@ -2,7 +2,6 @@ use anyhow::Result;
 use rmcp::{
     ErrorData as McpError, handler::server::{
         ServerHandler,
-        tool::{ToolRouter},
         wrapper::Parameters,
     },
     model::*,
@@ -68,7 +67,6 @@ struct Cli {
 /// McpServer - A Model Context Protocol server
 #[derive(Clone)]
 pub struct McpServer {
-    tool_router: ToolRouter<Self>,
     /// Unified API database with items and embeddings
     api_db: Arc<ApiDatabase>,
     /// Embedding model for runtime query embedding
@@ -325,7 +323,6 @@ impl McpServer {
         };
 
         Ok(Self {
-            tool_router: Self::tool_router(),
             api_db: Arc::new(api_db),
             embedding_model,
         })
@@ -669,50 +666,45 @@ impl McpServer {
 #[tool_handler]
 impl ServerHandler for McpServer {
     fn get_info(&self) -> ServerInfo {
-        ServerInfo {
-            capabilities: ServerCapabilities::builder()
+        ServerInfo::new(
+            ServerCapabilities::builder()
                 .enable_tools()
                 .build(),
-            server_info: Implementation{
-                name: env!("CARGO_CRATE_NAME").to_owned(),
-                title: Some("vSphere API MCP Server for Rust".into()),
-                version: env!("CARGO_PKG_VERSION").to_owned(),
-                icons: None,
-                website_url: None,
-            },
-            instructions: Some(
-                "🎯 START HERE: Call get_starter_guide() FIRST to learn the correct vim_rs patterns!\n\n\
-                This MCP server provides comprehensive vSphere API documentation for Rust development using vim_rs.\n\n\
-                UNIFIED API:\n\
-                - search(query) → Find items by natural language query\n\
-                - get(id) → Get detailed info for any item by ID\n\n\
-                ID FORMATS:\n\
-                - Managed Object: 'VirtualMachine'\n\
-                - Method: 'VirtualMachine::power_on_vm_task'\n\
-                - Structure: 'VirtualDevice'\n\
-                - Field: 'VirtualHardware::device'\n\
-                - Enum: 'ManagedEntityStatus'\n\
-                - Trait: 'VirtualDeviceTrait'\n\
-                - Example: 'example::connection_basic'\n\n\
-                PATH NOTATION (shown in search results):\n\
-                - `::` = property/method on Managed Object, `.` = field access\n\
-                - `?` = optional, `[*]` = array, `→` = downcast, `⇒` = trait cast\n\
-                - Example: `VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard`\n\n\
-                PROPERTY COLLECTOR HELPERS:\n\
-                - list_property_collector_root_types → List all supported managed object types\n\
-                - get_property_path → Explore property paths and their types\n\n\
-                ⚠️ CRITICAL FOR POLYMORPHIC TYPES:\n\
-                vim_rs uses TRAITS for polymorphic types, NOT enums!\n\
-                - VirtualDevice is `Box<dyn VirtualDeviceTrait>`, not an enum\n\
-                - Use CastInto trait: `device.as_ref().into_ref()` to cast between traits\n\
-                - Import `vim_rs::types::convert::CastInto` when working with polymorphic types\n\n\
-                CRITICAL: Always use ClientBuilder and vim_retrievable! macro (see starter guide).\n\
-                Never manually construct PropertyCollector specs or fetch objects one-by-one.\n\n\
-                ⚠️ IMPORTANT: This server covers vim_rs (Rust) only, not Python/Go/Java/PowerCLI bindings."
-                .to_string()
-            ),
-            ..Default::default()
-        }
+        )
+        .with_server_info(
+            Implementation::new(env!("CARGO_CRATE_NAME"), env!("CARGO_PKG_VERSION"))
+                .with_title("vSphere API MCP Server for Rust"),
+        )
+        .with_instructions(
+            "🎯 START HERE: Call get_starter_guide() FIRST to learn the correct vim_rs patterns!\n\n\
+            This MCP server provides comprehensive vSphere API documentation for Rust development using vim_rs.\n\n\
+            UNIFIED API:\n\
+            - search(query) → Find items by natural language query\n\
+            - get(id) → Get detailed info for any item by ID\n\n\
+            ID FORMATS:\n\
+            - Managed Object: 'VirtualMachine'\n\
+            - Method: 'VirtualMachine::power_on_vm_task'\n\
+            - Structure: 'VirtualDevice'\n\
+            - Field: 'VirtualHardware::device'\n\
+            - Enum: 'ManagedEntityStatus'\n\
+            - Trait: 'VirtualDeviceTrait'\n\
+            - Example: 'example::connection_basic'\n\n\
+            PATH NOTATION (shown in search results):\n\
+            - `::` = property/method on Managed Object, `.` = field access\n\
+            - `?` = optional, `[*]` = array, `→` = downcast, `⇒` = trait cast\n\
+            - Example: `VirtualMachine::config?.hardware.device[*]→VirtualEthernetCard`\n\n\
+            PROPERTY COLLECTOR HELPERS:\n\
+            - list_property_collector_root_types → List all supported managed object types\n\
+            - get_property_path → Explore property paths and their types\n\n\
+            ⚠️ CRITICAL FOR POLYMORPHIC TYPES:\n\
+            vim_rs uses TRAITS for polymorphic types, NOT enums!\n\
+            - VirtualDevice is `Box<dyn VirtualDeviceTrait>`, not an enum\n\
+            - Use CastInto trait: `device.as_ref().into_ref()` to cast between traits\n\
+            - Import `vim_rs::types::convert::CastInto` when working with polymorphic types\n\n\
+            CRITICAL: Always use ClientBuilder and vim_retrievable! macro (see starter guide).\n\
+            Never manually construct PropertyCollector specs or fetch objects one-by-one.\n\n\
+            ⚠️ IMPORTANT: This server covers vim_rs (Rust) only, not Python/Go/Java/PowerCLI bindings.",
+        )
     }
 
 }
