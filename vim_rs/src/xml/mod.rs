@@ -9,6 +9,10 @@
 /// This enables miniserde types to round-trip through XML without any
 /// special derive macros — the same `Serialize`/`Deserialize` impls
 /// that work with JSON work here, just with field-name conventions.
+///
+/// With `feature = "xml"`, deserialization is guided by generated [`crate::types::api_field_types::ApiFieldType`]
+/// metadata (`from_xml`, SOAP helpers). Diagnostics on decode failures may be logged at **debug** level on the
+/// **`vim_rs::wire::soap`** target (`log` crate); public [`Result`] errors remain unit-style.
 pub(crate) mod client;
 pub mod soap;
 pub mod ser;

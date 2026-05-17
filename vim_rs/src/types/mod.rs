@@ -11,6 +11,10 @@ pub mod api_field_types;
 #[cfg(feature = "xml")]
 pub mod api_field_registry;
 #[cfg(feature = "xml")]
+pub mod data_type_aware;
+#[cfg(feature = "xml")]
+pub mod data_type_aware_impl;
+#[cfg(feature = "xml")]
 pub mod api_typed_visitor;
 pub mod boxed_types;
 pub mod vim_any;

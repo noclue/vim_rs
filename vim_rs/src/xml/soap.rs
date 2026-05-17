@@ -1,10 +1,11 @@
+use crate::types::data_type_aware::DataTypeAware;
+use crate::xml::de::DeserializeOptions;
+use crate::xml::{de, ser};
 use miniserde::de::Deserialize;
 use miniserde::ser::Serialize;
 use miniserde::{Error, Result};
 use quick_xml::events::{BytesStart, Event};
 use quick_xml::reader::NsReader;
-use crate::xml::{de, ser};
-use crate::xml::de::DeserializeOptions;
 
 const SOAP_NS: &str = "http://schemas.xmlsoap.org/soap/envelope/";
 
@@ -58,7 +59,7 @@ fn skip_element(reader: &mut NsReader<&[u8]>) -> Result<()> {
     }
 }
 
-pub fn vim_response<T: Deserialize>(response_xml: &str) -> Result<T> {
+pub fn vim_response<T: Deserialize + DataTypeAware>(response_xml: &str) -> Result<T> {
     let mut reader = NsReader::from_str(response_xml);
     reader.config_mut().trim_text(false);
 
@@ -68,7 +69,7 @@ pub fn vim_response<T: Deserialize>(response_xml: &str) -> Result<T> {
 
     let mut out = None;
     let visitor = T::begin(&mut out);
-    de::stream_drive(&mut reader, &returnval, visitor)?;
+    de::stream_drive(&mut reader, &returnval, visitor, T::data_type())?;
     out.ok_or(Error)
 }
 
@@ -77,7 +78,7 @@ pub fn vim_response<T: Deserialize>(response_xml: &str) -> Result<T> {
 ///
 /// Intended for paths that need to paper over malformed producers (e.g.
 /// `vcsim` `HostConfigInfo.optionDef` without `optionType`).
-pub fn vim_response_with<T: Deserialize>(
+pub fn vim_response_with<T: Deserialize + DataTypeAware>(
     response_xml: &str,
     opts: DeserializeOptions,
 ) -> Result<T> {
@@ -89,12 +90,16 @@ pub fn vim_response_with<T: Deserialize>(
 /// Client-internal [`vim_response`] dispatcher honoring the `vcsim_compat`
 /// feature gate. See [`crate::xml::de::from_xml_internal`] for rationale.
 #[inline]
-pub(crate) fn vim_response_internal<T: Deserialize>(response_xml: &str) -> Result<T> {
+pub(crate) fn vim_response_internal<T: Deserialize + DataTypeAware>(
+    response_xml: &str,
+) -> Result<T> {
     #[cfg(feature = "vcsim_compat")]
     {
         vim_response_with(
             response_xml,
-            DeserializeOptions { tolerate_build_errors: true },
+            DeserializeOptions {
+                tolerate_build_errors: true,
+            },
         )
     }
     #[cfg(not(feature = "vcsim_compat"))]
@@ -112,13 +117,15 @@ pub(crate) fn vim_response_internal<T: Deserialize>(response_xml: &str) -> Resul
 /// continues. Stream-level errors (malformed XML, reader failures) still
 /// propagate.
 #[inline]
-pub(crate) fn vim_response_list_internal<T: Deserialize>(
+pub(crate) fn vim_response_list_internal<T: Deserialize + DataTypeAware>(
     response_xml: &str,
 ) -> Result<Vec<T>> {
     #[cfg(feature = "vcsim_compat")]
     {
         de::with_options(
-            DeserializeOptions { tolerate_build_errors: true },
+            DeserializeOptions {
+                tolerate_build_errors: true,
+            },
             || vim_response_list_tolerant::<T>(response_xml),
         )
     }
@@ -133,7 +140,9 @@ pub(crate) fn vim_response_list_internal<T: Deserialize>(
 /// `Ok(())` under tolerant mode), that item is dropped and streaming
 /// continues. Only referenced when `vcsim_compat` is enabled.
 #[cfg(feature = "vcsim_compat")]
-fn vim_response_list_tolerant<T: Deserialize>(response_xml: &str) -> Result<Vec<T>> {
+fn vim_response_list_tolerant<T: Deserialize + DataTypeAware>(
+    response_xml: &str,
+) -> Result<Vec<T>> {
     let mut reader = NsReader::from_str(response_xml);
     reader.config_mut().trim_text(false);
 
@@ -148,7 +157,7 @@ fn vim_response_list_tolerant<T: Deserialize>(response_xml: &str) -> Result<Vec<
                 if n == "returnval" {
                     let mut out = None;
                     let visitor = T::begin(&mut out);
-                    de::stream_drive(&mut reader, &e, visitor)?;
+                    de::stream_drive(&mut reader, &e, visitor, T::data_type())?;
                     if let Some(v) = out {
                         results.push(v);
                     }
@@ -164,7 +173,7 @@ fn vim_response_list_tolerant<T: Deserialize>(response_xml: &str) -> Result<Vec<
     }
 }
 
-pub fn vim_response_list<T: Deserialize>(response_xml: &str) -> Result<Vec<T>> {
+pub fn vim_response_list<T: Deserialize + DataTypeAware>(response_xml: &str) -> Result<Vec<T>> {
     let mut reader = NsReader::from_str(response_xml);
     reader.config_mut().trim_text(false);
 
@@ -179,7 +188,7 @@ pub fn vim_response_list<T: Deserialize>(response_xml: &str) -> Result<Vec<T>> {
                 if n == "returnval" {
                     let mut out = None;
                     let visitor = T::begin(&mut out);
-                    de::stream_drive(&mut reader, &e, visitor)?;
+                    de::stream_drive(&mut reader, &e, visitor, T::data_type())?;
                     results.push(out.ok_or(Error)?);
                 } else {
                     skip_element(&mut reader)?;

@@ -37,6 +37,13 @@ impl Default for VimAny {
     }
 }
 
+#[cfg(feature = "xml")]
+impl super::data_type_aware::DataTypeAware for VimAny {
+    fn data_type() -> super::api_field_types::ApiFieldType {
+        super::api_field_types::ApiFieldType::Any
+    }
+}
+
 impl std::fmt::Debug for VimAny {
     fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
         match self {

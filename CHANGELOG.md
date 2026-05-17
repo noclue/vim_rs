@@ -19,6 +19,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Changed
+
+- **SOAP/XML (`xml` feature):** Enrich codegen (api_field_registry, data_type_aware) and rewrite xml/de.rs so the driver follows declared types. Add Spec Kit docs and changelog note for 001-metadata-xml-de. Support for non-"vim" namespaces is absent.
+
 ## [0.4.4] - 2026-04-18
 
 ### Added

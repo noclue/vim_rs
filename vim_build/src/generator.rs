@@ -120,6 +120,7 @@ fn emit_types(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
 
     emit_enums(&types_folder, vim_model)?;
     emit_structs(&types_folder, vim_model)?;
+    emit_data_type_aware_impl(&types_folder, vim_model)?;
 
     emit_defaults(&types_folder, vim_model)?;
 
@@ -223,6 +224,12 @@ fn emit_enums(types_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     Ok(())
 }
 
+fn emit_data_type_aware_impl(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
+    let mut printer = printer_for_file(root_folder.join("data_type_aware_impl.rs"))?;
+    rs_emitter::data_type_aware::generate_data_type_aware_impls(vim_model, &mut printer)?;
+    Ok(())
+}
+
 fn emit_structs(root_folder: &Path, vim_model: &vim_model::Model) -> Result<()> {
     use crate::rs_emitter::TypesEmitter;
     let file = std::fs::File::create(root_folder.join("structs.rs"))
@@ -254,6 +261,10 @@ fn emit_mod_rs(types_folder: &std::path::Path) -> Result<()> {
     p.println("pub mod api_field_types;")?;
     p.println("#[cfg(feature = \"xml\")]")?;
     p.println("pub mod api_field_registry;")?;
+    p.println("#[cfg(feature = \"xml\")]")?;
+    p.println("pub mod data_type_aware;")?;
+    p.println("#[cfg(feature = \"xml\")]")?;
+    p.println("pub mod data_type_aware_impl;")?;
     p.println("#[cfg(feature = \"xml\")]")?;
     p.println("pub mod api_typed_visitor;")?;
     p.println("pub mod boxed_types;")?;

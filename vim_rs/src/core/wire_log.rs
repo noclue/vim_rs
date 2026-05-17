@@ -59,6 +59,19 @@ pub(crate) fn log_json_line(
     let level = level_for_wire_record(mode, mo_type, detailed_content);
     log::log!(target: TARGET_JSON, level, "{}", msg);
 }
+/// Debug-only context for XML deserialization failures (`vim_rs::xml::de`).
+/// Never pass secrets or full bodies; callers pass element/type hints only.
+#[cfg(feature = "xml")]
+pub(crate) fn log_xml_deser_failure(context: impl core::fmt::Display) {
+    let mut msg = format!("{context}");
+    const MAX: usize = 512;
+    if msg.len() > MAX {
+        msg.truncate(MAX);
+        msg.push_str("...");
+    }
+    log::log!(target: TARGET_SOAP, Level::Debug, "xml_deser: {}", msg);
+}
+
 #[cfg(feature = "xml")]
 pub(crate) fn log_soap_line(
     mode: WireLoggingMode,
