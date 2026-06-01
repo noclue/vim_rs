@@ -207,6 +207,7 @@ pub trait VimClient: Send + Sync {
 ///
 /// This is a free function (not a trait method) so that it can be generic on `T`
 /// without breaking object-safety of `VimClient`.
+#[cfg(not(feature = "xml"))]
 pub fn unmarshal<T: miniserde::Deserialize>(transport: Transport, bytes: &[u8]) -> Result<T> {
     let text = std::str::from_utf8(bytes)
         .map_err(|e| Error::ParseError(e.to_string()))?;
@@ -214,13 +215,25 @@ pub fn unmarshal<T: miniserde::Deserialize>(transport: Transport, bytes: &[u8]) 
         Transport::Json => miniserde::json::from_str(text)
             .map_err(|_| Error::ParseError(format!(
                 "JSON deserialization failed for {}", std::any::type_name::<T>()))),
-        #[cfg(feature = "xml")]
+    }
+}
+
+/// Deserialize response bytes according to the transport format.
+///
+/// With the `xml` feature, SOAP/XML unmarshalling requires [`crate::types::data_type_aware::DataTypeAware`]
+/// at the root type (same contract as [`crate::xml::de::from_xml`]).
+#[cfg(feature = "xml")]
+pub fn unmarshal<T>(transport: Transport, bytes: &[u8]) -> Result<T>
+where
+    T: miniserde::Deserialize + crate::types::data_type_aware::DataTypeAware,
+{
+    let text = std::str::from_utf8(bytes)
+        .map_err(|e| Error::ParseError(e.to_string()))?;
+    match transport {
+        Transport::Json => miniserde::json::from_str(text)
+            .map_err(|_| Error::ParseError(format!(
+                "JSON deserialization failed for {}", std::any::type_name::<T>()))),
         Transport::Soap => {
-            // Method responses are SOAP envelopes with `<returnval>`; property fetch returns raw object XML.
-            // Uses the feature-gated tolerant dispatchers: with `vcsim_compat`
-            // enabled, malformed elements are dropped instead of failing the
-            // whole parse; with the feature off this is identical to the
-            // historical strict `vim_response` / `from_xml` path.
             crate::xml::soap::vim_response_internal(text)
                 .or_else(|_| crate::xml::de::from_xml_internal(text))
                 .map_err(|_| Error::ParseError(format!(
@@ -236,6 +249,7 @@ pub fn unmarshal<T: miniserde::Deserialize>(transport: Transport, bytes: &[u8]) 
 /// *QueryEvents*, *ReadNextTasks*, *ReadPreviousTasks*, and *ReadNextTasksByViewSpec*. For those
 /// APIs, do **not** use [`unmarshal`] with `Vec<…>` on SOAP: [`unmarshal`] only drives the first
 /// `<returnval>` via [`crate::xml::soap::vim_response`].
+#[cfg(not(feature = "xml"))]
 pub fn unmarshal_array<U: miniserde::Deserialize>(
     transport: Transport,
     bytes: &[u8],
@@ -249,7 +263,23 @@ pub fn unmarshal_array<U: miniserde::Deserialize>(
                 std::any::type_name::<U>()
             ))
         }),
-        #[cfg(feature = "xml")]
+    }
+}
+
+#[cfg(feature = "xml")]
+pub fn unmarshal_array<U>(transport: Transport, bytes: &[u8]) -> Result<Vec<U>>
+where
+    U: miniserde::Deserialize + crate::types::data_type_aware::DataTypeAware,
+{
+    let text = std::str::from_utf8(bytes)
+        .map_err(|e| Error::ParseError(e.to_string()))?;
+    match transport {
+        Transport::Json => miniserde::json::from_str(text).map_err(|_| {
+            Error::ParseError(format!(
+                "JSON deserialization failed for Vec<{}>",
+                std::any::type_name::<U>()
+            ))
+        }),
         Transport::Soap => crate::xml::soap::vim_response_list_internal(text).map_err(|_| {
             Error::ParseError(format!(
                 "XML deserialization failed for Vec<{}>",

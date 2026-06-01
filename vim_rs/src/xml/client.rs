@@ -9,12 +9,12 @@ use crate::core::wire_log;
 use miniserde::ser::{Fragment, Map as SerMap, Serialize};
 
 use crate::core::client::{BoxFuture, Error, PropertyValue, Result, Transport, VimClient};
-use crate::types::vim_any::VimAny;
 use crate::types::enums::MoTypesEnum;
 use crate::types::structs::{
     ManagedObjectReference, MethodFault, ObjectSpec, PropertyFilterSpec, PropertySpec,
     RetrieveOptions, ServiceContent,
 };
+use crate::types::vim_any::VimAny;
 const SOAP_ACTION: &str = "urn:vim25/9.1.0.0";
 const CONTENT_TYPE: &str = "text/xml; charset=utf-8";
 
@@ -227,7 +227,9 @@ fn soap_error_from_body(body: &str, status: reqwest::StatusCode, context: &str) 
     if let Some(faultstring) = extract_soap_fault(body) {
         return Error::ParseError(faultstring);
     }
-    Error::ParseError(format!("HTTP {status} ({context}): no SOAP fault recognised"))
+    Error::ParseError(format!(
+        "HTTP {status} ({context}): no SOAP fault recognised"
+    ))
 }
 
 // ============================================================================
@@ -447,7 +449,10 @@ impl SoapClient {
                     warn!("SOAP fault from {}: typed={:?}", method_name, f.type_);
                 }
                 Error::ParseError(s) => {
-                    warn!("Parse Error or SOAP envelope fault from {}: {}", method_name, s);
+                    warn!(
+                        "Parse Error or SOAP envelope fault from {}: {}",
+                        method_name, s
+                    );
                 }
                 _ => {}
             }
@@ -494,10 +499,18 @@ impl SoapClient {
             spec_set: &[spec],
             options: &options,
         };
-        let body = self.soap_invoke("RetrievePropertiesEx", "PropertyCollector", &pc.value, Some(&req)).await?;
+        let body = self
+            .soap_invoke(
+                "RetrievePropertiesEx",
+                "PropertyCollector",
+                &pc.value,
+                Some(&req),
+            )
+            .await?;
 
-        let result: crate::types::structs::RetrieveResult = super::soap::vim_response_internal(&body)
-            .map_err(|_| Error::ParseError("Failed to parse RetrieveResult".to_string()))?;
+        let result: crate::types::structs::RetrieveResult =
+            super::soap::vim_response_internal(&body)
+                .map_err(|_| Error::ParseError("Failed to parse RetrieveResult".to_string()))?;
 
         if result.objects.is_empty() {
             return Ok(None);
@@ -537,11 +550,14 @@ impl VimClient for SoapClient {
     ) -> BoxFuture<'a, Result<Bytes>> {
         Box::pin(async move {
             if !svc.is_empty() {
-                return Err(Error::ParseError(format!("Service name not supported for SOAP: {}", svc)));
+                return Err(Error::ParseError(format!(
+                    "Service name not supported for SOAP: {}",
+                    svc
+                )));
             }
             let body = self
-            .soap_invoke(method_name, mo_type, mo_id, params)
-            .await?;
+                .soap_invoke(method_name, mo_type, mo_id, params)
+                .await?;
             Ok(Bytes::from(body))
         })
     }
@@ -556,7 +572,10 @@ impl VimClient for SoapClient {
     ) -> BoxFuture<'a, Result<Option<Bytes>>> {
         Box::pin(async move {
             if !svc.is_empty() {
-                return Err(Error::ParseError(format!("Service name not supported for SOAP: {}", svc)));
+                return Err(Error::ParseError(format!(
+                    "Service name not supported for SOAP: {}",
+                    svc
+                )));
             }
             let body = self
                 .soap_invoke(method_name, mo_type, mo_id, params)
@@ -581,11 +600,14 @@ impl VimClient for SoapClient {
     ) -> BoxFuture<'a, Result<()>> {
         Box::pin(async move {
             if !svc.is_empty() {
-                return Err(Error::ParseError(format!("Service name not supported for SOAP: {}", svc)));
+                return Err(Error::ParseError(format!(
+                    "Service name not supported for SOAP: {}",
+                    svc
+                )));
             }
             let _ = self
-            .soap_invoke(method_name, mo_type, mo_id, params)
-            .await?;
+                .soap_invoke(method_name, mo_type, mo_id, params)
+                .await?;
             Ok(())
         })
     }
@@ -599,7 +621,10 @@ impl VimClient for SoapClient {
     ) -> BoxFuture<'a, Result<Option<PropertyValue>>> {
         Box::pin(async move {
             if !svc.is_empty() {
-                return Err(Error::ParseError(format!("Service name not supported for SOAP: {}", svc)));
+                return Err(Error::ParseError(format!(
+                    "Service name not supported for SOAP: {}",
+                    svc
+                )));
             }
             let maybe = self.fetch_property_via_pc(mo_type, mo_id, property).await?;
             Ok(maybe.map(PropertyValue::Parsed))
@@ -743,8 +768,8 @@ impl<'a> SerMap for FetchPropertyRequestMap<'a> {
 
 #[cfg(all(test, feature = "xml"))]
 pub(crate) fn soap_test_client_with_service_content() -> SoapClient {
-    use crate::core::client::{WireLoggingMode, API_RELEASE, TEST_WIRE_DEAD_ADDR};
     use crate::core::client::{test_dead_port_http_client, test_minimal_service_content_for_tests};
+    use crate::core::client::{WireLoggingMode, API_RELEASE, TEST_WIRE_DEAD_ADDR};
     let mut c = SoapClient::new(
         test_dead_port_http_client(),
         TEST_WIRE_DEAD_ADDR,
@@ -881,4 +906,3 @@ mod fault_extraction_tests {
         assert!(is_request_canceled_error(&err));
     }
 }
-

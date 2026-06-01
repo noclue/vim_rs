@@ -11,6 +11,7 @@ pub mod names;
 pub mod ser;
 pub mod struct_enum;
 pub mod api_registry;
+pub mod data_type_aware;
 pub(crate) mod structs;
 pub(crate) mod trait_emitter;
 pub mod vim_object;

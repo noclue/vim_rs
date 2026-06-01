@@ -8,6 +8,12 @@ use quick_xml::events::{BytesRef, BytesStart, Event};
 use quick_xml::name::{NamespaceResolver, ResolveResult};
 use quick_xml::reader::NsReader;
 
+use crate::core::wire_log;
+use crate::types::api_field_registry::{lookup_api_field, lookup_xml_type};
+use crate::types::api_field_types::ApiFieldType;
+use crate::types::data_type_aware::DataTypeAware;
+use crate::types::struct_enum::StructType;
+
 // ============================================================================
 // Deserialize options (tolerant mode)
 // ============================================================================
@@ -50,7 +56,9 @@ impl OptionsGuard {
             c.set(opts.tolerate_build_errors);
             p
         });
-        Self { prev_tolerate_build_errors: prev }
+        Self {
+            prev_tolerate_build_errors: prev,
+        }
     }
 }
 
@@ -108,6 +116,8 @@ struct XmlAttr {
     is_xmlns: bool,
     /// `true` when this attribute expands to `{XML_SCHEMA_INSTANCE_NS}type`.
     is_schema_instance_type: bool,
+    /// `true` when this attribute expands to `{XML_SCHEMA_INSTANCE_NS}nil`.
+    is_schema_instance_nil: bool,
 }
 
 /// Strip XML namespace prefix from an xsi:type value to get a clean type name.
@@ -122,23 +132,6 @@ fn xsi_type_to_type_name(xsi_val: &str) -> &str {
 /// True for `xmlns`, `xmlns:foo`, etc. — namespace declarations to skip.
 fn is_xmlns_attr(name: &str) -> bool {
     name == "xmlns" || name.starts_with("xmlns:")
-}
-
-/// Scan attributes in one pass: extract the schema-instance `type` value and count
-/// non-xmlns attributes. Avoids allocating a filtered Vec.
-fn find_xsi_type_info(attrs: &[XmlAttr]) -> (Option<&str>, usize) {
-    let mut xsi_val = None;
-    let mut non_ns_count = 0;
-    for a in attrs {
-        if a.is_xmlns {
-            continue;
-        }
-        non_ns_count += 1;
-        if a.is_schema_instance_type {
-            xsi_val = Some(a.value.as_str());
-        }
-    }
-    (xsi_val, non_ns_count)
 }
 
 // ============================================================================
@@ -168,10 +161,7 @@ fn parse_numeric_char_ref(body: &[u8]) -> Result<char> {
     if body.is_empty() {
         return Err(Error);
     }
-    let code = if let Some(hex) = body
-        .strip_prefix(b"x")
-        .or_else(|| body.strip_prefix(b"X"))
-    {
+    let code = if let Some(hex) = body.strip_prefix(b"x").or_else(|| body.strip_prefix(b"X")) {
         if hex.is_empty() {
             return Err(Error);
         }
@@ -211,14 +201,160 @@ fn extract_attrs(resolver: &NamespaceResolver, start: &BytesStart<'_>) -> Result
                     _ => false,
                 }
             };
+            let is_schema_instance_nil = if is_xmlns {
+                false
+            } else {
+                match resolver.resolve_attribute(a.key) {
+                    (ResolveResult::Bound(ns), local) => {
+                        local.as_ref() == b"nil" && ns.0 == XML_SCHEMA_INSTANCE_NS
+                    }
+                    (ResolveResult::Unknown(_), local) => {
+                        local.as_ref() == b"nil" && raw_name == "xsi:nil"
+                    }
+                    _ => false,
+                }
+            };
             Ok(XmlAttr {
                 raw_name,
                 value,
                 is_xmlns,
                 is_schema_instance_type,
+                is_schema_instance_nil,
             })
         })
         .collect()
+}
+
+fn wire_local_name(full: &str) -> &str {
+    full.rsplit_once(':').map(|(_, l)| l).unwrap_or(full)
+}
+
+fn local_tag_name(start: &BytesStart<'_>) -> Result<String> {
+    std::str::from_utf8(start.name().local_name().as_ref())
+        .map_err(|_| Error)
+        .map(String::from)
+}
+
+fn nil_truthy(value: &str) -> bool {
+    matches!(value.trim().to_ascii_lowercase().as_str(), "true" | "1")
+}
+
+fn schema_instance_nil(attrs: &[XmlAttr]) -> bool {
+    attrs
+        .iter()
+        .any(|a| a.is_schema_instance_nil && nil_truthy(&a.value))
+}
+
+/// Skip content until the matching end tag (reader positioned after the outer `Start`).
+fn skip_nested_element(reader: &mut NsReader<&[u8]>) -> Result<()> {
+    let mut depth = 1u32;
+    loop {
+        match reader.read_event().map_err(|_| Error)? {
+            Event::Start(_) => depth += 1,
+            Event::Empty(_) => {}
+            Event::End(_) => {
+                depth -= 1;
+                if depth == 0 {
+                    return Ok(());
+                }
+            }
+            Event::Eof => return Err(Error),
+            _ => {}
+        }
+    }
+}
+
+fn xsi_type_local(attrs: &[XmlAttr]) -> Option<&str> {
+    attrs.iter().find_map(|a| {
+        if a.is_schema_instance_type {
+            Some(xsi_type_to_type_name(a.value.as_str()))
+        } else {
+            None
+        }
+    })
+}
+
+fn resolve_object_effective_st(base: StructType, attrs: &[XmlAttr]) -> Result<StructType> {
+    match xsi_type_local(attrs) {
+        None => Ok(base),
+        Some(name) => {
+            let st = StructType::from_str(name).ok_or_else(|| {
+                wire_log::log_xml_deser_failure(format!(
+                    "resolve_object_effective_st: unknown StructType from xsi:type={name:?} base={base:?}"
+                ));
+                Error
+            })?;
+            if !st.child_of(base) {
+                wire_log::log_xml_deser_failure(format!(
+                    "resolve_object_effective_st: xsi:type={name:?} not child_of base={base:?}"
+                ));
+                return Err(Error);
+            }
+            Ok(st)
+        }
+    }
+}
+
+fn parse_bool_xml(text: &str) -> Option<bool> {
+    match text.trim().to_ascii_lowercase().as_str() {
+        "true" | "1" => Some(true),
+        "false" | "0" => Some(false),
+        _ => None,
+    }
+}
+
+/// Deliver XML text to a visitor using exactly one method — no probe ordering.
+fn deliver_text_typed(ft: ApiFieldType, text: &str, visitor: &mut dyn Visitor) -> Result<()> {
+    match ft {
+        ApiFieldType::Str => visitor.string(text),
+        ApiFieldType::Binary => visitor.string(text),
+        ApiFieldType::Bool => {
+            let b = parse_bool_xml(text).ok_or(Error)?;
+            visitor.boolean(b)
+        }
+        ApiFieldType::I8 => {
+            let n = parse_int_trimmed(text)?;
+            let v = i8::try_from(n).map_err(|_| Error)?;
+            visitor.negative(i64::from(v))
+        }
+        ApiFieldType::I16 => {
+            let n = parse_int_trimmed(text)?;
+            let v = i16::try_from(n).map_err(|_| Error)?;
+            visitor.negative(i64::from(v))
+        }
+        ApiFieldType::I32 => {
+            let n = parse_int_trimmed(text)?;
+            let v = i32::try_from(n).map_err(|_| Error)?;
+            visitor.negative(i64::from(v))
+        }
+        ApiFieldType::I64 => {
+            let n = parse_int_trimmed(text)?;
+            visitor.negative(n)
+        }
+        ApiFieldType::F32 => {
+            let n = parse_float_trimmed(text)?;
+            if !n.is_finite() {
+                return Err(Error);
+            }
+            visitor.float(n as f64)
+        }
+        ApiFieldType::F64 => {
+            let n = parse_float_trimmed(text)?;
+            if !n.is_finite() {
+                return Err(Error);
+            }
+            visitor.float(n)
+        }
+        ApiFieldType::Any | ApiFieldType::Object(_) | ApiFieldType::Array(_) => Err(Error),
+    }
+}
+
+fn parse_int_trimmed(text: &str) -> Result<i64> {
+    text.trim().parse::<i64>().map_err(|_| Error)
+}
+
+fn parse_float_trimmed(text: &str) -> Result<f64> {
+    text.trim().parse::<f64>().map_err(|_| Error)
 }
 
 pub(crate) fn start_name(start: &BytesStart<'_>) -> Result<String> {
@@ -236,12 +372,12 @@ pub(crate) fn start_name(start: &BytesStart<'_>) -> Result<String> {
 /// ```ignore
 /// let dog: Dog = xml::from_xml("<Dog><name>Rex</name><breed>Lab</breed></Dog>").unwrap();
 /// ```
-pub fn from_xml<T: Deserialize>(xml: &str) -> Result<T> {
+pub fn from_xml<T: Deserialize + DataTypeAware>(xml: &str) -> Result<T> {
     let mut out = None;
     let visitor = T::begin(&mut out);
     let mut reader = NsReader::from_str(xml);
     reader.config_mut().trim_text(false);
-    stream_root(&mut reader, visitor)?;
+    stream_root(&mut reader, visitor, T::data_type())?;
     out.ok_or(Error)
 }
 
@@ -258,7 +394,10 @@ pub fn from_xml<T: Deserialize>(xml: &str) -> Result<T> {
 ///     DeserializeOptions { tolerate_build_errors: true },
 /// )?;
 /// ```
-pub fn from_xml_with<T: Deserialize>(xml: &str, opts: DeserializeOptions) -> Result<T> {
+pub fn from_xml_with<T: Deserialize + DataTypeAware>(
+    xml: &str,
+    opts: DeserializeOptions,
+) -> Result<T> {
     let _guard = OptionsGuard::push(&opts);
     from_xml(xml)
 }
@@ -283,10 +422,15 @@ pub fn with_options<T, F: FnOnce() -> T>(opts: DeserializeOptions, f: F) -> T {
 /// `crate::core::client::unmarshal`) decoupled from the tolerance plumbing:
 /// end-users only flip a crate feature.
 #[inline]
-pub(crate) fn from_xml_internal<T: Deserialize>(xml: &str) -> Result<T> {
+pub(crate) fn from_xml_internal<T: Deserialize + DataTypeAware>(xml: &str) -> Result<T> {
     #[cfg(feature = "vcsim_compat")]
     {
-        from_xml_with(xml, DeserializeOptions { tolerate_build_errors: true })
+        from_xml_with(
+            xml,
+            DeserializeOptions {
+                tolerate_build_errors: true,
+            },
+        )
     }
     #[cfg(not(feature = "vcsim_compat"))]
     {
@@ -295,11 +439,15 @@ pub(crate) fn from_xml_internal<T: Deserialize>(xml: &str) -> Result<T> {
 }
 
 /// Find the root element and drive the visitor from it.
-fn stream_root(reader: &mut NsReader<&[u8]>, visitor: &mut dyn Visitor) -> Result<()> {
+fn stream_root(
+    reader: &mut NsReader<&[u8]>,
+    visitor: &mut dyn Visitor,
+    root_ft: ApiFieldType,
+) -> Result<()> {
     loop {
         match reader.read_event().map_err(|_| Error)? {
-            Event::Start(e) => return stream_drive(reader, &e, visitor),
-            Event::Empty(e) => return drive_empty(reader.resolver(), &e, visitor),
+            Event::Start(e) => return stream_drive(reader, &e, visitor, root_ft),
+            Event::Empty(e) => return drive_empty_typed(reader.resolver(), &e, visitor, root_ft),
             Event::Eof => return Err(Error),
             _ => continue,
         }
@@ -310,114 +458,32 @@ fn stream_root(reader: &mut NsReader<&[u8]>, visitor: &mut dyn Visitor) -> Resul
 // Value delivery helpers
 // ============================================================================
 
-/// Try to deliver an XML text value to a Visitor by attempting each typed method.
+/// Try to deliver a typed leaf value via the map() interface (`_typeName` + `#text` or empty `_value` seq).
 ///
-/// XML values are always strings. This function tries the Visitor's methods
-/// in order: string → unsigned int → signed int → float → bool → null.
-/// Only the matching type's Visitor implementation accepts.
-fn deliver_text(text: &str, visitor: &mut dyn Visitor) -> Result<()> {
-    let trimmed = text.trim();
-
-    if visitor.string(trimmed).is_ok() {
-        return Ok(());
-    }
-
-    if let Ok(n) = trimmed.parse::<u64>() {
-        if visitor.nonnegative(n).is_ok() {
-            return Ok(());
-        }
-    }
-
-    if let Ok(n) = trimmed.parse::<i64>() {
-        if visitor.negative(n).is_ok() {
-            return Ok(());
-        }
-    }
-
-    if let Ok(n) = trimmed.parse::<f64>() {
-        if visitor.float(n).is_ok() {
-            return Ok(());
-        }
-    }
-
-    match trimmed {
-        "true" => {
-            if visitor.boolean(true).is_ok() {
-                return Ok(());
-            }
-        }
-        "false" => {
-            if visitor.boolean(false).is_ok() {
-                return Ok(());
-            }
-        }
-        _ => {}
-    }
-
-    if trimmed.is_empty() {
-        if visitor.null().is_ok() {
-            return Ok(());
-        }
-    }
-
-    Err(Error)
-}
-
-/// Deliver a leaf element (no attrs, no children) to a visitor.
-///
-/// For non-empty text, delegates to `deliver_text`.  For empty text, tries
-/// `string("") → null() → map()+finish()` to cover String fields,
-/// `Option<T>`, and all-optional structs respectively.
-///
-/// The `try_empty_map` call is factored out so the `Box<dyn Map>` borrow is
-/// fully released before the caller resumes (borrow-checker requirement).
-fn deliver_leaf(text: &str, visitor: &mut dyn Visitor) -> Result<()> {
-    if !text.trim().is_empty() {
-        return deliver_text(text, visitor);
-    }
-    if visitor.string("").is_ok() {
-        return Ok(());
-    }
-    if visitor.null().is_ok() {
-        return Ok(());
-    }
-    try_empty_map(visitor)
-}
-
-fn try_empty_map(visitor: &mut dyn Visitor) -> Result<()> {
-    let mut map = visitor.map()?;
-    map.finish()
-}
-
-/// Try to deliver a typed leaf value via the map() interface.
-///
-/// Emits `_typeName` and `#text` keys into the visitor's map and calls
-/// `finish()`. Returns `Ok(true)` on success, `Ok(false)` when the visitor
-/// rejects `map()` (the caller should fall back to plain text delivery).
-///
-/// The function boundary ensures the mutable borrow of `visitor` from
-/// `visitor.map()` is fully released before the caller can use `visitor` again.
-fn typed_leaf_via_map(visitor: &mut dyn Visitor, type_name: &str, text: &str) -> Result<bool> {
+/// Returns `Ok(true)` on success, `Ok(false)` when the visitor rejects `map()` (caller errors).
+fn typed_leaf_via_map(
+    visitor: &mut dyn Visitor,
+    type_name: &str,
+    text: &str,
+    value_ft: ApiFieldType,
+) -> Result<bool> {
     let map = match visitor.map() {
         Ok(m) => m,
         Err(_) => return Ok(false),
     };
     let mut map = map;
-    deliver_text(type_name, map.key("_typeName")?)?;
-    if !text.trim().is_empty() {
-        deliver_text(text, map.key("#text")?)?;
-    } else {
-        // Empty text — could be either:
-        //   (a) xsd:string with value "" → string("") accepted via #text
-        //   (b) ArrayOf* with no children → initialise _value as empty seq
-        let text_visitor = map.key("#text")?;
-        if text_visitor.string("").is_err() {
+    deliver_text_typed(ApiFieldType::Str, type_name, map.key("_typeName")?)?;
+    match value_ft {
+        ApiFieldType::Array(_) => {
+            if !text.trim().is_empty() {
+                return Err(Error);
+            }
             try_deliver_empty_value(&mut *map)?;
         }
+        _ => {
+            deliver_text_typed(value_ft, text, map.key("#text")?)?;
+        }
     }
-    // Tolerant boundary: at this point the reader has already consumed the
-    // element's End (or the element was self-closing / text-only and never
-    // had one). Swallowing here drops the value but keeps the stream intact.
     finish_map_or_tolerate(map, type_name)?;
     Ok(true)
 }
@@ -473,13 +539,14 @@ fn emit_attrs_to_map(map: &mut dyn miniserde::de::Map, attrs: &[XmlAttr]) -> Res
         .iter()
         .find_map(|a| a.is_schema_instance_type.then_some(a.value.as_str()))
     {
-        deliver_text(xsi_type_to_type_name(xsi), map.key("_typeName")?)?;
+        map.key("_typeName")?.string(xsi_type_to_type_name(xsi))?;
     }
     for a in attrs {
-        if a.is_schema_instance_type || a.is_xmlns {
+        if a.is_schema_instance_type || a.is_xmlns || a.is_schema_instance_nil {
             continue;
         }
-        deliver_text(&a.value, map.key(&format!("@{}", a.raw_name))?)?;
+        map.key(&format!("@{}", wire_local_name(&a.raw_name)))?
+            .string(&a.value)?;
     }
     Ok(())
 }
@@ -492,180 +559,456 @@ pub(crate) fn stream_drive(
     reader: &mut NsReader<&[u8]>,
     start: &BytesStart<'_>,
     visitor: &mut dyn Visitor,
+    declared: ApiFieldType,
+) -> Result<()> {
+    match declared {
+        ApiFieldType::Any => stream_drive_any_typed(reader, start, visitor),
+        ApiFieldType::Bool
+        | ApiFieldType::I8
+        | ApiFieldType::I16
+        | ApiFieldType::I32
+        | ApiFieldType::I64
+        | ApiFieldType::F32
+        | ApiFieldType::F64
+        | ApiFieldType::Str
+        | ApiFieldType::Binary => drive_primitive_element(reader, start, visitor, declared),
+        ApiFieldType::Object(base) => drive_object_element(reader, start, visitor, base),
+        ApiFieldType::Array(_) => Err(Error),
+    }
+}
+
+/// [`ApiFieldType::Any`]: require `xsi:type`, resolve via [`lookup_xml_type`], then dispatch without
+/// visitor-based type probing (FR-011), including boxed `ArrayOf*` via `_typeName` + `_value` (**FR-012**).
+fn stream_drive_any_typed(
+    reader: &mut NsReader<&[u8]>,
+    start: &BytesStart<'_>,
+    visitor: &mut dyn Visitor,
 ) -> Result<()> {
     let attrs = extract_attrs(reader.resolver(), start)?;
+    if schema_instance_nil(&attrs) {
+        skip_nested_element(reader)?;
+        return visitor.null();
+    }
+    let xsi = match xsi_type_local(&attrs) {
+        Some(x) => x,
+        None => {
+            wire_log::log_xml_deser_failure(
+                "Any: missing xsi:type on non-nil element (strict mode)",
+            );
+            return Err(Error);
+        }
+    };
+    let resolved = match lookup_xml_type(xsi) {
+        Some(r) => r,
+        None => {
+            wire_log::log_xml_deser_failure(format!(
+                "Any: unresolvable xsi:type local_name={xsi:?}"
+            ));
+            return Err(Error);
+        }
+    };
+    match resolved {
+        ApiFieldType::Object(st) => drive_object_element(reader, start, visitor, st),
+        ApiFieldType::Bool
+        | ApiFieldType::I8
+        | ApiFieldType::I16
+        | ApiFieldType::I32
+        | ApiFieldType::I64
+        | ApiFieldType::F32
+        | ApiFieldType::F64
+        | ApiFieldType::Str
+        | ApiFieldType::Binary => {
+            // Boxed / primitive `Any` value: same visitor shape as JSON (`_typeName` + `#text`), not
+            // a raw primitive leaf (FR-011).
+            let mut text = String::new();
+            let first_child = accumulate_text(reader, &mut text)?;
+            if first_child.is_some() {
+                wire_log::log_xml_deser_failure(
+                    "Any primitive: unexpected child elements under typed leaf",
+                );
+                return Err(Error);
+            }
+            let raw = attrs
+                .iter()
+                .find_map(|a| a.is_schema_instance_type.then_some(a.value.as_str()))
+                .ok_or_else(|| {
+                    wire_log::log_xml_deser_failure(
+                        "Any primitive: missing xsi instance type attr",
+                    );
+                    Error
+                })?;
+            let type_name = xsi_type_to_type_name(raw);
+            if typed_leaf_via_map(visitor, type_name, &text, resolved)? {
+                Ok(())
+            } else {
+                wire_log::log_xml_deser_failure(
+                    "Any primitive: visitor rejected typed leaf (map) delivery",
+                );
+                Err(Error)
+            }
+        }
+        ApiFieldType::Array(inner) => stream_drive_any_array_typed(reader, start, visitor, inner),
+        ApiFieldType::Any => {
+            wire_log::log_xml_deser_failure("Any: lookup_xml_type resolved to Any (invalid)");
+            Err(Error)
+        }
+    }
+}
+
+/// Boxed `ArrayOf*` under [`ApiFieldType::Any`]: `_typeName` + `_value` seq of `inner` (**FR-011**, **FR-012**).
+fn stream_drive_any_array_typed(
+    reader: &mut NsReader<&[u8]>,
+    start: &BytesStart<'_>,
+    visitor: &mut dyn Visitor,
+    inner: &'static ApiFieldType,
+) -> Result<()> {
+    let attrs = extract_attrs(reader.resolver(), start)?;
+    if schema_instance_nil(&attrs) {
+        skip_nested_element(reader)?;
+        return visitor.null();
+    }
+    let raw = attrs
+        .iter()
+        .find_map(|a| a.is_schema_instance_type.then_some(a.value.as_str()))
+        .ok_or_else(|| {
+            wire_log::log_xml_deser_failure("Any array: missing xsi:type");
+            Error
+        })?;
+    let type_name_str = xsi_type_to_type_name(raw);
+
+    let mut map = visitor.map()?;
+    deliver_text_typed(ApiFieldType::Str, type_name_str, map.key("_typeName")?)?;
+
     let mut text = String::new();
     let first_child = accumulate_text(reader, &mut text)?;
 
-    if first_child.is_none() && attrs.is_empty() {
-        return deliver_leaf(&text, visitor);
-    }
-
-    // Typed leaf: only schema-instance `type` attribute (plus optional xmlns*), no children.
-    // Try the map() route first (needed for VimAny / PolyCore which must see
-    // `_typeName` before the value). If map() is rejected, fall back to plain
-    // text delivery (e.g. a plain String inside Vec<String>).
-    //
-    // The `typed_leaf_via_map` function boundary releases the mutable borrow
-    // before we fall through — the borrow checker cannot see that
-    // `Box<dyn Map + '_>` is absent in the Err case.
-    let (xsi_val, non_ns_count) = find_xsi_type_info(&attrs);
-    if non_ns_count == 1 && xsi_val.is_some() && first_child.is_none() {
-        let type_name = xsi_type_to_type_name(xsi_val.unwrap());
-        if typed_leaf_via_map(visitor, type_name, &text)? {
-            return Ok(());
+    if first_child.is_none() {
+        if !text.trim().is_empty() {
+            wire_log::log_xml_deser_failure("Any array: text content without elements");
+            return Err(Error);
         }
-        return deliver_leaf(&text, visitor);
+        try_deliver_empty_value(&mut *map)?;
+        let element_hint = local_tag_name(start).unwrap_or_default();
+        return finish_map_or_tolerate(map, &element_hint);
     }
 
-    // Complex element — open as map, emit attrs, text, and children.
-    let mut map = visitor.map()?;
-    emit_attrs_to_map(&mut *map, &attrs)?;
     if !text.trim().is_empty() {
-        deliver_text(&text, map.key("#text")?)?;
+        wire_log::log_xml_deser_failure("Any array: text mixed with child elements");
+        return Err(Error);
     }
-    if let Some((child_start, is_empty)) = first_child {
-        stream_children(reader, &mut *map, child_start, is_empty)?;
+
+    let (first_start, first_is_empty) = first_child.unwrap();
+    let local = local_tag_name(&first_start)?;
+
+    {
+        let seq_vis = map.key("_value")?;
+        let mut seq = seq_vis.seq().map_err(|_| Error)?;
+
+        let mut pending = Some((first_start, first_is_empty));
+        while let Some((st, emp)) = pending.take() {
+            if local_tag_name(&st)? != local {
+                wire_log::log_xml_deser_failure("Any array: unexpected child tag");
+                return Err(Error);
+            }
+            let ev = seq.element()?;
+            if emp {
+                drive_empty_typed(reader.resolver(), &st, ev, *inner)?;
+            } else {
+                stream_drive(reader, &st, ev, *inner)?;
+            }
+            match read_next_child(reader)? {
+                None => break,
+                Some((next_st, next_emp)) => {
+                    if local_tag_name(&next_st)? != local {
+                        wire_log::log_xml_deser_failure(
+                            "Any array: heterogeneous sibling elements",
+                        );
+                        return Err(Error);
+                    }
+                    pending = Some((next_st, next_emp));
+                }
+            }
+        }
+        seq.finish()?;
     }
-    // Tolerant boundary. `accumulate_text` and `stream_children` both consume
-    // through the matching End tag, so returning `Ok(())` here on build()
-    // failure leaves the reader correctly positioned at the *next* sibling.
-    // In strict mode this is equivalent to `map.finish()`.
-    let element_hint = start_name(start).unwrap_or_default();
+
+    let element_hint = local_tag_name(start).unwrap_or_default();
     finish_map_or_tolerate(map, &element_hint)
 }
 
-/// Drive a miniserde Visitor from a self-closing element (e.g. `<options/>`).
-fn drive_empty(
+fn drive_empty_any_array_typed(
+    resolver: &NamespaceResolver,
+    start: &BytesStart<'_>,
+    visitor: &mut dyn Visitor,
+    _inner: &'static ApiFieldType,
+) -> Result<()> {
+    let attrs = extract_attrs(resolver, start)?;
+    if schema_instance_nil(&attrs) {
+        return visitor.null();
+    }
+    let raw = attrs
+        .iter()
+        .find_map(|a| a.is_schema_instance_type.then_some(a.value.as_str()))
+        .ok_or_else(|| {
+            wire_log::log_xml_deser_failure("Any array empty: missing xsi:type");
+            Error
+        })?;
+    let type_name_str = xsi_type_to_type_name(raw);
+    let mut map = visitor.map()?;
+    deliver_text_typed(ApiFieldType::Str, type_name_str, map.key("_typeName")?)?;
+    try_deliver_empty_value(&mut *map)?;
+    let element_hint = local_tag_name(start).unwrap_or_default();
+    finish_map_or_tolerate(map, &element_hint)
+}
+
+fn drive_empty_any_typed(
     resolver: &NamespaceResolver,
     start: &BytesStart<'_>,
     visitor: &mut dyn Visitor,
 ) -> Result<()> {
     let attrs = extract_attrs(resolver, start)?;
-
-    if attrs.is_empty() {
-        return deliver_leaf("", visitor);
+    if schema_instance_nil(&attrs) {
+        return visitor.null();
     }
-
-    let (xsi_val, non_ns_count) = find_xsi_type_info(&attrs);
-    if non_ns_count == 1 && xsi_val.is_some() {
-        let type_name = xsi_type_to_type_name(xsi_val.unwrap());
-        if typed_leaf_via_map(visitor, type_name, "")? {
-            return Ok(());
+    let xsi = match xsi_type_local(&attrs) {
+        Some(x) => x,
+        None => {
+            wire_log::log_xml_deser_failure("Any empty element: missing xsi:type (strict mode)");
+            return Err(Error);
         }
-        return deliver_leaf("", visitor);
+    };
+    let resolved = match lookup_xml_type(xsi) {
+        Some(r) => r,
+        None => {
+            wire_log::log_xml_deser_failure(format!(
+                "Any empty: unresolvable xsi:type local_name={xsi:?}"
+            ));
+            return Err(Error);
+        }
+    };
+    match resolved {
+        ApiFieldType::Object(st) => {
+            drive_empty_typed(resolver, start, visitor, ApiFieldType::Object(st))
+        }
+        ApiFieldType::Bool
+        | ApiFieldType::I8
+        | ApiFieldType::I16
+        | ApiFieldType::I32
+        | ApiFieldType::I64
+        | ApiFieldType::F32
+        | ApiFieldType::F64
+        | ApiFieldType::Str
+        | ApiFieldType::Binary => {
+            let raw = attrs
+                .iter()
+                .find_map(|a| a.is_schema_instance_type.then_some(a.value.as_str()))
+                .ok_or_else(|| {
+                    wire_log::log_xml_deser_failure("Any empty primitive: missing xsi attr");
+                    Error
+                })?;
+            let type_name = xsi_type_to_type_name(raw);
+            if typed_leaf_via_map(visitor, type_name, "", resolved)? {
+                Ok(())
+            } else {
+                wire_log::log_xml_deser_failure(
+                    "Any empty primitive: visitor rejected typed leaf (map) delivery",
+                );
+                Err(Error)
+            }
+        }
+        ApiFieldType::Array(inner) => drive_empty_any_array_typed(resolver, start, visitor, inner),
+        ApiFieldType::Any => {
+            wire_log::log_xml_deser_failure("Any empty: lookup resolved to Any (invalid)");
+            Err(Error)
+        }
     }
+}
 
+fn drive_primitive_element(
+    reader: &mut NsReader<&[u8]>,
+    start: &BytesStart<'_>,
+    visitor: &mut dyn Visitor,
+    declared: ApiFieldType,
+) -> Result<()> {
+    let attrs = extract_attrs(reader.resolver(), start)?;
+    if schema_instance_nil(&attrs) {
+        skip_nested_element(reader)?;
+        return visitor.null();
+    }
+    if let Some(xsi) = xsi_type_local(&attrs) {
+        let resolved = lookup_xml_type(xsi).ok_or_else(|| {
+            wire_log::log_xml_deser_failure(format!(
+                "primitive element: unknown xsi:type={xsi:?} declared={declared:?}"
+            ));
+            Error
+        })?;
+        if resolved != declared {
+            wire_log::log_xml_deser_failure(format!(
+                "primitive element: xsi:type={xsi:?} resolved={resolved:?} declared={declared:?}"
+            ));
+            return Err(Error);
+        }
+    }
+    let mut text = String::new();
+    let first_child = accumulate_text(reader, &mut text)?;
+    if first_child.is_some() {
+        return Err(Error);
+    }
+    deliver_text_typed(declared, &text, visitor)
+}
+
+fn drive_object_element(
+    reader: &mut NsReader<&[u8]>,
+    start: &BytesStart<'_>,
+    visitor: &mut dyn Visitor,
+    base: StructType,
+) -> Result<()> {
+    let attrs = extract_attrs(reader.resolver(), start)?;
+    if schema_instance_nil(&attrs) {
+        skip_nested_element(reader)?;
+        return visitor.null();
+    }
+    let effective_st = resolve_object_effective_st(base, &attrs)?;
     let mut map = visitor.map()?;
     emit_attrs_to_map(&mut *map, &attrs)?;
-    // Self-closing element has no body; reader never entered it. Safe to
-    // swallow build() failure under tolerant mode.
-    let element_hint = start_name(start).unwrap_or_default();
+    let mut text = String::new();
+    let first_child = accumulate_text(reader, &mut text)?;
+    if !text.trim().is_empty() {
+        deliver_text_typed(ApiFieldType::Str, &text, map.key("#text")?)?;
+    }
+    if let Some((child_start, is_empty)) = first_child {
+        stream_children_typed(reader, &mut *map, effective_st, child_start, is_empty)?;
+    }
+    let element_hint = local_tag_name(start).unwrap_or_default();
     finish_map_or_tolerate(map, &element_hint)
 }
 
-/// Dispatch to the correct driver based on whether the element is self-closing.
-fn drive_element(
-    reader: &mut NsReader<&[u8]>,
-    start: &BytesStart<'_>,
-    is_empty: bool,
-    visitor: &mut dyn Visitor,
-) -> Result<()> {
-    if is_empty {
-        drive_empty(reader.resolver(), start, visitor)
-    } else {
-        stream_drive(reader, start, visitor)
-    }
-}
-
-// ============================================================================
-// Child element streaming with sequence detection
-// ============================================================================
-
-/// Process child elements streaming, grouping adjacent same-named elements
-/// into sequences via one-element lookahead.
-fn stream_children(
+fn stream_children_typed(
     reader: &mut NsReader<&[u8]>,
     map: &mut dyn miniserde::de::Map,
+    effective_st: StructType,
     first_start: BytesStart<'static>,
     first_is_empty: bool,
 ) -> Result<()> {
     let mut pending = Some((first_start, first_is_empty));
-
     while let Some((start, is_empty)) = pending.take() {
-        let name = start_name(&start)?;
-        let visitor = map.key(&name)?;
-        pending = try_seq_or_single(reader, visitor, &name, &start, is_empty)?;
+        let wire_name = local_tag_name(&start)?;
+        let ft = lookup_api_field(effective_st, wire_name.as_str()).ok_or_else(|| {
+            wire_log::log_xml_deser_failure(format!(
+                "unknown field wire_name={wire_name:?} for StructType::{effective_st:?}"
+            ));
+            Error
+        })?;
+        let field_visitor = map.key(&wire_name)?;
+        pending = dispatch_typed_field(reader, field_visitor, ft, &start, is_empty)?;
     }
-
     Ok(())
 }
 
-/// Try seq() on the visitor and, if accepted, stream all same-named siblings
-/// into it. Returns `Ok((true, lookahead))` if seq was used, or
-/// `Ok((false, None))` if the visitor rejected seq (caller should deliver as
-/// a single element instead).
-///
-/// The function boundary ensures the `Box<dyn Seq>` from `seq()` is dropped
-/// before returning, releasing the mutable borrow on visitor.
-fn try_stream_as_seq(
+fn dispatch_typed_field(
     reader: &mut NsReader<&[u8]>,
     visitor: &mut dyn Visitor,
-    name: &str,
+    ft: ApiFieldType,
     start: &BytesStart<'_>,
     is_empty: bool,
-) -> Result<(bool, Option<(BytesStart<'static>, bool)>)> {
-    let mut seq = match visitor.seq() {
-        Ok(seq) => seq,
-        Err(_) => return Ok((false, None)),
-    };
-
-    drive_element(reader, start, is_empty, seq.element()?)?;
-
-    loop {
-        match read_next_child(reader)? {
-            Some((next_start, next_empty)) => {
-                if start_name(&next_start)? == name {
-                    drive_element(reader, &next_start, next_empty, seq.element()?)?;
-                } else {
-                    seq.finish()?;
-                    return Ok((true, Some((next_start, next_empty))));
+) -> Result<Option<(BytesStart<'static>, bool)>> {
+    let local = local_tag_name(start)?;
+    match ft {
+        ApiFieldType::Array(inner) => {
+            let mut seq = visitor.seq().map_err(|_| Error)?;
+            if is_empty {
+                drive_empty_typed(reader.resolver(), start, seq.element()?, *inner)?;
+            } else {
+                stream_drive(reader, start, seq.element()?, *inner)?;
+            }
+            loop {
+                match read_next_child(reader)? {
+                    Some((next_start, next_empty)) => {
+                        if local_tag_name(&next_start)? == local {
+                            let ev = seq.element()?;
+                            if next_empty {
+                                drive_empty_typed(reader.resolver(), &next_start, ev, *inner)?;
+                            } else {
+                                stream_drive(reader, &next_start, ev, *inner)?;
+                            }
+                        } else {
+                            seq.finish()?;
+                            return Ok(Some((next_start, next_empty)));
+                        }
+                    }
+                    None => {
+                        seq.finish()?;
+                        return Ok(None);
+                    }
                 }
             }
-            None => {
-                seq.finish()?;
-                return Ok((true, None));
+        }
+        _ => {
+            if is_empty {
+                drive_empty_typed(reader.resolver(), start, visitor, ft)?;
+            } else {
+                stream_drive(reader, start, visitor, ft)?;
             }
+            read_next_child(reader)
         }
     }
 }
 
-/// Try to deliver element(s) as a sequence. If seq() is rejected by the
-/// visitor, deliver as a single element instead.
-///
-/// Returns the next pending child (lookahead from reading past same-named
-/// siblings), or None when the parent's End tag was reached.
-fn try_seq_or_single(
-    reader: &mut NsReader<&[u8]>,
-    visitor: &mut dyn Visitor,
-    name: &str,
+pub(crate) fn drive_empty_typed(
+    resolver: &NamespaceResolver,
     start: &BytesStart<'_>,
-    is_empty: bool,
-) -> Result<Option<(BytesStart<'static>, bool)>> {
-    let (was_seq, pending) = try_stream_as_seq(reader, visitor, name, start, is_empty)?;
-    if was_seq {
-        return Ok(pending);
+    visitor: &mut dyn Visitor,
+    declared: ApiFieldType,
+) -> Result<()> {
+    match declared {
+        ApiFieldType::Any => drive_empty_any_typed(resolver, start, visitor),
+        ApiFieldType::Bool
+        | ApiFieldType::I8
+        | ApiFieldType::I16
+        | ApiFieldType::I32
+        | ApiFieldType::I64
+        | ApiFieldType::F32
+        | ApiFieldType::F64
+        | ApiFieldType::Str
+        | ApiFieldType::Binary => {
+            let attrs = extract_attrs(resolver, start)?;
+            if schema_instance_nil(&attrs) {
+                return visitor.null();
+            }
+            if let Some(xsi) = xsi_type_local(&attrs) {
+                let resolved = lookup_xml_type(xsi).ok_or_else(|| {
+                    wire_log::log_xml_deser_failure(format!(
+                        "primitive empty element: unknown xsi:type={xsi:?} declared={declared:?}"
+                    ));
+                    Error
+                })?;
+                if resolved != declared {
+                    wire_log::log_xml_deser_failure(format!(
+                        "primitive empty element: xsi:type={xsi:?} resolved={resolved:?} declared={declared:?}"
+                    ));
+                    return Err(Error);
+                }
+            }
+            deliver_text_typed(declared, "", visitor)
+        }
+        ApiFieldType::Object(base) => {
+            let attrs = extract_attrs(resolver, start)?;
+            if schema_instance_nil(&attrs) {
+                return visitor.null();
+            }
+            let _effective_st = resolve_object_effective_st(base, &attrs)?;
+            let mut map = visitor.map()?;
+            emit_attrs_to_map(&mut *map, &attrs)?;
+            let element_hint = local_tag_name(start).unwrap_or_default();
+            finish_map_or_tolerate(map, &element_hint)
+        }
+        ApiFieldType::Array(_) => Err(Error),
     }
-
-    drive_element(reader, start, is_empty, visitor)?;
-    Ok(read_next_child(reader)?)
 }
 
 /// Read the next child element from the stream, skipping inter-element
 /// whitespace. Returns None when the parent's End tag is reached.
-fn read_next_child(
-    reader: &mut NsReader<&[u8]>,
-) -> Result<Option<(BytesStart<'static>, bool)>> {
+fn read_next_child(reader: &mut NsReader<&[u8]>) -> Result<Option<(BytesStart<'static>, bool)>> {
     loop {
         match reader.read_event().map_err(|_| Error)? {
             Event::Start(e) => return Ok(Some((e.into_owned(), false))),
@@ -682,7 +1025,10 @@ mod tests {
     use crate::types::boxed_types::ValueElements;
     use crate::types::enums::{MoTypesEnum, PropertyChangeOpEnum};
     use crate::types::mini_helpers::Base64;
-    use crate::types::structs::{HooksHookListSpec, ManagedObjectReference, PropertyChange, UpdateSet, VirtualMachineVirtualNumaInfo};
+    use crate::types::structs::{
+        HooksHookListSpec, ManagedObjectReference, PropertyChange, UpdateSet,
+        VirtualMachineVirtualNumaInfo,
+    };
     use crate::types::traits::OptionValueTrait;
     use crate::types::vim_any::VimAny;
 
@@ -715,63 +1061,63 @@ mod tests {
         let value: bool = from_xml(xml).unwrap();
         assert_eq!(value, true);
     }
-    
+
     #[test]
     fn test_from_xml_string() {
         let xml = "<child>text</child>";
         let value: String = from_xml(xml).unwrap();
         assert_eq!(value, "text");
     }
-    
+
     #[test]
     fn test_from_xml_int8() {
         let xml = "<child>127</child>";
         let value: i8 = from_xml(xml).unwrap();
         assert_eq!(value, 127);
     }
-    
+
     #[test]
     fn test_from_xml_int16() {
         let xml = "<child>32767</child>";
         let value: i16 = from_xml(xml).unwrap();
         assert_eq!(value, 32767);
     }
-    
+
     #[test]
     fn test_from_xml_int32() {
         let xml = "<child>2147483647</child>";
         let value: i32 = from_xml(xml).unwrap();
         assert_eq!(value, 2147483647);
     }
-    
+
     #[test]
     fn test_from_xml_int64() {
         let xml = "<child>9223372036854775807</child>";
         let value: i64 = from_xml(xml).unwrap();
         assert_eq!(value, 9223372036854775807);
     }
-    
+
     #[test]
     fn test_from_xml_float() {
         let xml = "<child>3.14</child>";
         let value: f32 = from_xml(xml).unwrap();
         assert_eq!(value, 3.14);
     }
-    
+
     #[test]
     fn test_from_xml_double() {
         let xml = "<child>2.718281828</child>";
         let value: f64 = from_xml(xml).unwrap();
         assert_eq!(value, 2.718281828);
     }
-    
+
     #[test]
     fn test_from_xml_datetime() {
         let xml = "<child>2024-01-15T10:30:00Z</child>";
         let value: String = from_xml(xml).unwrap();
         assert_eq!(value, "2024-01-15T10:30:00Z");
     }
-    
+
     #[test]
     fn test_from_xml_binary() {
         let xml = "<child>YWJjMTIz</child>";
@@ -780,7 +1126,7 @@ mod tests {
     }
 
     #[test]
-    fn test_basic_struct(){
+    fn test_basic_struct() {
         let xml = r#"<numaInfo>
                             <autoCoresPerNumaNode>true</autoCoresPerNumaNode>
                             <vnumaOnCpuHotaddExposed>false</vnumaOnCpuHotaddExposed>
@@ -792,7 +1138,7 @@ mod tests {
     }
 
     #[test]
-    fn test_struct_no_fields(){
+    fn test_struct_no_fields() {
         let xml = r#"<numaInfo></numaInfo>"#;
         let value: VirtualMachineVirtualNumaInfo = from_xml(xml).unwrap();
         assert_eq!(value.auto_cores_per_numa_node, None);
@@ -801,7 +1147,7 @@ mod tests {
     }
 
     #[test]
-    fn test_struct_self_closing_empty(){
+    fn test_struct_self_closing_empty() {
         let xml = r#"<numaInfo/>"#;
         let value: VirtualMachineVirtualNumaInfo = from_xml(xml).unwrap();
         assert_eq!(value.auto_cores_per_numa_node, None);
@@ -811,7 +1157,7 @@ mod tests {
 
     #[test]
     fn test_extra_config_parse() {
-        let xml = r#"<extraConfig>
+        let xml = r#"<extraConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
                         <key>tools.guest.desktop.autolock</key>
                         <value xsi:type="xsd:string">TRUE</value>
                     </extraConfig>"#;
@@ -824,7 +1170,7 @@ mod tests {
 
     #[test]
     fn test_extra_config_parse_empty_string() {
-        let xml = r#"<extraConfig>
+        let xml = r#"<extraConfig xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
             <key>scsi0:0.redo</key>
             <value xsi:type="xsd:string"></value>
         </extraConfig>"#;
@@ -844,7 +1190,7 @@ mod tests {
         assert!(result.truncated.is_none());
         assert!(result.filter_set.is_none());
     }
-    
+
     #[test]
     fn test_mor_deserialize() {
         let xml = r#"<val type="VirtualMachine">5</val>"#;
@@ -900,9 +1246,15 @@ mod tests {
         let value: HooksHookListSpec = from_xml(&xml).unwrap();
         assert_eq!(value.solutions.unwrap().len(), 2);
         assert_eq!(value.hosts.as_ref().unwrap().len(), 2);
-        assert_eq!(value.hosts.as_ref().unwrap()[0].r#type, MoTypesEnum::HostSystem);
+        assert_eq!(
+            value.hosts.as_ref().unwrap()[0].r#type,
+            MoTypesEnum::HostSystem
+        );
         assert_eq!(value.hosts.as_ref().unwrap()[0].value, "test3");
-        assert_eq!(value.hosts.as_ref().unwrap()[1].r#type, MoTypesEnum::HostSystem);
+        assert_eq!(
+            value.hosts.as_ref().unwrap()[1].r#type,
+            MoTypesEnum::HostSystem
+        );
         assert_eq!(value.hosts.as_ref().unwrap()[1].value, "test4");
     }
 
@@ -989,7 +1341,11 @@ mod tests {
     #[test]
     fn test_unknown_named_entity_fails() {
         let err = from_xml::<String>(r#"<child>&notarealxmlentity;</child>"#);
-        assert!(err.is_err(), "expected unknown entity to fail, got {:?}", err);
+        assert!(
+            err.is_err(),
+            "expected unknown entity to fail, got {:?}",
+            err
+        );
     }
 
     #[test]
@@ -1020,5 +1376,27 @@ mod tests {
             from_xml(r#"<mor type="VirtualMachine">vm&amp;1</mor>"#).unwrap();
         assert_eq!(v.r#type, MoTypesEnum::VirtualMachine);
         assert_eq!(v.value, "vm&1");
+    }
+
+    /// Unknown child wire names fail fast (SC-002): no silent string fallback into opaque maps.
+    #[test]
+    fn test_unknown_child_element_errors_for_object() {
+        let xml = r#"<ManagedObjectReference><type>VirtualMachine</type><value>vm-1</value><bogusUnexpected /></ManagedObjectReference>"#;
+        assert!(
+            from_xml::<ManagedObjectReference>(xml).is_err(),
+            "unknown field must fail deserialization"
+        );
+    }
+
+    /// Invalid `xsi:type` that does not resolve in [`lookup_xml_type`] must error (SC-002).
+    #[test]
+    fn test_invalid_xsi_type_on_primitive_errors() {
+        let xmlns = r#"xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance""#;
+        let xml =
+            format!(r#"<child {xmlns} xsi:type="TotallyUnknownXmlTypeName999999">42</child>"#);
+        assert!(
+            from_xml::<i32>(&xml).is_err(),
+            "garbage xsi:type must fail for typed primitive leaf"
+        );
     }
 }

@@ -1,7 +1,6 @@
 use miniserde::ser::{Fragment, Map as SerMap, Serialize};
 use std::borrow::Cow;
 
-
 // ============================================================================
 // XML escaping (delegated to quick_xml)
 // ============================================================================

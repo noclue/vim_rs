@@ -3,6 +3,7 @@
 use std::collections::BTreeSet;
 
 use convert_case::{Case, Casing};
+use phf_codegen::Map as PhfMapBuilder;
 use crate::printer::Printer;
 use crate::rs_emitter::errors::Result;
 use crate::rs_emitter::structs::ANY;
@@ -30,6 +31,11 @@ pub fn generate_api_field_registry(vim_model: &Model, printer: &mut dyn Printer)
         for (_, field) in &s.fields {
             collect_sigs(&field.vim_type, vim_model, &mut sigs);
         }
+    }
+    // Boxed `Any` descendants (`Primitive*`, `ArrayOf*`, …) need static refs even when they
+    // never appear as a struct field type.
+    for (_, bt) in &vim_model.any_value_types {
+        collect_sigs(&bt.property_type, vim_model, &mut sigs);
     }
 
     // Emit static ApiFieldType values: inner types before `Array(&...)`.
@@ -92,6 +98,93 @@ pub fn generate_api_field_registry(vim_model: &Model, printer: &mut dyn Printer)
     printer.println("pub fn resolve_type(type_name: &str) -> Option<StructType> {")?;
     printer.indent();
     printer.println("StructType::from_str(type_name)")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.newline()?;
+
+    emit_lookup_xml_tables(printer, vim_model)?;
+
+    Ok(())
+}
+
+/// XSD / SOAP primitive names and `Any` wrapper types (`ArrayOf*`, `Primitive*`) for `xsi:type`.
+fn emit_lookup_xml_tables(printer: &mut dyn Printer, model: &Model) -> Result<()> {
+    printer.println("/// XSD primitive local names (`string`, `int`, …) mapped to [`ApiFieldType`].")?;
+    printer.println("fn lookup_xml_primitive(type_name: &str) -> Option<ApiFieldType> {")?;
+    printer.indent();
+    printer.println("match type_name {")?;
+    printer.indent();
+    // Canonical XSD names (local part only — prefixes stripped before lookup).
+    let mut prim: Vec<(&str, &str)> = vec![
+        ("string", "str"),
+        ("boolean", "bool"),
+        ("byte", "i8"),
+        ("short", "i16"),
+        ("int", "i32"),
+        ("long", "i64"),
+        ("unsignedByte", "i16"),
+        ("unsignedShort", "i32"),
+        ("unsignedInt", "i64"),
+        ("unsignedLong", "i64"),
+        ("float", "f32"),
+        ("double", "f64"),
+        ("decimal", "str"),
+        ("dateTime", "str"),
+        ("base64Binary", "binary"),
+        ("anyType", "any"),
+    ];
+    prim.sort_by(|a, b| a.0.cmp(b.0));
+    for (xml_name, sig) in prim {
+        let sym = static_name_for_sig(sig);
+        printer.println(&format!("\"{xml_name}\" => Some({sym}),"))?;
+    }
+    printer.println("_ => None,")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.newline()?;
+
+    // Stable iteration for deterministic codegen.
+    let mut boxed_keys: Vec<String> = model.any_value_types.keys().cloned().collect();
+    boxed_keys.sort();
+
+    let mut wrapper_map = PhfMapBuilder::new();
+    for k in &boxed_keys {
+        let bt = model.any_value_types.get(k).expect("boxed key");
+        let sym = data_type_to_expr(&bt.property_type, model)?;
+        wrapper_map.entry(k.clone(), &sym);
+    }
+
+    printer.println(
+        "/// `Primitive*` / `ArrayOf*` boxed value types from the schema (`Any` descendants). O(1) lookup.",
+    )?;
+    printer.println(&format!(
+        "static ANY_VALUE_WRAPPER_MAP: phf::Map<&'static str, ApiFieldType> = {};",
+        wrapper_map.build()
+    ))?;
+    printer.newline()?;
+
+    printer.println("#[inline]")?;
+    printer.println("fn lookup_any_value_wrapper(type_name: &str) -> Option<ApiFieldType> {")?;
+    printer.indent();
+    printer.println("ANY_VALUE_WRAPPER_MAP.get(type_name).copied()")?;
+    printer.dedent();
+    printer.println("}")?;
+    printer.newline()?;
+
+    printer.println(
+        "/// Resolve `xsi:type` local names (after stripping namespace prefixes) to an [`ApiFieldType`].",
+    )?;
+    printer.println(
+        "/// Resolution order: [`StructType`] first, then boxed `Any` value types (PHF), then XSD primitives.",
+    )?;
+    printer.println("pub fn lookup_xml_type(type_name: &str) -> Option<ApiFieldType> {")?;
+    printer.indent();
+    printer.println("resolve_type(type_name)")?;
+    printer.println("    .map(ApiFieldType::Object)")?;
+    printer.println("    .or_else(|| lookup_any_value_wrapper(type_name))")?;
+    printer.println("    .or_else(|| lookup_xml_primitive(type_name))")?;
     printer.dedent();
     printer.println("}")?;
 
