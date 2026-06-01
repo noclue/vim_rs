@@ -14,7 +14,9 @@ categories = ["api-bindings", "network-programming"]
 exclude = ["target/*", "**/*.rs.bk"]
 
 [features]
+default = ["default-client"]
 defaults = []
+default-client = ["reqwest/default"]
 xml = ["dep:quick-xml", "reqwest/cookies"]
 # Compatibility layer for producers that emit malformed SOAP payloads
 # (notably `govc vcsim`, which omits required fields such as
@@ -36,7 +38,7 @@ indexmap = "2.9"
 log = "0.4"
 miniserde = "0.1"
 quick-xml = { version = "0.39", optional = true }
-reqwest = { version = "0.12" }
+reqwest = { version = "0.13", default-features = false }
 thiserror = "2.0"
 tokio = { version = "1.44", features = ["rt-multi-thread", "macros", "sync"] }
 vim_macros = { version = "0.4.4", path = "../vim_macros" }

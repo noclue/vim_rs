@@ -53,11 +53,60 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 You can add `insecure()` to your builder configuration to bypass TLS checks for both hostname and certificate.
 
-One can set the `reqwest` preconfigured client through the builder's `http_client` method to reuse the `reqwest` connection and connection settings. The `vim_rs` client abstraction is cheap, but the `reqwest` HTTP client is not.
+One can set a preconfigured `reqwest` client through the builder's `http_client()` method to reuse connections and TLS settings without disabling default features. The `vim_rs` client abstraction is cheap, but the `reqwest` HTTP client is not.
 
 The `client` above is an `Arc` around the actual client object. Use `.clone()` to pass it around.
 
 If the above goes well, you have a connection to the vCenter server with an initialized session and retrieved service content.
+
+### TLS backend and opting out of the default HTTP client
+
+By default, `vim_rs` enables the **`default-client`** feature, which enables `reqwest/default` (**rustls** for TLS on reqwest 0.13 — not OpenSSL — plus `charset`, `http2`, and `system-proxy`). To pick your own TLS stack (for example **native-tls**/OpenSSL, or rustls with **ring** instead of the default aws-lc-rs provider), use `default-features = false` and pass a `reqwest::Client` to `ClientBuilder::new(server, client)`.
+
+With **`default-features = false`**, `ClientBuilder::new` requires `(server, reqwest::Client)`; `insecure()` and `http_client()` are not on the builder — configure TLS and proxies on your `reqwest` client instead. For self-signed certs, use `danger_accept_invalid_certs` and `danger_accept_invalid_hostnames` on the reqwest builder (same effect as turnkey `.insecure(true)`).
+
+**VI/JSON only** (vCenter JSON API; sessions use the `vmware-api-session-id` header — no HTTP cookies):
+
+```toml
+vim_rs = { version = "0.4", default-features = false }
+reqwest = { version = "0.13", default-features = false, features = ["rustls"] }
+# Often useful (reqwest defaults when default-client is on): "charset", "http2", "system-proxy"
+```
+
+```rust
+use vim_rs::core::ClientBuilder;
+
+let http = reqwest::Client::builder().build()?;
+let client = ClientBuilder::new("vcenter.example.com", http)
+    .basic_authn("administrator@vsphere.local", "password")
+    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
+    .build()
+    .await?;
+```
+
+**SOAP/XML** (ESXi or `TransportMode::Soap` / `Auto`; enable `vim_rs` **`xml`** and reqwest **`cookies`**, and call `.cookie_store(true)` on your client):
+
+```toml
+vim_rs = { version = "0.4", default-features = false, features = ["xml"] }
+reqwest = { version = "0.13", default-features = false, features = ["rustls", "cookies", "charset", "http2", "system-proxy"] }
+```
+
+```rust
+use vim_rs::core::ClientBuilder;
+use vim_rs::core::client::TransportMode;
+
+let http = reqwest::Client::builder().cookie_store(true).build()?;
+let client = ClientBuilder::new("esxi.example.com", http)
+    .basic_authn("root", "password")
+    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
+    .transport(TransportMode::Soap)
+    .build()
+    .await?;
+```
+
+See [`tls_rustls_only`](tls_rustls_only) for an OpenSSL-free dependency graph using `rustls-no-provider` plus a separate `rustls` crate with the **ring** provider (instead of `features = ["rustls"]` alone).
+
+To check for OpenSSL in the graph, run `cargo tree -i openssl-sys` from your crate directory. **No `openssl-sys` in the tree is the expected good outcome** — Cargo prints `error: package ID specification 'openssl-sys' did not match any packages` and exits with code 101. That message is not a failed build; it means the inverse query found nothing. If `openssl-sys` were present, you would see a tree rooted at that package instead.
 
 ### Wire logging (transport diagnostics)
 
@@ -624,3 +673,6 @@ On a good machine, the first-time compilation of vim-tests can take between 2 an
 
 **Why does the design use a hybrid approach with both traits and enums?**  
 The VIM API is inherently polymorphic, and while enums are safe and idiomatic in Rust, using only enums would lead to unwieldy type definitions. The hybrid approach—with traits for the deep hierarchical parts and enums for simpler aspects—strikes a balance between performance and usability.
+
+**Why does ESX authentication fail?**  
+For SOAP/XML against ESXi, enable the `vim_rs` **`xml`** feature, enable reqwest's **`cookies`** feature, and call `.cookie_store(true)` on `reqwest::Client::builder()` before `build()`. VI/JSON to vCenter does not use HTTP cookies. If you opted out of `default-client`, you must supply the configured client to `ClientBuilder::new(server, http_client)`.
