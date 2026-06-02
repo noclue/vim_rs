@@ -9,7 +9,7 @@ crossterm = {  version = "0.29", features = ["event-stream"]}
 futures = "0.3"
 tokio = {  version = "1.44", features = ["macros"]}
 ratatui = {  version = "0.30" , features = ["crossterm"]}
-vim_rs = { version = "0.4.4", features = ["xml"], path = "../../vim_rs" }
+vim_rs = { version = "0.5.0", features = ["xml"], path = "../../vim_rs" }
 chrono = "0.4"
 tui-tree-widget = "0.24"
 miniserde = "0.1"

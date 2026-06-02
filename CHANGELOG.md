@@ -19,15 +19,22 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.5.0] - 2026-06-02
+
+> **Breaking release.** This version moves the HTTP stack to **reqwest 0.13** with a
+> **rustls** (not OpenSSL) TLS default and re-implements the SOAP/XML deserialization stack.
+> Binaries that relied on linking `openssl-sys` through the old reqwest default, or that
+> depended on the previous XML driver behavior, must review the notes below before upgrading.
+
 ### Added
 
 - **`default-client` Cargo feature** (enabled by default): turnkey `ClientBuilder` auto-creates a `reqwest` client and supports `insecure(true)` / `http_client()` overrides. Disable with `default-features = false` and pass your own `reqwest::Client` to `ClientBuilder::new(server, client)` (compile-time required client when opted out). See `examples/tls_rustls_only`.
 
 ### Changed
 
-- **reqwest 0.13** with `default-features = false` on the dependency; turnkey builds enable `reqwest/default` via `default-client` (TLS backend is **rustls**, not OpenSSL — **breaking** for binaries that relied on linking `openssl-sys` through the old default). Default-feature `vim_rs` / `examples/vtui` build-time and binary-size deltas were not measured for this release.
+- **BREAKING: reqwest 0.13** bring your own client with `default-features = false` on the `vim_rs` dependency; turnkey builds enable `reqwest/default` via `default-client`. With reqwest 0.13 the default TLS backend is **rustls**, not OpenSSL. The change of TLS may be **breaking** for binaries that relied on linking `openssl-sys` through the old default.
 - **`reqwest/cookies`** is enabled only with the `xml` feature; VI/JSON session auth uses the `vmware-api-session-id` header, not HTTP cookies. Auto-built clients call `.cookie_store(true)` only on the SOAP path.
-- **SOAP/XML (`xml` feature):** Enrich codegen (api_field_registry, data_type_aware) and rewrite xml/de.rs so the driver follows declared types. Add Spec Kit docs and changelog note for 001-metadata-xml-de. Support for non-"vim" namespaces is absent.
+- **BREAKING: SOAP/XML (`xml` feature):** Enrich codegen (api_field_registry, data_type_aware) and rewrite xml/de.rs so the driver follows declared types. Add Spec Kit docs and changelog note for 001-metadata-xml-de. Support for non-"vim" namespaces is absent.
 
 ## [0.4.4] - 2026-04-18
 

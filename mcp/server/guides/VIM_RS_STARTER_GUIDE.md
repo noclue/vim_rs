@@ -71,7 +71,7 @@ async fn main() -> Result<()> {
 **Dependencies needed:**
 ```toml
 [dependencies]
-vim_rs = "0.4"
+vim_rs = "0.5"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
@@ -90,7 +90,7 @@ Enable XML only when the target requires it, most notably for direct ESXi connec
 
 ```toml
 [dependencies]
-vim_rs = { version = "0.4", features = ["xml"] }
+vim_rs = { version = "0.5", features = ["xml"] }
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
@@ -152,7 +152,7 @@ Use this when integration tests target **[govc vcsim](https://github.com/vmware/
 1. **`vcsim_compat` feature** (requires `xml`): enables tolerant client-internal SOAP unmarshalling so incomplete XML fragments (for example `HostConfigInfo.optionDef` without `optionType`) can be dropped instead of failing the entire response. Scoped helpers such as `vim_rs::xml::de::from_xml_with` exist for explicit control.
 
    ```toml
-   vim_rs = { version = "0.4", features = ["xml", "vcsim_compat"] }
+   vim_rs = { version = "0.5", features = ["xml", "vcsim_compat"] }
    ```
 
 2. **Macro path suffix `?`:** In `vim_retrievable!` and `vim_updatable!`, append `?` to the **quoted** property path string to force `Option<T>` even when the OpenAPI spec marks the property as required—for example `effective_cpu = "summary.quick_stats.overall_cpu_usage"?`. vcsim (and occasionally real hosts) omit “required” fields; without `?`, `TryFrom` fails and whole rows are dropped during retrieval or cache updates.
@@ -413,7 +413,7 @@ let spec = VirtualDeviceConfigSpec {
 
 Enable the `defaults` feature in your `Cargo.toml`:
 ```toml
-vim_rs = { version = "0.4", features = ["defaults"] }
+vim_rs = { version = "0.5", features = ["defaults"] }
 ```
 
 Then use `..Default::default()` to fill in optional fields:
