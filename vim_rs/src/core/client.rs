@@ -347,6 +347,7 @@ pub struct ClientBuilder {
     compatible_api_releases: Option<Vec<String>>,
     api_release: Option<String>,
     http_client: Option<reqwest::Client>,
+    #[cfg(feature = "default-client")]
     insecure: Option<bool>,
     app_name: Option<String>,
     app_version: Option<String>,
@@ -357,16 +358,54 @@ pub struct ClientBuilder {
     wire_logging: WireLoggingMode,
 }
 
+/// Build a `reqwest::Client` when the `default-client` feature is enabled (turnkey path).
+#[cfg(feature = "default-client")]
+fn build_default_http_client(
+    insecure: Option<bool>,
+    _cookie_store: bool,
+) -> Result<reqwest::Client> {
+    let mut builder = reqwest::Client::builder();
+    #[cfg(feature = "xml")]
+    if _cookie_store {
+        builder = builder.cookie_store(true);
+    }
+    if let Some(insecure) = insecure {
+        builder = builder
+            .danger_accept_invalid_certs(insecure)
+            .danger_accept_invalid_hostnames(insecure);
+    }
+    Ok(builder.build()?)
+}
+
+#[cfg(feature = "default-client")]
+fn obtain_http_client(
+    existing: Option<reqwest::Client>,
+    insecure: Option<bool>,
+    cookie_store: bool,
+) -> Result<reqwest::Client> {
+    match existing {
+        Some(client) => Ok(client),
+        None => build_default_http_client(insecure, cookie_store),
+    }
+}
+
+#[cfg(not(feature = "default-client"))]
+fn obtain_http_client(existing: Option<reqwest::Client>) -> Result<reqwest::Client> {
+    existing.ok_or_else(|| {
+        Error::ParseError(
+            "ClientBuilder requires a reqwest::Client from new(server, http_client)".into(),
+        )
+    })
+}
+
 impl ClientBuilder {
-    /// Create a new client builder for a VI/JSON API at given FQDN or IP address
-    ///
-    /// * `server_address` - vCenter server FQDN or IP address
-    pub fn new(server_address: &str) -> Self {
+    fn new_common(server_address: &str, http_client: Option<reqwest::Client>) -> Self {
         Self {
             server_address: server_address.to_string(),
             compatible_api_releases: None,
             api_release: None,
-            http_client: None,
+            http_client,
+            #[cfg(feature = "default-client")]
             insecure: None,
             app_name: None,
             app_version: None,
@@ -377,6 +416,51 @@ impl ClientBuilder {
             wire_logging: WireLoggingMode::default(),
         }
     }
+}
+
+#[cfg(feature = "default-client")]
+impl ClientBuilder {
+    /// Create a client builder for a VI/JSON (or SOAP with `xml`) API at the given FQDN or IP.
+    ///
+    /// When the `default-client` feature is enabled (default), a `reqwest::Client` is created
+    /// automatically at [`Self::build`] unless one is supplied via [`Self::http_client`].
+    pub fn new(server_address: &str) -> Self {
+        Self::new_common(server_address, None)
+    }
+
+    /// Set the reqwest::Client instance to use for HTTP requests.
+    ///
+    /// Resets the [`Self::insecure`] flag; configure TLS on the supplied client instead.
+    pub fn http_client(mut self, http_client: reqwest::Client) -> Self {
+        self.http_client = Some(http_client);
+        self.insecure = None;
+        self
+    }
+
+    /// Allow invalid TLS certificates and hostnames on an auto-created client.
+    ///
+    /// Resets a previously set [`Self::http_client`]; a new client is built at [`Self::build`].
+    pub fn insecure(mut self, insecure: bool) -> Self {
+        warn!("!!! WARNING !!! Insecure mode enabled. TLS certificate and hostname verification is disabled. !!! WARNING !!!");
+        self.insecure = Some(insecure);
+        self.http_client = None;
+        self
+    }
+}
+
+#[cfg(not(feature = "default-client"))]
+impl ClientBuilder {
+    /// Create a client builder with a caller-supplied `reqwest::Client`.
+    ///
+    /// Requires `default-features = false` on the `vim_rs` dependency (disables `default-client`).
+    /// Configure TLS, proxies, and (for SOAP) [`reqwest::ClientBuilder::cookie_store`] on your
+    /// client before passing it here.
+    pub fn new(server_address: &str, http_client: reqwest::Client) -> Self {
+        Self::new_common(server_address, Some(http_client))
+    }
+}
+
+impl ClientBuilder {
 
     /// Opt-in transport logging on dedicated log targets (`vim_rs::wire::json`, `vim_rs::wire::soap`).
     ///
@@ -411,26 +495,6 @@ impl ClientBuilder {
     /// * `api_release` - API release version
     pub fn api_release(mut self, api_release: &str) -> Self {
         self.api_release = Some(api_release.to_string());
-        self
-    }
-
-    /// Set the reqwest::Client instance to use for HTTP requests.
-    /// This resets the insecure flag. Use the http_client methods to set the certificate and
-    /// hostname verification behavior.
-    /// * `http_client` - preconfigured reqwest::Client instance
-    pub fn http_client(mut self, http_client: reqwest::Client) -> Self {
-        self.http_client = Some(http_client);
-        self.insecure = None;
-        self
-    }
-
-    /// Set the insecure flag to allow invalid certificates and hostnames.
-    /// This resets the http_client. A new reqwest::Client instance will be created instead.
-    /// * `insecure` - Allow invalid certificates and hostnames
-    pub fn insecure(mut self, insecure: bool) -> Self {
-        warn!("!!! WARNING !!! Insecure mode enabled. TLS certificate and hostname verification is disabled. !!! WARNING !!!");
-        self.insecure = Some(insecure);
-        self.http_client = None;
         self
     }
 
@@ -484,17 +548,10 @@ impl ClientBuilder {
 
     async fn build_json(self) -> Result<Arc<Client>> {
         let wire_logging = self.wire_logging;
-        let http_client = match self.http_client {
-            Some(client) => client,
-            None => {
-                let mut builder = reqwest::ClientBuilder::new();
-                if let Some(insecure) = self.insecure {
-                    builder = builder.danger_accept_invalid_certs(insecure)
-                                     .danger_accept_invalid_hostnames(insecure);
-                }
-                builder.build()?
-            },
-        };
+        #[cfg(feature = "default-client")]
+        let http_client = obtain_http_client(self.http_client, self.insecure, false)?;
+        #[cfg(not(feature = "default-client"))]
+        let http_client = obtain_http_client(self.http_client)?;
         let session_key = Arc::new(RwLock::new(None));
 
         let user_agent = user_agent(self.app_name.as_deref(), self.app_version.as_deref());
@@ -612,18 +669,10 @@ impl ClientBuilder {
 
     #[cfg(feature = "xml")]
     async fn build_soap_facade(self) -> Result<Arc<Client>> {
-        let http_client = match self.http_client {
-            Some(client) => client,
-            None => {
-                let mut builder = reqwest::ClientBuilder::new()
-                    .cookie_store(true);
-                if let Some(insecure) = self.insecure {
-                    builder = builder.danger_accept_invalid_certs(insecure)
-                                     .danger_accept_invalid_hostnames(insecure);
-                }
-                builder.build()?
-            },
-        };
+        #[cfg(feature = "default-client")]
+        let http_client = obtain_http_client(self.http_client, self.insecure, true)?;
+        #[cfg(not(feature = "default-client"))]
+        let http_client = obtain_http_client(self.http_client)?;
         let ua = user_agent(self.app_name.as_deref(), self.app_version.as_deref());
         let api_release = match self.api_release {
             Some(release) => release.clone(),
@@ -653,14 +702,11 @@ impl ClientBuilder {
     async fn build_auto_facade(self) -> Result<Arc<Client>> {
         let wl = self.wire_logging;
         let ua = user_agent(self.app_name.as_deref(), self.app_version.as_deref());
-        let http_client_for_probe = {
-            let mut builder = reqwest::ClientBuilder::new();
-            if let Some(insecure) = self.insecure {
-                builder = builder.danger_accept_invalid_certs(insecure)
-                                 .danger_accept_invalid_hostnames(insecure);
-            }
-            builder.build()?
-        };
+        #[cfg(feature = "default-client")]
+        let http_client_for_probe =
+            obtain_http_client(self.http_client.clone(), self.insecure, false)?;
+        #[cfg(not(feature = "default-client"))]
+        let http_client_for_probe = obtain_http_client(self.http_client.clone())?;
 
         let releases = self.compatible_api_releases.clone()
             .unwrap_or_else(|| COMPATIBLE_API_RELEASES.iter().map(|s| s.to_string()).collect());
@@ -1833,6 +1879,18 @@ mod wire_logging_transport_tests {
         }
     }
 
+    fn client_builder_for_wire_dead_addr() -> ClientBuilder {
+        let http = test_dead_port_http_client();
+        #[cfg(feature = "default-client")]
+        {
+            ClientBuilder::new(TEST_WIRE_DEAD_ADDR).http_client(http)
+        }
+        #[cfg(not(feature = "default-client"))]
+        {
+            ClientBuilder::new(TEST_WIRE_DEAD_ADDR, http)
+        }
+    }
+
     #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
     async fn json_hello_negotiate_and_invoke_paths_log_transport_failure() {
         let _serial = SERIAL.lock().expect("serial");
@@ -1840,8 +1898,7 @@ mod wire_logging_transport_tests {
         clear_wire_lines();
 
         // Hello System negotiation (no fixed api_release → must POST hello).
-        let hello_err = ClientBuilder::new(TEST_WIRE_DEAD_ADDR)
-            .http_client(test_dead_port_http_client())
+        let hello_err = client_builder_for_wire_dead_addr()
             .wire_logging(WireLoggingMode::Summary)
             .build()
             .await;
@@ -1954,8 +2011,7 @@ mod wire_logging_transport_tests {
         init_wire_capture();
         clear_wire_lines();
 
-        let err = ClientBuilder::new(TEST_WIRE_DEAD_ADDR)
-            .http_client(test_dead_port_http_client())
+        let err = client_builder_for_wire_dead_addr()
             .wire_logging(WireLoggingMode::Summary)
             .transport(super::TransportMode::Auto)
             .build()
