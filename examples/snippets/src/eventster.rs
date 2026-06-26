@@ -74,6 +74,8 @@ async fn dump_events(client: Arc<Client>, event_manager: &EventManager) -> Resul
         event_type_id: None,
         max_count: None,
         delayed_init: None,
+        auditable: None,
+        audit_id: None,
     };
 
     let collector = event_manager.create_collector_for_events(filter).await?;

@@ -55,7 +55,7 @@ use crate::core::client::{VimClient, Result};
 /// **Obtaining Metadata and Metrics**  
 /// This interface provides these
 /// query operations:
-/// - *PerformanceManager.QueryPerfProviderSummary*, for obtaining metatdata about *performance providers*
+/// - *PerformanceManager.QueryPerfProviderSummary*, for obtaining metadata about *performance providers*
 /// - *PerformanceManager.QueryPerfCounter* and *PerformanceManager.QueryPerfCounterByLevel* for obtaining
 ///   metadata about supported counters.
 /// - *PerformanceManager.QueryPerf*, *PerformanceManager.QueryAvailablePerfMetric*, and *PerformanceManager.QueryPerfComposite* for obtaining statistics for one or more
@@ -177,7 +177,7 @@ impl PerformanceManager {
     /// 
     /// Requires **system.read** privilege for every virtual machine on
     /// the target host, or the query fails with the &#147;NoPermission&#148;
-    /// fault. Suported for *HostSystem* managed entities only.
+    /// fault. Supported for *HostSystem* managed entities only.
     /// 
     /// ***Required privileges:*** System.View
     ///

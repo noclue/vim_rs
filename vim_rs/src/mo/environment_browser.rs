@@ -97,9 +97,9 @@ impl EnvironmentBrowser {
     /// 
     /// If the Environment Browser belongs to a virtual machine and the spec argument
     /// is omitted, the method returns the ConfigOption object corresponding to the
-    /// vmx version of the virutal machine and the
+    /// vmx version of the virtual machine and the
     /// *guestOSDescriptor* list contains
-    /// only the guestId of the virutal machine.
+    /// only the guestId of the virtual machine.
     /// 
     /// ***Required privileges:*** System.View
     ///

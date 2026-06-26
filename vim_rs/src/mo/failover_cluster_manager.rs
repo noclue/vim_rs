@@ -84,7 +84,7 @@ impl FailoverClusterManager {
     /// ### planned
     /// \- if false, a failover is initiated immediate and may
     /// result in data loss.
-    /// if true, a failover is initated after the Active node
+    /// if true, a failover is initiated after the Active node
     /// flushes its state to Passive and there is no data loss.
     ///
     /// ## Returns:

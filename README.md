@@ -634,9 +634,11 @@ To generate new `vim` content, run `vim_build/src/main`.
 
 ## Updating the OpenAPI Specification
 
-The OpenAPI specification is held in `vim_build/data`. We use a JSON conversion of the original specification as `DatastoreAccessible_enum` with values `True` and `False` is ambiguously rendered in YAML, i.e., as per the YAML specs, the values are interpreted as boolean constants and not strings.
+The OpenAPI specification is held in `vim_build/data`. The current binding target is **vSphere API 9.1.0.0**, canonical input file `vi_json_openapi_specification_v9_1_0_0.json`.
 
-To add a newer version of the OpenAPI spec, use a tool like `yq` to convert to JSON, e.g., `yq -o=json eval vi_json_openapi_specification_v8_0_2_0.yaml`. Review if `DatastoreAccessible_enum` values are rendered as boolean flags or strings. The correct way is to have Strings - `True` and `False`.
+We use a JSON conversion of the original specification because `DatastoreAccessible_enum` with values `True` and `False` is ambiguously rendered in YAML, i.e., as per the YAML specs, the values are interpreted as boolean constants and not strings.
+
+To add a newer version of the OpenAPI spec, use a tool like `yq` to convert to JSON, e.g., `yq -o=json eval vi-json.yaml > vi_json_openapi_specification_v9_1_0_0.json`. On Windows, ensure the output is **UTF-8** (not UTF-16 from shell redirects). Review if `DatastoreAccessible_enum` values are rendered as boolean flags or strings. The correct way is to have Strings - `True` and `False`.
 
 ## `vim_rs` Structure
 

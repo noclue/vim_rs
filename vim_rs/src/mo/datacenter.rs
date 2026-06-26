@@ -223,7 +223,7 @@ impl Datacenter {
     /// ### spec
     /// The connection spec for the host to be queried. It must contain
     /// values for all parameters required by *Datacenter.QueryConnectionInfo*
-    /// See *Datacenter.QueryConnectionInfo* or a list of thrown expections.
+    /// See *Datacenter.QueryConnectionInfo* or a list of thrown exceptions.
     ///
     /// ## Errors:
     ///
@@ -662,7 +662,7 @@ impl Datacenter {
             None => Ok(None),
         }
     }
-    /// List of permissions defined for this entity.
+    /// List of the permissions explicitly defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let pv_opt = self.client.fetch_property_raw("", "Datacenter", &self.mo_id, "permission").await?;
         match pv_opt {

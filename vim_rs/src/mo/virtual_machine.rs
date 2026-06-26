@@ -264,11 +264,16 @@ impl VirtualMachine {
     ///   VirtualMachine.Provisioning.DeployTemplate
     /// - source is template, destination is template -
     ///   VirtualMachine.Provisioning.CloneTemplate
-    /// - source is encrypted virtual machine - Cryptographer.Clone
+    /// - source is encrypted virtual machine -
+    ///   Cryptographer.Clone and starting from vSphere 9.0
+    ///   Cryptographer.Access is also required
     ///   
     /// If customization is requested in the CloneSpec, then the
     /// VirtualMachine.Provisioning.Customize privilege must also be
     /// held on the source virtual machine.
+    /// 
+    /// The VirtualMachine.Inventory.CreateFromExisting privilege is required on
+    /// the destination folder.
     /// 
     /// The Resource.AssignVMToPool privilege is also required for the
     /// resource pool specified in the CloneSpec, if the destination is not a
@@ -280,8 +285,6 @@ impl VirtualMachine {
     ///
     /// ### folder
     /// The location of the new virtual machine.
-    /// 
-    /// ***Required privileges:*** VirtualMachine.Inventory.CreateFromExisting
     /// 
     /// Refers instance of *Folder*.
     ///
@@ -337,7 +340,7 @@ impl VirtualMachine {
     /// is not enabled on the destination and the user does not have
     /// Cryptographer.RegisterHost permission on the host.
     /// 
-    /// ***NoPermission***: if source virtual machine is encrypted, but the
+    /// ***NoPermission***: if source virtual machine is encrypted, but
     /// the user does not have Cryptographer.Clone permission on it.
     pub async fn clone_vm_task(&self, folder: &crate::types::structs::ManagedObjectReference, name: &str, spec: &crate::types::structs::VirtualMachineCloneSpec) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CloneVmRequestType {folder, name, spec, };
@@ -892,7 +895,7 @@ impl VirtualMachine {
     /// ## Parameters:
     ///
     /// ### vm
-    /// The secondary virtual machine specified will be disabed.
+    /// The secondary virtual machine specified will be disabled.
     /// This field must specify a secondary virtual machine that is part of the fault
     /// tolerant group that this virtual machine is currently associated with. It can
     /// only be invoked from the primary virtual machine in the group.
@@ -1508,20 +1511,16 @@ impl VirtualMachine {
     /// first try the delta disk backing and then try the parent backing if needed.
     /// 
     /// Promoting does two things
-    /// 1. If the unlink parameter is true, any disk backing which is shared
-    ///    shared by multiple virtual machines is copied so that this virtual machine
-    ///    has its own unshared version. Copied files always end up in the virtual
-    ///    machine's home directory. To promote the disks of a powered on VM,
-    ///    the VM cannot have snapshots.
-    /// 2. Any disk backing which is not shared between multiple virtual
+    /// 1. Unlinking shared disk backings:
+    ///    All shared disk backings are copied from its parent to its home
+    ///    directory. This creates an exclusive, unshared version for the VM disks
+    ///    and removes the link to its parent from the delta disk, resulting in
+    ///    the creation of an independent VM with its own base disk.
+    /// 2. Consolidation:
+    ///    Any disk backing which is not shared between multiple virtual
     ///    machines and is not associated with a snapshot is consolidated
     ///    with its child backing.
     ///    
-    /// If the unlink parameter is true, the net effect of this operation is improved
-    /// read performance, at the cost of disk space. If the unlink parameter is
-    /// false the net effect is improved read performance at the cost of inhibiting
-    /// future sharing.
-    /// 
     /// This operation is only supported if
     /// *HostCapability.deltaDiskBackingsSupported* is true.
     /// 
@@ -1533,7 +1532,9 @@ impl VirtualMachine {
     /// ## Parameters:
     ///
     /// ### unlink
-    /// If true, then these disks will be unlinked before consolidation.
+    /// If true, disks on powered-off VMs are unlinked before
+    /// consolidation. This has no effect on powered-on VMs, as
+    /// child disks are unlinked by default.
     ///
     /// ### disks
     /// The set of disks that are to be promoted.
@@ -1611,10 +1612,10 @@ impl VirtualMachine {
     /// Typically, callers will make multiple calls to this function, starting
     /// with startOffset 0 and then examine the "length" property in the
     /// returned DiskChangeInfo structure, repeatedly calling queryChangedDiskAreas
-    /// until a map forthe entire virtual disk has been obtained.
+    /// until a map for the entire virtual disk has been obtained.
     ///
     /// ### change_id
-    /// Identifyer referring to a point in the past that should be used
+    /// Identifier referring to a point in the past that should be used
     /// as the point in time at which to begin including changes to the disk in
     /// the result. A typical use case would be a backup application obtaining a
     /// changeId from a virtual disk's backing info when performing a
@@ -1624,7 +1625,7 @@ impl VirtualMachine {
     /// ## Returns:
     ///
     /// Returns a data structure specifying extents of the virtual disk that
-    /// have changed since the thime the changeId string was obtained.
+    /// have changed since the time the changeId string was obtained.
     ///
     /// ## Errors:
     ///
@@ -1655,7 +1656,7 @@ impl VirtualMachine {
     ///
     /// ***InvalidPowerState***: If the virtual machine is not powered on.
     /// 
-    /// ***Timedout***: If the the virtual machine did not respond
+    /// ***Timedout***: If the virtual machine did not respond
     /// to the request in a timely manner.
     /// 
     /// ***VmConfigFault***: If an error occurred.
@@ -1820,16 +1821,16 @@ impl VirtualMachine {
     ///   block tracking for the virtual machine's disks.
     /// - VirtualMachine.Config.MksControl if toggling display connection
     ///   limits or the guest auto-lock feature.
-    /// - DVSwitch.CanUse if connecting a VirtualEthernetAdapter to a port
-    ///   in a DistributedVirtualSwitch.
-    /// - DVPortgroup.CanUse if connecting a VirtualEthernetAdapter to a
-    ///   DistributedVirtualPortgroup.
+    /// - VirtualMachine.Config.ManagedBy if changing
+    ///   *managedBy* property of the VM.
+    /// - VirtualMachine.Config.UpgradeVirtualHardware if upgrading the VM's
+    ///   virtual hardware to the latest revision that is supported by the VM's host.
     /// - Cryptographer.Encrypt if vm home folder is encrypted or existing
-    ///   disk is encryted.
+    ///   disk is encrypted.
     /// - Cryptographer.Decrypt if vm home folder is decrypted or existing
-    ///   disk is decryted.
+    ///   disk is decrypted.
     /// - Cryptographer.Recrypt if vm home folder is recrypted or existing
-    ///   disk is recryted.
+    ///   disk is recrypted.
     /// - Cryptographer.AddDisk if encrypted disk is attached to the vm.
     /// - Cryptographer.RegisterHost on the host if the virtual machine is
     ///   encrypted, but encryption is not enabled on the host.
@@ -2034,10 +2035,13 @@ impl VirtualMachine {
     /// Starting from vCenter 6.0 this API also supports relocating a VM to a new
     /// vCenter service.
     /// 
-    /// Requires the following additional permissions:
+    /// Requires the following additional privileges:
     /// - Resource.HotMigrate if the virtual machine is powered on.
-    /// - Datastore.AllocateSpec if the virtual machine or its disks are
+    /// - Datastore.AllocateSpace if the virtual machine or its disks are
     ///   being relocated to a new datastore.
+    /// - Starting from vSphere 9.0, Cryptographer.Access is required if the
+    ///   virtual machine is encrypted and the virtual machine or its disks
+    ///   are being relocated to a new datastore.
     /// - Resource.AssignVMToPool if the resource pool is changing.
     /// - VirtualMachine.Inventory.Register against the destination folder if
     ///   the virtual machine is moving to a new vCenter service.
@@ -2061,7 +2065,7 @@ impl VirtualMachine {
     ///   virtual disks, these disks will not be automatically moved to the
     ///   specified datastore, instead they will stay on a persistent
     ///   memory storage in destination host that supports the profile.
-    /// - To explicityly move these disks to a location other than
+    /// - To explicitly move these disks to a location other than
     ///   persistent memory storage, use disk locator to specify the
     ///   new destination datastore along with a storage profile that removes
     ///   the persistent memory storage requirement. Note that this
@@ -2222,6 +2226,45 @@ impl VirtualMachine {
     pub async fn rename_task(&self, new_name: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = RenameRequestType {new_name, };
         let bytes = self.client.invoke("", "VirtualMachine", &self.mo_id, "Rename_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
+    /// Repair the broken disk chains in the VM while the VM is powered off.
+    /// 
+    /// Requires Datastore.FileManagement privilege on the datastore where each
+    /// virtual disk resides.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
+    /// ## Returns:
+    ///
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidPowerState***: if the virtual machine is powered on
+    /// or suspended.
+    /// 
+    /// ***VmConfigFault***: if a virtual machine configuration issue prevents
+    /// repairing. Typically, a more specific fault is thrown such as
+    /// *InvalidDiskFormat* if a disk cannot be read.
+    /// 
+    /// ***InsufficientResourcesFault***: if this operation would violate a
+    /// resource usage policy. This is typically due to too many open
+    /// files causing disk files cannot open.
+    /// 
+    /// ***FileFault***: if there is a problem accessing the virtual machine's
+    /// disk files for this operation. Typically a more specific fault
+    /// for example *NoDiskSpace* or
+    /// *FileLocked* is thrown.
+    /// 
+    /// ***TaskInProgress***: if the virtual machine is busy.
+    /// 
+    /// ***NotSupported***: if the ESX server doesn't support repair of the VM
+    /// 
+    /// ***SystemError***: if failure due to any other reason.
+    pub async fn repair_vm_disk_chains_task(&self) -> Result<crate::types::structs::ManagedObjectReference> {
+        let bytes = self.client.invoke("", "VirtualMachine", &self.mo_id, "RepairVmDiskChains_Task", None).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
@@ -3332,7 +3375,7 @@ impl VirtualMachine {
             None => Ok(None),
         }
     }
-    /// List of permissions defined for this entity.
+    /// List of the permissions explicitly defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let pv_opt = self.client.fetch_property_raw("", "VirtualMachine", &self.mo_id, "permission").await?;
         match pv_opt {

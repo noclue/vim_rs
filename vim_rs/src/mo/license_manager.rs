@@ -23,7 +23,7 @@ use crate::core::client::{VimClient, Result};
 /// InvalidState will be thrown.
 /// 
 /// To specify the edition type and any optional functions, use updateLicense for
-/// ESX Server and addLicense follow by LicenseAssingmentManager.updateAssignedLicense
+/// ESX Server and addLicense follow by LicenseAssignmentManager.updateAssignedLicense
 /// for VirtualCenter.
 /// 
 /// When an edition is specified for a given host, the cost of that edition
@@ -350,7 +350,7 @@ impl LicenseManager {
     /// provided by the product and the additional features that can be licensed.
     /// 
     /// To determine what featureKey the current platform will accept, use
-    /// querySourceAvailablity() at runtime, or consult the documentation for the
+    /// querySourceAvailability() at runtime, or consult the documentation for the
     /// current platform.
     /// 
     /// ***Required privileges:*** Global.Licenses

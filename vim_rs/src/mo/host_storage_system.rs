@@ -367,7 +367,7 @@ impl HostStorageSystem {
     /// ## Parameters:
     ///
     /// ### spec
-    /// A data object that specifices the parameters necessary
+    /// A data object that specifies the parameters necessary
     /// to create a software host bus adapter of a specific type.
     ///
     /// ## Errors:
@@ -844,7 +844,7 @@ impl HostStorageSystem {
         Ok(result)
     }
     /// Mark a disk to local disk, due to the reason that local disks
-    /// behind some controllers might not be recongized as local correctly.
+    /// behind some controllers might not be recognized as local correctly.
     /// 
     /// Task failure might lose existing claim rules on the disk.
     /// 
@@ -923,7 +923,7 @@ impl HostStorageSystem {
         Ok(result)
     }
     /// Mark a disk to SSD, due to the reason that SSDs behind some controllers
-    /// might not be recongized as SSD correctly.
+    /// might not be recognized as SSD correctly.
     /// 
     /// Task failure might lose existing claim rules on the disk.
     /// 
@@ -2012,7 +2012,7 @@ impl HostStorageSystem {
     ///
     /// ### target_set
     /// The set the targets to configure. Optional,
-    /// when obmitted will configura the authentication properties
+    /// when omitted will configure the authentication properties
     /// for the adapter instead.
     ///
     /// ## Errors:

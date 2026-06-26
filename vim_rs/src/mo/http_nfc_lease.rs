@@ -109,7 +109,7 @@ impl HttpNfcLease {
         }
     }
     /// Perform a series of validations on the target host to see if
-    /// it can succesfully perform PullFromUrls.
+    /// it can successfully perform PullFromUrls.
     /// 
     /// ***Since:*** vSphere API Release 7.0.2.0
     ///

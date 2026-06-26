@@ -872,7 +872,7 @@ mod tests {
 
     fn load_openapi() -> OpenAPI {
         let mut file =
-            std::fs::File::open("data/vi_json_openapi_specification_v9_0_0_0_24798170.json").unwrap();
+            std::fs::File::open("data/vi_json_openapi_specification_v9_1_0_0.json").unwrap();
         let mut data = String::new();
         file.read_to_string(&mut data).unwrap();
         let openapi: OpenAPI = serde_json::from_str(&data).unwrap();

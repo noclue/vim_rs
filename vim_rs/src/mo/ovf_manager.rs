@@ -51,7 +51,7 @@ use crate::core::client::{VimClient, Result};
 /// The client must inspect and act upon warnings and errors as previously described.
 /// 
 /// No matter if the export succeeds or fails, the client is responsible for releasing the
-/// shared state lock taken on the entity (by *VirtualMaching.exportVm* or *VirtualApp.exportVApp*) during the export.
+/// shared state lock taken on the entity (by *VirtualMachine.exportVm* or *VirtualApp.exportVApp*) during the export.
 /// 
 /// **Error handling**
 /// 

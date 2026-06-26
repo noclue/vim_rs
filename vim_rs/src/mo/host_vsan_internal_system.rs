@@ -25,7 +25,7 @@ impl HostVsanInternalSystem {
     /// time can be queried from QueryVsanObjects() or QueryCmmds() APIs.
     /// Abidcating ownership tears down DOM owner in-memory state. Hosts in the
     /// cluster will then compete to become the new owner of the object, similar
-    /// to a host failure event. There is a short interuption of IO flow while
+    /// to a host failure event. There is a short interruption of IO flow while
     /// the owner re-election is going on, but it is transparent to any consumers
     /// of the object.
     /// This API is meant as a troubleshooting and debugging tool. It is internal
@@ -224,7 +224,7 @@ impl HostVsanInternalSystem {
     /// Instead of returning all objects, only such objects are returned that
     /// are currently resyncing any stale components or syncing fresh replicas.
     /// The API returns the same output format as queryVsanObjects(). It
-    /// retrieves information about syncing all objects, or retricts the
+    /// retrieves information about syncing all objects, or restricts the
     /// search for syncing objects to the UUID list provided. In order to make
     /// this API efficient, the output of this API contains the found
     /// DOM\_OBJECT, and referenced LSOM\_OBJECT and DISK entries.
@@ -404,7 +404,7 @@ impl HostVsanInternalSystem {
     /// approach and creates a minimal and temporary object on each physical
     /// MD disk consumed by VSAN across the entire VSAN cluster. The temporary
     /// objects are deleted right away upon completion of creation. The result
-    /// returns a list of all checked MDs, indicating wheather or not there was
+    /// returns a list of all checked MDs, indicating whether or not there was
     /// a problem creating an object on that MD at the given point in time.
     /// 
     /// ***Required privileges:*** System.Read

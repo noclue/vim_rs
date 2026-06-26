@@ -21,7 +21,7 @@ static PRUNED_TYPES: [&str; 2] = ["MethodFault", "Event"];
 
 fn main() {
     let root_folder = Path::new("../");
-    let vi_json_spec_path = Path::new("data/vi_json_openapi_specification_v9_0_0_0_24798170.json");
+    let vi_json_spec_path = Path::new("data/vi_json_openapi_specification_v9_1_0_0.json");
 
     //generate_to_console(vi_json_spec_path).unwrap();
     let start = Instant::now();

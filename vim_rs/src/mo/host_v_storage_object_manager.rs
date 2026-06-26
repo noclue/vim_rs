@@ -213,9 +213,10 @@ impl HostVStorageObjectManager {
     /// Crypto information of the new disk.
     ///
     /// ### path
-    /// Relative location in the specified datastore where disk needs
-    /// to be created. If not specified disk gets created at defualt
-    /// VStorageObject location on the specified datastore.
+    /// Relative location where disk has to be created, used in
+    /// `targetDatastore` and `datastore` parameters.
+    /// If not specified disk gets created at default *VStorageObject*
+    /// location of `targetDatastore` or `datastore`.
     ///
     /// ### provisioning_type
     /// Provisioining type of the disk as specified in above
@@ -223,6 +224,31 @@ impl HostVStorageObjectManager {
     /// *BaseConfigInfoDiskFileBackingInfoProvisioningType_enum*
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
+    ///
+    /// ### is_linked_clone
+    /// Indicates whether a linkedClone Disk needs to be created from the snapshot.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
+    /// ### target_id
+    /// The ID of the target virtual storage object.
+    /// For each new request, the ID should be a unique ID
+    /// complying to RFC4122V4 (generated randomly).
+    /// For retry requests with the same ID, all the other input
+    /// parameters are expected to remain same.
+    /// If not specified, a system generated ID will be assigned
+    /// to the newly created virtual storage object.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
+    /// ### target_datastore
+    /// The target datastore where the new disk needs to be created.
+    /// if not specified, the new disk will be created where
+    /// the source virtual storage object is located.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    /// 
+    /// Refers instance of *Datastore*.
     ///
     /// ## Returns:
     ///
@@ -239,8 +265,8 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn host_v_storage_object_create_disk_from_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>, provisioning_type: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = HostVStorageObjectCreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, provisioning_type, };
+    pub async fn host_v_storage_object_create_disk_from_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>, provisioning_type: Option<&str>, is_linked_clone: Option<bool>, target_id: Option<&crate::types::structs::Id>, target_datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = HostVStorageObjectCreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, provisioning_type, is_linked_clone, target_id, target_datastore, };
         let bytes = self.client.invoke("", "HostVStorageObjectManager", &self.mo_id, "HostVStorageObjectCreateDiskFromSnapshot_Task", Some(&input)).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
@@ -306,6 +332,17 @@ impl HostVStorageObjectManager {
     /// ### description
     /// A short description to be associated with the snapshot.
     ///
+    /// ### snapshot_id
+    /// The ID of the snapshot of the virtual storage object,
+    /// For each new request, the ID should be a unique ID
+    /// complying to RFC4122V4 (generated randomly).
+    /// For retry requests with the same ID, all the other input
+    /// parameters are expected to remain same.
+    /// If not specified, a random system generated snapshot ID
+    /// will be assigned to the snapshot.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
@@ -321,8 +358,8 @@ impl HostVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
+    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str, snapshot_id: Option<&crate::types::structs::Id>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, snapshot_id, };
         let bytes = self.client.invoke("", "HostVStorageObjectManager", &self.mo_id, "VStorageObjectCreateSnapshotEx_Task", Some(&input)).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
@@ -450,7 +487,7 @@ impl HostVStorageObjectManager {
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
-    /// Delete a virtual storage object and its assoicated backings.
+    /// Delete a virtual storage object and its associated backings.
     /// 
     /// Requires Datastore.FileManagement privilege on the datastore where the
     /// virtual storage object is located.
@@ -467,6 +504,13 @@ impl HostVStorageObjectManager {
     /// located.
     /// 
     /// Refers instance of *Datastore*.
+    ///
+    /// ### is_lc_parent_attached
+    /// Set to true if parent of linked clone is attached
+    /// to VM, set to false if parent of linked clone is
+    /// detached, unset is considered as false.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
     ///
     /// ## Returns:
     ///
@@ -490,13 +534,13 @@ impl HostVStorageObjectManager {
     /// The disk may be consumed and cannot be deleted.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn host_delete_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = HostDeleteVStorageObjectRequestType {id, datastore, };
+    pub async fn host_delete_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, is_lc_parent_attached: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = HostDeleteVStorageObjectRequestType {id, datastore, is_lc_parent_attached, };
         let bytes = self.client.invoke("", "HostVStorageObjectManager", &self.mo_id, "HostDeleteVStorageObject_Task", Some(&input)).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
-    /// Delete a virtual storage object and its assoicated backings.
+    /// Delete a virtual storage object and its associated backings.
     /// 
     /// Requires Datastore.FileManagement privilege on the datastore where the
     /// virtual storage object is located.
@@ -515,6 +559,13 @@ impl HostVStorageObjectManager {
     /// located.
     /// 
     /// Refers instance of *Datastore*.
+    ///
+    /// ### is_lc_parent_attached
+    /// Set to true if parent of linked clone is attached
+    /// to VM, set to false if parent of linked clone is
+    /// detached, unset is considered as false.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
     ///
     /// ## Returns:
     ///
@@ -535,8 +586,8 @@ impl HostVStorageObjectManager {
     /// The disk may be consumed and cannot be deleted.
     /// 
     /// ***TaskInProgress***: If the virtual storage object is busy.
-    pub async fn host_delete_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = HostDeleteVStorageObjectExRequestType {id, datastore, };
+    pub async fn host_delete_v_storage_object_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, is_lc_parent_attached: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = HostDeleteVStorageObjectExRequestType {id, datastore, is_lc_parent_attached, };
         let bytes = self.client.invoke("", "HostVStorageObjectManager", &self.mo_id, "HostDeleteVStorageObjectEx_Task", Some(&input)).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
@@ -836,7 +887,7 @@ impl HostVStorageObjectManager {
     /// ## Parameters:
     ///
     /// ### path
-    /// URL or datastore path to the virtual disk.
+    /// URL or datastore path to the running point of the virtual disk.
     ///
     /// ### name
     /// The descriptive name of the disk object. If
@@ -847,6 +898,16 @@ impl HostVStorageObjectManager {
     /// Optional Parameter describing if the control Flags should be changed to default values
     /// 
     /// ***Since:*** vSphere API Release 8.0.2.0
+    ///
+    /// ### id
+    /// The ID of the newly registered virtual storage object.
+    /// For each new request, the ID should be a unique ID complying
+    /// to RFC4122V4 (generated randomly).
+    /// For retry requests with the same ID, all the other input
+    /// parameters are expected to remain same.
+    /// If not specified, a system generated ID will be assigned.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
     ///
     /// ## Returns:
     ///
@@ -861,8 +922,8 @@ impl HostVStorageObjectManager {
     /// 
     /// ***AlreadyExists***: If disk is already registered as a
     /// virtual storage object.
-    pub async fn host_register_disk(&self, path: &str, name: Option<&str>, modify_control_flags: Option<bool>) -> Result<crate::types::structs::VStorageObject> {
-        let input = HostRegisterDiskRequestType {path, name, modify_control_flags, };
+    pub async fn host_register_disk(&self, path: &str, name: Option<&str>, modify_control_flags: Option<bool>, id: Option<&crate::types::structs::Id>) -> Result<crate::types::structs::VStorageObject> {
+        let input = HostRegisterDiskRequestType {path, name, modify_control_flags, id, };
         let bytes = self.client.invoke("", "HostVStorageObjectManager", &self.mo_id, "HostRegisterDisk", Some(&input)).await?;
         let result: crate::types::structs::VStorageObject = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
@@ -889,6 +950,9 @@ impl HostVStorageObjectManager {
     /// The specification for relocation of the virtual
     /// storage object.
     ///
+    /// ### is_lc_parent_attached
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
@@ -906,8 +970,8 @@ impl HostVStorageObjectManager {
     /// 
     /// ***NotFound***: If specified virtual storage object cannot
     /// be found.
-    pub async fn host_relocate_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VslmRelocateSpec) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = HostRelocateVStorageObjectRequestType {id, datastore, spec, };
+    pub async fn host_relocate_v_storage_object_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, spec: &crate::types::structs::VslmRelocateSpec, is_lc_parent_attached: Option<bool>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = HostRelocateVStorageObjectRequestType {id, datastore, spec, is_lc_parent_attached, };
         let bytes = self.client.invoke("", "HostVStorageObjectManager", &self.mo_id, "HostRelocateVStorageObject_Task", Some(&input)).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
@@ -985,6 +1049,48 @@ impl HostVStorageObjectManager {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
         let bytes = self.client.invoke("", "HostVStorageObjectManager", &self.mo_id, "RenameVStorageObjectEx", Some(&input)).await?;
         let result: crate::types::structs::VslmVClockInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
+    /// Repair a virtual disk having broken chain.
+    /// 
+    /// Requires Datastore.FileManagement privilege on the datastore where each
+    /// virtual disk resides.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
+    /// ## Parameters:
+    ///
+    /// ### id
+    /// The ID of the virtual disk to be repaired.
+    ///
+    /// ### datastore
+    /// The datastore where the virtual disk is located.
+    /// 
+    /// ***Required privileges:*** Datastore.FileManagement
+    /// 
+    /// Refers instance of *Datastore*.
+    ///
+    /// ## Returns:
+    ///
+    /// This method returns a *Task* object with which to
+    /// monitor the operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***FileFault***: If an error occurs while repairing the virtual disk.
+    /// 
+    /// ***NotFound***: If the specified virtual storage object cannot be found.
+    /// 
+    /// ***InvalidDatastore***: If the operation cannot be performed on the
+    /// datastore.
+    /// 
+    /// ***TaskInProgress***: If the virtual storage object is busy.
+    pub async fn repair_v_storage_object_chain_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = RepairVStorageObjectChainRequestType {id, datastore, };
+        let bytes = self.client.invoke("", "HostVStorageObjectManager", &self.mo_id, "RepairVStorageObjectChain_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves snapshot information of a given VStorageObject.
@@ -1404,6 +1510,48 @@ impl HostVStorageObjectManager {
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
+    /// Convert FCD disk to legacy disk.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
+    /// ## Parameters:
+    ///
+    /// ### id
+    /// The ID of the virtual storage object which
+    /// needs to be unregistered.
+    ///
+    /// ### datastore
+    /// The datastore where the virtual storage object is
+    /// located.
+    /// 
+    /// ***Required privileges:*** Datastore.FileManagement
+    /// 
+    /// Refers instance of *Datastore*.
+    ///
+    /// ## Returns:
+    ///
+    /// This method returns a *Task* object with which to
+    /// monitor the operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidState***: If unregister disk operation could not be performed.
+    /// 
+    /// ***NotFound***: If a given vstorage object id was not found.
+    /// 
+    /// ***InvalidDatastore***: If the operation cannot be performed on the datastore.
+    /// 
+    /// ***TaskInProgress***: If the virtual storage object is busy.
+    /// 
+    /// ***NotSupported***: If operation is not supported because of some underlying condition.
+    pub async fn unregister_disk_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = UnregisterDiskRequestType {id, datastore, };
+        let bytes = self.client.invoke("", "HostVStorageObjectManager", &self.mo_id, "UnregisterDisk_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
     /// Update metadata KV pairs to a virtual storage object.
     /// 
     /// And this API is by
@@ -1634,6 +1782,9 @@ struct HostVStorageObjectCreateDiskFromSnapshotRequestType<'a> {
     crypto: Option<&'a dyn crate::types::traits::CryptoSpecTrait>,
     path: Option<&'a str>,
     provisioning_type: Option<&'a str>,
+    is_linked_clone: Option<bool>,
+    target_id: Option<&'a crate::types::structs::Id>,
+    target_datastore: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 
 impl<'a> miniserde::Serialize for HostVStorageObjectCreateDiskFromSnapshotRequestType<'a> {
@@ -1674,6 +1825,18 @@ impl<'b, 'a> miniserde::ser::Map for HostVStorageObjectCreateDiskFromSnapshotReq
                     let Some(ref val) = self.data.provisioning_type else { continue; };
                     return Some((std::borrow::Cow::Borrowed("provisioningType"), val as &dyn miniserde::Serialize));
                 }
+                9 => {
+                    let Some(ref val) = self.data.is_linked_clone else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("isLinkedClone"), val as &dyn miniserde::Serialize));
+                }
+                10 => {
+                    let Some(ref val) = self.data.target_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targetId"), val as &dyn miniserde::Serialize));
+                }
+                11 => {
+                    let Some(ref val) = self.data.target_datastore else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targetDatastore"), val as &dyn miniserde::Serialize));
+                }
                 _ => return None,
             }
         }
@@ -1713,6 +1876,7 @@ struct VStorageObjectCreateSnapshotExRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
     description: &'a str,
+    snapshot_id: Option<&'a crate::types::structs::Id>,
 }
 
 impl<'a> miniserde::Serialize for VStorageObjectCreateSnapshotExRequestType<'a> {
@@ -1728,14 +1892,20 @@ struct VStorageObjectCreateSnapshotExRequestTypeSer<'b, 'a> {
 
 impl<'b, 'a> miniserde::ser::Map for VStorageObjectCreateSnapshotExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
-        let seq = self.seq;
-        self.seq += 1;
-        match seq {
-            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VStorageObjectCreateSnapshotExRequestType")),
-            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
-            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
-            3 => return Some((std::borrow::Cow::Borrowed("description"), &self.data.description as &dyn miniserde::Serialize)),
-            _ => return None,
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VStorageObjectCreateSnapshotExRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("description"), &self.data.description as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.snapshot_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("snapshotId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
         }
     }
 }
@@ -1832,6 +2002,7 @@ impl<'b, 'a> miniserde::ser::Map for VStorageObjectDeleteSnapshotEx2RequestTypeS
 struct HostDeleteVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
+    is_lc_parent_attached: Option<bool>,
 }
 
 impl<'a> miniserde::Serialize for HostDeleteVStorageObjectRequestType<'a> {
@@ -1847,19 +2018,26 @@ struct HostDeleteVStorageObjectRequestTypeSer<'b, 'a> {
 
 impl<'b, 'a> miniserde::ser::Map for HostDeleteVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
-        let seq = self.seq;
-        self.seq += 1;
-        match seq {
-            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostDeleteVStorageObjectRequestType")),
-            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
-            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
-            _ => return None,
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostDeleteVStorageObjectRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.is_lc_parent_attached else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("isLcParentAttached"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
         }
     }
 }
 struct HostDeleteVStorageObjectExRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
+    is_lc_parent_attached: Option<bool>,
 }
 
 impl<'a> miniserde::Serialize for HostDeleteVStorageObjectExRequestType<'a> {
@@ -1875,13 +2053,19 @@ struct HostDeleteVStorageObjectExRequestTypeSer<'b, 'a> {
 
 impl<'b, 'a> miniserde::ser::Map for HostDeleteVStorageObjectExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
-        let seq = self.seq;
-        self.seq += 1;
-        match seq {
-            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostDeleteVStorageObjectExRequestType")),
-            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
-            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
-            _ => return None,
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostDeleteVStorageObjectExRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.is_lc_parent_attached else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("isLcParentAttached"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
         }
     }
 }
@@ -2062,6 +2246,7 @@ struct HostRegisterDiskRequestType<'a> {
     path: &'a str,
     name: Option<&'a str>,
     modify_control_flags: Option<bool>,
+    id: Option<&'a crate::types::structs::Id>,
 }
 
 impl<'a> miniserde::Serialize for HostRegisterDiskRequestType<'a> {
@@ -2091,6 +2276,10 @@ impl<'b, 'a> miniserde::ser::Map for HostRegisterDiskRequestTypeSer<'b, 'a> {
                     let Some(ref val) = self.data.modify_control_flags else { continue; };
                     return Some((std::borrow::Cow::Borrowed("modifyControlFlags"), val as &dyn miniserde::Serialize));
                 }
+                4 => {
+                    let Some(ref val) = self.data.id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("id"), val as &dyn miniserde::Serialize));
+                }
                 _ => return None,
             }
         }
@@ -2100,6 +2289,7 @@ struct HostRelocateVStorageObjectRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
     spec: &'a crate::types::structs::VslmRelocateSpec,
+    is_lc_parent_attached: Option<bool>,
 }
 
 impl<'a> miniserde::Serialize for HostRelocateVStorageObjectRequestType<'a> {
@@ -2115,14 +2305,20 @@ struct HostRelocateVStorageObjectRequestTypeSer<'b, 'a> {
 
 impl<'b, 'a> miniserde::ser::Map for HostRelocateVStorageObjectRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
-        let seq = self.seq;
-        self.seq += 1;
-        match seq {
-            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostRelocateVStorageObjectRequestType")),
-            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
-            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
-            3 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
-            _ => return None,
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"HostRelocateVStorageObjectRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("spec"), &self.data.spec as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.is_lc_parent_attached else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("isLcParentAttached"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
         }
     }
 }
@@ -2182,6 +2378,34 @@ impl<'b, 'a> miniserde::ser::Map for RenameVStorageObjectExRequestTypeSer<'b, 'a
             1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
             2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
             3 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
+struct RepairVStorageObjectChainRequestType<'a> {
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+}
+
+impl<'a> miniserde::Serialize for RepairVStorageObjectChainRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RepairVStorageObjectChainRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RepairVStorageObjectChainRequestTypeSer<'b, 'a> {
+    data: &'b RepairVStorageObjectChainRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RepairVStorageObjectChainRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RepairVStorageObjectChainRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
             _ => return None,
         }
     }
@@ -2508,6 +2732,34 @@ impl<'b, 'a> miniserde::ser::Map for HostSetVirtualDiskUuidRequestTypeSer<'b, 'a
                 }
                 _ => return None,
             }
+        }
+    }
+}
+struct UnregisterDiskRequestType<'a> {
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+}
+
+impl<'a> miniserde::Serialize for UnregisterDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnregisterDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnregisterDiskRequestTypeSer<'b, 'a> {
+    data: &'b UnregisterDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UnregisterDiskRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnregisterDiskRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
         }
     }
 }

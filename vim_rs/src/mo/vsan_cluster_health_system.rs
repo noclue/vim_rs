@@ -215,6 +215,14 @@ impl VsanClusterHealthSystem {
     /// Mark issueFound flag as True if they
     /// are not consistent.
     /// 
+    /// As of vSphere API version 9.0, this API is deprecated and should not be
+    /// used. There is no dedicated vSAN health service version as the vSAN health
+    /// functionality is always part of vCenter Server and ESX host. The vSAN health
+    /// version will always equal the vCenter Server or ESX host version, which
+    /// can be queried directly from the vCenter Server or ESX host APIs. Use
+    /// *AboutInfo.version* from vCenter Server or the appropriate ESX host
+    /// version API instead.
+    /// 
     /// ***Required privileges:*** System.Read
     ///
     /// ## Parameters:
