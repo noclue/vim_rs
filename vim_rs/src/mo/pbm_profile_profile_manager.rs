@@ -157,7 +157,7 @@ impl PbmProfileProfileManager {
     /// 
     /// ***PbmFaultProfileStorageFault***: if there is an error in persisting the profile.
     /// 
-    /// ***PbmDuplicateName***: if a profile with the same name already exists.
+    /// ***PbmDuplicateName***: if a profile with the same name or K8s compliant name already exists.
     pub async fn pbm_create(&self, create_spec: &crate::types::structs::PbmCapabilityProfileCreateSpec) -> Result<crate::types::structs::PbmProfileId> {
         let input = PbmCreateRequestType {create_spec, };
         let bytes = self.client.invoke("pbm", "PbmProfileProfileManager", &self.mo_id, "PbmCreate", Some(&input)).await?;
@@ -225,7 +225,7 @@ impl PbmProfileProfileManager {
     /// Unique identifier for the vendor/owner of capability
     /// metadata. The specified vendor ID must match
     /// *PbmCapabilitySchemaVendorInfo*.*PbmCapabilitySchemaVendorInfo.vendorUuid*.
-    /// If omitted, the Server searchs all capability metadata registered with the system. If a
+    /// If omitted, the Server searches all capability metadata registered with the system. If a
     /// <code>vendorUuid</code> unknown to the Server is specified, empty results will be returned.
     ///
     /// ## Returns:
@@ -248,7 +248,7 @@ impl PbmProfileProfileManager {
     ///
     /// ### vendor_uuid
     /// Unique identifier for the vendor/owner of capability metadata.
-    /// If omitted, the server searchs all capability metadata registered
+    /// If omitted, the server searches all capability metadata registered
     /// with the system. The specified vendor ID must match
     /// *PbmCapabilitySchemaVendorInfo*.*PbmCapabilitySchemaVendorInfo.vendorUuid*.
     ///

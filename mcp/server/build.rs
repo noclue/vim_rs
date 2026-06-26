@@ -66,7 +66,7 @@ fn validate_api_database(mcp_root: &Path, workspace_root: &Path) {
     let mut stale_sources: Vec<String> = Vec::new();
 
     // Check OpenAPI spec
-    let openapi_spec = workspace_root.join("vim_build/data/vi_json_openapi_specification_v9_0_0_0_24798170.json");
+    let openapi_spec = workspace_root.join("vim_build/data/vi_json_openapi_specification_v9_1_0_0.json");
     if openapi_spec.exists() {
         println!("cargo:rerun-if-changed={}", openapi_spec.display());
         if is_newer_than(&openapi_spec, db_modified) {

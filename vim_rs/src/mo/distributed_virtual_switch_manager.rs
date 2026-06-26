@@ -103,6 +103,34 @@ impl DistributedVirtualSwitchManager {
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
+    /// Get all VPC network spans.
+    /// 
+    /// Each span is represented by a
+    /// *DistributedVirtualSwitchManagerSpanInfo*. If no spans exist,
+    /// the function may return an empty list.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    /// 
+    /// ***Required privileges:*** System.View
+    ///
+    /// ## Parameters:
+    ///
+    /// ### span_id
+    /// If spanId is specified, returns the span with the given ID.
+    /// If spanId is not specified, returns all spans currently configured in the
+    /// system.
+    ///
+    /// ## Errors:
+    ///
+    /// ***NotFound***: if the span does not exist.
+    pub async fn get_vpc_network_span(&self, span_id: Option<&str>) -> Result<Option<Vec<crate::types::structs::DistributedVirtualSwitchManagerSpanInfo>>> {
+        let input = GetVpcNetworkSpanRequestType {span_id, };
+        let bytes_opt = self.client.invoke_optional("", "DistributedVirtualSwitchManager", &self.mo_id, "GetVpcNetworkSpan", Some(&input)).await?;
+        match bytes_opt {
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+            None => Ok(None),
+        }
+    }
     /// Import the configuration of entities specified in
     /// *EntityBackupConfig*.
     /// 
@@ -491,6 +519,37 @@ impl<'b, 'a> miniserde::ser::Map for DvsManagerExportEntityRequestTypeSer<'b, 'a
             0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"DVSManagerExportEntityRequestType")),
             1 => return Some((std::borrow::Cow::Borrowed("selectionSet"), &self.data.selection_set as &dyn miniserde::Serialize)),
             _ => return None,
+        }
+    }
+}
+struct GetVpcNetworkSpanRequestType<'a> {
+    span_id: Option<&'a str>,
+}
+
+impl<'a> miniserde::Serialize for GetVpcNetworkSpanRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(GetVpcNetworkSpanRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct GetVpcNetworkSpanRequestTypeSer<'b, 'a> {
+    data: &'b GetVpcNetworkSpanRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for GetVpcNetworkSpanRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"GetVpcNetworkSpanRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.span_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("spanId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
         }
     }
 }

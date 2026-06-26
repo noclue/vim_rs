@@ -664,6 +664,44 @@ impl HostDatastoreSystem {
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
+    /// Resolves hostname of the NFS server.
+    /// 
+    /// For NFSv3, if volume name is given, then only the IP address of this
+    /// volume is updated. Otherwise, IP addresses of all the volumes mounted
+    /// with the hostname are updated. For NFSv4, irrespective of volume name,
+    /// IP addresses of all the volumes which are mounted with this hostname
+    /// are updated.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    /// 
+    /// ***Required privileges:*** Host.Config.Storage
+    ///
+    /// ## Parameters:
+    ///
+    /// ### host_name
+    /// Host name of the NFS server.
+    ///
+    /// ### volume_name
+    /// Volume name of the NFS file system.
+    ///
+    /// ### force
+    /// Flag for forced resolution of the host name of
+    /// the NFS server, even if the volumes are not in APD state.
+    /// If unset, force flag will be treated as false.
+    ///
+    /// ### is_nfs_41
+    /// Indicates whether host name is resolved for
+    /// NFSv41 file system.
+    /// If unset, host name is resolved for NFSv3 file system.
+    ///
+    /// ## Errors:
+    ///
+    /// ***PlatformConfigFault***: if remote host name resolution fails
+    /// for the NFS server.
+    pub async fn resolve_nfs_server_host_name(&self, host_name: &str, volume_name: Option<&str>, force: Option<bool>, is_nfs_41: Option<bool>) -> Result<()> {
+        let input = ResolveNfsServerHostNameRequestType {host_name, volume_name, force, is_nfs_41, };
+        self.client.invoke_void("", "HostDatastoreSystem", &self.mo_id, "ResolveNfsServerHostName", Some(&input)).await
+    }
     /// Set max queue depth for a specified NFS datastore.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
@@ -1220,6 +1258,49 @@ impl<'b, 'a> miniserde::ser::Map for ResignatureUnresolvedVmfsVolumeRequestTypeS
             0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ResignatureUnresolvedVmfsVolumeRequestType")),
             1 => return Some((std::borrow::Cow::Borrowed("resolutionSpec"), &self.data.resolution_spec as &dyn miniserde::Serialize)),
             _ => return None,
+        }
+    }
+}
+struct ResolveNfsServerHostNameRequestType<'a> {
+    host_name: &'a str,
+    volume_name: Option<&'a str>,
+    force: Option<bool>,
+    is_nfs_41: Option<bool>,
+}
+
+impl<'a> miniserde::Serialize for ResolveNfsServerHostNameRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(ResolveNfsServerHostNameRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct ResolveNfsServerHostNameRequestTypeSer<'b, 'a> {
+    data: &'b ResolveNfsServerHostNameRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for ResolveNfsServerHostNameRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"ResolveNfsServerHostNameRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("hostName"), &self.data.host_name as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.volume_name else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("volumeName"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.force else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("force"), val as &dyn miniserde::Serialize));
+                }
+                4 => {
+                    let Some(ref val) = self.data.is_nfs_41 else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("isNFS41"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
         }
     }
 }

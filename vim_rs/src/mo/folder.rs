@@ -156,7 +156,7 @@ impl Folder {
     /// Adds a set of new and existing hosts to the cluster.
     /// 
     /// This API is a composite API and performs the following tasks before hosts
-    /// become part of the specified cluter -
+    /// become part of the specified cluster -
     /// - Adds all new hosts as standalone hosts.
     /// - Move each host to the desired state.
     /// - Move each host to the cluster.
@@ -1269,7 +1269,7 @@ impl Folder {
             None => Ok(None),
         }
     }
-    /// List of permissions defined for this entity.
+    /// List of the permissions explicitly defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let pv_opt = self.client.fetch_property_raw("", "Folder", &self.mo_id, "permission").await?;
         match pv_opt {

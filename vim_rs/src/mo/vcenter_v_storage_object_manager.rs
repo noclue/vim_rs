@@ -4,7 +4,7 @@ use crate::core::client::{VimClient, Result};
 /// 
 /// VStorageObjectManager and SPBM policy support:
 /// All of the VStorageObjectManager APIs requiring ESXi host
-/// uses "Programatically selected" host to perform the actual operation.
+/// uses "Programmatically selected" host to perform the actual operation.
 /// If the selected host is of 6.5 version then policy would not be passed
 /// down to host. In that case, user operation would succeed but if user checks
 /// SPBM Entity Compliance, it will show "Mismatch" / "Non Compliant" as a
@@ -248,25 +248,52 @@ impl VcenterVStorageObjectManager {
     /// ### crypto
     /// Crypto information of the new disk.
     /// If unset and if profile contains an encryption iofilter and
-    /// if snapshto is unencrypted, then cyrpto will be of
+    /// if snapshto is unencrypted, then crypto will be of
     /// type CryptoSpecEncrypt, and filled with keyId that is
     /// automatically generated and keyProviderId that is the
     /// default kms cluster.
     /// If unset and if profile is a default policy and if snapshot
     /// is unenrypted, then crypto is treated as CryptoSpecNoOp.
     /// If unset and if profile contains an encryption iofilter and
-    /// if snapshot is encrypted, then cyrpto is treated as
+    /// if snapshot is encrypted, then crypto is treated as
     /// CryptoSpecNoOp.
     /// If unset and if profile is a default policy and if
-    /// snapshot is encrypted, then cyrpto is treated as
+    /// snapshot is encrypted, then crypto is treated as
     /// CryptoSpecDecrypt.
     /// To recrypt the disk during creating disk, crypto has to be
     /// present.
     ///
     /// ### path
-    /// Relative location in the specified datastore where disk needs
-    /// to be created. If not specified disk gets created at the
-    /// defualt VStorageObject location on the specified datastore.
+    /// Relative location where disk has to be created, used in
+    /// `targetDatastore` and `datastore` parameters.
+    /// If not specified disk gets created at default *VStorageObject*
+    /// location of `targetDatastore` or `datastore`.
+    ///
+    /// ### is_linked_clone
+    /// Indicates whether a linkedClone Disk needs to be created
+    /// from the snapshot.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
+    /// ### target_id
+    /// The ID of the target virtual storage object.
+    /// For each new request, the ID should be a unique ID
+    /// complying to RFC4122V4 (generated randomly).
+    /// For retry requests with the same ID, all the other input
+    /// parameters are expected to remain same.
+    /// If not specified, a system generated ID will be assigned
+    /// to the newly created virtual storage object.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
+    /// ### target_datastore
+    /// The target datastore where the new disk needs to be created.
+    /// if not specified, the new disk will be created where
+    /// the source virtual storage object is located.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    /// 
+    /// Refers instance of *Datastore*.
     ///
     /// ## Returns:
     ///
@@ -283,8 +310,8 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn create_disk_from_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = CreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, };
+    pub async fn create_disk_from_snapshot_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, snapshot_id: &crate::types::structs::Id, name: &str, profile: Option<&[Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>, crypto: Option<&dyn crate::types::traits::CryptoSpecTrait>, path: Option<&str>, is_linked_clone: Option<bool>, target_id: Option<&crate::types::structs::Id>, target_datastore: Option<&crate::types::structs::ManagedObjectReference>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CreateDiskFromSnapshotRequestType {id, datastore, snapshot_id, name, profile, crypto, path, is_linked_clone, target_id, target_datastore, };
         let bytes = self.client.invoke("", "VcenterVStorageObjectManager", &self.mo_id, "CreateDiskFromSnapshot_Task", Some(&input)).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
@@ -352,6 +379,17 @@ impl VcenterVStorageObjectManager {
     /// ### description
     /// A short description to be associated with the snapshot.
     ///
+    /// ### snapshot_id
+    /// The ID of the snapshot of the virtual storage object,
+    /// For each new request, the ID should be a unique ID
+    /// complying to RFC4122V4 (generated randomly).
+    /// For retry requests with the same ID, all the other input
+    /// parameters are expected to remain same.
+    /// If not specified, a random system generated snapshot ID
+    /// will be assigned to the snapshot.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
     /// ## Returns:
     ///
     /// Refers instance of *Task*.
@@ -367,8 +405,8 @@ impl VcenterVStorageObjectManager {
     /// ***InvalidState***: If the operation cannot be performed on the disk.
     /// 
     /// ***NotFound***: If specified virtual storage object cannot be found.
-    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str) -> Result<crate::types::structs::ManagedObjectReference> {
-        let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, };
+    pub async fn v_storage_object_create_snapshot_ex_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference, description: &str, snapshot_id: Option<&crate::types::structs::Id>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = VStorageObjectCreateSnapshotExRequestType {id, datastore, description, snapshot_id, };
         let bytes = self.client.invoke("", "VcenterVStorageObjectManager", &self.mo_id, "VStorageObjectCreateSnapshotEx_Task", Some(&input)).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
@@ -514,6 +552,8 @@ impl VcenterVStorageObjectManager {
     /// The datastore where the virtual storage object
     /// is located.
     /// 
+    /// ***Required privileges:*** Datastore.FileManagement
+    /// 
     /// Refers instance of *Datastore*.
     ///
     /// ## Returns:
@@ -547,7 +587,7 @@ impl VcenterVStorageObjectManager {
     /// Delete a virtual storage object and its associated backings.
     /// 
     /// Returns
-    /// the corresponding vclock upon succeess.
+    /// the corresponding vclock upon success.
     /// 
     /// Requires Datastore.FileManagement privilege on the datastore where the
     /// virtual storage object is located.
@@ -922,7 +962,7 @@ impl VcenterVStorageObjectManager {
     /// ## Returns:
     ///
     /// Returns a data structure specifying extents of the virtual disk
-    /// that have changed since the thime the changeId string was
+    /// that have changed since the time the changeId string was
     /// obtained.
     ///
     /// ## Errors:
@@ -948,6 +988,7 @@ impl VcenterVStorageObjectManager {
     }
     /// Get the virtual disk UUID.
     /// 
+    /// Requires Datastore.FileManagement privilege on the datastore where virtualDisk is present.
     /// The datacenter parameter may be omitted if a URL is used to name the disk.
     /// A URL has the form
     /// > _scheme_://_authority_/folder/_path_?dcPath=_dcPath_&amp;dsName=_dsName_
@@ -1040,6 +1081,8 @@ impl VcenterVStorageObjectManager {
     /// Reconciles/scans datastore for the virtual storage objects and returns
     /// the result.
     /// 
+    /// Requires Datastore.FileManagement privilege on the datastore.
+    /// 
     /// ***Since:*** vSphere API Release 9.0.0.0
     /// 
     /// ***Required privileges:*** System.View
@@ -1087,12 +1130,22 @@ impl VcenterVStorageObjectManager {
     /// ## Parameters:
     ///
     /// ### path
-    /// URL path to the virtual disk.
+    /// URL path to the running point of the virtual disk.
     ///
     /// ### name
     /// The descriptive name of the disk object. If
     /// unset the name will be automatically determined
     /// from the path. @see vim.vslm.BaseConfigInfo#name
+    ///
+    /// ### id
+    /// The ID of the newly registered virtual storage object.
+    /// For each new request, the ID should be a unique ID complying
+    /// to RFC4122V4 (generated randomly).
+    /// For retry requests with the same ID, all the other input
+    /// parameters are expected to remain same.
+    /// If not specified, a system generated ID will be assigned.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
     ///
     /// ## Returns:
     ///
@@ -1107,8 +1160,8 @@ impl VcenterVStorageObjectManager {
     /// 
     /// ***AlreadyExists***: If disk is already registered as a
     /// virtual storage object.
-    pub async fn register_disk(&self, path: &str, name: Option<&str>) -> Result<crate::types::structs::VStorageObject> {
-        let input = RegisterDiskRequestType {path, name, };
+    pub async fn register_disk(&self, path: &str, name: Option<&str>, id: Option<&crate::types::structs::Id>) -> Result<crate::types::structs::VStorageObject> {
+        let input = RegisterDiskRequestType {path, name, id, };
         let bytes = self.client.invoke("", "VcenterVStorageObjectManager", &self.mo_id, "RegisterDisk", Some(&input)).await?;
         let result: crate::types::structs::VStorageObject = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
@@ -1232,6 +1285,48 @@ impl VcenterVStorageObjectManager {
         let input = RenameVStorageObjectExRequestType {id, datastore, name, };
         let bytes = self.client.invoke("", "VcenterVStorageObjectManager", &self.mo_id, "RenameVStorageObjectEx", Some(&input)).await?;
         let result: crate::types::structs::VslmVClockInfo = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
+    /// Repair a virtual disk having broken chain.
+    /// 
+    /// Requires Datastore.FileManagement privilege on the datastore where each
+    /// virtual disk resides.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
+    /// ## Parameters:
+    ///
+    /// ### id
+    /// The ID of the virtual disk to be repaired.
+    ///
+    /// ### datastore
+    /// The datastore where the virtual disk is located.
+    /// 
+    /// ***Required privileges:*** Datastore.FileManagement
+    /// 
+    /// Refers instance of *Datastore*.
+    ///
+    /// ## Returns:
+    ///
+    /// This method returns a *Task* object with which to
+    /// monitor the operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***FileFault***: If an error occurs while repairing the virtual disk.
+    /// 
+    /// ***NotFound***: If the specified virtual storage object cannot be found.
+    /// 
+    /// ***InvalidDatastore***: If the operation cannot be performed on the
+    /// datastore.
+    /// 
+    /// ***TaskInProgress***: If the virtual storage object is busy.
+    pub async fn repair_v_storage_object_chain_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = RepairVStorageObjectChainRequestType {id, datastore, };
+        let bytes = self.client.invoke("", "VcenterVStorageObjectManager", &self.mo_id, "RepairVStorageObjectChain_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
     /// Retrieves snapshot disk details of a given snapshot.
@@ -1579,6 +1674,7 @@ impl VcenterVStorageObjectManager {
     }
     /// Set the virtual disk Uuid.
     /// 
+    /// Requires Datastore.FileManagement privilege on the datastore where virtualDisk is present.
     /// The datacenter parameter may be omitted if a URL is used to name the disk.
     /// A URL has the form
     /// > _scheme_://_authority_/folder/_path_?dcPath=_dcPath_&amp;dsName=_dsName_
@@ -1634,6 +1730,48 @@ impl VcenterVStorageObjectManager {
     pub async fn set_virtual_disk_uuid_ex_task(&self, name: &str, datacenter: Option<&crate::types::structs::ManagedObjectReference>, uuid: Option<&str>) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = SetVirtualDiskUuidExRequestType {name, datacenter, uuid, };
         let bytes = self.client.invoke("", "VcenterVStorageObjectManager", &self.mo_id, "SetVirtualDiskUuidEx_Task", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
+    /// Convert FCD disk to legacy disk.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ///
+    /// ## Parameters:
+    ///
+    /// ### id
+    /// The ID of the virtual storage object which
+    /// needs to be unregistered.
+    ///
+    /// ### datastore
+    /// The datastore where the virtual storage object is
+    /// located.
+    /// 
+    /// ***Required privileges:*** Datastore.FileManagement
+    /// 
+    /// Refers instance of *Datastore*.
+    ///
+    /// ## Returns:
+    ///
+    /// This method returns a *Task* object with which to
+    /// monitor the operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidState***: If unregister disk operation could not be performed.
+    /// 
+    /// ***NotFound***: If a given vstorage object id was not found.
+    /// 
+    /// ***InvalidDatastore***: If the operation cannot be performed on the datastore.
+    /// 
+    /// ***TaskInProgress***: If the virtual storage object is busy.
+    /// 
+    /// ***NotSupported***: If operation is not supported because of some underlying condition.
+    pub async fn unregister_disk_task(&self, id: &crate::types::structs::Id, datastore: &crate::types::structs::ManagedObjectReference) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = UnregisterDiskRequestType {id, datastore, };
+        let bytes = self.client.invoke("", "VcenterVStorageObjectManager", &self.mo_id, "UnregisterDisk_Task", Some(&input)).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
@@ -1746,6 +1884,8 @@ impl VcenterVStorageObjectManager {
     ///
     /// ### datastore
     /// The datastore to query for the virtual storage objects.
+    /// 
+    /// ***Required privileges:*** Datastore.FileManagement
     /// 
     /// Refers instance of *Datastore*.
     ///
@@ -1981,6 +2121,9 @@ struct CreateDiskFromSnapshotRequestType<'a> {
     profile: Option<&'a [Box<dyn crate::types::traits::VirtualMachineProfileSpecTrait>]>,
     crypto: Option<&'a dyn crate::types::traits::CryptoSpecTrait>,
     path: Option<&'a str>,
+    is_linked_clone: Option<bool>,
+    target_id: Option<&'a crate::types::structs::Id>,
+    target_datastore: Option<&'a crate::types::structs::ManagedObjectReference>,
 }
 
 impl<'a> miniserde::Serialize for CreateDiskFromSnapshotRequestType<'a> {
@@ -2016,6 +2159,18 @@ impl<'b, 'a> miniserde::ser::Map for CreateDiskFromSnapshotRequestTypeSer<'b, 'a
                 7 => {
                     let Some(ref val) = self.data.path else { continue; };
                     return Some((std::borrow::Cow::Borrowed("path"), val as &dyn miniserde::Serialize));
+                }
+                8 => {
+                    let Some(ref val) = self.data.is_linked_clone else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("isLinkedClone"), val as &dyn miniserde::Serialize));
+                }
+                9 => {
+                    let Some(ref val) = self.data.target_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targetId"), val as &dyn miniserde::Serialize));
+                }
+                10 => {
+                    let Some(ref val) = self.data.target_datastore else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("targetDatastore"), val as &dyn miniserde::Serialize));
                 }
                 _ => return None,
             }
@@ -2056,6 +2211,7 @@ struct VStorageObjectCreateSnapshotExRequestType<'a> {
     id: &'a crate::types::structs::Id,
     datastore: &'a crate::types::structs::ManagedObjectReference,
     description: &'a str,
+    snapshot_id: Option<&'a crate::types::structs::Id>,
 }
 
 impl<'a> miniserde::Serialize for VStorageObjectCreateSnapshotExRequestType<'a> {
@@ -2071,14 +2227,20 @@ struct VStorageObjectCreateSnapshotExRequestTypeSer<'b, 'a> {
 
 impl<'b, 'a> miniserde::ser::Map for VStorageObjectCreateSnapshotExRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
-        let seq = self.seq;
-        self.seq += 1;
-        match seq {
-            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VStorageObjectCreateSnapshotExRequestType")),
-            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
-            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
-            3 => return Some((std::borrow::Cow::Borrowed("description"), &self.data.description as &dyn miniserde::Serialize)),
-            _ => return None,
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VStorageObjectCreateSnapshotExRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+                3 => return Some((std::borrow::Cow::Borrowed("description"), &self.data.description as &dyn miniserde::Serialize)),
+                4 => {
+                    let Some(ref val) = self.data.snapshot_id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("snapshotId"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
         }
     }
 }
@@ -2555,6 +2717,7 @@ impl<'b, 'a> miniserde::ser::Map for ReconcileDatastoreInventoryExRequestTypeSer
 struct RegisterDiskRequestType<'a> {
     path: &'a str,
     name: Option<&'a str>,
+    id: Option<&'a crate::types::structs::Id>,
 }
 
 impl<'a> miniserde::Serialize for RegisterDiskRequestType<'a> {
@@ -2579,6 +2742,10 @@ impl<'b, 'a> miniserde::ser::Map for RegisterDiskRequestTypeSer<'b, 'a> {
                 2 => {
                     let Some(ref val) = self.data.name else { continue; };
                     return Some((std::borrow::Cow::Borrowed("name"), val as &dyn miniserde::Serialize));
+                }
+                3 => {
+                    let Some(ref val) = self.data.id else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("id"), val as &dyn miniserde::Serialize));
                 }
                 _ => return None,
             }
@@ -2671,6 +2838,34 @@ impl<'b, 'a> miniserde::ser::Map for RenameVStorageObjectExRequestTypeSer<'b, 'a
             1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
             2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
             3 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
+struct RepairVStorageObjectChainRequestType<'a> {
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+}
+
+impl<'a> miniserde::Serialize for RepairVStorageObjectChainRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(RepairVStorageObjectChainRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct RepairVStorageObjectChainRequestTypeSer<'b, 'a> {
+    data: &'b RepairVStorageObjectChainRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for RepairVStorageObjectChainRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RepairVStorageObjectChainRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
             _ => return None,
         }
     }
@@ -2986,6 +3181,34 @@ impl<'b, 'a> miniserde::ser::Map for SetVirtualDiskUuidExRequestTypeSer<'b, 'a> 
                 }
                 _ => return None,
             }
+        }
+    }
+}
+struct UnregisterDiskRequestType<'a> {
+    id: &'a crate::types::structs::Id,
+    datastore: &'a crate::types::structs::ManagedObjectReference,
+}
+
+impl<'a> miniserde::Serialize for UnregisterDiskRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(UnregisterDiskRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct UnregisterDiskRequestTypeSer<'b, 'a> {
+    data: &'b UnregisterDiskRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for UnregisterDiskRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"UnregisterDiskRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("id"), &self.data.id as &dyn miniserde::Serialize)),
+            2 => return Some((std::borrow::Cow::Borrowed("datastore"), &self.data.datastore as &dyn miniserde::Serialize)),
+            _ => return None,
         }
     }
 }

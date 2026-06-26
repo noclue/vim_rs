@@ -124,6 +124,7 @@
 /// - `TaskHistoryCollector`
 /// - `TaskManager`
 /// - `TenantTenantManager`
+/// - `TransitGateway`: ***Since:*** vSphere API Release 9.1.0.0
 /// - `UserDirectory`
 /// - `VStorageObjectManagerBase`
 /// - `VcenterVStorageObjectManager`
@@ -174,6 +175,7 @@
 /// - `VasaProvider`
 /// - `ManagedObject`
 /// - `CnsVolumeManager`
+/// - `DataProtectionHealthSystem`
 /// - `HostSpbm`
 /// - `VsanClusterPowerSystem`
 /// - `VsanDiagnosticsSystem`
@@ -186,6 +188,7 @@
 /// - `VsanPolicyManager`
 /// - `VsanRemoteDatastoreSystem`
 /// - `VsanResourceCheckSystem`
+/// - `VsanSiteMaintenanceSystem`
 /// - `VsanUpdateManager`
 /// - `VsanVdsSystem`
 /// - `VsanVumSystem`
@@ -335,6 +338,7 @@ pub enum MoTypesEnum {
     TaskHistoryCollector,
     TaskManager,
     TenantTenantManager,
+    TransitGateway,
     UserDirectory,
     VStorageObjectManagerBase,
     VcenterVStorageObjectManager,
@@ -385,6 +389,7 @@ pub enum MoTypesEnum {
     VasaProvider,
     ManagedObject,
     CnsVolumeManager,
+    DataProtectionHealthSystem,
     HostSpbm,
     VsanClusterPowerSystem,
     VsanDiagnosticsSystem,
@@ -397,6 +402,7 @@ pub enum MoTypesEnum {
     VsanPolicyManager,
     VsanRemoteDatastoreSystem,
     VsanResourceCheckSystem,
+    VsanSiteMaintenanceSystem,
     VsanUpdateManager,
     VsanVdsSystem,
     VsanVumSystem,
@@ -405,6 +411,22 @@ pub enum MoTypesEnum {
     VslmStorageLifecycleManager,
     VslmTask,
     VslmVStorageObjectManager,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Enumeration of reason codes representing why backend needs to report
+/// the disk being claimed already.
+/// 
+/// Possible values:
+/// - `maxVendorsExceeded`: The disk is already protected by the maximum number of vendors supported by the corresponding DPD.
+/// - `alreadyInUse`: The disk is already protected by the same vendor when a new protection request from the same vendor is received, or the allocation limit is reached for the vendor attempting to claim the disk.
+/// - `diskAlreadyClaimedReasonUnknown`: A fallback value used when a client sees an unknown DiskAlreadyClaimedReason.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum DpDiskAlreadyClaimedReasonEnum {
+    MaxVendorsExceeded,
+    AlreadyInUse,
+    DiskAlreadyClaimedReasonUnknown,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -543,29 +565,38 @@ pub enum DpSyncTypeEnum {
 /// Possible values:
 /// - `QueryPeInfo`: Support for QueryProtectedEntityInfo API.
 ///   
-///   Required minimal ESX vmodl version: '7.0.3.0'.
-/// - `PerDiskBaseSnapshotId`: Support for specifying per-disk base-snapshot ID when taking a vSphere Data Protection snapshot.
+///   Required minimal ESX vmodl
+///   version: '7.0.3.0'.
+/// - `PerDiskBaseSnapshotId`: Support for specifying per-disk base-snapshot ID when taking a vSphere
+///   Data Protection snapshot.
 ///   
 ///   Required minimal ESX vmodl version: '8.0.0.1'.
-/// - `QuiescedSnapshot`: Support for vSphere Data Protection application consistent and quiesced snapshots.
+/// - `QuiescedSnapshot`: Support for vSphere Data Protection application consistent and quiesced
+///   snapshots.
 ///   
 ///   Required minimal ESX vmodl version: '8.0.1.0'.
-/// - `RuntimeStats`: Support for querying DPD runtime stats with the QueryProtectedEntityInfo API.
+/// - `RuntimeStats`: Support for querying DPD runtime stats with the QueryProtectedEntityInfo
+///   API.
 ///   
 ///   Required minimal ESX vmodl version: '8.0.1.0'.
-/// - `PreservedExtents`: Support for DataIntegrity specific params (v1) when taking vSphere Data Protection snapshots.
+/// - `PreservedExtents`: Support for DataIntegrity specific params (v1) when taking vSphere Data
+///   Protection snapshots.
 ///   
-///   Required minimal ESX vmodl version: '8.0.1.0', and ESX version of '8.0.1' and patch level of at least '0.25'.
+///   Required minimal ESX vmodl version: '8.0.1.0', and
+///   ESX version of '8.0.1' and patch level of at least '0.25'.
 /// - `MultiPe`: Support for multi-PE consistency groups.
 ///   
-///   Required minimal ESX vmodl version: '8.0.2.0'.
+///   Required minimal ESX vmodl
+///   version: '8.0.2.0'.
 /// - `VsanNativeSnapshot`: Support for VSAN native snapshots.
 ///   
-///   Required minimal ESX vmodl version: '8.0.3.0'.
+///   Required minimal ESX vmodl version:
+///   '8.0.3.0'.
 /// - `SparseDiskEnhancement`: Enhancement for vSphere Data Protection operations over sparse disks.
 ///   
 ///   Required minimal ESX vmodl version: '8.0.3.0'.
-/// - `VSphereDpCapabilities_Unknown`: Fallback value for an unknown VSphereDataProtectionCapabilities seen by a client.
+/// - `VSphereDpCapabilities_Unknown`: Fallback value for an unknown VSphereDataProtectionCapabilities seen
+///   by a client.
 ///   
 /// ***Since:*** 8.0.0.4
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -579,6 +610,26 @@ pub enum DpVSphereDataProtectionCapabilitiesEnum {
     VsanNativeSnapshot,
     SparseDiskEnhancement,
     VSphereDpCapabilitiesUnknown,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// vSphere Data Protection capabilities (features) introduced in 9.0U1 release.
+/// 
+/// Some of the capabilities will be enabled in 9.0U1 release, while others will
+/// be enabled in a subsequent release. For those capabilities that will be
+/// enabled in 9.0U1 releases, the required minimal ESX vmodl api version is
+/// '9.1.0.0'.
+/// 
+/// Possible values:
+/// - `MultiInitiator`: Support for multiple LWD protection initiators.
+/// - `VsanDataIntegrity`: Support for returning vSAN disk checksums.
+/// - `PolicyEngine`: Support configuring HBR policy engine policy on LWD protected entities.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum DpVSphereDataProtectionCapabilities90U1Enum {
+    MultiInitiator,
+    VsanDataIntegrity,
+    PolicyEngine,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -869,7 +920,10 @@ pub enum HooksHookTypeEnum {
 /// - `INVALID_PROPERTIES`: The provided OVF properties are insufficient to satisfy the required
 ///   user configurable properties in the VM described in the vmSource.
 /// - `INVALID_TRANSITION`: The legacy agency requested for transition is not valid/cannot be
-///   mapped to systm Virtual Machines solution.
+///   mapped to system Virtual Machines solution.
+/// - `INVALID_CLUSTER_TRANSITION`: The LCCM agency requested for cluster transition is invalid because it
+///   cannot be mapped to the desired state specification or has a different
+///   scope than the cluster for transition.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum SolutionsInvalidReasonEnum {
     InvalidOvfDescriptor,
@@ -880,6 +934,7 @@ pub enum SolutionsInvalidReasonEnum {
     InvalidFolder,
     InvalidProperties,
     InvalidTransition,
+    InvalidClusterTransition,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -887,24 +942,31 @@ pub enum SolutionsInvalidReasonEnum {
 /// Describes possible reasons a solution is non compliant.
 /// 
 /// Possible values:
-/// - `WORKING`: There is ongoing work to acheive the desired state.
-/// - `ISSUE`: ESX Agent Manager has ecnountered am issue attempting to acheive the
+/// - `WORKING`: There is ongoing work to achieve the desired state.
+/// - `ISSUE`: ESX Agent Manager has encountered am issue attempting to achieve the
 ///   desired state.
 /// - `IN_HOOK`: ESX Agent Manager is awaiting user input to continue attempting to
-///   acheive the desired state.
+///   achieve the desired state.
+/// - `BLOCKED`: ESX Agent Manager is blocked from reaching the desired state.
+///   
+///   For
+///   example, this can occur if *SolutionsSequentialRemediationPolicy* is
+///   set and another deployment is in #ISSUE state.
 /// - `OBSOLETE_SPEC`: An obsoleted spec is currently in application for this solution.
 ///   
 ///   This state should take precedence over:
 ///   - *WORKING*
 ///   - *ISSUE*
 ///   - *IN_HOOK*
-/// - `NO_SPEC`: Application for this solutiona has never been requested with
+///   - *BLOCKED*
+/// - `NO_SPEC`: Application for this solution has never been requested with
 ///   *Solutions.Apply*.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum SolutionsNonComplianceReasonEnum {
     Working,
     Issue,
     InHook,
+    Blocked,
     ObsoleteSpec,
     NoSpec,
     /// This variant handles values not known at compile time.
@@ -916,9 +978,9 @@ pub enum SolutionsNonComplianceReasonEnum {
 /// Possible values:
 /// - `ALL_CLONES`: Utilizes all cloning methods available, will create initial snapshots
 ///   on the Virtual Machines.
-/// - `FULL_CLONES_ONLY`: Utilize only full copy cloning menthods, will create initial snapshots
+/// - `FULL_CLONES_ONLY`: Utilize only full copy cloning methods, will create initial snapshots
 ///   on the Virtual Machines.
-/// - `NO_CLONES`: Virtual Machiness will not be cloned from pre-existing deployment.
+/// - `NO_CLONES`: Virtual Machines will not be cloned from pre-existing deployment.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum SolutionsVmDeploymentOptimizationEnum {
     AllClones,
@@ -1025,6 +1087,7 @@ pub enum PbmDebugManagerKeystoreNameEnum {
 /// - `datastore`: Indicates a datastore.
 /// - `vsanObjectId`: Indicates a VSAN object
 /// - `fileShareId`: Indicates a file service
+/// - `cluster`: Indicates a cluster.
 /// - `unknown`: Unknown object type.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum PbmObjectTypeEnum {
@@ -1035,6 +1098,7 @@ pub enum PbmObjectTypeEnum {
     Datastore,
     VsanObjectId,
     FileShareId,
+    Cluster,
     Unknown,
     /// This variant handles values not known at compile time.
     Other_(String),
@@ -1372,6 +1436,8 @@ pub enum PbmProfileCategoryEnumEnum {
 ///   for PMem datastores
 /// - `VmcManagementProfile`: Indicates the system pre-created non-editable VMC default profile.
 /// - `VsanMaxDefaultProfile`: Indicates the system pre-created non-editable VSANMAX default profile.
+/// - `VsanEsaAutoManagedRaidProfile`: Indicates the new system pre-created non-editable vSAN ESA default
+///   profile.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum PbmSystemCreatedProfileTypeEnum {
     VsanDefaultProfile,
@@ -1379,6 +1445,7 @@ pub enum PbmSystemCreatedProfileTypeEnum {
     PmemDefaultProfile,
     VmcManagementProfile,
     VsanMaxDefaultProfile,
+    VsanEsaAutoManagedRaidProfile,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -1389,6 +1456,7 @@ pub enum PbmSystemCreatedProfileTypeEnum {
 /// Possible values:
 /// - `CREATE`: Indicates create operation of an entity.
 /// - `REGISTER`: Indicates register operation of an entity.
+/// - `UNREGISTER`: Indicate unregister operation of an entity.
 /// - `RECONFIGURE`: Indicates reconfigure operation of an entity.
 /// - `MIGRATE`: Indicates migrate operation of an entity.
 /// - `CLONE`: Indicates clone operation of an entity.
@@ -1396,6 +1464,7 @@ pub enum PbmSystemCreatedProfileTypeEnum {
 pub enum PbmOperationEnum {
     Create,
     Register,
+    Unregister,
     Reconfigure,
     Migrate,
     Clone,
@@ -1905,7 +1974,7 @@ pub enum BatchResultResultEnum {
     Other_(String),
 }
 
-/// HCIWorkflowState identifies the state of the cluser from the perspective of HCI
+/// HCIWorkflowState identifies the state of the cluster from the perspective of HCI
 /// workflow.
 /// 
 /// The workflow begins with in\_progress mode and can transition
@@ -2094,6 +2163,9 @@ pub enum DiagnosticManagerLogFormatEnum {
 /// - `provisioning`: vSphere Provisioning Traffic
 ///   
 ///   ***Since:*** vSphere API Release 9.0.0.0
+/// - `vSANiSCSI`: vSAN iSCSI Traffic
+///   
+///   ***Since:*** vSphere API Release 9.1.0.0
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
     Management,
@@ -2108,6 +2180,7 @@ pub enum DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
     BackupNfc,
     Nvmetcp,
     Provisioning,
+    VSaNiScsi,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -2430,7 +2503,7 @@ pub enum HostCryptoStateEnum {
 /// - `poweredOff`: The host was specifically powered off by the user through
 ///   VirtualCenter.
 ///   
-///   This state is not a cetain state, because
+///   This state is not a certain state, because
 ///   after VirtualCenter issues the command to power off the host,
 ///   the host might crash, or kill all the processes but fail to
 ///   power off.
@@ -2438,7 +2511,7 @@ pub enum HostCryptoStateEnum {
 ///   explicitly by the user, or automatically by DPM.
 ///   
 ///   This state
-///   is not a cetain state, because after VirtualCenter issues the
+///   is not a certain state, because after VirtualCenter issues the
 ///   command to put the host in standby state, the host might
 ///   crash, or kill all the processes but fail to power off. A host
 ///   that is exiting standby mode *exiting*
@@ -2492,7 +2565,7 @@ pub enum HostSystemRemediationStateStateEnum {
 /// - `entering`: The host is entering standby mode.
 /// - `exiting`: The host is exiting standby mode.
 /// - `in`: The host is in standby mode.
-/// - `none`: The host is not in standy mode, and it is not
+/// - `none`: The host is not in standby mode, and it is not
 ///   in the process of entering/exiting standby mode.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum HostStandbyModeEnum {
@@ -3133,6 +3206,150 @@ pub enum PlaceVmsXClusterSpecPlacementTypeEnum {
 pub enum ResourceConfigSpecScaleSharesBehaviorEnum {
     Disabled,
     ScaleCpuAndMemoryShares,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Possible values:
+/// - `AllElements`: When specified, the value on the right hand side
+///   (*SearchIndexPredicate.comparableValue*) is compared
+///   against each element in the array with the provided operator
+///   *SearchIndexPredicateComparisonOperator_enum*.
+///   
+///   The resource will be matched if the *SearchIndexPredicateComparisonOperator_enum*
+///   returns true for ALL elements in the array, otherwise it will
+///   be filtered out.
+/// - `AnyElement`: When specified, the value on the right hand side
+///   (*SearchIndexPredicate.comparableValue*) is compared
+///   against each element in the array with the provided operator
+///   *SearchIndexPredicateComparisonOperator_enum*.
+///   
+///   The resource will be matched if the *SearchIndexPredicateComparisonOperator_enum*
+///   returns true for ANY element in the array, otherwise it will
+///   be filtered out.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum SearchIndexPredicateArrayOperatorEnum {
+    AllElements,
+    AnyElement,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Possible values:
+/// - `Equal`: Equality operator.
+/// - `NotEqual`: Inequality operator.
+/// - `Greater`: Greater than operator.
+///   
+///   Applicable to numerical properties only, e.g. `long`,
+///   `double`. Cannot apply to `String` or `boolean`.
+/// - `GreaterOrEqual`: Greater than or equal to operator.
+///   
+///   Applicable to numerical properties only, e.g. `long`,
+///   `double`. Cannot apply to `String` or `boolean`.
+/// - `Less`: Less than operator.
+///   
+///   Applicable to numerical properties only, e.g. `long`,
+///   `double`. Cannot apply to `String` or `boolean`.
+/// - `LessOrEqual`: Less than or equal to operator.
+///   
+///   Applicable to numerical properties only, e.g. `long`,
+///   `double`. Cannot apply to `String` or `boolean`.
+/// - `In`: Checks for equality with at least one of a list of values.
+///   
+///   Must be used either with *SearchIndexPredicate.comparableList* or
+///   with *Predicate#comparableQueryIndex*. In the second
+///   case the query result set is used as _comparableList_.
+/// - `NotIn`: Checks for inequality with all values in a list.
+///   
+///   If the property is
+///   equal to any of the values in the list, evaluates to `false`.
+///   Otherwise, evaluates to `true` and the property is matched.
+///   
+///   Must be used either with *SearchIndexPredicate.comparableList* or
+///   with *Predicate#comparableQueryIndex*. In the second
+///   case the query result set is used as _comparableList_.
+/// - `Like`: Pattern matching operator applicable to `String` properties.
+///   
+///   The `*` character is used to define wildcard, i.e. substitute
+///   for zero or more missing letters) before or after a given sequence
+///   of characters. If used at the end, it is interpreted as _search
+///   for all properties whose value starts with the given characters_.
+///   If used at the beginning, it is interpreted as _search for all
+///   properties whose value ends with the given characters_.
+///   
+///   For instance, if the input pattern is _\*vm_ it will match
+///   property with value _linux-vm_, but not _vm-linux_.
+///   If the input pattern is _vm\*_ it will match
+///   property with value _vm-linux_, but not _linux-vm_.
+///   
+///   The wildcard character cannot be used in between other characters,
+///   i.e. in the middle of a pattern. It can be use more than once in a
+///   single pattern only in case it surrounds the pattern, i.e. both in
+///   the beginning and at the end of the pattern to perform substring
+///   (infix) search.
+///   
+///   For instance, if the input pattern is _\*vm\*_ it will match
+///   property with value _linux-vm-1_, _linux-vm_,
+///   _old-vm-linux_, _vm-linux_ and _vm_.
+///   
+///   The backslash character `\` is used for escaping. Hence,
+///   wildcard is escaped with the sequence _\\\*_ and the escape
+///   character itself with the sequence _\\\\_.
+/// - `NotLike`: Opposite of `Like`.
+///   
+///   The resource will be matched if the
+///   property does NOT contain the provided pattern.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum SearchIndexPredicateComparisonOperatorEnum {
+    Equal,
+    NotEqual,
+    Greater,
+    GreaterOrEqual,
+    Less,
+    LessOrEqual,
+    In,
+    NotIn,
+    Like,
+    NotLike,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Possible values:
+/// - `ClusterComputeResource`
+/// - `ComputeResource`
+/// - `Datacenter`
+/// - `Datastore`
+/// - `DistributedVirtualPortgroup`
+/// - `DistributedVirtualSwitch`
+/// - `Folder`
+/// - `HostSystem`
+/// - `Network`
+/// - `OpaqueNetwork`
+/// - `ResourcePool`
+/// - `ServiceInstance`
+/// - `StoragePod`
+/// - `VirtualApp`
+/// - `VirtualMachine`
+/// - `VmwareDistributedVirtualSwitch`
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum SearchIndexQuerySpecResourceTypeEnum {
+    ClusterComputeResource,
+    ComputeResource,
+    Datacenter,
+    Datastore,
+    DistributedVirtualPortgroup,
+    DistributedVirtualSwitch,
+    Folder,
+    HostSystem,
+    Network,
+    OpaqueNetwork,
+    ResourcePool,
+    ServiceInstance,
+    StoragePod,
+    VirtualApp,
+    VirtualMachine,
+    VmwareDistributedVirtualSwitch,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -5370,6 +5587,47 @@ pub enum VsanCapabilityType90Enum {
     Other_(String),
 }
 
+/// Represents a feature capability for 90u1 release.
+/// 
+/// Possible values:
+/// - `vsanhcimeshdit`
+/// - `vsanhcimeshmixmode`
+/// - `vsanxvchcimeshscv2`
+/// - `dataserviceprecheck`
+/// - `vsansitemmandtakeover`
+/// - `vsanscclientv2`
+/// - `vsan2globaldedupv2`
+/// - `perfsvcdhciv2`
+/// - `automanagedraid`
+/// - `vsanvmdiskplacementxvc`
+/// - `vsaneffectivecapacity`
+/// - `immutablesnapshot`
+/// - `vsan2globaldedupencryption`
+/// - `vsan2compressionconfig`
+/// - `fileservicefds`
+/// - `vsancyberrecovery`
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VsanCapabilityType91Enum {
+    Vsanhcimeshdit,
+    Vsanhcimeshmixmode,
+    Vsanxvchcimeshscv2,
+    Dataserviceprecheck,
+    Vsansitemmandtakeover,
+    Vsanscclientv2,
+    Vsan2Globaldedupv2,
+    Perfsvcdhciv2,
+    Automanagedraid,
+    Vsanvmdiskplacementxvc,
+    Vsaneffectivecapacity,
+    Immutablesnapshot,
+    Vsan2Globaldedupencryption,
+    Vsan2Compressionconfig,
+    Fileservicefds,
+    Vsancyberrecovery,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
 /// The vSAN cluster health action ID enumeration.
 /// 
 /// Actions are remediation operations user can take to resolve health issues.
@@ -5489,6 +5747,31 @@ pub enum VsanClusterHealthCategoryEnumEnum {
     Other_(String),
 }
 
+/// vSAN component state types.
+/// 
+/// Possible values:
+/// - `ACTIVE`: The component is in a normal active state.
+/// - `ACTIVE_STALE`: The component is in a normal state but the component
+///   is not in sync with the vSAN cluster.
+/// - `ABSENT`: The component is absent.
+/// - `ABSENT_RESYNC`: The component is absent, and there are some bytes need
+///   to be synced for this component.
+/// - `DEGRADED`: The component is in degraded state.
+/// - `RECONFIG`: The component is in reconfiguration state.
+/// - `UNKNOWN`: The component state is unknown.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VsanComponentStatesEnum {
+    Active,
+    ActiveStale,
+    Absent,
+    AbsentResync,
+    Degraded,
+    Reconfig,
+    Unknown,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
 /// The vSAN Datastore type.
 /// 
 /// It can be used in
@@ -5510,6 +5793,45 @@ pub enum VsanDatastoreTypeEnum {
     Vsandirect,
     Pmem,
     VsanDatastoreTypeUnknown,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// The vSAN HCI Mesh data-in-transit encryption health issue enumeration.
+/// 
+/// Possible values:
+/// - `hostHasNoHciMeshDitEncConfigForTheServerCluster`: This cluster(as the client cluster) host doesn't have HCI Mesh data-in-transit encryption configuration for the peer server cluster.
+/// - `hostHasNoHciMeshDitEncConfigForTheClientCluster`: The peer server cluster host doesn't have HCI Mesh data-in-transit encryption configuration for this cluster(as the client cluster).
+/// - `clusterServerHciMeshDitEncIsEnabledButTheHostIsNot`: This cluster(as the client cluster) has enabled HCI Mesh data-in-transit encryption for the peer server cluster, but the host in this cluster has not.
+/// - `clusterClientHciMeshDitEncIsEnabledButTheHostIsNot`: The peer server cluster has enabled HCI Mesh data-in-transit encryption for the this cluster (as the client cluster), but the peer server cluster host has not.
+/// - `hostServerHciMeshDitEncIsEnabledButTheClusterIsNot`: The host in this cluster(as the client cluster) has enabled HCI Mesh data-in-transit encryption for the peer server cluster, but this cluster has not.
+/// - `hostClientHciMeshDitEncIsEnabledButTheClusterIsNot`: The peer server cluster host has enabled HCI Mesh data-in-transit encryption for this cluster (as the client cluster), but the peer server cluster has not.
+/// - `hostServerHciMeshDitEncIsNotInSettledState`: The host in this cluster(as the client cluster) HCI Mesh data-in-transit encryption is not in "settled" state for the peer server cluster.
+/// - `hostHasDifferentServerHciMeshDitEncRekeyInterval`: The host in this cluster(as the client cluster) HCI Mesh data-in-transit encryption configuration "rekey interval" is inconsistent with this cluster configuration for the peer server cluster.
+/// - `hostClientHciMeshDitEncStateIsNotSettled`: The peer server cluster host HCI Mesh data-in-transit encryption is not in "settled" state for this cluster(as the client cluster).
+/// - `clientHostIncapable`: This cluster(as the client cluster) host is incapable of HCI Mesh data-in-transit encryption.
+/// - `serverHostIncapable`: The peer server cluster host is incapable of HCI Mesh data-in-transit encryption.
+/// - `clientHciMeshDitEncIsEnabledButTheServerIsNot`: This cluster(as the client cluster) has enabled HCI Mesh data-in-transit encryption for the peer server cluster, but the peer server cluster has not.
+/// - `serverHciMeshDitEncIsEnabledButTheClientIsNot`: The peer server cluster has enabled HCI Mesh data-in-transit encryption for this cluster(as the server cluster), but this cluster has not.
+/// - `serverHciMeshDitEncIsNotSettled`: The peer server cluster HCI Mesh data-in-transit encryption is not in "settled" state.
+/// - `VsanHciMeshDitEncryptionIssue_Unknown`: Unknown issue.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VsanHciMeshDitEncryptionIssueEnum {
+    HostHasNoHciMeshDitEncConfigForTheServerCluster,
+    HostHasNoHciMeshDitEncConfigForTheClientCluster,
+    ClusterServerHciMeshDitEncIsEnabledButTheHostIsNot,
+    ClusterClientHciMeshDitEncIsEnabledButTheHostIsNot,
+    HostServerHciMeshDitEncIsEnabledButTheClusterIsNot,
+    HostClientHciMeshDitEncIsEnabledButTheClusterIsNot,
+    HostServerHciMeshDitEncIsNotInSettledState,
+    HostHasDifferentServerHciMeshDitEncRekeyInterval,
+    HostClientHciMeshDitEncStateIsNotSettled,
+    ClientHostIncapable,
+    ServerHostIncapable,
+    ClientHciMeshDitEncIsEnabledButTheServerIsNot,
+    ServerHciMeshDitEncIsEnabledButTheClientIsNot,
+    ServerHciMeshDitEncIsNotSettled,
+    VsanHciMeshDitEncryptionIssueUnknown,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -5659,6 +5981,10 @@ pub enum VsanIscsiTargetServiceProcessStatusEnum {
 /// - `hbrPersist`
 /// - `traceobject`
 /// - `esaObjectOverhead`
+/// - `pgNamespace`
+/// - `clusterDBNamespace`
+/// - `aggregatedSystemObjects`
+/// - `nativeObjectStore`
 /// - `VsanObjectTypeEnum_Unknown`
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum VsanObjectTypeEnumEnum {
@@ -5695,6 +6021,10 @@ pub enum VsanObjectTypeEnumEnum {
     HbrPersist,
     Traceobject,
     EsaObjectOverhead,
+    PgNamespace,
+    ClusterDbNamespace,
+    AggregatedSystemObjects,
+    NativeObjectStore,
     VsanObjectTypeEnumUnknown,
     /// This variant handles values not known at compile time.
     Other_(String),
@@ -6016,6 +6346,76 @@ pub enum QuerySelectionNameTypeEnum {
     Other_(String),
 }
 
+/// Enumerates different modes of volume synchronization.
+/// 
+/// This enumeration is used within *CnsSyncVolumeSpec* to specify
+/// the scope of a synchronization operation, allowing for partial or full updates
+/// of volume information. Enumerations represent non-overlapping and mutually
+/// exclusive set of attributes, which would be synced.
+/// 
+/// Possible values:
+/// - `SPACE_USAGE`: Specifies that only space usage information for the volume should be synchronized.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum CnsSyncVolumeModeEnum {
+    SpaceUsage,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Enumerates possible target volume type for unregister volume operation.
+/// 
+/// Possible values:
+/// - `FCD`: Represents a default block volume target type, managed as a First Class Disk (FCD).
+/// - `LEGACY_DISK`: Represents a block volume target type managed as a legacy virtual disk.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum CnsUnregisterTargetVolumeTypeEnum {
+    Fcd,
+    LegacyDisk,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Enumerates types of backing for batch attach operations.
+/// 
+/// These values correspond to VirtualDevice.FileBackingInfo subclasses.
+/// Note: RawDiskMappingVer2BackingInfo and PartitionedRawDiskMappingVer2BackingInfo
+/// are not included because they are only supported for VMware server.
+/// 
+/// Possible values:
+/// - `FlatVer1BackingInfo`: Flat disk format version 1.
+///   
+///   See *VirtualDiskFlatVer1BackingInfo*
+/// - `FlatVer2BackingInfo`: Flat disk format version 2.
+///   
+///   See *VirtualDiskFlatVer2BackingInfo*
+/// - `SparseVer1BackingInfo`: Sparse disk format version 1.
+///   
+///   See *VirtualDiskSparseVer1BackingInfo*
+/// - `SparseVer2BackingInfo`: Sparse disk format version 2.
+///   
+///   See *VirtualDiskSparseVer2BackingInfo*
+/// - `RawDiskMappingVer1BackingInfo`: Raw disk mapping.
+///   
+///   See *VirtualDiskRawDiskMappingVer1BackingInfo*
+/// - `SeSparseBackingInfo`: Space efficient sparse disk format.
+///   
+///   See *VirtualDiskSeSparseBackingInfo*
+/// - `LocalPMemBackingInfo`: Local persistent memory backing.
+///   
+///   See *VirtualDiskLocalPMemBackingInfo*
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum CnsVolumeBackingTypeEnum {
+    FlatVer1BackingInfo,
+    FlatVer2BackingInfo,
+    SparseVer1BackingInfo,
+    SparseVer2BackingInfo,
+    RawDiskMappingVer1BackingInfo,
+    SeSparseBackingInfo,
+    LocalPMemBackingInfo,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
 /// Enumerate types of container volume based on the type of backing for the
 /// volume.
 /// 
@@ -6109,7 +6509,7 @@ pub enum DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
 ///   For NSX backing type, We only support ephemeral portgroup type.
 ///   If *DistributedVirtualPortgroupPortgroupType_enum* is
 ///   ephemeral, A *DistributedVirtualPort* will be
-///   dynamicly created by NSX when the virtual machine is reconfigured
+///   dynamically created by NSX when the virtual machine is reconfigured
 ///   to connect to the portgroup.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum DistributedVirtualPortgroupBackingTypeEnum {
@@ -6324,6 +6724,23 @@ pub enum DistributedVirtualSwitchHostMemberHostComponentStateEnum {
     Warning,
     Disconnected,
     Down,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Enumerates the possible runtime statuses for enabling Performance NIC Offload.
+/// 
+/// Possible values:
+/// - `SUCCEEDED`: Performance NIC offload is successfully enabled.
+/// - `IN_PROGRESS`: Performance NIC offload is in the process of being enabled.
+/// - `FAILED`: The attempt to enable Performance NIC Offload has failed.
+///   
+/// ***Since:*** vSphere API Release 9.1.0.0
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum {
+    Succeeded,
+    InProgress,
+    Failed,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -6942,7 +7359,7 @@ pub enum CannotEnableVmcpForClusterReasonEnum {
 }
 
 /// Possible values:
-/// - `resourcePool`: Move out of the resouce pool
+/// - `resourcePool`: Move out of the resource pool
 /// - `cluster`: Move out of the cluster
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum CannotMoveFaultToleranceVmMoveTypeEnum {
@@ -6993,7 +7410,7 @@ pub enum CannotUseNetworkReasonEnum {
 /// Possible values:
 /// - `HostNetworkMisconfiguration`: There is a problem with the host network configuration.
 /// - `HostMisconfiguration`: There is a problem with the host configuration.
-/// - `InsufficientPrivileges`: The privileges were insuffient for the operation.
+/// - `InsufficientPrivileges`: The privileges were insufficient for the operation.
 /// - `NoPrimaryAgentAvailable`: There was no running primary agent available to contact.
 ///   
 ///   Check that your other hosts don't have HA errors
@@ -7229,7 +7646,7 @@ pub enum ReplicationDiskConfigFaultReasonForFaultEnum {
 /// - `invalidDestinationIpAddress`: Invalid destination IP address
 /// - `invalidDestinationPort`: Invalid destination port
 /// - `invalidExtraVmOptions`: Malformed extra options list
-/// - `staleGenerationNumber`: Mis-matching generation number (stale)
+/// - `staleGenerationNumber`: Mismatching generation number (stale)
 /// - `reconfigureVmReplicationIdNotAllowed`: Attempting to re-configure the VM replication ID
 /// - `cannotRetrieveVmReplicationConfiguration`: Could not retrieve the VM configuration
 /// - `replicationAlreadyEnabled`: Attempting to re-enable replication for the VM
@@ -7601,6 +8018,26 @@ pub enum HostBiosInfoFirmwareTypeEnum {
     Other_(String),
 }
 
+/// Indicates the type of DRTM launch that occurred on the platform.
+/// 
+/// TPM attestation may be used to definitively determine the DRTM
+/// launch details, including the Measured Launch Environment (MLE).
+/// 
+/// Possible values:
+/// - `none`: No DRTM launch occurred.
+/// - `intelTxt`: Intel TXT DRTM launch occurred.
+/// - `amdSkinit`: AMD SKINIT DRTM launch occurred.
+///   
+/// ***Since:*** vSphere API Release 9.1.0.0
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum HostCapabilityDrtmTypesEnum {
+    None,
+    IntelTxt,
+    AmdSkinit,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
 /// Deprecated as of vSphere API 7.0, use
 /// *VmFaultToleranceConfigIssueReasonForIssue_enum*.
 /// 
@@ -7665,7 +8102,7 @@ pub enum HostReplayUnsupportedReasonEnum {
 /// - `priority`: only the unmap priority is supported
 /// - `fixed`: the unmap bandwidth can be set as a fixed value
 /// - `dynamic`: the unmap bandwidth can be set as a range, where the actual
-///   bandwidth will be dynamically throttled by the backened
+///   bandwidth will be dynamically throttled by the backend
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum HostCapabilityUnmapMethodSupportedEnum {
     Priority,
@@ -7755,6 +8192,23 @@ pub enum HostCertificateManagerCertificateInfoCertificateStatusEnum {
 pub enum HostCertificateManagerCertificateKindEnum {
     Machine,
     VasaClient,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Algorithm and key size used to generate the private key.
+/// 
+/// Possible values:
+/// - `RSA_2048`: RSA private key size: 2048 bits
+/// - `RSA_3072`: RSA private key size: 3072 bits
+/// - `RSA_4096`: RSA private key size: 4096 bits
+///   
+/// ***Since:*** vSphere API Release 9.1.0.0
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum HostCertificateManagerCryptoAlgorithmEnum {
+    Rsa2048,
+    Rsa3072,
+    Rsa4096,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -8991,6 +9445,9 @@ pub enum HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
 /// - `ops`: Stack key used for ops applications
 ///   
 ///   ***Since:*** vSphere API Release 8.0.0.1
+/// - `vnetworking`: Stack key used for vnetworking
+///   
+///   ***Since:*** vSphere API Release 9.1.0.0
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum HostNetStackInstanceSystemStackKeyEnum {
     DefaultTcpipStack,
@@ -8998,6 +9455,7 @@ pub enum HostNetStackInstanceSystemStackKeyEnum {
     VSphereProvisioning,
     Mirror,
     Ops,
+    Vnetworking,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -9400,6 +9858,34 @@ pub enum HostPatchManagerReasonEnum {
     HasDependentPatch,
     ConflictPatch,
     ConflictLib,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Valid modes for a DirectPath device.
+/// 
+/// Possible values:
+/// - `none`: Device is not available for use by virtual machines.
+/// - `host`: Device is configured for host use, and is not available to virtual machines.
+/// - `directPath`: Device is available for virtual machines as a DirectPath device.
+/// - `enhancedDirectPath`: Device is available for virtual machines as an Enhanced DirectPath device.
+/// - `vGpuSameSize`: Device is available for virtual machines in Nvidia vGPU same size mode.
+/// - `vGpuMixedSize`: Device is available for virtual machines in Nvidia vGPU mixed size mode.
+/// - `systemSelect`: System selects the mode.
+///   
+///   After configuration, the device will be in one
+///   of the other valid modes for a DirectPath device.
+/// 
+/// ***Since:*** vSphere API Release 9.1.0.0
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum HostPciPassthruInfoDirectPathDeviceModeEnum {
+    None,
+    Host,
+    DirectPath,
+    EnhancedDirectPath,
+    VGpuSameSize,
+    VGpuMixedSize,
+    SystemSelect,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -9861,6 +10347,7 @@ pub enum HostServicePolicyEnum {
 /// - `uninitialized`
 /// - `initialized`
 /// - `working`
+/// - `disabledBios`: ***Since:*** vSphere API Release 9.1.0.0
 /// 
 /// ***Since:*** vSphere API Release 7.0.1.0
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -9868,6 +10355,7 @@ pub enum HostSevInfoSevStateEnum {
     Uninitialized,
     Initialized,
     Working,
+    DisabledBios,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -10039,6 +10527,7 @@ pub enum HostSystemIdentificationInfoIdentifierEnum {
 /// - `initialized`
 /// - `configured`
 /// - `ready`
+/// - `disabledBios`: ***Since:*** vSphere API Release 9.1.0.0
 /// 
 /// ***Since:*** vSphere API Release 9.0.0.0
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -10047,6 +10536,7 @@ pub enum HostTdxInfoTdxStateEnum {
     Initialized,
     Configured,
     Ready,
+    DisabledBios,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -10169,6 +10659,9 @@ pub enum HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
 /// - `vsanExternal`: The VirtualNic is used for external vSAN traffic.
 ///   
 ///   ***Since:*** vSphere API Release 9.0.0.0
+/// - `vnetworking`: The VirtualNic is used for Tunnel Endpoint(TEP) of overlay network.
+///   
+///   ***Since:*** vSphere API Release 9.1.0.0
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum HostVirtualNicManagerNicTypeEnum {
     Vmotion,
@@ -10184,6 +10677,7 @@ pub enum HostVirtualNicManagerNicTypeEnum {
     NvmeTcp,
     NvmeRdma,
     VsanExternal,
+    Vnetworking,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -10409,7 +10903,7 @@ pub enum VsanIoInsightStateEnum {
 /// - `nonavailabilityrelatedreconfig`: The object is fully in compliance with the NumberOfFailuresToTolerate policy and the data movement is to satisfy another policy change.
 /// - `nonavailabilityrelatedincompliance`: This is a catch all state when none of the other states apply.
 ///   
-///   An object with this state is not compliant with its current policy, but is meeting the availablity (NumberOfFailuresToTolerate) policy. The object might be in this state because vSAN is not able to meet a non-availability related policy such as NumberOfDiskStripesPerObject because of lack of available resources. User need check the vSAN system resources like the number of fault domains and hosts, free capacity to make it compliant.
+///   An object with this state is not compliant with its current policy, but is meeting the availability (NumberOfFailuresToTolerate) policy. The object might be in this state because vSAN is not able to meet a non-availability related policy such as NumberOfDiskStripesPerObject because of lack of available resources. User need check the vSAN system resources like the number of fault domains and hosts, free capacity to make it compliant.
 /// - `healthy`: The object is in perfect condition, exactly aligned with its policy, and is not currently being moved or otherwise worked on.
 /// - `reducedavailabilitywithpolicypending`
 /// - `reducedavailabilitywithpolicypendingfailed`
@@ -10450,10 +10944,10 @@ pub enum VsanObjectHealthStateEnum {
 /// - `STATE_SOCKET_TIMEOUT`: connection to peer failed with socket timeout error.
 /// - `STATE_HTTP_EXCEPTION`: connection to peer failed with http exception.
 /// - `STATE_MEMORY_ERROR`: connection to peer failed with memory error.
-/// - `STATE_SYSTEM_ERROR`: connection to peer failed with system rrror.
+/// - `STATE_SYSTEM_ERROR`: connection to peer failed with system error.
 /// - `STATE_OS_ERROR`: connection to peer failed with os error.
 /// - `STATE_GENERAL_EXCEPTION`: connection to peer failed with general exception.
-/// - `STATE_UNKNOWN`: connectino to peer failed with unknown issue.
+/// - `STATE_UNKNOWN`: connection to peer failed with unknown issue.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum VsanPeerHostConnectivityHealthStateEnum {
     StateGood,
@@ -10814,7 +11308,7 @@ pub enum HostProfileManagerAnswerFileStatusEnum {
 ///   failed.
 ///   
 ///   May treat this as a warning.
-/// - `state_not_satisfied`: The required state is not satisfied so host profiel apply cannot
+/// - `state_not_satisfied`: The required state is not satisfied so host profile apply cannot
 ///   be done.
 /// - `exit_maintenancemode_failed`: Exit maintenance mode failed.
 /// - `canceled`: The remediation was canceled.
@@ -10952,7 +11446,7 @@ pub enum WeekOfMonthEnum {
 /// Possible values:
 /// - `cluster`: clusters are the scope
 /// - `host`: individual hosts are the scope
-/// - `storagePod`: datastore cluster is teh scope
+/// - `storagePod`: datastore cluster is the scope
 /// - `datastore`: individual datastores are the scope
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum PlacementAffinityRuleRuleScopeEnum {
@@ -11236,7 +11730,7 @@ pub enum VchaClusterStateEnum {
 ///   takes over the role of Active vCenter Server upon failover.
 /// - `witness`: Node is having a role of Witness.
 ///   
-///   In this role, node acts as a quorom
+///   In this role, node acts as a quorum
 ///   node for avoiding the classic split-brain problem.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum VchaNodeRoleEnum {
@@ -11301,6 +11795,9 @@ pub enum VirtualMachineCertThumbprintHashAlgorithmEnum {
 ///   
 ///   The virtual machine clone
 ///   will not have access to the original virtual machine's TPM secrets.
+///   If the virtual TPM operates in read-only mode (
+///   VirtualTPM#readOnly}), the clone virtual machine will be configured
+///   with a regularly operating (non read-only) virtual TPM.
 /// 
 /// ***Since:*** vSphere API Release 8.0.0.1
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -11415,7 +11912,7 @@ pub enum VirtualMachineConfigSpecEncryptedVMotionModesEnum {
 /// - `set`: Take a client-specified set of WWNs (specified in "wwn" property) and
 ///   assign them to the virtual machine.
 ///   
-///   If the new WWN quntity are more
+///   If the new WWN quantity are more
 ///   than existing then we will append them to the existing list of WWNs.
 /// - `remove`: Remove the currently assigned WWNs from the virtual machine.
 /// - `extend`: Generate a new set of WWNs and append them to the existing list
@@ -11905,6 +12402,21 @@ pub enum VirtualMachineToolsVersionStatusEnum {
 pub enum GuestOsDescriptorFirmwareTypeEnum {
     Bios,
     Efi,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Guest CPU architecture constants.
+/// 
+/// Possible values:
+/// - `x86`: x86 architecture.
+/// - `arm`: ARM architecture.
+///   
+/// ***Since:*** vSphere API Release 9.1.0.0
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VirtualMachineGuestArchitectureEnum {
+    X86,
+    Arm,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -12587,7 +13099,7 @@ pub enum VirtualMachineRelocateDiskMoveOptionsEnum {
 
 /// Deprecated as of vSphere API 5.0.
 /// 
-/// The set of tranformations that can be performed on the virtual disks
+/// The set of transformations that can be performed on the virtual disks
 /// as part of the copy.
 /// 
 /// Possible values:
@@ -12763,7 +13275,7 @@ pub enum UpgradePolicyEnum {
 ///   this is a subset of wireless controllers.
 /// - `wusb`: Wireless device related to the Wireless USB standard,
 ///   this is a subset of wireless controllers,
-/// - `pda`: Palm PDA, and Micorsoft ActiveSync PDA.
+/// - `pda`: Palm PDA, and Microsoft ActiveSync PDA.
 /// - `vendor_specific`: Device that has an interface using a vendor-specific protocol.
 /// - `other`: Other miscellaneous device.
 /// - `unknownFamily`: There was an error in determining this device's classes
@@ -12915,6 +13427,134 @@ pub enum VirtualHardwareMotherboardLayoutEnum {
 pub enum VirtualMachineVirtualPMemSnapshotModeEnum {
     IndependentPersistent,
     IndependentEraseonrevert,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Specifies the strictness of a placement policy to be enforced while
+/// placing a VM at different stages of a VM's lifecycle.
+/// 
+/// This field may not apply to all types of placement policies derived from
+/// *VmPlacementPolicy*.
+/// 
+/// Possible values:
+/// - `PreferredDuringPlacementPreferredDuringExecution`: A VmPlacementPolicy with this strictness is enforced on a best-effort
+///   basis whenever a VM linked with this policy (via that VM's
+///   *VirtualMachineConfigSpec.vmPlacementPolicies* or
+///   *VirtualMachineRelocateSpec.vmPlacementPolicies*) needs to be placed.
+///   
+///   Below is a detailed explanation:
+///   If an operation requires specifying a VM's *VirtualMachineConfigSpec* or
+///   *VirtualMachineRelocateSpec* and there is a VmPlacementPolicy specified in
+///   that *VirtualMachineConfigSpec.vmPlacementPolicies* or
+///   *VirtualMachineRelocateSpec.vmPlacementPolicies* with this
+///   VmPlacementPolicyStrictness, then it means the following:
+///   
+///   (1) This VmPlacementPolicy will be considered as "preferred". This
+///   means that if a VM with this VmPlacementPolicy cannot be successfully
+///   placed on any host due to this policy, then the policy will be dropped
+///   and a placement recommendation can still be generated even if it
+///   results in violating that policy. This is denoted by the
+///   "PreferredDuringPlacement" part of this strictness value.
+///   
+///   (2) This VmPlacementPolicy will be enforced for that operation as well
+///   as beyond that when that VM is in execution. For example, when the VM
+///   needs to be relocated for putting its host into maintenance mode, then
+///   this VmPlacementPolicy will be enforced on a best-effort basis.
+///   Similarly, when the VM needs to be restarted as part of vSphere HA
+///   failover, then this VmPlacementPolicy will be enforced on a best-effort
+///   basis.
+///   This is denoted by the "PreferredDuringExecution" part of this
+///   strictness value. Note that if a VM needs to be relocated by DRS for
+///   load-balancing, then any VmPlacementPolicy is considered as "Required"
+///   and DRS load-balancing is not included in the "PreferredDuringExecution"
+///   part of this strictness value.
+/// - `RequiredDuringPlacementPreferredDuringExecution`: A VmPlacementPolicy with this strictness is enforced on a strict
+///   basis while placing the VM for the operation where this policy has
+///   been specified via *VirtualMachineConfigSpec.vmPlacementPolicies* or
+///   *VirtualMachineRelocateSpec.vmPlacementPolicies*).
+///   
+///   After that, the same policy
+///   will be enforced on a best-effort basis.
+///   
+///   Below is a detailed explanation:
+///   If an operation requires specifying a VM's *VirtualMachineConfigSpec* or
+///   *VirtualMachineRelocateSpec* and there is a VmPlacementPolicy specified in
+///   that *VirtualMachineConfigSpec.vmPlacementPolicies* or
+///   *VirtualMachineRelocateSpec.vmPlacementPolicies* with this
+///   VmPlacementPolicyStrictness, then it means the following:
+///   
+///   (1) This VmPlacementPolicy will be considered as "required" while
+///   computing the placement for that operation. This means that if a VM
+///   with this VmPlacementPolicy cannot be successfully placed on any host
+///   due to this policy, then the policy will still be honored and no
+///   placement recommendation will be generated for that operation. The
+///   policy must be satisfied to find a successful placement target for
+///   the VM for that operation. This is denoted by the
+///   "RequiredDuringPlacement" part of this strictness value.
+///   
+///   (2) This VmPlacementPolicy will be enforced for that operation as well
+///   as beyond that when that VM is in execution. For example, when the VM
+///   needs to be relocated for putting its host into maintenance mode, then
+///   this VmPlacementPolicy will be enforced on a best-effort basis.
+///   Similarly, when the VM needs to be restarted as part of vSphere HA
+///   failover, then this VmPlacementPolicy will be enforced on a best-effort
+///   basis.
+///   This is denoted by the "PreferredDuringExecution" part of this
+///   strictness value. Note that if a VM needs to be relocated by DRS for
+///   load-balancing, then any VmPlacementPolicy is considered as "Required"
+///   and DRS load-balancing is not included in the "PreferredDuringExecution"
+///   part of this strictness value.
+/// 
+/// ***Since:*** vSphere API Release 9.1.0.0
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
+    PreferredDuringPlacementPreferredDuringExecution,
+    RequiredDuringPlacementPreferredDuringExecution,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Defines the infrastructure topology for which a VM placement policy
+/// should be enforced.
+/// 
+/// For example, for any policy that defines affinity or anti-affinity
+/// between VMs, the topology defines the granularity of the infrastructure
+/// at which the affinity or anti-affinity needs to be enforced.
+/// If 2 VMs are anti-affined, then:
+/// \- Topology of host means those 2 VMs should be placed on 2 different hosts.
+/// \- Topology of zone means those 2 VMs should be placed in 2 different zones.
+/// 
+/// Note:
+/// \- This field may not apply to all types of placement policies derived from
+/// *VmPlacementPolicy*.
+/// 
+/// Possible values:
+/// - `Host`: Any VM placement policy with this *VmPlacementPolicyVmPlacementPolicyTopology_enum* will
+///   be enforced at the granularity of ESXi host.
+///   
+///   For example, a VM-VM affinity policy with this
+///   *VmPlacementPolicyVmPlacementPolicyTopology_enum* would imply that the associated VMs
+///   need to be placed on the same ESXi host.
+/// - `ClusterComputeResource`: Any VM placement policy with this *VmPlacementPolicyVmPlacementPolicyTopology_enum* will be
+///   enforced at the granularity of a vCenter compute cluster.
+///   
+///   For example, a VM-VM affinity policy with this
+///   *VmPlacementPolicyVmPlacementPolicyTopology_enum* would imply that the associated VMs
+///   need to be placed in the same vCenter compute cluster.
+/// - `VSphereZone`: Any VM placement policy with this *VmPlacementPolicyVmPlacementPolicyTopology_enum* will be
+///   enforced at the granularity of vSphere Zone.
+///   
+///   For example, a VM-VM affinity policy with this
+///   *VmPlacementPolicyVmPlacementPolicyTopology_enum* would imply that the associated VMs
+///   need to be placed in the same vSphere Zone.
+/// 
+/// ***Since:*** vSphere API Release 9.1.0.0
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VmPlacementPolicyVmPlacementPolicyTopologyEnum {
+    Host,
+    ClusterComputeResource,
+    VSphereZone,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -13274,6 +13914,21 @@ pub enum VirtualDiskDeltaDiskFormatEnum {
 pub enum VirtualDiskDeltaDiskFormatVariantEnum {
     VmfsSparseVariant,
     VsanSparseVariant,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// The disk chain broken issue constants.
+/// 
+/// Possible values:
+/// - `noIssue`: Indicates the disk chain has no issue
+/// - `cidMismatch`: Indicates the disk chain is broken due to cid mismatch
+///   
+/// ***Since:*** vSphere API Release 9.1.0.0
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VirtualDiskDiskChainBrokenIssueEnum {
+    NoIssue,
+    CidMismatch,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -14109,6 +14764,31 @@ pub enum VimVsanMountPrecheckTypeEnum {
     Other_(String),
 }
 
+/// This indicates the precheck type when mounting a remote vSAN datastore and
+/// enabling remote DIT at the same time.
+/// 
+/// Possible values:
+/// - `serverClusterConsistency`: Check whether the cluster specified by remote DIT config backs up the remote datastore.
+/// - `clientRemoteDITCapability`: Check whether the client cluster has remote DIT capability.
+/// - `serverRemoteDITCapability`: Check whether the server cluster has remote DIT capability.
+/// - `rekeyIntervalValid`: Check whether the rekey interval is valid
+/// - `datastoreBelongToServerCluster`: Check whether the datastore being mounted belongs to the server cluster
+/// - `remoteDITInfoRetrieval`: Check whether remote DIT related datastore infomation can be retrieved.
+/// - `remoteDITVersionCheck`: Check whether the existing client cluster versions meet the minimum
+///   requirement for remote DIT.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VimVsanMountPrecheckTypeDitEnum {
+    ServerClusterConsistency,
+    ClientRemoteDitCapability,
+    ServerRemoteDitCapability,
+    RekeyIntervalValid,
+    DatastoreBelongToServerCluster,
+    RemoteDitInfoRetrieval,
+    RemoteDitVersionCheck,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
 /// Remediate action type.
 /// 
 /// When vSAN cluster remediate, vSAN will check the performance service configuration and
@@ -14240,6 +14920,25 @@ pub enum VsanResourceCheckStatusTypeEnum {
     ResourceCheckNoRecentValue,
     ResourceCheckNotSupported,
     ResourceCheckStatusTypeUnknown,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Defines the different fault domain maintenance states.
+/// 
+/// Possible values:
+/// - `notInMaintenanceMode`: Indicates the fault domain is not in maintenance mode.
+/// - `inMaintenanceMode`: Indicates the fault domain is in maintenance mode.
+/// - `enteringMaintenanceMode`: Indicates the fault domain is entering maintenance mode.
+/// - `exitingMaintenanceMode`: Indicates the fault domain is exiting maintenance mode.
+/// - `SiteMaintenanceState_Unknown`: Represents the value when the lower version client cannot recognize the enum value.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VsanSiteMaintenanceStateEnum {
+    NotInMaintenanceMode,
+    InMaintenanceMode,
+    EnteringMaintenanceMode,
+    ExitingMaintenanceMode,
+    SiteMaintenanceStateUnknown,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -14420,12 +15119,33 @@ pub enum VsanConfigTypeEnum {
 /// Possible values:
 /// - `diskGroup`: represent disk group for regular vSAN.
 /// - `singleTier`: represent vSAN ESA storage pool.
+/// - `cyberRecoveryTier`: represent vSAN ESA cyber recovery storage tier.
 /// - `VsanDiskCompatibilityType_Unknown`: represent the value when the lower version client cannot recognize the enum value.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum VsanDiskCompatibilityTypeEnum {
     DiskGroup,
     SingleTier,
+    CyberRecoveryTier,
     VsanDiskCompatibilityTypeUnknown,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// vSAN HCI Mesh Config limits
+/// 
+/// Possible values:
+/// - `MaxClientClusters`: For a server cluster, the maximum number of client clusters that can connect to it.
+/// - `MaxServerClusters`: For a client cluster, the maximum number of server clusters it can connect by this cluster.
+/// - `MaxClientVcenters`: For a server vCenter, the maximum number of client vCenters it can connect to it.
+/// - `MaxServerVcenters`: For a client vCenter, the maximum number of server vCenters it can connect by this vCenter.
+/// - `ConfigLimitType_unknown`: Unknown config key.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VimVsanVsanHciMeshConfigLimitsEnum {
+    MaxClientClusters,
+    MaxServerClusters,
+    MaxClientVcenters,
+    MaxServerVcenters,
+    ConfigLimitTypeUnknown,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -14461,6 +15181,7 @@ pub enum VsanDiskCompatibilityTypeEnum {
 /// - `VsanEsaPreChecks`
 /// - `vcsaInstallerForVsanEsa`
 /// - `upgradePreCheckForVCF`
+/// - `snapshotCreationPrecheck`
 /// - `VsanHealthPerspective_Unknown`
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum VsanHealthPerspectiveEnum {
@@ -14486,6 +15207,7 @@ pub enum VsanHealthPerspectiveEnum {
     VsanEsaPreChecks,
     VcsaInstallerForVsanEsa,
     UpgradePreCheckForVcf,
+    SnapshotCreationPrecheck,
     VsanHealthPerspectiveUnknown,
     /// This variant handles values not known at compile time.
     Other_(String),
@@ -14654,6 +15376,10 @@ pub enum VsanSiteLocationTypeEnum {
 /// - `pgSnapshotsHealth`: represent the snapshot health stats of the protection groups.
 /// - `vmSnapshotsHealth`: represent the snapshot health stats of the virtual machines.
 /// - `vmMembershipChanges`: represent the stats of VM membership changes.
+/// - `dpObjsInfo`: represent the list of dp objects(i.e.
+///   
+///   pg namespace, cluster db namespace).
+/// - `generalHealth`: represent the health object which is consumable by vSAN Health
 /// - `VsanSnapHealthType_Unknown`: represent the value when the lower version client cannot recognize the enum value.
 #[derive(Clone, PartialEq, Eq, Hash)]
 pub enum VsanSnapHealthTypeEnum {
@@ -14661,6 +15387,8 @@ pub enum VsanSnapHealthTypeEnum {
     PgSnapshotsHealth,
     VmSnapshotsHealth,
     VmMembershipChanges,
+    DpObjsInfo,
+    GeneralHealth,
     VsanSnapHealthTypeUnknown,
     /// This variant handles values not known at compile time.
     Other_(String),
@@ -15411,6 +16139,13 @@ pub enum BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
 /// - `virtualDiskFormat`: The type of VirtualDisk for 4k native disk/array support.
 ///   
 ///   ***Since:*** vSphere API Release 9.0.0.0
+/// - `sharedFileBacking`: Flag indicates if file backing is shared across
+///   multiple FCD disk chains.
+///   
+///   ***Since:*** vSphere API Release 9.1.0.0
+/// - `linkedCloneDetails`: Base disk path of a linked clone disk and linked clone parent ID
+///   
+///   ***Since:*** vSphere API Release 9.1.0.0
 /// 
 /// ***Since:*** vSphere API Release 8.0.0.1
 #[derive(Clone, PartialEq, Eq, Hash)]
@@ -15437,6 +16172,8 @@ pub enum VslmDiskInfoFlagEnum {
     NativeSnapshotSupported,
     CbtEnabled,
     VirtualDiskFormat,
+    SharedFileBacking,
+    LinkedCloneDetails,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -15470,6 +16207,72 @@ pub enum VslmVStorageObjectControlFlagEnum {
     KeepAfterDeleteVm,
     DisableRelocation,
     EnableChangedBlockTracking,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Virtual storage object metadata operation constants.
+/// 
+/// Possible values:
+/// - `UPDATE`: Update metadata of linked clone if specified.
+/// - `RESET`: Reset metadata of linked clone to default
+///   value if specified.
+/// - `NO_OP`: If no metadata change is required to be performed.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum VslmVsoPostRelocateChangeMetadataOperationEnum {
+    Update,
+    Reset,
+    NoOp,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Possible authentication schemes.
+/// 
+/// Possible values:
+/// - `Basic`: Authentication scheme which transmits credentials as
+///   user-id/password pairs, encoded using Base64.
+///   
+///   See RFC 7617 for details.
+/// - `Bearer`: Authentication scheme which transmits opaque access token string.
+///   
+///   See RFC 6750 for details.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum AuthenticationRequiredAuthenticationSchemeEnum {
+    Basic,
+    Bearer,
+    /// This variant handles values not known at compile time.
+    Other_(String),
+}
+
+/// Possible reasons why an access request is declined.
+/// 
+/// Possible values:
+/// - `invalid_request`: The request is missing a required parameter, includes an unsupported
+///   parameter or parameter value, repeats the same parameter, uses more
+///   than one method for including an access token, or is otherwise
+///   malformed.
+/// - `invalid_token`: The access token is invalid, expired, revoked or is invalid for
+///   other reasons.
+///   
+///   The client may request a new access token and
+///   retry the request.
+/// - `insufficient_scope`: The request requires higher privileges than provided by the access
+///   token.
+/// - `registration_required`: vCenter requires registration of the full user claims to enable the
+///   provided access token use in vCenter.
+///   
+///   The client application should
+///   obtain the full claims token from the authorization server on the
+///   "ovl" field specified URI and register the full claims token with
+///   vCenter. After registration, the client application should retry
+///   the request.
+#[derive(Clone, PartialEq, Eq, Hash)]
+pub enum AuthenticationRequiredErrorTypeEnum {
+    InvalidRequest,
+    InvalidToken,
+    InsufficientScope,
+    RegistrationRequired,
     /// This variant handles values not known at compile time.
     Other_(String),
 }
@@ -15635,242 +16438,246 @@ miniserde::make_place!(Place);
 static MO_TYPES_ENUM_MAP: phf::Map<&'static str, MoTypesEnum> = ::phf::Map {
     key: 12913932095322966823,
     disps: &[
-        (2, 86),
-        (0, 1),
-        (0, 12),
-        (0, 40),
-        (0, 0),
-        (0, 94),
-        (1, 50),
-        (0, 25),
-        (0, 159),
-        (12, 6),
-        (5, 71),
-        (0, 24),
-        (0, 10),
-        (0, 8),
-        (12, 1),
-        (0, 118),
-        (0, 3),
-        (0, 49),
-        (2, 23),
-        (0, 0),
-        (2, 20),
-        (5, 120),
-        (2, 4),
-        (0, 0),
-        (0, 0),
-        (19, 79),
-        (0, 28),
-        (16, 121),
-        (0, 105),
-        (0, 17),
-        (0, 159),
+        (0, 158),
+        (1, 68),
+        (0, 163),
         (0, 4),
-        (1, 0),
-        (0, 65),
-        (0, 53),
+        (1, 5),
+        (0, 40),
+        (1, 38),
+        (5, 172),
+        (11, 169),
+        (0, 0),
+        (0, 2),
+        (1, 64),
+        (0, 183),
+        (1, 44),
+        (0, 5),
+        (0, 0),
+        (1, 180),
+        (5, 180),
+        (0, 119),
+        (5, 162),
+        (0, 51),
+        (1, 2),
+        (19, 55),
+        (3, 20),
         (0, 3),
-        (2, 47),
-        (8, 132),
-        (83, 136),
+        (2, 0),
+        (0, 133),
+        (1, 165),
+        (0, 1),
+        (5, 160),
+        (2, 58),
+        (0, 158),
+        (0, 104),
+        (12, 190),
+        (0, 17),
+        (53, 195),
+        (0, 32),
+        (1, 106),
+        (0, 90),
+        (1, 137),
     ],
     entries: &[
-        ("VslmSessionManager", MoTypesEnum::VslmSessionManager),
-        ("ManagedEntity", MoTypesEnum::ManagedEntity),
-        ("HostServiceSystem", MoTypesEnum::HostServiceSystem),
-        ("VirtualMachineGuestCustomizationManager", MoTypesEnum::VirtualMachineGuestCustomizationManager),
-        ("SmsStorageManager", MoTypesEnum::SmsStorageManager),
-        ("LicenseManager", MoTypesEnum::LicenseManager),
-        ("Datacenter", MoTypesEnum::Datacenter),
-        ("VsanIoInsightManager", MoTypesEnum::VsanIoInsightManager),
-        ("HostBootDeviceSystem", MoTypesEnum::HostBootDeviceSystem),
-        ("ResourcePool", MoTypesEnum::ResourcePool),
-        ("ExtensibleManagedObject", MoTypesEnum::ExtensibleManagedObject),
-        ("PbmServiceInstance", MoTypesEnum::PbmServiceInstance),
-        ("VsanFileServiceSystem", MoTypesEnum::VsanFileServiceSystem),
-        ("SearchIndex", MoTypesEnum::SearchIndex),
-        ("HostCpuSchedulerSystem", MoTypesEnum::HostCpuSchedulerSystem),
-        ("HostHealthStatusSystem", MoTypesEnum::HostHealthStatusSystem),
-        ("HostDatastoreSystem", MoTypesEnum::HostDatastoreSystem),
-        ("ManagedObject", MoTypesEnum::ManagedObject),
-        ("HostProfileManager", MoTypesEnum::HostProfileManager),
-        ("HostDatastoreBrowser", MoTypesEnum::HostDatastoreBrowser),
-        ("View", MoTypesEnum::View),
-        ("CnsVolumeManager", MoTypesEnum::CnsVolumeManager),
-        ("HostLocalAccountManager", MoTypesEnum::HostLocalAccountManager),
-        ("HostVFlashManager", MoTypesEnum::HostVFlashManager),
-        ("DatastoreNamespaceManager", MoTypesEnum::DatastoreNamespaceManager),
-        ("VsanPolicyManager", MoTypesEnum::VsanPolicyManager),
-        ("HostEsxAgentHostManager", MoTypesEnum::HostEsxAgentHostManager),
-        ("FailoverClusterConfigurator", MoTypesEnum::FailoverClusterConfigurator),
-        ("PbmPlacementSolver", MoTypesEnum::PbmPlacementSolver),
-        ("ContainerView", MoTypesEnum::ContainerView),
-        ("HostAutoStartManager", MoTypesEnum::HostAutoStartManager),
-        ("HostVStorageObjectManager", MoTypesEnum::HostVStorageObjectManager),
-        ("ComputeResource", MoTypesEnum::ComputeResource),
-        ("PbmCapabilityMetadataManager", MoTypesEnum::PbmCapabilityMetadataManager),
-        ("HttpNfcLease", MoTypesEnum::HttpNfcLease),
-        ("VirtualDiskManager", MoTypesEnum::VirtualDiskManager),
-        ("SessionManager", MoTypesEnum::SessionManager),
-        ("CustomizationSpecManager", MoTypesEnum::CustomizationSpecManager),
-        ("DiagnosticManager", MoTypesEnum::DiagnosticManager),
-        ("ProfileManager", MoTypesEnum::ProfileManager),
-        ("HostMemorySystem", MoTypesEnum::HostMemorySystem),
-        ("StorageResourceManager", MoTypesEnum::StorageResourceManager),
-        ("GuestAuthManager", MoTypesEnum::GuestAuthManager),
-        ("HostSpbm", MoTypesEnum::HostSpbm),
-        ("OvfManager", MoTypesEnum::OvfManager),
-        ("HostPowerSystem", MoTypesEnum::HostPowerSystem),
-        ("FailoverClusterManager", MoTypesEnum::FailoverClusterManager),
-        ("VasaProvider", MoTypesEnum::VasaProvider),
-        ("FileManager", MoTypesEnum::FileManager),
-        ("OptionManager", MoTypesEnum::OptionManager),
+        ("EamObject", MoTypesEnum::EamObject),
         ("CertificateManager", MoTypesEnum::CertificateManager),
-        ("HostDirectoryStore", MoTypesEnum::HostDirectoryStore),
-        ("ClusterComputeResource", MoTypesEnum::ClusterComputeResource),
-        ("HostProfile", MoTypesEnum::HostProfile),
-        ("PerformanceManager", MoTypesEnum::PerformanceManager),
-        ("UserDirectory", MoTypesEnum::UserDirectory),
-        ("VimClusterVsanVcDiskManagementSystem", MoTypesEnum::VimClusterVsanVcDiskManagementSystem),
-        ("HostCertificateManager", MoTypesEnum::HostCertificateManager),
-        ("VsanUpgradeSystem", MoTypesEnum::VsanUpgradeSystem),
-        ("OpaqueNetwork", MoTypesEnum::OpaqueNetwork),
-        ("HostDiagnosticSystem", MoTypesEnum::HostDiagnosticSystem),
-        ("VslmStorageLifecycleManager", MoTypesEnum::VslmStorageLifecycleManager),
-        ("CryptoManagerKmip", MoTypesEnum::CryptoManagerKmip),
-        ("HostSystem", MoTypesEnum::HostSystem),
-        ("DirectPathProfileManager", MoTypesEnum::DirectPathProfileManager),
-        ("HostAccessManager", MoTypesEnum::HostAccessManager),
-        ("VsanVcClusterHealthSystem", MoTypesEnum::VsanVcClusterHealthSystem),
-        ("EventHistoryCollector", MoTypesEnum::EventHistoryCollector),
-        ("StorageQueryManager", MoTypesEnum::StorageQueryManager),
-        ("VsanVumSystem", MoTypesEnum::VsanVumSystem),
-        ("VsanUpgradeSystemEx", MoTypesEnum::VsanUpgradeSystemEx),
-        ("VirtualizationManager", MoTypesEnum::VirtualizationManager),
-        ("TaskHistoryCollector", MoTypesEnum::TaskHistoryCollector),
+        ("IscsiManager", MoTypesEnum::IscsiManager),
         ("AuthorizationManager", MoTypesEnum::AuthorizationManager),
-        ("IoFilterManager", MoTypesEnum::IoFilterManager),
-        ("ManagedObjectView", MoTypesEnum::ManagedObjectView),
-        ("LicenseAssignmentManager", MoTypesEnum::LicenseAssignmentManager),
-        ("MessageBusProxy", MoTypesEnum::MessageBusProxy),
-        ("HostDateTimeSystem", MoTypesEnum::HostDateTimeSystem),
-        ("GuestWindowsRegistryManager", MoTypesEnum::GuestWindowsRegistryManager),
-        ("AlarmManager", MoTypesEnum::AlarmManager),
-        ("HostVirtualNicManager", MoTypesEnum::HostVirtualNicManager),
-        ("Task", MoTypesEnum::Task),
-        ("VsanUpdateManager", MoTypesEnum::VsanUpdateManager),
-        ("PbmSessionManager", MoTypesEnum::PbmSessionManager),
-        ("ScheduledTask", MoTypesEnum::ScheduledTask),
-        ("Network", MoTypesEnum::Network),
-        ("InventoryView", MoTypesEnum::InventoryView),
-        ("Datastore", MoTypesEnum::Datastore),
-        ("VsanClusterPowerSystem", MoTypesEnum::VsanClusterPowerSystem),
-        ("HostAssignableHardwareManager", MoTypesEnum::HostAssignableHardwareManager),
-        ("OverheadMemoryManager", MoTypesEnum::OverheadMemoryManager),
+        ("VsanRemoteDatastoreSystem", MoTypesEnum::VsanRemoteDatastoreSystem),
+        ("VslmStorageLifecycleManager", MoTypesEnum::VslmStorageLifecycleManager),
+        ("PbmCapabilityMetadataManager", MoTypesEnum::PbmCapabilityMetadataManager),
+        ("HostVsanInternalSystem", MoTypesEnum::HostVsanInternalSystem),
+        ("HostDirectoryStore", MoTypesEnum::HostDirectoryStore),
+        ("ServiceInstance", MoTypesEnum::ServiceInstance),
+        ("PerformanceManager", MoTypesEnum::PerformanceManager),
+        ("HostSnmpSystem", MoTypesEnum::HostSnmpSystem),
+        ("VStorageObjectManagerBase", MoTypesEnum::VStorageObjectManagerBase),
+        ("HostAutoStartManager", MoTypesEnum::HostAutoStartManager),
+        ("VsanSiteMaintenanceSystem", MoTypesEnum::VsanSiteMaintenanceSystem),
+        ("CustomFieldsManager", MoTypesEnum::CustomFieldsManager),
+        ("SiteInfoManager", MoTypesEnum::SiteInfoManager),
         ("ListView", MoTypesEnum::ListView),
+        ("OptionManager", MoTypesEnum::OptionManager),
+        ("VslmServiceInstance", MoTypesEnum::VslmServiceInstance),
+        ("ClusterProfile", MoTypesEnum::ClusterProfile),
+        ("Alarm", MoTypesEnum::Alarm),
+        ("HostLocalAccountManager", MoTypesEnum::HostLocalAccountManager),
+        ("HostSystem", MoTypesEnum::HostSystem),
+        ("SmsProvider", MoTypesEnum::SmsProvider),
+        ("PbmProfileProfileManager", MoTypesEnum::PbmProfileProfileManager),
+        ("ResourcePlanningManager", MoTypesEnum::ResourcePlanningManager),
+        ("VsanUpgradeSystem", MoTypesEnum::VsanUpgradeSystem),
+        ("VsanFileServiceSystem", MoTypesEnum::VsanFileServiceSystem),
+        ("VsanClusterPowerSystem", MoTypesEnum::VsanClusterPowerSystem),
+        ("VsanObjectSystem", MoTypesEnum::VsanObjectSystem),
+        ("TaskManager", MoTypesEnum::TaskManager),
+        ("VsanVcClusterConfigSystem", MoTypesEnum::VsanVcClusterConfigSystem),
+        ("ComputeResource", MoTypesEnum::ComputeResource),
+        ("HostPciPassthruSystem", MoTypesEnum::HostPciPassthruSystem),
         ("VslmTask", MoTypesEnum::VslmTask),
-        ("GuestOperationsManager", MoTypesEnum::GuestOperationsManager),
-        ("VimClusterVsanVcStretchedClusterSystem", MoTypesEnum::VimClusterVsanVcStretchedClusterSystem),
-        ("CryptoManagerHost", MoTypesEnum::CryptoManagerHost),
+        ("HostDatastoreSystem", MoTypesEnum::HostDatastoreSystem),
+        ("HostDatastoreBrowser", MoTypesEnum::HostDatastoreBrowser),
+        ("HostMemorySystem", MoTypesEnum::HostMemorySystem),
+        ("HostProfileManager", MoTypesEnum::HostProfileManager),
+        ("TransitGateway", MoTypesEnum::TransitGateway),
+        ("DiagnosticManager", MoTypesEnum::DiagnosticManager),
+        ("VsanVcClusterHealthSystem", MoTypesEnum::VsanVcClusterHealthSystem),
+        ("ExtensibleManagedObject", MoTypesEnum::ExtensibleManagedObject),
+        ("ViewManager", MoTypesEnum::ViewManager),
+        ("VirtualMachineProvisioningChecker", MoTypesEnum::VirtualMachineProvisioningChecker),
+        ("StorageQueryManager", MoTypesEnum::StorageQueryManager),
+        ("Profile", MoTypesEnum::Profile),
+        ("HostCpuSchedulerSystem", MoTypesEnum::HostCpuSchedulerSystem),
+        ("PropertyCollector", MoTypesEnum::PropertyCollector),
+        ("EsxAgentManager", MoTypesEnum::EsxAgentManager),
+        ("IoFilterManager", MoTypesEnum::IoFilterManager),
+        ("HostFirewallSystem", MoTypesEnum::HostFirewallSystem),
+        ("VcenterVStorageObjectManager", MoTypesEnum::VcenterVStorageObjectManager),
+        ("OverheadMemoryManager", MoTypesEnum::OverheadMemoryManager),
+        ("VsanVumSystem", MoTypesEnum::VsanVumSystem),
+        ("HostNetworkSystem", MoTypesEnum::HostNetworkSystem),
+        ("ManagedObjectView", MoTypesEnum::ManagedObjectView),
+        ("PbmServiceInstance", MoTypesEnum::PbmServiceInstance),
+        ("ClusterComputeResource", MoTypesEnum::ClusterComputeResource),
+        ("VsanSpaceReportSystem", MoTypesEnum::VsanSpaceReportSystem),
+        ("SimpleCommand", MoTypesEnum::SimpleCommand),
+        ("HostDateTimeSystem", MoTypesEnum::HostDateTimeSystem),
+        ("SessionManager", MoTypesEnum::SessionManager),
+        ("VsanUpgradeSystemEx", MoTypesEnum::VsanUpgradeSystemEx),
+        ("DistributedVirtualSwitch", MoTypesEnum::DistributedVirtualSwitch),
+        ("HostHealthStatusSystem", MoTypesEnum::HostHealthStatusSystem),
+        ("EventHistoryCollector", MoTypesEnum::EventHistoryCollector),
+        ("SmsServiceInstance", MoTypesEnum::SmsServiceInstance),
+        ("HostAuthenticationStore", MoTypesEnum::HostAuthenticationStore),
+        ("HostSpbm", MoTypesEnum::HostSpbm),
+        ("HostBootDeviceSystem", MoTypesEnum::HostBootDeviceSystem),
+        ("InventoryView", MoTypesEnum::InventoryView),
+        ("HostVStorageObjectManager", MoTypesEnum::HostVStorageObjectManager),
+        ("Datastore", MoTypesEnum::Datastore),
+        ("VsanIoInsightManager", MoTypesEnum::VsanIoInsightManager),
+        ("VirtualDiskManager", MoTypesEnum::VirtualDiskManager),
+        ("VsanVcsaDeployerSystem", MoTypesEnum::VsanVcsaDeployerSystem),
+        ("ClusterProfileManager", MoTypesEnum::ClusterProfileManager),
+        ("MessageBusProxy", MoTypesEnum::MessageBusProxy),
+        ("Network", MoTypesEnum::Network),
+        ("HealthUpdateManager", MoTypesEnum::HealthUpdateManager),
+        ("DirectPathProfileManager", MoTypesEnum::DirectPathProfileManager),
+        ("ManagedObject", MoTypesEnum::ManagedObject),
+        ("PbmProvider", MoTypesEnum::PbmProvider),
+        ("Agency", MoTypesEnum::Agency),
+        ("HttpNfcLease", MoTypesEnum::HttpNfcLease),
+        ("HostFirmwareSystem", MoTypesEnum::HostFirmwareSystem),
+        ("View", MoTypesEnum::View),
+        ("HostImageConfigManager", MoTypesEnum::HostImageConfigManager),
+        ("VsanSystemEx", MoTypesEnum::VsanSystemEx),
+        ("VirtualMachineGuestCustomizationManager", MoTypesEnum::VirtualMachineGuestCustomizationManager),
+        ("DistributedVirtualSwitchManager", MoTypesEnum::DistributedVirtualSwitchManager),
+        ("EamTask", MoTypesEnum::EamTask),
+        ("HostActiveDirectoryAuthentication", MoTypesEnum::HostActiveDirectoryAuthentication),
+        ("VsanDiagnosticsSystem", MoTypesEnum::VsanDiagnosticsSystem),
+        ("IpPoolManager", MoTypesEnum::IpPoolManager),
+        ("CustomizationSpecManager", MoTypesEnum::CustomizationSpecManager),
+        ("ExtensionManager", MoTypesEnum::ExtensionManager),
+        ("FailoverClusterManager", MoTypesEnum::FailoverClusterManager),
+        ("GuestFileManager", MoTypesEnum::GuestFileManager),
+        ("Folder", MoTypesEnum::Folder),
+        ("CryptoManagerKmip", MoTypesEnum::CryptoManagerKmip),
+        ("VsanObjectManager", MoTypesEnum::VsanObjectManager),
+        ("Agent", MoTypesEnum::Agent),
+        ("HostKernelModuleSystem", MoTypesEnum::HostKernelModuleSystem),
+        ("TaskHistoryCollector", MoTypesEnum::TaskHistoryCollector),
+        ("VslmVStorageObjectManager", MoTypesEnum::VslmVStorageObjectManager),
+        ("OpaqueNetwork", MoTypesEnum::OpaqueNetwork),
+        ("Datacenter", MoTypesEnum::Datacenter),
+        ("UserDirectory", MoTypesEnum::UserDirectory),
+        ("ScheduledTaskManager", MoTypesEnum::ScheduledTaskManager),
+        ("HostVFlashManager", MoTypesEnum::HostVFlashManager),
+        ("PbmComplianceManager", MoTypesEnum::PbmComplianceManager),
+        ("CryptoManager", MoTypesEnum::CryptoManager),
+        ("DatastoreNamespaceManager", MoTypesEnum::DatastoreNamespaceManager),
+        ("CnsVolumeManager", MoTypesEnum::CnsVolumeManager),
+        ("OvfManager", MoTypesEnum::OvfManager),
+        ("PbmPlacementSolver", MoTypesEnum::PbmPlacementSolver),
+        ("HostPatchManager", MoTypesEnum::HostPatchManager),
+        ("SmsSessionManager", MoTypesEnum::SmsSessionManager),
+        ("VmwareDistributedVirtualSwitch", MoTypesEnum::VmwareDistributedVirtualSwitch),
+        ("ProfileManager", MoTypesEnum::ProfileManager),
         ("VirtualMachineSnapshot", MoTypesEnum::VirtualMachineSnapshot),
         ("VsanClusterMgmtInternalSystem", MoTypesEnum::VsanClusterMgmtInternalSystem),
-        ("PropertyFilter", MoTypesEnum::PropertyFilter),
-        ("Agency", MoTypesEnum::Agency),
-        ("HostSnmpSystem", MoTypesEnum::HostSnmpSystem),
-        ("SmsTask", MoTypesEnum::SmsTask),
-        ("VsanVdsSystem", MoTypesEnum::VsanVdsSystem),
         ("CryptoManagerHostKMS", MoTypesEnum::CryptoManagerHostKms),
-        ("SmsProvider", MoTypesEnum::SmsProvider),
-        ("EamTask", MoTypesEnum::EamTask),
-        ("ServiceManager", MoTypesEnum::ServiceManager),
-        ("DistributedVirtualSwitch", MoTypesEnum::DistributedVirtualSwitch),
-        ("VsanMassCollector", MoTypesEnum::VsanMassCollector),
-        ("VsanResourceCheckSystem", MoTypesEnum::VsanResourceCheckSystem),
-        ("EnvironmentBrowser", MoTypesEnum::EnvironmentBrowser),
-        ("HostImageConfigManager", MoTypesEnum::HostImageConfigManager),
-        ("HostLocalAuthentication", MoTypesEnum::HostLocalAuthentication),
-        ("ClusterEVCManager", MoTypesEnum::ClusterEvcManager),
-        ("VsanObjectManager", MoTypesEnum::VsanObjectManager),
-        ("ClusterProfileManager", MoTypesEnum::ClusterProfileManager),
-        ("PbmReplicationManager", MoTypesEnum::PbmReplicationManager),
-        ("SimpleCommand", MoTypesEnum::SimpleCommand),
-        ("CryptoManager", MoTypesEnum::CryptoManager),
-        ("VslmVStorageObjectManager", MoTypesEnum::VslmVStorageObjectManager),
-        ("VirtualMachineCompatibilityChecker", MoTypesEnum::VirtualMachineCompatibilityChecker),
-        ("EventManager", MoTypesEnum::EventManager),
-        ("Profile", MoTypesEnum::Profile),
-        ("VsanSystemEx", MoTypesEnum::VsanSystemEx),
-        ("HostStorageSystem", MoTypesEnum::HostStorageSystem),
-        ("PbmProvider", MoTypesEnum::PbmProvider),
-        ("EamObject", MoTypesEnum::EamObject),
-        ("ClusterProfile", MoTypesEnum::ClusterProfile),
-        ("DistributedVirtualPortgroup", MoTypesEnum::DistributedVirtualPortgroup),
-        ("Agent", MoTypesEnum::Agent),
-        ("HostAuthenticationManager", MoTypesEnum::HostAuthenticationManager),
-        ("HostPatchManager", MoTypesEnum::HostPatchManager),
-        ("StoragePod", MoTypesEnum::StoragePod),
-        ("HostAuthenticationStore", MoTypesEnum::HostAuthenticationStore),
-        ("ServiceInstance", MoTypesEnum::ServiceInstance),
-        ("HostNetworkSystem", MoTypesEnum::HostNetworkSystem),
-        ("ResourcePlanningManager", MoTypesEnum::ResourcePlanningManager),
-        ("HistoryCollector", MoTypesEnum::HistoryCollector),
-        ("VslmServiceInstance", MoTypesEnum::VslmServiceInstance),
-        ("HostVMotionSystem", MoTypesEnum::HostVMotionSystem),
-        ("SmsServiceInstance", MoTypesEnum::SmsServiceInstance),
-        ("HostKernelModuleSystem", MoTypesEnum::HostKernelModuleSystem),
-        ("HostGraphicsManager", MoTypesEnum::HostGraphicsManager),
-        ("GuestFileManager", MoTypesEnum::GuestFileManager),
-        ("VStorageObjectManagerBase", MoTypesEnum::VStorageObjectManagerBase),
+        ("SmsStorageManager", MoTypesEnum::SmsStorageManager),
         ("HostSpecificationManager", MoTypesEnum::HostSpecificationManager),
-        ("HealthUpdateManager", MoTypesEnum::HealthUpdateManager),
-        ("IpPoolManager", MoTypesEnum::IpPoolManager),
-        ("VsanVcClusterConfigSystem", MoTypesEnum::VsanVcClusterConfigSystem),
-        ("VmwareDistributedVirtualSwitch", MoTypesEnum::VmwareDistributedVirtualSwitch),
-        ("EsxAgentManager", MoTypesEnum::EsxAgentManager),
-        ("DistributedVirtualSwitchManager", MoTypesEnum::DistributedVirtualSwitchManager),
-        ("TenantTenantManager", MoTypesEnum::TenantTenantManager),
-        ("VsanObjectSystem", MoTypesEnum::VsanObjectSystem),
-        ("VsanHostVdsSystem", MoTypesEnum::VsanHostVdsSystem),
-        ("HostFirmwareSystem", MoTypesEnum::HostFirmwareSystem),
-        ("HostCacheConfigurationManager", MoTypesEnum::HostCacheConfigurationManager),
-        ("VsanPerformanceManager", MoTypesEnum::VsanPerformanceManager),
-        ("VsanSpaceReportSystem", MoTypesEnum::VsanSpaceReportSystem),
-        ("PbmProfileProfileManager", MoTypesEnum::PbmProfileProfileManager),
-        ("VsanRemoteDatastoreSystem", MoTypesEnum::VsanRemoteDatastoreSystem),
-        ("HostFirewallSystem", MoTypesEnum::HostFirewallSystem),
-        ("PropertyCollector", MoTypesEnum::PropertyCollector),
-        ("LocalizationManager", MoTypesEnum::LocalizationManager),
-        ("TaskManager", MoTypesEnum::TaskManager),
-        ("VirtualMachineProvisioningChecker", MoTypesEnum::VirtualMachineProvisioningChecker),
-        ("HostNvdimmSystem", MoTypesEnum::HostNvdimmSystem),
-        ("HostVsanInternalSystem", MoTypesEnum::HostVsanInternalSystem),
-        ("ViewManager", MoTypesEnum::ViewManager),
-        ("HostVsanSystem", MoTypesEnum::HostVsanSystem),
-        ("VsanIscsiTargetSystem", MoTypesEnum::VsanIscsiTargetSystem),
-        ("VsanPhoneHomeSystem", MoTypesEnum::VsanPhoneHomeSystem),
-        ("CustomFieldsManager", MoTypesEnum::CustomFieldsManager),
-        ("GuestProcessManager", MoTypesEnum::GuestProcessManager),
-        ("SiteInfoManager", MoTypesEnum::SiteInfoManager),
-        ("SmsSessionManager", MoTypesEnum::SmsSessionManager),
-        ("ExtensionManager", MoTypesEnum::ExtensionManager),
-        ("VirtualMachine", MoTypesEnum::VirtualMachine),
-        ("VsanVcsaDeployerSystem", MoTypesEnum::VsanVcsaDeployerSystem),
-        ("Alarm", MoTypesEnum::Alarm),
-        ("HostVsanHealthSystem", MoTypesEnum::HostVsanHealthSystem),
-        ("GuestAliasManager", MoTypesEnum::GuestAliasManager),
-        ("HostActiveDirectoryAuthentication", MoTypesEnum::HostActiveDirectoryAuthentication),
-        ("Folder", MoTypesEnum::Folder),
-        ("VcenterVStorageObjectManager", MoTypesEnum::VcenterVStorageObjectManager),
-        ("VsanDiagnosticsSystem", MoTypesEnum::VsanDiagnosticsSystem),
-        ("IscsiManager", MoTypesEnum::IscsiManager),
+        ("DistributedVirtualPortgroup", MoTypesEnum::DistributedVirtualPortgroup),
         ("ProfileComplianceManager", MoTypesEnum::ProfileComplianceManager),
-        ("ScheduledTaskManager", MoTypesEnum::ScheduledTaskManager),
+        ("HostProfile", MoTypesEnum::HostProfile),
+        ("PropertyFilter", MoTypesEnum::PropertyFilter),
+        ("VsanResourceCheckSystem", MoTypesEnum::VsanResourceCheckSystem),
+        ("VsanHostVdsSystem", MoTypesEnum::VsanHostVdsSystem),
+        ("FileManager", MoTypesEnum::FileManager),
+        ("ServiceManager", MoTypesEnum::ServiceManager),
+        ("GuestOperationsManager", MoTypesEnum::GuestOperationsManager),
+        ("CryptoManagerHost", MoTypesEnum::CryptoManagerHost),
+        ("GuestWindowsRegistryManager", MoTypesEnum::GuestWindowsRegistryManager),
+        ("LicenseManager", MoTypesEnum::LicenseManager),
+        ("HostVMotionSystem", MoTypesEnum::HostVMotionSystem),
+        ("HostVsanHealthSystem", MoTypesEnum::HostVsanHealthSystem),
+        ("HostDiagnosticSystem", MoTypesEnum::HostDiagnosticSystem),
+        ("VimClusterVsanVcDiskManagementSystem", MoTypesEnum::VimClusterVsanVcDiskManagementSystem),
+        ("FailoverClusterConfigurator", MoTypesEnum::FailoverClusterConfigurator),
+        ("EventManager", MoTypesEnum::EventManager),
+        ("AlarmManager", MoTypesEnum::AlarmManager),
+        ("StoragePod", MoTypesEnum::StoragePod),
+        ("HostPowerSystem", MoTypesEnum::HostPowerSystem),
+        ("SmsTask", MoTypesEnum::SmsTask),
+        ("PbmSessionManager", MoTypesEnum::PbmSessionManager),
+        ("VimClusterVsanVcStretchedClusterSystem", MoTypesEnum::VimClusterVsanVcStretchedClusterSystem),
+        ("GuestAuthManager", MoTypesEnum::GuestAuthManager),
+        ("Task", MoTypesEnum::Task),
+        ("HostServiceSystem", MoTypesEnum::HostServiceSystem),
+        ("HostVsanSystem", MoTypesEnum::HostVsanSystem),
+        ("ManagedEntity", MoTypesEnum::ManagedEntity),
+        ("ClusterEVCManager", MoTypesEnum::ClusterEvcManager),
+        ("HostCacheConfigurationManager", MoTypesEnum::HostCacheConfigurationManager),
+        ("HostAssignableHardwareManager", MoTypesEnum::HostAssignableHardwareManager),
+        ("VasaProvider", MoTypesEnum::VasaProvider),
         ("VsanClusterHealthSystem", MoTypesEnum::VsanClusterHealthSystem),
-        ("HostPciPassthruSystem", MoTypesEnum::HostPciPassthruSystem),
-        ("PbmComplianceManager", MoTypesEnum::PbmComplianceManager),
+        ("VsanUpdateManager", MoTypesEnum::VsanUpdateManager),
+        ("StorageResourceManager", MoTypesEnum::StorageResourceManager),
+        ("PbmReplicationManager", MoTypesEnum::PbmReplicationManager),
+        ("ContainerView", MoTypesEnum::ContainerView),
+        ("HostGraphicsManager", MoTypesEnum::HostGraphicsManager),
+        ("VirtualMachine", MoTypesEnum::VirtualMachine),
+        ("LicenseAssignmentManager", MoTypesEnum::LicenseAssignmentManager),
+        ("HostAccessManager", MoTypesEnum::HostAccessManager),
+        ("VsanPolicyManager", MoTypesEnum::VsanPolicyManager),
+        ("LocalizationManager", MoTypesEnum::LocalizationManager),
+        ("HistoryCollector", MoTypesEnum::HistoryCollector),
+        ("VslmSessionManager", MoTypesEnum::VslmSessionManager),
+        ("VsanIscsiTargetSystem", MoTypesEnum::VsanIscsiTargetSystem),
+        ("TenantTenantManager", MoTypesEnum::TenantTenantManager),
+        ("EnvironmentBrowser", MoTypesEnum::EnvironmentBrowser),
+        ("HostCertificateManager", MoTypesEnum::HostCertificateManager),
+        ("VirtualizationManager", MoTypesEnum::VirtualizationManager),
+        ("GuestProcessManager", MoTypesEnum::GuestProcessManager),
+        ("VsanVdsSystem", MoTypesEnum::VsanVdsSystem),
+        ("VsanPerformanceManager", MoTypesEnum::VsanPerformanceManager),
+        ("VsanMassCollector", MoTypesEnum::VsanMassCollector),
+        ("VsanPhoneHomeSystem", MoTypesEnum::VsanPhoneHomeSystem),
+        ("ScheduledTask", MoTypesEnum::ScheduledTask),
+        ("HostStorageSystem", MoTypesEnum::HostStorageSystem),
+        ("HostAuthenticationManager", MoTypesEnum::HostAuthenticationManager),
+        ("HostEsxAgentHostManager", MoTypesEnum::HostEsxAgentHostManager),
         ("VsanCapabilitySystem", MoTypesEnum::VsanCapabilitySystem),
+        ("HostVirtualNicManager", MoTypesEnum::HostVirtualNicManager),
+        ("VirtualMachineCompatibilityChecker", MoTypesEnum::VirtualMachineCompatibilityChecker),
+        ("HostLocalAuthentication", MoTypesEnum::HostLocalAuthentication),
+        ("DataProtectionHealthSystem", MoTypesEnum::DataProtectionHealthSystem),
+        ("HostNvdimmSystem", MoTypesEnum::HostNvdimmSystem),
+        ("GuestAliasManager", MoTypesEnum::GuestAliasManager),
         ("VirtualApp", MoTypesEnum::VirtualApp),
+        ("SearchIndex", MoTypesEnum::SearchIndex),
+        ("ResourcePool", MoTypesEnum::ResourcePool),
     ],
 };
 
@@ -16002,6 +16809,7 @@ impl MoTypesEnum {
             MoTypesEnum::TaskHistoryCollector => "TaskHistoryCollector",
             MoTypesEnum::TaskManager => "TaskManager",
             MoTypesEnum::TenantTenantManager => "TenantTenantManager",
+            MoTypesEnum::TransitGateway => "TransitGateway",
             MoTypesEnum::UserDirectory => "UserDirectory",
             MoTypesEnum::VStorageObjectManagerBase => "VStorageObjectManagerBase",
             MoTypesEnum::VcenterVStorageObjectManager => "VcenterVStorageObjectManager",
@@ -16052,6 +16860,7 @@ impl MoTypesEnum {
             MoTypesEnum::VasaProvider => "VasaProvider",
             MoTypesEnum::ManagedObject => "ManagedObject",
             MoTypesEnum::CnsVolumeManager => "CnsVolumeManager",
+            MoTypesEnum::DataProtectionHealthSystem => "DataProtectionHealthSystem",
             MoTypesEnum::HostSpbm => "HostSpbm",
             MoTypesEnum::VsanClusterPowerSystem => "VsanClusterPowerSystem",
             MoTypesEnum::VsanDiagnosticsSystem => "VsanDiagnosticsSystem",
@@ -16064,6 +16873,7 @@ impl MoTypesEnum {
             MoTypesEnum::VsanPolicyManager => "VsanPolicyManager",
             MoTypesEnum::VsanRemoteDatastoreSystem => "VsanRemoteDatastoreSystem",
             MoTypesEnum::VsanResourceCheckSystem => "VsanResourceCheckSystem",
+            MoTypesEnum::VsanSiteMaintenanceSystem => "VsanSiteMaintenanceSystem",
             MoTypesEnum::VsanUpdateManager => "VsanUpdateManager",
             MoTypesEnum::VsanVdsSystem => "VsanVdsSystem",
             MoTypesEnum::VsanVumSystem => "VsanVumSystem",
@@ -16119,6 +16929,76 @@ impl<'a> From<&'a MoTypesEnum> for &'a str {
 }
 
 impl AsRef<str> for MoTypesEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static DP_DISK_ALREADY_CLAIMED_REASON_ENUM_MAP: phf::Map<&'static str, DpDiskAlreadyClaimedReasonEnum> = ::phf::Map {
+    key: 15467950696543387533,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("maxVendorsExceeded", DpDiskAlreadyClaimedReasonEnum::MaxVendorsExceeded),
+        ("diskAlreadyClaimedReasonUnknown", DpDiskAlreadyClaimedReasonEnum::DiskAlreadyClaimedReasonUnknown),
+        ("alreadyInUse", DpDiskAlreadyClaimedReasonEnum::AlreadyInUse),
+    ],
+};
+
+impl DpDiskAlreadyClaimedReasonEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            DpDiskAlreadyClaimedReasonEnum::MaxVendorsExceeded => "maxVendorsExceeded",
+            DpDiskAlreadyClaimedReasonEnum::AlreadyInUse => "alreadyInUse",
+            DpDiskAlreadyClaimedReasonEnum::DiskAlreadyClaimedReasonUnknown => "diskAlreadyClaimedReasonUnknown",
+            DpDiskAlreadyClaimedReasonEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        DP_DISK_ALREADY_CLAIMED_REASON_ENUM_MAP.get(s).cloned().unwrap_or_else(|| DpDiskAlreadyClaimedReasonEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for DpDiskAlreadyClaimedReasonEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for DpDiskAlreadyClaimedReasonEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpDiskAlreadyClaimedReasonEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpDiskAlreadyClaimedReasonEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for DpDiskAlreadyClaimedReasonEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for DpDiskAlreadyClaimedReasonEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a DpDiskAlreadyClaimedReasonEnum> for &'a str {
+    fn from(value: &'a DpDiskAlreadyClaimedReasonEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for DpDiskAlreadyClaimedReasonEnum {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -16635,6 +17515,76 @@ impl<'a> From<&'a DpVSphereDataProtectionCapabilitiesEnum> for &'a str {
 }
 
 impl AsRef<str> for DpVSphereDataProtectionCapabilitiesEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static DP_V_SPHERE_DATA_PROTECTION_CAPABILITIES_90_U_1_ENUM_MAP: phf::Map<&'static str, DpVSphereDataProtectionCapabilities90U1Enum> = ::phf::Map {
+    key: 10121458955350035957,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("VsanDataIntegrity", DpVSphereDataProtectionCapabilities90U1Enum::VsanDataIntegrity),
+        ("MultiInitiator", DpVSphereDataProtectionCapabilities90U1Enum::MultiInitiator),
+        ("PolicyEngine", DpVSphereDataProtectionCapabilities90U1Enum::PolicyEngine),
+    ],
+};
+
+impl DpVSphereDataProtectionCapabilities90U1Enum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            DpVSphereDataProtectionCapabilities90U1Enum::MultiInitiator => "MultiInitiator",
+            DpVSphereDataProtectionCapabilities90U1Enum::VsanDataIntegrity => "VsanDataIntegrity",
+            DpVSphereDataProtectionCapabilities90U1Enum::PolicyEngine => "PolicyEngine",
+            DpVSphereDataProtectionCapabilities90U1Enum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        DP_V_SPHERE_DATA_PROTECTION_CAPABILITIES_90_U_1_ENUM_MAP.get(s).cloned().unwrap_or_else(|| DpVSphereDataProtectionCapabilities90U1Enum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for DpVSphereDataProtectionCapabilities90U1Enum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for DpVSphereDataProtectionCapabilities90U1Enum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DpVSphereDataProtectionCapabilities90U1Enum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DpVSphereDataProtectionCapabilities90U1Enum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for DpVSphereDataProtectionCapabilities90U1Enum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for DpVSphereDataProtectionCapabilities90U1Enum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a DpVSphereDataProtectionCapabilities90U1Enum> for &'a str {
+    fn from(value: &'a DpVSphereDataProtectionCapabilities90U1Enum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for DpVSphereDataProtectionCapabilities90U1Enum {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -17549,20 +18499,21 @@ impl AsRef<str> for HooksHookTypeEnum {
 }
 
 static SOLUTIONS_INVALID_REASON_ENUM_MAP: phf::Map<&'static str, SolutionsInvalidReasonEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 12913932095322966823,
     disps: &[
-        (1, 3),
-        (3, 0),
+        (2, 0),
+        (1, 4),
     ],
     entries: &[
-        ("INVALID_DATASTORES", SolutionsInvalidReasonEnum::InvalidDatastores),
         ("INVALID_OVF_DESCRIPTOR", SolutionsInvalidReasonEnum::InvalidOvfDescriptor),
-        ("INVALID_RESOURCE_POOL", SolutionsInvalidReasonEnum::InvalidResourcePool),
         ("INVALID_PROPERTIES", SolutionsInvalidReasonEnum::InvalidProperties),
         ("INVALID_NETWORKS", SolutionsInvalidReasonEnum::InvalidNetworks),
-        ("INACCESSBLE_VM_SOURCE", SolutionsInvalidReasonEnum::InaccessbleVmSource),
-        ("INVALID_TRANSITION", SolutionsInvalidReasonEnum::InvalidTransition),
         ("INVALID_FOLDER", SolutionsInvalidReasonEnum::InvalidFolder),
+        ("INVALID_CLUSTER_TRANSITION", SolutionsInvalidReasonEnum::InvalidClusterTransition),
+        ("INVALID_TRANSITION", SolutionsInvalidReasonEnum::InvalidTransition),
+        ("INVALID_DATASTORES", SolutionsInvalidReasonEnum::InvalidDatastores),
+        ("INVALID_RESOURCE_POOL", SolutionsInvalidReasonEnum::InvalidResourcePool),
+        ("INACCESSBLE_VM_SOURCE", SolutionsInvalidReasonEnum::InaccessbleVmSource),
     ],
 };
 
@@ -17577,6 +18528,7 @@ impl SolutionsInvalidReasonEnum {
             SolutionsInvalidReasonEnum::InvalidFolder => "INVALID_FOLDER",
             SolutionsInvalidReasonEnum::InvalidProperties => "INVALID_PROPERTIES",
             SolutionsInvalidReasonEnum::InvalidTransition => "INVALID_TRANSITION",
+            SolutionsInvalidReasonEnum::InvalidClusterTransition => "INVALID_CLUSTER_TRANSITION",
             SolutionsInvalidReasonEnum::Other_(s) => s,
         }
     }
@@ -17630,16 +18582,18 @@ impl AsRef<str> for SolutionsInvalidReasonEnum {
 }
 
 static SOLUTIONS_NON_COMPLIANCE_REASON_ENUM_MAP: phf::Map<&'static str, SolutionsNonComplianceReasonEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 12913932095322966823,
     disps: &[
-        (3, 0),
+        (1, 0),
+        (2, 4),
     ],
     entries: &[
-        ("WORKING", SolutionsNonComplianceReasonEnum::Working),
-        ("OBSOLETE_SPEC", SolutionsNonComplianceReasonEnum::ObsoleteSpec),
-        ("IN_HOOK", SolutionsNonComplianceReasonEnum::InHook),
         ("NO_SPEC", SolutionsNonComplianceReasonEnum::NoSpec),
+        ("WORKING", SolutionsNonComplianceReasonEnum::Working),
         ("ISSUE", SolutionsNonComplianceReasonEnum::Issue),
+        ("IN_HOOK", SolutionsNonComplianceReasonEnum::InHook),
+        ("BLOCKED", SolutionsNonComplianceReasonEnum::Blocked),
+        ("OBSOLETE_SPEC", SolutionsNonComplianceReasonEnum::ObsoleteSpec),
     ],
 };
 
@@ -17649,6 +18603,7 @@ impl SolutionsNonComplianceReasonEnum {
             SolutionsNonComplianceReasonEnum::Working => "WORKING",
             SolutionsNonComplianceReasonEnum::Issue => "ISSUE",
             SolutionsNonComplianceReasonEnum::InHook => "IN_HOOK",
+            SolutionsNonComplianceReasonEnum::Blocked => "BLOCKED",
             SolutionsNonComplianceReasonEnum::ObsoleteSpec => "OBSOLETE_SPEC",
             SolutionsNonComplianceReasonEnum::NoSpec => "NO_SPEC",
             SolutionsNonComplianceReasonEnum::Other_(s) => s,
@@ -18127,19 +19082,20 @@ impl AsRef<str> for PbmDebugManagerKeystoreNameEnum {
 }
 
 static PBM_OBJECT_TYPE_ENUM_MAP: phf::Map<&'static str, PbmObjectTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 15467950696543387533,
     disps: &[
-        (0, 0),
-        (1, 3),
+        (5, 0),
+        (5, 1),
     ],
     entries: &[
         ("virtualMachineAndDisks", PbmObjectTypeEnum::VirtualMachineAndDisks),
-        ("virtualMachine", PbmObjectTypeEnum::VirtualMachine),
-        ("unknown", PbmObjectTypeEnum::Unknown),
+        ("cluster", PbmObjectTypeEnum::Cluster),
         ("virtualDiskUUID", PbmObjectTypeEnum::VirtualDiskUuid),
-        ("virtualDiskId", PbmObjectTypeEnum::VirtualDiskId),
         ("vsanObjectId", PbmObjectTypeEnum::VsanObjectId),
         ("datastore", PbmObjectTypeEnum::Datastore),
+        ("virtualMachine", PbmObjectTypeEnum::VirtualMachine),
+        ("virtualDiskId", PbmObjectTypeEnum::VirtualDiskId),
+        ("unknown", PbmObjectTypeEnum::Unknown),
         ("fileShareId", PbmObjectTypeEnum::FileShareId),
     ],
 };
@@ -18154,6 +19110,7 @@ impl PbmObjectTypeEnum {
             PbmObjectTypeEnum::Datastore => "datastore",
             PbmObjectTypeEnum::VsanObjectId => "vsanObjectId",
             PbmObjectTypeEnum::FileShareId => "fileShareId",
+            PbmObjectTypeEnum::Cluster => "cluster",
             PbmObjectTypeEnum::Unknown => "unknown",
             PbmObjectTypeEnum::Other_(s) => s,
         }
@@ -19085,16 +20042,18 @@ impl AsRef<str> for PbmProfileCategoryEnumEnum {
 }
 
 static PBM_SYSTEM_CREATED_PROFILE_TYPE_ENUM_MAP: phf::Map<&'static str, PbmSystemCreatedProfileTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15467950696543387533,
     disps: &[
-        (3, 0),
+        (4, 0),
+        (2, 4),
     ],
     entries: &[
-        ("PmemDefaultProfile", PbmSystemCreatedProfileTypeEnum::PmemDefaultProfile),
         ("VVolDefaultProfile", PbmSystemCreatedProfileTypeEnum::VVolDefaultProfile),
+        ("VsanMaxDefaultProfile", PbmSystemCreatedProfileTypeEnum::VsanMaxDefaultProfile),
+        ("PmemDefaultProfile", PbmSystemCreatedProfileTypeEnum::PmemDefaultProfile),
+        ("VsanEsaAutoManagedRaidProfile", PbmSystemCreatedProfileTypeEnum::VsanEsaAutoManagedRaidProfile),
         ("VmcManagementProfile", PbmSystemCreatedProfileTypeEnum::VmcManagementProfile),
         ("VsanDefaultProfile", PbmSystemCreatedProfileTypeEnum::VsanDefaultProfile),
-        ("VsanMaxDefaultProfile", PbmSystemCreatedProfileTypeEnum::VsanMaxDefaultProfile),
     ],
 };
 
@@ -19106,6 +20065,7 @@ impl PbmSystemCreatedProfileTypeEnum {
             PbmSystemCreatedProfileTypeEnum::PmemDefaultProfile => "PmemDefaultProfile",
             PbmSystemCreatedProfileTypeEnum::VmcManagementProfile => "VmcManagementProfile",
             PbmSystemCreatedProfileTypeEnum::VsanMaxDefaultProfile => "VsanMaxDefaultProfile",
+            PbmSystemCreatedProfileTypeEnum::VsanEsaAutoManagedRaidProfile => "VsanEsaAutoManagedRaidProfile",
             PbmSystemCreatedProfileTypeEnum::Other_(s) => s,
         }
     }
@@ -19159,16 +20119,18 @@ impl AsRef<str> for PbmSystemCreatedProfileTypeEnum {
 }
 
 static PBM_OPERATION_ENUM_MAP: phf::Map<&'static str, PbmOperationEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 8694567506910003252,
     disps: &[
-        (0, 0),
+        (1, 2),
+        (1, 0),
     ],
     entries: &[
-        ("RECONFIGURE", PbmOperationEnum::Reconfigure),
-        ("CREATE", PbmOperationEnum::Create),
-        ("MIGRATE", PbmOperationEnum::Migrate),
         ("CLONE", PbmOperationEnum::Clone),
         ("REGISTER", PbmOperationEnum::Register),
+        ("RECONFIGURE", PbmOperationEnum::Reconfigure),
+        ("MIGRATE", PbmOperationEnum::Migrate),
+        ("UNREGISTER", PbmOperationEnum::Unregister),
+        ("CREATE", PbmOperationEnum::Create),
     ],
 };
 
@@ -19177,6 +20139,7 @@ impl PbmOperationEnum {
         match self {
             PbmOperationEnum::Create => "CREATE",
             PbmOperationEnum::Register => "REGISTER",
+            PbmOperationEnum::Unregister => "UNREGISTER",
             PbmOperationEnum::Reconfigure => "RECONFIGURE",
             PbmOperationEnum::Migrate => "MIGRATE",
             PbmOperationEnum::Clone => "CLONE",
@@ -21777,23 +22740,24 @@ impl AsRef<str> for DiagnosticManagerLogFormatEnum {
 static DISTRIBUTED_VIRTUAL_SWITCH_HOST_INFRASTRUCTURE_TRAFFIC_CLASS_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchHostInfrastructureTrafficClassEnum> = ::phf::Map {
     key: 15467950696543387533,
     disps: &[
-        (0, 11),
-        (3, 0),
-        (3, 4),
+        (4, 0),
+        (5, 0),
+        (1, 1),
     ],
     entries: &[
-        ("virtualMachine", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::VirtualMachine),
-        ("nfs", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Nfs),
-        ("vsan", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vsan),
-        ("faultTolerance", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::FaultTolerance),
-        ("backupNfc", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::BackupNfc),
         ("iSCSI", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::IScsi),
-        ("management", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Management),
-        ("vdp", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vdp),
         ("provisioning", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Provisioning),
+        ("faultTolerance", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::FaultTolerance),
+        ("management", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Management),
+        ("nfs", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Nfs),
         ("nvmetcp", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Nvmetcp),
-        ("vmotion", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vmotion),
+        ("backupNfc", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::BackupNfc),
         ("hbr", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Hbr),
+        ("vsan", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vsan),
+        ("vdp", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vdp),
+        ("virtualMachine", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::VirtualMachine),
+        ("vmotion", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vmotion),
+        ("vSANiSCSI", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::VSaNiScsi),
     ],
 };
 
@@ -21812,6 +22776,7 @@ impl DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
             DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::BackupNfc => "backupNfc",
             DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Nvmetcp => "nvmetcp",
             DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Provisioning => "provisioning",
+            DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::VSaNiScsi => "vSANiSCSI",
             DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Other_(s) => s,
         }
     }
@@ -24523,6 +25488,258 @@ impl<'a> From<&'a ResourceConfigSpecScaleSharesBehaviorEnum> for &'a str {
 }
 
 impl AsRef<str> for ResourceConfigSpecScaleSharesBehaviorEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static SEARCH_INDEX_PREDICATE_ARRAY_OPERATOR_ENUM_MAP: phf::Map<&'static str, SearchIndexPredicateArrayOperatorEnum> = ::phf::Map {
+    key: 15467950696543387533,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("AnyElement", SearchIndexPredicateArrayOperatorEnum::AnyElement),
+        ("AllElements", SearchIndexPredicateArrayOperatorEnum::AllElements),
+    ],
+};
+
+impl SearchIndexPredicateArrayOperatorEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            SearchIndexPredicateArrayOperatorEnum::AllElements => "AllElements",
+            SearchIndexPredicateArrayOperatorEnum::AnyElement => "AnyElement",
+            SearchIndexPredicateArrayOperatorEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        SEARCH_INDEX_PREDICATE_ARRAY_OPERATOR_ENUM_MAP.get(s).cloned().unwrap_or_else(|| SearchIndexPredicateArrayOperatorEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for SearchIndexPredicateArrayOperatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for SearchIndexPredicateArrayOperatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SearchIndexPredicateArrayOperatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SearchIndexPredicateArrayOperatorEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for SearchIndexPredicateArrayOperatorEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for SearchIndexPredicateArrayOperatorEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a SearchIndexPredicateArrayOperatorEnum> for &'a str {
+    fn from(value: &'a SearchIndexPredicateArrayOperatorEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for SearchIndexPredicateArrayOperatorEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static SEARCH_INDEX_PREDICATE_COMPARISON_OPERATOR_ENUM_MAP: phf::Map<&'static str, SearchIndexPredicateComparisonOperatorEnum> = ::phf::Map {
+    key: 8727728585699229200,
+    disps: &[
+        (9, 0),
+        (0, 2),
+    ],
+    entries: &[
+        ("Less", SearchIndexPredicateComparisonOperatorEnum::Less),
+        ("NotLike", SearchIndexPredicateComparisonOperatorEnum::NotLike),
+        ("LessOrEqual", SearchIndexPredicateComparisonOperatorEnum::LessOrEqual),
+        ("Like", SearchIndexPredicateComparisonOperatorEnum::Like),
+        ("NotIn", SearchIndexPredicateComparisonOperatorEnum::NotIn),
+        ("Greater", SearchIndexPredicateComparisonOperatorEnum::Greater),
+        ("GreaterOrEqual", SearchIndexPredicateComparisonOperatorEnum::GreaterOrEqual),
+        ("In", SearchIndexPredicateComparisonOperatorEnum::In),
+        ("Equal", SearchIndexPredicateComparisonOperatorEnum::Equal),
+        ("NotEqual", SearchIndexPredicateComparisonOperatorEnum::NotEqual),
+    ],
+};
+
+impl SearchIndexPredicateComparisonOperatorEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            SearchIndexPredicateComparisonOperatorEnum::Equal => "Equal",
+            SearchIndexPredicateComparisonOperatorEnum::NotEqual => "NotEqual",
+            SearchIndexPredicateComparisonOperatorEnum::Greater => "Greater",
+            SearchIndexPredicateComparisonOperatorEnum::GreaterOrEqual => "GreaterOrEqual",
+            SearchIndexPredicateComparisonOperatorEnum::Less => "Less",
+            SearchIndexPredicateComparisonOperatorEnum::LessOrEqual => "LessOrEqual",
+            SearchIndexPredicateComparisonOperatorEnum::In => "In",
+            SearchIndexPredicateComparisonOperatorEnum::NotIn => "NotIn",
+            SearchIndexPredicateComparisonOperatorEnum::Like => "Like",
+            SearchIndexPredicateComparisonOperatorEnum::NotLike => "NotLike",
+            SearchIndexPredicateComparisonOperatorEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        SEARCH_INDEX_PREDICATE_COMPARISON_OPERATOR_ENUM_MAP.get(s).cloned().unwrap_or_else(|| SearchIndexPredicateComparisonOperatorEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for SearchIndexPredicateComparisonOperatorEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for SearchIndexPredicateComparisonOperatorEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SearchIndexPredicateComparisonOperatorEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SearchIndexPredicateComparisonOperatorEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for SearchIndexPredicateComparisonOperatorEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for SearchIndexPredicateComparisonOperatorEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a SearchIndexPredicateComparisonOperatorEnum> for &'a str {
+    fn from(value: &'a SearchIndexPredicateComparisonOperatorEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for SearchIndexPredicateComparisonOperatorEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static SEARCH_INDEX_QUERY_SPEC_RESOURCE_TYPE_ENUM_MAP: phf::Map<&'static str, SearchIndexQuerySpecResourceTypeEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (0, 3),
+        (9, 0),
+        (15, 5),
+        (1, 4),
+    ],
+    entries: &[
+        ("Network", SearchIndexQuerySpecResourceTypeEnum::Network),
+        ("DistributedVirtualSwitch", SearchIndexQuerySpecResourceTypeEnum::DistributedVirtualSwitch),
+        ("HostSystem", SearchIndexQuerySpecResourceTypeEnum::HostSystem),
+        ("DistributedVirtualPortgroup", SearchIndexQuerySpecResourceTypeEnum::DistributedVirtualPortgroup),
+        ("StoragePod", SearchIndexQuerySpecResourceTypeEnum::StoragePod),
+        ("VmwareDistributedVirtualSwitch", SearchIndexQuerySpecResourceTypeEnum::VmwareDistributedVirtualSwitch),
+        ("OpaqueNetwork", SearchIndexQuerySpecResourceTypeEnum::OpaqueNetwork),
+        ("ResourcePool", SearchIndexQuerySpecResourceTypeEnum::ResourcePool),
+        ("Datastore", SearchIndexQuerySpecResourceTypeEnum::Datastore),
+        ("VirtualApp", SearchIndexQuerySpecResourceTypeEnum::VirtualApp),
+        ("ClusterComputeResource", SearchIndexQuerySpecResourceTypeEnum::ClusterComputeResource),
+        ("ServiceInstance", SearchIndexQuerySpecResourceTypeEnum::ServiceInstance),
+        ("Folder", SearchIndexQuerySpecResourceTypeEnum::Folder),
+        ("Datacenter", SearchIndexQuerySpecResourceTypeEnum::Datacenter),
+        ("ComputeResource", SearchIndexQuerySpecResourceTypeEnum::ComputeResource),
+        ("VirtualMachine", SearchIndexQuerySpecResourceTypeEnum::VirtualMachine),
+    ],
+};
+
+impl SearchIndexQuerySpecResourceTypeEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            SearchIndexQuerySpecResourceTypeEnum::ClusterComputeResource => "ClusterComputeResource",
+            SearchIndexQuerySpecResourceTypeEnum::ComputeResource => "ComputeResource",
+            SearchIndexQuerySpecResourceTypeEnum::Datacenter => "Datacenter",
+            SearchIndexQuerySpecResourceTypeEnum::Datastore => "Datastore",
+            SearchIndexQuerySpecResourceTypeEnum::DistributedVirtualPortgroup => "DistributedVirtualPortgroup",
+            SearchIndexQuerySpecResourceTypeEnum::DistributedVirtualSwitch => "DistributedVirtualSwitch",
+            SearchIndexQuerySpecResourceTypeEnum::Folder => "Folder",
+            SearchIndexQuerySpecResourceTypeEnum::HostSystem => "HostSystem",
+            SearchIndexQuerySpecResourceTypeEnum::Network => "Network",
+            SearchIndexQuerySpecResourceTypeEnum::OpaqueNetwork => "OpaqueNetwork",
+            SearchIndexQuerySpecResourceTypeEnum::ResourcePool => "ResourcePool",
+            SearchIndexQuerySpecResourceTypeEnum::ServiceInstance => "ServiceInstance",
+            SearchIndexQuerySpecResourceTypeEnum::StoragePod => "StoragePod",
+            SearchIndexQuerySpecResourceTypeEnum::VirtualApp => "VirtualApp",
+            SearchIndexQuerySpecResourceTypeEnum::VirtualMachine => "VirtualMachine",
+            SearchIndexQuerySpecResourceTypeEnum::VmwareDistributedVirtualSwitch => "VmwareDistributedVirtualSwitch",
+            SearchIndexQuerySpecResourceTypeEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        SEARCH_INDEX_QUERY_SPEC_RESOURCE_TYPE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| SearchIndexQuerySpecResourceTypeEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for SearchIndexQuerySpecResourceTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for SearchIndexQuerySpecResourceTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<SearchIndexQuerySpecResourceTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(SearchIndexQuerySpecResourceTypeEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for SearchIndexQuerySpecResourceTypeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for SearchIndexQuerySpecResourceTypeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a SearchIndexQuerySpecResourceTypeEnum> for &'a str {
+    fn from(value: &'a SearchIndexQuerySpecResourceTypeEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for SearchIndexQuerySpecResourceTypeEnum {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -29687,6 +30904,105 @@ impl AsRef<str> for VsanCapabilityType90Enum {
     }
 }
 
+static VSAN_CAPABILITY_TYPE_91_ENUM_MAP: phf::Map<&'static str, VsanCapabilityType91Enum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (2, 1),
+        (15, 0),
+        (3, 0),
+        (0, 0),
+    ],
+    entries: &[
+        ("perfsvcdhciv2", VsanCapabilityType91Enum::Perfsvcdhciv2),
+        ("fileservicefds", VsanCapabilityType91Enum::Fileservicefds),
+        ("vsan2compressionconfig", VsanCapabilityType91Enum::Vsan2Compressionconfig),
+        ("dataserviceprecheck", VsanCapabilityType91Enum::Dataserviceprecheck),
+        ("vsanhcimeshmixmode", VsanCapabilityType91Enum::Vsanhcimeshmixmode),
+        ("immutablesnapshot", VsanCapabilityType91Enum::Immutablesnapshot),
+        ("vsanvmdiskplacementxvc", VsanCapabilityType91Enum::Vsanvmdiskplacementxvc),
+        ("vsaneffectivecapacity", VsanCapabilityType91Enum::Vsaneffectivecapacity),
+        ("vsanhcimeshdit", VsanCapabilityType91Enum::Vsanhcimeshdit),
+        ("vsancyberrecovery", VsanCapabilityType91Enum::Vsancyberrecovery),
+        ("vsanxvchcimeshscv2", VsanCapabilityType91Enum::Vsanxvchcimeshscv2),
+        ("vsan2globaldedupencryption", VsanCapabilityType91Enum::Vsan2Globaldedupencryption),
+        ("automanagedraid", VsanCapabilityType91Enum::Automanagedraid),
+        ("vsanscclientv2", VsanCapabilityType91Enum::Vsanscclientv2),
+        ("vsansitemmandtakeover", VsanCapabilityType91Enum::Vsansitemmandtakeover),
+        ("vsan2globaldedupv2", VsanCapabilityType91Enum::Vsan2Globaldedupv2),
+    ],
+};
+
+impl VsanCapabilityType91Enum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VsanCapabilityType91Enum::Vsanhcimeshdit => "vsanhcimeshdit",
+            VsanCapabilityType91Enum::Vsanhcimeshmixmode => "vsanhcimeshmixmode",
+            VsanCapabilityType91Enum::Vsanxvchcimeshscv2 => "vsanxvchcimeshscv2",
+            VsanCapabilityType91Enum::Dataserviceprecheck => "dataserviceprecheck",
+            VsanCapabilityType91Enum::Vsansitemmandtakeover => "vsansitemmandtakeover",
+            VsanCapabilityType91Enum::Vsanscclientv2 => "vsanscclientv2",
+            VsanCapabilityType91Enum::Vsan2Globaldedupv2 => "vsan2globaldedupv2",
+            VsanCapabilityType91Enum::Perfsvcdhciv2 => "perfsvcdhciv2",
+            VsanCapabilityType91Enum::Automanagedraid => "automanagedraid",
+            VsanCapabilityType91Enum::Vsanvmdiskplacementxvc => "vsanvmdiskplacementxvc",
+            VsanCapabilityType91Enum::Vsaneffectivecapacity => "vsaneffectivecapacity",
+            VsanCapabilityType91Enum::Immutablesnapshot => "immutablesnapshot",
+            VsanCapabilityType91Enum::Vsan2Globaldedupencryption => "vsan2globaldedupencryption",
+            VsanCapabilityType91Enum::Vsan2Compressionconfig => "vsan2compressionconfig",
+            VsanCapabilityType91Enum::Fileservicefds => "fileservicefds",
+            VsanCapabilityType91Enum::Vsancyberrecovery => "vsancyberrecovery",
+            VsanCapabilityType91Enum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VSAN_CAPABILITY_TYPE_91_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VsanCapabilityType91Enum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VsanCapabilityType91Enum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VsanCapabilityType91Enum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanCapabilityType91Enum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanCapabilityType91Enum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VsanCapabilityType91Enum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VsanCapabilityType91Enum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VsanCapabilityType91Enum> for &'a str {
+    fn from(value: &'a VsanCapabilityType91Enum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VsanCapabilityType91Enum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
 static VSAN_CLUSTER_HEALTH_ACTION_ID_ENUM_ENUM_MAP: phf::Map<&'static str, VsanClusterHealthActionIdEnumEnum> = ::phf::Map {
     key: 10121458955350035957,
     disps: &[
@@ -29904,6 +31220,85 @@ impl AsRef<str> for VsanClusterHealthCategoryEnumEnum {
     }
 }
 
+static VSAN_COMPONENT_STATES_ENUM_MAP: phf::Map<&'static str, VsanComponentStatesEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (3, 0),
+        (4, 3),
+    ],
+    entries: &[
+        ("RECONFIG", VsanComponentStatesEnum::Reconfig),
+        ("ABSENT", VsanComponentStatesEnum::Absent),
+        ("ACTIVE_STALE", VsanComponentStatesEnum::ActiveStale),
+        ("UNKNOWN", VsanComponentStatesEnum::Unknown),
+        ("ABSENT_RESYNC", VsanComponentStatesEnum::AbsentResync),
+        ("ACTIVE", VsanComponentStatesEnum::Active),
+        ("DEGRADED", VsanComponentStatesEnum::Degraded),
+    ],
+};
+
+impl VsanComponentStatesEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VsanComponentStatesEnum::Active => "ACTIVE",
+            VsanComponentStatesEnum::ActiveStale => "ACTIVE_STALE",
+            VsanComponentStatesEnum::Absent => "ABSENT",
+            VsanComponentStatesEnum::AbsentResync => "ABSENT_RESYNC",
+            VsanComponentStatesEnum::Degraded => "DEGRADED",
+            VsanComponentStatesEnum::Reconfig => "RECONFIG",
+            VsanComponentStatesEnum::Unknown => "UNKNOWN",
+            VsanComponentStatesEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VSAN_COMPONENT_STATES_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VsanComponentStatesEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VsanComponentStatesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VsanComponentStatesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanComponentStatesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanComponentStatesEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VsanComponentStatesEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VsanComponentStatesEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VsanComponentStatesEnum> for &'a str {
+    fn from(value: &'a VsanComponentStatesEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VsanComponentStatesEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
 static VSAN_DATASTORE_TYPE_ENUM_MAP: phf::Map<&'static str, VsanDatastoreTypeEnum> = ::phf::Map {
     key: 15467950696543387533,
     disps: &[
@@ -29971,6 +31366,102 @@ impl<'a> From<&'a VsanDatastoreTypeEnum> for &'a str {
 }
 
 impl AsRef<str> for VsanDatastoreTypeEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static VSAN_HCI_MESH_DIT_ENCRYPTION_ISSUE_ENUM_MAP: phf::Map<&'static str, VsanHciMeshDitEncryptionIssueEnum> = ::phf::Map {
+    key: 1937371814602216758,
+    disps: &[
+        (0, 2),
+        (1, 0),
+        (5, 7),
+    ],
+    entries: &[
+        ("clusterServerHciMeshDitEncIsEnabledButTheHostIsNot", VsanHciMeshDitEncryptionIssueEnum::ClusterServerHciMeshDitEncIsEnabledButTheHostIsNot),
+        ("hostHasDifferentServerHciMeshDitEncRekeyInterval", VsanHciMeshDitEncryptionIssueEnum::HostHasDifferentServerHciMeshDitEncRekeyInterval),
+        ("hostHasNoHciMeshDitEncConfigForTheServerCluster", VsanHciMeshDitEncryptionIssueEnum::HostHasNoHciMeshDitEncConfigForTheServerCluster),
+        ("hostServerHciMeshDitEncIsEnabledButTheClusterIsNot", VsanHciMeshDitEncryptionIssueEnum::HostServerHciMeshDitEncIsEnabledButTheClusterIsNot),
+        ("hostClientHciMeshDitEncStateIsNotSettled", VsanHciMeshDitEncryptionIssueEnum::HostClientHciMeshDitEncStateIsNotSettled),
+        ("hostClientHciMeshDitEncIsEnabledButTheClusterIsNot", VsanHciMeshDitEncryptionIssueEnum::HostClientHciMeshDitEncIsEnabledButTheClusterIsNot),
+        ("clientHciMeshDitEncIsEnabledButTheServerIsNot", VsanHciMeshDitEncryptionIssueEnum::ClientHciMeshDitEncIsEnabledButTheServerIsNot),
+        ("hostHasNoHciMeshDitEncConfigForTheClientCluster", VsanHciMeshDitEncryptionIssueEnum::HostHasNoHciMeshDitEncConfigForTheClientCluster),
+        ("VsanHciMeshDitEncryptionIssue_Unknown", VsanHciMeshDitEncryptionIssueEnum::VsanHciMeshDitEncryptionIssueUnknown),
+        ("serverHostIncapable", VsanHciMeshDitEncryptionIssueEnum::ServerHostIncapable),
+        ("serverHciMeshDitEncIsEnabledButTheClientIsNot", VsanHciMeshDitEncryptionIssueEnum::ServerHciMeshDitEncIsEnabledButTheClientIsNot),
+        ("clusterClientHciMeshDitEncIsEnabledButTheHostIsNot", VsanHciMeshDitEncryptionIssueEnum::ClusterClientHciMeshDitEncIsEnabledButTheHostIsNot),
+        ("hostServerHciMeshDitEncIsNotInSettledState", VsanHciMeshDitEncryptionIssueEnum::HostServerHciMeshDitEncIsNotInSettledState),
+        ("serverHciMeshDitEncIsNotSettled", VsanHciMeshDitEncryptionIssueEnum::ServerHciMeshDitEncIsNotSettled),
+        ("clientHostIncapable", VsanHciMeshDitEncryptionIssueEnum::ClientHostIncapable),
+    ],
+};
+
+impl VsanHciMeshDitEncryptionIssueEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VsanHciMeshDitEncryptionIssueEnum::HostHasNoHciMeshDitEncConfigForTheServerCluster => "hostHasNoHciMeshDitEncConfigForTheServerCluster",
+            VsanHciMeshDitEncryptionIssueEnum::HostHasNoHciMeshDitEncConfigForTheClientCluster => "hostHasNoHciMeshDitEncConfigForTheClientCluster",
+            VsanHciMeshDitEncryptionIssueEnum::ClusterServerHciMeshDitEncIsEnabledButTheHostIsNot => "clusterServerHciMeshDitEncIsEnabledButTheHostIsNot",
+            VsanHciMeshDitEncryptionIssueEnum::ClusterClientHciMeshDitEncIsEnabledButTheHostIsNot => "clusterClientHciMeshDitEncIsEnabledButTheHostIsNot",
+            VsanHciMeshDitEncryptionIssueEnum::HostServerHciMeshDitEncIsEnabledButTheClusterIsNot => "hostServerHciMeshDitEncIsEnabledButTheClusterIsNot",
+            VsanHciMeshDitEncryptionIssueEnum::HostClientHciMeshDitEncIsEnabledButTheClusterIsNot => "hostClientHciMeshDitEncIsEnabledButTheClusterIsNot",
+            VsanHciMeshDitEncryptionIssueEnum::HostServerHciMeshDitEncIsNotInSettledState => "hostServerHciMeshDitEncIsNotInSettledState",
+            VsanHciMeshDitEncryptionIssueEnum::HostHasDifferentServerHciMeshDitEncRekeyInterval => "hostHasDifferentServerHciMeshDitEncRekeyInterval",
+            VsanHciMeshDitEncryptionIssueEnum::HostClientHciMeshDitEncStateIsNotSettled => "hostClientHciMeshDitEncStateIsNotSettled",
+            VsanHciMeshDitEncryptionIssueEnum::ClientHostIncapable => "clientHostIncapable",
+            VsanHciMeshDitEncryptionIssueEnum::ServerHostIncapable => "serverHostIncapable",
+            VsanHciMeshDitEncryptionIssueEnum::ClientHciMeshDitEncIsEnabledButTheServerIsNot => "clientHciMeshDitEncIsEnabledButTheServerIsNot",
+            VsanHciMeshDitEncryptionIssueEnum::ServerHciMeshDitEncIsEnabledButTheClientIsNot => "serverHciMeshDitEncIsEnabledButTheClientIsNot",
+            VsanHciMeshDitEncryptionIssueEnum::ServerHciMeshDitEncIsNotSettled => "serverHciMeshDitEncIsNotSettled",
+            VsanHciMeshDitEncryptionIssueEnum::VsanHciMeshDitEncryptionIssueUnknown => "VsanHciMeshDitEncryptionIssue_Unknown",
+            VsanHciMeshDitEncryptionIssueEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VSAN_HCI_MESH_DIT_ENCRYPTION_ISSUE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VsanHciMeshDitEncryptionIssueEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VsanHciMeshDitEncryptionIssueEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VsanHciMeshDitEncryptionIssueEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanHciMeshDitEncryptionIssueEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanHciMeshDitEncryptionIssueEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VsanHciMeshDitEncryptionIssueEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VsanHciMeshDitEncryptionIssueEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VsanHciMeshDitEncryptionIssueEnum> for &'a str {
+    fn from(value: &'a VsanHciMeshDitEncryptionIssueEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VsanHciMeshDitEncryptionIssueEnum {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -30405,51 +31896,56 @@ impl AsRef<str> for VsanIscsiTargetServiceProcessStatusEnum {
 }
 
 static VSAN_OBJECT_TYPE_ENUM_ENUM_MAP: phf::Map<&'static str, VsanObjectTypeEnumEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 12913932095322966823,
     disps: &[
-        (15, 1),
-        (6, 11),
-        (0, 0),
         (1, 0),
-        (5, 13),
-        (0, 1),
-        (25, 18),
+        (0, 0),
+        (1, 10),
+        (2, 36),
+        (1, 2),
+        (1, 17),
+        (1, 7),
+        (26, 32),
     ],
     entries: &[
-        ("hbrPersist", VsanObjectTypeEnumEnum::HbrPersist),
-        ("hbrCfg", VsanObjectTypeEnumEnum::HbrCfg),
-        ("iscsiLun", VsanObjectTypeEnumEnum::IscsiLun),
         ("detachedCnsVolFile", VsanObjectTypeEnumEnum::DetachedCnsVolFile),
-        ("VsanObjectTypeEnum_Unknown", VsanObjectTypeEnumEnum::VsanObjectTypeEnumUnknown),
-        ("attachedCnsVolBlock", VsanObjectTypeEnumEnum::AttachedCnsVolBlock),
-        ("statsdb", VsanObjectTypeEnumEnum::Statsdb),
-        ("slackSpaceCapRequiredForHost", VsanObjectTypeEnumEnum::SlackSpaceCapRequiredForHost),
-        ("improvedVirtualDisk", VsanObjectTypeEnumEnum::ImprovedVirtualDisk),
-        ("extension", VsanObjectTypeEnumEnum::Extension),
-        ("transientSpace", VsanObjectTypeEnumEnum::TransientSpace),
-        ("dedupOverhead", VsanObjectTypeEnumEnum::DedupOverhead),
-        ("iscsiTarget", VsanObjectTypeEnumEnum::IscsiTarget),
         ("physicalTransientSpace", VsanObjectTypeEnumEnum::PhysicalTransientSpace),
-        ("vmswap", VsanObjectTypeEnumEnum::Vmswap),
-        ("attachedCnsVolFile", VsanObjectTypeEnumEnum::AttachedCnsVolFile),
-        ("other", VsanObjectTypeEnumEnum::Other),
-        ("haMetadataObject", VsanObjectTypeEnumEnum::HaMetadataObject),
-        ("hostRebuildCapacity", VsanObjectTypeEnumEnum::HostRebuildCapacity),
-        ("namespace", VsanObjectTypeEnumEnum::Namespace),
-        ("vdisk", VsanObjectTypeEnumEnum::Vdisk),
-        ("spaceUnderDedupConsideration", VsanObjectTypeEnumEnum::SpaceUnderDedupConsideration),
-        ("vmem", VsanObjectTypeEnumEnum::Vmem),
-        ("cnsVolFile", VsanObjectTypeEnumEnum::CnsVolFile),
-        ("checksumOverhead", VsanObjectTypeEnumEnum::ChecksumOverhead),
-        ("fileServiceRoot", VsanObjectTypeEnumEnum::FileServiceRoot),
-        ("esaObjectOverhead", VsanObjectTypeEnumEnum::EsaObjectOverhead),
-        ("traceobject", VsanObjectTypeEnumEnum::Traceobject),
-        ("minSpaceRequiredForVsanOp", VsanObjectTypeEnumEnum::MinSpaceRequiredForVsanOp),
-        ("hbrDisk", VsanObjectTypeEnumEnum::HbrDisk),
-        ("detachedCnsVolBlock", VsanObjectTypeEnumEnum::DetachedCnsVolBlock),
-        ("fileShare", VsanObjectTypeEnumEnum::FileShare),
-        ("resynPauseThresholdForHost", VsanObjectTypeEnumEnum::ResynPauseThresholdForHost),
         ("fileSystemOverhead", VsanObjectTypeEnumEnum::FileSystemOverhead),
+        ("cnsVolFile", VsanObjectTypeEnumEnum::CnsVolFile),
+        ("attachedCnsVolFile", VsanObjectTypeEnumEnum::AttachedCnsVolFile),
+        ("spaceUnderDedupConsideration", VsanObjectTypeEnumEnum::SpaceUnderDedupConsideration),
+        ("esaObjectOverhead", VsanObjectTypeEnumEnum::EsaObjectOverhead),
+        ("extension", VsanObjectTypeEnumEnum::Extension),
+        ("hbrPersist", VsanObjectTypeEnumEnum::HbrPersist),
+        ("aggregatedSystemObjects", VsanObjectTypeEnumEnum::AggregatedSystemObjects),
+        ("statsdb", VsanObjectTypeEnumEnum::Statsdb),
+        ("minSpaceRequiredForVsanOp", VsanObjectTypeEnumEnum::MinSpaceRequiredForVsanOp),
+        ("VsanObjectTypeEnum_Unknown", VsanObjectTypeEnumEnum::VsanObjectTypeEnumUnknown),
+        ("checksumOverhead", VsanObjectTypeEnumEnum::ChecksumOverhead),
+        ("hostRebuildCapacity", VsanObjectTypeEnumEnum::HostRebuildCapacity),
+        ("resynPauseThresholdForHost", VsanObjectTypeEnumEnum::ResynPauseThresholdForHost),
+        ("traceobject", VsanObjectTypeEnumEnum::Traceobject),
+        ("pgNamespace", VsanObjectTypeEnumEnum::PgNamespace),
+        ("clusterDBNamespace", VsanObjectTypeEnumEnum::ClusterDbNamespace),
+        ("improvedVirtualDisk", VsanObjectTypeEnumEnum::ImprovedVirtualDisk),
+        ("hbrDisk", VsanObjectTypeEnumEnum::HbrDisk),
+        ("namespace", VsanObjectTypeEnumEnum::Namespace),
+        ("iscsiLun", VsanObjectTypeEnumEnum::IscsiLun),
+        ("nativeObjectStore", VsanObjectTypeEnumEnum::NativeObjectStore),
+        ("fileServiceRoot", VsanObjectTypeEnumEnum::FileServiceRoot),
+        ("dedupOverhead", VsanObjectTypeEnumEnum::DedupOverhead),
+        ("vmswap", VsanObjectTypeEnumEnum::Vmswap),
+        ("transientSpace", VsanObjectTypeEnumEnum::TransientSpace),
+        ("vdisk", VsanObjectTypeEnumEnum::Vdisk),
+        ("fileShare", VsanObjectTypeEnumEnum::FileShare),
+        ("detachedCnsVolBlock", VsanObjectTypeEnumEnum::DetachedCnsVolBlock),
+        ("slackSpaceCapRequiredForHost", VsanObjectTypeEnumEnum::SlackSpaceCapRequiredForHost),
+        ("haMetadataObject", VsanObjectTypeEnumEnum::HaMetadataObject),
+        ("other", VsanObjectTypeEnumEnum::Other),
+        ("attachedCnsVolBlock", VsanObjectTypeEnumEnum::AttachedCnsVolBlock),
+        ("hbrCfg", VsanObjectTypeEnumEnum::HbrCfg),
+        ("iscsiTarget", VsanObjectTypeEnumEnum::IscsiTarget),
+        ("vmem", VsanObjectTypeEnumEnum::Vmem),
     ],
 };
 
@@ -30489,6 +31985,10 @@ impl VsanObjectTypeEnumEnum {
             VsanObjectTypeEnumEnum::HbrPersist => "hbrPersist",
             VsanObjectTypeEnumEnum::Traceobject => "traceobject",
             VsanObjectTypeEnumEnum::EsaObjectOverhead => "esaObjectOverhead",
+            VsanObjectTypeEnumEnum::PgNamespace => "pgNamespace",
+            VsanObjectTypeEnumEnum::ClusterDbNamespace => "clusterDBNamespace",
+            VsanObjectTypeEnumEnum::AggregatedSystemObjects => "aggregatedSystemObjects",
+            VsanObjectTypeEnumEnum::NativeObjectStore => "nativeObjectStore",
             VsanObjectTypeEnumEnum::VsanObjectTypeEnumUnknown => "VsanObjectTypeEnum_Unknown",
             VsanObjectTypeEnumEnum::Other_(s) => s,
         }
@@ -31657,6 +33157,219 @@ impl AsRef<str> for QuerySelectionNameTypeEnum {
     }
 }
 
+static CNS_SYNC_VOLUME_MODE_ENUM_MAP: phf::Map<&'static str, CnsSyncVolumeModeEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("SPACE_USAGE", CnsSyncVolumeModeEnum::SpaceUsage),
+    ],
+};
+
+impl CnsSyncVolumeModeEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            CnsSyncVolumeModeEnum::SpaceUsage => "SPACE_USAGE",
+            CnsSyncVolumeModeEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        CNS_SYNC_VOLUME_MODE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| CnsSyncVolumeModeEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for CnsSyncVolumeModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for CnsSyncVolumeModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CnsSyncVolumeModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CnsSyncVolumeModeEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for CnsSyncVolumeModeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for CnsSyncVolumeModeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a CnsSyncVolumeModeEnum> for &'a str {
+    fn from(value: &'a CnsSyncVolumeModeEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for CnsSyncVolumeModeEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static CNS_UNREGISTER_TARGET_VOLUME_TYPE_ENUM_MAP: phf::Map<&'static str, CnsUnregisterTargetVolumeTypeEnum> = ::phf::Map {
+    key: 15467950696543387533,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("LEGACY_DISK", CnsUnregisterTargetVolumeTypeEnum::LegacyDisk),
+        ("FCD", CnsUnregisterTargetVolumeTypeEnum::Fcd),
+    ],
+};
+
+impl CnsUnregisterTargetVolumeTypeEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            CnsUnregisterTargetVolumeTypeEnum::Fcd => "FCD",
+            CnsUnregisterTargetVolumeTypeEnum::LegacyDisk => "LEGACY_DISK",
+            CnsUnregisterTargetVolumeTypeEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        CNS_UNREGISTER_TARGET_VOLUME_TYPE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| CnsUnregisterTargetVolumeTypeEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for CnsUnregisterTargetVolumeTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for CnsUnregisterTargetVolumeTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CnsUnregisterTargetVolumeTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CnsUnregisterTargetVolumeTypeEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for CnsUnregisterTargetVolumeTypeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for CnsUnregisterTargetVolumeTypeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a CnsUnregisterTargetVolumeTypeEnum> for &'a str {
+    fn from(value: &'a CnsUnregisterTargetVolumeTypeEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for CnsUnregisterTargetVolumeTypeEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static CNS_VOLUME_BACKING_TYPE_ENUM_MAP: phf::Map<&'static str, CnsVolumeBackingTypeEnum> = ::phf::Map {
+    key: 10121458955350035957,
+    disps: &[
+        (1, 0),
+        (2, 2),
+    ],
+    entries: &[
+        ("FlatVer1BackingInfo", CnsVolumeBackingTypeEnum::FlatVer1BackingInfo),
+        ("RawDiskMappingVer1BackingInfo", CnsVolumeBackingTypeEnum::RawDiskMappingVer1BackingInfo),
+        ("FlatVer2BackingInfo", CnsVolumeBackingTypeEnum::FlatVer2BackingInfo),
+        ("SeSparseBackingInfo", CnsVolumeBackingTypeEnum::SeSparseBackingInfo),
+        ("SparseVer2BackingInfo", CnsVolumeBackingTypeEnum::SparseVer2BackingInfo),
+        ("SparseVer1BackingInfo", CnsVolumeBackingTypeEnum::SparseVer1BackingInfo),
+        ("LocalPMemBackingInfo", CnsVolumeBackingTypeEnum::LocalPMemBackingInfo),
+    ],
+};
+
+impl CnsVolumeBackingTypeEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            CnsVolumeBackingTypeEnum::FlatVer1BackingInfo => "FlatVer1BackingInfo",
+            CnsVolumeBackingTypeEnum::FlatVer2BackingInfo => "FlatVer2BackingInfo",
+            CnsVolumeBackingTypeEnum::SparseVer1BackingInfo => "SparseVer1BackingInfo",
+            CnsVolumeBackingTypeEnum::SparseVer2BackingInfo => "SparseVer2BackingInfo",
+            CnsVolumeBackingTypeEnum::RawDiskMappingVer1BackingInfo => "RawDiskMappingVer1BackingInfo",
+            CnsVolumeBackingTypeEnum::SeSparseBackingInfo => "SeSparseBackingInfo",
+            CnsVolumeBackingTypeEnum::LocalPMemBackingInfo => "LocalPMemBackingInfo",
+            CnsVolumeBackingTypeEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        CNS_VOLUME_BACKING_TYPE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| CnsVolumeBackingTypeEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for CnsVolumeBackingTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for CnsVolumeBackingTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<CnsVolumeBackingTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(CnsVolumeBackingTypeEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for CnsVolumeBackingTypeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for CnsVolumeBackingTypeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a CnsVolumeBackingTypeEnum> for &'a str {
+    fn from(value: &'a CnsVolumeBackingTypeEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for CnsVolumeBackingTypeEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
 static CNS_VOLUME_TYPE_ENUM_MAP: phf::Map<&'static str, CnsVolumeTypeEnum> = ::phf::Map {
     key: 12913932095322966823,
     disps: &[
@@ -32693,6 +34406,76 @@ impl<'a> From<&'a DistributedVirtualSwitchHostMemberHostComponentStateEnum> for 
 }
 
 impl AsRef<str> for DistributedVirtualSwitchHostMemberHostComponentStateEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static DISTRIBUTED_VIRTUAL_SWITCH_HOST_MEMBER_HOST_PERF_NIC_OFFLOAD_STATE_STATUS_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("FAILED", DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::Failed),
+        ("IN_PROGRESS", DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::InProgress),
+        ("SUCCEEDED", DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::Succeeded),
+    ],
+};
+
+impl DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::Succeeded => "SUCCEEDED",
+            DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::InProgress => "IN_PROGRESS",
+            DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::Failed => "FAILED",
+            DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        DISTRIBUTED_VIRTUAL_SWITCH_HOST_MEMBER_HOST_PERF_NIC_OFFLOAD_STATE_STATUS_ENUM_MAP.get(s).cloned().unwrap_or_else(|| DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum> for &'a str {
+    fn from(value: &'a DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -37280,6 +39063,76 @@ impl AsRef<str> for HostBiosInfoFirmwareTypeEnum {
     }
 }
 
+static HOST_CAPABILITY_DRTM_TYPES_ENUM_MAP: phf::Map<&'static str, HostCapabilityDrtmTypesEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (2, 0),
+    ],
+    entries: &[
+        ("amdSkinit", HostCapabilityDrtmTypesEnum::AmdSkinit),
+        ("none", HostCapabilityDrtmTypesEnum::None),
+        ("intelTxt", HostCapabilityDrtmTypesEnum::IntelTxt),
+    ],
+};
+
+impl HostCapabilityDrtmTypesEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            HostCapabilityDrtmTypesEnum::None => "none",
+            HostCapabilityDrtmTypesEnum::IntelTxt => "intelTxt",
+            HostCapabilityDrtmTypesEnum::AmdSkinit => "amdSkinit",
+            HostCapabilityDrtmTypesEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        HOST_CAPABILITY_DRTM_TYPES_ENUM_MAP.get(s).cloned().unwrap_or_else(|| HostCapabilityDrtmTypesEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for HostCapabilityDrtmTypesEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for HostCapabilityDrtmTypesEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCapabilityDrtmTypesEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCapabilityDrtmTypesEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for HostCapabilityDrtmTypesEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for HostCapabilityDrtmTypesEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a HostCapabilityDrtmTypesEnum> for &'a str {
+    fn from(value: &'a HostCapabilityDrtmTypesEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for HostCapabilityDrtmTypesEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
 static HOST_CAPABILITY_FT_UNSUPPORTED_REASON_ENUM_MAP: phf::Map<&'static str, HostCapabilityFtUnsupportedReasonEnum> = ::phf::Map {
     key: 12913932095322966823,
     disps: &[
@@ -37720,6 +39573,76 @@ impl<'a> From<&'a HostCertificateManagerCertificateKindEnum> for &'a str {
 }
 
 impl AsRef<str> for HostCertificateManagerCertificateKindEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static HOST_CERTIFICATE_MANAGER_CRYPTO_ALGORITHM_ENUM_MAP: phf::Map<&'static str, HostCertificateManagerCryptoAlgorithmEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("RSA_2048", HostCertificateManagerCryptoAlgorithmEnum::Rsa2048),
+        ("RSA_4096", HostCertificateManagerCryptoAlgorithmEnum::Rsa4096),
+        ("RSA_3072", HostCertificateManagerCryptoAlgorithmEnum::Rsa3072),
+    ],
+};
+
+impl HostCertificateManagerCryptoAlgorithmEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            HostCertificateManagerCryptoAlgorithmEnum::Rsa2048 => "RSA_2048",
+            HostCertificateManagerCryptoAlgorithmEnum::Rsa3072 => "RSA_3072",
+            HostCertificateManagerCryptoAlgorithmEnum::Rsa4096 => "RSA_4096",
+            HostCertificateManagerCryptoAlgorithmEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        HOST_CERTIFICATE_MANAGER_CRYPTO_ALGORITHM_ENUM_MAP.get(s).cloned().unwrap_or_else(|| HostCertificateManagerCryptoAlgorithmEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for HostCertificateManagerCryptoAlgorithmEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for HostCertificateManagerCryptoAlgorithmEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostCertificateManagerCryptoAlgorithmEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostCertificateManagerCryptoAlgorithmEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for HostCertificateManagerCryptoAlgorithmEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for HostCertificateManagerCryptoAlgorithmEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a HostCertificateManagerCryptoAlgorithmEnum> for &'a str {
+    fn from(value: &'a HostCertificateManagerCryptoAlgorithmEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for HostCertificateManagerCryptoAlgorithmEnum {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -41643,16 +43566,18 @@ impl AsRef<str> for HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
 }
 
 static HOST_NET_STACK_INSTANCE_SYSTEM_STACK_KEY_ENUM_MAP: phf::Map<&'static str, HostNetStackInstanceSystemStackKeyEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 12913932095322966823,
     disps: &[
-        (0, 0),
+        (1, 3),
+        (1, 0),
     ],
     entries: &[
-        ("mirror", HostNetStackInstanceSystemStackKeyEnum::Mirror),
         ("ops", HostNetStackInstanceSystemStackKeyEnum::Ops),
-        ("vmotion", HostNetStackInstanceSystemStackKeyEnum::Vmotion),
-        ("vSphereProvisioning", HostNetStackInstanceSystemStackKeyEnum::VSphereProvisioning),
+        ("vnetworking", HostNetStackInstanceSystemStackKeyEnum::Vnetworking),
         ("defaultTcpipStack", HostNetStackInstanceSystemStackKeyEnum::DefaultTcpipStack),
+        ("vmotion", HostNetStackInstanceSystemStackKeyEnum::Vmotion),
+        ("mirror", HostNetStackInstanceSystemStackKeyEnum::Mirror),
+        ("vSphereProvisioning", HostNetStackInstanceSystemStackKeyEnum::VSphereProvisioning),
     ],
 };
 
@@ -41664,6 +43589,7 @@ impl HostNetStackInstanceSystemStackKeyEnum {
             HostNetStackInstanceSystemStackKeyEnum::VSphereProvisioning => "vSphereProvisioning",
             HostNetStackInstanceSystemStackKeyEnum::Mirror => "mirror",
             HostNetStackInstanceSystemStackKeyEnum::Ops => "ops",
+            HostNetStackInstanceSystemStackKeyEnum::Vnetworking => "vnetworking",
             HostNetStackInstanceSystemStackKeyEnum::Other_(s) => s,
         }
     }
@@ -43179,6 +45105,85 @@ impl<'a> From<&'a HostPatchManagerReasonEnum> for &'a str {
 }
 
 impl AsRef<str> for HostPatchManagerReasonEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static HOST_PCI_PASSTHRU_INFO_DIRECT_PATH_DEVICE_MODE_ENUM_MAP: phf::Map<&'static str, HostPciPassthruInfoDirectPathDeviceModeEnum> = ::phf::Map {
+    key: 15467950696543387533,
+    disps: &[
+        (3, 0),
+        (1, 3),
+    ],
+    entries: &[
+        ("host", HostPciPassthruInfoDirectPathDeviceModeEnum::Host),
+        ("none", HostPciPassthruInfoDirectPathDeviceModeEnum::None),
+        ("directPath", HostPciPassthruInfoDirectPathDeviceModeEnum::DirectPath),
+        ("vGpuMixedSize", HostPciPassthruInfoDirectPathDeviceModeEnum::VGpuMixedSize),
+        ("systemSelect", HostPciPassthruInfoDirectPathDeviceModeEnum::SystemSelect),
+        ("enhancedDirectPath", HostPciPassthruInfoDirectPathDeviceModeEnum::EnhancedDirectPath),
+        ("vGpuSameSize", HostPciPassthruInfoDirectPathDeviceModeEnum::VGpuSameSize),
+    ],
+};
+
+impl HostPciPassthruInfoDirectPathDeviceModeEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            HostPciPassthruInfoDirectPathDeviceModeEnum::None => "none",
+            HostPciPassthruInfoDirectPathDeviceModeEnum::Host => "host",
+            HostPciPassthruInfoDirectPathDeviceModeEnum::DirectPath => "directPath",
+            HostPciPassthruInfoDirectPathDeviceModeEnum::EnhancedDirectPath => "enhancedDirectPath",
+            HostPciPassthruInfoDirectPathDeviceModeEnum::VGpuSameSize => "vGpuSameSize",
+            HostPciPassthruInfoDirectPathDeviceModeEnum::VGpuMixedSize => "vGpuMixedSize",
+            HostPciPassthruInfoDirectPathDeviceModeEnum::SystemSelect => "systemSelect",
+            HostPciPassthruInfoDirectPathDeviceModeEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        HOST_PCI_PASSTHRU_INFO_DIRECT_PATH_DEVICE_MODE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| HostPciPassthruInfoDirectPathDeviceModeEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for HostPciPassthruInfoDirectPathDeviceModeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for HostPciPassthruInfoDirectPathDeviceModeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<HostPciPassthruInfoDirectPathDeviceModeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(HostPciPassthruInfoDirectPathDeviceModeEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for HostPciPassthruInfoDirectPathDeviceModeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for HostPciPassthruInfoDirectPathDeviceModeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a HostPciPassthruInfoDirectPathDeviceModeEnum> for &'a str {
+    fn from(value: &'a HostPciPassthruInfoDirectPathDeviceModeEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for HostPciPassthruInfoDirectPathDeviceModeEnum {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -44823,14 +46828,15 @@ impl AsRef<str> for HostServicePolicyEnum {
 }
 
 static HOST_SEV_INFO_SEV_STATE_ENUM_MAP: phf::Map<&'static str, HostSevInfoSevStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15467950696543387533,
     disps: &[
         (1, 0),
     ],
     entries: &[
+        ("disabledBios", HostSevInfoSevStateEnum::DisabledBios),
         ("working", HostSevInfoSevStateEnum::Working),
-        ("initialized", HostSevInfoSevStateEnum::Initialized),
         ("uninitialized", HostSevInfoSevStateEnum::Uninitialized),
+        ("initialized", HostSevInfoSevStateEnum::Initialized),
     ],
 };
 
@@ -44840,6 +46846,7 @@ impl HostSevInfoSevStateEnum {
             HostSevInfoSevStateEnum::Uninitialized => "uninitialized",
             HostSevInfoSevStateEnum::Initialized => "initialized",
             HostSevInfoSevStateEnum::Working => "working",
+            HostSevInfoSevStateEnum::DisabledBios => "disabledBios",
             HostSevInfoSevStateEnum::Other_(s) => s,
         }
     }
@@ -45538,13 +47545,14 @@ impl AsRef<str> for HostSystemIdentificationInfoIdentifierEnum {
 }
 
 static HOST_TDX_INFO_TDX_STATE_ENUM_MAP: phf::Map<&'static str, HostTdxInfoTdxStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 7485420634051515786,
     disps: &[
         (3, 0),
     ],
     entries: &[
-        ("configured", HostTdxInfoTdxStateEnum::Configured),
+        ("disabledBios", HostTdxInfoTdxStateEnum::DisabledBios),
         ("ready", HostTdxInfoTdxStateEnum::Ready),
+        ("configured", HostTdxInfoTdxStateEnum::Configured),
         ("initialized", HostTdxInfoTdxStateEnum::Initialized),
         ("initializing", HostTdxInfoTdxStateEnum::Initializing),
     ],
@@ -45557,6 +47565,7 @@ impl HostTdxInfoTdxStateEnum {
             HostTdxInfoTdxStateEnum::Initialized => "initialized",
             HostTdxInfoTdxStateEnum::Configured => "configured",
             HostTdxInfoTdxStateEnum::Ready => "ready",
+            HostTdxInfoTdxStateEnum::DisabledBios => "disabledBios",
             HostTdxInfoTdxStateEnum::Other_(s) => s,
         }
     }
@@ -45886,24 +47895,25 @@ impl AsRef<str> for HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
 static HOST_VIRTUAL_NIC_MANAGER_NIC_TYPE_ENUM_MAP: phf::Map<&'static str, HostVirtualNicManagerNicTypeEnum> = ::phf::Map {
     key: 15467950696543387533,
     disps: &[
-        (1, 0),
-        (0, 1),
-        (9, 4),
+        (5, 0),
+        (0, 13),
+        (1, 11),
     ],
     entries: &[
-        ("vSphereProvisioning", HostVirtualNicManagerNicTypeEnum::VSphereProvisioning),
-        ("vsan", HostVirtualNicManagerNicTypeEnum::Vsan),
-        ("vSphereReplication", HostVirtualNicManagerNicTypeEnum::VSphereReplication),
         ("faultToleranceLogging", HostVirtualNicManagerNicTypeEnum::FaultToleranceLogging),
-        ("vmotion", HostVirtualNicManagerNicTypeEnum::Vmotion),
-        ("management", HostVirtualNicManagerNicTypeEnum::Management),
-        ("nvmeTcp", HostVirtualNicManagerNicTypeEnum::NvmeTcp),
-        ("vSphereReplicationNFC", HostVirtualNicManagerNicTypeEnum::VSphereReplicationNfc),
-        ("nvmeRdma", HostVirtualNicManagerNicTypeEnum::NvmeRdma),
         ("vsanExternal", HostVirtualNicManagerNicTypeEnum::VsanExternal),
+        ("nvmeRdma", HostVirtualNicManagerNicTypeEnum::NvmeRdma),
+        ("vSphereReplicationNFC", HostVirtualNicManagerNicTypeEnum::VSphereReplicationNfc),
+        ("vSphereProvisioning", HostVirtualNicManagerNicTypeEnum::VSphereProvisioning),
         ("ptp", HostVirtualNicManagerNicTypeEnum::Ptp),
         ("vSphereBackupNFC", HostVirtualNicManagerNicTypeEnum::VSphereBackupNfc),
         ("vsanWitness", HostVirtualNicManagerNicTypeEnum::VsanWitness),
+        ("nvmeTcp", HostVirtualNicManagerNicTypeEnum::NvmeTcp),
+        ("management", HostVirtualNicManagerNicTypeEnum::Management),
+        ("vnetworking", HostVirtualNicManagerNicTypeEnum::Vnetworking),
+        ("vmotion", HostVirtualNicManagerNicTypeEnum::Vmotion),
+        ("vsan", HostVirtualNicManagerNicTypeEnum::Vsan),
+        ("vSphereReplication", HostVirtualNicManagerNicTypeEnum::VSphereReplication),
     ],
 };
 
@@ -45923,6 +47933,7 @@ impl HostVirtualNicManagerNicTypeEnum {
             HostVirtualNicManagerNicTypeEnum::NvmeTcp => "nvmeTcp",
             HostVirtualNicManagerNicTypeEnum::NvmeRdma => "nvmeRdma",
             HostVirtualNicManagerNicTypeEnum::VsanExternal => "vsanExternal",
+            HostVirtualNicManagerNicTypeEnum::Vnetworking => "vnetworking",
             HostVirtualNicManagerNicTypeEnum::Other_(s) => s,
         }
     }
@@ -51523,6 +53534,74 @@ impl AsRef<str> for GuestOsDescriptorFirmwareTypeEnum {
     }
 }
 
+static VIRTUAL_MACHINE_GUEST_ARCHITECTURE_ENUM_MAP: phf::Map<&'static str, VirtualMachineGuestArchitectureEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("arm", VirtualMachineGuestArchitectureEnum::Arm),
+        ("x86", VirtualMachineGuestArchitectureEnum::X86),
+    ],
+};
+
+impl VirtualMachineGuestArchitectureEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VirtualMachineGuestArchitectureEnum::X86 => "x86",
+            VirtualMachineGuestArchitectureEnum::Arm => "arm",
+            VirtualMachineGuestArchitectureEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VIRTUAL_MACHINE_GUEST_ARCHITECTURE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VirtualMachineGuestArchitectureEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VirtualMachineGuestArchitectureEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VirtualMachineGuestArchitectureEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualMachineGuestArchitectureEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualMachineGuestArchitectureEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VirtualMachineGuestArchitectureEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VirtualMachineGuestArchitectureEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VirtualMachineGuestArchitectureEnum> for &'a str {
+    fn from(value: &'a VirtualMachineGuestArchitectureEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VirtualMachineGuestArchitectureEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
 static VIRTUAL_MACHINE_GUEST_OS_FAMILY_ENUM_MAP: phf::Map<&'static str, VirtualMachineGuestOsFamilyEnum> = ::phf::Map {
     key: 12913932095322966823,
     disps: &[
@@ -53584,6 +55663,144 @@ impl AsRef<str> for VirtualMachineVirtualPMemSnapshotModeEnum {
     }
 }
 
+static VM_PLACEMENT_POLICY_VM_PLACEMENT_POLICY_STRICTNESS_ENUM_MAP: phf::Map<&'static str, VmPlacementPolicyVmPlacementPolicyStrictnessEnum> = ::phf::Map {
+    key: 15467950696543387533,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("PreferredDuringPlacementPreferredDuringExecution", VmPlacementPolicyVmPlacementPolicyStrictnessEnum::PreferredDuringPlacementPreferredDuringExecution),
+        ("RequiredDuringPlacementPreferredDuringExecution", VmPlacementPolicyVmPlacementPolicyStrictnessEnum::RequiredDuringPlacementPreferredDuringExecution),
+    ],
+};
+
+impl VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VmPlacementPolicyVmPlacementPolicyStrictnessEnum::PreferredDuringPlacementPreferredDuringExecution => "PreferredDuringPlacementPreferredDuringExecution",
+            VmPlacementPolicyVmPlacementPolicyStrictnessEnum::RequiredDuringPlacementPreferredDuringExecution => "RequiredDuringPlacementPreferredDuringExecution",
+            VmPlacementPolicyVmPlacementPolicyStrictnessEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VM_PLACEMENT_POLICY_VM_PLACEMENT_POLICY_STRICTNESS_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VmPlacementPolicyVmPlacementPolicyStrictnessEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VmPlacementPolicyVmPlacementPolicyStrictnessEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VmPlacementPolicyVmPlacementPolicyStrictnessEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VmPlacementPolicyVmPlacementPolicyStrictnessEnum> for &'a str {
+    fn from(value: &'a VmPlacementPolicyVmPlacementPolicyStrictnessEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static VM_PLACEMENT_POLICY_VM_PLACEMENT_POLICY_TOPOLOGY_ENUM_MAP: phf::Map<&'static str, VmPlacementPolicyVmPlacementPolicyTopologyEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (1, 0),
+    ],
+    entries: &[
+        ("ClusterComputeResource", VmPlacementPolicyVmPlacementPolicyTopologyEnum::ClusterComputeResource),
+        ("VSphereZone", VmPlacementPolicyVmPlacementPolicyTopologyEnum::VSphereZone),
+        ("Host", VmPlacementPolicyVmPlacementPolicyTopologyEnum::Host),
+    ],
+};
+
+impl VmPlacementPolicyVmPlacementPolicyTopologyEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VmPlacementPolicyVmPlacementPolicyTopologyEnum::Host => "Host",
+            VmPlacementPolicyVmPlacementPolicyTopologyEnum::ClusterComputeResource => "ClusterComputeResource",
+            VmPlacementPolicyVmPlacementPolicyTopologyEnum::VSphereZone => "VSphereZone",
+            VmPlacementPolicyVmPlacementPolicyTopologyEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VM_PLACEMENT_POLICY_VM_PLACEMENT_POLICY_TOPOLOGY_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VmPlacementPolicyVmPlacementPolicyTopologyEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VmPlacementPolicyVmPlacementPolicyTopologyEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VmPlacementPolicyVmPlacementPolicyTopologyEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VmPlacementPolicyVmPlacementPolicyTopologyEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VmPlacementPolicyVmPlacementPolicyTopologyEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VmPlacementPolicyVmPlacementPolicyTopologyEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VmPlacementPolicyVmPlacementPolicyTopologyEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VmPlacementPolicyVmPlacementPolicyTopologyEnum> for &'a str {
+    fn from(value: &'a VmPlacementPolicyVmPlacementPolicyTopologyEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VmPlacementPolicyVmPlacementPolicyTopologyEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
 static VIRTUAL_MACHINE_WINDOWS_QUIESCE_SPEC_VSS_BACKUP_CONTEXT_ENUM_MAP: phf::Map<&'static str, VirtualMachineWindowsQuiesceSpecVssBackupContextEnum> = ::phf::Map {
     key: 10121458955350035957,
     disps: &[
@@ -54561,6 +56778,74 @@ impl<'a> From<&'a VirtualDiskDeltaDiskFormatVariantEnum> for &'a str {
 }
 
 impl AsRef<str> for VirtualDiskDeltaDiskFormatVariantEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static VIRTUAL_DISK_DISK_CHAIN_BROKEN_ISSUE_ENUM_MAP: phf::Map<&'static str, VirtualDiskDiskChainBrokenIssueEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("cidMismatch", VirtualDiskDiskChainBrokenIssueEnum::CidMismatch),
+        ("noIssue", VirtualDiskDiskChainBrokenIssueEnum::NoIssue),
+    ],
+};
+
+impl VirtualDiskDiskChainBrokenIssueEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VirtualDiskDiskChainBrokenIssueEnum::NoIssue => "noIssue",
+            VirtualDiskDiskChainBrokenIssueEnum::CidMismatch => "cidMismatch",
+            VirtualDiskDiskChainBrokenIssueEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VIRTUAL_DISK_DISK_CHAIN_BROKEN_ISSUE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VirtualDiskDiskChainBrokenIssueEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VirtualDiskDiskChainBrokenIssueEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VirtualDiskDiskChainBrokenIssueEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VirtualDiskDiskChainBrokenIssueEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VirtualDiskDiskChainBrokenIssueEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VirtualDiskDiskChainBrokenIssueEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VirtualDiskDiskChainBrokenIssueEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VirtualDiskDiskChainBrokenIssueEnum> for &'a str {
+    fn from(value: &'a VirtualDiskDiskChainBrokenIssueEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VirtualDiskDiskChainBrokenIssueEnum {
     fn as_ref(&self) -> &str {
         self.as_str()
     }
@@ -57430,6 +59715,85 @@ impl AsRef<str> for VimVsanMountPrecheckTypeEnum {
     }
 }
 
+static VIM_VSAN_MOUNT_PRECHECK_TYPE_DIT_ENUM_MAP: phf::Map<&'static str, VimVsanMountPrecheckTypeDitEnum> = ::phf::Map {
+    key: 15467950696543387533,
+    disps: &[
+        (4, 0),
+        (4, 5),
+    ],
+    entries: &[
+        ("datastoreBelongToServerCluster", VimVsanMountPrecheckTypeDitEnum::DatastoreBelongToServerCluster),
+        ("clientRemoteDITCapability", VimVsanMountPrecheckTypeDitEnum::ClientRemoteDitCapability),
+        ("remoteDITInfoRetrieval", VimVsanMountPrecheckTypeDitEnum::RemoteDitInfoRetrieval),
+        ("serverClusterConsistency", VimVsanMountPrecheckTypeDitEnum::ServerClusterConsistency),
+        ("serverRemoteDITCapability", VimVsanMountPrecheckTypeDitEnum::ServerRemoteDitCapability),
+        ("rekeyIntervalValid", VimVsanMountPrecheckTypeDitEnum::RekeyIntervalValid),
+        ("remoteDITVersionCheck", VimVsanMountPrecheckTypeDitEnum::RemoteDitVersionCheck),
+    ],
+};
+
+impl VimVsanMountPrecheckTypeDitEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VimVsanMountPrecheckTypeDitEnum::ServerClusterConsistency => "serverClusterConsistency",
+            VimVsanMountPrecheckTypeDitEnum::ClientRemoteDitCapability => "clientRemoteDITCapability",
+            VimVsanMountPrecheckTypeDitEnum::ServerRemoteDitCapability => "serverRemoteDITCapability",
+            VimVsanMountPrecheckTypeDitEnum::RekeyIntervalValid => "rekeyIntervalValid",
+            VimVsanMountPrecheckTypeDitEnum::DatastoreBelongToServerCluster => "datastoreBelongToServerCluster",
+            VimVsanMountPrecheckTypeDitEnum::RemoteDitInfoRetrieval => "remoteDITInfoRetrieval",
+            VimVsanMountPrecheckTypeDitEnum::RemoteDitVersionCheck => "remoteDITVersionCheck",
+            VimVsanMountPrecheckTypeDitEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VIM_VSAN_MOUNT_PRECHECK_TYPE_DIT_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VimVsanMountPrecheckTypeDitEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VimVsanMountPrecheckTypeDitEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VimVsanMountPrecheckTypeDitEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanMountPrecheckTypeDitEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanMountPrecheckTypeDitEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VimVsanMountPrecheckTypeDitEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VimVsanMountPrecheckTypeDitEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VimVsanMountPrecheckTypeDitEnum> for &'a str {
+    fn from(value: &'a VimVsanMountPrecheckTypeDitEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VimVsanMountPrecheckTypeDitEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
 static VSAN_PERFSVC_REMEDIATE_ACTION_ENUM_MAP: phf::Map<&'static str, VsanPerfsvcRemediateActionEnum> = ::phf::Map {
     key: 15467950696543387533,
     disps: &[
@@ -57933,6 +60297,80 @@ impl AsRef<str> for VsanResourceCheckStatusTypeEnum {
     }
 }
 
+static VSAN_SITE_MAINTENANCE_STATE_ENUM_MAP: phf::Map<&'static str, VsanSiteMaintenanceStateEnum> = ::phf::Map {
+    key: 345707026197253659,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("exitingMaintenanceMode", VsanSiteMaintenanceStateEnum::ExitingMaintenanceMode),
+        ("enteringMaintenanceMode", VsanSiteMaintenanceStateEnum::EnteringMaintenanceMode),
+        ("inMaintenanceMode", VsanSiteMaintenanceStateEnum::InMaintenanceMode),
+        ("SiteMaintenanceState_Unknown", VsanSiteMaintenanceStateEnum::SiteMaintenanceStateUnknown),
+        ("notInMaintenanceMode", VsanSiteMaintenanceStateEnum::NotInMaintenanceMode),
+    ],
+};
+
+impl VsanSiteMaintenanceStateEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VsanSiteMaintenanceStateEnum::NotInMaintenanceMode => "notInMaintenanceMode",
+            VsanSiteMaintenanceStateEnum::InMaintenanceMode => "inMaintenanceMode",
+            VsanSiteMaintenanceStateEnum::EnteringMaintenanceMode => "enteringMaintenanceMode",
+            VsanSiteMaintenanceStateEnum::ExitingMaintenanceMode => "exitingMaintenanceMode",
+            VsanSiteMaintenanceStateEnum::SiteMaintenanceStateUnknown => "SiteMaintenanceState_Unknown",
+            VsanSiteMaintenanceStateEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VSAN_SITE_MAINTENANCE_STATE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VsanSiteMaintenanceStateEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VsanSiteMaintenanceStateEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VsanSiteMaintenanceStateEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VsanSiteMaintenanceStateEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VsanSiteMaintenanceStateEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VsanSiteMaintenanceStateEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VsanSiteMaintenanceStateEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VsanSiteMaintenanceStateEnum> for &'a str {
+    fn from(value: &'a VsanSiteMaintenanceStateEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VsanSiteMaintenanceStateEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
 static VSAN_SNAPSHOT_CREATOR_ENUM_MAP: phf::Map<&'static str, VsanSnapshotCreatorEnum> = ::phf::Map {
     key: 12913932095322966823,
     disps: &[
@@ -58426,14 +60864,15 @@ impl AsRef<str> for VsanConfigTypeEnum {
 }
 
 static VSAN_DISK_COMPATIBILITY_TYPE_ENUM_MAP: phf::Map<&'static str, VsanDiskCompatibilityTypeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 12913932095322966823,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("VsanDiskCompatibilityType_Unknown", VsanDiskCompatibilityTypeEnum::VsanDiskCompatibilityTypeUnknown),
-        ("singleTier", VsanDiskCompatibilityTypeEnum::SingleTier),
+        ("cyberRecoveryTier", VsanDiskCompatibilityTypeEnum::CyberRecoveryTier),
         ("diskGroup", VsanDiskCompatibilityTypeEnum::DiskGroup),
+        ("singleTier", VsanDiskCompatibilityTypeEnum::SingleTier),
     ],
 };
 
@@ -58442,6 +60881,7 @@ impl VsanDiskCompatibilityTypeEnum {
         match self {
             VsanDiskCompatibilityTypeEnum::DiskGroup => "diskGroup",
             VsanDiskCompatibilityTypeEnum::SingleTier => "singleTier",
+            VsanDiskCompatibilityTypeEnum::CyberRecoveryTier => "cyberRecoveryTier",
             VsanDiskCompatibilityTypeEnum::VsanDiskCompatibilityTypeUnknown => "VsanDiskCompatibilityType_Unknown",
             VsanDiskCompatibilityTypeEnum::Other_(s) => s,
         }
@@ -58495,39 +60935,114 @@ impl AsRef<str> for VsanDiskCompatibilityTypeEnum {
     }
 }
 
-static VSAN_HEALTH_PERSPECTIVE_ENUM_MAP: phf::Map<&'static str, VsanHealthPerspectiveEnum> = ::phf::Map {
+static VIM_VSAN_VSAN_HCI_MESH_CONFIG_LIMITS_ENUM_MAP: phf::Map<&'static str, VimVsanVsanHciMeshConfigLimitsEnum> = ::phf::Map {
     key: 15467950696543387533,
     disps: &[
-        (12, 17),
-        (0, 2),
-        (1, 9),
-        (7, 13),
+        (2, 0),
+    ],
+    entries: &[
+        ("MaxServerVcenters", VimVsanVsanHciMeshConfigLimitsEnum::MaxServerVcenters),
+        ("ConfigLimitType_unknown", VimVsanVsanHciMeshConfigLimitsEnum::ConfigLimitTypeUnknown),
+        ("MaxClientClusters", VimVsanVsanHciMeshConfigLimitsEnum::MaxClientClusters),
+        ("MaxServerClusters", VimVsanVsanHciMeshConfigLimitsEnum::MaxServerClusters),
+        ("MaxClientVcenters", VimVsanVsanHciMeshConfigLimitsEnum::MaxClientVcenters),
+    ],
+};
+
+impl VimVsanVsanHciMeshConfigLimitsEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VimVsanVsanHciMeshConfigLimitsEnum::MaxClientClusters => "MaxClientClusters",
+            VimVsanVsanHciMeshConfigLimitsEnum::MaxServerClusters => "MaxServerClusters",
+            VimVsanVsanHciMeshConfigLimitsEnum::MaxClientVcenters => "MaxClientVcenters",
+            VimVsanVsanHciMeshConfigLimitsEnum::MaxServerVcenters => "MaxServerVcenters",
+            VimVsanVsanHciMeshConfigLimitsEnum::ConfigLimitTypeUnknown => "ConfigLimitType_unknown",
+            VimVsanVsanHciMeshConfigLimitsEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VIM_VSAN_VSAN_HCI_MESH_CONFIG_LIMITS_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VimVsanVsanHciMeshConfigLimitsEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VimVsanVsanHciMeshConfigLimitsEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VimVsanVsanHciMeshConfigLimitsEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VimVsanVsanHciMeshConfigLimitsEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VimVsanVsanHciMeshConfigLimitsEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VimVsanVsanHciMeshConfigLimitsEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VimVsanVsanHciMeshConfigLimitsEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VimVsanVsanHciMeshConfigLimitsEnum> for &'a str {
+    fn from(value: &'a VimVsanVsanHciMeshConfigLimitsEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VimVsanVsanHciMeshConfigLimitsEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static VSAN_HEALTH_PERSPECTIVE_ENUM_MAP: phf::Map<&'static str, VsanHealthPerspectiveEnum> = ::phf::Map {
+    key: 12213676231523076107,
+    disps: &[
+        (0, 4),
+        (4, 1),
+        (13, 3),
+        (1, 21),
         (0, 0),
     ],
     entries: &[
-        ("vsanUpgradeBeforeExitMM", VsanHealthPerspectiveEnum::VsanUpgradeBeforeExitMm),
-        ("VsanHealthPerspective_Unknown", VsanHealthPerspectiveEnum::VsanHealthPerspectiveUnknown),
-        ("CreateExtendClusterView", VsanHealthPerspectiveEnum::CreateExtendClusterView),
-        ("upgradeAfterExitMMPmanForVMC", VsanHealthPerspectiveEnum::UpgradeAfterExitMmPmanForVmc),
-        ("upgradeAfterExitMMPman", VsanHealthPerspectiveEnum::UpgradeAfterExitMmPman),
-        ("clusterPowerOffPrecheck", VsanHealthPerspectiveEnum::ClusterPowerOffPrecheck),
-        ("defaultView", VsanHealthPerspectiveEnum::DefaultView),
-        ("upgradeBeforeExitMM", VsanHealthPerspectiveEnum::UpgradeBeforeExitMm),
-        ("upgradePreCheck", VsanHealthPerspectiveEnum::UpgradePreCheck),
-        ("vmcUpgradePreChecks", VsanHealthPerspectiveEnum::VmcUpgradePreChecks),
-        ("vsanUpgradeAfterExitMM", VsanHealthPerspectiveEnum::VsanUpgradeAfterExitMm),
-        ("upgradePreCheckPman", VsanHealthPerspectiveEnum::UpgradePreCheckPman),
-        ("upgradeBeforeExitMMPman", VsanHealthPerspectiveEnum::UpgradeBeforeExitMmPman),
-        ("inPlaceUpgradeServiceMode", VsanHealthPerspectiveEnum::InPlaceUpgradeServiceMode),
-        ("upgradePreCheckPmanForVMC", VsanHealthPerspectiveEnum::UpgradePreCheckPmanForVmc),
-        ("beforeConfigureHost", VsanHealthPerspectiveEnum::BeforeConfigureHost),
-        ("upgradePreCheckForVCF", VsanHealthPerspectiveEnum::UpgradePreCheckForVcf),
-        ("deployAssist", VsanHealthPerspectiveEnum::DeployAssist),
         ("VsanEsaPreChecks", VsanHealthPerspectiveEnum::VsanEsaPreChecks),
-        ("upgradeAfterExitMM", VsanHealthPerspectiveEnum::UpgradeAfterExitMm),
-        ("upgradeBeforeExitMMPmanForVMC", VsanHealthPerspectiveEnum::UpgradeBeforeExitMmPmanForVmc),
+        ("upgradePreCheckPmanForVMC", VsanHealthPerspectiveEnum::UpgradePreCheckPmanForVmc),
+        ("upgradeAfterExitMMPman", VsanHealthPerspectiveEnum::UpgradeAfterExitMmPman),
+        ("CreateExtendClusterView", VsanHealthPerspectiveEnum::CreateExtendClusterView),
         ("vcsaInstallerForVsanEsa", VsanHealthPerspectiveEnum::VcsaInstallerForVsanEsa),
+        ("snapshotCreationPrecheck", VsanHealthPerspectiveEnum::SnapshotCreationPrecheck),
+        ("inPlaceUpgradeServiceMode", VsanHealthPerspectiveEnum::InPlaceUpgradeServiceMode),
+        ("upgradePreCheck", VsanHealthPerspectiveEnum::UpgradePreCheck),
+        ("upgradeBeforeExitMMPman", VsanHealthPerspectiveEnum::UpgradeBeforeExitMmPman),
+        ("upgradePreCheckForVCF", VsanHealthPerspectiveEnum::UpgradePreCheckForVcf),
+        ("upgradePreCheckPman", VsanHealthPerspectiveEnum::UpgradePreCheckPman),
+        ("vmcUpgradePreChecks", VsanHealthPerspectiveEnum::VmcUpgradePreChecks),
         ("vsanUpgradePreCheck", VsanHealthPerspectiveEnum::VsanUpgradePreCheck),
+        ("beforeConfigureHost", VsanHealthPerspectiveEnum::BeforeConfigureHost),
+        ("VsanHealthPerspective_Unknown", VsanHealthPerspectiveEnum::VsanHealthPerspectiveUnknown),
+        ("upgradeAfterExitMMPmanForVMC", VsanHealthPerspectiveEnum::UpgradeAfterExitMmPmanForVmc),
+        ("vsanUpgradeBeforeExitMM", VsanHealthPerspectiveEnum::VsanUpgradeBeforeExitMm),
+        ("upgradeBeforeExitMMPmanForVMC", VsanHealthPerspectiveEnum::UpgradeBeforeExitMmPmanForVmc),
+        ("upgradeAfterExitMM", VsanHealthPerspectiveEnum::UpgradeAfterExitMm),
+        ("upgradeBeforeExitMM", VsanHealthPerspectiveEnum::UpgradeBeforeExitMm),
+        ("clusterPowerOffPrecheck", VsanHealthPerspectiveEnum::ClusterPowerOffPrecheck),
+        ("deployAssist", VsanHealthPerspectiveEnum::DeployAssist),
+        ("defaultView", VsanHealthPerspectiveEnum::DefaultView),
+        ("vsanUpgradeAfterExitMM", VsanHealthPerspectiveEnum::VsanUpgradeAfterExitMm),
     ],
 };
 
@@ -58556,6 +61071,7 @@ impl VsanHealthPerspectiveEnum {
             VsanHealthPerspectiveEnum::VsanEsaPreChecks => "VsanEsaPreChecks",
             VsanHealthPerspectiveEnum::VcsaInstallerForVsanEsa => "vcsaInstallerForVsanEsa",
             VsanHealthPerspectiveEnum::UpgradePreCheckForVcf => "upgradePreCheckForVCF",
+            VsanHealthPerspectiveEnum::SnapshotCreationPrecheck => "snapshotCreationPrecheck",
             VsanHealthPerspectiveEnum::VsanHealthPerspectiveUnknown => "VsanHealthPerspective_Unknown",
             VsanHealthPerspectiveEnum::Other_(s) => s,
         }
@@ -59176,16 +61692,19 @@ impl AsRef<str> for VsanSiteLocationTypeEnum {
 }
 
 static VSAN_SNAP_HEALTH_TYPE_ENUM_MAP: phf::Map<&'static str, VsanSnapHealthTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15467950696543387533,
     disps: &[
         (2, 0),
+        (2, 4),
     ],
     entries: &[
         ("vmSnapshotsHealth", VsanSnapHealthTypeEnum::VmSnapshotsHealth),
         ("VsanSnapHealthType_Unknown", VsanSnapHealthTypeEnum::VsanSnapHealthTypeUnknown),
-        ("vmMembershipChanges", VsanSnapHealthTypeEnum::VmMembershipChanges),
-        ("applianceHealth", VsanSnapHealthTypeEnum::ApplianceHealth),
         ("pgSnapshotsHealth", VsanSnapHealthTypeEnum::PgSnapshotsHealth),
+        ("dpObjsInfo", VsanSnapHealthTypeEnum::DpObjsInfo),
+        ("vmMembershipChanges", VsanSnapHealthTypeEnum::VmMembershipChanges),
+        ("generalHealth", VsanSnapHealthTypeEnum::GeneralHealth),
+        ("applianceHealth", VsanSnapHealthTypeEnum::ApplianceHealth),
     ],
 };
 
@@ -59196,6 +61715,8 @@ impl VsanSnapHealthTypeEnum {
             VsanSnapHealthTypeEnum::PgSnapshotsHealth => "pgSnapshotsHealth",
             VsanSnapHealthTypeEnum::VmSnapshotsHealth => "vmSnapshotsHealth",
             VsanSnapHealthTypeEnum::VmMembershipChanges => "vmMembershipChanges",
+            VsanSnapHealthTypeEnum::DpObjsInfo => "dpObjsInfo",
+            VsanSnapHealthTypeEnum::GeneralHealth => "generalHealth",
             VsanSnapHealthTypeEnum::VsanSnapHealthTypeUnknown => "VsanSnapHealthType_Unknown",
             VsanSnapHealthTypeEnum::Other_(s) => s,
         }
@@ -61812,37 +64333,39 @@ impl AsRef<str> for BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
 }
 
 static VSLM_DISK_INFO_FLAG_ENUM_MAP: phf::Map<&'static str, VslmDiskInfoFlagEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 8694567506910003252,
     disps: &[
-        (0, 5),
-        (0, 3),
-        (13, 14),
-        (0, 0),
-        (6, 4),
+        (0, 13),
+        (13, 8),
+        (15, 0),
+        (2, 8),
+        (9, 0),
     ],
     entries: &[
-        ("ioFilter", VslmDiskInfoFlagEnum::IoFilter),
-        ("type", VslmDiskInfoFlagEnum::Type),
-        ("backingObjectId", VslmDiskInfoFlagEnum::BackingObjectId),
-        ("virtualDiskFormat", VslmDiskInfoFlagEnum::VirtualDiskFormat),
-        ("id", VslmDiskInfoFlagEnum::Id),
-        ("keyId", VslmDiskInfoFlagEnum::KeyId),
-        ("tentativeState", VslmDiskInfoFlagEnum::TentativeState),
-        ("keyProviderId", VslmDiskInfoFlagEnum::KeyProviderId),
-        ("deviceName", VslmDiskInfoFlagEnum::DeviceName),
         ("cbtEnabled", VslmDiskInfoFlagEnum::CbtEnabled),
-        ("createTime", VslmDiskInfoFlagEnum::CreateTime),
-        ("descriptorVersion", VslmDiskInfoFlagEnum::DescriptorVersion),
-        ("relocationDisabled", VslmDiskInfoFlagEnum::RelocationDisabled),
-        ("controlFlags", VslmDiskInfoFlagEnum::ControlFlags),
-        ("consumers", VslmDiskInfoFlagEnum::Consumers),
-        ("name", VslmDiskInfoFlagEnum::Name),
-        ("path", VslmDiskInfoFlagEnum::Path),
+        ("sharedFileBacking", VslmDiskInfoFlagEnum::SharedFileBacking),
+        ("id", VslmDiskInfoFlagEnum::Id),
+        ("tentativeState", VslmDiskInfoFlagEnum::TentativeState),
         ("nativeSnapshotSupported", VslmDiskInfoFlagEnum::NativeSnapshotSupported),
-        ("keepAfterVmDelete", VslmDiskInfoFlagEnum::KeepAfterVmDelete),
-        ("capacity", VslmDiskInfoFlagEnum::Capacity),
+        ("linkedCloneDetails", VslmDiskInfoFlagEnum::LinkedCloneDetails),
+        ("backingObjectId", VslmDiskInfoFlagEnum::BackingObjectId),
+        ("descriptorVersion", VslmDiskInfoFlagEnum::DescriptorVersion),
+        ("controlFlags", VslmDiskInfoFlagEnum::ControlFlags),
+        ("createTime", VslmDiskInfoFlagEnum::CreateTime),
+        ("deviceName", VslmDiskInfoFlagEnum::DeviceName),
+        ("relocationDisabled", VslmDiskInfoFlagEnum::RelocationDisabled),
+        ("keyId", VslmDiskInfoFlagEnum::KeyId),
+        ("name", VslmDiskInfoFlagEnum::Name),
         ("parentPath", VslmDiskInfoFlagEnum::ParentPath),
         ("allocated", VslmDiskInfoFlagEnum::Allocated),
+        ("keepAfterVmDelete", VslmDiskInfoFlagEnum::KeepAfterVmDelete),
+        ("capacity", VslmDiskInfoFlagEnum::Capacity),
+        ("keyProviderId", VslmDiskInfoFlagEnum::KeyProviderId),
+        ("type", VslmDiskInfoFlagEnum::Type),
+        ("consumers", VslmDiskInfoFlagEnum::Consumers),
+        ("ioFilter", VslmDiskInfoFlagEnum::IoFilter),
+        ("virtualDiskFormat", VslmDiskInfoFlagEnum::VirtualDiskFormat),
+        ("path", VslmDiskInfoFlagEnum::Path),
     ],
 };
 
@@ -61871,6 +64394,8 @@ impl VslmDiskInfoFlagEnum {
             VslmDiskInfoFlagEnum::NativeSnapshotSupported => "nativeSnapshotSupported",
             VslmDiskInfoFlagEnum::CbtEnabled => "cbtEnabled",
             VslmDiskInfoFlagEnum::VirtualDiskFormat => "virtualDiskFormat",
+            VslmDiskInfoFlagEnum::SharedFileBacking => "sharedFileBacking",
+            VslmDiskInfoFlagEnum::LinkedCloneDetails => "linkedCloneDetails",
             VslmDiskInfoFlagEnum::Other_(s) => s,
         }
     }
@@ -62054,6 +64579,216 @@ impl<'a> From<&'a VslmVStorageObjectControlFlagEnum> for &'a str {
 }
 
 impl AsRef<str> for VslmVStorageObjectControlFlagEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static VSLM_VSO_POST_RELOCATE_CHANGE_METADATA_OPERATION_ENUM_MAP: phf::Map<&'static str, VslmVsoPostRelocateChangeMetadataOperationEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (1, 0),
+    ],
+    entries: &[
+        ("RESET", VslmVsoPostRelocateChangeMetadataOperationEnum::Reset),
+        ("UPDATE", VslmVsoPostRelocateChangeMetadataOperationEnum::Update),
+        ("NO_OP", VslmVsoPostRelocateChangeMetadataOperationEnum::NoOp),
+    ],
+};
+
+impl VslmVsoPostRelocateChangeMetadataOperationEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            VslmVsoPostRelocateChangeMetadataOperationEnum::Update => "UPDATE",
+            VslmVsoPostRelocateChangeMetadataOperationEnum::Reset => "RESET",
+            VslmVsoPostRelocateChangeMetadataOperationEnum::NoOp => "NO_OP",
+            VslmVsoPostRelocateChangeMetadataOperationEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        VSLM_VSO_POST_RELOCATE_CHANGE_METADATA_OPERATION_ENUM_MAP.get(s).cloned().unwrap_or_else(|| VslmVsoPostRelocateChangeMetadataOperationEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for VslmVsoPostRelocateChangeMetadataOperationEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for VslmVsoPostRelocateChangeMetadataOperationEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<VslmVsoPostRelocateChangeMetadataOperationEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(VslmVsoPostRelocateChangeMetadataOperationEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for VslmVsoPostRelocateChangeMetadataOperationEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for VslmVsoPostRelocateChangeMetadataOperationEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a VslmVsoPostRelocateChangeMetadataOperationEnum> for &'a str {
+    fn from(value: &'a VslmVsoPostRelocateChangeMetadataOperationEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for VslmVsoPostRelocateChangeMetadataOperationEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static AUTHENTICATION_REQUIRED_AUTHENTICATION_SCHEME_ENUM_MAP: phf::Map<&'static str, AuthenticationRequiredAuthenticationSchemeEnum> = ::phf::Map {
+    key: 12913932095322966823,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("Bearer", AuthenticationRequiredAuthenticationSchemeEnum::Bearer),
+        ("Basic", AuthenticationRequiredAuthenticationSchemeEnum::Basic),
+    ],
+};
+
+impl AuthenticationRequiredAuthenticationSchemeEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            AuthenticationRequiredAuthenticationSchemeEnum::Basic => "Basic",
+            AuthenticationRequiredAuthenticationSchemeEnum::Bearer => "Bearer",
+            AuthenticationRequiredAuthenticationSchemeEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        AUTHENTICATION_REQUIRED_AUTHENTICATION_SCHEME_ENUM_MAP.get(s).cloned().unwrap_or_else(|| AuthenticationRequiredAuthenticationSchemeEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for AuthenticationRequiredAuthenticationSchemeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for AuthenticationRequiredAuthenticationSchemeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AuthenticationRequiredAuthenticationSchemeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AuthenticationRequiredAuthenticationSchemeEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for AuthenticationRequiredAuthenticationSchemeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for AuthenticationRequiredAuthenticationSchemeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a AuthenticationRequiredAuthenticationSchemeEnum> for &'a str {
+    fn from(value: &'a AuthenticationRequiredAuthenticationSchemeEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for AuthenticationRequiredAuthenticationSchemeEnum {
+    fn as_ref(&self) -> &str {
+        self.as_str()
+    }
+}
+
+static AUTHENTICATION_REQUIRED_ERROR_TYPE_ENUM_MAP: phf::Map<&'static str, AuthenticationRequiredErrorTypeEnum> = ::phf::Map {
+    key: 2126027241312876569,
+    disps: &[
+        (0, 0),
+    ],
+    entries: &[
+        ("invalid_request", AuthenticationRequiredErrorTypeEnum::InvalidRequest),
+        ("invalid_token", AuthenticationRequiredErrorTypeEnum::InvalidToken),
+        ("insufficient_scope", AuthenticationRequiredErrorTypeEnum::InsufficientScope),
+        ("registration_required", AuthenticationRequiredErrorTypeEnum::RegistrationRequired),
+    ],
+};
+
+impl AuthenticationRequiredErrorTypeEnum {
+    pub fn as_str(&self) -> &str {
+        match self {
+            AuthenticationRequiredErrorTypeEnum::InvalidRequest => "invalid_request",
+            AuthenticationRequiredErrorTypeEnum::InvalidToken => "invalid_token",
+            AuthenticationRequiredErrorTypeEnum::InsufficientScope => "insufficient_scope",
+            AuthenticationRequiredErrorTypeEnum::RegistrationRequired => "registration_required",
+            AuthenticationRequiredErrorTypeEnum::Other_(s) => s,
+        }
+    }
+
+    pub fn from_str(s: &str) -> Self {
+        AUTHENTICATION_REQUIRED_ERROR_TYPE_ENUM_MAP.get(s).cloned().unwrap_or_else(|| AuthenticationRequiredErrorTypeEnum::Other_(s.to_string()))
+    }
+}
+
+impl miniserde::Serialize for AuthenticationRequiredErrorTypeEnum {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Str(std::borrow::Cow::Borrowed(self.as_str()))
+    }
+}
+
+impl miniserde::Deserialize for AuthenticationRequiredErrorTypeEnum {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<AuthenticationRequiredErrorTypeEnum> {
+    fn string(&mut self, s: &str) -> miniserde::Result<()> {
+        self.out = Some(AuthenticationRequiredErrorTypeEnum::from_str(s));
+        Ok(())
+    }
+}
+
+impl std::fmt::Display for AuthenticationRequiredErrorTypeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl std::fmt::Debug for AuthenticationRequiredErrorTypeEnum {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        write!(f, "{}", self.as_str())
+    }
+}
+
+impl<'a> From<&'a AuthenticationRequiredErrorTypeEnum> for &'a str {
+    fn from(value: &'a AuthenticationRequiredErrorTypeEnum) -> Self {
+        value.as_str()
+    }
+}
+
+impl AsRef<str> for AuthenticationRequiredErrorTypeEnum {
     fn as_ref(&self) -> &str {
         self.as_str()
     }

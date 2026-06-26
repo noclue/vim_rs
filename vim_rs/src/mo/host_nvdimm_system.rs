@@ -122,7 +122,7 @@ impl HostNvdimmSystem {
     /// Delete all block mode namespaces in the system.
     /// 
     /// Existing block namespace(s) can be deleted from all NVDIMMs, if the
-    /// system is in maintenance mode. If paramters passed are valid and
+    /// system is in maintenance mode. If parameters passed are valid and
     /// the system is in maintenance mode, then DSM calls are made to
     /// delete these namespaces. DSM calls are blockable, slow operations
     /// and hence the use of task.
@@ -164,7 +164,7 @@ impl HostNvdimmSystem {
     /// Delete nvd namespace whose uuid matches passed parameter.
     /// 
     /// An existing namespace of type block or persistent mode can be deleted
-    /// from NVDIMM(s), if the system is in maintenance mode. If paramters
+    /// from NVDIMM(s), if the system is in maintenance mode. If parameters
     /// passed are valid and the system is in maintenance mode, then a DSM call
     /// is made to delete this namespace. DSM calls are blockable, slow
     /// operations and hence the use of task.

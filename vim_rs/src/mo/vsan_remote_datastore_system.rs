@@ -253,6 +253,10 @@ impl VsanRemoteDatastoreSystem {
     /// ### xvc_datastore
     /// -
     ///
+    /// ### server_cluster_info
+    /// Server cluster information of the remote VC
+    /// vSAN datastore to be checked for mount.
+    ///
     /// ## Returns:
     ///
     /// Pre-check results of a client cluster mounting cross VC vSAN datastore.
@@ -260,8 +264,8 @@ impl VsanRemoteDatastoreSystem {
     /// ## Errors:
     ///
     /// ***VsanFault***: vSAN related faults.
-    pub async fn remote_vc_mount_precheck(&self, cluster: &crate::types::structs::ManagedObjectReference, xvc_datastore: &crate::types::structs::VsanXvcDatastoreInfo) -> Result<Box<dyn crate::types::traits::VsanMountPrecheckResultTrait>> {
-        let input = RemoteVcMountPrecheckRequestType {cluster, xvc_datastore, };
+    pub async fn remote_vc_mount_precheck(&self, cluster: &crate::types::structs::ManagedObjectReference, xvc_datastore: &crate::types::structs::VsanXvcDatastoreInfo, server_cluster_info: Option<&crate::types::structs::VcRemoteVsanServerClusterInfo>) -> Result<Box<dyn crate::types::traits::VsanMountPrecheckResultTrait>> {
+        let input = RemoteVcMountPrecheckRequestType {cluster, xvc_datastore, server_cluster_info, };
         let bytes = self.client.invoke("vsan", "VsanRemoteDatastoreSystem", &self.mo_id, "RemoteVcMountPrecheck", Some(&input)).await?;
         let result: Box<dyn crate::types::traits::VsanMountPrecheckResultTrait> = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
@@ -495,6 +499,7 @@ impl<'b, 'a> miniserde::ser::Map for VsanQueryHciMeshDatastoresRequestTypeSer<'b
 struct RemoteVcMountPrecheckRequestType<'a> {
     cluster: &'a crate::types::structs::ManagedObjectReference,
     xvc_datastore: &'a crate::types::structs::VsanXvcDatastoreInfo,
+    server_cluster_info: Option<&'a crate::types::structs::VcRemoteVsanServerClusterInfo>,
 }
 
 impl<'a> miniserde::Serialize for RemoteVcMountPrecheckRequestType<'a> {
@@ -510,13 +515,19 @@ struct RemoteVcMountPrecheckRequestTypeSer<'b, 'a> {
 
 impl<'b, 'a> miniserde::ser::Map for RemoteVcMountPrecheckRequestTypeSer<'b, 'a> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
-        let seq = self.seq;
-        self.seq += 1;
-        match seq {
-            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoteVcMountPrecheckRequestType")),
-            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
-            2 => return Some((std::borrow::Cow::Borrowed("xvcDatastore"), &self.data.xvc_datastore as &dyn miniserde::Serialize)),
-            _ => return None,
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"RemoteVcMountPrecheckRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => return Some((std::borrow::Cow::Borrowed("xvcDatastore"), &self.data.xvc_datastore as &dyn miniserde::Serialize)),
+                3 => {
+                    let Some(ref val) = self.data.server_cluster_info else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("serverClusterInfo"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
         }
     }
 }

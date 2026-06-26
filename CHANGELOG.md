@@ -19,6 +19,32 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-06-26
+
+> **Breaking minor release.** Bindings regenerated from the vSphere **9.1.0.0** VI/JSON
+> OpenAPI specification. The 9.1.0.0 spec diff introduces compile-breaking struct changes
+> (e.g. new fields on generated types); semver **0.6.0** reflects that impact. No
+> intentional changes to client transport, TLS, or macro semantics.
+
+### Changed
+
+- Regenerated `vim_rs` types, managed-object stubs, and serialization code from
+  `vim_build/data/vi_json_openapi_specification_v9_1_0_0.json`.
+- Regenerated `vim_macros` and MCP server `field_data.rs` from the same generator run.
+- Generator, data-transformer, MCP staleness checks, and OpenAPI test fixtures now
+  reference the 9.1.0.0 JSON input file.
+- `API_RELEASE` default and `COMPATIBLE_API_RELEASES` negotiation list updated to
+  **9.1.0.0** (9.0.0.0 retained for older vCenter negotiation).
+
+### Breaking
+
+- **`EventFilterSpec`** (vSphere 9.1.0.0): new optional fields `auditable` and
+  `audit_id`. Existing struct literals fail to compile unless the `defaults` feature
+  is enabled or the new fields are set explicitly. Updated
+  `examples/snippets/src/eventster.rs` accordingly.
+- **Upgrade from 0.5.0:** review generated struct literals against the 9.1.0.0 binding
+  diff; enable `defaults` or assign new fields where the spec added properties.
+
 ## [0.5.0] - 2026-06-02
 
 > **Breaking release.** This version moves the HTTP stack to **reqwest 0.13** with a

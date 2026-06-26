@@ -171,6 +171,58 @@ impl VsanObjectSystem {
             None => Ok(None),
         }
     }
+    /// Retrieves the physical disk placement detail for the backing
+    /// vSAN objects from the specified entities like virtual machine.
+    /// 
+    /// This method provides detailed information about the physical
+    /// placement of vSAN objects deployed on the specified cluster.
+    /// The results include:
+    /// \- Object details.
+    /// \- Component structures.
+    /// \- Disk placement details.
+    /// All the given object specs registered within this cluster will be
+    /// retrieved.
+    /// This API supports the object query mounted from remote datastores.
+    /// Calling this API from host level is not supported. If the cluster
+    /// argument is ignored or the object query specs are empty, the API
+    /// will return an empty result.
+    /// Currently, this API only supports single virtual machine.
+    /// 
+    /// ***Required privileges:*** System.Read
+    ///
+    /// ## Parameters:
+    ///
+    /// ### cluster
+    /// The vSAN cluster. This parameter is only applicable for
+    /// cluster-level API calls.
+    /// 
+    /// ***Required privileges:*** System.Read
+    /// 
+    /// Refers instance of *ComputeResource*.
+    ///
+    /// ### specs
+    /// The query specifications for the objects. Multiple object
+    /// specifications are supported. If unset, the method will
+    /// return an empty result.
+    ///
+    /// ## Returns:
+    ///
+    /// An list containing the physical placement information for the
+    /// specified entities like virtual machine.
+    ///
+    /// ## Errors:
+    ///
+    /// ***NotSupported***: If run directly on an ESX Server host.
+    /// 
+    /// ***VsanFault***: If run with some faults found. E.g. the VM count of the given specs exceeds the limit, and other faults like no datastore properties found in the given cluster. Details can be found in VsanFault message.
+    pub async fn vsan_query_physical_placements(&self, cluster: &crate::types::structs::ManagedObjectReference, specs: Option<&crate::types::structs::VsanQueryPhysicalPlacementSpecs>) -> Result<Option<Vec<crate::types::structs::VsanObjectPlacement>>> {
+        let input = VsanQueryPhysicalPlacementsRequestType {cluster, specs, };
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanObjectSystem", &self.mo_id, "VsanQueryPhysicalPlacements", Some(&input)).await?;
+        match bytes_opt {
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+            None => Ok(None),
+        }
+    }
     /// Query summary information about the syncing objects in this cluster.
     /// 
     /// It will retrieve information about syncing objects based on object
@@ -470,6 +522,39 @@ impl<'b, 'a> miniserde::ser::Map for VsanQueryObjectIdentitiesRequestTypeSer<'b,
                 7 => {
                     let Some(ref val) = self.data.extra_query_spec else { continue; };
                     return Some((std::borrow::Cow::Borrowed("extraQuerySpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
+struct VsanQueryPhysicalPlacementsRequestType<'a> {
+    cluster: &'a crate::types::structs::ManagedObjectReference,
+    specs: Option<&'a crate::types::structs::VsanQueryPhysicalPlacementSpecs>,
+}
+
+impl<'a> miniserde::Serialize for VsanQueryPhysicalPlacementsRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanQueryPhysicalPlacementsRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanQueryPhysicalPlacementsRequestTypeSer<'b, 'a> {
+    data: &'b VsanQueryPhysicalPlacementsRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanQueryPhysicalPlacementsRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanQueryPhysicalPlacementsRequestType")),
+                1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+                2 => {
+                    let Some(ref val) = self.data.specs else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("specs"), val as &dyn miniserde::Serialize));
                 }
                 _ => return None,
             }

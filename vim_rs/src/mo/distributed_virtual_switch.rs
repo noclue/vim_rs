@@ -620,7 +620,7 @@ impl DistributedVirtualSwitch {
     /// 
     /// ***VspanSameSessionPortConflict***: if a dvPort is used as both the source and destination in the same Distributed Port Mirroring session.
     /// 
-    /// ***VspanDestPortConflict***: if a dvPort is used as desination ports in multiple Distributed Port Mirroring sessions.
+    /// ***VspanDestPortConflict***: if a dvPort is used as destination ports in multiple Distributed Port Mirroring sessions.
     pub async fn reconfigure_dvs_task(&self, spec: &dyn crate::types::traits::DvsConfigSpecTrait) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = ReconfigureDvsRequestType {spec, };
         let bytes = self.client.invoke("", "DistributedVirtualSwitch", &self.mo_id, "ReconfigureDvs_Task", Some(&input)).await?;
@@ -1260,7 +1260,7 @@ impl DistributedVirtualSwitch {
             None => Ok(None),
         }
     }
-    /// List of permissions defined for this entity.
+    /// List of the permissions explicitly defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let pv_opt = self.client.fetch_property_raw("", "DistributedVirtualSwitch", &self.mo_id, "permission").await?;
         match pv_opt {

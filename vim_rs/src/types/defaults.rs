@@ -11,6 +11,12 @@ impl Default for enums::MoTypesEnum {
     }
 }
 
+impl Default for enums::DpDiskAlreadyClaimedReasonEnum {
+    fn default() -> Self {
+        Self::MaxVendorsExceeded
+    }
+}
+
 impl Default for enums::DpInvalidProtectionReasonEnum {
     fn default() -> Self {
         Self::ProtectionDegraded
@@ -50,6 +56,12 @@ impl Default for enums::DpSyncTypeEnum {
 impl Default for enums::DpVSphereDataProtectionCapabilitiesEnum {
     fn default() -> Self {
         Self::QueryPeInfo
+    }
+}
+
+impl Default for enums::DpVSphereDataProtectionCapabilities90U1Enum {
+    fn default() -> Self {
+        Self::MultiInitiator
     }
 }
 
@@ -701,6 +713,24 @@ impl Default for enums::ResourceConfigSpecScaleSharesBehaviorEnum {
     }
 }
 
+impl Default for enums::SearchIndexPredicateArrayOperatorEnum {
+    fn default() -> Self {
+        Self::AllElements
+    }
+}
+
+impl Default for enums::SearchIndexPredicateComparisonOperatorEnum {
+    fn default() -> Self {
+        Self::Equal
+    }
+}
+
+impl Default for enums::SearchIndexQuerySpecResourceTypeEnum {
+    fn default() -> Self {
+        Self::ClusterComputeResource
+    }
+}
+
 impl Default for enums::VMotionCompatibilityTypeEnum {
     fn default() -> Self {
         Self::Cpu
@@ -1091,6 +1121,12 @@ impl Default for enums::VsanCapabilityType90Enum {
     }
 }
 
+impl Default for enums::VsanCapabilityType91Enum {
+    fn default() -> Self {
+        Self::Vsanhcimeshdit
+    }
+}
+
 impl Default for enums::VsanClusterHealthActionIdEnumEnum {
     fn default() -> Self {
         Self::RepairClusterObjectsAction
@@ -1103,9 +1139,21 @@ impl Default for enums::VsanClusterHealthCategoryEnumEnum {
     }
 }
 
+impl Default for enums::VsanComponentStatesEnum {
+    fn default() -> Self {
+        Self::Active
+    }
+}
+
 impl Default for enums::VsanDatastoreTypeEnum {
     fn default() -> Self {
         Self::Vsan
+    }
+}
+
+impl Default for enums::VsanHciMeshDitEncryptionIssueEnum {
+    fn default() -> Self {
+        Self::HostHasNoHciMeshDitEncConfigForTheServerCluster
     }
 }
 
@@ -1241,6 +1289,24 @@ impl Default for enums::QuerySelectionNameTypeEnum {
     }
 }
 
+impl Default for enums::CnsSyncVolumeModeEnum {
+    fn default() -> Self {
+        Self::SpaceUsage
+    }
+}
+
+impl Default for enums::CnsUnregisterTargetVolumeTypeEnum {
+    fn default() -> Self {
+        Self::Fcd
+    }
+}
+
+impl Default for enums::CnsVolumeBackingTypeEnum {
+    fn default() -> Self {
+        Self::FlatVer1BackingInfo
+    }
+}
+
 impl Default for enums::CnsVolumeTypeEnum {
     fn default() -> Self {
         Self::Block
@@ -1328,6 +1394,12 @@ impl Default for enums::HostDistributedVirtualSwitchManagerFailoverStageEnum {
 impl Default for enums::DistributedVirtualSwitchHostMemberHostComponentStateEnum {
     fn default() -> Self {
         Self::Up
+    }
+}
+
+impl Default for enums::DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum {
+    fn default() -> Self {
+        Self::Succeeded
     }
 }
 
@@ -1703,6 +1775,12 @@ impl Default for enums::HostBiosInfoFirmwareTypeEnum {
     }
 }
 
+impl Default for enums::HostCapabilityDrtmTypesEnum {
+    fn default() -> Self {
+        Self::None
+    }
+}
+
 impl Default for enums::HostCapabilityFtUnsupportedReasonEnum {
     fn default() -> Self {
         Self::VMotionNotLicensed
@@ -1736,6 +1814,12 @@ impl Default for enums::HostCertificateManagerCertificateInfoCertificateStatusEn
 impl Default for enums::HostCertificateManagerCertificateKindEnum {
     fn default() -> Self {
         Self::Machine
+    }
+}
+
+impl Default for enums::HostCertificateManagerCryptoAlgorithmEnum {
+    fn default() -> Self {
+        Self::Rsa2048
     }
 }
 
@@ -2192,6 +2276,12 @@ impl Default for enums::HostPatchManagerIntegrityStatusEnum {
 impl Default for enums::HostPatchManagerReasonEnum {
     fn default() -> Self {
         Self::Obsoleted
+    }
+}
+
+impl Default for enums::HostPciPassthruInfoDirectPathDeviceModeEnum {
+    fn default() -> Self {
+        Self::None
     }
 }
 
@@ -2879,6 +2969,12 @@ impl Default for enums::GuestOsDescriptorFirmwareTypeEnum {
     }
 }
 
+impl Default for enums::VirtualMachineGuestArchitectureEnum {
+    fn default() -> Self {
+        Self::X86
+    }
+}
+
 impl Default for enums::VirtualMachineGuestOsFamilyEnum {
     fn default() -> Self {
         Self::WindowsGuest
@@ -3011,6 +3107,18 @@ impl Default for enums::VirtualMachineVirtualPMemSnapshotModeEnum {
     }
 }
 
+impl Default for enums::VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
+    fn default() -> Self {
+        Self::PreferredDuringPlacementPreferredDuringExecution
+    }
+}
+
+impl Default for enums::VmPlacementPolicyVmPlacementPolicyTopologyEnum {
+    fn default() -> Self {
+        Self::Host
+    }
+}
+
 impl Default for enums::VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
     fn default() -> Self {
         Self::CtxAuto
@@ -3092,6 +3200,12 @@ impl Default for enums::VirtualDiskDeltaDiskFormatEnum {
 impl Default for enums::VirtualDiskDeltaDiskFormatVariantEnum {
     fn default() -> Self {
         Self::VmfsSparseVariant
+    }
+}
+
+impl Default for enums::VirtualDiskDiskChainBrokenIssueEnum {
+    fn default() -> Self {
+        Self::NoIssue
     }
 }
 
@@ -3329,6 +3443,12 @@ impl Default for enums::VimVsanMountPrecheckTypeEnum {
     }
 }
 
+impl Default for enums::VimVsanMountPrecheckTypeDitEnum {
+    fn default() -> Self {
+        Self::ServerClusterConsistency
+    }
+}
+
 impl Default for enums::VsanPerfsvcRemediateActionEnum {
     fn default() -> Self {
         Self::Enable
@@ -3371,6 +3491,12 @@ impl Default for enums::VsanResourceCheckStatusTypeEnum {
     }
 }
 
+impl Default for enums::VsanSiteMaintenanceStateEnum {
+    fn default() -> Self {
+        Self::NotInMaintenanceMode
+    }
+}
+
 impl Default for enums::VsanSnapshotCreatorEnum {
     fn default() -> Self {
         Self::SnapService
@@ -3410,6 +3536,12 @@ impl Default for enums::VsanConfigTypeEnum {
 impl Default for enums::VsanDiskCompatibilityTypeEnum {
     fn default() -> Self {
         Self::DiskGroup
+    }
+}
+
+impl Default for enums::VimVsanVsanHciMeshConfigLimitsEnum {
+    fn default() -> Self {
+        Self::MaxClientClusters
     }
 }
 
@@ -3698,6 +3830,24 @@ impl Default for enums::VStorageObjectConsumptionTypeEnum {
 impl Default for enums::VslmVStorageObjectControlFlagEnum {
     fn default() -> Self {
         Self::KeepAfterDeleteVm
+    }
+}
+
+impl Default for enums::VslmVsoPostRelocateChangeMetadataOperationEnum {
+    fn default() -> Self {
+        Self::Update
+    }
+}
+
+impl Default for enums::AuthenticationRequiredAuthenticationSchemeEnum {
+    fn default() -> Self {
+        Self::Basic
+    }
+}
+
+impl Default for enums::AuthenticationRequiredErrorTypeEnum {
+    fn default() -> Self {
+        Self::InvalidRequest
     }
 }
 
@@ -4864,6 +5014,7 @@ impl Default for structs::SolutionsHookInfo {
             solution: String::new(),
             config: structs::SolutionsHookConfig::default(),
             raised_at: String::new(),
+            dynamic_update_processed: false,
         }
     }
 }
@@ -5413,6 +5564,7 @@ impl Default for structs::PbmPlacementCompatibilityResult {
     fn default() -> Self {
         Self {
             hub: structs::PbmPlacementHub::default(),
+            hub_info: None,
             matching_resources: None,
             how_many: None,
             utilization: None,
@@ -5446,6 +5598,14 @@ impl Default for structs::PbmPlacementHub {
     }
 }
 
+impl Default for structs::PbmPlacementHubInfo {
+    fn default() -> Self {
+        Self {
+            zone_clusters: None,
+        }
+    }
+}
+
 impl Default for structs::PbmPlacementRequirement {
     fn default() -> Self {
         Self {
@@ -5465,6 +5625,15 @@ impl Default for structs::PbmPlacementCapabilityProfileRequirement {
     fn default() -> Self {
         Self {
             profile_id: structs::PbmProfileId::default(),
+        }
+    }
+}
+
+impl Default for structs::PbmPlacementZoneTopologyRequirement {
+    fn default() -> Self {
+        Self {
+            pbm_placement_capability_profile_requirement_: structs::PbmPlacementCapabilityProfileRequirement::default(),
+            clusters: None,
         }
     }
 }
@@ -5489,6 +5658,7 @@ impl Default for structs::PbmCapabilityProfileCreateSpec {
             category: None,
             resource_type: structs::PbmProfileResourceType::default(),
             constraints: Default::default(),
+            k_8_s_compliant_name: None,
         }
     }
 }
@@ -5563,6 +5733,8 @@ impl Default for structs::PbmCapabilityProfile {
             is_default: false,
             system_created_profile_type: None,
             line_of_service: None,
+            k_8_s_compliant_name: None,
+            other_k_8_s_compliant_names: None,
         }
     }
 }
@@ -5581,6 +5753,16 @@ impl Default for structs::PbmProfileId {
     fn default() -> Self {
         Self {
             unique_id: String::new(),
+        }
+    }
+}
+
+impl Default for structs::PbmProfileK8SCompliantNameSpec {
+    fn default() -> Self {
+        Self {
+            profile_id: String::new(),
+            k_8_s_compliant_name: String::new(),
+            other_k_8_s_compliant_names: None,
         }
     }
 }
@@ -6751,6 +6933,14 @@ impl Default for structs::VsanClusterConfigPrecheckItem {
     }
 }
 
+impl Default for structs::VsanValidationItem {
+    fn default() -> Self {
+        Self {
+            cluster_compute_resource_validation_result_base_: structs::ClusterComputeResourceValidationResultBase::default(),
+        }
+    }
+}
+
 impl Default for structs::ClusterComputeResourceVcsSlots {
     fn default() -> Self {
         Self {
@@ -7645,6 +7835,8 @@ impl Default for structs::VMwareDvsFeatureCapability {
             nsx_supported: None,
             mtu_capability: None,
             real_time_config_supported: None,
+            perf_nic_offload_capability: None,
+            system_traffic_capabilities: None,
         }
     }
 }
@@ -9325,6 +9517,14 @@ impl Default for structs::PerfSampleInfo {
     }
 }
 
+impl Default for structs::PlaceVmsXClusterSpecCandidateNetworks {
+    fn default() -> Self {
+        Self {
+            networks: None,
+        }
+    }
+}
+
 impl Default for structs::PrivilegePolicyDef {
     fn default() -> Self {
         Self {
@@ -9526,6 +9726,75 @@ impl Default for structs::VimVsanReconfigSpec {
             server_cluster_config: None,
             snap_service_config: None,
             deconverged_net_config: None,
+            vboss_cluster_config: None,
+        }
+    }
+}
+
+impl Default for structs::SearchIndexFilter {
+    fn default() -> Self {
+        Self {
+            predicates: None,
+        }
+    }
+}
+
+impl Default for structs::SearchIndexIterationSpec {
+    fn default() -> Self {
+        Self {
+            marker: None,
+            limit: None,
+        }
+    }
+}
+
+impl Default for structs::SearchIndexOptionalValue {
+    fn default() -> Self {
+        Self {
+            value: None,
+        }
+    }
+}
+
+impl Default for structs::SearchIndexPredicate {
+    fn default() -> Self {
+        Self {
+            property_path: String::new(),
+            operator: String::new(),
+            array_operator: None,
+            comparable_value: None,
+            comparable_list: None,
+        }
+    }
+}
+
+impl Default for structs::SearchIndexQuerySpec {
+    fn default() -> Self {
+        Self {
+            properties: None,
+            resource_type: String::new(),
+            filters: None,
+            return_total_count: None,
+            limit: None,
+        }
+    }
+}
+
+impl Default for structs::SearchIndexResourceItem {
+    fn default() -> Self {
+        Self {
+            property_values: None,
+        }
+    }
+}
+
+impl Default for structs::SearchIndexResultSet {
+    fn default() -> Self {
+        Self {
+            properties: None,
+            items: None,
+            total_count: None,
+            marker: None,
         }
     }
 }
@@ -9864,6 +10133,24 @@ impl Default for structs::Tag {
     }
 }
 
+impl Default for structs::TagId {
+    fn default() -> Self {
+        Self {
+            name_id: None,
+            uuid: None,
+        }
+    }
+}
+
+impl Default for structs::TagIdNameId {
+    fn default() -> Self {
+        Self {
+            tag: String::new(),
+            category: String::new(),
+        }
+    }
+}
+
 impl Default for structs::TaskDescription {
     fn default() -> Self {
         Self {
@@ -10027,6 +10314,32 @@ impl Default for structs::TaskReasonUser {
     }
 }
 
+impl Default for structs::TransitGatewayConfigInfo {
+    fn default() -> Self {
+        Self {
+            id: String::new(),
+            name: String::new(),
+        }
+    }
+}
+
+impl Default for structs::TransitGatewayConfigSpec {
+    fn default() -> Self {
+        Self {
+            name: None,
+        }
+    }
+}
+
+impl Default for structs::TransitGatewayCreateSpec {
+    fn default() -> Self {
+        Self {
+            id: String::new(),
+            name: String::new(),
+        }
+    }
+}
+
 impl Default for structs::UpdateVirtualMachineFilesResult {
     fn default() -> Self {
         Self {
@@ -10060,6 +10373,8 @@ impl Default for structs::PosixUserSearchResult {
             user_search_result_: structs::UserSearchResult::default(),
             id: 0,
             shell_access: None,
+            last_password_change: None,
+            maximum_password_age: None,
         }
     }
 }
@@ -11024,6 +11339,7 @@ impl Default for structs::ClusterClusterInitialPlacementAction {
             cluster_action_: structs::ClusterAction::default(),
             target_host: None,
             pool: structs::ManagedObjectReference::default(),
+            available_networks: None,
             config_spec: None,
         }
     }
@@ -12087,6 +12403,19 @@ impl Default for structs::VsanCapability {
     }
 }
 
+impl Default for structs::VsanClientServerHciMeshDitEncryptionHealthSummary {
+    fn default() -> Self {
+        Self {
+            cluster_uuid: String::new(),
+            cluster_name: String::new(),
+            owner_vc: None,
+            is_local_owner_vc: None,
+            health: String::new(),
+            issues: None,
+        }
+    }
+}
+
 impl Default for structs::VsanClusterAdvCfgSyncHostResult {
     fn default() -> Self {
         Self {
@@ -12200,6 +12529,17 @@ impl Default for structs::VsanClusterGlobalDedupHealthSummary {
     }
 }
 
+impl Default for structs::VsanClusterHciMeshDitEncryptionHealthSummary {
+    fn default() -> Self {
+        Self {
+            overall_health: String::new(),
+            host_client_cluster_summary: None,
+            host_server_cluster_summary: None,
+            server_cluster_summary: None,
+        }
+    }
+}
+
 impl Default for structs::VsanClusterHclInfo {
     fn default() -> Self {
         Self {
@@ -12283,6 +12623,7 @@ impl Default for structs::VsanClusterHealthQuerySpec {
             task: None,
             disk_names: None,
             include_health_remediation: None,
+            exclude_checks: None,
         }
     }
 }
@@ -12375,6 +12716,8 @@ impl Default for structs::VsanClusterHealthSummary {
             dit_encryption_health: None,
             health_score: None,
             global_dedup_health: None,
+            hci_mesh_dit_encryption_health: None,
+            health_status_counts: None,
         }
     }
 }
@@ -12584,6 +12927,31 @@ impl Default for structs::VsanClusterWhatifHostFailuresResult {
     }
 }
 
+impl Default for structs::VsanComponentBasicInfo {
+    fn default() -> Self {
+        Self {
+            uuid: String::new(),
+            component_state: String::new(),
+            host_name: String::new(),
+            host_node_uuid: String::new(),
+            fault_domain_uuid: None,
+            fault_domain_name: None,
+            cache_disk_info: None,
+            capacity_disk_info: None,
+        }
+    }
+}
+
+impl Default for structs::VsanComponentPlacement {
+    fn default() -> Self {
+        Self {
+            r#type: String::new(),
+            children: None,
+            basic_info: None,
+        }
+    }
+}
+
 impl Default for structs::VsanConfigGeneration {
     fn default() -> Self {
         Self {
@@ -12632,6 +13000,19 @@ impl Default for structs::VimClusterVsanDiskMappingsConfigSpec {
     fn default() -> Self {
         Self {
             host_disk_mappings: Vec::new(),
+        }
+    }
+}
+
+impl Default for structs::VsanEffectiveSpaceUsage {
+    fn default() -> Self {
+        Self {
+            total_usable_b: 0,
+            free_usable_b: 0,
+            actual_written_b: None,
+            over_reserved_b: None,
+            total_provision_b: None,
+            snapshot_space: None,
         }
     }
 }
@@ -12769,6 +13150,16 @@ impl Default for structs::VsanHealthExtMgmtPreCheckResult {
             install_state_check_passed: None,
             results: Vec::new(),
             vum_registered: None,
+        }
+    }
+}
+
+impl Default for structs::VsanHealthStatusCounts {
+    fn default() -> Self {
+        Self {
+            error: 0,
+            warning: 0,
+            info: 0,
         }
     }
 }
@@ -13024,6 +13415,7 @@ impl Default for structs::VsanObjIdentityQuerySpec {
     fn default() -> Self {
         Self {
             known_spbm_profile_uuids: None,
+            include_effective_capacity: None,
         }
     }
 }
@@ -13091,6 +13483,36 @@ impl Default for structs::VsanObjectInformation {
             spbm_profile_uuid: None,
             spbm_profile_generation_id: None,
             spbm_compliance_result: None,
+        }
+    }
+}
+
+impl Default for structs::VsanObjectPlacement {
+    fn default() -> Self {
+        Self {
+            details: None,
+        }
+    }
+}
+
+impl Default for structs::VsanObjectPlacementDetails {
+    fn default() -> Self {
+        Self {
+            uuid: String::new(),
+            r#type: String::new(),
+            name: None,
+            is_remote: false,
+            vm: None,
+            spbm_profile_uuid: None,
+            spbm_profile_name: None,
+            is_local_policy: None,
+            remote_datastore_uuid: None,
+            remote_datastore_name: None,
+            remote_cluster: None,
+            remote_cluster_name: None,
+            remote_vc: None,
+            health_state: None,
+            components: None,
         }
     }
 }
@@ -13176,6 +13598,7 @@ impl Default for structs::VsanPerfEntityType {
             description: None,
             advanced_graphs: None,
             verbose_graphs: None,
+            hotspot_graphs: None,
         }
     }
 }
@@ -13201,6 +13624,18 @@ impl Default for structs::VsanPerfHotspotEntitiesMetrics {
             start_time: String::new(),
             end_time: String::new(),
             metrics_value: None,
+        }
+    }
+}
+
+impl Default for structs::VsanPerfHotspotEntityType {
+    fn default() -> Self {
+        Self {
+            name: String::new(),
+            id: String::new(),
+            sorting_metrics: None,
+            original_entity_types: None,
+            description: None,
         }
     }
 }
@@ -13371,11 +13806,29 @@ impl Default for structs::VsanPerfsvcConfig {
     }
 }
 
+impl Default for structs::VsanQueryPhysicalPlacementSpecs {
+    fn default() -> Self {
+        Self {
+            vms: None,
+        }
+    }
+}
+
 impl Default for structs::VsanRemoteClusterQuerySpec {
     fn default() -> Self {
         Self {
             start_time: None,
             end_time: None,
+        }
+    }
+}
+
+impl Default for structs::VsanSnapshotSpace {
+    fn default() -> Self {
+        Self {
+            snapshot_count: None,
+            actual_snapshot_used_b: None,
+            fully_inflated_snapshot_used_b: None,
         }
     }
 }
@@ -13401,6 +13854,7 @@ impl Default for structs::VsanSpaceUsage {
             uncommitted_b: None,
             capacity_health_threshold: None,
             space_efficiency_ratio: None,
+            effective_space_usage: None,
         }
     }
 }
@@ -13621,6 +14075,14 @@ impl Default for structs::CnsBaseCreateSpec {
     }
 }
 
+impl Default for structs::CnsBlockCreateSpec {
+    fn default() -> Self {
+        Self {
+            crypto_spec: None,
+        }
+    }
+}
+
 impl Default for structs::CnsFileCreateSpec {
     fn default() -> Self {
         Self {
@@ -13698,6 +14160,7 @@ impl Default for structs::CnsPlacementResult {
         Self {
             datastore: structs::ManagedObjectReference::default(),
             placement_faults: None,
+            clusters: None,
         }
     }
 }
@@ -13753,6 +14216,7 @@ impl Default for structs::CnsSnapshotCreateSpec {
         Self {
             volume_id: structs::CnsVolumeId::default(),
             description: String::new(),
+            snapshot_id: None,
         }
     }
 }
@@ -13770,6 +14234,25 @@ impl Default for structs::CnsSnapshotId {
     fn default() -> Self {
         Self {
             id: String::new(),
+        }
+    }
+}
+
+impl Default for structs::CnsSyncVolumeSpec {
+    fn default() -> Self {
+        Self {
+            volume_id: structs::CnsVolumeId::default(),
+            datastore: None,
+            sync_mode: None,
+        }
+    }
+}
+
+impl Default for structs::CnsUnregisterVolumeSpec {
+    fn default() -> Self {
+        Self {
+            volume_id: structs::CnsVolumeId::default(),
+            target_volume_type: String::new(),
         }
     }
 }
@@ -13805,6 +14288,12 @@ impl Default for structs::CnsVolumeAttachDetachSpec {
         Self {
             volume_id: structs::CnsVolumeId::default(),
             vm: structs::ManagedObjectReference::default(),
+            disk_mode: None,
+            sharing: None,
+            controller_key: None,
+            unit_number: None,
+            backing_type_name: None,
+            volume_encrypted: None,
         }
     }
 }
@@ -13814,12 +14303,24 @@ impl Default for structs::CnsVolumeCreateSpec {
         Self {
             name: String::new(),
             volume_type: String::new(),
+            volume_id: None,
             datastores: None,
             metadata: None,
             backing_object_details: Default::default(),
             profile: None,
+            active_clusters: None,
             create_spec: None,
             volume_source: None,
+        }
+    }
+}
+
+impl Default for structs::CnsVolumeCryptoUpdateSpec {
+    fn default() -> Self {
+        Self {
+            volume_id: structs::CnsVolumeId::default(),
+            profile: None,
+            disks_crypto: None,
         }
     }
 }
@@ -13939,11 +14440,21 @@ impl Default for structs::CnsVolumeSource {
     }
 }
 
+impl Default for structs::CnsCloneVolumeSource {
+    fn default() -> Self {
+        Self {
+            volume_id: structs::CnsVolumeId::default(),
+            keep_after_delete_vm: None,
+        }
+    }
+}
+
 impl Default for structs::CnsSnapshotVolumeSource {
     fn default() -> Self {
         Self {
             volume_id: None,
             snapshot_id: None,
+            linked_clone: None,
         }
     }
 }
@@ -14098,6 +14609,7 @@ impl Default for structs::DvPortgroupConfigInfo {
             logical_switch_uuid: None,
             segment_id: None,
             subnet_id: None,
+            nsx_config: None,
         }
     }
 }
@@ -14124,6 +14636,17 @@ impl Default for structs::DvPortgroupConfigSpec {
             logical_switch_uuid: None,
             segment_id: None,
             subnet_id: None,
+            nsx_config: None,
+        }
+    }
+}
+
+impl Default for structs::DvPortgroupNsxConfig {
+    fn default() -> Self {
+        Self {
+            vlan_id_extended: None,
+            subnet_addresses: None,
+            span_ids: None,
         }
     }
 }
@@ -14169,6 +14692,14 @@ impl Default for structs::DistributedVirtualPortgroupProblem {
         Self {
             logical_switch_uuid: String::new(),
             fault: structs::MethodFault::default(),
+        }
+    }
+}
+
+impl Default for structs::DvPortgroupNsxSubnetAddressInfo {
+    fn default() -> Self {
+        Self {
+            cidr: None,
         }
     }
 }
@@ -14289,6 +14820,16 @@ impl Default for structs::DvsManagerPhysicalNicsList {
         Self {
             host: structs::ManagedObjectReference::default(),
             physical_nics: None,
+        }
+    }
+}
+
+impl Default for structs::DistributedVirtualSwitchManagerSpanInfo {
+    fn default() -> Self {
+        Self {
+            id: String::new(),
+            clusters: None,
+            exclusive: None,
         }
     }
 }
@@ -14417,6 +14958,7 @@ impl Default for structs::DistributedVirtualSwitchHostMemberConfigInfo {
             transport_zones: None,
             nsxt_used_uplink_names: None,
             network_offloading_enabled: None,
+            tepless_mode: None,
         }
     }
 }
@@ -14481,6 +15023,16 @@ impl Default for structs::VMwareDvsTeamingHealthCheckResult {
     }
 }
 
+impl Default for structs::DistributedVirtualSwitchHostMemberHostPerfNicOffloadState {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            runtime_status: None,
+            status_description: None,
+        }
+    }
+}
+
 impl Default for structs::DistributedVirtualSwitchHostMemberHostUplinkState {
     fn default() -> Self {
         Self {
@@ -14511,6 +15063,7 @@ impl Default for structs::HostMemberRuntimeInfo {
             nsxt_status_detail: None,
             health_check_result: None,
             host_uplink_state: None,
+            host_perf_nic_offload_state: None,
         }
     }
 }
@@ -14556,6 +15109,7 @@ impl Default for structs::DistributedVirtualSwitchNetworkOffloadSpec {
             id: String::new(),
             name: None,
             types: None,
+            dpu_capability: None,
         }
     }
 }
@@ -14983,6 +15537,14 @@ impl Default for structs::VmwareDistributedVirtualSwitchNetworkOffloadConfig {
     }
 }
 
+impl Default for structs::VMwareDvsPerfNicOffloadCapability {
+    fn default() -> Self {
+        Self {
+            supported: None,
+        }
+    }
+}
+
 impl Default for structs::VMwareDvsPvlanConfigSpec {
     fn default() -> Self {
         Self {
@@ -15016,6 +15578,14 @@ impl Default for structs::VmwareDistributedVirtualSwitchRealTimeLanAnnotation {
         Self {
             lan_a_uplink: None,
             lan_b_uplink: None,
+        }
+    }
+}
+
+impl Default for structs::VMwareDvsSystemTrafficCapabilities {
+    fn default() -> Self {
+        Self {
+            system_traffic_qualifiers: None,
         }
     }
 }
@@ -15443,8 +16013,10 @@ impl Default for structs::Event {
             ds: None,
             net: None,
             dvs: None,
+            tgw: None,
             full_formatted_message: None,
             change_tag: None,
+            audit_id: None,
             type_: None,
             extra_fields_: std::collections::HashMap::new(),
         }
@@ -15565,6 +16137,15 @@ impl Default for structs::ScheduledTaskEventArgument {
     }
 }
 
+impl Default for structs::TgwEventArgument {
+    fn default() -> Self {
+        Self {
+            entity_event_argument_: structs::EntityEventArgument::default(),
+            tgw: structs::ManagedObjectReference::default(),
+        }
+    }
+}
+
 impl Default for structs::VmEventArgument {
     fn default() -> Self {
         Self {
@@ -15644,6 +16225,8 @@ impl Default for structs::EventFilterSpec {
             event_type_id: None,
             max_count: None,
             delayed_init: None,
+            auditable: None,
+            audit_id: None,
         }
     }
 }
@@ -15870,6 +16453,8 @@ impl Default for structs::HostAssignableHardwareBinding {
         Self {
             instance_id: String::new(),
             vm: structs::ManagedObjectReference::default(),
+            pci_id: None,
+            device_key: None,
         }
     }
 }
@@ -16085,6 +16670,7 @@ impl Default for structs::HostCapability {
             tpm_supported: false,
             tpm_version: None,
             txt_enabled: None,
+            drtm_type: None,
             supported_cpu_feature: None,
             virtual_exec_usage_supported: false,
             storage_iorm_supported: false,
@@ -16194,6 +16780,12 @@ impl Default for structs::HostCapability {
             cim_supported: None,
             npiv_supported: None,
             entitlement_supported: None,
+            monitor_unrestricted: None,
+            vnetworking_nic_selection_supported: None,
+            direct_path_info_supported: None,
+            fcd_linked_clone_supported: None,
+            ehv_quick_boot_supported: None,
+            nested_hv_tiering_enabled: None,
         }
     }
 }
@@ -16216,6 +16808,7 @@ impl Default for structs::HostCertificateManagerCertificateSpec {
         Self {
             kind: String::new(),
             subject_alternative_names: None,
+            crypto_algorithm: None,
         }
     }
 }
@@ -17683,6 +18276,8 @@ impl Default for structs::HostHostBusAdapter {
             driver: None,
             pci: None,
             storage_protocol: None,
+            driver_version: None,
+            firmware_version: None,
         }
     }
 }
@@ -17814,6 +18409,9 @@ impl Default for structs::HostProxySwitch {
             ens_info: None,
             network_offloading_enabled: None,
             host_uplink_state: None,
+            auto_deploy_owned: None,
+            host_perf_nic_offload_state: None,
+            tepless_mode: None,
         }
     }
 }
@@ -18461,6 +19059,15 @@ impl Default for structs::HostMaintenanceSpec {
         Self {
             vsan_mode: None,
             purpose: None,
+            evac_mode: None,
+        }
+    }
+}
+
+impl Default for structs::HostMaintenanceSpecEvacuationMode {
+    fn default() -> Self {
+        Self {
+            workload_non_disruptive: false,
         }
     }
 }
@@ -19407,6 +20014,18 @@ impl Default for structs::HostPciDevice {
             parent_bridge: None,
             device_name: String::new(),
             device_class_name: None,
+            direct_path_info: None,
+        }
+    }
+}
+
+impl Default for structs::HostPciDeviceDirectPathInfo {
+    fn default() -> Self {
+        Self {
+            interconnect_type: None,
+            driver_name: None,
+            driver_version: None,
+            available_memory: None,
         }
     }
 }
@@ -19441,6 +20060,7 @@ impl Default for structs::HostPciPassthruInfo {
             passthru_capable: false,
             passthru_active: false,
             hardware_label: None,
+            direct_path_state: None,
         }
     }
 }
@@ -19455,6 +20075,16 @@ impl Default for structs::HostSriovInfo {
             num_virtual_function_requested: 0,
             num_virtual_function: 0,
             max_virtual_function_supported: 0,
+        }
+    }
+}
+
+impl Default for structs::HostPciPassthruInfoDirectPathState {
+    fn default() -> Self {
+        Self {
+            mode: String::new(),
+            configurable_modes: None,
+            used_memory: None,
         }
     }
 }
@@ -19492,6 +20122,7 @@ impl Default for structs::PhysicalNic {
             ens_interrupt_supported: None,
             rdma_device: None,
             dpu_id: None,
+            perf_nic_offload_supported: None,
         }
     }
 }
@@ -19687,6 +20318,25 @@ impl Default for structs::PnicTsoInfo {
             nic_name: String::new(),
             is_supported: false,
             is_enabled: false,
+        }
+    }
+}
+
+impl Default for structs::PodVmInfo {
+    fn default() -> Self {
+        Self {
+            has_page_sharing_pod_vm: false,
+            pod_vm_overhead_info: structs::PodVmOverheadInfo::default(),
+        }
+    }
+}
+
+impl Default for structs::PodVmOverheadInfo {
+    fn default() -> Self {
+        Self {
+            crx_page_sharing_supported: false,
+            pod_vm_overhead_without_page_sharing: 0,
+            pod_vm_overhead_with_page_sharing: 0,
         }
     }
 }
@@ -19951,6 +20601,7 @@ impl Default for structs::HostRuntimeInfo {
             stateless_nvds_migration_ready: None,
             partial_maintenance_mode: None,
             state_encryption: None,
+            pod_vm_info: None,
         }
     }
 }
@@ -20357,6 +21008,8 @@ impl Default for structs::HostListSummary {
             quick_stats: structs::HostListSummaryQuickStats::default(),
             overall_status: enums::ManagedEntityStatusEnum::default(),
             reboot_required: false,
+            reboot_required_reason: None,
+            maintenance_mode_required: None,
             custom_value: None,
             management_server_ip: None,
             max_evc_mode_key: None,
@@ -20710,6 +21363,15 @@ impl Default for structs::HostTpmSoftwareComponentEventDetails {
             vib_name: String::new(),
             vib_version: String::new(),
             vib_vendor: String::new(),
+        }
+    }
+}
+
+impl Default for structs::HostTpmSystemVersionEventDetails {
+    fn default() -> Self {
+        Self {
+            host_tpm_event_details_: structs::HostTpmEventDetails::default(),
+            system_version: String::new(),
         }
     }
 }
@@ -21596,6 +22258,15 @@ impl Default for structs::VsanHclMemInfo {
     }
 }
 
+impl Default for structs::VsanHealthObjectStats {
+    fn default() -> Self {
+        Self {
+            num_auto_managed_objects: 0,
+            num_ftt_3_managed_objects: 0,
+        }
+    }
+}
+
 impl Default for structs::VsanHealthQuerySpec {
     fn default() -> Self {
         Self {
@@ -21646,6 +22317,33 @@ impl Default for structs::VsanHostGlobalDedupConfigHealthSummary {
         Self {
             hostname: None,
             health: None,
+        }
+    }
+}
+
+impl Default for structs::VsanHostHciMeshDitEncryptionHealth {
+    fn default() -> Self {
+        Self {
+            cluster_uuid: String::new(),
+            cluster_name: String::new(),
+            owner_vc: None,
+            is_local_owner_vc: None,
+            health: String::new(),
+            issues: None,
+        }
+    }
+}
+
+impl Default for structs::VsanHostHciMeshDitEncryptionHealthSummary {
+    fn default() -> Self {
+        Self {
+            hostname: String::new(),
+            cluster_uuid: String::new(),
+            cluster_name: String::new(),
+            owner_vc: String::new(),
+            is_local_owner_vc: None,
+            capable: None,
+            cluster_healths: None,
         }
     }
 }
@@ -21857,6 +22555,16 @@ impl Default for structs::VsanKmsHealth {
     }
 }
 
+impl Default for structs::VsanLicensedDiskResult {
+    fn default() -> Self {
+        Self {
+            uuid: String::new(),
+            name: String::new(),
+            capacity: 0,
+        }
+    }
+}
+
 impl Default for structs::VsanLimitHealthResult {
     fn default() -> Self {
         Self {
@@ -21985,6 +22693,8 @@ impl Default for structs::VsanObjectOverallHealth {
             object_format_change_required_uuids: None,
             objects_relayout_bytes: None,
             global_dedup_store_health: None,
+            object_stats: None,
+            vsan_objects_for_object_store_volumes: None,
         }
     }
 }
@@ -22052,6 +22762,7 @@ impl Default for structs::VsanPhysicalDiskHealthSummary {
             hostname: None,
             host_dedup_scope: None,
             error: None,
+            licensed_disks: None,
         }
     }
 }
@@ -22459,6 +23170,15 @@ impl Default for structs::ArrayUpdateSpec {
         Self {
             operation: enums::ArrayUpdateOperationEnum::default(),
             remove_key: None,
+        }
+    }
+}
+
+impl Default for structs::TagSpec {
+    fn default() -> Self {
+        Self {
+            array_update_spec_: structs::ArrayUpdateSpec::default(),
+            id: structs::TagId::default(),
         }
     }
 }
@@ -24564,6 +25284,7 @@ impl Default for structs::VirtualMachineCapability {
             vendor_device_group_supported: None,
             sev_snp_supported: None,
             tdx_supported: None,
+            ehv_secure_boot_supported: None,
         }
     }
 }
@@ -24681,6 +25402,7 @@ impl Default for structs::VirtualMachineConfigInfo {
             metro_ft_host_group: None,
             tdx_enabled: None,
             sev_snp_enabled: None,
+            guest_architecture: None,
         }
     }
 }
@@ -24820,6 +25542,8 @@ impl Default for structs::VirtualMachineConfigSpec {
             metro_ft_host_group: None,
             tdx_enabled: None,
             sev_snp_enabled: None,
+            tag_specs: None,
+            vm_placement_policies: None,
         }
     }
 }
@@ -24868,6 +25592,7 @@ impl Default for structs::ConfigTarget {
             dvx_class_info: None,
             sev_snp_supported: None,
             tdx_supported: None,
+            v_motion_bandwidth: None,
         }
     }
 }
@@ -25195,6 +25920,7 @@ impl Default for structs::GuestInfo {
             guest_id: None,
             guest_family: None,
             guest_full_name: None,
+            guest_reboot_status: None,
             guest_detailed_data: None,
             host_name: None,
             ip_address: None,
@@ -25235,6 +25961,16 @@ impl Default for structs::GuestDiskInfo {
             free_space: None,
             filesystem_type: None,
             mappings: None,
+        }
+    }
+}
+
+impl Default for structs::VirtualMachineGuestRebootStatus {
+    fn default() -> Self {
+        Self {
+            reboot_requested: false,
+            requesting_components: None,
+            request_timestamp: None,
         }
     }
 }
@@ -25576,6 +26312,8 @@ impl Default for structs::VirtualMachineRelocateSpec {
             device_change: None,
             profile: None,
             crypto_spec: None,
+            tag_specs: None,
+            vm_placement_policies: None,
         }
     }
 }
@@ -25617,9 +26355,11 @@ impl Default for structs::ReplicationConfigSpec {
             net_compression_enabled: None,
             net_encryption_enabled: None,
             encryption_destination: None,
+            additional_encryption_destination: None,
             encryption_port: None,
             remote_certificate_thumbprint: None,
             data_sets_replication_enabled: None,
+            use_hbr_proxy_http_preamble: None,
             disk: None,
         }
     }
@@ -25671,6 +26411,9 @@ impl Default for structs::VirtualMachineRuntimeInfo {
             suspended_to_memory: None,
             op_notification_timeout: None,
             iommu_active: None,
+            consolidate_work_total: None,
+            consolidate_work_done: None,
+            disk_chain_broken: None,
         }
     }
 }
@@ -26379,6 +27122,44 @@ impl Default for structs::VirtualMachineVirtualPMem {
     }
 }
 
+impl Default for structs::VmPlacementPolicy {
+    fn default() -> Self {
+        Self {
+        }
+    }
+}
+
+impl Default for structs::VmToVmGroupsAntiAffinity {
+    fn default() -> Self {
+        Self {
+            self_tag: None,
+            anti_affined_vm_group_tags: None,
+            policy_strictness: None,
+            policy_topology: None,
+        }
+    }
+}
+
+impl Default for structs::VmVmAffinity {
+    fn default() -> Self {
+        Self {
+            affined_vms_tag: structs::TagId::default(),
+            policy_strictness: None,
+            policy_topology: None,
+        }
+    }
+}
+
+impl Default for structs::VmVmAntiAffinity {
+    fn default() -> Self {
+        Self {
+            anti_affined_vms_tag: structs::TagId::default(),
+            policy_strictness: None,
+            policy_topology: None,
+        }
+    }
+}
+
 impl Default for structs::CheckResult {
     fn default() -> Self {
         Self {
@@ -26480,6 +27261,13 @@ impl Default for structs::CustomizationCloudinitPrep {
     }
 }
 
+impl Default for structs::CustomizationLinuxFlexPrep {
+    fn default() -> Self {
+        Self {
+        }
+    }
+}
+
 impl Default for structs::CustomizationLinuxPrep {
     fn default() -> Self {
         Self {
@@ -26489,6 +27277,9 @@ impl Default for structs::CustomizationLinuxPrep {
             hw_clock_utc: None,
             script_text: None,
             compatible_customization_method: None,
+            reset_password: None,
+            password: None,
+            extra_config: None,
         }
     }
 }
@@ -26501,6 +27292,9 @@ impl Default for structs::CustomizationSysprep {
             gui_run_once: None,
             identification: structs::CustomizationIdentification::default(),
             license_file_print_data: None,
+            script_text: None,
+            reset_password: None,
+            extra_config: None,
         }
     }
 }
@@ -26509,6 +27303,13 @@ impl Default for structs::CustomizationSysprepText {
     fn default() -> Self {
         Self {
             value: String::new(),
+        }
+    }
+}
+
+impl Default for structs::CustomizationWindowsFlexPrep {
+    fn default() -> Self {
+        Self {
         }
     }
 }
@@ -26529,6 +27330,13 @@ impl Default for structs::CustomizationCustomIpGenerator {
 }
 
 impl Default for structs::CustomizationDhcpIpGenerator {
+    fn default() -> Self {
+        Self {
+        }
+    }
+}
+
+impl Default for structs::CustomizationDisableIpV4 {
     fn default() -> Self {
         Self {
         }
@@ -26929,6 +27737,7 @@ impl Default for structs::VirtualDisk {
             native_unmanaged_linked_clone: None,
             independent_filters: None,
             guest_read_only: None,
+            disk_chain_broken_issue: None,
         }
     }
 }
@@ -29115,11 +29924,36 @@ impl Default for structs::ReplicationSpec {
     }
 }
 
+impl Default for structs::VsanAutoRaidConfig {
+    fn default() -> Self {
+        Self {
+            assume_auto_managed_raid: false,
+        }
+    }
+}
+
+impl Default for structs::VsanAutoRaidInfo {
+    fn default() -> Self {
+        Self {
+            host_failures_to_tolerate: 0,
+            sub_failures_to_tolerate: None,
+        }
+    }
+}
+
 impl Default for structs::VsanCapacityReservationInfo {
     fn default() -> Self {
         Self {
             host_rebuild_threshold: None,
             vsan_op_space_threshold: None,
+        }
+    }
+}
+
+impl Default for structs::VsanClientUnicastConfig {
+    fn default() -> Self {
+        Self {
+            unicast_info: None,
         }
     }
 }
@@ -29143,6 +29977,14 @@ impl Default for structs::VsanCompatibilityCheckResult {
     }
 }
 
+impl Default for structs::VsanCyberRecoveryConfig {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+        }
+    }
+}
+
 impl Default for structs::VimVsanDataEfficiencyCapacityState {
     fn default() -> Self {
         Self {
@@ -29155,6 +29997,7 @@ impl Default for structs::VimVsanDataEfficiencyCapacityState {
             esa_dedup_space_saving: None,
             esa_compression_space_saving: None,
             total_space_used_without_overhead: None,
+            dedup_enabled_object_space_used: None,
         }
     }
 }
@@ -29206,6 +30049,7 @@ impl Default for structs::VsanDataInTransitEncryptionConfig {
         Self {
             enabled: None,
             rekey_interval: None,
+            state: None,
         }
     }
 }
@@ -29292,6 +30136,26 @@ impl Default for structs::DiskClaimConfiguration {
             disk_model: None,
             vendor: None,
             disk_capacity: None,
+        }
+    }
+}
+
+impl Default for structs::DiskInfo {
+    fn default() -> Self {
+        Self {
+            disk_uuid: String::new(),
+            disk_name: String::new(),
+            is_ssd: None,
+        }
+    }
+}
+
+impl Default for structs::DpDaemonHealth {
+    fn default() -> Self {
+        Self {
+            host: structs::ManagedObjectReference::default(),
+            name: String::new(),
+            status: String::new(),
         }
     }
 }
@@ -29415,6 +30279,17 @@ impl Default for structs::VsanResourceCheckVsanResult {
     fn default() -> Self {
         Self {
             vsan_resource_check_component_result_: structs::VsanResourceCheckComponentResult::default(),
+        }
+    }
+}
+
+impl Default for structs::VsanSiteMaintenanceResourceCheckResult {
+    fn default() -> Self {
+        Self {
+            vsan_resource_check_vsan_result_: structs::VsanResourceCheckVsanResult::default(),
+            vm_to_migrate: None,
+            vm_to_power_off_info: None,
+            check_details: None,
         }
     }
 }
@@ -29619,6 +30494,19 @@ impl Default for structs::VsanHciMeshDatastoreSource {
     fn default() -> Self {
         Self {
             vc_info: Default::default(),
+        }
+    }
+}
+
+impl Default for structs::VsanHostSiteMaintenanceStatus {
+    fn default() -> Self {
+        Self {
+            host: structs::ManagedObjectReference::default(),
+            state: None,
+            start_time: None,
+            host_count: None,
+            hosts: None,
+            status_update_time: None,
         }
     }
 }
@@ -30016,6 +30904,16 @@ impl Default for structs::VsanDiskDataEvacuationResourceCheckTaskDetails {
     }
 }
 
+impl Default for structs::VsanSiteMaintenanceCheckTaskDetails {
+    fn default() -> Self {
+        Self {
+            vsan_resource_check_task_details_: structs::VsanResourceCheckTaskDetails::default(),
+            cluster: structs::ManagedObjectReference::default(),
+            site_maintenance_spec: structs::VsanSiteMaintenanceSpec::default(),
+        }
+    }
+}
+
 impl Default for structs::ResyncIopsInfo {
     fn default() -> Self {
         Self {
@@ -30056,6 +30954,7 @@ impl Default for structs::VsanServerHostUnicastInfo {
             host_uuid: String::new(),
             node_type: None,
             unicast_spec: None,
+            thumbprint_list: None,
         }
     }
 }
@@ -30069,10 +30968,96 @@ impl Default for structs::VsanSharedWitnessCompatibilityResult {
     }
 }
 
+impl Default for structs::VsanSiteMaintenanceInfo {
+    fn default() -> Self {
+        Self {
+            fault_domain_name: String::new(),
+            state: String::new(),
+            tracking_task: None,
+            host_status: None,
+            status_update_time: None,
+        }
+    }
+}
+
+impl Default for structs::VsanSiteMaintenancePrecheckDetail {
+    fn default() -> Self {
+        Self {
+            test_name: String::new(),
+            test_status: String::new(),
+            message: None,
+        }
+    }
+}
+
+impl Default for structs::VsanSiteMaintenancePrecheckStatus {
+    fn default() -> Self {
+        Self {
+            timestamp: String::new(),
+            status: String::new(),
+            task_details: None,
+            resource_check_result: None,
+        }
+    }
+}
+
+impl Default for structs::VsanSiteMaintenanceSpec {
+    fn default() -> Self {
+        Self {
+            fault_domain_name: String::new(),
+        }
+    }
+}
+
 impl Default for structs::VsanSnapServiceConfig {
     fn default() -> Self {
         Self {
             enabled: false,
+        }
+    }
+}
+
+impl Default for structs::VsanSiteMaintenanceVmPowerOffInfo {
+    fn default() -> Self {
+        Self {
+            vm_to_power_off: None,
+            reason: None,
+        }
+    }
+}
+
+impl Default for structs::VsanVbossConfig {
+    fn default() -> Self {
+        Self {
+            enabled: false,
+            configs: None,
+        }
+    }
+}
+
+impl Default for structs::VsanVbossClusterConfig {
+    fn default() -> Self {
+        Self {
+            vsan_vboss_config_: structs::VsanVbossConfig::default(),
+        }
+    }
+}
+
+impl Default for structs::VsanVbossHostConfig {
+    fn default() -> Self {
+        Self {
+            vsan_vboss_config_: structs::VsanVbossConfig::default(),
+        }
+    }
+}
+
+impl Default for structs::VsanVbossObjectStoreConfig {
+    fn default() -> Self {
+        Self {
+            id: String::new(),
+            secret_key: None,
+            volume_uuids: None,
+            properties: None,
         }
     }
 }
@@ -30091,6 +31076,8 @@ impl Default for structs::VcRemoteVsanServerClusterInfo {
             cluster_uuid: String::new(),
             network_topology: None,
             site_affinity: None,
+            owner_vc: None,
+            dit_config: None,
         }
     }
 }
@@ -30274,6 +31261,8 @@ impl Default for structs::VsanEsaConfig {
             hcl_disk_claim_enabled: None,
             datastore_default_policy_selection_config: None,
             disk_configuration: None,
+            auto_raid_config: None,
+            delete_storage_pool_disk_spec: None,
         }
     }
 }
@@ -30284,6 +31273,7 @@ impl Default for structs::VsanEsaConfigInfo {
             hcl_disk_claim_enabled: None,
             datastore_default_policy_selection_config: None,
             disk_configuration: None,
+            auto_raid_config: None,
         }
     }
 }
@@ -30336,6 +31326,7 @@ impl Default for structs::VsanFileServicePreflightCheckResult {
             domain_config_warning: None,
             ntp_config_warning: None,
             svs_config_issue: None,
+            nsx_config_issue: None,
         }
     }
 }
@@ -30607,6 +31598,7 @@ impl Default for structs::VsanObjSnapParams {
             creator: None,
             snapshot_type: None,
             cookie: None,
+            immutable_tag: None,
         }
     }
 }
@@ -30673,6 +31665,7 @@ impl Default for structs::VsanSnapshotDetail {
             snapshot_id: 0,
             snapshot_type: String::new(),
             snapshot_path: None,
+            snapshot_tags_info: None,
         }
     }
 }
@@ -30693,6 +31686,7 @@ impl Default for structs::VsanSnapshotQuerySpec {
             snapshot_type: None,
             creator: None,
             include_descriptor_path: None,
+            snapshot_tag_mask: None,
         }
     }
 }
@@ -30712,6 +31706,9 @@ impl Default for structs::VsanSpaceEfficiencyRatio {
             overall_ratio: None,
             compression_ratio: None,
             dedup_ratio: None,
+            dedup_enabled_ratio: None,
+            thin_provision_ratio: None,
+            snapshot_saving_ratio: None,
         }
     }
 }
@@ -30949,6 +31946,8 @@ impl Default for structs::VsanXvcClientInfoSpec {
             vsan_format_version: None,
             min_vsan_format_version: None,
             datastore: None,
+            unicast_info: None,
+            sa_generation: None,
         }
     }
 }
@@ -31019,6 +32018,7 @@ impl Default for structs::VsanClusterConfigInfo {
             enabled: None,
             default_config: None,
             vsan_esa_enabled: None,
+            vsan_cyber_recovery_enabled: None,
         }
     }
 }
@@ -31050,6 +32050,7 @@ impl Default for structs::VsanConfigInfoEx {
             snap_service_config: None,
             deconverged_net_config: None,
             site_fault_domain_config: None,
+            vboss_cluster_config: None,
         }
     }
 }
@@ -31107,6 +32108,33 @@ impl Default for structs::VsanAddStoragePoolDiskSpec {
         Self {
             host: structs::ManagedObjectReference::default(),
             disks: Vec::new(),
+        }
+    }
+}
+
+impl Default for structs::VsanHostClientClusterUnicastConfig {
+    fn default() -> Self {
+        Self {
+            remote_unicast_config: None,
+        }
+    }
+}
+
+impl Default for structs::VsanHostClientClusterUnicastInfo {
+    fn default() -> Self {
+        Self {
+            cluster_uuid: String::new(),
+            unicast_info: None,
+        }
+    }
+}
+
+impl Default for structs::VsanHostClientHostUnicastInfo {
+    fn default() -> Self {
+        Self {
+            host_uuid: String::new(),
+            unicast_spec: None,
+            thumbprint_list: None,
         }
     }
 }
@@ -31173,6 +32201,7 @@ impl Default for structs::VsanHostConfigInfo {
             network_info: None,
             fault_domain_info: None,
             vsan_esa_enabled: None,
+            vsan_cyber_recovery_enabled: None,
         }
     }
 }
@@ -31197,6 +32226,11 @@ impl Default for structs::VsanHostConfigInfoEx {
             server_cluster_configs: None,
             snap_service_config: None,
             deconverged_net_config: None,
+            remote_dit_infos: None,
+            client_unicast_config: None,
+            site_takeover_config: None,
+            vboss_host_config: None,
+            auto_raid_config: None,
         }
     }
 }
@@ -31272,6 +32306,8 @@ impl Default for structs::VsanInTransitEncryptionInfo {
             enabled: None,
             rekey_interval: None,
             transition_state: None,
+            server_cluster_uuid: None,
+            client_cluster_uuid: None,
         }
     }
 }
@@ -31498,6 +32534,14 @@ impl Default for structs::SiteAffinityInfo {
         Self {
             name: String::new(),
             site_id: None,
+        }
+    }
+}
+
+impl Default for structs::VsanSiteTakeoverConfig {
+    fn default() -> Self {
+        Self {
+            takeover_timestamp: None,
         }
     }
 }
@@ -31809,6 +32853,8 @@ impl Default for structs::VStorageObjectConfigInfo {
             consumption_type: None,
             consumer_id: None,
             virtual_disk_format: None,
+            linked_clone_base_path: None,
+            linked_clone_parent_id: None,
         }
     }
 }
@@ -31830,6 +32876,7 @@ impl Default for structs::BaseConfigInfoFileBackingInfo {
             parent: None,
             delta_size_in_mb: None,
             key_id: None,
+            shared_file_backing: None,
         }
     }
 }
@@ -31856,6 +32903,7 @@ impl Default for structs::BaseConfigInfoRawDiskMappingBackingInfo {
 impl Default for structs::VslmCreateSpec {
     fn default() -> Self {
         Self {
+            id: None,
             name: String::new(),
             keep_after_delete_vm: None,
             backing_spec: Default::default(),
@@ -32041,6 +33089,29 @@ impl Default for structs::VStorageObject {
     }
 }
 
+impl Default for structs::VStorageObjectAttachResult {
+    fn default() -> Self {
+        Self {
+            volume_id: structs::Id::default(),
+            disk_uuid: None,
+            fault: None,
+        }
+    }
+}
+
+impl Default for structs::VStorageObjectAttachSpec {
+    fn default() -> Self {
+        Self {
+            volume_id: structs::Id::default(),
+            datastore: structs::ManagedObjectReference::default(),
+            disk_mode: None,
+            sharing: None,
+            controller_key: None,
+            unit_number: None,
+        }
+    }
+}
+
 impl Default for structs::VStorageObjectSnapshot {
     fn default() -> Self {
         Self {
@@ -32148,6 +33219,19 @@ impl Default for structs::LocalizedMethodFault {
         Self {
             fault: structs::MethodFault::default(),
             localized_message: None,
+        }
+    }
+}
+
+impl Default for structs::AuthenticationRequiredChallenge {
+    fn default() -> Self {
+        Self {
+            scheme: String::new(),
+            realm: None,
+            error: None,
+            error_description: None,
+            ovl: None,
+            oidc_config_url: None,
         }
     }
 }
@@ -32694,6 +33778,12 @@ impl Default for Box<dyn traits::PbmPlacementMatchingResourcesTrait> {
 impl Default for Box<dyn traits::PbmPlacementRequirementTrait> {
     fn default() -> Self {
         Box::new(structs::PbmPlacementRequirement::default())
+    }
+}
+
+impl Default for Box<dyn traits::PbmPlacementCapabilityProfileRequirementTrait> {
+    fn default() -> Self {
+        Box::new(structs::PbmPlacementCapabilityProfileRequirement::default())
     }
 }
 
@@ -33873,6 +34963,12 @@ impl Default for Box<dyn traits::VirtualMachineVirtualDeviceGroupsDeviceGroupTra
     }
 }
 
+impl Default for Box<dyn traits::VmPlacementPolicyTrait> {
+    fn default() -> Self {
+        Box::new(structs::VmPlacementPolicy::default())
+    }
+}
+
 impl Default for Box<dyn traits::CustomizationIdentitySettingsTrait> {
     fn default() -> Self {
         Box::new(structs::CustomizationIdentitySettings::default())
@@ -34197,6 +35293,12 @@ impl Default for Box<dyn traits::VsanResourceCheckComponentResultTrait> {
     }
 }
 
+impl Default for Box<dyn traits::VsanResourceCheckVsanResultTrait> {
+    fn default() -> Self {
+        Box::new(structs::VsanResourceCheckVsanResult::default())
+    }
+}
+
 impl Default for Box<dyn traits::VsanMountPrecheckItemTrait> {
     fn default() -> Self {
         Box::new(structs::VsanMountPrecheckItem::default())
@@ -34218,6 +35320,12 @@ impl Default for Box<dyn traits::VsanRemoteVcInfoTrait> {
 impl Default for Box<dyn traits::VsanResourceCheckTaskDetailsTrait> {
     fn default() -> Self {
         Box::new(structs::VsanResourceCheckTaskDetails::default())
+    }
+}
+
+impl Default for Box<dyn traits::VsanVbossConfigTrait> {
+    fn default() -> Self {
+        Box::new(structs::VsanVbossConfig::default())
     }
 }
 

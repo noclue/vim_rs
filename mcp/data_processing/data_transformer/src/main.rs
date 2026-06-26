@@ -50,7 +50,7 @@ async fn main() -> Result<()> {
     let mcp_data_dir = workspace_root.join("mcp").join("data");
     let examples_dir = workspace_root.join("examples");
     let vim_build_data_dir = workspace_root.join("vim_build").join("data");
-    let vi_json_spec_path = vim_build_data_dir.join("vi_json_openapi_specification_v9_0_0_0_24798170.json");
+    let vi_json_spec_path = vim_build_data_dir.join("vi_json_openapi_specification_v9_1_0_0.json");
     let model_cache_dir = mcp_data_dir.join("model_cache");
     let output_path = mcp_data_dir.join("api_database.bin");
 

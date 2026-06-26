@@ -153,7 +153,7 @@ impl HostAccessManager {
     /// directly to the host and the UI may choose to show them only in some
     /// "advanced" UI view.
     /// 
-    /// ***Required privileges:*** Global.Settings
+    /// ***Required privileges:*** System.View
     ///
     /// ## Returns:
     ///
@@ -200,12 +200,23 @@ impl HostAccessManager {
     /// - if a user is added to the exceptions list,
     ///   then the permissions of that user are restored.
     ///   
+    /// As of vSphere API 9.1, all user names in the specified list
+    /// can be prefixed with '+' (plus) or '-' (minus) sign.
+    /// In this case, either all names must have a '+' or '-' prefix,
+    /// or all names must have no prefix.
+    /// 
     /// ***Required privileges:*** Global.Settings
     ///
     /// ## Parameters:
     ///
     /// ### users
-    /// the new list of lockdown mode exceptions.
+    /// the new list of lockdown mode exceptions,
+    /// or a list of users to set or unset as lockdown exceptions
+    /// depending on the '+' or '-' prefix of each user name.
+    /// If a user name starts with '+' then it will be
+    /// added to the current list of lockdown exceptions.
+    /// If a user name starts with '-' then it will be
+    /// removed from the current list of lockdown exceptions.
     ///
     /// ## Errors:
     ///
@@ -222,12 +233,23 @@ impl HostAccessManager {
     /// The special users 'dcui' and 'vpxuser' need not be specified.
     /// They are always reported in the list of system users.
     /// 
+    /// As of vSphere API 9.1, all user names in the specified list
+    /// can be prepended with '+' (plus) or '-' (minus) sign.
+    /// In this case, either all names must have a '+' or '-' prefix,
+    /// or all names must have no prefix.
+    /// 
     /// ***Required privileges:*** Global.Settings
     ///
     /// ## Parameters:
     ///
     /// ### users
-    /// the new list of local system users.
+    /// the new list of local system users, or a list of
+    /// users to set or unset as system users depending
+    /// on the '+' or '-' prefix of each user name.
+    /// If a user name starts with '+' then it will be
+    /// added to the current list of system users.
+    /// If a user name starts with '-' then it will be
+    /// removed from the current list of system users.
     ///
     /// ## Errors:
     ///

@@ -95,7 +95,7 @@ impl VirtualMachineGuestCustomizationManager {
     /// It specifies the virtual machine's configuration.
     ///
     /// ### config_params
-    /// addtional key/value pair list to support
+    /// additional key/value pair list to support
     /// third party customization.
     ///
     /// ## Returns:

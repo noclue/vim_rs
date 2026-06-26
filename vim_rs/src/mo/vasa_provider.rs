@@ -380,7 +380,7 @@ impl VasaProvider {
     /// This API will be used when provider
     /// certificate is about to expire, but still within soft or hard limit window. If the
     /// provider is in "disconnected" state, this operation will be a no-op.
-    /// Note: This API works only for providers that support VASA 2.0 and onwards.
+    /// Note: This API works only for non-IOFilter and non-VSAN providers that support VASA 2.0 and onwards.
     /// 
     /// ***Required privileges:*** StorageViews.ConfigureService
     ///
@@ -444,7 +444,7 @@ impl VasaProvider {
     /// 
     /// This API will unregister the
     /// provider automatically.
-    /// Note: This API works only for providers that support VASA 2.0 and onwards.
+    /// Note: This API works only for non-IOFilter and non-VSAN providers that support VASA 2.0 and onwards.
     /// 
     /// ***Required privileges:*** StorageViews.ConfigureService
     ///

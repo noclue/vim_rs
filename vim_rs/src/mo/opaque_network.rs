@@ -395,7 +395,7 @@ impl OpaqueNetwork {
             None => Ok(None),
         }
     }
-    /// List of permissions defined for this entity.
+    /// List of the permissions explicitly defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let pv_opt = self.client.fetch_property_raw("", "OpaqueNetwork", &self.mo_id, "permission").await?;
         match pv_opt {
