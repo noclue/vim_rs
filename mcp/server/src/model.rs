@@ -19,6 +19,7 @@ pub const STARTER_GUIDE: &str = include_str!("../guides/VIM_RS_STARTER_GUIDE.md"
 /// The database file is embedded at compile time using include_bytes!
 pub fn load_embedded_database() -> Result<ApiDatabase> {
     const DATA: &[u8] = include_bytes!("../../data/api_database.bin");
-    bincode::deserialize(DATA)
-        .map_err(|e| anyhow::anyhow!("Failed to deserialize embedded database: {}", e))
+    let (database, _) = bincode::serde::decode_from_slice(DATA, bincode::config::standard())
+        .map_err(|e| anyhow::anyhow!("Failed to deserialize embedded database: {}", e))?;
+    Ok(database)
 }

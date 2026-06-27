@@ -71,7 +71,7 @@ fn generate_phf_map(
     vim_model: &Model,
     printer: &mut dyn Printer,
 ) -> rs_emitter::errors::Result<()> {
-    let mut map_builder = phf_codegen::Map::new();
+    let mut entries: Vec<(String, String)> = Vec::new();
     
     for (_, data_type) in &vim_model.structs {
         let struct_ref = data_type.borrow();
@@ -79,8 +79,15 @@ fn generate_phf_map(
         if rust_type_name == rs_emitter::structs::ANY {
             continue;
         }
-        let vim_name = struct_ref.name.clone();
-        map_builder.entry(vim_name, &format!("StructType::{}", rust_type_name));
+        entries.push((
+            struct_ref.name.clone(),
+            format!("StructType::{}", rust_type_name),
+        ));
+    }
+
+    let mut map_builder = phf_codegen::Map::new();
+    for (key, value) in &entries {
+        map_builder.entry(key, value);
     }
     
     printer.println(&format!(

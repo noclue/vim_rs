@@ -37,12 +37,12 @@ env_logger = "0.11"
 indexmap = "2.9"
 log = "0.4"
 miniserde = "0.1"
-quick-xml = { version = "0.39", optional = true }
+quick-xml = { version = "0.40", optional = true }
 reqwest = { version = "0.13", default-features = false }
 thiserror = "2.0"
 tokio = { version = "1.44", features = ["rt-multi-thread", "macros", "sync"] }
 vim_macros = { version = "0.6.0", path = "../vim_macros" }
-phf = "0.13"
+phf = "0.14"
 
 [build-dependencies]
 rustc_version = "0.4"
@@ -51,7 +51,7 @@ rustc_version = "0.4"
 doctest = false
 
 [dev-dependencies]
-criterion = { version = "0.5", features = ["html_reports"] }
+criterion = { version = "0.8", features = ["html_reports"] }
 
 [[bench]]
 name = "miniserde_bench"

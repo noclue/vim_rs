@@ -16436,248 +16436,274 @@ pub enum VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum {
 miniserde::make_place!(Place);
 
 static MO_TYPES_ENUM_MAP: phf::Map<&'static str, MoTypesEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 158),
-        (1, 68),
-        (0, 163),
+        (0, 16),
+        (0, 9),
+        (0, 55),
+        (0, 0),
+        (0, 0),
+        (0, 0),
+        (0, 21),
+        (0, 9),
         (0, 4),
-        (1, 5),
-        (0, 40),
-        (1, 38),
-        (5, 172),
-        (11, 169),
-        (0, 0),
-        (0, 2),
-        (1, 64),
-        (0, 183),
-        (1, 44),
-        (0, 5),
-        (0, 0),
-        (1, 180),
-        (5, 180),
-        (0, 119),
-        (5, 162),
-        (0, 51),
-        (1, 2),
-        (19, 55),
-        (3, 20),
-        (0, 3),
-        (2, 0),
-        (0, 133),
-        (1, 165),
+        (0, 20),
+        (0, 35),
+        (1, 4),
+        (0, 86),
+        (0, 11),
+        (0, 69),
         (0, 1),
-        (5, 160),
-        (2, 58),
-        (0, 158),
-        (0, 104),
-        (12, 190),
-        (0, 17),
-        (53, 195),
+        (0, 11),
+        (0, 38),
+        (0, 81),
+        (0, 3),
+        (0, 30),
+        (0, 1),
+        (0, 0),
+        (0, 1),
+        (0, 89),
+        (0, 148),
+        (0, 46),
+        (0, 12),
+        (0, 0),
+        (0, 83),
+        (0, 2),
+        (0, 0),
+        (0, 117),
+        (0, 20),
+        (0, 48),
+        (0, 166),
+        (0, 180),
+        (0, 70),
+        (0, 3),
+        (0, 3),
+        (0, 27),
+        (0, 1),
+        (0, 1),
+        (0, 0),
+        (0, 5),
+        (0, 41),
+        (0, 0),
+        (0, 28),
+        (0, 169),
+        (0, 2),
         (0, 32),
-        (1, 106),
-        (0, 90),
-        (1, 137),
+        (0, 5),
+        (0, 115),
+        (3, 63),
+        (0, 0),
+        (0, 10),
+        (0, 69),
+        (0, 68),
+        (1, 131),
+        (1, 167),
+        (0, 1),
+        (0, 94),
+        (0, 167),
+        (0, 0),
+        (0, 1),
+        (0, 4),
     ],
     entries: &[
-        ("EamObject", MoTypesEnum::EamObject),
-        ("CertificateManager", MoTypesEnum::CertificateManager),
-        ("IscsiManager", MoTypesEnum::IscsiManager),
-        ("AuthorizationManager", MoTypesEnum::AuthorizationManager),
-        ("VsanRemoteDatastoreSystem", MoTypesEnum::VsanRemoteDatastoreSystem),
-        ("VslmStorageLifecycleManager", MoTypesEnum::VslmStorageLifecycleManager),
-        ("PbmCapabilityMetadataManager", MoTypesEnum::PbmCapabilityMetadataManager),
-        ("HostVsanInternalSystem", MoTypesEnum::HostVsanInternalSystem),
-        ("HostDirectoryStore", MoTypesEnum::HostDirectoryStore),
-        ("ServiceInstance", MoTypesEnum::ServiceInstance),
-        ("PerformanceManager", MoTypesEnum::PerformanceManager),
-        ("HostSnmpSystem", MoTypesEnum::HostSnmpSystem),
-        ("VStorageObjectManagerBase", MoTypesEnum::VStorageObjectManagerBase),
-        ("HostAutoStartManager", MoTypesEnum::HostAutoStartManager),
-        ("VsanSiteMaintenanceSystem", MoTypesEnum::VsanSiteMaintenanceSystem),
-        ("CustomFieldsManager", MoTypesEnum::CustomFieldsManager),
-        ("SiteInfoManager", MoTypesEnum::SiteInfoManager),
-        ("ListView", MoTypesEnum::ListView),
-        ("OptionManager", MoTypesEnum::OptionManager),
-        ("VslmServiceInstance", MoTypesEnum::VslmServiceInstance),
-        ("ClusterProfile", MoTypesEnum::ClusterProfile),
-        ("Alarm", MoTypesEnum::Alarm),
         ("HostLocalAccountManager", MoTypesEnum::HostLocalAccountManager),
-        ("HostSystem", MoTypesEnum::HostSystem),
-        ("SmsProvider", MoTypesEnum::SmsProvider),
-        ("PbmProfileProfileManager", MoTypesEnum::PbmProfileProfileManager),
-        ("ResourcePlanningManager", MoTypesEnum::ResourcePlanningManager),
-        ("VsanUpgradeSystem", MoTypesEnum::VsanUpgradeSystem),
-        ("VsanFileServiceSystem", MoTypesEnum::VsanFileServiceSystem),
-        ("VsanClusterPowerSystem", MoTypesEnum::VsanClusterPowerSystem),
-        ("VsanObjectSystem", MoTypesEnum::VsanObjectSystem),
-        ("TaskManager", MoTypesEnum::TaskManager),
-        ("VsanVcClusterConfigSystem", MoTypesEnum::VsanVcClusterConfigSystem),
-        ("ComputeResource", MoTypesEnum::ComputeResource),
-        ("HostPciPassthruSystem", MoTypesEnum::HostPciPassthruSystem),
-        ("VslmTask", MoTypesEnum::VslmTask),
-        ("HostDatastoreSystem", MoTypesEnum::HostDatastoreSystem),
-        ("HostDatastoreBrowser", MoTypesEnum::HostDatastoreBrowser),
-        ("HostMemorySystem", MoTypesEnum::HostMemorySystem),
-        ("HostProfileManager", MoTypesEnum::HostProfileManager),
-        ("TransitGateway", MoTypesEnum::TransitGateway),
-        ("DiagnosticManager", MoTypesEnum::DiagnosticManager),
-        ("VsanVcClusterHealthSystem", MoTypesEnum::VsanVcClusterHealthSystem),
-        ("ExtensibleManagedObject", MoTypesEnum::ExtensibleManagedObject),
-        ("ViewManager", MoTypesEnum::ViewManager),
-        ("VirtualMachineProvisioningChecker", MoTypesEnum::VirtualMachineProvisioningChecker),
-        ("StorageQueryManager", MoTypesEnum::StorageQueryManager),
-        ("Profile", MoTypesEnum::Profile),
-        ("HostCpuSchedulerSystem", MoTypesEnum::HostCpuSchedulerSystem),
-        ("PropertyCollector", MoTypesEnum::PropertyCollector),
-        ("EsxAgentManager", MoTypesEnum::EsxAgentManager),
-        ("IoFilterManager", MoTypesEnum::IoFilterManager),
-        ("HostFirewallSystem", MoTypesEnum::HostFirewallSystem),
-        ("VcenterVStorageObjectManager", MoTypesEnum::VcenterVStorageObjectManager),
-        ("OverheadMemoryManager", MoTypesEnum::OverheadMemoryManager),
-        ("VsanVumSystem", MoTypesEnum::VsanVumSystem),
-        ("HostNetworkSystem", MoTypesEnum::HostNetworkSystem),
-        ("ManagedObjectView", MoTypesEnum::ManagedObjectView),
-        ("PbmServiceInstance", MoTypesEnum::PbmServiceInstance),
-        ("ClusterComputeResource", MoTypesEnum::ClusterComputeResource),
-        ("VsanSpaceReportSystem", MoTypesEnum::VsanSpaceReportSystem),
-        ("SimpleCommand", MoTypesEnum::SimpleCommand),
-        ("HostDateTimeSystem", MoTypesEnum::HostDateTimeSystem),
-        ("SessionManager", MoTypesEnum::SessionManager),
-        ("VsanUpgradeSystemEx", MoTypesEnum::VsanUpgradeSystemEx),
-        ("DistributedVirtualSwitch", MoTypesEnum::DistributedVirtualSwitch),
-        ("HostHealthStatusSystem", MoTypesEnum::HostHealthStatusSystem),
-        ("EventHistoryCollector", MoTypesEnum::EventHistoryCollector),
-        ("SmsServiceInstance", MoTypesEnum::SmsServiceInstance),
-        ("HostAuthenticationStore", MoTypesEnum::HostAuthenticationStore),
-        ("HostSpbm", MoTypesEnum::HostSpbm),
-        ("HostBootDeviceSystem", MoTypesEnum::HostBootDeviceSystem),
-        ("InventoryView", MoTypesEnum::InventoryView),
-        ("HostVStorageObjectManager", MoTypesEnum::HostVStorageObjectManager),
-        ("Datastore", MoTypesEnum::Datastore),
-        ("VsanIoInsightManager", MoTypesEnum::VsanIoInsightManager),
-        ("VirtualDiskManager", MoTypesEnum::VirtualDiskManager),
-        ("VsanVcsaDeployerSystem", MoTypesEnum::VsanVcsaDeployerSystem),
         ("ClusterProfileManager", MoTypesEnum::ClusterProfileManager),
-        ("MessageBusProxy", MoTypesEnum::MessageBusProxy),
-        ("Network", MoTypesEnum::Network),
         ("HealthUpdateManager", MoTypesEnum::HealthUpdateManager),
-        ("DirectPathProfileManager", MoTypesEnum::DirectPathProfileManager),
-        ("ManagedObject", MoTypesEnum::ManagedObject),
-        ("PbmProvider", MoTypesEnum::PbmProvider),
-        ("Agency", MoTypesEnum::Agency),
-        ("HttpNfcLease", MoTypesEnum::HttpNfcLease),
-        ("HostFirmwareSystem", MoTypesEnum::HostFirmwareSystem),
-        ("View", MoTypesEnum::View),
-        ("HostImageConfigManager", MoTypesEnum::HostImageConfigManager),
-        ("VsanSystemEx", MoTypesEnum::VsanSystemEx),
-        ("VirtualMachineGuestCustomizationManager", MoTypesEnum::VirtualMachineGuestCustomizationManager),
-        ("DistributedVirtualSwitchManager", MoTypesEnum::DistributedVirtualSwitchManager),
-        ("EamTask", MoTypesEnum::EamTask),
-        ("HostActiveDirectoryAuthentication", MoTypesEnum::HostActiveDirectoryAuthentication),
-        ("VsanDiagnosticsSystem", MoTypesEnum::VsanDiagnosticsSystem),
-        ("IpPoolManager", MoTypesEnum::IpPoolManager),
-        ("CustomizationSpecManager", MoTypesEnum::CustomizationSpecManager),
-        ("ExtensionManager", MoTypesEnum::ExtensionManager),
-        ("FailoverClusterManager", MoTypesEnum::FailoverClusterManager),
-        ("GuestFileManager", MoTypesEnum::GuestFileManager),
-        ("Folder", MoTypesEnum::Folder),
-        ("CryptoManagerKmip", MoTypesEnum::CryptoManagerKmip),
-        ("VsanObjectManager", MoTypesEnum::VsanObjectManager),
-        ("Agent", MoTypesEnum::Agent),
-        ("HostKernelModuleSystem", MoTypesEnum::HostKernelModuleSystem),
-        ("TaskHistoryCollector", MoTypesEnum::TaskHistoryCollector),
-        ("VslmVStorageObjectManager", MoTypesEnum::VslmVStorageObjectManager),
-        ("OpaqueNetwork", MoTypesEnum::OpaqueNetwork),
-        ("Datacenter", MoTypesEnum::Datacenter),
-        ("UserDirectory", MoTypesEnum::UserDirectory),
-        ("ScheduledTaskManager", MoTypesEnum::ScheduledTaskManager),
-        ("HostVFlashManager", MoTypesEnum::HostVFlashManager),
-        ("PbmComplianceManager", MoTypesEnum::PbmComplianceManager),
-        ("CryptoManager", MoTypesEnum::CryptoManager),
-        ("DatastoreNamespaceManager", MoTypesEnum::DatastoreNamespaceManager),
-        ("CnsVolumeManager", MoTypesEnum::CnsVolumeManager),
-        ("OvfManager", MoTypesEnum::OvfManager),
-        ("PbmPlacementSolver", MoTypesEnum::PbmPlacementSolver),
-        ("HostPatchManager", MoTypesEnum::HostPatchManager),
-        ("SmsSessionManager", MoTypesEnum::SmsSessionManager),
-        ("VmwareDistributedVirtualSwitch", MoTypesEnum::VmwareDistributedVirtualSwitch),
-        ("ProfileManager", MoTypesEnum::ProfileManager),
-        ("VirtualMachineSnapshot", MoTypesEnum::VirtualMachineSnapshot),
-        ("VsanClusterMgmtInternalSystem", MoTypesEnum::VsanClusterMgmtInternalSystem),
-        ("CryptoManagerHostKMS", MoTypesEnum::CryptoManagerHostKms),
-        ("SmsStorageManager", MoTypesEnum::SmsStorageManager),
-        ("HostSpecificationManager", MoTypesEnum::HostSpecificationManager),
-        ("DistributedVirtualPortgroup", MoTypesEnum::DistributedVirtualPortgroup),
-        ("ProfileComplianceManager", MoTypesEnum::ProfileComplianceManager),
-        ("HostProfile", MoTypesEnum::HostProfile),
-        ("PropertyFilter", MoTypesEnum::PropertyFilter),
-        ("VsanResourceCheckSystem", MoTypesEnum::VsanResourceCheckSystem),
-        ("VsanHostVdsSystem", MoTypesEnum::VsanHostVdsSystem),
-        ("FileManager", MoTypesEnum::FileManager),
-        ("ServiceManager", MoTypesEnum::ServiceManager),
-        ("GuestOperationsManager", MoTypesEnum::GuestOperationsManager),
-        ("CryptoManagerHost", MoTypesEnum::CryptoManagerHost),
-        ("GuestWindowsRegistryManager", MoTypesEnum::GuestWindowsRegistryManager),
-        ("LicenseManager", MoTypesEnum::LicenseManager),
-        ("HostVMotionSystem", MoTypesEnum::HostVMotionSystem),
-        ("HostVsanHealthSystem", MoTypesEnum::HostVsanHealthSystem),
-        ("HostDiagnosticSystem", MoTypesEnum::HostDiagnosticSystem),
-        ("VimClusterVsanVcDiskManagementSystem", MoTypesEnum::VimClusterVsanVcDiskManagementSystem),
-        ("FailoverClusterConfigurator", MoTypesEnum::FailoverClusterConfigurator),
-        ("EventManager", MoTypesEnum::EventManager),
+        ("EsxAgentManager", MoTypesEnum::EsxAgentManager),
+        ("ServiceInstance", MoTypesEnum::ServiceInstance),
+        ("VsanUpgradeSystem", MoTypesEnum::VsanUpgradeSystem),
+        ("ResourcePlanningManager", MoTypesEnum::ResourcePlanningManager),
+        ("HostDatastoreBrowser", MoTypesEnum::HostDatastoreBrowser),
+        ("Datastore", MoTypesEnum::Datastore),
         ("AlarmManager", MoTypesEnum::AlarmManager),
-        ("StoragePod", MoTypesEnum::StoragePod),
-        ("HostPowerSystem", MoTypesEnum::HostPowerSystem),
-        ("SmsTask", MoTypesEnum::SmsTask),
-        ("PbmSessionManager", MoTypesEnum::PbmSessionManager),
-        ("VimClusterVsanVcStretchedClusterSystem", MoTypesEnum::VimClusterVsanVcStretchedClusterSystem),
-        ("GuestAuthManager", MoTypesEnum::GuestAuthManager),
-        ("Task", MoTypesEnum::Task),
-        ("HostServiceSystem", MoTypesEnum::HostServiceSystem),
-        ("HostVsanSystem", MoTypesEnum::HostVsanSystem),
-        ("ManagedEntity", MoTypesEnum::ManagedEntity),
-        ("ClusterEVCManager", MoTypesEnum::ClusterEvcManager),
-        ("HostCacheConfigurationManager", MoTypesEnum::HostCacheConfigurationManager),
-        ("HostAssignableHardwareManager", MoTypesEnum::HostAssignableHardwareManager),
-        ("VasaProvider", MoTypesEnum::VasaProvider),
-        ("VsanClusterHealthSystem", MoTypesEnum::VsanClusterHealthSystem),
-        ("VsanUpdateManager", MoTypesEnum::VsanUpdateManager),
-        ("StorageResourceManager", MoTypesEnum::StorageResourceManager),
-        ("PbmReplicationManager", MoTypesEnum::PbmReplicationManager),
-        ("ContainerView", MoTypesEnum::ContainerView),
-        ("HostGraphicsManager", MoTypesEnum::HostGraphicsManager),
         ("VirtualMachine", MoTypesEnum::VirtualMachine),
-        ("LicenseAssignmentManager", MoTypesEnum::LicenseAssignmentManager),
-        ("HostAccessManager", MoTypesEnum::HostAccessManager),
-        ("VsanPolicyManager", MoTypesEnum::VsanPolicyManager),
-        ("LocalizationManager", MoTypesEnum::LocalizationManager),
-        ("HistoryCollector", MoTypesEnum::HistoryCollector),
-        ("VslmSessionManager", MoTypesEnum::VslmSessionManager),
-        ("VsanIscsiTargetSystem", MoTypesEnum::VsanIscsiTargetSystem),
-        ("TenantTenantManager", MoTypesEnum::TenantTenantManager),
-        ("EnvironmentBrowser", MoTypesEnum::EnvironmentBrowser),
-        ("HostCertificateManager", MoTypesEnum::HostCertificateManager),
-        ("VirtualizationManager", MoTypesEnum::VirtualizationManager),
-        ("GuestProcessManager", MoTypesEnum::GuestProcessManager),
-        ("VsanVdsSystem", MoTypesEnum::VsanVdsSystem),
-        ("VsanPerformanceManager", MoTypesEnum::VsanPerformanceManager),
-        ("VsanMassCollector", MoTypesEnum::VsanMassCollector),
-        ("VsanPhoneHomeSystem", MoTypesEnum::VsanPhoneHomeSystem),
-        ("ScheduledTask", MoTypesEnum::ScheduledTask),
-        ("HostStorageSystem", MoTypesEnum::HostStorageSystem),
-        ("HostAuthenticationManager", MoTypesEnum::HostAuthenticationManager),
-        ("HostEsxAgentHostManager", MoTypesEnum::HostEsxAgentHostManager),
-        ("VsanCapabilitySystem", MoTypesEnum::VsanCapabilitySystem),
-        ("HostVirtualNicManager", MoTypesEnum::HostVirtualNicManager),
-        ("VirtualMachineCompatibilityChecker", MoTypesEnum::VirtualMachineCompatibilityChecker),
-        ("HostLocalAuthentication", MoTypesEnum::HostLocalAuthentication),
-        ("DataProtectionHealthSystem", MoTypesEnum::DataProtectionHealthSystem),
-        ("HostNvdimmSystem", MoTypesEnum::HostNvdimmSystem),
-        ("GuestAliasManager", MoTypesEnum::GuestAliasManager),
-        ("VirtualApp", MoTypesEnum::VirtualApp),
+        ("VirtualMachineSnapshot", MoTypesEnum::VirtualMachineSnapshot),
+        ("DistributedVirtualSwitchManager", MoTypesEnum::DistributedVirtualSwitchManager),
+        ("Agent", MoTypesEnum::Agent),
+        ("AuthorizationManager", MoTypesEnum::AuthorizationManager),
         ("SearchIndex", MoTypesEnum::SearchIndex),
+        ("EamTask", MoTypesEnum::EamTask),
+        ("VsanPhoneHomeSystem", MoTypesEnum::VsanPhoneHomeSystem),
+        ("HostStorageSystem", MoTypesEnum::HostStorageSystem),
+        ("VsanVcClusterHealthSystem", MoTypesEnum::VsanVcClusterHealthSystem),
+        ("HostSpbm", MoTypesEnum::HostSpbm),
+        ("PropertyCollector", MoTypesEnum::PropertyCollector),
+        ("VsanVcsaDeployerSystem", MoTypesEnum::VsanVcsaDeployerSystem),
+        ("IpPoolManager", MoTypesEnum::IpPoolManager),
+        ("ExtensionManager", MoTypesEnum::ExtensionManager),
+        ("DirectPathProfileManager", MoTypesEnum::DirectPathProfileManager),
+        ("CertificateManager", MoTypesEnum::CertificateManager),
+        ("MessageBusProxy", MoTypesEnum::MessageBusProxy),
+        ("Task", MoTypesEnum::Task),
+        ("PropertyFilter", MoTypesEnum::PropertyFilter),
+        ("DatastoreNamespaceManager", MoTypesEnum::DatastoreNamespaceManager),
+        ("DiagnosticManager", MoTypesEnum::DiagnosticManager),
+        ("ExtensibleManagedObject", MoTypesEnum::ExtensibleManagedObject),
+        ("HostDatastoreSystem", MoTypesEnum::HostDatastoreSystem),
+        ("HostAssignableHardwareManager", MoTypesEnum::HostAssignableHardwareManager),
+        ("HostFirewallSystem", MoTypesEnum::HostFirewallSystem),
+        ("EventHistoryCollector", MoTypesEnum::EventHistoryCollector),
+        ("HostVsanSystem", MoTypesEnum::HostVsanSystem),
+        ("HostNvdimmSystem", MoTypesEnum::HostNvdimmSystem),
+        ("HostCpuSchedulerSystem", MoTypesEnum::HostCpuSchedulerSystem),
+        ("HostSnmpSystem", MoTypesEnum::HostSnmpSystem),
+        ("HostNetworkSystem", MoTypesEnum::HostNetworkSystem),
+        ("HostCacheConfigurationManager", MoTypesEnum::HostCacheConfigurationManager),
+        ("CryptoManagerHostKMS", MoTypesEnum::CryptoManagerHostKms),
+        ("LocalizationManager", MoTypesEnum::LocalizationManager),
+        ("VsanClusterHealthSystem", MoTypesEnum::VsanClusterHealthSystem),
+        ("StoragePod", MoTypesEnum::StoragePod),
+        ("HostCertificateManager", MoTypesEnum::HostCertificateManager),
+        ("VasaProvider", MoTypesEnum::VasaProvider),
+        ("VimClusterVsanVcStretchedClusterSystem", MoTypesEnum::VimClusterVsanVcStretchedClusterSystem),
+        ("Alarm", MoTypesEnum::Alarm),
+        ("VsanSystemEx", MoTypesEnum::VsanSystemEx),
+        ("HostServiceSystem", MoTypesEnum::HostServiceSystem),
+        ("ServiceManager", MoTypesEnum::ServiceManager),
+        ("HostAuthenticationStore", MoTypesEnum::HostAuthenticationStore),
+        ("HostPciPassthruSystem", MoTypesEnum::HostPciPassthruSystem),
+        ("HostVMotionSystem", MoTypesEnum::HostVMotionSystem),
+        ("VirtualMachineGuestCustomizationManager", MoTypesEnum::VirtualMachineGuestCustomizationManager),
+        ("VsanObjectManager", MoTypesEnum::VsanObjectManager),
+        ("ProfileManager", MoTypesEnum::ProfileManager),
+        ("SmsSessionManager", MoTypesEnum::SmsSessionManager),
+        ("HostVirtualNicManager", MoTypesEnum::HostVirtualNicManager),
+        ("HostPowerSystem", MoTypesEnum::HostPowerSystem),
+        ("HistoryCollector", MoTypesEnum::HistoryCollector),
+        ("PbmComplianceManager", MoTypesEnum::PbmComplianceManager),
+        ("PerformanceManager", MoTypesEnum::PerformanceManager),
+        ("EnvironmentBrowser", MoTypesEnum::EnvironmentBrowser),
+        ("VStorageObjectManagerBase", MoTypesEnum::VStorageObjectManagerBase),
+        ("PbmProfileProfileManager", MoTypesEnum::PbmProfileProfileManager),
+        ("SmsServiceInstance", MoTypesEnum::SmsServiceInstance),
+        ("VirtualMachineProvisioningChecker", MoTypesEnum::VirtualMachineProvisioningChecker),
+        ("HostDateTimeSystem", MoTypesEnum::HostDateTimeSystem),
+        ("HostFirmwareSystem", MoTypesEnum::HostFirmwareSystem),
+        ("VsanDiagnosticsSystem", MoTypesEnum::VsanDiagnosticsSystem),
+        ("VslmTask", MoTypesEnum::VslmTask),
+        ("VsanClusterPowerSystem", MoTypesEnum::VsanClusterPowerSystem),
+        ("ListView", MoTypesEnum::ListView),
+        ("LicenseManager", MoTypesEnum::LicenseManager),
+        ("GuestOperationsManager", MoTypesEnum::GuestOperationsManager),
+        ("VslmSessionManager", MoTypesEnum::VslmSessionManager),
+        ("HostDiagnosticSystem", MoTypesEnum::HostDiagnosticSystem),
+        ("ManagedObject", MoTypesEnum::ManagedObject),
+        ("HostAuthenticationManager", MoTypesEnum::HostAuthenticationManager),
+        ("PbmServiceInstance", MoTypesEnum::PbmServiceInstance),
+        ("ScheduledTaskManager", MoTypesEnum::ScheduledTaskManager),
+        ("SmsStorageManager", MoTypesEnum::SmsStorageManager),
+        ("VsanSiteMaintenanceSystem", MoTypesEnum::VsanSiteMaintenanceSystem),
+        ("ProfileComplianceManager", MoTypesEnum::ProfileComplianceManager),
+        ("OverheadMemoryManager", MoTypesEnum::OverheadMemoryManager),
+        ("HostPatchManager", MoTypesEnum::HostPatchManager),
+        ("IoFilterManager", MoTypesEnum::IoFilterManager),
+        ("DistributedVirtualPortgroup", MoTypesEnum::DistributedVirtualPortgroup),
+        ("VslmStorageLifecycleManager", MoTypesEnum::VslmStorageLifecycleManager),
+        ("SmsTask", MoTypesEnum::SmsTask),
+        ("VsanRemoteDatastoreSystem", MoTypesEnum::VsanRemoteDatastoreSystem),
+        ("OvfManager", MoTypesEnum::OvfManager),
+        ("VsanSpaceReportSystem", MoTypesEnum::VsanSpaceReportSystem),
+        ("OpaqueNetwork", MoTypesEnum::OpaqueNetwork),
+        ("EventManager", MoTypesEnum::EventManager),
+        ("UserDirectory", MoTypesEnum::UserDirectory),
+        ("ManagedObjectView", MoTypesEnum::ManagedObjectView),
+        ("CnsVolumeManager", MoTypesEnum::CnsVolumeManager),
+        ("ScheduledTask", MoTypesEnum::ScheduledTask),
+        ("VirtualMachineCompatibilityChecker", MoTypesEnum::VirtualMachineCompatibilityChecker),
+        ("ViewManager", MoTypesEnum::ViewManager),
+        ("Datacenter", MoTypesEnum::Datacenter),
+        ("VsanHostVdsSystem", MoTypesEnum::VsanHostVdsSystem),
+        ("VsanObjectSystem", MoTypesEnum::VsanObjectSystem),
+        ("CryptoManager", MoTypesEnum::CryptoManager),
+        ("EamObject", MoTypesEnum::EamObject),
+        ("LicenseAssignmentManager", MoTypesEnum::LicenseAssignmentManager),
+        ("VsanMassCollector", MoTypesEnum::VsanMassCollector),
+        ("PbmReplicationManager", MoTypesEnum::PbmReplicationManager),
+        ("ManagedEntity", MoTypesEnum::ManagedEntity),
+        ("HostKernelModuleSystem", MoTypesEnum::HostKernelModuleSystem),
+        ("GuestAliasManager", MoTypesEnum::GuestAliasManager),
+        ("VsanClusterMgmtInternalSystem", MoTypesEnum::VsanClusterMgmtInternalSystem),
+        ("HttpNfcLease", MoTypesEnum::HttpNfcLease),
+        ("VsanIoInsightManager", MoTypesEnum::VsanIoInsightManager),
+        ("OptionManager", MoTypesEnum::OptionManager),
+        ("VsanVcClusterConfigSystem", MoTypesEnum::VsanVcClusterConfigSystem),
+        ("ClusterComputeResource", MoTypesEnum::ClusterComputeResource),
+        ("Network", MoTypesEnum::Network),
+        ("VmwareDistributedVirtualSwitch", MoTypesEnum::VmwareDistributedVirtualSwitch),
+        ("HostImageConfigManager", MoTypesEnum::HostImageConfigManager),
+        ("HostLocalAuthentication", MoTypesEnum::HostLocalAuthentication),
+        ("SimpleCommand", MoTypesEnum::SimpleCommand),
+        ("ClusterEVCManager", MoTypesEnum::ClusterEvcManager),
+        ("HostEsxAgentHostManager", MoTypesEnum::HostEsxAgentHostManager),
+        ("FailoverClusterConfigurator", MoTypesEnum::FailoverClusterConfigurator),
+        ("CryptoManagerKmip", MoTypesEnum::CryptoManagerKmip),
+        ("DataProtectionHealthSystem", MoTypesEnum::DataProtectionHealthSystem),
+        ("View", MoTypesEnum::View),
+        ("VcenterVStorageObjectManager", MoTypesEnum::VcenterVStorageObjectManager),
+        ("TransitGateway", MoTypesEnum::TransitGateway),
+        ("VsanUpdateManager", MoTypesEnum::VsanUpdateManager),
+        ("FileManager", MoTypesEnum::FileManager),
+        ("PbmPlacementSolver", MoTypesEnum::PbmPlacementSolver),
+        ("ComputeResource", MoTypesEnum::ComputeResource),
+        ("StorageResourceManager", MoTypesEnum::StorageResourceManager),
+        ("FailoverClusterManager", MoTypesEnum::FailoverClusterManager),
+        ("SmsProvider", MoTypesEnum::SmsProvider),
+        ("HostProfileManager", MoTypesEnum::HostProfileManager),
+        ("CustomFieldsManager", MoTypesEnum::CustomFieldsManager),
+        ("PbmProvider", MoTypesEnum::PbmProvider),
+        ("HostAccessManager", MoTypesEnum::HostAccessManager),
+        ("VslmServiceInstance", MoTypesEnum::VslmServiceInstance),
+        ("SiteInfoManager", MoTypesEnum::SiteInfoManager),
+        ("PbmCapabilityMetadataManager", MoTypesEnum::PbmCapabilityMetadataManager),
+        ("VsanVumSystem", MoTypesEnum::VsanVumSystem),
+        ("ClusterProfile", MoTypesEnum::ClusterProfile),
+        ("Profile", MoTypesEnum::Profile),
+        ("HostProfile", MoTypesEnum::HostProfile),
+        ("GuestFileManager", MoTypesEnum::GuestFileManager),
+        ("VsanPerformanceManager", MoTypesEnum::VsanPerformanceManager),
+        ("GuestWindowsRegistryManager", MoTypesEnum::GuestWindowsRegistryManager),
+        ("VsanFileServiceSystem", MoTypesEnum::VsanFileServiceSystem),
+        ("TaskManager", MoTypesEnum::TaskManager),
+        ("VsanVdsSystem", MoTypesEnum::VsanVdsSystem),
+        ("HostVsanHealthSystem", MoTypesEnum::HostVsanHealthSystem),
+        ("DistributedVirtualSwitch", MoTypesEnum::DistributedVirtualSwitch),
+        ("CryptoManagerHost", MoTypesEnum::CryptoManagerHost),
+        ("HostVFlashManager", MoTypesEnum::HostVFlashManager),
+        ("VirtualizationManager", MoTypesEnum::VirtualizationManager),
+        ("VsanIscsiTargetSystem", MoTypesEnum::VsanIscsiTargetSystem),
+        ("VsanPolicyManager", MoTypesEnum::VsanPolicyManager),
+        ("SessionManager", MoTypesEnum::SessionManager),
+        ("GuestAuthManager", MoTypesEnum::GuestAuthManager),
         ("ResourcePool", MoTypesEnum::ResourcePool),
+        ("TaskHistoryCollector", MoTypesEnum::TaskHistoryCollector),
+        ("CustomizationSpecManager", MoTypesEnum::CustomizationSpecManager),
+        ("InventoryView", MoTypesEnum::InventoryView),
+        ("HostGraphicsManager", MoTypesEnum::HostGraphicsManager),
+        ("VsanResourceCheckSystem", MoTypesEnum::VsanResourceCheckSystem),
+        ("HostDirectoryStore", MoTypesEnum::HostDirectoryStore),
+        ("HostSpecificationManager", MoTypesEnum::HostSpecificationManager),
+        ("HostVStorageObjectManager", MoTypesEnum::HostVStorageObjectManager),
+        ("HostBootDeviceSystem", MoTypesEnum::HostBootDeviceSystem),
+        ("ContainerView", MoTypesEnum::ContainerView),
+        ("GuestProcessManager", MoTypesEnum::GuestProcessManager),
+        ("HostHealthStatusSystem", MoTypesEnum::HostHealthStatusSystem),
+        ("StorageQueryManager", MoTypesEnum::StorageQueryManager),
+        ("VsanCapabilitySystem", MoTypesEnum::VsanCapabilitySystem),
+        ("VimClusterVsanVcDiskManagementSystem", MoTypesEnum::VimClusterVsanVcDiskManagementSystem),
+        ("VsanUpgradeSystemEx", MoTypesEnum::VsanUpgradeSystemEx),
+        ("VirtualDiskManager", MoTypesEnum::VirtualDiskManager),
+        ("HostVsanInternalSystem", MoTypesEnum::HostVsanInternalSystem),
+        ("HostActiveDirectoryAuthentication", MoTypesEnum::HostActiveDirectoryAuthentication),
+        ("Agency", MoTypesEnum::Agency),
+        ("IscsiManager", MoTypesEnum::IscsiManager),
+        ("HostSystem", MoTypesEnum::HostSystem),
+        ("PbmSessionManager", MoTypesEnum::PbmSessionManager),
+        ("HostMemorySystem", MoTypesEnum::HostMemorySystem),
+        ("VslmVStorageObjectManager", MoTypesEnum::VslmVStorageObjectManager),
+        ("VirtualApp", MoTypesEnum::VirtualApp),
+        ("TenantTenantManager", MoTypesEnum::TenantTenantManager),
+        ("HostAutoStartManager", MoTypesEnum::HostAutoStartManager),
+        ("Folder", MoTypesEnum::Folder),
     ],
 };
 
@@ -16935,14 +16961,14 @@ impl AsRef<str> for MoTypesEnum {
 }
 
 static DP_DISK_ALREADY_CLAIMED_REASON_ENUM_MAP: phf::Map<&'static str, DpDiskAlreadyClaimedReasonEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
-        ("maxVendorsExceeded", DpDiskAlreadyClaimedReasonEnum::MaxVendorsExceeded),
-        ("diskAlreadyClaimedReasonUnknown", DpDiskAlreadyClaimedReasonEnum::DiskAlreadyClaimedReasonUnknown),
         ("alreadyInUse", DpDiskAlreadyClaimedReasonEnum::AlreadyInUse),
+        ("diskAlreadyClaimedReasonUnknown", DpDiskAlreadyClaimedReasonEnum::DiskAlreadyClaimedReasonUnknown),
+        ("maxVendorsExceeded", DpDiskAlreadyClaimedReasonEnum::MaxVendorsExceeded),
     ],
 };
 
@@ -17005,7 +17031,7 @@ impl AsRef<str> for DpDiskAlreadyClaimedReasonEnum {
 }
 
 static DP_INVALID_PROTECTION_REASON_ENUM_MAP: phf::Map<&'static str, DpInvalidProtectionReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -17075,13 +17101,13 @@ impl AsRef<str> for DpInvalidProtectionReasonEnum {
 }
 
 static DP_MIGRATION_TYPE_ENUM_MAP: phf::Map<&'static str, DpMigrationTypeEnum> = ::phf::Map {
-    key: 12213676231523076107,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("coldMigration", DpMigrationTypeEnum::ColdMigration),
         ("hotMigration", DpMigrationTypeEnum::HotMigration),
+        ("coldMigration", DpMigrationTypeEnum::ColdMigration),
         ("migrationTypeUnknown", DpMigrationTypeEnum::MigrationTypeUnknown),
     ],
 };
@@ -17145,13 +17171,14 @@ impl AsRef<str> for DpMigrationTypeEnum {
 }
 
 static DP_PROTECTION_STATUS_TYPE_ENUM_MAP: phf::Map<&'static str, DpProtectionStatusTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (0, 2),
     ],
     entries: &[
-        ("pe_unprotected", DpProtectionStatusTypeEnum::PeUnprotected),
         ("ProtectionStatusType_unknown", DpProtectionStatusTypeEnum::ProtectionStatusTypeUnknown),
+        ("pe_unprotected", DpProtectionStatusTypeEnum::PeUnprotected),
         ("pe_partially_protected", DpProtectionStatusTypeEnum::PePartiallyProtected),
         ("pe_protected", DpProtectionStatusTypeEnum::PeProtected),
     ],
@@ -17217,15 +17244,16 @@ impl AsRef<str> for DpProtectionStatusTypeEnum {
 }
 
 static DP_PROTECTION_SUPPORT_TYPE_ENUM_MAP: phf::Map<&'static str, DpProtectionSupportTypeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("supported", DpProtectionSupportTypeEnum::Supported),
         ("partially_supported", DpProtectionSupportTypeEnum::PartiallySupported),
-        ("not_supported", DpProtectionSupportTypeEnum::NotSupported),
+        ("supported", DpProtectionSupportTypeEnum::Supported),
         ("ProtectionSupportType_unknown", DpProtectionSupportTypeEnum::ProtectionSupportTypeUnknown),
+        ("not_supported", DpProtectionSupportTypeEnum::NotSupported),
     ],
 };
 
@@ -17289,19 +17317,20 @@ impl AsRef<str> for DpProtectionSupportTypeEnum {
 }
 
 static DP_SNAPSHOT_TYPE_ENUM_MAP: phf::Map<&'static str, DpSnapshotTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 1),
         (2, 0),
+        (1, 2),
+        (0, 0),
     ],
     entries: &[
-        ("crashConsistent", DpSnapshotTypeEnum::CrashConsistent),
-        ("vssAppConsistent", DpSnapshotTypeEnum::VssAppConsistent),
         ("vssAppConsistentCopy", DpSnapshotTypeEnum::VssAppConsistentCopy),
-        ("snapshotTypeUnknown", DpSnapshotTypeEnum::SnapshotTypeUnknown),
-        ("metadataOnly", DpSnapshotTypeEnum::MetadataOnly),
-        ("vssAppConsistentFull", DpSnapshotTypeEnum::VssAppConsistentFull),
         ("applicationConsistent", DpSnapshotTypeEnum::ApplicationConsistent),
+        ("snapshotTypeUnknown", DpSnapshotTypeEnum::SnapshotTypeUnknown),
+        ("vssAppConsistent", DpSnapshotTypeEnum::VssAppConsistent),
+        ("vssAppConsistentFull", DpSnapshotTypeEnum::VssAppConsistentFull),
+        ("crashConsistent", DpSnapshotTypeEnum::CrashConsistent),
+        ("metadataOnly", DpSnapshotTypeEnum::MetadataOnly),
     ],
 };
 
@@ -17368,14 +17397,14 @@ impl AsRef<str> for DpSnapshotTypeEnum {
 }
 
 static DP_SYNC_TYPE_ENUM_MAP: phf::Map<&'static str, DpSyncTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("deltaSync", DpSyncTypeEnum::DeltaSync),
-        ("fullSync", DpSyncTypeEnum::FullSync),
         ("syncTypeUnknown", DpSyncTypeEnum::SyncTypeUnknown),
+        ("fullSync", DpSyncTypeEnum::FullSync),
+        ("deltaSync", DpSyncTypeEnum::DeltaSync),
     ],
 };
 
@@ -17438,21 +17467,22 @@ impl AsRef<str> for DpSyncTypeEnum {
 }
 
 static DP_V_SPHERE_DATA_PROTECTION_CAPABILITIES_ENUM_MAP: phf::Map<&'static str, DpVSphereDataProtectionCapabilitiesEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (7, 2),
         (0, 0),
+        (1, 3),
+        (5, 5),
     ],
     entries: &[
-        ("SparseDiskEnhancement", DpVSphereDataProtectionCapabilitiesEnum::SparseDiskEnhancement),
-        ("PerDiskBaseSnapshotId", DpVSphereDataProtectionCapabilitiesEnum::PerDiskBaseSnapshotId),
-        ("PreservedExtents", DpVSphereDataProtectionCapabilitiesEnum::PreservedExtents),
-        ("VsanNativeSnapshot", DpVSphereDataProtectionCapabilitiesEnum::VsanNativeSnapshot),
-        ("RuntimeStats", DpVSphereDataProtectionCapabilitiesEnum::RuntimeStats),
         ("VSphereDpCapabilities_Unknown", DpVSphereDataProtectionCapabilitiesEnum::VSphereDpCapabilitiesUnknown),
-        ("MultiPe", DpVSphereDataProtectionCapabilitiesEnum::MultiPe),
-        ("QuiescedSnapshot", DpVSphereDataProtectionCapabilitiesEnum::QuiescedSnapshot),
         ("QueryPeInfo", DpVSphereDataProtectionCapabilitiesEnum::QueryPeInfo),
+        ("SparseDiskEnhancement", DpVSphereDataProtectionCapabilitiesEnum::SparseDiskEnhancement),
+        ("PreservedExtents", DpVSphereDataProtectionCapabilitiesEnum::PreservedExtents),
+        ("QuiescedSnapshot", DpVSphereDataProtectionCapabilitiesEnum::QuiescedSnapshot),
+        ("PerDiskBaseSnapshotId", DpVSphereDataProtectionCapabilitiesEnum::PerDiskBaseSnapshotId),
+        ("VsanNativeSnapshot", DpVSphereDataProtectionCapabilitiesEnum::VsanNativeSnapshot),
+        ("MultiPe", DpVSphereDataProtectionCapabilitiesEnum::MultiPe),
+        ("RuntimeStats", DpVSphereDataProtectionCapabilitiesEnum::RuntimeStats),
     ],
 };
 
@@ -17521,13 +17551,13 @@ impl AsRef<str> for DpVSphereDataProtectionCapabilitiesEnum {
 }
 
 static DP_V_SPHERE_DATA_PROTECTION_CAPABILITIES_90_U_1_ENUM_MAP: phf::Map<&'static str, DpVSphereDataProtectionCapabilities90U1Enum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("VsanDataIntegrity", DpVSphereDataProtectionCapabilities90U1Enum::VsanDataIntegrity),
         ("MultiInitiator", DpVSphereDataProtectionCapabilities90U1Enum::MultiInitiator),
+        ("VsanDataIntegrity", DpVSphereDataProtectionCapabilities90U1Enum::VsanDataIntegrity),
         ("PolicyEngine", DpVSphereDataProtectionCapabilities90U1Enum::PolicyEngine),
     ],
 };
@@ -17591,15 +17621,16 @@ impl AsRef<str> for DpVSphereDataProtectionCapabilities90U1Enum {
 }
 
 static DP_VSS_BACKUP_CONTEXT_ENUM_MAP: phf::Map<&'static str, DpVssBackupContextEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 1),
+        (1, 0),
     ],
     entries: &[
-        ("vssBackupContextAuto", DpVssBackupContextEnum::VssBackupContextAuto),
-        ("vssBackupContextFileShareBackup", DpVssBackupContextEnum::VssBackupContextFileShareBackup),
         ("vssBackupContextBackup", DpVssBackupContextEnum::VssBackupContextBackup),
+        ("vssBackupContextFileShareBackup", DpVssBackupContextEnum::VssBackupContextFileShareBackup),
         ("vssBackupContextUnknown", DpVssBackupContextEnum::VssBackupContextUnknown),
+        ("vssBackupContextAuto", DpVssBackupContextEnum::VssBackupContextAuto),
     ],
 };
 
@@ -17663,14 +17694,14 @@ impl AsRef<str> for DpVssBackupContextEnum {
 }
 
 static DP_VSS_BACKUP_TYPE_ENUM_MAP: phf::Map<&'static str, DpVssBackupTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("vssBackupTypeCopy", DpVssBackupTypeEnum::VssBackupTypeCopy),
-        ("vssBackupTypeFull", DpVssBackupTypeEnum::VssBackupTypeFull),
         ("vssBackupTypeUnknown", DpVssBackupTypeEnum::VssBackupTypeUnknown),
+        ("vssBackupTypeFull", DpVssBackupTypeEnum::VssBackupTypeFull),
     ],
 };
 
@@ -17733,14 +17764,15 @@ impl AsRef<str> for DpVssBackupTypeEnum {
 }
 
 static DP_CAPABILITY_SUPPORT_LEVEL_ENUM_MAP: phf::Map<&'static str, DpCapabilitySupportLevelEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (1, 3),
     ],
     entries: &[
-        ("CapabilitySupportLevel_unknown", DpCapabilitySupportLevelEnum::CapabilitySupportLevelUnknown),
-        ("partially_supported", DpCapabilitySupportLevelEnum::PartiallySupported),
         ("not_supported", DpCapabilitySupportLevelEnum::NotSupported),
+        ("partially_supported", DpCapabilitySupportLevelEnum::PartiallySupported),
+        ("CapabilitySupportLevel_unknown", DpCapabilitySupportLevelEnum::CapabilitySupportLevelUnknown),
         ("supported", DpCapabilitySupportLevelEnum::Supported),
     ],
 };
@@ -17805,15 +17837,16 @@ impl AsRef<str> for DpCapabilitySupportLevelEnum {
 }
 
 static DP_DR_SRM_WORKFLOW_ENUM_MAP: phf::Map<&'static str, DpDrSrmWorkflowEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
+        (0, 0),
         (0, 0),
     ],
     entries: &[
         ("cleanup_test", DpDrSrmWorkflowEnum::CleanupTest),
-        ("srmWorkflowUnknown", DpDrSrmWorkflowEnum::SrmWorkflowUnknown),
-        ("reprotect", DpDrSrmWorkflowEnum::Reprotect),
         ("failover", DpDrSrmWorkflowEnum::Failover),
+        ("reprotect", DpDrSrmWorkflowEnum::Reprotect),
+        ("srmWorkflowUnknown", DpDrSrmWorkflowEnum::SrmWorkflowUnknown),
         ("test_failover", DpDrSrmWorkflowEnum::TestFailover),
     ],
 };
@@ -17879,7 +17912,7 @@ impl AsRef<str> for DpDrSrmWorkflowEnum {
 }
 
 static AGENCY_VM_PLACEMENT_POLICY_VM_ANTI_AFFINITY_ENUM_MAP: phf::Map<&'static str, AgencyVmPlacementPolicyVmAntiAffinityEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
@@ -17947,7 +17980,7 @@ impl AsRef<str> for AgencyVmPlacementPolicyVmAntiAffinityEnum {
 }
 
 static AGENCY_VM_PLACEMENT_POLICY_VM_DATA_AFFINITY_ENUM_MAP: phf::Map<&'static str, AgencyVmPlacementPolicyVmDataAffinityEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
@@ -18015,9 +18048,9 @@ impl AsRef<str> for AgencyVmPlacementPolicyVmDataAffinityEnum {
 }
 
 static AGENT_CONFIG_INFO_AUTHENTICATION_SCHEME_ENUM_MAP: phf::Map<&'static str, AgentConfigInfoAuthenticationSchemeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("VMWARE_SESSION_ID", AgentConfigInfoAuthenticationSchemeEnum::VmwareSessionId),
@@ -18083,14 +18116,14 @@ impl AsRef<str> for AgentConfigInfoAuthenticationSchemeEnum {
 }
 
 static AGENT_CONFIG_INFO_OVF_DISK_PROVISIONING_ENUM_MAP: phf::Map<&'static str, AgentConfigInfoOvfDiskProvisioningEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("none", AgentConfigInfoOvfDiskProvisioningEnum::None),
-        ("thin", AgentConfigInfoOvfDiskProvisioningEnum::Thin),
         ("thick", AgentConfigInfoOvfDiskProvisioningEnum::Thick),
+        ("thin", AgentConfigInfoOvfDiskProvisioningEnum::Thin),
+        ("none", AgentConfigInfoOvfDiskProvisioningEnum::None),
     ],
 };
 
@@ -18153,14 +18186,14 @@ impl AsRef<str> for AgentConfigInfoOvfDiskProvisioningEnum {
 }
 
 static AGENT_VM_HOOK_VM_STATE_ENUM_MAP: phf::Map<&'static str, AgentVmHookVmStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("prePowerOn", AgentVmHookVmStateEnum::PrePowerOn),
-        ("provisioned", AgentVmHookVmStateEnum::Provisioned),
         ("poweredOn", AgentVmHookVmStateEnum::PoweredOn),
+        ("provisioned", AgentVmHookVmStateEnum::Provisioned),
+        ("prePowerOn", AgentVmHookVmStateEnum::PrePowerOn),
     ],
 };
 
@@ -18223,13 +18256,13 @@ impl AsRef<str> for AgentVmHookVmStateEnum {
 }
 
 static EAM_OBJECT_RUNTIME_INFO_GOAL_STATE_ENUM_MAP: phf::Map<&'static str, EamObjectRuntimeInfoGoalStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 5277884738100225802,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("disabled", EamObjectRuntimeInfoGoalStateEnum::Disabled),
         ("enabled", EamObjectRuntimeInfoGoalStateEnum::Enabled),
+        ("disabled", EamObjectRuntimeInfoGoalStateEnum::Disabled),
         ("uninstalled", EamObjectRuntimeInfoGoalStateEnum::Uninstalled),
     ],
 };
@@ -18293,9 +18326,9 @@ impl AsRef<str> for EamObjectRuntimeInfoGoalStateEnum {
 }
 
 static EAM_OBJECT_RUNTIME_INFO_STATUS_ENUM_MAP: phf::Map<&'static str, EamObjectRuntimeInfoStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
         ("red", EamObjectRuntimeInfoStatusEnum::Red),
@@ -18363,7 +18396,7 @@ impl AsRef<str> for EamObjectRuntimeInfoStatusEnum {
 }
 
 static ESX_AGENT_MANAGER_MAINTENANCE_MODE_POLICY_ENUM_MAP: phf::Map<&'static str, EsxAgentManagerMaintenanceModePolicyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -18431,13 +18464,13 @@ impl AsRef<str> for EsxAgentManagerMaintenanceModePolicyEnum {
 }
 
 static HOOKS_HOOK_TYPE_ENUM_MAP: phf::Map<&'static str, HooksHookTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("POST_PROVISIONING", HooksHookTypeEnum::PostProvisioning),
         ("POST_POWER_ON", HooksHookTypeEnum::PostPowerOn),
+        ("POST_PROVISIONING", HooksHookTypeEnum::PostProvisioning),
     ],
 };
 
@@ -18499,19 +18532,20 @@ impl AsRef<str> for HooksHookTypeEnum {
 }
 
 static SOLUTIONS_INVALID_REASON_ENUM_MAP: phf::Map<&'static str, SolutionsInvalidReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
-        (1, 4),
+        (0, 4),
+        (0, 0),
+        (0, 7),
     ],
     entries: &[
-        ("INVALID_OVF_DESCRIPTOR", SolutionsInvalidReasonEnum::InvalidOvfDescriptor),
-        ("INVALID_PROPERTIES", SolutionsInvalidReasonEnum::InvalidProperties),
-        ("INVALID_NETWORKS", SolutionsInvalidReasonEnum::InvalidNetworks),
-        ("INVALID_FOLDER", SolutionsInvalidReasonEnum::InvalidFolder),
-        ("INVALID_CLUSTER_TRANSITION", SolutionsInvalidReasonEnum::InvalidClusterTransition),
         ("INVALID_TRANSITION", SolutionsInvalidReasonEnum::InvalidTransition),
+        ("INVALID_NETWORKS", SolutionsInvalidReasonEnum::InvalidNetworks),
         ("INVALID_DATASTORES", SolutionsInvalidReasonEnum::InvalidDatastores),
+        ("INVALID_FOLDER", SolutionsInvalidReasonEnum::InvalidFolder),
+        ("INVALID_OVF_DESCRIPTOR", SolutionsInvalidReasonEnum::InvalidOvfDescriptor),
+        ("INVALID_CLUSTER_TRANSITION", SolutionsInvalidReasonEnum::InvalidClusterTransition),
+        ("INVALID_PROPERTIES", SolutionsInvalidReasonEnum::InvalidProperties),
         ("INVALID_RESOURCE_POOL", SolutionsInvalidReasonEnum::InvalidResourcePool),
         ("INACCESSBLE_VM_SOURCE", SolutionsInvalidReasonEnum::InaccessbleVmSource),
     ],
@@ -18582,18 +18616,18 @@ impl AsRef<str> for SolutionsInvalidReasonEnum {
 }
 
 static SOLUTIONS_NON_COMPLIANCE_REASON_ENUM_MAP: phf::Map<&'static str, SolutionsNonComplianceReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
-        (2, 4),
+        (1, 2),
+        (0, 0),
     ],
     entries: &[
-        ("NO_SPEC", SolutionsNonComplianceReasonEnum::NoSpec),
-        ("WORKING", SolutionsNonComplianceReasonEnum::Working),
-        ("ISSUE", SolutionsNonComplianceReasonEnum::Issue),
-        ("IN_HOOK", SolutionsNonComplianceReasonEnum::InHook),
-        ("BLOCKED", SolutionsNonComplianceReasonEnum::Blocked),
         ("OBSOLETE_SPEC", SolutionsNonComplianceReasonEnum::ObsoleteSpec),
+        ("WORKING", SolutionsNonComplianceReasonEnum::Working),
+        ("IN_HOOK", SolutionsNonComplianceReasonEnum::InHook),
+        ("NO_SPEC", SolutionsNonComplianceReasonEnum::NoSpec),
+        ("ISSUE", SolutionsNonComplianceReasonEnum::Issue),
+        ("BLOCKED", SolutionsNonComplianceReasonEnum::Blocked),
     ],
 };
 
@@ -18659,9 +18693,9 @@ impl AsRef<str> for SolutionsNonComplianceReasonEnum {
 }
 
 static SOLUTIONS_VM_DEPLOYMENT_OPTIMIZATION_ENUM_MAP: phf::Map<&'static str, SolutionsVmDeploymentOptimizationEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
         ("NO_CLONES", SolutionsVmDeploymentOptimizationEnum::NoClones),
@@ -18729,7 +18763,7 @@ impl AsRef<str> for SolutionsVmDeploymentOptimizationEnum {
 }
 
 static SOLUTIONS_VM_DISK_PROVISIONING_ENUM_MAP: phf::Map<&'static str, SolutionsVmDiskProvisioningEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -18797,7 +18831,7 @@ impl AsRef<str> for SolutionsVmDiskProvisioningEnum {
 }
 
 static SOLUTIONS_VM_PLACEMENT_POLICY_ENUM_MAP: phf::Map<&'static str, SolutionsVmPlacementPolicyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -18863,20 +18897,21 @@ impl AsRef<str> for SolutionsVmPlacementPolicyEnum {
 }
 
 static PBM_LOGGING_CONFIGURATION_COMPONENT_ENUM_MAP: phf::Map<&'static str, PbmLoggingConfigurationComponentEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 4),
         (0, 7),
+        (0, 0),
     ],
     entries: &[
-        ("sps", PbmLoggingConfigurationComponentEnum::Sps),
-        ("httpclient_content", PbmLoggingConfigurationComponentEnum::HttpclientContent),
-        ("spbm", PbmLoggingConfigurationComponentEnum::Spbm),
-        ("sms", PbmLoggingConfigurationComponentEnum::Sms),
-        ("vslm", PbmLoggingConfigurationComponentEnum::Vslm),
-        ("httpclient_header", PbmLoggingConfigurationComponentEnum::HttpclientHeader),
-        ("vmomi", PbmLoggingConfigurationComponentEnum::Vmomi),
         ("pbm", PbmLoggingConfigurationComponentEnum::Pbm),
+        ("spbm", PbmLoggingConfigurationComponentEnum::Spbm),
+        ("httpclient_header", PbmLoggingConfigurationComponentEnum::HttpclientHeader),
+        ("sms", PbmLoggingConfigurationComponentEnum::Sms),
+        ("httpclient_content", PbmLoggingConfigurationComponentEnum::HttpclientContent),
+        ("vmomi", PbmLoggingConfigurationComponentEnum::Vmomi),
+        ("vslm", PbmLoggingConfigurationComponentEnum::Vslm),
+        ("sps", PbmLoggingConfigurationComponentEnum::Sps),
     ],
 };
 
@@ -18944,14 +18979,14 @@ impl AsRef<str> for PbmLoggingConfigurationComponentEnum {
 }
 
 static PBM_LOGGING_CONFIGURATION_LOG_LEVEL_ENUM_MAP: phf::Map<&'static str, PbmLoggingConfigurationLogLevelEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("DEBUG", PbmLoggingConfigurationLogLevelEnum::Debug),
         ("INFO", PbmLoggingConfigurationLogLevelEnum::Info),
         ("TRACE", PbmLoggingConfigurationLogLevelEnum::Trace),
+        ("DEBUG", PbmLoggingConfigurationLogLevelEnum::Debug),
     ],
 };
 
@@ -19014,13 +19049,13 @@ impl AsRef<str> for PbmLoggingConfigurationLogLevelEnum {
 }
 
 static PBM_DEBUG_MANAGER_KEYSTORE_NAME_ENUM_MAP: phf::Map<&'static str, PbmDebugManagerKeystoreNameEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("TRUSTED_ROOTS", PbmDebugManagerKeystoreNameEnum::TrustedRoots),
         ("SMS", PbmDebugManagerKeystoreNameEnum::Sms),
+        ("TRUSTED_ROOTS", PbmDebugManagerKeystoreNameEnum::TrustedRoots),
     ],
 };
 
@@ -19082,21 +19117,22 @@ impl AsRef<str> for PbmDebugManagerKeystoreNameEnum {
 }
 
 static PBM_OBJECT_TYPE_ENUM_MAP: phf::Map<&'static str, PbmObjectTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
-        (5, 0),
-        (5, 1),
+        (0, 4),
+        (3, 0),
+        (0, 1),
     ],
     entries: &[
-        ("virtualMachineAndDisks", PbmObjectTypeEnum::VirtualMachineAndDisks),
-        ("cluster", PbmObjectTypeEnum::Cluster),
         ("virtualDiskUUID", PbmObjectTypeEnum::VirtualDiskUuid),
         ("vsanObjectId", PbmObjectTypeEnum::VsanObjectId),
-        ("datastore", PbmObjectTypeEnum::Datastore),
-        ("virtualMachine", PbmObjectTypeEnum::VirtualMachine),
-        ("virtualDiskId", PbmObjectTypeEnum::VirtualDiskId),
         ("unknown", PbmObjectTypeEnum::Unknown),
+        ("datastore", PbmObjectTypeEnum::Datastore),
         ("fileShareId", PbmObjectTypeEnum::FileShareId),
+        ("virtualMachineAndDisks", PbmObjectTypeEnum::VirtualMachineAndDisks),
+        ("virtualDiskId", PbmObjectTypeEnum::VirtualDiskId),
+        ("virtualMachine", PbmObjectTypeEnum::VirtualMachine),
+        ("cluster", PbmObjectTypeEnum::Cluster),
     ],
 };
 
@@ -19165,13 +19201,13 @@ impl AsRef<str> for PbmObjectTypeEnum {
 }
 
 static PBM_VVOL_TYPE_ENUM_MAP: phf::Map<&'static str, PbmVvolTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("Config", PbmVvolTypeEnum::Config),
         ("Swap", PbmVvolTypeEnum::Swap),
+        ("Config", PbmVvolTypeEnum::Config),
         ("Data", PbmVvolTypeEnum::Data),
     ],
 };
@@ -19235,7 +19271,7 @@ impl AsRef<str> for PbmVvolTypeEnum {
 }
 
 static PBM_CAPABILITY_OPERATOR_ENUM_MAP: phf::Map<&'static str, PbmCapabilityOperatorEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -19301,13 +19337,13 @@ impl AsRef<str> for PbmCapabilityOperatorEnum {
 }
 
 static PBM_CAPABILITY_SCHEMA_CAPABILITY_CATEGORY_ENUM_MAP: phf::Map<&'static str, PbmCapabilitySchemaCapabilityCategoryEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("datastoreSpecific", PbmCapabilitySchemaCapabilityCategoryEnum::DatastoreSpecific),
         ("common", PbmCapabilitySchemaCapabilityCategoryEnum::Common),
+        ("datastoreSpecific", PbmCapabilitySchemaCapabilityCategoryEnum::DatastoreSpecific),
     ],
 };
 
@@ -19369,22 +19405,24 @@ impl AsRef<str> for PbmCapabilitySchemaCapabilityCategoryEnum {
 }
 
 static PBM_LINE_OF_SERVICE_INFO_LINE_OF_SERVICE_ENUM_ENUM_MAP: phf::Map<&'static str, PbmLineOfServiceInfoLineOfServiceEnumEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 8),
-        (3, 0),
+        (1, 9),
+        (4, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
         ("STRETCHED_CLUSTER", PbmLineOfServiceInfoLineOfServiceEnumEnum::StretchedCluster),
-        ("DATASTORE_IO_CONTROL", PbmLineOfServiceInfoLineOfServiceEnumEnum::DatastoreIoControl),
-        ("DATA_PROTECTION", PbmLineOfServiceInfoLineOfServiceEnumEnum::DataProtection),
-        ("PERSISTENCE", PbmLineOfServiceInfoLineOfServiceEnumEnum::Persistence),
-        ("COMPRESSION", PbmLineOfServiceInfoLineOfServiceEnumEnum::Compression),
-        ("REPLICATION", PbmLineOfServiceInfoLineOfServiceEnumEnum::Replication),
         ("CACHING", PbmLineOfServiceInfoLineOfServiceEnumEnum::Caching),
-        ("INSPECTION", PbmLineOfServiceInfoLineOfServiceEnumEnum::Inspection),
         ("ENCRYPTION", PbmLineOfServiceInfoLineOfServiceEnumEnum::Encryption),
         ("DATA_PROVIDER", PbmLineOfServiceInfoLineOfServiceEnumEnum::DataProvider),
+        ("REPLICATION", PbmLineOfServiceInfoLineOfServiceEnumEnum::Replication),
+        ("INSPECTION", PbmLineOfServiceInfoLineOfServiceEnumEnum::Inspection),
+        ("PERSISTENCE", PbmLineOfServiceInfoLineOfServiceEnumEnum::Persistence),
+        ("COMPRESSION", PbmLineOfServiceInfoLineOfServiceEnumEnum::Compression),
+        ("DATASTORE_IO_CONTROL", PbmLineOfServiceInfoLineOfServiceEnumEnum::DatastoreIoControl),
+        ("DATA_PROTECTION", PbmLineOfServiceInfoLineOfServiceEnumEnum::DataProtection),
     ],
 };
 
@@ -19454,13 +19492,13 @@ impl AsRef<str> for PbmLineOfServiceInfoLineOfServiceEnumEnum {
 }
 
 static PBM_BUILTIN_GENERIC_TYPE_ENUM_MAP: phf::Map<&'static str, PbmBuiltinGenericTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("VMW_RANGE", PbmBuiltinGenericTypeEnum::VmwRange),
         ("VMW_SET", PbmBuiltinGenericTypeEnum::VmwSet),
+        ("VMW_RANGE", PbmBuiltinGenericTypeEnum::VmwRange),
     ],
 };
 
@@ -19522,22 +19560,24 @@ impl AsRef<str> for PbmBuiltinGenericTypeEnum {
 }
 
 static PBM_BUILTIN_TYPE_ENUM_MAP: phf::Map<&'static str, PbmBuiltinTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16263683158343804936,
     disps: &[
-        (2, 2),
-        (3, 0),
+        (0, 9),
+        (0, 0),
+        (0, 0),
+        (0, 4),
     ],
     entries: &[
-        ("VMW_TIMESPAN", PbmBuiltinTypeEnum::VmwTimespan),
-        ("XSD_INT", PbmBuiltinTypeEnum::XsdInt),
         ("XSD_DATETIME", PbmBuiltinTypeEnum::XsdDatetime),
-        ("VMW_POLICY", PbmBuiltinTypeEnum::VmwPolicy),
+        ("VMW_TIMESPAN", PbmBuiltinTypeEnum::VmwTimespan),
         ("XSD_LONG", PbmBuiltinTypeEnum::XsdLong),
-        ("XSD_STRING", PbmBuiltinTypeEnum::XsdString),
-        ("XSD_INTEGER", PbmBuiltinTypeEnum::XsdInteger),
-        ("XSD_DOUBLE", PbmBuiltinTypeEnum::XsdDouble),
-        ("XSD_SHORT", PbmBuiltinTypeEnum::XsdShort),
         ("XSD_BOOLEAN", PbmBuiltinTypeEnum::XsdBoolean),
+        ("XSD_INTEGER", PbmBuiltinTypeEnum::XsdInteger),
+        ("XSD_SHORT", PbmBuiltinTypeEnum::XsdShort),
+        ("XSD_INT", PbmBuiltinTypeEnum::XsdInt),
+        ("VMW_POLICY", PbmBuiltinTypeEnum::VmwPolicy),
+        ("XSD_DOUBLE", PbmBuiltinTypeEnum::XsdDouble),
+        ("XSD_STRING", PbmBuiltinTypeEnum::XsdString),
     ],
 };
 
@@ -19607,19 +19647,20 @@ impl AsRef<str> for PbmBuiltinTypeEnum {
 }
 
 static PBM_CAPABILITY_TIME_UNIT_TYPE_ENUM_MAP: phf::Map<&'static str, PbmCapabilityTimeUnitTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (5, 4),
         (0, 0),
+        (0, 3),
+        (0, 3),
     ],
     entries: &[
-        ("WEEKS", PbmCapabilityTimeUnitTypeEnum::Weeks),
-        ("MINUTES", PbmCapabilityTimeUnitTypeEnum::Minutes),
-        ("HOURS", PbmCapabilityTimeUnitTypeEnum::Hours),
-        ("YEARS", PbmCapabilityTimeUnitTypeEnum::Years),
         ("MONTHS", PbmCapabilityTimeUnitTypeEnum::Months),
-        ("DAYS", PbmCapabilityTimeUnitTypeEnum::Days),
         ("SECONDS", PbmCapabilityTimeUnitTypeEnum::Seconds),
+        ("MINUTES", PbmCapabilityTimeUnitTypeEnum::Minutes),
+        ("DAYS", PbmCapabilityTimeUnitTypeEnum::Days),
+        ("HOURS", PbmCapabilityTimeUnitTypeEnum::Hours),
+        ("WEEKS", PbmCapabilityTimeUnitTypeEnum::Weeks),
+        ("YEARS", PbmCapabilityTimeUnitTypeEnum::Years),
     ],
 };
 
@@ -19686,16 +19727,17 @@ impl AsRef<str> for PbmCapabilityTimeUnitTypeEnum {
 }
 
 static PBM_COMPLIANCE_STATUS_ENUM_MAP: phf::Map<&'static str, PbmComplianceStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (3, 0),
+        (0, 3),
     ],
     entries: &[
-        ("nonCompliant", PbmComplianceStatusEnum::NonCompliant),
-        ("compliant", PbmComplianceStatusEnum::Compliant),
-        ("outOfDate", PbmComplianceStatusEnum::OutOfDate),
-        ("notApplicable", PbmComplianceStatusEnum::NotApplicable),
         ("unknown", PbmComplianceStatusEnum::Unknown),
+        ("notApplicable", PbmComplianceStatusEnum::NotApplicable),
+        ("compliant", PbmComplianceStatusEnum::Compliant),
+        ("nonCompliant", PbmComplianceStatusEnum::NonCompliant),
+        ("outOfDate", PbmComplianceStatusEnum::OutOfDate),
     ],
 };
 
@@ -19760,14 +19802,14 @@ impl AsRef<str> for PbmComplianceStatusEnum {
 }
 
 static PBM_COMPLIANCE_RESULT_COMPLIANCE_TASK_STATUS_ENUM_MAP: phf::Map<&'static str, PbmComplianceResultComplianceTaskStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("inProgress", PbmComplianceResultComplianceTaskStatusEnum::InProgress),
-        ("success", PbmComplianceResultComplianceTaskStatusEnum::Success),
         ("failed", PbmComplianceResultComplianceTaskStatusEnum::Failed),
+        ("success", PbmComplianceResultComplianceTaskStatusEnum::Success),
     ],
 };
 
@@ -19830,14 +19872,15 @@ impl AsRef<str> for PbmComplianceResultComplianceTaskStatusEnum {
 }
 
 static PBM_HEALTH_STATUS_FOR_ENTITY_ENUM_MAP: phf::Map<&'static str, PbmHealthStatusForEntityEnum> = ::phf::Map {
-    key: 351906021642186605,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("red", PbmHealthStatusForEntityEnum::Red),
-        ("yellow", PbmHealthStatusForEntityEnum::Yellow),
         ("unknown", PbmHealthStatusForEntityEnum::Unknown),
+        ("yellow", PbmHealthStatusForEntityEnum::Yellow),
+        ("red", PbmHealthStatusForEntityEnum::Red),
         ("green", PbmHealthStatusForEntityEnum::Green),
     ],
 };
@@ -19902,14 +19945,14 @@ impl AsRef<str> for PbmHealthStatusForEntityEnum {
 }
 
 static PBM_ASSOCIATE_AND_APPLY_POLICY_STATUS_POLICY_STATUS_ENUM_MAP: phf::Map<&'static str, PbmAssociateAndApplyPolicyStatusPolicyStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("invalid", PbmAssociateAndApplyPolicyStatusPolicyStatusEnum::Invalid),
-        ("success", PbmAssociateAndApplyPolicyStatusPolicyStatusEnum::Success),
         ("failed", PbmAssociateAndApplyPolicyStatusPolicyStatusEnum::Failed),
+        ("success", PbmAssociateAndApplyPolicyStatusPolicyStatusEnum::Success),
+        ("invalid", PbmAssociateAndApplyPolicyStatusPolicyStatusEnum::Invalid),
     ],
 };
 
@@ -19972,7 +20015,7 @@ impl AsRef<str> for PbmAssociateAndApplyPolicyStatusPolicyStatusEnum {
 }
 
 static PBM_PROFILE_CATEGORY_ENUM_ENUM_MAP: phf::Map<&'static str, PbmProfileCategoryEnumEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -20042,18 +20085,18 @@ impl AsRef<str> for PbmProfileCategoryEnumEnum {
 }
 
 static PBM_SYSTEM_CREATED_PROFILE_TYPE_ENUM_MAP: phf::Map<&'static str, PbmSystemCreatedProfileTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
+        (0, 4),
         (4, 0),
-        (2, 4),
     ],
     entries: &[
+        ("VsanDefaultProfile", PbmSystemCreatedProfileTypeEnum::VsanDefaultProfile),
+        ("PmemDefaultProfile", PbmSystemCreatedProfileTypeEnum::PmemDefaultProfile),
+        ("VmcManagementProfile", PbmSystemCreatedProfileTypeEnum::VmcManagementProfile),
         ("VVolDefaultProfile", PbmSystemCreatedProfileTypeEnum::VVolDefaultProfile),
         ("VsanMaxDefaultProfile", PbmSystemCreatedProfileTypeEnum::VsanMaxDefaultProfile),
-        ("PmemDefaultProfile", PbmSystemCreatedProfileTypeEnum::PmemDefaultProfile),
         ("VsanEsaAutoManagedRaidProfile", PbmSystemCreatedProfileTypeEnum::VsanEsaAutoManagedRaidProfile),
-        ("VmcManagementProfile", PbmSystemCreatedProfileTypeEnum::VmcManagementProfile),
-        ("VsanDefaultProfile", PbmSystemCreatedProfileTypeEnum::VsanDefaultProfile),
     ],
 };
 
@@ -20119,18 +20162,18 @@ impl AsRef<str> for PbmSystemCreatedProfileTypeEnum {
 }
 
 static PBM_OPERATION_ENUM_MAP: phf::Map<&'static str, PbmOperationEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16263683158343804936,
     disps: &[
-        (1, 2),
-        (1, 0),
+        (0, 0),
+        (3, 4),
     ],
     entries: &[
+        ("CREATE", PbmOperationEnum::Create),
+        ("MIGRATE", PbmOperationEnum::Migrate),
+        ("RECONFIGURE", PbmOperationEnum::Reconfigure),
+        ("UNREGISTER", PbmOperationEnum::Unregister),
         ("CLONE", PbmOperationEnum::Clone),
         ("REGISTER", PbmOperationEnum::Register),
-        ("RECONFIGURE", PbmOperationEnum::Reconfigure),
-        ("MIGRATE", PbmOperationEnum::Migrate),
-        ("UNREGISTER", PbmOperationEnum::Unregister),
-        ("CREATE", PbmOperationEnum::Create),
     ],
 };
 
@@ -20196,19 +20239,20 @@ impl AsRef<str> for PbmOperationEnum {
 }
 
 static PBM_IOFILTER_INFO_FILTER_TYPE_ENUM_MAP: phf::Map<&'static str, PbmIofilterInfoFilterTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
-        (3, 0),
+        (0, 6),
+        (0, 3),
+        (0, 0),
     ],
     entries: &[
-        ("CACHE", PbmIofilterInfoFilterTypeEnum::Cache),
+        ("DATAPROVIDER", PbmIofilterInfoFilterTypeEnum::Dataprovider),
         ("DATASTOREIOCONTROL", PbmIofilterInfoFilterTypeEnum::Datastoreiocontrol),
         ("INSPECTION", PbmIofilterInfoFilterTypeEnum::Inspection),
-        ("COMPRESSION", PbmIofilterInfoFilterTypeEnum::Compression),
-        ("DATAPROVIDER", PbmIofilterInfoFilterTypeEnum::Dataprovider),
-        ("REPLICATION", PbmIofilterInfoFilterTypeEnum::Replication),
         ("ENCRYPTION", PbmIofilterInfoFilterTypeEnum::Encryption),
+        ("COMPRESSION", PbmIofilterInfoFilterTypeEnum::Compression),
+        ("CACHE", PbmIofilterInfoFilterTypeEnum::Cache),
+        ("REPLICATION", PbmIofilterInfoFilterTypeEnum::Replication),
     ],
 };
 
@@ -20275,9 +20319,9 @@ impl AsRef<str> for PbmIofilterInfoFilterTypeEnum {
 }
 
 static PBM_POLICY_ASSOCIATION_VOLUME_ALLOCATION_TYPE_ENUM_MAP: phf::Map<&'static str, PbmPolicyAssociationVolumeAllocationTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
         ("FullyInitialized", PbmPolicyAssociationVolumeAllocationTypeEnum::FullyInitialized),
@@ -20345,7 +20389,7 @@ impl AsRef<str> for PbmPolicyAssociationVolumeAllocationTypeEnum {
 }
 
 static PBM_PROFILE_RESOURCE_TYPE_ENUM_ENUM_MAP: phf::Map<&'static str, PbmProfileResourceTypeEnumEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -20411,14 +20455,15 @@ impl AsRef<str> for PbmProfileResourceTypeEnumEnum {
 }
 
 static PBM_VM_OPERATION_ENUM_MAP: phf::Map<&'static str, PbmVmOperationEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (3, 0),
     ],
     entries: &[
+        ("RECONFIGURE", PbmVmOperationEnum::Reconfigure),
         ("CLONE", PbmVmOperationEnum::Clone),
         ("MIGRATE", PbmVmOperationEnum::Migrate),
-        ("RECONFIGURE", PbmVmOperationEnum::Reconfigure),
         ("CREATE", PbmVmOperationEnum::Create),
     ],
 };
@@ -20483,26 +20528,28 @@ impl AsRef<str> for PbmVmOperationEnum {
 }
 
 static ENTITY_REFERENCE_ENTITY_TYPE_ENUM_MAP: phf::Map<&'static str, EntityReferenceEntityTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
-        (6, 12),
-        (3, 3),
+        (4, 2),
+        (0, 0),
+        (1, 7),
+        (0, 4),
+        (0, 12),
     ],
     entries: &[
+        ("scsiTarget", EntityReferenceEntityTypeEnum::ScsiTarget),
+        ("cluster", EntityReferenceEntityTypeEnum::Cluster),
+        ("scsiPath", EntityReferenceEntityTypeEnum::ScsiPath),
+        ("datacenter", EntityReferenceEntityTypeEnum::Datacenter),
+        ("nasMount", EntityReferenceEntityTypeEnum::NasMount),
+        ("host", EntityReferenceEntityTypeEnum::Host),
+        ("storagePod", EntityReferenceEntityTypeEnum::StoragePod),
+        ("vmFile", EntityReferenceEntityTypeEnum::VmFile),
+        ("datastore", EntityReferenceEntityTypeEnum::Datastore),
+        ("resourcePool", EntityReferenceEntityTypeEnum::ResourcePool),
+        ("scsiVolume", EntityReferenceEntityTypeEnum::ScsiVolume),
         ("scsiAdapter", EntityReferenceEntityTypeEnum::ScsiAdapter),
         ("vm", EntityReferenceEntityTypeEnum::Vm),
-        ("storagePod", EntityReferenceEntityTypeEnum::StoragePod),
-        ("scsiVolume", EntityReferenceEntityTypeEnum::ScsiVolume),
-        ("datastore", EntityReferenceEntityTypeEnum::Datastore),
-        ("scsiTarget", EntityReferenceEntityTypeEnum::ScsiTarget),
-        ("scsiPath", EntityReferenceEntityTypeEnum::ScsiPath),
-        ("cluster", EntityReferenceEntityTypeEnum::Cluster),
-        ("nasMount", EntityReferenceEntityTypeEnum::NasMount),
-        ("resourcePool", EntityReferenceEntityTypeEnum::ResourcePool),
-        ("vmFile", EntityReferenceEntityTypeEnum::VmFile),
-        ("host", EntityReferenceEntityTypeEnum::Host),
-        ("datacenter", EntityReferenceEntityTypeEnum::Datacenter),
     ],
 };
 
@@ -20575,15 +20622,16 @@ impl AsRef<str> for EntityReferenceEntityTypeEnum {
 }
 
 static SMS_TASK_STATE_ENUM_MAP: phf::Map<&'static str, SmsTaskStateEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
+        (0, 3),
     ],
     entries: &[
-        ("running", SmsTaskStateEnum::Running),
-        ("error", SmsTaskStateEnum::Error),
         ("success", SmsTaskStateEnum::Success),
         ("queued", SmsTaskStateEnum::Queued),
+        ("error", SmsTaskStateEnum::Error),
+        ("running", SmsTaskStateEnum::Running),
     ],
 };
 
@@ -20647,13 +20695,13 @@ impl AsRef<str> for SmsTaskStateEnum {
 }
 
 static VP_CATEGORY_ENUM_MAP: phf::Map<&'static str, VpCategoryEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("internal", VpCategoryEnum::Internal),
         ("external", VpCategoryEnum::External),
+        ("internal", VpCategoryEnum::Internal),
     ],
 };
 
@@ -20715,16 +20763,17 @@ impl AsRef<str> for VpCategoryEnum {
 }
 
 static VASA_PROVIDER_CERTIFICATE_STATUS_ENUM_MAP: phf::Map<&'static str, VasaProviderCertificateStatusEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 2),
     ],
     entries: &[
         ("expiryHardLimitReached", VasaProviderCertificateStatusEnum::ExpiryHardLimitReached),
-        ("expirySoftLimitReached", VasaProviderCertificateStatusEnum::ExpirySoftLimitReached),
         ("valid", VasaProviderCertificateStatusEnum::Valid),
-        ("expired", VasaProviderCertificateStatusEnum::Expired),
+        ("expirySoftLimitReached", VasaProviderCertificateStatusEnum::ExpirySoftLimitReached),
         ("invalid", VasaProviderCertificateStatusEnum::Invalid),
+        ("expired", VasaProviderCertificateStatusEnum::Expired),
     ],
 };
 
@@ -20789,7 +20838,7 @@ impl AsRef<str> for VasaProviderCertificateStatusEnum {
 }
 
 static PROVIDER_PROFILE_ENUM_MAP: phf::Map<&'static str, ProviderProfileEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
@@ -20857,13 +20906,13 @@ impl AsRef<str> for ProviderProfileEnum {
 }
 
 static VP_TYPE_ENUM_MAP: phf::Map<&'static str, VpTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 9838186554752179993,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("DATASERVICE", VpTypeEnum::Dataservice),
         ("PERSISTENCE", VpTypeEnum::Persistence),
+        ("DATASERVICE", VpTypeEnum::Dataservice),
         ("UNKNOWN", VpTypeEnum::Unknown),
     ],
 };
@@ -20927,14 +20976,14 @@ impl AsRef<str> for VpTypeEnum {
 }
 
 static VASA_PROVIDER_PROFILE_ENUM_MAP: phf::Map<&'static str, VasaProviderProfileEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 4203492208743950414,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("blockDevice", VasaProviderProfileEnum::BlockDevice),
         ("fileSystem", VasaProviderProfileEnum::FileSystem),
         ("capability", VasaProviderProfileEnum::Capability),
+        ("blockDevice", VasaProviderProfileEnum::BlockDevice),
     ],
 };
 
@@ -20997,18 +21046,18 @@ impl AsRef<str> for VasaProviderProfileEnum {
 }
 
 static VASA_PROVIDER_STATUS_ENUM_MAP: phf::Map<&'static str, VasaProviderStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
+        (0, 0),
         (1, 0),
-        (0, 5),
     ],
     entries: &[
+        ("connected", VasaProviderStatusEnum::Connected),
+        ("online", VasaProviderStatusEnum::Online),
+        ("unknown", VasaProviderStatusEnum::Unknown),
         ("disconnected", VasaProviderStatusEnum::Disconnected),
         ("syncError", VasaProviderStatusEnum::SyncError),
         ("offline", VasaProviderStatusEnum::Offline),
-        ("online", VasaProviderStatusEnum::Online),
-        ("unknown", VasaProviderStatusEnum::Unknown),
-        ("connected", VasaProviderStatusEnum::Connected),
     ],
 };
 
@@ -21074,13 +21123,13 @@ impl AsRef<str> for VasaProviderStatusEnum {
 }
 
 static VASA_AUTHENTICATION_TYPE_ENUM_MAP: phf::Map<&'static str, VasaAuthenticationTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("UseSessionId", VasaAuthenticationTypeEnum::UseSessionId),
         ("LoginByToken", VasaAuthenticationTypeEnum::LoginByToken),
+        ("UseSessionId", VasaAuthenticationTypeEnum::UseSessionId),
     ],
 };
 
@@ -21142,14 +21191,14 @@ impl AsRef<str> for VasaAuthenticationTypeEnum {
 }
 
 static SMS_ALARM_STATUS_ENUM_MAP: phf::Map<&'static str, SmsAlarmStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
+        ("Green", SmsAlarmStatusEnum::Green),
         ("Red", SmsAlarmStatusEnum::Red),
         ("Yellow", SmsAlarmStatusEnum::Yellow),
-        ("Green", SmsAlarmStatusEnum::Green),
     ],
 };
 
@@ -21212,20 +21261,21 @@ impl AsRef<str> for SmsAlarmStatusEnum {
 }
 
 static ALARM_TYPE_ENUM_MAP: phf::Map<&'static str, AlarmTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15995050791870030928,
     disps: &[
-        (2, 0),
-        (5, 5),
+        (0, 0),
+        (0, 3),
+        (0, 2),
     ],
     entries: &[
-        ("CapabilityAlarm", AlarmTypeEnum::CapabilityAlarm),
-        ("SpaceCapacityAlarm", AlarmTypeEnum::SpaceCapacityAlarm),
         ("CertificateAlarm", AlarmTypeEnum::CertificateAlarm),
         ("ObjectAlarm", AlarmTypeEnum::ObjectAlarm),
-        ("ComplianceAlarm", AlarmTypeEnum::ComplianceAlarm),
+        ("SpaceCapacityAlarm", AlarmTypeEnum::SpaceCapacityAlarm),
+        ("CapabilityAlarm", AlarmTypeEnum::CapabilityAlarm),
         ("ManageabilityAlarm", AlarmTypeEnum::ManageabilityAlarm),
-        ("StorageObjectAlarm", AlarmTypeEnum::StorageObjectAlarm),
         ("ReplicationAlarm", AlarmTypeEnum::ReplicationAlarm),
+        ("StorageObjectAlarm", AlarmTypeEnum::StorageObjectAlarm),
+        ("ComplianceAlarm", AlarmTypeEnum::ComplianceAlarm),
     ],
 };
 
@@ -21293,14 +21343,14 @@ impl AsRef<str> for AlarmTypeEnum {
 }
 
 static BACKING_STORAGE_POOL_TYPE_ENUM_MAP: phf::Map<&'static str, BackingStoragePoolTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
+        ("thinProvisioningPool", BackingStoragePoolTypeEnum::ThinProvisioningPool),
         ("deduplicationPool", BackingStoragePoolTypeEnum::DeduplicationPool),
         ("thinAndDeduplicationCombinedPool", BackingStoragePoolTypeEnum::ThinAndDeduplicationCombinedPool),
-        ("thinProvisioningPool", BackingStoragePoolTypeEnum::ThinProvisioningPool),
     ],
 };
 
@@ -21363,32 +21413,34 @@ impl AsRef<str> for BackingStoragePoolTypeEnum {
 }
 
 static SMS_ENTITY_TYPE_ENUM_MAP: phf::Map<&'static str, SmsEntityTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 1),
-        (2, 0),
-        (1, 1),
-        (0, 9),
+        (0, 1),
+        (0, 4),
+        (2, 8),
+        (0, 0),
+        (0, 7),
+        (0, 7),
     ],
     entries: &[
-        ("ProtocolEndpointEntity", SmsEntityTypeEnum::ProtocolEndpointEntity),
-        ("StorageProcessorEntity", SmsEntityTypeEnum::StorageProcessorEntity),
-        ("ResourceAssociationEntity", SmsEntityTypeEnum::ResourceAssociationEntity),
-        ("StorageCapabilityEntity", SmsEntityTypeEnum::StorageCapabilityEntity),
-        ("StorageObjectEntity", SmsEntityTypeEnum::StorageObjectEntity),
-        ("StorageContainerEntity", SmsEntityTypeEnum::StorageContainerEntity),
-        ("StoragePortEntity", SmsEntityTypeEnum::StoragePortEntity),
-        ("ReplicationGroupEntity", SmsEntityTypeEnum::ReplicationGroupEntity),
-        ("StorageLunEntity", SmsEntityTypeEnum::StorageLunEntity),
-        ("BackingStoragePoolEntity", SmsEntityTypeEnum::BackingStoragePoolEntity),
-        ("DefaultProfileEntity", SmsEntityTypeEnum::DefaultProfileEntity),
-        ("StorageFileSystemEntity", SmsEntityTypeEnum::StorageFileSystemEntity),
-        ("VirtualVolumeInfoEntity", SmsEntityTypeEnum::VirtualVolumeInfoEntity),
         ("CapabilitySchemaEntity", SmsEntityTypeEnum::CapabilitySchemaEntity),
-        ("FaultDomainEntity", SmsEntityTypeEnum::FaultDomainEntity),
-        ("CapabilityProfileEntity", SmsEntityTypeEnum::CapabilityProfileEntity),
+        ("ResourceAssociationEntity", SmsEntityTypeEnum::ResourceAssociationEntity),
+        ("ReplicationGroupEntity", SmsEntityTypeEnum::ReplicationGroupEntity),
+        ("VirtualVolumeInfoEntity", SmsEntityTypeEnum::VirtualVolumeInfoEntity),
         ("StorageArrayEntity", SmsEntityTypeEnum::StorageArrayEntity),
+        ("StorageLunEntity", SmsEntityTypeEnum::StorageLunEntity),
+        ("StorageFileSystemEntity", SmsEntityTypeEnum::StorageFileSystemEntity),
+        ("StoragePortEntity", SmsEntityTypeEnum::StoragePortEntity),
+        ("ProtocolEndpointEntity", SmsEntityTypeEnum::ProtocolEndpointEntity),
+        ("BackingStoragePoolEntity", SmsEntityTypeEnum::BackingStoragePoolEntity),
         ("MessageCatalogEntity", SmsEntityTypeEnum::MessageCatalogEntity),
+        ("FaultDomainEntity", SmsEntityTypeEnum::FaultDomainEntity),
+        ("StorageCapabilityEntity", SmsEntityTypeEnum::StorageCapabilityEntity),
+        ("DefaultProfileEntity", SmsEntityTypeEnum::DefaultProfileEntity),
+        ("StorageProcessorEntity", SmsEntityTypeEnum::StorageProcessorEntity),
+        ("StorageContainerEntity", SmsEntityTypeEnum::StorageContainerEntity),
+        ("StorageObjectEntity", SmsEntityTypeEnum::StorageObjectEntity),
+        ("CapabilityProfileEntity", SmsEntityTypeEnum::CapabilityProfileEntity),
     ],
 };
 
@@ -21466,15 +21518,16 @@ impl AsRef<str> for SmsEntityTypeEnum {
 }
 
 static BLOCK_DEVICE_INTERFACE_ENUM_MAP: phf::Map<&'static str, BlockDeviceInterfaceEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
-        ("fcoe", BlockDeviceInterfaceEnum::Fcoe),
-        ("fc", BlockDeviceInterfaceEnum::Fc),
-        ("otherBlock", BlockDeviceInterfaceEnum::OtherBlock),
         ("iscsi", BlockDeviceInterfaceEnum::Iscsi),
+        ("fc", BlockDeviceInterfaceEnum::Fc),
+        ("fcoe", BlockDeviceInterfaceEnum::Fcoe),
+        ("otherBlock", BlockDeviceInterfaceEnum::OtherBlock),
     ],
 };
 
@@ -21538,13 +21591,13 @@ impl AsRef<str> for BlockDeviceInterfaceEnum {
 }
 
 static FILE_SYSTEM_INTERFACE_ENUM_MAP: phf::Map<&'static str, FileSystemInterfaceEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("nfs", FileSystemInterfaceEnum::Nfs),
         ("otherFileSystem", FileSystemInterfaceEnum::OtherFileSystem),
+        ("nfs", FileSystemInterfaceEnum::Nfs),
     ],
 };
 
@@ -21606,18 +21659,19 @@ impl AsRef<str> for FileSystemInterfaceEnum {
 }
 
 static VASA_PROFILE_ENUM_MAP: phf::Map<&'static str, VasaProfileEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 16287231350648472473,
     disps: &[
-        (4, 3),
-        (6, 0),
+        (0, 5),
+        (0, 5),
+        (3, 0),
     ],
     entries: &[
+        ("fileSystem", VasaProfileEnum::FileSystem),
         ("policy", VasaProfileEnum::Policy),
+        ("statistics", VasaProfileEnum::Statistics),
         ("capability", VasaProfileEnum::Capability),
         ("object", VasaProfileEnum::Object),
-        ("fileSystem", VasaProfileEnum::FileSystem),
         ("storageDrsFileSystem", VasaProfileEnum::StorageDrsFileSystem),
-        ("statistics", VasaProfileEnum::Statistics),
         ("storageDrsBlockDevice", VasaProfileEnum::StorageDrsBlockDevice),
         ("blockDevice", VasaProfileEnum::BlockDevice),
     ],
@@ -21687,15 +21741,16 @@ impl AsRef<str> for VasaProfileEnum {
 }
 
 static STORAGE_CONTAINER_VVOL_CONTAINER_TYPE_ENUM_ENUM_MAP: phf::Map<&'static str, StorageContainerVvolContainerTypeEnumEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (0, 3),
+        (1, 0),
     ],
     entries: &[
-        ("NFS4x", StorageContainerVvolContainerTypeEnumEnum::Nfs4X),
-        ("NVMe", StorageContainerVvolContainerTypeEnumEnum::NvMe),
         ("SCSI", StorageContainerVvolContainerTypeEnumEnum::Scsi),
         ("NFS", StorageContainerVvolContainerTypeEnumEnum::Nfs),
+        ("NFS4x", StorageContainerVvolContainerTypeEnumEnum::Nfs4X),
+        ("NVMe", StorageContainerVvolContainerTypeEnumEnum::NvMe),
     ],
 };
 
@@ -21759,7 +21814,7 @@ impl AsRef<str> for StorageContainerVvolContainerTypeEnumEnum {
 }
 
 static FILE_SYSTEM_INTERFACE_VERSION_ENUM_MAP: phf::Map<&'static str, FileSystemInterfaceVersionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -21825,14 +21880,14 @@ impl AsRef<str> for FileSystemInterfaceVersionEnum {
 }
 
 static THIN_PROVISIONING_STATUS_ENUM_MAP: phf::Map<&'static str, ThinProvisioningStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("YELLOW", ThinProvisioningStatusEnum::Yellow),
         ("RED", ThinProvisioningStatusEnum::Red),
         ("GREEN", ThinProvisioningStatusEnum::Green),
+        ("YELLOW", ThinProvisioningStatusEnum::Yellow),
     ],
 };
 
@@ -21895,16 +21950,17 @@ impl AsRef<str> for ThinProvisioningStatusEnum {
 }
 
 static REPLICATION_REPLICATION_STATE_ENUM_MAP: phf::Map<&'static str, ReplicationReplicationStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
+        (0, 1),
         (1, 0),
     ],
     entries: &[
         ("SOURCE", ReplicationReplicationStateEnum::Source),
-        ("FAILEDOVER", ReplicationReplicationStateEnum::Failedover),
+        ("REMOTE_FAILEDOVER", ReplicationReplicationStateEnum::RemoteFailedover),
         ("INTEST", ReplicationReplicationStateEnum::Intest),
         ("TARGET", ReplicationReplicationStateEnum::Target),
-        ("REMOTE_FAILEDOVER", ReplicationReplicationStateEnum::RemoteFailedover),
+        ("FAILEDOVER", ReplicationReplicationStateEnum::Failedover),
     ],
 };
 
@@ -21969,7 +22025,7 @@ impl AsRef<str> for ReplicationReplicationStateEnum {
 }
 
 static BATCH_RESULT_RESULT_ENUM_MAP: phf::Map<&'static str, BatchResultResultEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -22037,13 +22093,13 @@ impl AsRef<str> for BatchResultResultEnum {
 }
 
 static CLUSTER_COMPUTE_RESOURCE_HCI_WORKFLOW_STATE_ENUM_MAP: phf::Map<&'static str, ClusterComputeResourceHciWorkflowStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("done", ClusterComputeResourceHciWorkflowStateEnum::Done),
         ("in_progress", ClusterComputeResourceHciWorkflowStateEnum::InProgress),
+        ("done", ClusterComputeResourceHciWorkflowStateEnum::Done),
         ("invalid", ClusterComputeResourceHciWorkflowStateEnum::Invalid),
     ],
 };
@@ -22107,14 +22163,14 @@ impl AsRef<str> for ClusterComputeResourceHciWorkflowStateEnum {
 }
 
 static CLUSTER_COMPUTE_RESOURCE_VCS_HEALTH_STATUS_ENUM_MAP: phf::Map<&'static str, ClusterComputeResourceVcsHealthStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
+        ("nonhealthy", ClusterComputeResourceVcsHealthStatusEnum::Nonhealthy),
         ("degraded", ClusterComputeResourceVcsHealthStatusEnum::Degraded),
         ("healthy", ClusterComputeResourceVcsHealthStatusEnum::Healthy),
-        ("nonhealthy", ClusterComputeResourceVcsHealthStatusEnum::Nonhealthy),
     ],
 };
 
@@ -22177,9 +22233,9 @@ impl AsRef<str> for ClusterComputeResourceVcsHealthStatusEnum {
 }
 
 static COMPUTE_RESOURCE_HOST_SPBM_LICENSE_INFO_HOST_SPBM_LICENSE_STATE_ENUM_MAP: phf::Map<&'static str, ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("unlicensed", ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum::Unlicensed),
@@ -22247,7 +22303,7 @@ impl AsRef<str> for ComputeResourceHostSpbmLicenseInfoHostSpbmLicenseStateEnum {
 }
 
 static COMPUTE_RESOURCE_NETWORK_BOOT_MODE_ENUM_MAP: phf::Map<&'static str, ComputeResourceNetworkBootModeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -22315,14 +22371,14 @@ impl AsRef<str> for ComputeResourceNetworkBootModeEnum {
 }
 
 static CONFIG_SPEC_OPERATION_ENUM_MAP: phf::Map<&'static str, ConfigSpecOperationEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("add", ConfigSpecOperationEnum::Add),
-        ("edit", ConfigSpecOperationEnum::Edit),
         ("remove", ConfigSpecOperationEnum::Remove),
+        ("edit", ConfigSpecOperationEnum::Edit),
     ],
 };
 
@@ -22385,13 +22441,13 @@ impl AsRef<str> for ConfigSpecOperationEnum {
 }
 
 static DATASTORE_ACCESSIBLE_ENUM_MAP: phf::Map<&'static str, DatastoreAccessibleEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("False", DatastoreAccessibleEnum::False),
         ("True", DatastoreAccessibleEnum::True),
+        ("False", DatastoreAccessibleEnum::False),
     ],
 };
 
@@ -22453,14 +22509,14 @@ impl AsRef<str> for DatastoreAccessibleEnum {
 }
 
 static DATASTORE_SECTOR_FORMAT_ENUM_MAP: phf::Map<&'static str, DatastoreSectorFormatEnum> = ::phf::Map {
-    key: 12213676231523076107,
+    key: 15995050791870030928,
     disps: &[
         (0, 0),
     ],
     entries: &[
+        ("emulated_512", DatastoreSectorFormatEnum::Emulated512),
         ("native_4k", DatastoreSectorFormatEnum::Native4K),
         ("native_512", DatastoreSectorFormatEnum::Native512),
-        ("emulated_512", DatastoreSectorFormatEnum::Emulated512),
     ],
 };
 
@@ -22523,14 +22579,14 @@ impl AsRef<str> for DatastoreSectorFormatEnum {
 }
 
 static DATASTORE_SUMMARY_MAINTENANCE_MODE_STATE_ENUM_MAP: phf::Map<&'static str, DatastoreSummaryMaintenanceModeStateEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("inMaintenance", DatastoreSummaryMaintenanceModeStateEnum::InMaintenance),
-        ("normal", DatastoreSummaryMaintenanceModeStateEnum::Normal),
         ("enteringMaintenance", DatastoreSummaryMaintenanceModeStateEnum::EnteringMaintenance),
+        ("normal", DatastoreSummaryMaintenanceModeStateEnum::Normal),
     ],
 };
 
@@ -22593,19 +22649,20 @@ impl AsRef<str> for DatastoreSummaryMaintenanceModeStateEnum {
 }
 
 static DIAGNOSTIC_MANAGER_LOG_CREATOR_ENUM_MAP: phf::Map<&'static str, DiagnosticManagerLogCreatorEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
+        (3, 0),
         (0, 0),
-        (0, 4),
+        (3, 2),
     ],
     entries: &[
-        ("recordLog", DiagnosticManagerLogCreatorEnum::RecordLog),
-        ("hostd", DiagnosticManagerLogCreatorEnum::Hostd),
-        ("serverd", DiagnosticManagerLogCreatorEnum::Serverd),
         ("vpxClient", DiagnosticManagerLogCreatorEnum::VpxClient),
+        ("hostd", DiagnosticManagerLogCreatorEnum::Hostd),
         ("vpxa", DiagnosticManagerLogCreatorEnum::Vpxa),
-        ("install", DiagnosticManagerLogCreatorEnum::Install),
         ("vpxd", DiagnosticManagerLogCreatorEnum::Vpxd),
+        ("recordLog", DiagnosticManagerLogCreatorEnum::RecordLog),
+        ("serverd", DiagnosticManagerLogCreatorEnum::Serverd),
+        ("install", DiagnosticManagerLogCreatorEnum::Install),
     ],
 };
 
@@ -22672,7 +22729,7 @@ impl AsRef<str> for DiagnosticManagerLogCreatorEnum {
 }
 
 static DIAGNOSTIC_MANAGER_LOG_FORMAT_ENUM_MAP: phf::Map<&'static str, DiagnosticManagerLogFormatEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -22738,26 +22795,28 @@ impl AsRef<str> for DiagnosticManagerLogFormatEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_SWITCH_HOST_INFRASTRUCTURE_TRAFFIC_CLASS_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchHostInfrastructureTrafficClassEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
-        (5, 0),
-        (1, 1),
+        (3, 0),
+        (0, 9),
+        (0, 0),
+        (5, 5),
+        (0, 8),
     ],
     entries: &[
-        ("iSCSI", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::IScsi),
-        ("provisioning", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Provisioning),
         ("faultTolerance", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::FaultTolerance),
-        ("management", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Management),
-        ("nfs", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Nfs),
-        ("nvmetcp", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Nvmetcp),
-        ("backupNfc", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::BackupNfc),
         ("hbr", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Hbr),
-        ("vsan", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vsan),
-        ("vdp", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vdp),
-        ("virtualMachine", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::VirtualMachine),
-        ("vmotion", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vmotion),
+        ("management", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Management),
         ("vSANiSCSI", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::VSaNiScsi),
+        ("vdp", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vdp),
+        ("iSCSI", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::IScsi),
+        ("virtualMachine", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::VirtualMachine),
+        ("backupNfc", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::BackupNfc),
+        ("nfs", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Nfs),
+        ("vsan", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vsan),
+        ("provisioning", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Provisioning),
+        ("nvmetcp", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Nvmetcp),
+        ("vmotion", DistributedVirtualSwitchHostInfrastructureTrafficClassEnum::Vmotion),
     ],
 };
 
@@ -22830,13 +22889,13 @@ impl AsRef<str> for DistributedVirtualSwitchHostInfrastructureTrafficClassEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_SWITCH_NETWORK_RESOURCE_CONTROL_VERSION_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchNetworkResourceControlVersionEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("version2", DistributedVirtualSwitchNetworkResourceControlVersionEnum::Version2),
         ("version3", DistributedVirtualSwitchNetworkResourceControlVersionEnum::Version3),
+        ("version2", DistributedVirtualSwitchNetworkResourceControlVersionEnum::Version2),
     ],
 };
 
@@ -22898,16 +22957,17 @@ impl AsRef<str> for DistributedVirtualSwitchNetworkResourceControlVersionEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_SWITCH_NIC_TEAMING_POLICY_MODE_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchNicTeamingPolicyModeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (4, 0),
+        (3, 1),
     ],
     entries: &[
-        ("failover_explicit", DistributedVirtualSwitchNicTeamingPolicyModeEnum::FailoverExplicit),
         ("loadbalance_loadbased", DistributedVirtualSwitchNicTeamingPolicyModeEnum::LoadbalanceLoadbased),
+        ("failover_explicit", DistributedVirtualSwitchNicTeamingPolicyModeEnum::FailoverExplicit),
+        ("loadbalance_srcid", DistributedVirtualSwitchNicTeamingPolicyModeEnum::LoadbalanceSrcid),
         ("loadbalance_srcmac", DistributedVirtualSwitchNicTeamingPolicyModeEnum::LoadbalanceSrcmac),
         ("loadbalance_ip", DistributedVirtualSwitchNicTeamingPolicyModeEnum::LoadbalanceIp),
-        ("loadbalance_srcid", DistributedVirtualSwitchNicTeamingPolicyModeEnum::LoadbalanceSrcid),
     ],
 };
 
@@ -22972,16 +23032,17 @@ impl AsRef<str> for DistributedVirtualSwitchNicTeamingPolicyModeEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_SWITCH_PRODUCT_SPEC_OPERATION_TYPE_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchProductSpecOperationTypeEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (1, 1),
+        (1, 0),
     ],
     entries: &[
-        ("notifyAvailableUpgrade", DistributedVirtualSwitchProductSpecOperationTypeEnum::NotifyAvailableUpgrade),
-        ("updateBundleInfo", DistributedVirtualSwitchProductSpecOperationTypeEnum::UpdateBundleInfo),
         ("proceedWithUpgrade", DistributedVirtualSwitchProductSpecOperationTypeEnum::ProceedWithUpgrade),
-        ("upgrade", DistributedVirtualSwitchProductSpecOperationTypeEnum::Upgrade),
+        ("updateBundleInfo", DistributedVirtualSwitchProductSpecOperationTypeEnum::UpdateBundleInfo),
         ("preInstall", DistributedVirtualSwitchProductSpecOperationTypeEnum::PreInstall),
+        ("upgrade", DistributedVirtualSwitchProductSpecOperationTypeEnum::Upgrade),
+        ("notifyAvailableUpgrade", DistributedVirtualSwitchProductSpecOperationTypeEnum::NotifyAvailableUpgrade),
     ],
 };
 
@@ -23046,7 +23107,7 @@ impl AsRef<str> for DistributedVirtualSwitchProductSpecOperationTypeEnum {
 }
 
 static DRS_INJECTOR_WORKLOAD_CORRELATION_STATE_ENUM_MAP: phf::Map<&'static str, DrsInjectorWorkloadCorrelationStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -23114,7 +23175,7 @@ impl AsRef<str> for DrsInjectorWorkloadCorrelationStateEnum {
 }
 
 static FOLDER_DESIRED_HOST_STATE_ENUM_MAP: phf::Map<&'static str, FolderDesiredHostStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -23182,20 +23243,21 @@ impl AsRef<str> for FolderDesiredHostStateEnum {
 }
 
 static FOLDER_EXTERNALLY_MANAGED_FOLDER_TYPE_ENUM_MAP: phf::Map<&'static str, FolderExternallyManagedFolderTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (5, 0),
-        (3, 1),
+        (4, 0),
+        (0, 6),
+        (0, 1),
     ],
     entries: &[
-        ("VSPHERE_POD", FolderExternallyManagedFolderTypeEnum::VspherePod),
-        ("SUPERVISOR", FolderExternallyManagedFolderTypeEnum::Supervisor),
-        ("VPC", FolderExternallyManagedFolderTypeEnum::Vpc),
-        ("PROJECT", FolderExternallyManagedFolderTypeEnum::Project),
         ("SUBNET", FolderExternallyManagedFolderTypeEnum::Subnet),
         ("PROJECT_ROOT", FolderExternallyManagedFolderTypeEnum::ProjectRoot),
-        ("SEGMENT", FolderExternallyManagedFolderTypeEnum::Segment),
+        ("VSPHERE_POD", FolderExternallyManagedFolderTypeEnum::VspherePod),
         ("VPC_ROOT", FolderExternallyManagedFolderTypeEnum::VpcRoot),
+        ("VPC", FolderExternallyManagedFolderTypeEnum::Vpc),
+        ("SUPERVISOR", FolderExternallyManagedFolderTypeEnum::Supervisor),
+        ("PROJECT", FolderExternallyManagedFolderTypeEnum::Project),
+        ("SEGMENT", FolderExternallyManagedFolderTypeEnum::Segment),
     ],
 };
 
@@ -23263,17 +23325,17 @@ impl AsRef<str> for FolderExternallyManagedFolderTypeEnum {
 }
 
 static REPLICATION_VM_STATE_ENUM_MAP: phf::Map<&'static str, ReplicationVmStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
-        (1, 4),
+        (0, 0),
+        (3, 2),
     ],
     entries: &[
-        ("idle", ReplicationVmStateEnum::Idle),
+        ("active", ReplicationVmStateEnum::Active),
         ("error", ReplicationVmStateEnum::Error),
+        ("idle", ReplicationVmStateEnum::Idle),
         ("none", ReplicationVmStateEnum::None),
         ("paused", ReplicationVmStateEnum::Paused),
-        ("active", ReplicationVmStateEnum::Active),
         ("syncing", ReplicationVmStateEnum::Syncing),
     ],
 };
@@ -23340,13 +23402,13 @@ impl AsRef<str> for ReplicationVmStateEnum {
 }
 
 static QUIESCE_MODE_ENUM_MAP: phf::Map<&'static str, QuiesceModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("filesystem", QuiesceModeEnum::Filesystem),
         ("application", QuiesceModeEnum::Application),
+        ("filesystem", QuiesceModeEnum::Filesystem),
         ("none", QuiesceModeEnum::None),
     ],
 };
@@ -23410,15 +23472,16 @@ impl AsRef<str> for QuiesceModeEnum {
 }
 
 static HEALTH_UPDATE_INFO_COMPONENT_TYPE_ENUM_MAP: phf::Map<&'static str, HealthUpdateInfoComponentTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
+        (0, 0),
         (1, 0),
     ],
     entries: &[
-        ("Network", HealthUpdateInfoComponentTypeEnum::Network),
         ("Storage", HealthUpdateInfoComponentTypeEnum::Storage),
-        ("Fan", HealthUpdateInfoComponentTypeEnum::Fan),
         ("Memory", HealthUpdateInfoComponentTypeEnum::Memory),
+        ("Network", HealthUpdateInfoComponentTypeEnum::Network),
+        ("Fan", HealthUpdateInfoComponentTypeEnum::Fan),
         ("Power", HealthUpdateInfoComponentTypeEnum::Power),
     ],
 };
@@ -23484,9 +23547,9 @@ impl AsRef<str> for HealthUpdateInfoComponentTypeEnum {
 }
 
 static HOST_SYSTEM_CONNECTION_STATE_ENUM_MAP: phf::Map<&'static str, HostSystemConnectionStateEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 2689841203009609170,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("disconnected", HostSystemConnectionStateEnum::Disconnected),
@@ -23554,15 +23617,16 @@ impl AsRef<str> for HostSystemConnectionStateEnum {
 }
 
 static HOST_CRYPTO_STATE_ENUM_MAP: phf::Map<&'static str, HostCryptoStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (2, 0),
     ],
     entries: &[
+        ("incapable", HostCryptoStateEnum::Incapable),
+        ("prepared", HostCryptoStateEnum::Prepared),
         ("safe", HostCryptoStateEnum::Safe),
         ("pendingIncapable", HostCryptoStateEnum::PendingIncapable),
-        ("prepared", HostCryptoStateEnum::Prepared),
-        ("incapable", HostCryptoStateEnum::Incapable),
     ],
 };
 
@@ -23626,15 +23690,16 @@ impl AsRef<str> for HostCryptoStateEnum {
 }
 
 static HOST_SYSTEM_POWER_STATE_ENUM_MAP: phf::Map<&'static str, HostSystemPowerStateEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
-        ("standBy", HostSystemPowerStateEnum::StandBy),
-        ("poweredOff", HostSystemPowerStateEnum::PoweredOff),
-        ("poweredOn", HostSystemPowerStateEnum::PoweredOn),
         ("unknown", HostSystemPowerStateEnum::Unknown),
+        ("poweredOn", HostSystemPowerStateEnum::PoweredOn),
+        ("poweredOff", HostSystemPowerStateEnum::PoweredOff),
+        ("standBy", HostSystemPowerStateEnum::StandBy),
     ],
 };
 
@@ -23698,18 +23763,18 @@ impl AsRef<str> for HostSystemPowerStateEnum {
 }
 
 static HOST_SYSTEM_REMEDIATION_STATE_STATE_ENUM_MAP: phf::Map<&'static str, HostSystemRemediationStateStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
-        (0, 1),
+        (2, 3),
     ],
     entries: &[
+        ("remediationRunning", HostSystemRemediationStateStateEnum::RemediationRunning),
         ("precheckRemediationComplete", HostSystemRemediationStateStateEnum::PrecheckRemediationComplete),
+        ("remediationFailed", HostSystemRemediationStateStateEnum::RemediationFailed),
+        ("precheckRemediationRunning", HostSystemRemediationStateStateEnum::PrecheckRemediationRunning),
         ("precheckRemediationFailed", HostSystemRemediationStateStateEnum::PrecheckRemediationFailed),
         ("remediationReady", HostSystemRemediationStateStateEnum::RemediationReady),
-        ("precheckRemediationRunning", HostSystemRemediationStateStateEnum::PrecheckRemediationRunning),
-        ("remediationFailed", HostSystemRemediationStateStateEnum::RemediationFailed),
-        ("remediationRunning", HostSystemRemediationStateStateEnum::RemediationRunning),
     ],
 };
 
@@ -23775,14 +23840,15 @@ impl AsRef<str> for HostSystemRemediationStateStateEnum {
 }
 
 static HOST_STANDBY_MODE_ENUM_MAP: phf::Map<&'static str, HostStandbyModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 1),
     ],
     entries: &[
-        ("exiting", HostStandbyModeEnum::Exiting),
-        ("none", HostStandbyModeEnum::None),
         ("in", HostStandbyModeEnum::In),
+        ("none", HostStandbyModeEnum::None),
+        ("exiting", HostStandbyModeEnum::Exiting),
         ("entering", HostStandbyModeEnum::Entering),
     ],
 };
@@ -23847,13 +23913,13 @@ impl AsRef<str> for HostStandbyModeEnum {
 }
 
 static HTTP_NFC_LEASE_MANIFEST_ENTRY_CHECKSUM_TYPE_ENUM_MAP: phf::Map<&'static str, HttpNfcLeaseManifestEntryChecksumTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("sha1", HttpNfcLeaseManifestEntryChecksumTypeEnum::Sha1),
         ("sha256", HttpNfcLeaseManifestEntryChecksumTypeEnum::Sha256),
+        ("sha1", HttpNfcLeaseManifestEntryChecksumTypeEnum::Sha1),
     ],
 };
 
@@ -23915,13 +23981,13 @@ impl AsRef<str> for HttpNfcLeaseManifestEntryChecksumTypeEnum {
 }
 
 static HTTP_NFC_LEASE_MODE_ENUM_MAP: phf::Map<&'static str, HttpNfcLeaseModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("pull", HttpNfcLeaseModeEnum::Pull),
         ("pushOrGet", HttpNfcLeaseModeEnum::PushOrGet),
+        ("pull", HttpNfcLeaseModeEnum::Pull),
     ],
 };
 
@@ -23983,14 +24049,15 @@ impl AsRef<str> for HttpNfcLeaseModeEnum {
 }
 
 static HTTP_NFC_LEASE_STATE_ENUM_MAP: phf::Map<&'static str, HttpNfcLeaseStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
         ("initializing", HttpNfcLeaseStateEnum::Initializing),
-        ("done", HttpNfcLeaseStateEnum::Done),
         ("ready", HttpNfcLeaseStateEnum::Ready),
+        ("done", HttpNfcLeaseStateEnum::Done),
         ("error", HttpNfcLeaseStateEnum::Error),
     ],
 };
@@ -24055,20 +24122,21 @@ impl AsRef<str> for HttpNfcLeaseStateEnum {
 }
 
 static IO_FILTER_TYPE_ENUM_MAP: phf::Map<&'static str, IoFilterTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (6, 0),
-        (1, 0),
+        (3, 0),
+        (7, 5),
+        (0, 0),
     ],
     entries: &[
-        ("replication", IoFilterTypeEnum::Replication),
-        ("datastoreIoControl", IoFilterTypeEnum::DatastoreIoControl),
         ("dataCapture", IoFilterTypeEnum::DataCapture),
-        ("dataProvider", IoFilterTypeEnum::DataProvider),
-        ("encryption", IoFilterTypeEnum::Encryption),
-        ("cache", IoFilterTypeEnum::Cache),
+        ("replication", IoFilterTypeEnum::Replication),
         ("compression", IoFilterTypeEnum::Compression),
         ("inspection", IoFilterTypeEnum::Inspection),
+        ("encryption", IoFilterTypeEnum::Encryption),
+        ("dataProvider", IoFilterTypeEnum::DataProvider),
+        ("cache", IoFilterTypeEnum::Cache),
+        ("datastoreIoControl", IoFilterTypeEnum::DatastoreIoControl),
     ],
 };
 
@@ -24136,14 +24204,14 @@ impl AsRef<str> for IoFilterTypeEnum {
 }
 
 static IO_FILTER_OPERATION_ENUM_MAP: phf::Map<&'static str, IoFilterOperationEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
         ("upgrade", IoFilterOperationEnum::Upgrade),
-        ("install", IoFilterOperationEnum::Install),
         ("uninstall", IoFilterOperationEnum::Uninstall),
+        ("install", IoFilterOperationEnum::Install),
     ],
 };
 
@@ -24206,16 +24274,17 @@ impl AsRef<str> for IoFilterOperationEnum {
 }
 
 static LATENCY_SENSITIVITY_SENSITIVITY_LEVEL_ENUM_MAP: phf::Map<&'static str, LatencySensitivitySensitivityLevelEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (1, 1),
     ],
     entries: &[
-        ("custom", LatencySensitivitySensitivityLevelEnum::Custom),
         ("normal", LatencySensitivitySensitivityLevelEnum::Normal),
-        ("medium", LatencySensitivitySensitivityLevelEnum::Medium),
         ("high", LatencySensitivitySensitivityLevelEnum::High),
         ("low", LatencySensitivitySensitivityLevelEnum::Low),
+        ("custom", LatencySensitivitySensitivityLevelEnum::Custom),
+        ("medium", LatencySensitivitySensitivityLevelEnum::Medium),
     ],
 };
 
@@ -24280,15 +24349,16 @@ impl AsRef<str> for LatencySensitivitySensitivityLevelEnum {
 }
 
 static LICENSE_FEATURE_INFO_UNIT_ENUM_MAP: phf::Map<&'static str, LicenseFeatureInfoUnitEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
+        (0, 3),
         (2, 0),
     ],
     entries: &[
+        ("cpuPackage", LicenseFeatureInfoUnitEnum::CpuPackage),
         ("cpuCore", LicenseFeatureInfoUnitEnum::CpuCore),
         ("host", LicenseFeatureInfoUnitEnum::Host),
         ("server", LicenseFeatureInfoUnitEnum::Server),
-        ("cpuPackage", LicenseFeatureInfoUnitEnum::CpuPackage),
         ("vm", LicenseFeatureInfoUnitEnum::Vm),
     ],
 };
@@ -24354,14 +24424,14 @@ impl AsRef<str> for LicenseFeatureInfoUnitEnum {
 }
 
 static LICENSE_FEATURE_INFO_SOURCE_RESTRICTION_ENUM_MAP: phf::Map<&'static str, LicenseFeatureInfoSourceRestrictionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("served", LicenseFeatureInfoSourceRestrictionEnum::Served),
-        ("unrestricted", LicenseFeatureInfoSourceRestrictionEnum::Unrestricted),
         ("file", LicenseFeatureInfoSourceRestrictionEnum::File),
+        ("unrestricted", LicenseFeatureInfoSourceRestrictionEnum::Unrestricted),
     ],
 };
 
@@ -24424,14 +24494,14 @@ impl AsRef<str> for LicenseFeatureInfoSourceRestrictionEnum {
 }
 
 static LICENSE_FEATURE_INFO_STATE_ENUM_MAP: phf::Map<&'static str, LicenseFeatureInfoStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("disabled", LicenseFeatureInfoStateEnum::Disabled),
         ("enabled", LicenseFeatureInfoStateEnum::Enabled),
         ("optional", LicenseFeatureInfoStateEnum::Optional),
+        ("disabled", LicenseFeatureInfoStateEnum::Disabled),
     ],
 };
 
@@ -24494,16 +24564,17 @@ impl AsRef<str> for LicenseFeatureInfoStateEnum {
 }
 
 static HOST_LICENSABLE_RESOURCE_KEY_ENUM_MAP: phf::Map<&'static str, HostLicensableResourceKeyEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 5),
-        (6, 0),
+        (0, 4),
+        (0, 4),
+        (0, 0),
     ],
     entries: &[
+        ("numCpuPackages", HostLicensableResourceKeyEnum::NumCpuPackages),
+        ("numCpuCores", HostLicensableResourceKeyEnum::NumCpuCores),
         ("numVmsStarted", HostLicensableResourceKeyEnum::NumVmsStarted),
         ("memorySize", HostLicensableResourceKeyEnum::MemorySize),
-        ("numCpuCores", HostLicensableResourceKeyEnum::NumCpuCores),
-        ("numCpuPackages", HostLicensableResourceKeyEnum::NumCpuPackages),
         ("vsanCapacity", HostLicensableResourceKeyEnum::VsanCapacity),
         ("memoryForVms", HostLicensableResourceKeyEnum::MemoryForVms),
         ("numVmsStarting", HostLicensableResourceKeyEnum::NumVmsStarting),
@@ -24573,31 +24644,33 @@ impl AsRef<str> for HostLicensableResourceKeyEnum {
 }
 
 static LICENSE_MANAGER_LICENSE_KEY_ENUM_MAP: phf::Map<&'static str, LicenseManagerLicenseKeyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
+        (1, 0),
+        (0, 6),
         (0, 0),
-        (7, 0),
-        (4, 10),
-        (4, 15),
+        (1, 1),
+        (2, 13),
+        (0, 4),
     ],
     entries: &[
         ("esxExpress", LicenseManagerLicenseKeyEnum::EsxExpress),
+        ("vmotion", LicenseManagerLicenseKeyEnum::Vmotion),
+        ("iscsi", LicenseManagerLicenseKeyEnum::Iscsi),
+        ("vc", LicenseManagerLicenseKeyEnum::Vc),
+        ("san", LicenseManagerLicenseKeyEnum::San),
         ("das", LicenseManagerLicenseKeyEnum::Das),
         ("esxHost", LicenseManagerLicenseKeyEnum::EsxHost),
+        ("gsxHost", LicenseManagerLicenseKeyEnum::GsxHost),
+        ("backup", LicenseManagerLicenseKeyEnum::Backup),
         ("esxFull", LicenseManagerLicenseKeyEnum::EsxFull),
-        ("iscsi", LicenseManagerLicenseKeyEnum::Iscsi),
-        ("vcExpress", LicenseManagerLicenseKeyEnum::VcExpress),
-        ("san", LicenseManagerLicenseKeyEnum::San),
+        ("drsPower", LicenseManagerLicenseKeyEnum::DrsPower),
         ("nas", LicenseManagerLicenseKeyEnum::Nas),
-        ("esxVmtn", LicenseManagerLicenseKeyEnum::EsxVmtn),
-        ("vc", LicenseManagerLicenseKeyEnum::Vc),
-        ("serverHost", LicenseManagerLicenseKeyEnum::ServerHost),
         ("vsmp", LicenseManagerLicenseKeyEnum::Vsmp),
         ("drs", LicenseManagerLicenseKeyEnum::Drs),
-        ("vmotion", LicenseManagerLicenseKeyEnum::Vmotion),
-        ("backup", LicenseManagerLicenseKeyEnum::Backup),
-        ("gsxHost", LicenseManagerLicenseKeyEnum::GsxHost),
-        ("drsPower", LicenseManagerLicenseKeyEnum::DrsPower),
+        ("esxVmtn", LicenseManagerLicenseKeyEnum::EsxVmtn),
+        ("serverHost", LicenseManagerLicenseKeyEnum::ServerHost),
+        ("vcExpress", LicenseManagerLicenseKeyEnum::VcExpress),
     ],
 };
 
@@ -24674,15 +24747,16 @@ impl AsRef<str> for LicenseManagerLicenseKeyEnum {
 }
 
 static LICENSE_MANAGER_STATE_ENUM_MAP: phf::Map<&'static str, LicenseManagerStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 3),
     ],
     entries: &[
-        ("normal", LicenseManagerStateEnum::Normal),
         ("fault", LicenseManagerStateEnum::Fault),
         ("marginal", LicenseManagerStateEnum::Marginal),
         ("initializing", LicenseManagerStateEnum::Initializing),
+        ("normal", LicenseManagerStateEnum::Normal),
     ],
 };
 
@@ -24746,9 +24820,10 @@ impl AsRef<str> for LicenseManagerStateEnum {
 }
 
 static LICENSE_RESERVATION_INFO_STATE_ENUM_MAP: phf::Map<&'static str, LicenseReservationInfoStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 2),
+        (0, 0),
     ],
     entries: &[
         ("unlicensedUse", LicenseReservationInfoStateEnum::UnlicensedUse),
@@ -24818,15 +24893,16 @@ impl AsRef<str> for LicenseReservationInfoStateEnum {
 }
 
 static MANAGED_ENTITY_STATUS_ENUM_MAP: phf::Map<&'static str, ManagedEntityStatusEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
         ("gray", ManagedEntityStatusEnum::Gray),
-        ("green", ManagedEntityStatusEnum::Green),
-        ("red", ManagedEntityStatusEnum::Red),
         ("yellow", ManagedEntityStatusEnum::Yellow),
+        ("red", ManagedEntityStatusEnum::Red),
+        ("green", ManagedEntityStatusEnum::Green),
     ],
 };
 
@@ -24890,14 +24966,14 @@ impl AsRef<str> for ManagedEntityStatusEnum {
 }
 
 static OVF_CONSUMER_OST_NODE_TYPE_ENUM_MAP: phf::Map<&'static str, OvfConsumerOstNodeTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
+        ("virtualSystem", OvfConsumerOstNodeTypeEnum::VirtualSystem),
         ("envelope", OvfConsumerOstNodeTypeEnum::Envelope),
         ("virtualSystemCollection", OvfConsumerOstNodeTypeEnum::VirtualSystemCollection),
-        ("virtualSystem", OvfConsumerOstNodeTypeEnum::VirtualSystem),
     ],
 };
 
@@ -24960,22 +25036,24 @@ impl AsRef<str> for OvfConsumerOstNodeTypeEnum {
 }
 
 static OVF_CREATE_IMPORT_SPEC_PARAMS_DISK_PROVISIONING_TYPE_ENUM_MAP: phf::Map<&'static str, OvfCreateImportSpecParamsDiskProvisioningTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
-        (8, 6),
+        (1, 0),
+        (0, 0),
+        (0, 5),
+        (0, 3),
     ],
     entries: &[
-        ("twoGbMaxExtentFlat", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::TwoGbMaxExtentFlat),
         ("thick", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::Thick),
-        ("seSparse", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::SeSparse),
-        ("sparse", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::Sparse),
-        ("monolithicSparse", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::MonolithicSparse),
         ("monolithicFlat", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::MonolithicFlat),
+        ("monolithicSparse", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::MonolithicSparse),
+        ("seSparse", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::SeSparse),
+        ("twoGbMaxExtentSparse", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::TwoGbMaxExtentSparse),
+        ("twoGbMaxExtentFlat", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::TwoGbMaxExtentFlat),
         ("flat", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::Flat),
         ("eagerZeroedThick", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::EagerZeroedThick),
+        ("sparse", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::Sparse),
         ("thin", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::Thin),
-        ("twoGbMaxExtentSparse", OvfCreateImportSpecParamsDiskProvisioningTypeEnum::TwoGbMaxExtentSparse),
     ],
 };
 
@@ -25045,18 +25123,18 @@ impl AsRef<str> for OvfCreateImportSpecParamsDiskProvisioningTypeEnum {
 }
 
 static PERF_SUMMARY_TYPE_ENUM_MAP: phf::Map<&'static str, PerfSummaryTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 2689841203009609170,
     disps: &[
-        (1, 0),
-        (0, 5),
+        (0, 0),
+        (1, 2),
     ],
     entries: &[
-        ("latest", PerfSummaryTypeEnum::Latest),
         ("maximum", PerfSummaryTypeEnum::Maximum),
         ("minimum", PerfSummaryTypeEnum::Minimum),
-        ("average", PerfSummaryTypeEnum::Average),
-        ("none", PerfSummaryTypeEnum::None),
         ("summation", PerfSummaryTypeEnum::Summation),
+        ("average", PerfSummaryTypeEnum::Average),
+        ("latest", PerfSummaryTypeEnum::Latest),
+        ("none", PerfSummaryTypeEnum::None),
     ],
 };
 
@@ -25122,14 +25200,14 @@ impl AsRef<str> for PerfSummaryTypeEnum {
 }
 
 static PERF_STATS_TYPE_ENUM_MAP: phf::Map<&'static str, PerfStatsTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
+        ("delta", PerfStatsTypeEnum::Delta),
         ("rate", PerfStatsTypeEnum::Rate),
         ("absolute", PerfStatsTypeEnum::Absolute),
-        ("delta", PerfStatsTypeEnum::Delta),
     ],
 };
 
@@ -25192,28 +25270,30 @@ impl AsRef<str> for PerfStatsTypeEnum {
 }
 
 static PERFORMANCE_MANAGER_UNIT_ENUM_MAP: phf::Map<&'static str, PerformanceManagerUnitEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
         (0, 0),
-        (14, 3),
+        (0, 8),
+        (0, 0),
+        (0, 2),
+        (0, 13),
     ],
     entries: &[
-        ("joule", PerformanceManagerUnitEnum::Joule),
-        ("number", PerformanceManagerUnitEnum::Number),
-        ("percent", PerformanceManagerUnitEnum::Percent),
-        ("megaBytes", PerformanceManagerUnitEnum::MegaBytes),
-        ("celsius", PerformanceManagerUnitEnum::Celsius),
         ("microsecond", PerformanceManagerUnitEnum::Microsecond),
-        ("second", PerformanceManagerUnitEnum::Second),
-        ("watt", PerformanceManagerUnitEnum::Watt),
-        ("megaHertz", PerformanceManagerUnitEnum::MegaHertz),
+        ("megaBytes", PerformanceManagerUnitEnum::MegaBytes),
+        ("percent", PerformanceManagerUnitEnum::Percent),
+        ("joule", PerformanceManagerUnitEnum::Joule),
         ("kiloBytes", PerformanceManagerUnitEnum::KiloBytes),
-        ("kiloBytesPerSecond", PerformanceManagerUnitEnum::KiloBytesPerSecond),
         ("megaBytesPerSecond", PerformanceManagerUnitEnum::MegaBytesPerSecond),
-        ("millisecond", PerformanceManagerUnitEnum::Millisecond),
         ("nanosecond", PerformanceManagerUnitEnum::Nanosecond),
+        ("watt", PerformanceManagerUnitEnum::Watt),
+        ("millisecond", PerformanceManagerUnitEnum::Millisecond),
         ("teraBytes", PerformanceManagerUnitEnum::TeraBytes),
+        ("megaHertz", PerformanceManagerUnitEnum::MegaHertz),
+        ("kiloBytesPerSecond", PerformanceManagerUnitEnum::KiloBytesPerSecond),
+        ("second", PerformanceManagerUnitEnum::Second),
+        ("number", PerformanceManagerUnitEnum::Number),
+        ("celsius", PerformanceManagerUnitEnum::Celsius),
     ],
 };
 
@@ -25288,9 +25368,9 @@ impl AsRef<str> for PerformanceManagerUnitEnum {
 }
 
 static PERF_FORMAT_ENUM_MAP: phf::Map<&'static str, PerfFormatEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("csv", PerfFormatEnum::Csv),
@@ -25356,13 +25436,13 @@ impl AsRef<str> for PerfFormatEnum {
 }
 
 static PLACE_VMS_X_CLUSTER_SPEC_PLACEMENT_TYPE_ENUM_MAP: phf::Map<&'static str, PlaceVmsXClusterSpecPlacementTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("createAndPowerOn", PlaceVmsXClusterSpecPlacementTypeEnum::CreateAndPowerOn),
         ("reconfigure", PlaceVmsXClusterSpecPlacementTypeEnum::Reconfigure),
+        ("createAndPowerOn", PlaceVmsXClusterSpecPlacementTypeEnum::CreateAndPowerOn),
         ("relocate", PlaceVmsXClusterSpecPlacementTypeEnum::Relocate),
     ],
 };
@@ -25426,13 +25506,13 @@ impl AsRef<str> for PlaceVmsXClusterSpecPlacementTypeEnum {
 }
 
 static RESOURCE_CONFIG_SPEC_SCALE_SHARES_BEHAVIOR_ENUM_MAP: phf::Map<&'static str, ResourceConfigSpecScaleSharesBehaviorEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("scaleCpuAndMemoryShares", ResourceConfigSpecScaleSharesBehaviorEnum::ScaleCpuAndMemoryShares),
         ("disabled", ResourceConfigSpecScaleSharesBehaviorEnum::Disabled),
+        ("scaleCpuAndMemoryShares", ResourceConfigSpecScaleSharesBehaviorEnum::ScaleCpuAndMemoryShares),
     ],
 };
 
@@ -25494,13 +25574,13 @@ impl AsRef<str> for ResourceConfigSpecScaleSharesBehaviorEnum {
 }
 
 static SEARCH_INDEX_PREDICATE_ARRAY_OPERATOR_ENUM_MAP: phf::Map<&'static str, SearchIndexPredicateArrayOperatorEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("AnyElement", SearchIndexPredicateArrayOperatorEnum::AnyElement),
         ("AllElements", SearchIndexPredicateArrayOperatorEnum::AllElements),
+        ("AnyElement", SearchIndexPredicateArrayOperatorEnum::AnyElement),
     ],
 };
 
@@ -25562,22 +25642,24 @@ impl AsRef<str> for SearchIndexPredicateArrayOperatorEnum {
 }
 
 static SEARCH_INDEX_PREDICATE_COMPARISON_OPERATOR_ENUM_MAP: phf::Map<&'static str, SearchIndexPredicateComparisonOperatorEnum> = ::phf::Map {
-    key: 8727728585699229200,
+    key: 16287231350648472473,
     disps: &[
-        (9, 0),
-        (0, 2),
+        (2, 0),
+        (3, 7),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
+        ("Greater", SearchIndexPredicateComparisonOperatorEnum::Greater),
+        ("NotIn", SearchIndexPredicateComparisonOperatorEnum::NotIn),
+        ("LessOrEqual", SearchIndexPredicateComparisonOperatorEnum::LessOrEqual),
+        ("GreaterOrEqual", SearchIndexPredicateComparisonOperatorEnum::GreaterOrEqual),
         ("Less", SearchIndexPredicateComparisonOperatorEnum::Less),
         ("NotLike", SearchIndexPredicateComparisonOperatorEnum::NotLike),
-        ("LessOrEqual", SearchIndexPredicateComparisonOperatorEnum::LessOrEqual),
-        ("Like", SearchIndexPredicateComparisonOperatorEnum::Like),
-        ("NotIn", SearchIndexPredicateComparisonOperatorEnum::NotIn),
-        ("Greater", SearchIndexPredicateComparisonOperatorEnum::Greater),
-        ("GreaterOrEqual", SearchIndexPredicateComparisonOperatorEnum::GreaterOrEqual),
         ("In", SearchIndexPredicateComparisonOperatorEnum::In),
-        ("Equal", SearchIndexPredicateComparisonOperatorEnum::Equal),
         ("NotEqual", SearchIndexPredicateComparisonOperatorEnum::NotEqual),
+        ("Equal", SearchIndexPredicateComparisonOperatorEnum::Equal),
+        ("Like", SearchIndexPredicateComparisonOperatorEnum::Like),
     ],
 };
 
@@ -25647,30 +25729,32 @@ impl AsRef<str> for SearchIndexPredicateComparisonOperatorEnum {
 }
 
 static SEARCH_INDEX_QUERY_SPEC_RESOURCE_TYPE_ENUM_MAP: phf::Map<&'static str, SearchIndexQuerySpecResourceTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (0, 3),
-        (9, 0),
-        (15, 5),
-        (1, 4),
+        (0, 0),
+        (1, 2),
+        (0, 9),
+        (0, 0),
+        (0, 8),
+        (13, 10),
     ],
     entries: &[
-        ("Network", SearchIndexQuerySpecResourceTypeEnum::Network),
         ("DistributedVirtualSwitch", SearchIndexQuerySpecResourceTypeEnum::DistributedVirtualSwitch),
-        ("HostSystem", SearchIndexQuerySpecResourceTypeEnum::HostSystem),
-        ("DistributedVirtualPortgroup", SearchIndexQuerySpecResourceTypeEnum::DistributedVirtualPortgroup),
-        ("StoragePod", SearchIndexQuerySpecResourceTypeEnum::StoragePod),
         ("VmwareDistributedVirtualSwitch", SearchIndexQuerySpecResourceTypeEnum::VmwareDistributedVirtualSwitch),
-        ("OpaqueNetwork", SearchIndexQuerySpecResourceTypeEnum::OpaqueNetwork),
-        ("ResourcePool", SearchIndexQuerySpecResourceTypeEnum::ResourcePool),
-        ("Datastore", SearchIndexQuerySpecResourceTypeEnum::Datastore),
         ("VirtualApp", SearchIndexQuerySpecResourceTypeEnum::VirtualApp),
-        ("ClusterComputeResource", SearchIndexQuerySpecResourceTypeEnum::ClusterComputeResource),
-        ("ServiceInstance", SearchIndexQuerySpecResourceTypeEnum::ServiceInstance),
-        ("Folder", SearchIndexQuerySpecResourceTypeEnum::Folder),
-        ("Datacenter", SearchIndexQuerySpecResourceTypeEnum::Datacenter),
-        ("ComputeResource", SearchIndexQuerySpecResourceTypeEnum::ComputeResource),
+        ("HostSystem", SearchIndexQuerySpecResourceTypeEnum::HostSystem),
+        ("ResourcePool", SearchIndexQuerySpecResourceTypeEnum::ResourcePool),
         ("VirtualMachine", SearchIndexQuerySpecResourceTypeEnum::VirtualMachine),
+        ("ClusterComputeResource", SearchIndexQuerySpecResourceTypeEnum::ClusterComputeResource),
+        ("StoragePod", SearchIndexQuerySpecResourceTypeEnum::StoragePod),
+        ("Folder", SearchIndexQuerySpecResourceTypeEnum::Folder),
+        ("OpaqueNetwork", SearchIndexQuerySpecResourceTypeEnum::OpaqueNetwork),
+        ("Datacenter", SearchIndexQuerySpecResourceTypeEnum::Datacenter),
+        ("ServiceInstance", SearchIndexQuerySpecResourceTypeEnum::ServiceInstance),
+        ("DistributedVirtualPortgroup", SearchIndexQuerySpecResourceTypeEnum::DistributedVirtualPortgroup),
+        ("ComputeResource", SearchIndexQuerySpecResourceTypeEnum::ComputeResource),
+        ("Datastore", SearchIndexQuerySpecResourceTypeEnum::Datastore),
+        ("Network", SearchIndexQuerySpecResourceTypeEnum::Network),
     ],
 };
 
@@ -25746,13 +25830,13 @@ impl AsRef<str> for SearchIndexQuerySpecResourceTypeEnum {
 }
 
 static V_MOTION_COMPATIBILITY_TYPE_ENUM_MAP: phf::Map<&'static str, VMotionCompatibilityTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("software", VMotionCompatibilityTypeEnum::Software),
         ("cpu", VMotionCompatibilityTypeEnum::Cpu),
+        ("software", VMotionCompatibilityTypeEnum::Software),
     ],
 };
 
@@ -25814,15 +25898,16 @@ impl AsRef<str> for VMotionCompatibilityTypeEnum {
 }
 
 static VALIDATE_MIGRATION_TEST_TYPE_ENUM_MAP: phf::Map<&'static str, ValidateMigrationTestTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (1, 0),
+        (0, 1),
     ],
     entries: &[
-        ("sourceTests", ValidateMigrationTestTypeEnum::SourceTests),
         ("compatibilityTests", ValidateMigrationTestTypeEnum::CompatibilityTests),
         ("diskAccessibilityTests", ValidateMigrationTestTypeEnum::DiskAccessibilityTests),
         ("resourceTests", ValidateMigrationTestTypeEnum::ResourceTests),
+        ("sourceTests", ValidateMigrationTestTypeEnum::SourceTests),
     ],
 };
 
@@ -25886,14 +25971,14 @@ impl AsRef<str> for ValidateMigrationTestTypeEnum {
 }
 
 static SESSION_MANAGER_GENERIC_SERVICE_TICKET_TICKET_TYPE_ENUM_MAP: phf::Map<&'static str, SessionManagerGenericServiceTicketTicketTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("VcServiceTicket", SessionManagerGenericServiceTicketTicketTypeEnum::VcServiceTicket),
         ("HttpNfcServiceTicket", SessionManagerGenericServiceTicketTicketTypeEnum::HttpNfcServiceTicket),
         ("HostServiceTicket", SessionManagerGenericServiceTicketTicketTypeEnum::HostServiceTicket),
+        ("VcServiceTicket", SessionManagerGenericServiceTicketTicketTypeEnum::VcServiceTicket),
     ],
 };
 
@@ -25956,19 +26041,20 @@ impl AsRef<str> for SessionManagerGenericServiceTicketTicketTypeEnum {
 }
 
 static SESSION_MANAGER_HTTP_SERVICE_REQUEST_SPEC_METHOD_ENUM_MAP: phf::Map<&'static str, SessionManagerHttpServiceRequestSpecMethodEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (3, 2),
-        (2, 0),
+        (0, 0),
+        (1, 7),
+        (0, 3),
     ],
     entries: &[
+        ("httpPost", SessionManagerHttpServiceRequestSpecMethodEnum::HttpPost),
+        ("httpTrace", SessionManagerHttpServiceRequestSpecMethodEnum::HttpTrace),
+        ("httpPut", SessionManagerHttpServiceRequestSpecMethodEnum::HttpPut),
+        ("httpHead", SessionManagerHttpServiceRequestSpecMethodEnum::HttpHead),
         ("httpOptions", SessionManagerHttpServiceRequestSpecMethodEnum::HttpOptions),
         ("httpConnect", SessionManagerHttpServiceRequestSpecMethodEnum::HttpConnect),
-        ("httpHead", SessionManagerHttpServiceRequestSpecMethodEnum::HttpHead),
-        ("httpPut", SessionManagerHttpServiceRequestSpecMethodEnum::HttpPut),
         ("httpDelete", SessionManagerHttpServiceRequestSpecMethodEnum::HttpDelete),
-        ("httpTrace", SessionManagerHttpServiceRequestSpecMethodEnum::HttpTrace),
-        ("httpPost", SessionManagerHttpServiceRequestSpecMethodEnum::HttpPost),
         ("httpGet", SessionManagerHttpServiceRequestSpecMethodEnum::HttpGet),
     ],
 };
@@ -26037,13 +26123,14 @@ impl AsRef<str> for SessionManagerHttpServiceRequestSpecMethodEnum {
 }
 
 static SHARES_LEVEL_ENUM_MAP: phf::Map<&'static str, SharesLevelEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("high", SharesLevelEnum::High),
         ("low", SharesLevelEnum::Low),
+        ("high", SharesLevelEnum::High),
         ("custom", SharesLevelEnum::Custom),
         ("normal", SharesLevelEnum::Normal),
     ],
@@ -26109,14 +26196,14 @@ impl AsRef<str> for SharesLevelEnum {
 }
 
 static SIMPLE_COMMAND_ENCODING_ENUM_MAP: phf::Map<&'static str, SimpleCommandEncodingEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("CSV", SimpleCommandEncodingEnum::Csv),
         ("HEX", SimpleCommandEncodingEnum::Hex),
         ("STRING", SimpleCommandEncodingEnum::String),
+        ("CSV", SimpleCommandEncodingEnum::Csv),
     ],
 };
 
@@ -26179,7 +26266,7 @@ impl AsRef<str> for SimpleCommandEncodingEnum {
 }
 
 static STORAGE_IORM_THRESHOLD_MODE_ENUM_MAP: phf::Map<&'static str, StorageIormThresholdModeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -26247,9 +26334,9 @@ impl AsRef<str> for StorageIormThresholdModeEnum {
 }
 
 static TASK_FILTER_SPEC_RECURSION_OPTION_ENUM_MAP: phf::Map<&'static str, TaskFilterSpecRecursionOptionEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("self", TaskFilterSpecRecursionOptionEnum::Self_),
@@ -26317,13 +26404,13 @@ impl AsRef<str> for TaskFilterSpecRecursionOptionEnum {
 }
 
 static TASK_FILTER_SPEC_TIME_OPTION_ENUM_MAP: phf::Map<&'static str, TaskFilterSpecTimeOptionEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
-        ("queuedTime", TaskFilterSpecTimeOptionEnum::QueuedTime),
         ("completedTime", TaskFilterSpecTimeOptionEnum::CompletedTime),
+        ("queuedTime", TaskFilterSpecTimeOptionEnum::QueuedTime),
         ("startedTime", TaskFilterSpecTimeOptionEnum::StartedTime),
     ],
 };
@@ -26387,15 +26474,16 @@ impl AsRef<str> for TaskFilterSpecTimeOptionEnum {
 }
 
 static TASK_INFO_STATE_ENUM_MAP: phf::Map<&'static str, TaskInfoStateEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
+        (0, 3),
     ],
     entries: &[
-        ("running", TaskInfoStateEnum::Running),
-        ("error", TaskInfoStateEnum::Error),
         ("success", TaskInfoStateEnum::Success),
         ("queued", TaskInfoStateEnum::Queued),
+        ("error", TaskInfoStateEnum::Error),
+        ("running", TaskInfoStateEnum::Running),
     ],
 };
 
@@ -26459,15 +26547,16 @@ impl AsRef<str> for TaskInfoStateEnum {
 }
 
 static VIRTUAL_APP_V_APP_STATE_ENUM_MAP: phf::Map<&'static str, VirtualAppVAppStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
+        (1, 1),
     ],
     entries: &[
-        ("starting", VirtualAppVAppStateEnum::Starting),
-        ("stopped", VirtualAppVAppStateEnum::Stopped),
         ("started", VirtualAppVAppStateEnum::Started),
         ("stopping", VirtualAppVAppStateEnum::Stopping),
+        ("stopped", VirtualAppVAppStateEnum::Stopped),
+        ("starting", VirtualAppVAppStateEnum::Starting),
     ],
 };
 
@@ -26531,14 +26620,14 @@ impl AsRef<str> for VirtualAppVAppStateEnum {
 }
 
 static VIRTUAL_DISK_ADAPTER_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualDiskAdapterTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("lsiLogic", VirtualDiskAdapterTypeEnum::LsiLogic),
         ("busLogic", VirtualDiskAdapterTypeEnum::BusLogic),
         ("ide", VirtualDiskAdapterTypeEnum::Ide),
+        ("lsiLogic", VirtualDiskAdapterTypeEnum::LsiLogic),
     ],
 };
 
@@ -26601,25 +26690,27 @@ impl AsRef<str> for VirtualDiskAdapterTypeEnum {
 }
 
 static VIRTUAL_DISK_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualDiskTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 11),
-        (5, 0),
+        (0, 0),
+        (0, 2),
+        (0, 0),
+        (0, 8),
         (0, 1),
     ],
     entries: &[
-        ("rdm", VirtualDiskTypeEnum::Rdm),
-        ("seSparse", VirtualDiskTypeEnum::SeSparse),
-        ("rdmp", VirtualDiskTypeEnum::Rdmp),
-        ("eagerZeroedThick", VirtualDiskTypeEnum::EagerZeroedThick),
-        ("sparse2Gb", VirtualDiskTypeEnum::Sparse2Gb),
-        ("preallocated", VirtualDiskTypeEnum::Preallocated),
-        ("thick2Gb", VirtualDiskTypeEnum::Thick2Gb),
-        ("delta", VirtualDiskTypeEnum::Delta),
-        ("sparseMonolithic", VirtualDiskTypeEnum::SparseMonolithic),
         ("thin", VirtualDiskTypeEnum::Thin),
-        ("flatMonolithic", VirtualDiskTypeEnum::FlatMonolithic),
+        ("rdm", VirtualDiskTypeEnum::Rdm),
+        ("preallocated", VirtualDiskTypeEnum::Preallocated),
+        ("sparseMonolithic", VirtualDiskTypeEnum::SparseMonolithic),
+        ("sparse2Gb", VirtualDiskTypeEnum::Sparse2Gb),
         ("thick", VirtualDiskTypeEnum::Thick),
+        ("thick2Gb", VirtualDiskTypeEnum::Thick2Gb),
+        ("rdmp", VirtualDiskTypeEnum::Rdmp),
+        ("flatMonolithic", VirtualDiskTypeEnum::FlatMonolithic),
+        ("eagerZeroedThick", VirtualDiskTypeEnum::EagerZeroedThick),
+        ("seSparse", VirtualDiskTypeEnum::SeSparse),
+        ("delta", VirtualDiskTypeEnum::Delta),
         ("raw", VirtualDiskTypeEnum::Raw),
     ],
 };
@@ -26693,13 +26784,13 @@ impl AsRef<str> for VirtualDiskTypeEnum {
 }
 
 static VIRTUAL_MACHINE_APP_HEARTBEAT_STATUS_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineAppHeartbeatStatusTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (2, 0),
     ],
     entries: &[
-        ("appStatusRed", VirtualMachineAppHeartbeatStatusTypeEnum::AppStatusRed),
         ("appStatusGray", VirtualMachineAppHeartbeatStatusTypeEnum::AppStatusGray),
+        ("appStatusRed", VirtualMachineAppHeartbeatStatusTypeEnum::AppStatusRed),
         ("appStatusGreen", VirtualMachineAppHeartbeatStatusTypeEnum::AppStatusGreen),
     ],
 };
@@ -26763,15 +26854,16 @@ impl AsRef<str> for VirtualMachineAppHeartbeatStatusTypeEnum {
 }
 
 static VIRTUAL_MACHINE_CONNECTION_STATE_ENUM_MAP: phf::Map<&'static str, VirtualMachineConnectionStateEnum> = ::phf::Map {
-    key: 471159234146692604,
+    key: 16287231350648472473,
     disps: &[
+        (0, 0),
         (1, 0),
     ],
     entries: &[
-        ("invalid", VirtualMachineConnectionStateEnum::Invalid),
-        ("inaccessible", VirtualMachineConnectionStateEnum::Inaccessible),
         ("disconnected", VirtualMachineConnectionStateEnum::Disconnected),
+        ("inaccessible", VirtualMachineConnectionStateEnum::Inaccessible),
         ("connected", VirtualMachineConnectionStateEnum::Connected),
+        ("invalid", VirtualMachineConnectionStateEnum::Invalid),
         ("orphaned", VirtualMachineConnectionStateEnum::Orphaned),
     ],
 };
@@ -26837,9 +26929,9 @@ impl AsRef<str> for VirtualMachineConnectionStateEnum {
 }
 
 static VIRTUAL_MACHINE_CRYPTO_STATE_ENUM_MAP: phf::Map<&'static str, VirtualMachineCryptoStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("unlocked", VirtualMachineCryptoStateEnum::Unlocked),
@@ -26905,18 +26997,18 @@ impl AsRef<str> for VirtualMachineCryptoStateEnum {
 }
 
 static VIRTUAL_MACHINE_FAULT_TOLERANCE_STATE_ENUM_MAP: phf::Map<&'static str, VirtualMachineFaultToleranceStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 3),
-        (0, 0),
+        (1, 0),
+        (4, 3),
     ],
     entries: &[
-        ("notConfigured", VirtualMachineFaultToleranceStateEnum::NotConfigured),
-        ("running", VirtualMachineFaultToleranceStateEnum::Running),
         ("needSecondary", VirtualMachineFaultToleranceStateEnum::NeedSecondary),
         ("starting", VirtualMachineFaultToleranceStateEnum::Starting),
-        ("enabled", VirtualMachineFaultToleranceStateEnum::Enabled),
         ("disabled", VirtualMachineFaultToleranceStateEnum::Disabled),
+        ("running", VirtualMachineFaultToleranceStateEnum::Running),
+        ("enabled", VirtualMachineFaultToleranceStateEnum::Enabled),
+        ("notConfigured", VirtualMachineFaultToleranceStateEnum::NotConfigured),
     ],
 };
 
@@ -26982,13 +27074,13 @@ impl AsRef<str> for VirtualMachineFaultToleranceStateEnum {
 }
 
 static VIRTUAL_MACHINE_FAULT_TOLERANCE_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineFaultToleranceTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
-        ("recordReplay", VirtualMachineFaultToleranceTypeEnum::RecordReplay),
         ("checkpointing", VirtualMachineFaultToleranceTypeEnum::Checkpointing),
+        ("recordReplay", VirtualMachineFaultToleranceTypeEnum::RecordReplay),
         ("unset", VirtualMachineFaultToleranceTypeEnum::Unset),
     ],
 };
@@ -27052,14 +27144,14 @@ impl AsRef<str> for VirtualMachineFaultToleranceTypeEnum {
 }
 
 static VIRTUAL_MACHINE_MOVE_PRIORITY_ENUM_MAP: phf::Map<&'static str, VirtualMachineMovePriorityEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15995050791870030928,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
+        ("defaultPriority", VirtualMachineMovePriorityEnum::DefaultPriority),
         ("highPriority", VirtualMachineMovePriorityEnum::HighPriority),
         ("lowPriority", VirtualMachineMovePriorityEnum::LowPriority),
-        ("defaultPriority", VirtualMachineMovePriorityEnum::DefaultPriority),
     ],
 };
 
@@ -27122,19 +27214,20 @@ impl AsRef<str> for VirtualMachineMovePriorityEnum {
 }
 
 static VIRTUAL_MACHINE_NEED_SECONDARY_REASON_ENUM_MAP: phf::Map<&'static str, VirtualMachineNeedSecondaryReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 5),
-        (2, 0),
+        (0, 4),
+        (0, 0),
+        (0, 6),
     ],
     entries: &[
-        ("lostConnection", VirtualMachineNeedSecondaryReasonEnum::LostConnection),
-        ("userAction", VirtualMachineNeedSecondaryReasonEnum::UserAction),
-        ("other", VirtualMachineNeedSecondaryReasonEnum::Other),
-        ("divergence", VirtualMachineNeedSecondaryReasonEnum::Divergence),
-        ("checkpointError", VirtualMachineNeedSecondaryReasonEnum::CheckpointError),
         ("initializing", VirtualMachineNeedSecondaryReasonEnum::Initializing),
+        ("lostConnection", VirtualMachineNeedSecondaryReasonEnum::LostConnection),
+        ("divergence", VirtualMachineNeedSecondaryReasonEnum::Divergence),
+        ("other", VirtualMachineNeedSecondaryReasonEnum::Other),
+        ("userAction", VirtualMachineNeedSecondaryReasonEnum::UserAction),
         ("partialHardwareFailure", VirtualMachineNeedSecondaryReasonEnum::PartialHardwareFailure),
+        ("checkpointError", VirtualMachineNeedSecondaryReasonEnum::CheckpointError),
     ],
 };
 
@@ -27201,14 +27294,14 @@ impl AsRef<str> for VirtualMachineNeedSecondaryReasonEnum {
 }
 
 static VIRTUAL_MACHINE_POWER_STATE_ENUM_MAP: phf::Map<&'static str, VirtualMachinePowerStateEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("poweredOff", VirtualMachinePowerStateEnum::PoweredOff),
-        ("suspended", VirtualMachinePowerStateEnum::Suspended),
         ("poweredOn", VirtualMachinePowerStateEnum::PoweredOn),
+        ("suspended", VirtualMachinePowerStateEnum::Suspended),
+        ("poweredOff", VirtualMachinePowerStateEnum::PoweredOff),
     ],
 };
 
@@ -27271,14 +27364,14 @@ impl AsRef<str> for VirtualMachinePowerStateEnum {
 }
 
 static VIRTUAL_MACHINE_RECORD_REPLAY_STATE_ENUM_MAP: phf::Map<&'static str, VirtualMachineRecordReplayStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("recording", VirtualMachineRecordReplayStateEnum::Recording),
-        ("inactive", VirtualMachineRecordReplayStateEnum::Inactive),
         ("replaying", VirtualMachineRecordReplayStateEnum::Replaying),
+        ("inactive", VirtualMachineRecordReplayStateEnum::Inactive),
+        ("recording", VirtualMachineRecordReplayStateEnum::Recording),
     ],
 };
 
@@ -27341,16 +27434,16 @@ impl AsRef<str> for VirtualMachineRecordReplayStateEnum {
 }
 
 static VIRTUAL_MACHINE_TICKET_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineTicketTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 2689841203009609170,
     disps: &[
-        (0, 0),
-        (1, 0),
+        (0, 1),
+        (3, 0),
     ],
     entries: &[
+        ("webRemoteDevice", VirtualMachineTicketTypeEnum::WebRemoteDevice),
+        ("webmks", VirtualMachineTicketTypeEnum::Webmks),
         ("device", VirtualMachineTicketTypeEnum::Device),
         ("guestIntegrity", VirtualMachineTicketTypeEnum::GuestIntegrity),
-        ("webmks", VirtualMachineTicketTypeEnum::Webmks),
-        ("webRemoteDevice", VirtualMachineTicketTypeEnum::WebRemoteDevice),
         ("guestControl", VirtualMachineTicketTypeEnum::GuestControl),
         ("mks", VirtualMachineTicketTypeEnum::Mks),
     ],
@@ -27418,15 +27511,16 @@ impl AsRef<str> for VirtualMachineTicketTypeEnum {
 }
 
 static VSAN_COMPOSITE_CONSTRAINT_CONJOINER_ENUM_ENUM_MAP: phf::Map<&'static str, VsanCompositeConstraintConjoinerEnumEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
-        (1, 0),
+        (0, 2),
+        (0, 0),
     ],
     entries: &[
         ("OR", VsanCompositeConstraintConjoinerEnumEnum::Or),
         ("AND", VsanCompositeConstraintConjoinerEnumEnum::And),
-        ("VsanCompositeConstraintConjoinerEnum_Unknown", VsanCompositeConstraintConjoinerEnumEnum::VsanCompositeConstraintConjoinerEnumUnknown),
         ("EXCEPT", VsanCompositeConstraintConjoinerEnumEnum::Except),
+        ("VsanCompositeConstraintConjoinerEnum_Unknown", VsanCompositeConstraintConjoinerEnumEnum::VsanCompositeConstraintConjoinerEnumUnknown),
     ],
 };
 
@@ -27490,24 +27584,25 @@ impl AsRef<str> for VsanCompositeConstraintConjoinerEnumEnum {
 }
 
 static VSAN_MASS_COLLECTOR_OBJECT_COLLECTION_ENUM_ENUM_MAP: phf::Map<&'static str, VsanMassCollectorObjectCollectionEnumEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (2, 4),
-        (1, 6),
         (0, 0),
+        (0, 0),
+        (2, 6),
+        (4, 9),
     ],
     entries: &[
-        ("ALL_DATASTORES", VsanMassCollectorObjectCollectionEnumEnum::AllDatastores),
-        ("VsanMassCollectorObjectCollectionEnum_Unknown", VsanMassCollectorObjectCollectionEnumEnum::VsanMassCollectorObjectCollectionEnumUnknown),
-        ("ALL_VMFS_DATASTORES", VsanMassCollectorObjectCollectionEnumEnum::AllVmfsDatastores),
+        ("SERVICE_INSTANCE", VsanMassCollectorObjectCollectionEnumEnum::ServiceInstance),
         ("ALL_VSAN_DATASTORES", VsanMassCollectorObjectCollectionEnumEnum::AllVsanDatastores),
         ("ALL_VSAN_ENABLED_CLUSTERS", VsanMassCollectorObjectCollectionEnumEnum::AllVsanEnabledClusters),
-        ("ALL_CLUSTERS", VsanMassCollectorObjectCollectionEnumEnum::AllClusters),
-        ("ALL_VSAN_ENABLED_HOSTS", VsanMassCollectorObjectCollectionEnumEnum::AllVsanEnabledHosts),
+        ("VsanMassCollectorObjectCollectionEnum_Unknown", VsanMassCollectorObjectCollectionEnumEnum::VsanMassCollectorObjectCollectionEnumUnknown),
         ("ALL_HOSTS", VsanMassCollectorObjectCollectionEnumEnum::AllHosts),
-        ("SERVICE_INSTANCE", VsanMassCollectorObjectCollectionEnumEnum::ServiceInstance),
+        ("ALL_CLUSTERS", VsanMassCollectorObjectCollectionEnumEnum::AllClusters),
         ("ALL_VSAN_ENABLED_HOSTS_EXCEPT_WITNESS", VsanMassCollectorObjectCollectionEnumEnum::AllVsanEnabledHostsExceptWitness),
+        ("ALL_VSAN_ENABLED_HOSTS", VsanMassCollectorObjectCollectionEnumEnum::AllVsanEnabledHosts),
         ("VCENTER", VsanMassCollectorObjectCollectionEnumEnum::Vcenter),
+        ("ALL_VMFS_DATASTORES", VsanMassCollectorObjectCollectionEnumEnum::AllVmfsDatastores),
+        ("ALL_DATASTORES", VsanMassCollectorObjectCollectionEnumEnum::AllDatastores),
     ],
 };
 
@@ -27578,19 +27673,20 @@ impl AsRef<str> for VsanMassCollectorObjectCollectionEnumEnum {
 }
 
 static VSAN_PROPERTY_CONSTRAINT_COMPARATOR_ENUM_ENUM_MAP: phf::Map<&'static str, VsanPropertyConstraintComparatorEnumEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (3, 5),
         (0, 0),
+        (0, 2),
+        (2, 2),
     ],
     entries: &[
-        ("POP", VsanPropertyConstraintComparatorEnumEnum::Pop),
-        ("SMALLER", VsanPropertyConstraintComparatorEnumEnum::Smaller),
-        ("EQUALS", VsanPropertyConstraintComparatorEnumEnum::Equals),
-        ("CONTAINS", VsanPropertyConstraintComparatorEnumEnum::Contains),
         ("VsanPropertyConstraintComparatorEnum_Unknown", VsanPropertyConstraintComparatorEnumEnum::VsanPropertyConstraintComparatorEnumUnknown),
-        ("GREATER", VsanPropertyConstraintComparatorEnumEnum::Greater),
+        ("EQUALS", VsanPropertyConstraintComparatorEnumEnum::Equals),
+        ("POP", VsanPropertyConstraintComparatorEnumEnum::Pop),
+        ("CONTAINS", VsanPropertyConstraintComparatorEnumEnum::Contains),
         ("TEXTUALLY_MATCHES", VsanPropertyConstraintComparatorEnumEnum::TextuallyMatches),
+        ("SMALLER", VsanPropertyConstraintComparatorEnumEnum::Smaller),
+        ("GREATER", VsanPropertyConstraintComparatorEnumEnum::Greater),
     ],
 };
 
@@ -27657,9 +27753,9 @@ impl AsRef<str> for VsanPropertyConstraintComparatorEnumEnum {
 }
 
 static VSAN_UPGRADE_SYSTEM_UPGRADE_HISTORY_DISK_GROUP_OP_TYPE_ENUM_MAP: phf::Map<&'static str, VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("add", VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum::Add),
@@ -27725,21 +27821,22 @@ impl AsRef<str> for VsanUpgradeSystemUpgradeHistoryDiskGroupOpTypeEnum {
 }
 
 static ACTION_PARAMETER_ENUM_MAP: phf::Map<&'static str, ActionParameterEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (4, 0),
-        (0, 2),
+        (0, 4),
+        (0, 0),
+        (7, 1),
     ],
     entries: &[
+        ("alarm", ActionParameterEnum::Alarm),
+        ("eventDescription", ActionParameterEnum::EventDescription),
         ("target", ActionParameterEnum::Target),
         ("oldStatus", ActionParameterEnum::OldStatus),
-        ("newStatus", ActionParameterEnum::NewStatus),
-        ("triggeringSummary", ActionParameterEnum::TriggeringSummary),
-        ("alarm", ActionParameterEnum::Alarm),
         ("declaringSummary", ActionParameterEnum::DeclaringSummary),
-        ("eventDescription", ActionParameterEnum::EventDescription),
-        ("alarmName", ActionParameterEnum::AlarmName),
         ("targetName", ActionParameterEnum::TargetName),
+        ("triggeringSummary", ActionParameterEnum::TriggeringSummary),
+        ("alarmName", ActionParameterEnum::AlarmName),
+        ("newStatus", ActionParameterEnum::NewStatus),
     ],
 };
 
@@ -27808,14 +27905,14 @@ impl AsRef<str> for ActionParameterEnum {
 }
 
 static ALARM_FILTER_SPEC_ALARM_TYPE_BY_ENTITY_ENUM_MAP: phf::Map<&'static str, AlarmFilterSpecAlarmTypeByEntityEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15995050791870030928,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("entityTypeAll", AlarmFilterSpecAlarmTypeByEntityEnum::EntityTypeAll),
         ("entityTypeHost", AlarmFilterSpecAlarmTypeByEntityEnum::EntityTypeHost),
         ("entityTypeVm", AlarmFilterSpecAlarmTypeByEntityEnum::EntityTypeVm),
+        ("entityTypeAll", AlarmFilterSpecAlarmTypeByEntityEnum::EntityTypeAll),
     ],
 };
 
@@ -27878,13 +27975,13 @@ impl AsRef<str> for AlarmFilterSpecAlarmTypeByEntityEnum {
 }
 
 static ALARM_FILTER_SPEC_ALARM_TYPE_BY_TRIGGER_ENUM_MAP: phf::Map<&'static str, AlarmFilterSpecAlarmTypeByTriggerEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (2, 0),
     ],
     entries: &[
-        ("triggerTypeEvent", AlarmFilterSpecAlarmTypeByTriggerEnum::TriggerTypeEvent),
         ("triggerTypeMetric", AlarmFilterSpecAlarmTypeByTriggerEnum::TriggerTypeMetric),
+        ("triggerTypeEvent", AlarmFilterSpecAlarmTypeByTriggerEnum::TriggerTypeEvent),
         ("triggerTypeAll", AlarmFilterSpecAlarmTypeByTriggerEnum::TriggerTypeAll),
     ],
 };
@@ -27948,17 +28045,17 @@ impl AsRef<str> for AlarmFilterSpecAlarmTypeByTriggerEnum {
 }
 
 static EVENT_ALARM_EXPRESSION_COMPARISON_OPERATOR_ENUM_MAP: phf::Map<&'static str, EventAlarmExpressionComparisonOperatorEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 4203492208743950414,
     disps: &[
-        (1, 0),
-        (0, 1),
+        (0, 0),
+        (0, 5),
     ],
     entries: &[
-        ("notEqualTo", EventAlarmExpressionComparisonOperatorEnum::NotEqualTo),
-        ("endsWith", EventAlarmExpressionComparisonOperatorEnum::EndsWith),
         ("equals", EventAlarmExpressionComparisonOperatorEnum::Equals),
-        ("doesNotEndWith", EventAlarmExpressionComparisonOperatorEnum::DoesNotEndWith),
+        ("notEqualTo", EventAlarmExpressionComparisonOperatorEnum::NotEqualTo),
         ("startsWith", EventAlarmExpressionComparisonOperatorEnum::StartsWith),
+        ("doesNotEndWith", EventAlarmExpressionComparisonOperatorEnum::DoesNotEndWith),
+        ("endsWith", EventAlarmExpressionComparisonOperatorEnum::EndsWith),
         ("doesNotStartWith", EventAlarmExpressionComparisonOperatorEnum::DoesNotStartWith),
     ],
 };
@@ -28025,13 +28122,13 @@ impl AsRef<str> for EventAlarmExpressionComparisonOperatorEnum {
 }
 
 static METRIC_ALARM_OPERATOR_ENUM_MAP: phf::Map<&'static str, MetricAlarmOperatorEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("isBelow", MetricAlarmOperatorEnum::IsBelow),
         ("isAbove", MetricAlarmOperatorEnum::IsAbove),
+        ("isBelow", MetricAlarmOperatorEnum::IsBelow),
     ],
 };
 
@@ -28093,9 +28190,9 @@ impl AsRef<str> for MetricAlarmOperatorEnum {
 }
 
 static STATE_ALARM_OPERATOR_ENUM_MAP: phf::Map<&'static str, StateAlarmOperatorEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("isUnequal", StateAlarmOperatorEnum::IsUnequal),
@@ -28161,19 +28258,20 @@ impl AsRef<str> for StateAlarmOperatorEnum {
 }
 
 static ACTION_TYPE_ENUM_MAP: phf::Map<&'static str, ActionTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15995050791870030928,
     disps: &[
+        (7, 0),
+        (0, 3),
         (0, 0),
-        (1, 5),
     ],
     entries: &[
-        ("StorageMigrationV1", ActionTypeEnum::StorageMigrationV1),
         ("HostInfraUpdateHaV1", ActionTypeEnum::HostInfraUpdateHaV1),
-        ("HostMaintenanceV1", ActionTypeEnum::HostMaintenanceV1),
-        ("MigrationV1", ActionTypeEnum::MigrationV1),
         ("VmPowerV1", ActionTypeEnum::VmPowerV1),
+        ("MigrationV1", ActionTypeEnum::MigrationV1),
         ("PlacementV1", ActionTypeEnum::PlacementV1),
         ("HostPowerV1", ActionTypeEnum::HostPowerV1),
+        ("StorageMigrationV1", ActionTypeEnum::StorageMigrationV1),
+        ("HostMaintenanceV1", ActionTypeEnum::HostMaintenanceV1),
         ("StoragePlacementV1", ActionTypeEnum::StoragePlacementV1),
     ],
 };
@@ -28242,33 +28340,36 @@ impl AsRef<str> for ActionTypeEnum {
 }
 
 static CLUSTER_POWER_STATUS_ENUM_MAP: phf::Map<&'static str, ClusterPowerStatusEnum> = ::phf::Map {
-    key: 4066803471364472071,
+    key: 16287231350648472473,
     disps: &[
-        (11, 0),
-        (0, 3),
-        (0, 3),
+        (0, 12),
+        (1, 0),
+        (0, 13),
+        (0, 2),
+        (0, 2),
+        (0, 17),
         (0, 0),
     ],
     entries: &[
-        ("hostsInfraVMsPoweredon", ClusterPowerStatusEnum::HostsInfraVMsPoweredon),
-        ("hostsInfraVMsPoweredoff", ClusterPowerStatusEnum::HostsInfraVMsPoweredoff),
-        ("infraVMsRecorded", ClusterPowerStatusEnum::InfraVMsRecorded),
-        ("clusterPoweredOff", ClusterPowerStatusEnum::ClusterPoweredOff),
-        ("vsanDOMPauseAllCCPsSet", ClusterPowerStatusEnum::VsanDomPauseAllCcPsSet),
-        ("supportedVMsPoweredOn", ClusterPowerStatusEnum::SupportedVMsPoweredOn),
-        ("ClusterPowerStatus_Unknown", ClusterPowerStatusEnum::ClusterPowerStatusUnknown),
-        ("vsanMemberShipUpdateDisabled", ClusterPowerStatusEnum::VsanMemberShipUpdateDisabled),
-        ("clusterPoweredOn", ClusterPowerStatusEnum::ClusterPoweredOn),
-        ("vcVMPoweredOff", ClusterPowerStatusEnum::VcVmPoweredOff),
-        ("vsanDOMPauseAllCCPsUnset", ClusterPowerStatusEnum::VsanDomPauseAllCcPsUnset),
-        ("hostsInMM", ClusterPowerStatusEnum::HostsInMm),
-        ("supportedVMsPoweredOff", ClusterPowerStatusEnum::SupportedVMsPoweredOff),
-        ("hostsOutOfMM", ClusterPowerStatusEnum::HostsOutOfMm),
         ("vcVMPoweredOn", ClusterPowerStatusEnum::VcVmPoweredOn),
-        ("haDisabled", ClusterPowerStatusEnum::HaDisabled),
-        ("vsanMemberShipUpdateEnabled", ClusterPowerStatusEnum::VsanMemberShipUpdateEnabled),
-        ("hostsPoweredOff", ClusterPowerStatusEnum::HostsPoweredOff),
+        ("clusterPoweredOn", ClusterPowerStatusEnum::ClusterPoweredOn),
+        ("hostsInfraVMsPoweredoff", ClusterPowerStatusEnum::HostsInfraVMsPoweredoff),
+        ("vsanMemberShipUpdateDisabled", ClusterPowerStatusEnum::VsanMemberShipUpdateDisabled),
         ("haEnabled", ClusterPowerStatusEnum::HaEnabled),
+        ("vsanDOMPauseAllCCPsUnset", ClusterPowerStatusEnum::VsanDomPauseAllCcPsUnset),
+        ("hostsOutOfMM", ClusterPowerStatusEnum::HostsOutOfMm),
+        ("hostsInfraVMsPoweredon", ClusterPowerStatusEnum::HostsInfraVMsPoweredon),
+        ("infraVMsRecorded", ClusterPowerStatusEnum::InfraVMsRecorded),
+        ("vsanMemberShipUpdateEnabled", ClusterPowerStatusEnum::VsanMemberShipUpdateEnabled),
+        ("vcVMPoweredOff", ClusterPowerStatusEnum::VcVmPoweredOff),
+        ("clusterPoweredOff", ClusterPowerStatusEnum::ClusterPoweredOff),
+        ("hostsPoweredOff", ClusterPowerStatusEnum::HostsPoweredOff),
+        ("supportedVMsPoweredOff", ClusterPowerStatusEnum::SupportedVMsPoweredOff),
+        ("haDisabled", ClusterPowerStatusEnum::HaDisabled),
+        ("ClusterPowerStatus_Unknown", ClusterPowerStatusEnum::ClusterPowerStatusUnknown),
+        ("vsanDOMPauseAllCCPsSet", ClusterPowerStatusEnum::VsanDomPauseAllCcPsSet),
+        ("hostsInMM", ClusterPowerStatusEnum::HostsInMm),
+        ("supportedVMsPoweredOn", ClusterPowerStatusEnum::SupportedVMsPoweredOn),
     ],
 };
 
@@ -28347,13 +28448,13 @@ impl AsRef<str> for ClusterPowerStatusEnum {
 }
 
 static CLUSTER_CRYPTO_CONFIG_INFO_CRYPTO_MODE_ENUM_MAP: phf::Map<&'static str, ClusterCryptoConfigInfoCryptoModeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("onDemand", ClusterCryptoConfigInfoCryptoModeEnum::OnDemand),
         ("forceEnable", ClusterCryptoConfigInfoCryptoModeEnum::ForceEnable),
+        ("onDemand", ClusterCryptoConfigInfoCryptoModeEnum::OnDemand),
     ],
 };
 
@@ -28415,20 +28516,21 @@ impl AsRef<str> for ClusterCryptoConfigInfoCryptoModeEnum {
 }
 
 static CLUSTER_DAS_AAM_NODE_STATE_DAS_STATE_ENUM_MAP: phf::Map<&'static str, ClusterDasAamNodeStateDasStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (5, 2),
-        (1, 0),
+        (0, 2),
+        (2, 1),
+        (3, 0),
     ],
     entries: &[
+        ("error", ClusterDasAamNodeStateDasStateEnum::Error),
+        ("nodeFailed", ClusterDasAamNodeStateDasStateEnum::NodeFailed),
+        ("configuring", ClusterDasAamNodeStateDasStateEnum::Configuring),
         ("initialized", ClusterDasAamNodeStateDasStateEnum::Initialized),
         ("uninitialized", ClusterDasAamNodeStateDasStateEnum::Uninitialized),
-        ("unconfiguring", ClusterDasAamNodeStateDasStateEnum::Unconfiguring),
-        ("error", ClusterDasAamNodeStateDasStateEnum::Error),
         ("running", ClusterDasAamNodeStateDasStateEnum::Running),
-        ("configuring", ClusterDasAamNodeStateDasStateEnum::Configuring),
-        ("nodeFailed", ClusterDasAamNodeStateDasStateEnum::NodeFailed),
         ("agentShutdown", ClusterDasAamNodeStateDasStateEnum::AgentShutdown),
+        ("unconfiguring", ClusterDasAamNodeStateDasStateEnum::Unconfiguring),
     ],
 };
 
@@ -28496,9 +28598,9 @@ impl AsRef<str> for ClusterDasAamNodeStateDasStateEnum {
 }
 
 static CLUSTER_DAS_CONFIG_INFO_HB_DATASTORE_CANDIDATE_ENUM_MAP: phf::Map<&'static str, ClusterDasConfigInfoHbDatastoreCandidateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
         ("allFeasibleDsWithUserPreference", ClusterDasConfigInfoHbDatastoreCandidateEnum::AllFeasibleDsWithUserPreference),
@@ -28566,13 +28668,13 @@ impl AsRef<str> for ClusterDasConfigInfoHbDatastoreCandidateEnum {
 }
 
 static CLUSTER_DAS_CONFIG_INFO_SERVICE_STATE_ENUM_MAP: phf::Map<&'static str, ClusterDasConfigInfoServiceStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("enabled", ClusterDasConfigInfoServiceStateEnum::Enabled),
         ("disabled", ClusterDasConfigInfoServiceStateEnum::Disabled),
+        ("enabled", ClusterDasConfigInfoServiceStateEnum::Enabled),
     ],
 };
 
@@ -28634,13 +28736,13 @@ impl AsRef<str> for ClusterDasConfigInfoServiceStateEnum {
 }
 
 static CLUSTER_DAS_CONFIG_INFO_VM_MONITORING_STATE_ENUM_MAP: phf::Map<&'static str, ClusterDasConfigInfoVmMonitoringStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("vmAndAppMonitoring", ClusterDasConfigInfoVmMonitoringStateEnum::VmAndAppMonitoring),
         ("vmMonitoringOnly", ClusterDasConfigInfoVmMonitoringStateEnum::VmMonitoringOnly),
+        ("vmAndAppMonitoring", ClusterDasConfigInfoVmMonitoringStateEnum::VmAndAppMonitoring),
         ("vmMonitoringDisabled", ClusterDasConfigInfoVmMonitoringStateEnum::VmMonitoringDisabled),
     ],
 };
@@ -28704,24 +28806,25 @@ impl AsRef<str> for ClusterDasConfigInfoVmMonitoringStateEnum {
 }
 
 static CLUSTER_DAS_FDM_AVAILABILITY_STATE_ENUM_MAP: phf::Map<&'static str, ClusterDasFdmAvailabilityStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
+        (5, 0),
         (0, 2),
+        (8, 4),
         (0, 0),
-        (1, 7),
     ],
     entries: &[
+        ("connectedToMaster", ClusterDasFdmAvailabilityStateEnum::ConnectedToMaster),
         ("fdmUnreachable", ClusterDasFdmAvailabilityStateEnum::FdmUnreachable),
-        ("networkIsolated", ClusterDasFdmAvailabilityStateEnum::NetworkIsolated),
+        ("networkPartitionedFromMaster", ClusterDasFdmAvailabilityStateEnum::NetworkPartitionedFromMaster),
         ("master", ClusterDasFdmAvailabilityStateEnum::Master),
         ("election", ClusterDasFdmAvailabilityStateEnum::Election),
-        ("retry", ClusterDasFdmAvailabilityStateEnum::Retry),
-        ("hostDown", ClusterDasFdmAvailabilityStateEnum::HostDown),
-        ("initializationError", ClusterDasFdmAvailabilityStateEnum::InitializationError),
-        ("connectedToMaster", ClusterDasFdmAvailabilityStateEnum::ConnectedToMaster),
-        ("uninitialized", ClusterDasFdmAvailabilityStateEnum::Uninitialized),
-        ("networkPartitionedFromMaster", ClusterDasFdmAvailabilityStateEnum::NetworkPartitionedFromMaster),
         ("uninitializationError", ClusterDasFdmAvailabilityStateEnum::UninitializationError),
+        ("hostDown", ClusterDasFdmAvailabilityStateEnum::HostDown),
+        ("networkIsolated", ClusterDasFdmAvailabilityStateEnum::NetworkIsolated),
+        ("uninitialized", ClusterDasFdmAvailabilityStateEnum::Uninitialized),
+        ("retry", ClusterDasFdmAvailabilityStateEnum::Retry),
+        ("initializationError", ClusterDasFdmAvailabilityStateEnum::InitializationError),
     ],
 };
 
@@ -28792,15 +28895,16 @@ impl AsRef<str> for ClusterDasFdmAvailabilityStateEnum {
 }
 
 static DAS_VM_PRIORITY_ENUM_MAP: phf::Map<&'static str, DasVmPriorityEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("high", DasVmPriorityEnum::High),
-        ("low", DasVmPriorityEnum::Low),
-        ("disabled", DasVmPriorityEnum::Disabled),
         ("medium", DasVmPriorityEnum::Medium),
+        ("high", DasVmPriorityEnum::High),
+        ("disabled", DasVmPriorityEnum::Disabled),
+        ("low", DasVmPriorityEnum::Low),
     ],
 };
 
@@ -28864,15 +28968,16 @@ impl AsRef<str> for DasVmPriorityEnum {
 }
 
 static CLUSTER_DAS_VM_SETTINGS_ISOLATION_RESPONSE_ENUM_MAP: phf::Map<&'static str, ClusterDasVmSettingsIsolationResponseEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 3),
+        (0, 0),
     ],
     entries: &[
         ("none", ClusterDasVmSettingsIsolationResponseEnum::None),
-        ("clusterIsolationResponse", ClusterDasVmSettingsIsolationResponseEnum::ClusterIsolationResponse),
         ("powerOff", ClusterDasVmSettingsIsolationResponseEnum::PowerOff),
         ("shutdown", ClusterDasVmSettingsIsolationResponseEnum::Shutdown),
+        ("clusterIsolationResponse", ClusterDasVmSettingsIsolationResponseEnum::ClusterIsolationResponse),
     ],
 };
 
@@ -28936,19 +29041,20 @@ impl AsRef<str> for ClusterDasVmSettingsIsolationResponseEnum {
 }
 
 static CLUSTER_DAS_VM_SETTINGS_RESTART_PRIORITY_ENUM_MAP: phf::Map<&'static str, ClusterDasVmSettingsRestartPriorityEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (4, 1),
-        (2, 0),
+        (1, 5),
+        (0, 0),
+        (1, 1),
     ],
     entries: &[
-        ("disabled", ClusterDasVmSettingsRestartPriorityEnum::Disabled),
         ("low", ClusterDasVmSettingsRestartPriorityEnum::Low),
         ("high", ClusterDasVmSettingsRestartPriorityEnum::High),
-        ("medium", ClusterDasVmSettingsRestartPriorityEnum::Medium),
-        ("highest", ClusterDasVmSettingsRestartPriorityEnum::Highest),
-        ("lowest", ClusterDasVmSettingsRestartPriorityEnum::Lowest),
         ("clusterRestartPriority", ClusterDasVmSettingsRestartPriorityEnum::ClusterRestartPriority),
+        ("lowest", ClusterDasVmSettingsRestartPriorityEnum::Lowest),
+        ("medium", ClusterDasVmSettingsRestartPriorityEnum::Medium),
+        ("disabled", ClusterDasVmSettingsRestartPriorityEnum::Disabled),
+        ("highest", ClusterDasVmSettingsRestartPriorityEnum::Highest),
     ],
 };
 
@@ -29015,13 +29121,13 @@ impl AsRef<str> for ClusterDasVmSettingsRestartPriorityEnum {
 }
 
 static DPM_BEHAVIOR_ENUM_MAP: phf::Map<&'static str, DpmBehaviorEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("manual", DpmBehaviorEnum::Manual),
         ("automated", DpmBehaviorEnum::Automated),
+        ("manual", DpmBehaviorEnum::Manual),
     ],
 };
 
@@ -29083,13 +29189,13 @@ impl AsRef<str> for DpmBehaviorEnum {
 }
 
 static DRS_BEHAVIOR_ENUM_MAP: phf::Map<&'static str, DrsBehaviorEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("manual", DrsBehaviorEnum::Manual),
         ("partiallyAutomated", DrsBehaviorEnum::PartiallyAutomated),
+        ("manual", DrsBehaviorEnum::Manual),
         ("fullyAutomated", DrsBehaviorEnum::FullyAutomated),
     ],
 };
@@ -29153,16 +29259,17 @@ impl AsRef<str> for DrsBehaviorEnum {
 }
 
 static DRS_RECOMMENDATION_REASON_CODE_ENUM_MAP: phf::Map<&'static str, DrsRecommendationReasonCodeEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
+        (0, 0),
+        (0, 4),
     ],
     entries: &[
-        ("jointAffin", DrsRecommendationReasonCodeEnum::JointAffin),
-        ("fairnessCpuAvg", DrsRecommendationReasonCodeEnum::FairnessCpuAvg),
         ("fairnessMemAvg", DrsRecommendationReasonCodeEnum::FairnessMemAvg),
+        ("fairnessCpuAvg", DrsRecommendationReasonCodeEnum::FairnessCpuAvg),
         ("hostMaint", DrsRecommendationReasonCodeEnum::HostMaint),
         ("antiAffin", DrsRecommendationReasonCodeEnum::AntiAffin),
+        ("jointAffin", DrsRecommendationReasonCodeEnum::JointAffin),
     ],
 };
 
@@ -29227,14 +29334,14 @@ impl AsRef<str> for DrsRecommendationReasonCodeEnum {
 }
 
 static CLUSTER_HOST_INFRA_UPDATE_HA_MODE_ACTION_OPERATION_TYPE_ENUM_MAP: phf::Map<&'static str, ClusterHostInfraUpdateHaModeActionOperationTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 2689841203009609170,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("enterQuarantine", ClusterHostInfraUpdateHaModeActionOperationTypeEnum::EnterQuarantine),
         ("exitQuarantine", ClusterHostInfraUpdateHaModeActionOperationTypeEnum::ExitQuarantine),
         ("enterMaintenance", ClusterHostInfraUpdateHaModeActionOperationTypeEnum::EnterMaintenance),
+        ("enterQuarantine", ClusterHostInfraUpdateHaModeActionOperationTypeEnum::EnterQuarantine),
     ],
 };
 
@@ -29297,13 +29404,13 @@ impl AsRef<str> for ClusterHostInfraUpdateHaModeActionOperationTypeEnum {
 }
 
 static HOST_POWER_OPERATION_TYPE_ENUM_MAP: phf::Map<&'static str, HostPowerOperationTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15995050791870030928,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("powerOff", HostPowerOperationTypeEnum::PowerOff),
         ("powerOn", HostPowerOperationTypeEnum::PowerOn),
+        ("powerOff", HostPowerOperationTypeEnum::PowerOff),
     ],
 };
 
@@ -29365,13 +29472,13 @@ impl AsRef<str> for HostPowerOperationTypeEnum {
 }
 
 static CLUSTER_INFRA_UPDATE_HA_CONFIG_INFO_BEHAVIOR_TYPE_ENUM_MAP: phf::Map<&'static str, ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("Manual", ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum::Manual),
         ("Automated", ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum::Automated),
+        ("Manual", ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum::Manual),
     ],
 };
 
@@ -29433,7 +29540,7 @@ impl AsRef<str> for ClusterInfraUpdateHaConfigInfoBehaviorTypeEnum {
 }
 
 static CLUSTER_INFRA_UPDATE_HA_CONFIG_INFO_REMEDIATION_TYPE_ENUM_MAP: phf::Map<&'static str, ClusterInfraUpdateHaConfigInfoRemediationTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -29501,15 +29608,16 @@ impl AsRef<str> for ClusterInfraUpdateHaConfigInfoRemediationTypeEnum {
 }
 
 static PLACEMENT_SPEC_PLACEMENT_TYPE_ENUM_MAP: phf::Map<&'static str, PlacementSpecPlacementTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 1),
     ],
     entries: &[
-        ("clone", PlacementSpecPlacementTypeEnum::Clone),
         ("reconfigure", PlacementSpecPlacementTypeEnum::Reconfigure),
-        ("relocate", PlacementSpecPlacementTypeEnum::Relocate),
+        ("clone", PlacementSpecPlacementTypeEnum::Clone),
         ("create", PlacementSpecPlacementTypeEnum::Create),
+        ("relocate", PlacementSpecPlacementTypeEnum::Relocate),
     ],
 };
 
@@ -29573,13 +29681,13 @@ impl AsRef<str> for PlacementSpecPlacementTypeEnum {
 }
 
 static CLUSTER_POWER_ON_VM_OPTION_ENUM_MAP: phf::Map<&'static str, ClusterPowerOnVmOptionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("ReserveResources", ClusterPowerOnVmOptionEnum::ReserveResources),
         ("OverrideAutomationLevel", ClusterPowerOnVmOptionEnum::OverrideAutomationLevel),
+        ("ReserveResources", ClusterPowerOnVmOptionEnum::ReserveResources),
     ],
 };
 
@@ -29641,54 +29749,58 @@ impl AsRef<str> for ClusterPowerOnVmOptionEnum {
 }
 
 static RECOMMENDATION_REASON_CODE_ENUM_MAP: phf::Map<&'static str, RecommendationReasonCodeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (0, 25),
-        (0, 13),
-        (1, 2),
-        (15, 0),
-        (0, 16),
-        (1, 6),
-        (0, 21),
-        (2, 26),
+        (0, 0),
+        (0, 22),
+        (0, 2),
+        (0, 32),
+        (0, 1),
+        (1, 30),
+        (1, 5),
+        (2, 7),
+        (0, 7),
+        (2, 27),
+        (0, 23),
+        (0, 18),
     ],
     entries: &[
-        ("balanceDatastoreSpaceUsage", RecommendationReasonCodeEnum::BalanceDatastoreSpaceUsage),
-        ("ahPlacementOptimization", RecommendationReasonCodeEnum::AhPlacementOptimization),
-        ("vmHostHardAffinity", RecommendationReasonCodeEnum::VmHostHardAffinity),
+        ("balanceDatastoreIOLoad", RecommendationReasonCodeEnum::BalanceDatastoreIoLoad),
+        ("networkBandwidthReservation", RecommendationReasonCodeEnum::NetworkBandwidthReservation),
         ("iolbDisabledInternal", RecommendationReasonCodeEnum::IolbDisabledInternal),
-        ("storagePlacement", RecommendationReasonCodeEnum::StoragePlacement),
-        ("unreservedCapacity", RecommendationReasonCodeEnum::UnreservedCapacity),
-        ("vmxUpgrade", RecommendationReasonCodeEnum::VmxUpgrade),
+        ("ahPlacementOptimization", RecommendationReasonCodeEnum::AhPlacementOptimization),
         ("datastoreSpaceOutage", RecommendationReasonCodeEnum::DatastoreSpaceOutage),
+        ("balanceDatastoreSpaceUsage", RecommendationReasonCodeEnum::BalanceDatastoreSpaceUsage),
+        ("xvmotionPlacement", RecommendationReasonCodeEnum::XvmotionPlacement),
         ("powerOnVm", RecommendationReasonCodeEnum::PowerOnVm),
+        ("virtualDiskJointAffin", RecommendationReasonCodeEnum::VirtualDiskJointAffin),
+        ("antiAffin", RecommendationReasonCodeEnum::AntiAffin),
+        ("jointAffin", RecommendationReasonCodeEnum::JointAffin),
+        ("fairnessMemAvg", RecommendationReasonCodeEnum::FairnessMemAvg),
+        ("maxVmsConstraint", RecommendationReasonCodeEnum::MaxVmsConstraint),
+        ("vmHostSoftAffinity", RecommendationReasonCodeEnum::VmHostSoftAffinity),
+        ("reservationMem", RecommendationReasonCodeEnum::ReservationMem),
+        ("virtualDiskAntiAffin", RecommendationReasonCodeEnum::VirtualDiskAntiAffin),
+        ("datastoreMaint", RecommendationReasonCodeEnum::DatastoreMaint),
+        ("storagePlacement", RecommendationReasonCodeEnum::StoragePlacement),
+        ("vmxUpgrade", RecommendationReasonCodeEnum::VmxUpgrade),
+        ("hostExitDegradation", RecommendationReasonCodeEnum::HostExitDegradation),
+        ("vmHostHardAffinity", RecommendationReasonCodeEnum::VmHostHardAffinity),
         ("powerSaving", RecommendationReasonCodeEnum::PowerSaving),
         ("hostInDegradation", RecommendationReasonCodeEnum::HostInDegradation),
-        ("checkResource", RecommendationReasonCodeEnum::CheckResource),
-        ("reservationCpu", RecommendationReasonCodeEnum::ReservationCpu),
-        ("maxVmsConstraint", RecommendationReasonCodeEnum::MaxVmsConstraint),
-        ("ftConstraints", RecommendationReasonCodeEnum::FtConstraints),
-        ("increaseCapacity", RecommendationReasonCodeEnum::IncreaseCapacity),
-        ("balanceDatastoreIOLoad", RecommendationReasonCodeEnum::BalanceDatastoreIoLoad),
-        ("virtualDiskJointAffin", RecommendationReasonCodeEnum::VirtualDiskJointAffin),
-        ("balanceDatastoreIOPSReservation", RecommendationReasonCodeEnum::BalanceDatastoreIopsReservation),
-        ("vmAntiAffinityPolicy", RecommendationReasonCodeEnum::VmAntiAffinityPolicy),
-        ("fairnessMemAvg", RecommendationReasonCodeEnum::FairnessMemAvg),
         ("vmHostAffinityPolicy", RecommendationReasonCodeEnum::VmHostAffinityPolicy),
-        ("datastoreMaint", RecommendationReasonCodeEnum::DatastoreMaint),
-        ("vmHostSoftAffinity", RecommendationReasonCodeEnum::VmHostSoftAffinity),
-        ("antiAffin", RecommendationReasonCodeEnum::AntiAffin),
-        ("virtualDiskAntiAffin", RecommendationReasonCodeEnum::VirtualDiskAntiAffin),
         ("fairnessCpuAvg", RecommendationReasonCodeEnum::FairnessCpuAvg),
-        ("hostMaint", RecommendationReasonCodeEnum::HostMaint),
-        ("jointAffin", RecommendationReasonCodeEnum::JointAffin),
-        ("xvmotionPlacement", RecommendationReasonCodeEnum::XvmotionPlacement),
-        ("vmHostAntiAffinityPolicy", RecommendationReasonCodeEnum::VmHostAntiAffinityPolicy),
-        ("balanceVsanUsage", RecommendationReasonCodeEnum::BalanceVsanUsage),
         ("enterStandby", RecommendationReasonCodeEnum::EnterStandby),
-        ("networkBandwidthReservation", RecommendationReasonCodeEnum::NetworkBandwidthReservation),
-        ("reservationMem", RecommendationReasonCodeEnum::ReservationMem),
-        ("hostExitDegradation", RecommendationReasonCodeEnum::HostExitDegradation),
+        ("reservationCpu", RecommendationReasonCodeEnum::ReservationCpu),
+        ("vmHostAntiAffinityPolicy", RecommendationReasonCodeEnum::VmHostAntiAffinityPolicy),
+        ("unreservedCapacity", RecommendationReasonCodeEnum::UnreservedCapacity),
+        ("vmAntiAffinityPolicy", RecommendationReasonCodeEnum::VmAntiAffinityPolicy),
+        ("checkResource", RecommendationReasonCodeEnum::CheckResource),
+        ("increaseCapacity", RecommendationReasonCodeEnum::IncreaseCapacity),
+        ("hostMaint", RecommendationReasonCodeEnum::HostMaint),
+        ("balanceVsanUsage", RecommendationReasonCodeEnum::BalanceVsanUsage),
+        ("balanceDatastoreIOPSReservation", RecommendationReasonCodeEnum::BalanceDatastoreIopsReservation),
+        ("ftConstraints", RecommendationReasonCodeEnum::FtConstraints),
     ],
 };
 
@@ -29784,7 +29896,7 @@ impl AsRef<str> for RecommendationReasonCodeEnum {
 }
 
 static RECOMMENDATION_TYPE_ENUM_MAP: phf::Map<&'static str, RecommendationTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -29850,14 +29962,15 @@ impl AsRef<str> for RecommendationTypeEnum {
 }
 
 static VSAN_STORAGE_COMPLIANCE_STATUS_ENUM_MAP: phf::Map<&'static str, VsanStorageComplianceStatusEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
+        (0, 1),
     ],
     entries: &[
         ("notApplicable", VsanStorageComplianceStatusEnum::NotApplicable),
-        ("unknown", VsanStorageComplianceStatusEnum::Unknown),
         ("nonCompliant", VsanStorageComplianceStatusEnum::NonCompliant),
+        ("unknown", VsanStorageComplianceStatusEnum::Unknown),
         ("compliant", VsanStorageComplianceStatusEnum::Compliant),
     ],
 };
@@ -29922,7 +30035,7 @@ impl AsRef<str> for VsanStorageComplianceStatusEnum {
 }
 
 static CLUSTER_SYSTEM_V_MS_CONFIG_INFO_DEPLOYMENT_MODE_ENUM_MAP: phf::Map<&'static str, ClusterSystemVMsConfigInfoDeploymentModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -29990,27 +30103,29 @@ impl AsRef<str> for ClusterSystemVMsConfigInfoDeploymentModeEnum {
 }
 
 static VIM_CLUSTER_VSAN_STRETCHED_CLUSTER_CONFIG_ISSUE_ENUM_ENUM_MAP: phf::Map<&'static str, VimClusterVsanStretchedClusterConfigIssueEnumEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (8, 2),
-        (3, 2),
-        (7, 0),
+        (1, 1),
+        (0, 11),
+        (1, 0),
+        (0, 2),
+        (1, 1),
     ],
     entries: &[
         ("WitnessInsideVcCluster", VimClusterVsanStretchedClusterConfigIssueEnumEnum::WitnessInsideVcCluster),
-        ("WitnessWithNoDiskMapping", VimClusterVsanStretchedClusterConfigIssueEnumEnum::WitnessWithNoDiskMapping),
-        ("HostWithNoStretchedClusterSupport", VimClusterVsanStretchedClusterConfigIssueEnumEnum::HostWithNoStretchedClusterSupport),
-        ("SharedWitnessComponentLimitScaledDown", VimClusterVsanStretchedClusterConfigIssueEnumEnum::SharedWitnessComponentLimitScaledDown),
-        ("ClusterWithMultipleUnicastAgents", VimClusterVsanStretchedClusterConfigIssueEnumEnum::ClusterWithMultipleUnicastAgents),
-        ("ClusterWithoutTwoDataFaultDomains", VimClusterVsanStretchedClusterConfigIssueEnumEnum::ClusterWithoutTwoDataFaultDomains),
-        ("WitnessFaultDomainInvalid", VimClusterVsanStretchedClusterConfigIssueEnumEnum::WitnessFaultDomainInvalid),
-        ("WitnessPreferredFaultDomainInvalid", VimClusterVsanStretchedClusterConfigIssueEnumEnum::WitnessPreferredFaultDomainInvalid),
-        ("WitnessPreferredFaultDomainNotExist", VimClusterVsanStretchedClusterConfigIssueEnumEnum::WitnessPreferredFaultDomainNotExist),
-        ("HostUnicastAgentUnset", VimClusterVsanStretchedClusterConfigIssueEnumEnum::HostUnicastAgentUnset),
-        ("ClusterWithoutOneWitnessHost", VimClusterVsanStretchedClusterConfigIssueEnumEnum::ClusterWithoutOneWitnessHost),
-        ("VSANStretchedClusterConfigIssueEnum_Unknown", VimClusterVsanStretchedClusterConfigIssueEnumEnum::VsanStretchedClusterConfigIssueEnumUnknown),
         ("SharedWitnessClusterDataHostNumExceed", VimClusterVsanStretchedClusterConfigIssueEnumEnum::SharedWitnessClusterDataHostNumExceed),
         ("HostWithInvalidUnicastAgent", VimClusterVsanStretchedClusterConfigIssueEnumEnum::HostWithInvalidUnicastAgent),
+        ("WitnessPreferredFaultDomainInvalid", VimClusterVsanStretchedClusterConfigIssueEnumEnum::WitnessPreferredFaultDomainInvalid),
+        ("SharedWitnessComponentLimitScaledDown", VimClusterVsanStretchedClusterConfigIssueEnumEnum::SharedWitnessComponentLimitScaledDown),
+        ("WitnessFaultDomainInvalid", VimClusterVsanStretchedClusterConfigIssueEnumEnum::WitnessFaultDomainInvalid),
+        ("ClusterWithoutOneWitnessHost", VimClusterVsanStretchedClusterConfigIssueEnumEnum::ClusterWithoutOneWitnessHost),
+        ("WitnessWithNoDiskMapping", VimClusterVsanStretchedClusterConfigIssueEnumEnum::WitnessWithNoDiskMapping),
+        ("VSANStretchedClusterConfigIssueEnum_Unknown", VimClusterVsanStretchedClusterConfigIssueEnumEnum::VsanStretchedClusterConfigIssueEnumUnknown),
+        ("HostUnicastAgentUnset", VimClusterVsanStretchedClusterConfigIssueEnumEnum::HostUnicastAgentUnset),
+        ("HostWithNoStretchedClusterSupport", VimClusterVsanStretchedClusterConfigIssueEnumEnum::HostWithNoStretchedClusterSupport),
+        ("ClusterWithoutTwoDataFaultDomains", VimClusterVsanStretchedClusterConfigIssueEnumEnum::ClusterWithoutTwoDataFaultDomains),
+        ("WitnessPreferredFaultDomainNotExist", VimClusterVsanStretchedClusterConfigIssueEnumEnum::WitnessPreferredFaultDomainNotExist),
+        ("ClusterWithMultipleUnicastAgents", VimClusterVsanStretchedClusterConfigIssueEnumEnum::ClusterWithMultipleUnicastAgents),
     ],
 };
 
@@ -30084,16 +30199,17 @@ impl AsRef<str> for VimClusterVsanStretchedClusterConfigIssueEnumEnum {
 }
 
 static CLUSTER_VM_COMPONENT_PROTECTION_SETTINGS_STORAGE_VM_REACTION_ENUM_MAP: phf::Map<&'static str, ClusterVmComponentProtectionSettingsStorageVmReactionEnum> = ::phf::Map {
-    key: 2126027241312876569,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
+        (0, 0),
+        (1, 2),
     ],
     entries: &[
-        ("restartAggressive", ClusterVmComponentProtectionSettingsStorageVmReactionEnum::RestartAggressive),
         ("warning", ClusterVmComponentProtectionSettingsStorageVmReactionEnum::Warning),
-        ("clusterDefault", ClusterVmComponentProtectionSettingsStorageVmReactionEnum::ClusterDefault),
         ("disabled", ClusterVmComponentProtectionSettingsStorageVmReactionEnum::Disabled),
         ("restartConservative", ClusterVmComponentProtectionSettingsStorageVmReactionEnum::RestartConservative),
+        ("restartAggressive", ClusterVmComponentProtectionSettingsStorageVmReactionEnum::RestartAggressive),
+        ("clusterDefault", ClusterVmComponentProtectionSettingsStorageVmReactionEnum::ClusterDefault),
     ],
 };
 
@@ -30158,14 +30274,14 @@ impl AsRef<str> for ClusterVmComponentProtectionSettingsStorageVmReactionEnum {
 }
 
 static CLUSTER_VM_COMPONENT_PROTECTION_SETTINGS_VM_REACTION_ON_APD_CLEARED_ENUM_MAP: phf::Map<&'static str, ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("reset", ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum::Reset),
         ("none", ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum::None),
         ("useClusterDefault", ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum::UseClusterDefault),
+        ("reset", ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEnum::Reset),
     ],
 };
 
@@ -30228,16 +30344,17 @@ impl AsRef<str> for ClusterVmComponentProtectionSettingsVmReactionOnApdClearedEn
 }
 
 static CLUSTER_VM_READINESS_READY_CONDITION_ENUM_MAP: phf::Map<&'static str, ClusterVmReadinessReadyConditionEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 1),
     ],
     entries: &[
-        ("guestHbStatusGreen", ClusterVmReadinessReadyConditionEnum::GuestHbStatusGreen),
-        ("none", ClusterVmReadinessReadyConditionEnum::None),
         ("useClusterDefault", ClusterVmReadinessReadyConditionEnum::UseClusterDefault),
-        ("appHbStatusGreen", ClusterVmReadinessReadyConditionEnum::AppHbStatusGreen),
         ("poweredOn", ClusterVmReadinessReadyConditionEnum::PoweredOn),
+        ("appHbStatusGreen", ClusterVmReadinessReadyConditionEnum::AppHbStatusGreen),
+        ("none", ClusterVmReadinessReadyConditionEnum::None),
+        ("guestHbStatusGreen", ClusterVmReadinessReadyConditionEnum::GuestHbStatusGreen),
     ],
 };
 
@@ -30302,15 +30419,16 @@ impl AsRef<str> for ClusterVmReadinessReadyConditionEnum {
 }
 
 static VSAN_BASELINE_PREFERENCE_TYPE_ENUM_MAP: phf::Map<&'static str, VsanBaselinePreferenceTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("noRecommendation", VsanBaselinePreferenceTypeEnum::NoRecommendation),
-        ("VsanBaselinePreferenceType_Unknown", VsanBaselinePreferenceTypeEnum::VsanBaselinePreferenceTypeUnknown),
         ("latestRelease", VsanBaselinePreferenceTypeEnum::LatestRelease),
         ("latestPatch", VsanBaselinePreferenceTypeEnum::LatestPatch),
+        ("VsanBaselinePreferenceType_Unknown", VsanBaselinePreferenceTypeEnum::VsanBaselinePreferenceTypeUnknown),
+        ("noRecommendation", VsanBaselinePreferenceTypeEnum::NoRecommendation),
     ],
 };
 
@@ -30374,15 +30492,16 @@ impl AsRef<str> for VsanBaselinePreferenceTypeEnum {
 }
 
 static VSAN_CAPABILITY_STATUS_ENUM_MAP: phf::Map<&'static str, VsanCapabilityStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (1, 0),
         (0, 0),
     ],
     entries: &[
-        ("oldversion", VsanCapabilityStatusEnum::Oldversion),
-        ("disconnected", VsanCapabilityStatusEnum::Disconnected),
-        ("unknown", VsanCapabilityStatusEnum::Unknown),
         ("calculated", VsanCapabilityStatusEnum::Calculated),
+        ("unknown", VsanCapabilityStatusEnum::Unknown),
+        ("disconnected", VsanCapabilityStatusEnum::Disconnected),
+        ("oldversion", VsanCapabilityStatusEnum::Oldversion),
     ],
 };
 
@@ -30446,184 +30565,204 @@ impl AsRef<str> for VsanCapabilityStatusEnum {
 }
 
 static VSAN_CAPABILITY_TYPE_ENUM_MAP: phf::Map<&'static str, VsanCapabilityTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 11),
-        (0, 17),
-        (4, 112),
-        (3, 0),
-        (0, 32),
         (0, 0),
-        (0, 83),
-        (1, 35),
-        (0, 17),
-        (7, 89),
-        (2, 93),
-        (0, 5),
+        (0, 8),
+        (0, 61),
+        (0, 26),
+        (0, 2),
+        (0, 1),
         (0, 70),
-        (0, 28),
         (0, 0),
-        (0, 37),
-        (1, 111),
-        (14, 42),
-        (1, 2),
-        (0, 34),
-        (133, 58),
-        (1, 14),
-        (0, 34),
-        (16, 126),
-        (0, 131),
-        (2, 4),
-        (0, 21),
-        (0, 140),
-        (17, 40),
+        (0, 10),
+        (0, 29),
+        (0, 8),
+        (0, 5),
+        (0, 0),
+        (0, 2),
+        (0, 11),
+        (0, 31),
+        (0, 12),
+        (0, 11),
+        (0, 38),
+        (0, 12),
+        (0, 1),
+        (0, 1),
+        (0, 98),
+        (0, 0),
+        (0, 2),
+        (0, 41),
+        (0, 33),
+        (0, 3),
+        (0, 2),
+        (0, 1),
+        (0, 42),
+        (0, 5),
+        (0, 0),
+        (0, 17),
+        (0, 6),
+        (0, 31),
+        (0, 119),
+        (1, 8),
+        (1, 135),
+        (0, 49),
+        (1, 52),
+        (0, 24),
+        (1, 62),
+        (0, 0),
+        (0, 5),
+        (1, 67),
+        (0, 0),
+        (4, 45),
+        (0, 0),
     ],
     entries: &[
-        ("validateconfigspec", VsanCapabilityTypeEnum::Validateconfigspec),
-        ("vsan2deeprekey", VsanCapabilityTypeEnum::Vsan2Deeprekey),
-        ("vsanmanagedpmem", VsanCapabilityTypeEnum::Vsanmanagedpmem),
-        ("pspairgap", VsanCapabilityTypeEnum::Pspairgap),
-        ("diagnosticsfeedback", VsanCapabilityTypeEnum::Diagnosticsfeedback),
-        ("perfsvctwoyaxisgraph", VsanCapabilityTypeEnum::Perfsvctwoyaxisgraph),
-        ("fileservicesmb", VsanCapabilityTypeEnum::Fileservicesmb),
-        ("verbosemodeconfiguration", VsanCapabilityTypeEnum::Verbosemodeconfiguration),
-        ("vsandirectdiskdecom", VsanCapabilityTypeEnum::Vsandirectdiskdecom),
-        ("cnsvolumes", VsanCapabilityTypeEnum::Cnsvolumes),
-        ("iscsitargets", VsanCapabilityTypeEnum::Iscsitargets),
-        ("netperftest", VsanCapabilityTypeEnum::Netperftest),
-        ("dfcobjectsmanagement", VsanCapabilityTypeEnum::Dfcobjectsmanagement),
-        ("complianceprecheck", VsanCapabilityTypeEnum::Complianceprecheck),
-        ("pr1741414fixed", VsanCapabilityTypeEnum::Pr1741414Fixed),
-        ("vsanesasingletier", VsanCapabilityTypeEnum::Vsanesasingletier),
-        ("readlocalitytodrs", VsanCapabilityTypeEnum::Readlocalitytodrs),
-        ("vsandefaultgatewaysupported", VsanCapabilityTypeEnum::Vsandefaultgatewaysupported),
-        ("pmanintegration", VsanCapabilityTypeEnum::Pmanintegration),
-        ("fcd", VsanCapabilityTypeEnum::Fcd),
-        ("capacityreservation", VsanCapabilityTypeEnum::Capacityreservation),
-        ("enhancedresyncapi", VsanCapabilityTypeEnum::Enhancedresyncapi),
-        ("vsandiagnostics", VsanCapabilityTypeEnum::Vsandiagnostics),
-        ("nestedfd", VsanCapabilityTypeEnum::Nestedfd),
-        ("resourceprecheck", VsanCapabilityTypeEnum::Resourceprecheck),
-        ("stretchedcluster", VsanCapabilityTypeEnum::Stretchedcluster),
-        ("policyassociation", VsanCapabilityTypeEnum::Policyassociation),
-        ("diskmgmtredesign", VsanCapabilityTypeEnum::Diskmgmtredesign),
-        ("supportinsight", VsanCapabilityTypeEnum::Supportinsight),
-        ("vsanrebuildtrim", VsanCapabilityTypeEnum::Vsanrebuildtrim),
-        ("healthremediation", VsanCapabilityTypeEnum::Healthremediation),
-        ("capacityevaluationonvc", VsanCapabilityTypeEnum::Capacityevaluationonvc),
-        ("dataefficiency", VsanCapabilityTypeEnum::Dataefficiency),
-        ("vsanxvchcimesh", VsanCapabilityTypeEnum::Vsanxvchcimesh),
-        ("encryption", VsanCapabilityTypeEnum::Encryption),
-        ("vsanencrkmx", VsanCapabilityTypeEnum::Vsanencrkmx),
-        ("slackspacecapacity", VsanCapabilityTypeEnum::Slackspacecapacity),
-        ("nativelargeclustersupport", VsanCapabilityTypeEnum::Nativelargeclustersupport),
-        ("dataintransitencryption", VsanCapabilityTypeEnum::Dataintransitencryption),
-        ("witnessmanagement", VsanCapabilityTypeEnum::Witnessmanagement),
-        ("historicalhealth", VsanCapabilityTypeEnum::Historicalhealth),
-        ("healthcheck2018q2", VsanCapabilityTypeEnum::Healthcheck2018Q2),
-        ("unicastmode", VsanCapabilityTypeEnum::Unicastmode),
-        ("throttleresync", VsanCapabilityTypeEnum::Throttleresync),
-        ("decomwhatif", VsanCapabilityTypeEnum::Decomwhatif),
-        ("vsanperfsvc80u2", VsanCapabilityTypeEnum::Vsanperfsvc80U2),
-        ("VsanCapabilityType_Unknown", VsanCapabilityTypeEnum::VsanCapabilityTypeUnknown),
-        ("purgeinaccessiblevmswapobjects", VsanCapabilityTypeEnum::Purgeinaccessiblevmswapobjects),
-        ("wcpappplatform", VsanCapabilityTypeEnum::Wcpappplatform),
-        ("supportApiVersion", VsanCapabilityTypeEnum::SupportApiVersion),
-        ("vitonlineresize", VsanCapabilityTypeEnum::Vitonlineresize),
-        ("datapersistresourcecheck", VsanCapabilityTypeEnum::Datapersistresourcecheck),
-        ("clusterpoweraction", VsanCapabilityTypeEnum::Clusterpoweraction),
-        ("fileservices", VsanCapabilityTypeEnum::Fileservices),
-        ("capacitycustomizablethresholds", VsanCapabilityTypeEnum::Capacitycustomizablethresholds),
-        ("vumbaselinerecommendation", VsanCapabilityTypeEnum::Vumbaselinerecommendation),
-        ("fileserviceowe", VsanCapabilityTypeEnum::Fileserviceowe),
-        ("topcontributors", VsanCapabilityTypeEnum::Topcontributors),
-        ("whatifcapacity", VsanCapabilityTypeEnum::Whatifcapacity),
-        ("dit4sw", VsanCapabilityTypeEnum::Dit4Sw),
-        ("policyhostapi", VsanCapabilityTypeEnum::Policyhostapi),
-        ("elasticpolicy", VsanCapabilityTypeEnum::Elasticpolicy),
-        ("vmlevelcapacity", VsanCapabilityTypeEnum::Vmlevelcapacity),
-        ("fileservice80", VsanCapabilityTypeEnum::Fileservice80),
-        ("iodiagnostics", VsanCapabilityTypeEnum::Iodiagnostics),
-        ("compressiononly", VsanCapabilityTypeEnum::Compressiononly),
-        ("archivaldataprotection", VsanCapabilityTypeEnum::Archivaldataprotection),
-        ("updatevumreleasecatalogoffline", VsanCapabilityTypeEnum::Updatevumreleasecatalogoffline),
-        ("recreatediskgroup", VsanCapabilityTypeEnum::Recreatediskgroup),
-        ("cnsreconfigpolicy", VsanCapabilityTypeEnum::Cnsreconfigpolicy),
-        ("filevolumes", VsanCapabilityTypeEnum::Filevolumes),
-        ("fileservicesnapshot", VsanCapabilityTypeEnum::Fileservicesnapshot),
-        ("snapservice", VsanCapabilityTypeEnum::Snapservice),
-        ("vsankeyexpiration", VsanCapabilityTypeEnum::Vsankeyexpiration),
-        ("hostreservedcapacity", VsanCapabilityTypeEnum::Hostreservedcapacity),
-        ("device4ksupport", VsanCapabilityTypeEnum::Device4Ksupport),
-        ("minrebalancethreshold", VsanCapabilityTypeEnum::Minrebalancethreshold),
-        ("clusteradvancedoptions", VsanCapabilityTypeEnum::Clusteradvancedoptions),
-        ("vsanxvchcimeshv3", VsanCapabilityTypeEnum::Vsanxvchcimeshv3),
-        ("automaticrebalance", VsanCapabilityTypeEnum::Automaticrebalance),
-        ("perfanalysis", VsanCapabilityTypeEnum::Perfanalysis),
-        ("perfsvcverbosemode", VsanCapabilityTypeEnum::Perfsvcverbosemode),
-        ("vsanEsaConfigure", VsanCapabilityTypeEnum::VsanEsaConfigure),
-        ("vsan2encr", VsanCapabilityTypeEnum::Vsan2Encr),
-        ("vitstretchedcluster", VsanCapabilityTypeEnum::Vitstretchedcluster),
-        ("dhci", VsanCapabilityTypeEnum::Dhci),
-        ("umap", VsanCapabilityTypeEnum::Umap),
-        ("sha256thumbprint", VsanCapabilityTypeEnum::Sha256Thumbprint),
-        ("healthcorrelation", VsanCapabilityTypeEnum::Healthcorrelation),
-        ("vsan2hcimesh", VsanCapabilityTypeEnum::Vsan2Hcimesh),
-        ("fileservicescale", VsanCapabilityTypeEnum::Fileservicescale),
-        ("vsanhostdomlatencysort", VsanCapabilityTypeEnum::Vsanhostdomlatencysort),
-        ("hdcsintegration", VsanCapabilityTypeEnum::Hdcsintegration),
-        ("fileservicesc", VsanCapabilityTypeEnum::Fileservicesc),
-        ("fileservicenfsv3", VsanCapabilityTypeEnum::Fileservicenfsv3),
-        ("firmwareupdate", VsanCapabilityTypeEnum::Firmwareupdate),
-        ("vumintegration", VsanCapabilityTypeEnum::Vumintegration),
-        ("improvedcapacityscreen", VsanCapabilityTypeEnum::Improvedcapacityscreen),
-        ("vsanmetadatanode", VsanCapabilityTypeEnum::Vsanmetadatanode),
-        ("repairtimerinresyncstats", VsanCapabilityTypeEnum::Repairtimerinresyncstats),
-        ("masspropertycollector", VsanCapabilityTypeEnum::Masspropertycollector),
-        ("vsandsdefaultpolicy", VsanCapabilityTypeEnum::Vsandsdefaultpolicy),
-        ("allflash", VsanCapabilityTypeEnum::Allflash),
-        ("iodiagmultiplevms", VsanCapabilityTypeEnum::Iodiagmultiplevms),
-        ("fileservicekerberos", VsanCapabilityTypeEnum::Fileservicekerberos),
-        ("hcimeshpolicy", VsanCapabilityTypeEnum::Hcimeshpolicy),
-        ("securewipe", VsanCapabilityTypeEnum::Securewipe),
-        ("perfsvcautoconfig", VsanCapabilityTypeEnum::Perfsvcautoconfig),
-        ("objectidentities", VsanCapabilityTypeEnum::Objectidentities),
-        ("remotedatastore", VsanCapabilityTypeEnum::Remotedatastore),
-        ("vsanmanagedvmfs", VsanCapabilityTypeEnum::Vsanmanagedvmfs),
-        ("fullStackFw", VsanCapabilityTypeEnum::FullStackFw),
-        ("diagnosticmode", VsanCapabilityTypeEnum::Diagnosticmode),
-        ("resyncetaimprovement", VsanCapabilityTypeEnum::Resyncetaimprovement),
-        ("sharedwitness", VsanCapabilityTypeEnum::Sharedwitness),
-        ("volumerelocation", VsanCapabilityTypeEnum::Volumerelocation),
-        ("hostaffinity", VsanCapabilityTypeEnum::Hostaffinity),
-        ("hcimeshstretchedcluster", VsanCapabilityTypeEnum::Hcimeshstretchedcluster),
-        ("nondatamovementdfc", VsanCapabilityTypeEnum::Nondatamovementdfc),
-        ("apidevversionenabled", VsanCapabilityTypeEnum::Apidevversionenabled),
-        ("vsanclient", VsanCapabilityTypeEnum::Vsanclient),
-        ("historicalcapacity", VsanCapabilityTypeEnum::Historicalcapacity),
-        ("vsan2disableencryption", VsanCapabilityTypeEnum::Vsan2Disableencryption),
-        ("capability", VsanCapabilityTypeEnum::Capability),
-        ("duplicatepciidfix", VsanCapabilityTypeEnum::Duplicatepciidfix),
-        ("ioinsight", VsanCapabilityTypeEnum::Ioinsight),
-        ("capacityoversubscription", VsanCapabilityTypeEnum::Capacityoversubscription),
-        ("metricsconfig", VsanCapabilityTypeEnum::Metricsconfig),
-        ("genericnestedfd", VsanCapabilityTypeEnum::Genericnestedfd),
         ("clusterpowerselfcontain", VsanCapabilityTypeEnum::Clusterpowerselfcontain),
-        ("clusterconfig", VsanCapabilityTypeEnum::Clusterconfig),
-        ("vsanxvchcimeshv2", VsanCapabilityTypeEnum::Vsanxvchcimeshv2),
-        ("gethcllastupdateonvc", VsanCapabilityTypeEnum::Gethcllastupdateonvc),
-        ("vsananalyticsevents", VsanCapabilityTypeEnum::Vsananalyticsevents),
-        ("cloudhealth", VsanCapabilityTypeEnum::Cloudhealth),
-        ("unicasttest", VsanCapabilityTypeEnum::Unicasttest),
-        ("upgrade", VsanCapabilityTypeEnum::Upgrade),
-        ("performanceforsupport", VsanCapabilityTypeEnum::Performanceforsupport),
-        ("vsanperfhighresolution", VsanCapabilityTypeEnum::Vsanperfhighresolution),
+        ("firmwareupdate", VsanCapabilityTypeEnum::Firmwareupdate),
+        ("topcontributors", VsanCapabilityTypeEnum::Topcontributors),
+        ("apidevversionenabled", VsanCapabilityTypeEnum::Apidevversionenabled),
+        ("verbosemodeconfiguration", VsanCapabilityTypeEnum::Verbosemodeconfiguration),
         ("upgraderesourceprecheck", VsanCapabilityTypeEnum::Upgraderesourceprecheck),
-        ("diskresourceprecheck", VsanCapabilityTypeEnum::Diskresourceprecheck),
-        ("configassist", VsanCapabilityTypeEnum::Configassist),
-        ("largecapacitydrive", VsanCapabilityTypeEnum::Largecapacitydrive),
-        ("vsanrdma", VsanCapabilityTypeEnum::Vsanrdma),
+        ("cnsvolumes", VsanCapabilityTypeEnum::Cnsvolumes),
+        ("metricsconfig", VsanCapabilityTypeEnum::Metricsconfig),
+        ("fileservicescale", VsanCapabilityTypeEnum::Fileservicescale),
+        ("compressiononly", VsanCapabilityTypeEnum::Compressiononly),
+        ("recreatediskgroup", VsanCapabilityTypeEnum::Recreatediskgroup),
+        ("filevolumes", VsanCapabilityTypeEnum::Filevolumes),
+        ("healthcheck2018q2", VsanCapabilityTypeEnum::Healthcheck2018Q2),
+        ("fileservicesc", VsanCapabilityTypeEnum::Fileservicesc),
+        ("throttleresync", VsanCapabilityTypeEnum::Throttleresync),
+        ("vsanmetadatanode", VsanCapabilityTypeEnum::Vsanmetadatanode),
+        ("dfcobjectsmanagement", VsanCapabilityTypeEnum::Dfcobjectsmanagement),
         ("localdataprotection", VsanCapabilityTypeEnum::Localdataprotection),
+        ("performanceforsupport", VsanCapabilityTypeEnum::Performanceforsupport),
+        ("historicalhealth", VsanCapabilityTypeEnum::Historicalhealth),
+        ("volumerelocation", VsanCapabilityTypeEnum::Volumerelocation),
+        ("vsanmanagedvmfs", VsanCapabilityTypeEnum::Vsanmanagedvmfs),
+        ("vsan2deeprekey", VsanCapabilityTypeEnum::Vsan2Deeprekey),
+        ("capability", VsanCapabilityTypeEnum::Capability),
+        ("elasticpolicy", VsanCapabilityTypeEnum::Elasticpolicy),
+        ("validateconfigspec", VsanCapabilityTypeEnum::Validateconfigspec),
+        ("device4ksupport", VsanCapabilityTypeEnum::Device4Ksupport),
+        ("witnessmanagement", VsanCapabilityTypeEnum::Witnessmanagement),
+        ("masspropertycollector", VsanCapabilityTypeEnum::Masspropertycollector),
+        ("wcpappplatform", VsanCapabilityTypeEnum::Wcpappplatform),
+        ("perfsvctwoyaxisgraph", VsanCapabilityTypeEnum::Perfsvctwoyaxisgraph),
+        ("supportinsight", VsanCapabilityTypeEnum::Supportinsight),
+        ("dataefficiency", VsanCapabilityTypeEnum::Dataefficiency),
+        ("gethcllastupdateonvc", VsanCapabilityTypeEnum::Gethcllastupdateonvc),
+        ("umap", VsanCapabilityTypeEnum::Umap),
+        ("fileservicesnapshot", VsanCapabilityTypeEnum::Fileservicesnapshot),
+        ("updatevumreleasecatalogoffline", VsanCapabilityTypeEnum::Updatevumreleasecatalogoffline),
+        ("enhancedresyncapi", VsanCapabilityTypeEnum::Enhancedresyncapi),
+        ("perfsvcverbosemode", VsanCapabilityTypeEnum::Perfsvcverbosemode),
+        ("upgrade", VsanCapabilityTypeEnum::Upgrade),
+        ("datapersistresourcecheck", VsanCapabilityTypeEnum::Datapersistresourcecheck),
+        ("vsanperfhighresolution", VsanCapabilityTypeEnum::Vsanperfhighresolution),
+        ("objectidentities", VsanCapabilityTypeEnum::Objectidentities),
+        ("healthremediation", VsanCapabilityTypeEnum::Healthremediation),
+        ("dhci", VsanCapabilityTypeEnum::Dhci),
+        ("netperftest", VsanCapabilityTypeEnum::Netperftest),
+        ("hcimeshstretchedcluster", VsanCapabilityTypeEnum::Hcimeshstretchedcluster),
+        ("fullStackFw", VsanCapabilityTypeEnum::FullStackFw),
+        ("policyassociation", VsanCapabilityTypeEnum::Policyassociation),
+        ("nondatamovementdfc", VsanCapabilityTypeEnum::Nondatamovementdfc),
+        ("whatifcapacity", VsanCapabilityTypeEnum::Whatifcapacity),
+        ("nestedfd", VsanCapabilityTypeEnum::Nestedfd),
+        ("perfsvcautoconfig", VsanCapabilityTypeEnum::Perfsvcautoconfig),
+        ("largecapacitydrive", VsanCapabilityTypeEnum::Largecapacitydrive),
+        ("clusterpoweraction", VsanCapabilityTypeEnum::Clusterpoweraction),
+        ("resourceprecheck", VsanCapabilityTypeEnum::Resourceprecheck),
+        ("capacitycustomizablethresholds", VsanCapabilityTypeEnum::Capacitycustomizablethresholds),
+        ("ioinsight", VsanCapabilityTypeEnum::Ioinsight),
+        ("vsanesasingletier", VsanCapabilityTypeEnum::Vsanesasingletier),
+        ("improvedcapacityscreen", VsanCapabilityTypeEnum::Improvedcapacityscreen),
+        ("unicastmode", VsanCapabilityTypeEnum::Unicastmode),
+        ("capacityreservation", VsanCapabilityTypeEnum::Capacityreservation),
+        ("purgeinaccessiblevmswapobjects", VsanCapabilityTypeEnum::Purgeinaccessiblevmswapobjects),
+        ("policyhostapi", VsanCapabilityTypeEnum::Policyhostapi),
+        ("vmlevelcapacity", VsanCapabilityTypeEnum::Vmlevelcapacity),
+        ("vitstretchedcluster", VsanCapabilityTypeEnum::Vitstretchedcluster),
+        ("vsanrebuildtrim", VsanCapabilityTypeEnum::Vsanrebuildtrim),
+        ("pmanintegration", VsanCapabilityTypeEnum::Pmanintegration),
+        ("slackspacecapacity", VsanCapabilityTypeEnum::Slackspacecapacity),
+        ("vsan2hcimesh", VsanCapabilityTypeEnum::Vsan2Hcimesh),
+        ("configassist", VsanCapabilityTypeEnum::Configassist),
+        ("dit4sw", VsanCapabilityTypeEnum::Dit4Sw),
+        ("VsanCapabilityType_Unknown", VsanCapabilityTypeEnum::VsanCapabilityTypeUnknown),
+        ("diskresourceprecheck", VsanCapabilityTypeEnum::Diskresourceprecheck),
+        ("pr1741414fixed", VsanCapabilityTypeEnum::Pr1741414Fixed),
+        ("perfanalysis", VsanCapabilityTypeEnum::Perfanalysis),
+        ("fileserviceowe", VsanCapabilityTypeEnum::Fileserviceowe),
+        ("hcimeshpolicy", VsanCapabilityTypeEnum::Hcimeshpolicy),
+        ("historicalcapacity", VsanCapabilityTypeEnum::Historicalcapacity),
+        ("vsandsdefaultpolicy", VsanCapabilityTypeEnum::Vsandsdefaultpolicy),
+        ("fcd", VsanCapabilityTypeEnum::Fcd),
+        ("hdcsintegration", VsanCapabilityTypeEnum::Hdcsintegration),
+        ("sha256thumbprint", VsanCapabilityTypeEnum::Sha256Thumbprint),
+        ("duplicatepciidfix", VsanCapabilityTypeEnum::Duplicatepciidfix),
+        ("fileservicenfsv3", VsanCapabilityTypeEnum::Fileservicenfsv3),
+        ("stretchedcluster", VsanCapabilityTypeEnum::Stretchedcluster),
+        ("diagnosticsfeedback", VsanCapabilityTypeEnum::Diagnosticsfeedback),
+        ("vsanperfsvc80u2", VsanCapabilityTypeEnum::Vsanperfsvc80U2),
+        ("vsanmanagedpmem", VsanCapabilityTypeEnum::Vsanmanagedpmem),
+        ("minrebalancethreshold", VsanCapabilityTypeEnum::Minrebalancethreshold),
+        ("vsan2disableencryption", VsanCapabilityTypeEnum::Vsan2Disableencryption),
+        ("fileservice80", VsanCapabilityTypeEnum::Fileservice80),
+        ("unicasttest", VsanCapabilityTypeEnum::Unicasttest),
+        ("vsanhostdomlatencysort", VsanCapabilityTypeEnum::Vsanhostdomlatencysort),
+        ("remotedatastore", VsanCapabilityTypeEnum::Remotedatastore),
+        ("capacityevaluationonvc", VsanCapabilityTypeEnum::Capacityevaluationonvc),
+        ("clusterconfig", VsanCapabilityTypeEnum::Clusterconfig),
+        ("sharedwitness", VsanCapabilityTypeEnum::Sharedwitness),
+        ("complianceprecheck", VsanCapabilityTypeEnum::Complianceprecheck),
+        ("allflash", VsanCapabilityTypeEnum::Allflash),
+        ("snapservice", VsanCapabilityTypeEnum::Snapservice),
+        ("vsanencrkmx", VsanCapabilityTypeEnum::Vsanencrkmx),
+        ("vsandiagnostics", VsanCapabilityTypeEnum::Vsandiagnostics),
+        ("vsanxvchcimesh", VsanCapabilityTypeEnum::Vsanxvchcimesh),
+        ("fileservices", VsanCapabilityTypeEnum::Fileservices),
+        ("fileservicekerberos", VsanCapabilityTypeEnum::Fileservicekerberos),
+        ("healthcorrelation", VsanCapabilityTypeEnum::Healthcorrelation),
+        ("vumbaselinerecommendation", VsanCapabilityTypeEnum::Vumbaselinerecommendation),
+        ("vsankeyexpiration", VsanCapabilityTypeEnum::Vsankeyexpiration),
+        ("readlocalitytodrs", VsanCapabilityTypeEnum::Readlocalitytodrs),
+        ("iscsitargets", VsanCapabilityTypeEnum::Iscsitargets),
+        ("cnsreconfigpolicy", VsanCapabilityTypeEnum::Cnsreconfigpolicy),
+        ("fileservicesmb", VsanCapabilityTypeEnum::Fileservicesmb),
+        ("hostaffinity", VsanCapabilityTypeEnum::Hostaffinity),
+        ("clusteradvancedoptions", VsanCapabilityTypeEnum::Clusteradvancedoptions),
+        ("vitonlineresize", VsanCapabilityTypeEnum::Vitonlineresize),
+        ("nativelargeclustersupport", VsanCapabilityTypeEnum::Nativelargeclustersupport),
+        ("vsandirectdiskdecom", VsanCapabilityTypeEnum::Vsandirectdiskdecom),
+        ("decomwhatif", VsanCapabilityTypeEnum::Decomwhatif),
+        ("pspairgap", VsanCapabilityTypeEnum::Pspairgap),
+        ("vsan2encr", VsanCapabilityTypeEnum::Vsan2Encr),
+        ("vsanclient", VsanCapabilityTypeEnum::Vsanclient),
+        ("repairtimerinresyncstats", VsanCapabilityTypeEnum::Repairtimerinresyncstats),
+        ("capacityoversubscription", VsanCapabilityTypeEnum::Capacityoversubscription),
+        ("archivaldataprotection", VsanCapabilityTypeEnum::Archivaldataprotection),
+        ("automaticrebalance", VsanCapabilityTypeEnum::Automaticrebalance),
+        ("vumintegration", VsanCapabilityTypeEnum::Vumintegration),
+        ("encryption", VsanCapabilityTypeEnum::Encryption),
+        ("diagnosticmode", VsanCapabilityTypeEnum::Diagnosticmode),
+        ("diskmgmtredesign", VsanCapabilityTypeEnum::Diskmgmtredesign),
+        ("securewipe", VsanCapabilityTypeEnum::Securewipe),
+        ("cloudhealth", VsanCapabilityTypeEnum::Cloudhealth),
+        ("vsanxvchcimeshv2", VsanCapabilityTypeEnum::Vsanxvchcimeshv2),
+        ("hostreservedcapacity", VsanCapabilityTypeEnum::Hostreservedcapacity),
+        ("iodiagmultiplevms", VsanCapabilityTypeEnum::Iodiagmultiplevms),
+        ("vsandefaultgatewaysupported", VsanCapabilityTypeEnum::Vsandefaultgatewaysupported),
+        ("vsanxvchcimeshv3", VsanCapabilityTypeEnum::Vsanxvchcimeshv3),
+        ("iodiagnostics", VsanCapabilityTypeEnum::Iodiagnostics),
+        ("vsanEsaConfigure", VsanCapabilityTypeEnum::VsanEsaConfigure),
+        ("dataintransitencryption", VsanCapabilityTypeEnum::Dataintransitencryption),
+        ("vsananalyticsevents", VsanCapabilityTypeEnum::Vsananalyticsevents),
+        ("supportApiVersion", VsanCapabilityTypeEnum::SupportApiVersion),
+        ("vsanrdma", VsanCapabilityTypeEnum::Vsanrdma),
+        ("genericnestedfd", VsanCapabilityTypeEnum::Genericnestedfd),
+        ("resyncetaimprovement", VsanCapabilityTypeEnum::Resyncetaimprovement),
     ],
 };
 
@@ -30828,18 +30967,18 @@ impl AsRef<str> for VsanCapabilityTypeEnum {
 }
 
 static VSAN_CAPABILITY_TYPE_90_ENUM_MAP: phf::Map<&'static str, VsanCapabilityType90Enum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
-        (0, 2),
+        (2, 5),
     ],
     entries: &[
         ("vsaniscsivip", VsanCapabilityType90Enum::Vsaniscsivip),
-        ("globaldedup", VsanCapabilityType90Enum::Globaldedup),
-        ("vsanstretchedclient", VsanCapabilityType90Enum::Vsanstretchedclient),
         ("vsanreplication", VsanCapabilityType90Enum::Vsanreplication),
-        ("vsansitemaintenance", VsanCapabilityType90Enum::Vsansitemaintenance),
+        ("globaldedup", VsanCapabilityType90Enum::Globaldedup),
         ("vsandedicatedvmknic", VsanCapabilityType90Enum::Vsandedicatedvmknic),
+        ("vsanstretchedclient", VsanCapabilityType90Enum::Vsanstretchedclient),
+        ("vsansitemaintenance", VsanCapabilityType90Enum::Vsansitemaintenance),
     ],
 };
 
@@ -30905,30 +31044,32 @@ impl AsRef<str> for VsanCapabilityType90Enum {
 }
 
 static VSAN_CAPABILITY_TYPE_91_ENUM_MAP: phf::Map<&'static str, VsanCapabilityType91Enum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 1),
-        (15, 0),
-        (3, 0),
+        (1, 1),
+        (0, 6),
         (0, 0),
+        (0, 0),
+        (0, 2),
+        (1, 1),
     ],
     entries: &[
-        ("perfsvcdhciv2", VsanCapabilityType91Enum::Perfsvcdhciv2),
-        ("fileservicefds", VsanCapabilityType91Enum::Fileservicefds),
-        ("vsan2compressionconfig", VsanCapabilityType91Enum::Vsan2Compressionconfig),
-        ("dataserviceprecheck", VsanCapabilityType91Enum::Dataserviceprecheck),
-        ("vsanhcimeshmixmode", VsanCapabilityType91Enum::Vsanhcimeshmixmode),
-        ("immutablesnapshot", VsanCapabilityType91Enum::Immutablesnapshot),
-        ("vsanvmdiskplacementxvc", VsanCapabilityType91Enum::Vsanvmdiskplacementxvc),
-        ("vsaneffectivecapacity", VsanCapabilityType91Enum::Vsaneffectivecapacity),
         ("vsanhcimeshdit", VsanCapabilityType91Enum::Vsanhcimeshdit),
-        ("vsancyberrecovery", VsanCapabilityType91Enum::Vsancyberrecovery),
-        ("vsanxvchcimeshscv2", VsanCapabilityType91Enum::Vsanxvchcimeshscv2),
         ("vsan2globaldedupencryption", VsanCapabilityType91Enum::Vsan2Globaldedupencryption),
-        ("automanagedraid", VsanCapabilityType91Enum::Automanagedraid),
+        ("vsanvmdiskplacementxvc", VsanCapabilityType91Enum::Vsanvmdiskplacementxvc),
+        ("dataserviceprecheck", VsanCapabilityType91Enum::Dataserviceprecheck),
+        ("vsancyberrecovery", VsanCapabilityType91Enum::Vsancyberrecovery),
+        ("vsanhcimeshmixmode", VsanCapabilityType91Enum::Vsanhcimeshmixmode),
+        ("perfsvcdhciv2", VsanCapabilityType91Enum::Perfsvcdhciv2),
+        ("vsaneffectivecapacity", VsanCapabilityType91Enum::Vsaneffectivecapacity),
+        ("immutablesnapshot", VsanCapabilityType91Enum::Immutablesnapshot),
+        ("vsanxvchcimeshscv2", VsanCapabilityType91Enum::Vsanxvchcimeshscv2),
+        ("vsan2compressionconfig", VsanCapabilityType91Enum::Vsan2Compressionconfig),
+        ("fileservicefds", VsanCapabilityType91Enum::Fileservicefds),
         ("vsanscclientv2", VsanCapabilityType91Enum::Vsanscclientv2),
-        ("vsansitemmandtakeover", VsanCapabilityType91Enum::Vsansitemmandtakeover),
         ("vsan2globaldedupv2", VsanCapabilityType91Enum::Vsan2Globaldedupv2),
+        ("vsansitemmandtakeover", VsanCapabilityType91Enum::Vsansitemmandtakeover),
+        ("automanagedraid", VsanCapabilityType91Enum::Automanagedraid),
     ],
 };
 
@@ -31004,50 +31145,54 @@ impl AsRef<str> for VsanCapabilityType91Enum {
 }
 
 static VSAN_CLUSTER_HEALTH_ACTION_ID_ENUM_ENUM_MAP: phf::Map<&'static str, VsanClusterHealthActionIdEnumEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (0, 14),
-        (1, 6),
-        (6, 0),
-        (3, 7),
-        (6, 5),
-        (8, 4),
+        (0, 9),
+        (0, 5),
+        (0, 1),
+        (3, 0),
         (0, 2),
+        (0, 10),
+        (0, 12),
+        (0, 5),
+        (0, 0),
+        (0, 13),
+        (0, 14),
     ],
     entries: &[
-        ("PurgeInaccessSwapObjs", VsanClusterHealthActionIdEnumEnum::PurgeInaccessSwapObjs),
-        ("SelectNvme", VsanClusterHealthActionIdEnumEnum::SelectNvme),
-        ("ConfigureAutomaticRebalance", VsanClusterHealthActionIdEnumEnum::ConfigureAutomaticRebalance),
-        ("RemediateIscsiLunsRuntimeStatus", VsanClusterHealthActionIdEnumEnum::RemediateIscsiLunsRuntimeStatus),
-        ("LoginVumIsoDepot", VsanClusterHealthActionIdEnumEnum::LoginVumIsoDepot),
-        ("ConfigureHA", VsanClusterHealthActionIdEnumEnum::ConfigureHa),
-        ("UpgradeVsanDiskFormat", VsanClusterHealthActionIdEnumEnum::UpgradeVsanDiskFormat),
-        ("EnableCeip", VsanClusterHealthActionIdEnumEnum::EnableCeip),
-        ("RelayoutVsanObjects", VsanClusterHealthActionIdEnumEnum::RelayoutVsanObjects),
-        ("EnablePerformanceServiceAction", VsanClusterHealthActionIdEnumEnum::EnablePerformanceServiceAction),
-        ("ClusterUpgrade", VsanClusterHealthActionIdEnumEnum::ClusterUpgrade),
-        ("RepairClusterObjectsAction", VsanClusterHealthActionIdEnumEnum::RepairClusterObjectsAction),
-        ("CreateFileServiceDomain", VsanClusterHealthActionIdEnumEnum::CreateFileServiceDomain),
-        ("ShallowRekey", VsanClusterHealthActionIdEnumEnum::ShallowRekey),
-        ("UploadHclDb", VsanClusterHealthActionIdEnumEnum::UploadHclDb),
-        ("ClaimVSANDisks", VsanClusterHealthActionIdEnumEnum::ClaimVsanDisks),
-        ("RunBurnInTest", VsanClusterHealthActionIdEnumEnum::RunBurnInTest),
-        ("EnableHealthService", VsanClusterHealthActionIdEnumEnum::EnableHealthService),
-        ("CreateDVS", VsanClusterHealthActionIdEnumEnum::CreateDvs),
-        ("RemediateClusterConfig", VsanClusterHealthActionIdEnumEnum::RemediateClusterConfig),
-        ("CreateVMKnicWithVMotion", VsanClusterHealthActionIdEnumEnum::CreateVmKnicWithVMotion),
-        ("VsanClusterHealthActionIdEnum_Unknown", VsanClusterHealthActionIdEnumEnum::VsanClusterHealthActionIdEnumUnknown),
         ("RemediateFileServiceImbalance", VsanClusterHealthActionIdEnumEnum::RemediateFileServiceImbalance),
+        ("ConfigureHA", VsanClusterHealthActionIdEnumEnum::ConfigureHa),
+        ("RepairClusterObjectsAction", VsanClusterHealthActionIdEnumEnum::RepairClusterObjectsAction),
+        ("UpgradeVsanDiskFormat", VsanClusterHealthActionIdEnumEnum::UpgradeVsanDiskFormat),
         ("CreateVMKnic", VsanClusterHealthActionIdEnumEnum::CreateVmKnic),
-        ("RemediateFileService", VsanClusterHealthActionIdEnumEnum::RemediateFileService),
-        ("ConfigureVSAN", VsanClusterHealthActionIdEnumEnum::ConfigureVsan),
-        ("RemediateDedup", VsanClusterHealthActionIdEnumEnum::RemediateDedup),
-        ("StopDiskBalance", VsanClusterHealthActionIdEnumEnum::StopDiskBalance),
-        ("DiskBalance", VsanClusterHealthActionIdEnumEnum::DiskBalance),
-        ("UpdateHclDbFromInternet", VsanClusterHealthActionIdEnumEnum::UpdateHclDbFromInternet),
+        ("LoginVumIsoDepot", VsanClusterHealthActionIdEnumEnum::LoginVumIsoDepot),
         ("ConfigureDRS", VsanClusterHealthActionIdEnumEnum::ConfigureDrs),
+        ("SelectNvme", VsanClusterHealthActionIdEnumEnum::SelectNvme),
+        ("RemediateIscsiLunsRuntimeStatus", VsanClusterHealthActionIdEnumEnum::RemediateIscsiLunsRuntimeStatus),
+        ("ClaimVSANDisks", VsanClusterHealthActionIdEnumEnum::ClaimVsanDisks),
+        ("EnablePerformanceServiceAction", VsanClusterHealthActionIdEnumEnum::EnablePerformanceServiceAction),
+        ("EnableCeip", VsanClusterHealthActionIdEnumEnum::EnableCeip),
+        ("CreateVMKnicWithVMotion", VsanClusterHealthActionIdEnumEnum::CreateVmKnicWithVMotion),
+        ("EnableHealthService", VsanClusterHealthActionIdEnumEnum::EnableHealthService),
+        ("UpdateHclDbFromInternet", VsanClusterHealthActionIdEnumEnum::UpdateHclDbFromInternet),
+        ("CreateDVS", VsanClusterHealthActionIdEnumEnum::CreateDvs),
+        ("VsanClusterHealthActionIdEnum_Unknown", VsanClusterHealthActionIdEnumEnum::VsanClusterHealthActionIdEnumUnknown),
+        ("CreateFileServiceDomain", VsanClusterHealthActionIdEnumEnum::CreateFileServiceDomain),
+        ("ConfigureAutomaticRebalance", VsanClusterHealthActionIdEnumEnum::ConfigureAutomaticRebalance),
+        ("PurgeInaccessSwapObjs", VsanClusterHealthActionIdEnumEnum::PurgeInaccessSwapObjs),
+        ("RunBurnInTest", VsanClusterHealthActionIdEnumEnum::RunBurnInTest),
+        ("UploadHclDb", VsanClusterHealthActionIdEnumEnum::UploadHclDb),
+        ("StopDiskBalance", VsanClusterHealthActionIdEnumEnum::StopDiskBalance),
+        ("ConfigureVSAN", VsanClusterHealthActionIdEnumEnum::ConfigureVsan),
+        ("RemediateFileService", VsanClusterHealthActionIdEnumEnum::RemediateFileService),
+        ("RelayoutVsanObjects", VsanClusterHealthActionIdEnumEnum::RelayoutVsanObjects),
         ("EnableIscsiTargetService", VsanClusterHealthActionIdEnumEnum::EnableIscsiTargetService),
         ("UploadReleaseCatalog", VsanClusterHealthActionIdEnumEnum::UploadReleaseCatalog),
+        ("ShallowRekey", VsanClusterHealthActionIdEnumEnum::ShallowRekey),
+        ("RemediateDedup", VsanClusterHealthActionIdEnumEnum::RemediateDedup),
+        ("DiskBalance", VsanClusterHealthActionIdEnumEnum::DiskBalance),
+        ("ClusterUpgrade", VsanClusterHealthActionIdEnumEnum::ClusterUpgrade),
+        ("RemediateClusterConfig", VsanClusterHealthActionIdEnumEnum::RemediateClusterConfig),
     ],
 };
 
@@ -31140,20 +31285,21 @@ impl AsRef<str> for VsanClusterHealthActionIdEnumEnum {
 }
 
 static VSAN_CLUSTER_HEALTH_CATEGORY_ENUM_ENUM_MAP: phf::Map<&'static str, VsanClusterHealthCategoryEnumEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
+        (1, 0),
+        (0, 1),
         (0, 0),
-        (1, 2),
     ],
     entries: &[
-        ("CapacityUtilization", VsanClusterHealthCategoryEnumEnum::CapacityUtilization),
-        ("Compliance", VsanClusterHealthCategoryEnumEnum::Compliance),
-        ("InfraPerformance", VsanClusterHealthCategoryEnumEnum::InfraPerformance),
-        ("InfraAvailability", VsanClusterHealthCategoryEnumEnum::InfraAvailability),
-        ("DataAvailability", VsanClusterHealthCategoryEnumEnum::DataAvailability),
-        ("SoftResourceUtilization", VsanClusterHealthCategoryEnumEnum::SoftResourceUtilization),
-        ("DataPerformance", VsanClusterHealthCategoryEnumEnum::DataPerformance),
         ("VsanClusterHealthCategoryEnum_Unknown", VsanClusterHealthCategoryEnumEnum::VsanClusterHealthCategoryEnumUnknown),
+        ("SoftResourceUtilization", VsanClusterHealthCategoryEnumEnum::SoftResourceUtilization),
+        ("DataAvailability", VsanClusterHealthCategoryEnumEnum::DataAvailability),
+        ("DataPerformance", VsanClusterHealthCategoryEnumEnum::DataPerformance),
+        ("InfraAvailability", VsanClusterHealthCategoryEnumEnum::InfraAvailability),
+        ("Compliance", VsanClusterHealthCategoryEnumEnum::Compliance),
+        ("CapacityUtilization", VsanClusterHealthCategoryEnumEnum::CapacityUtilization),
+        ("InfraPerformance", VsanClusterHealthCategoryEnumEnum::InfraPerformance),
     ],
 };
 
@@ -31221,19 +31367,20 @@ impl AsRef<str> for VsanClusterHealthCategoryEnumEnum {
 }
 
 static VSAN_COMPONENT_STATES_ENUM_MAP: phf::Map<&'static str, VsanComponentStatesEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
-        (4, 3),
+        (2, 0),
+        (0, 3),
+        (0, 1),
     ],
     entries: &[
         ("RECONFIG", VsanComponentStatesEnum::Reconfig),
-        ("ABSENT", VsanComponentStatesEnum::Absent),
-        ("ACTIVE_STALE", VsanComponentStatesEnum::ActiveStale),
-        ("UNKNOWN", VsanComponentStatesEnum::Unknown),
-        ("ABSENT_RESYNC", VsanComponentStatesEnum::AbsentResync),
         ("ACTIVE", VsanComponentStatesEnum::Active),
+        ("UNKNOWN", VsanComponentStatesEnum::Unknown),
         ("DEGRADED", VsanComponentStatesEnum::Degraded),
+        ("ABSENT", VsanComponentStatesEnum::Absent),
+        ("ABSENT_RESYNC", VsanComponentStatesEnum::AbsentResync),
+        ("ACTIVE_STALE", VsanComponentStatesEnum::ActiveStale),
     ],
 };
 
@@ -31300,15 +31447,16 @@ impl AsRef<str> for VsanComponentStatesEnum {
 }
 
 static VSAN_DATASTORE_TYPE_ENUM_MAP: phf::Map<&'static str, VsanDatastoreTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("vsandirect", VsanDatastoreTypeEnum::Vsandirect),
         ("vsan", VsanDatastoreTypeEnum::Vsan),
-        ("pmem", VsanDatastoreTypeEnum::Pmem),
         ("VsanDatastoreType_Unknown", VsanDatastoreTypeEnum::VsanDatastoreTypeUnknown),
+        ("vsandirect", VsanDatastoreTypeEnum::Vsandirect),
+        ("pmem", VsanDatastoreTypeEnum::Pmem),
     ],
 };
 
@@ -31372,28 +31520,30 @@ impl AsRef<str> for VsanDatastoreTypeEnum {
 }
 
 static VSAN_HCI_MESH_DIT_ENCRYPTION_ISSUE_ENUM_MAP: phf::Map<&'static str, VsanHciMeshDitEncryptionIssueEnum> = ::phf::Map {
-    key: 1937371814602216758,
+    key: 16287231350648472473,
     disps: &[
-        (0, 2),
-        (1, 0),
-        (5, 7),
+        (1, 8),
+        (0, 0),
+        (1, 2),
+        (1, 5),
+        (10, 2),
     ],
     entries: &[
-        ("clusterServerHciMeshDitEncIsEnabledButTheHostIsNot", VsanHciMeshDitEncryptionIssueEnum::ClusterServerHciMeshDitEncIsEnabledButTheHostIsNot),
-        ("hostHasDifferentServerHciMeshDitEncRekeyInterval", VsanHciMeshDitEncryptionIssueEnum::HostHasDifferentServerHciMeshDitEncRekeyInterval),
-        ("hostHasNoHciMeshDitEncConfigForTheServerCluster", VsanHciMeshDitEncryptionIssueEnum::HostHasNoHciMeshDitEncConfigForTheServerCluster),
-        ("hostServerHciMeshDitEncIsEnabledButTheClusterIsNot", VsanHciMeshDitEncryptionIssueEnum::HostServerHciMeshDitEncIsEnabledButTheClusterIsNot),
-        ("hostClientHciMeshDitEncStateIsNotSettled", VsanHciMeshDitEncryptionIssueEnum::HostClientHciMeshDitEncStateIsNotSettled),
-        ("hostClientHciMeshDitEncIsEnabledButTheClusterIsNot", VsanHciMeshDitEncryptionIssueEnum::HostClientHciMeshDitEncIsEnabledButTheClusterIsNot),
-        ("clientHciMeshDitEncIsEnabledButTheServerIsNot", VsanHciMeshDitEncryptionIssueEnum::ClientHciMeshDitEncIsEnabledButTheServerIsNot),
-        ("hostHasNoHciMeshDitEncConfigForTheClientCluster", VsanHciMeshDitEncryptionIssueEnum::HostHasNoHciMeshDitEncConfigForTheClientCluster),
-        ("VsanHciMeshDitEncryptionIssue_Unknown", VsanHciMeshDitEncryptionIssueEnum::VsanHciMeshDitEncryptionIssueUnknown),
-        ("serverHostIncapable", VsanHciMeshDitEncryptionIssueEnum::ServerHostIncapable),
-        ("serverHciMeshDitEncIsEnabledButTheClientIsNot", VsanHciMeshDitEncryptionIssueEnum::ServerHciMeshDitEncIsEnabledButTheClientIsNot),
-        ("clusterClientHciMeshDitEncIsEnabledButTheHostIsNot", VsanHciMeshDitEncryptionIssueEnum::ClusterClientHciMeshDitEncIsEnabledButTheHostIsNot),
         ("hostServerHciMeshDitEncIsNotInSettledState", VsanHciMeshDitEncryptionIssueEnum::HostServerHciMeshDitEncIsNotInSettledState),
+        ("clusterServerHciMeshDitEncIsEnabledButTheHostIsNot", VsanHciMeshDitEncryptionIssueEnum::ClusterServerHciMeshDitEncIsEnabledButTheHostIsNot),
+        ("hostClientHciMeshDitEncIsEnabledButTheClusterIsNot", VsanHciMeshDitEncryptionIssueEnum::HostClientHciMeshDitEncIsEnabledButTheClusterIsNot),
         ("serverHciMeshDitEncIsNotSettled", VsanHciMeshDitEncryptionIssueEnum::ServerHciMeshDitEncIsNotSettled),
+        ("serverHostIncapable", VsanHciMeshDitEncryptionIssueEnum::ServerHostIncapable),
+        ("clientHciMeshDitEncIsEnabledButTheServerIsNot", VsanHciMeshDitEncryptionIssueEnum::ClientHciMeshDitEncIsEnabledButTheServerIsNot),
         ("clientHostIncapable", VsanHciMeshDitEncryptionIssueEnum::ClientHostIncapable),
+        ("hostHasDifferentServerHciMeshDitEncRekeyInterval", VsanHciMeshDitEncryptionIssueEnum::HostHasDifferentServerHciMeshDitEncRekeyInterval),
+        ("hostClientHciMeshDitEncStateIsNotSettled", VsanHciMeshDitEncryptionIssueEnum::HostClientHciMeshDitEncStateIsNotSettled),
+        ("VsanHciMeshDitEncryptionIssue_Unknown", VsanHciMeshDitEncryptionIssueEnum::VsanHciMeshDitEncryptionIssueUnknown),
+        ("hostHasNoHciMeshDitEncConfigForTheClientCluster", VsanHciMeshDitEncryptionIssueEnum::HostHasNoHciMeshDitEncConfigForTheClientCluster),
+        ("clusterClientHciMeshDitEncIsEnabledButTheHostIsNot", VsanHciMeshDitEncryptionIssueEnum::ClusterClientHciMeshDitEncIsEnabledButTheHostIsNot),
+        ("hostHasNoHciMeshDitEncConfigForTheServerCluster", VsanHciMeshDitEncryptionIssueEnum::HostHasNoHciMeshDitEncConfigForTheServerCluster),
+        ("serverHciMeshDitEncIsEnabledButTheClientIsNot", VsanHciMeshDitEncryptionIssueEnum::ServerHciMeshDitEncIsEnabledButTheClientIsNot),
+        ("hostServerHciMeshDitEncIsEnabledButTheClusterIsNot", VsanHciMeshDitEncryptionIssueEnum::HostServerHciMeshDitEncIsEnabledButTheClusterIsNot),
     ],
 };
 
@@ -31468,14 +31618,15 @@ impl AsRef<str> for VsanHciMeshDitEncryptionIssueEnum {
 }
 
 static VIM_CLUSTER_VSAN_DISK_GROUP_CREATION_TYPE_ENUM_MAP: phf::Map<&'static str, VimClusterVsanDiskGroupCreationTypeEnum> = ::phf::Map {
-    key: 106375038446233661,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
+        (1, 0),
+        (0, 4),
     ],
     entries: &[
-        ("allflash", VimClusterVsanDiskGroupCreationTypeEnum::Allflash),
-        ("hybrid", VimClusterVsanDiskGroupCreationTypeEnum::Hybrid),
         ("vsandirect", VimClusterVsanDiskGroupCreationTypeEnum::Vsandirect),
+        ("hybrid", VimClusterVsanDiskGroupCreationTypeEnum::Hybrid),
+        ("allflash", VimClusterVsanDiskGroupCreationTypeEnum::Allflash),
         ("VsanDiskGroupCreationType_Unknown", VimClusterVsanDiskGroupCreationTypeEnum::VsanDiskGroupCreationTypeUnknown),
         ("pmem", VimClusterVsanDiskGroupCreationTypeEnum::Pmem),
     ],
@@ -31542,15 +31693,16 @@ impl AsRef<str> for VimClusterVsanDiskGroupCreationTypeEnum {
 }
 
 static VSAN_IO_INSIGHT_INSTANCE_STATE_ENUM_MAP: phf::Map<&'static str, VsanIoInsightInstanceStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (0, 2),
         (1, 0),
     ],
     entries: &[
-        ("VsanIoInsightInstanceState_unknown", VsanIoInsightInstanceStateEnum::VsanIoInsightInstanceStateUnknown),
+        ("completed", VsanIoInsightInstanceStateEnum::Completed),
         ("crashed", VsanIoInsightInstanceStateEnum::Crashed),
         ("running", VsanIoInsightInstanceStateEnum::Running),
-        ("completed", VsanIoInsightInstanceStateEnum::Completed),
+        ("VsanIoInsightInstanceState_unknown", VsanIoInsightInstanceStateEnum::VsanIoInsightInstanceStateUnknown),
     ],
 };
 
@@ -31614,13 +31766,13 @@ impl AsRef<str> for VsanIoInsightInstanceStateEnum {
 }
 
 static VSAN_ISCSI_LUN_STATUS_ENUM_MAP: phf::Map<&'static str, VsanIscsiLunStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("Offline", VsanIscsiLunStatusEnum::Offline),
         ("Online", VsanIscsiLunStatusEnum::Online),
+        ("Offline", VsanIscsiLunStatusEnum::Offline),
         ("VsanIscsiLUNStatus_Unknown", VsanIscsiLunStatusEnum::VsanIscsiLunStatusUnknown),
     ],
 };
@@ -31684,14 +31836,14 @@ impl AsRef<str> for VsanIscsiLunStatusEnum {
 }
 
 static VSAN_ISCSI_LUN_RUNTIME_STATUS_TYPE_ENUM_MAP: phf::Map<&'static str, VsanIscsiLunRuntimeStatusTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("Offline", VsanIscsiLunRuntimeStatusTypeEnum::Offline),
-        ("Online", VsanIscsiLunRuntimeStatusTypeEnum::Online),
         ("VsanIscsiLUNRuntimeStatusType_Unknown", VsanIscsiLunRuntimeStatusTypeEnum::VsanIscsiLunRuntimeStatusTypeUnknown),
+        ("Online", VsanIscsiLunRuntimeStatusTypeEnum::Online),
     ],
 };
 
@@ -31754,15 +31906,16 @@ impl AsRef<str> for VsanIscsiLunRuntimeStatusTypeEnum {
 }
 
 static VSAN_ISCSI_TARGET_AUTH_TYPE_ENUM_MAP: phf::Map<&'static str, VsanIscsiTargetAuthTypeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("CHAP_Mutual", VsanIscsiTargetAuthTypeEnum::ChapMutual),
         ("CHAP", VsanIscsiTargetAuthTypeEnum::Chap),
         ("NoAuth", VsanIscsiTargetAuthTypeEnum::NoAuth),
         ("VsanIscsiTargetAuthType_Unknown", VsanIscsiTargetAuthTypeEnum::VsanIscsiTargetAuthTypeUnknown),
+        ("CHAP_Mutual", VsanIscsiTargetAuthTypeEnum::ChapMutual),
     ],
 };
 
@@ -31826,13 +31979,13 @@ impl AsRef<str> for VsanIscsiTargetAuthTypeEnum {
 }
 
 static VSAN_ISCSI_TARGET_SERVICE_PROCESS_STATUS_ENUM_MAP: phf::Map<&'static str, VsanIscsiTargetServiceProcessStatusEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("VsanIscsiTargetServiceProcessStatus_Unknown", VsanIscsiTargetServiceProcessStatusEnum::VsanIscsiTargetServiceProcessStatusUnknown),
         ("Running", VsanIscsiTargetServiceProcessStatusEnum::Running),
+        ("VsanIscsiTargetServiceProcessStatus_Unknown", VsanIscsiTargetServiceProcessStatusEnum::VsanIscsiTargetServiceProcessStatusUnknown),
         ("Stopped", VsanIscsiTargetServiceProcessStatusEnum::Stopped),
     ],
 };
@@ -31896,56 +32049,61 @@ impl AsRef<str> for VsanIscsiTargetServiceProcessStatusEnum {
 }
 
 static VSAN_OBJECT_TYPE_ENUM_ENUM_MAP: phf::Map<&'static str, VsanObjectTypeEnumEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
         (0, 0),
-        (1, 10),
-        (2, 36),
+        (0, 10),
+        (0, 0),
+        (0, 6),
+        (0, 5),
+        (4, 33),
+        (1, 5),
+        (0, 2),
+        (1, 16),
+        (1, 0),
+        (0, 37),
+        (0, 3),
         (1, 2),
-        (1, 17),
-        (1, 7),
-        (26, 32),
     ],
     entries: &[
-        ("detachedCnsVolFile", VsanObjectTypeEnumEnum::DetachedCnsVolFile),
-        ("physicalTransientSpace", VsanObjectTypeEnumEnum::PhysicalTransientSpace),
-        ("fileSystemOverhead", VsanObjectTypeEnumEnum::FileSystemOverhead),
-        ("cnsVolFile", VsanObjectTypeEnumEnum::CnsVolFile),
-        ("attachedCnsVolFile", VsanObjectTypeEnumEnum::AttachedCnsVolFile),
-        ("spaceUnderDedupConsideration", VsanObjectTypeEnumEnum::SpaceUnderDedupConsideration),
-        ("esaObjectOverhead", VsanObjectTypeEnumEnum::EsaObjectOverhead),
-        ("extension", VsanObjectTypeEnumEnum::Extension),
-        ("hbrPersist", VsanObjectTypeEnumEnum::HbrPersist),
-        ("aggregatedSystemObjects", VsanObjectTypeEnumEnum::AggregatedSystemObjects),
-        ("statsdb", VsanObjectTypeEnumEnum::Statsdb),
-        ("minSpaceRequiredForVsanOp", VsanObjectTypeEnumEnum::MinSpaceRequiredForVsanOp),
-        ("VsanObjectTypeEnum_Unknown", VsanObjectTypeEnumEnum::VsanObjectTypeEnumUnknown),
-        ("checksumOverhead", VsanObjectTypeEnumEnum::ChecksumOverhead),
-        ("hostRebuildCapacity", VsanObjectTypeEnumEnum::HostRebuildCapacity),
+        ("hbrCfg", VsanObjectTypeEnumEnum::HbrCfg),
         ("resynPauseThresholdForHost", VsanObjectTypeEnumEnum::ResynPauseThresholdForHost),
+        ("minSpaceRequiredForVsanOp", VsanObjectTypeEnumEnum::MinSpaceRequiredForVsanOp),
+        ("attachedCnsVolFile", VsanObjectTypeEnumEnum::AttachedCnsVolFile),
+        ("hbrDisk", VsanObjectTypeEnumEnum::HbrDisk),
+        ("attachedCnsVolBlock", VsanObjectTypeEnumEnum::AttachedCnsVolBlock),
         ("traceobject", VsanObjectTypeEnumEnum::Traceobject),
         ("pgNamespace", VsanObjectTypeEnumEnum::PgNamespace),
-        ("clusterDBNamespace", VsanObjectTypeEnumEnum::ClusterDbNamespace),
-        ("improvedVirtualDisk", VsanObjectTypeEnumEnum::ImprovedVirtualDisk),
-        ("hbrDisk", VsanObjectTypeEnumEnum::HbrDisk),
-        ("namespace", VsanObjectTypeEnumEnum::Namespace),
-        ("iscsiLun", VsanObjectTypeEnumEnum::IscsiLun),
-        ("nativeObjectStore", VsanObjectTypeEnumEnum::NativeObjectStore),
-        ("fileServiceRoot", VsanObjectTypeEnumEnum::FileServiceRoot),
-        ("dedupOverhead", VsanObjectTypeEnumEnum::DedupOverhead),
         ("vmswap", VsanObjectTypeEnumEnum::Vmswap),
-        ("transientSpace", VsanObjectTypeEnumEnum::TransientSpace),
-        ("vdisk", VsanObjectTypeEnumEnum::Vdisk),
-        ("fileShare", VsanObjectTypeEnumEnum::FileShare),
-        ("detachedCnsVolBlock", VsanObjectTypeEnumEnum::DetachedCnsVolBlock),
-        ("slackSpaceCapRequiredForHost", VsanObjectTypeEnumEnum::SlackSpaceCapRequiredForHost),
-        ("haMetadataObject", VsanObjectTypeEnumEnum::HaMetadataObject),
+        ("esaObjectOverhead", VsanObjectTypeEnumEnum::EsaObjectOverhead),
+        ("VsanObjectTypeEnum_Unknown", VsanObjectTypeEnumEnum::VsanObjectTypeEnumUnknown),
+        ("namespace", VsanObjectTypeEnumEnum::Namespace),
+        ("spaceUnderDedupConsideration", VsanObjectTypeEnumEnum::SpaceUnderDedupConsideration),
+        ("dedupOverhead", VsanObjectTypeEnumEnum::DedupOverhead),
+        ("nativeObjectStore", VsanObjectTypeEnumEnum::NativeObjectStore),
         ("other", VsanObjectTypeEnumEnum::Other),
-        ("attachedCnsVolBlock", VsanObjectTypeEnumEnum::AttachedCnsVolBlock),
-        ("hbrCfg", VsanObjectTypeEnumEnum::HbrCfg),
-        ("iscsiTarget", VsanObjectTypeEnumEnum::IscsiTarget),
         ("vmem", VsanObjectTypeEnumEnum::Vmem),
+        ("aggregatedSystemObjects", VsanObjectTypeEnumEnum::AggregatedSystemObjects),
+        ("detachedCnsVolBlock", VsanObjectTypeEnumEnum::DetachedCnsVolBlock),
+        ("clusterDBNamespace", VsanObjectTypeEnumEnum::ClusterDbNamespace),
+        ("haMetadataObject", VsanObjectTypeEnumEnum::HaMetadataObject),
+        ("iscsiLun", VsanObjectTypeEnumEnum::IscsiLun),
+        ("fileServiceRoot", VsanObjectTypeEnumEnum::FileServiceRoot),
+        ("extension", VsanObjectTypeEnumEnum::Extension),
+        ("fileShare", VsanObjectTypeEnumEnum::FileShare),
+        ("transientSpace", VsanObjectTypeEnumEnum::TransientSpace),
+        ("detachedCnsVolFile", VsanObjectTypeEnumEnum::DetachedCnsVolFile),
+        ("slackSpaceCapRequiredForHost", VsanObjectTypeEnumEnum::SlackSpaceCapRequiredForHost),
+        ("cnsVolFile", VsanObjectTypeEnumEnum::CnsVolFile),
+        ("statsdb", VsanObjectTypeEnumEnum::Statsdb),
+        ("hostRebuildCapacity", VsanObjectTypeEnumEnum::HostRebuildCapacity),
+        ("improvedVirtualDisk", VsanObjectTypeEnumEnum::ImprovedVirtualDisk),
+        ("physicalTransientSpace", VsanObjectTypeEnumEnum::PhysicalTransientSpace),
+        ("checksumOverhead", VsanObjectTypeEnumEnum::ChecksumOverhead),
+        ("vdisk", VsanObjectTypeEnumEnum::Vdisk),
+        ("iscsiTarget", VsanObjectTypeEnumEnum::IscsiTarget),
+        ("hbrPersist", VsanObjectTypeEnumEnum::HbrPersist),
+        ("fileSystemOverhead", VsanObjectTypeEnumEnum::FileSystemOverhead),
     ],
 };
 
@@ -32043,7 +32201,7 @@ impl AsRef<str> for VsanObjectTypeEnumEnum {
 }
 
 static VSAN_OBJECT_TYPE_ENUM_90_ENUM_MAP: phf::Map<&'static str, VsanObjectTypeEnum90Enum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -32109,16 +32267,17 @@ impl AsRef<str> for VsanObjectTypeEnum90Enum {
 }
 
 static VSAN_PERF_DIAGNOSTIC_QUERY_TYPE_ENUM_MAP: phf::Map<&'static str, VsanPerfDiagnosticQueryTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (1, 3),
+        (0, 0),
     ],
     entries: &[
-        ("lat", VsanPerfDiagnosticQueryTypeEnum::Lat),
-        ("VsanPerfDiagnosticQueryType_Unknown", VsanPerfDiagnosticQueryTypeEnum::VsanPerfDiagnosticQueryTypeUnknown),
-        ("eval", VsanPerfDiagnosticQueryTypeEnum::Eval),
-        ("iops", VsanPerfDiagnosticQueryTypeEnum::Iops),
         ("tput", VsanPerfDiagnosticQueryTypeEnum::Tput),
+        ("eval", VsanPerfDiagnosticQueryTypeEnum::Eval),
+        ("lat", VsanPerfDiagnosticQueryTypeEnum::Lat),
+        ("iops", VsanPerfDiagnosticQueryTypeEnum::Iops),
+        ("VsanPerfDiagnosticQueryType_Unknown", VsanPerfDiagnosticQueryTypeEnum::VsanPerfDiagnosticQueryTypeUnknown),
     ],
 };
 
@@ -32183,21 +32342,23 @@ impl AsRef<str> for VsanPerfDiagnosticQueryTypeEnum {
 }
 
 static VSAN_PERF_STATS_UNIT_TYPE_ENUM_MAP: phf::Map<&'static str, VsanPerfStatsUnitTypeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
-        (4, 8),
+        (2, 1),
+        (5, 3),
+        (0, 2),
     ],
     entries: &[
-        ("time_ns", VsanPerfStatsUnitTypeEnum::TimeNs),
-        ("time_us", VsanPerfStatsUnitTypeEnum::TimeUs),
         ("VsanPerfStatsUnitType_Unknown", VsanPerfStatsUnitTypeEnum::VsanPerfStatsUnitTypeUnknown),
+        ("time_us", VsanPerfStatsUnitTypeEnum::TimeUs),
         ("percentage", VsanPerfStatsUnitTypeEnum::Percentage),
-        ("permille", VsanPerfStatsUnitTypeEnum::Permille),
-        ("time_ms", VsanPerfStatsUnitTypeEnum::TimeMs),
         ("rate_bytes", VsanPerfStatsUnitTypeEnum::RateBytes),
-        ("size_bytes", VsanPerfStatsUnitTypeEnum::SizeBytes),
         ("number", VsanPerfStatsUnitTypeEnum::Number),
+        ("size_bytes", VsanPerfStatsUnitTypeEnum::SizeBytes),
+        ("time_ms", VsanPerfStatsUnitTypeEnum::TimeMs),
+        ("time_ns", VsanPerfStatsUnitTypeEnum::TimeNs),
+        ("permille", VsanPerfStatsUnitTypeEnum::Permille),
         ("time_s", VsanPerfStatsUnitTypeEnum::TimeS),
     ],
 };
@@ -32268,15 +32429,16 @@ impl AsRef<str> for VsanPerfStatsUnitTypeEnum {
 }
 
 static VSAN_PERF_STATS_TYPE_ENUM_MAP: phf::Map<&'static str, VsanPerfStatsTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
+        (0, 1),
     ],
     entries: &[
         ("delta", VsanPerfStatsTypeEnum::Delta),
-        ("VsanPerfStatsType_Unknown", VsanPerfStatsTypeEnum::VsanPerfStatsTypeUnknown),
-        ("absolute", VsanPerfStatsTypeEnum::Absolute),
         ("rate", VsanPerfStatsTypeEnum::Rate),
+        ("absolute", VsanPerfStatsTypeEnum::Absolute),
+        ("VsanPerfStatsType_Unknown", VsanPerfStatsTypeEnum::VsanPerfStatsTypeUnknown),
     ],
 };
 
@@ -32340,19 +32502,20 @@ impl AsRef<str> for VsanPerfStatsTypeEnum {
 }
 
 static VSAN_PERF_SUMMARY_TYPE_ENUM_MAP: phf::Map<&'static str, VsanPerfSummaryTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (0, 3),
         (0, 0),
-        (3, 3),
+        (0, 4),
     ],
     entries: &[
+        ("average", VsanPerfSummaryTypeEnum::Average),
+        ("maximum", VsanPerfSummaryTypeEnum::Maximum),
         ("VsanPerfSummaryType_Unknown", VsanPerfSummaryTypeEnum::VsanPerfSummaryTypeUnknown),
+        ("minimum", VsanPerfSummaryTypeEnum::Minimum),
         ("none", VsanPerfSummaryTypeEnum::None),
         ("summation", VsanPerfSummaryTypeEnum::Summation),
         ("latest", VsanPerfSummaryTypeEnum::Latest),
-        ("average", VsanPerfSummaryTypeEnum::Average),
-        ("minimum", VsanPerfSummaryTypeEnum::Minimum),
-        ("maximum", VsanPerfSummaryTypeEnum::Maximum),
     ],
 };
 
@@ -32419,14 +32582,14 @@ impl AsRef<str> for VsanPerfSummaryTypeEnum {
 }
 
 static VSAN_PERF_THRESHOLD_DIRECTION_TYPE_ENUM_MAP: phf::Map<&'static str, VsanPerfThresholdDirectionTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("lower", VsanPerfThresholdDirectionTypeEnum::Lower),
         ("upper", VsanPerfThresholdDirectionTypeEnum::Upper),
         ("VsanPerfThresholdDirectionType_Unknown", VsanPerfThresholdDirectionTypeEnum::VsanPerfThresholdDirectionTypeUnknown),
+        ("lower", VsanPerfThresholdDirectionTypeEnum::Lower),
     ],
 };
 
@@ -32489,14 +32652,14 @@ impl AsRef<str> for VsanPerfThresholdDirectionTypeEnum {
 }
 
 static VSAN_RELAYOUT_OBJECTS_ERROR_CODE_ENUM_MAP: phf::Map<&'static str, VsanRelayoutObjectsErrorCodeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("generic", VsanRelayoutObjectsErrorCodeEnum::Generic),
         ("VsanRelayoutObjectsErrorCode_Unknown", VsanRelayoutObjectsErrorCodeEnum::VsanRelayoutObjectsErrorCodeUnknown),
         ("outOfResources", VsanRelayoutObjectsErrorCodeEnum::OutOfResources),
+        ("generic", VsanRelayoutObjectsErrorCodeEnum::Generic),
     ],
 };
 
@@ -32559,16 +32722,17 @@ impl AsRef<str> for VsanRelayoutObjectsErrorCodeEnum {
 }
 
 static VSAN_SPACE_REPORTING_ENTITY_TYPE_ENUM_MAP: phf::Map<&'static str, VsanSpaceReportingEntityTypeEnum> = ::phf::Map {
-    key: 2126027241312876569,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (4, 0),
     ],
     entries: &[
-        ("VsanSpaceReportingEntityType_Unknown", VsanSpaceReportingEntityTypeEnum::VsanSpaceReportingEntityTypeUnknown),
         ("VM", VsanSpaceReportingEntityTypeEnum::Vm),
-        ("FileShare", VsanSpaceReportingEntityTypeEnum::FileShare),
         ("FaultDomain", VsanSpaceReportingEntityTypeEnum::FaultDomain),
         ("Host", VsanSpaceReportingEntityTypeEnum::Host),
+        ("FileShare", VsanSpaceReportingEntityTypeEnum::FileShare),
+        ("VsanSpaceReportingEntityType_Unknown", VsanSpaceReportingEntityTypeEnum::VsanSpaceReportingEntityTypeUnknown),
     ],
 };
 
@@ -32633,17 +32797,17 @@ impl AsRef<str> for VsanSpaceReportingEntityTypeEnum {
 }
 
 static VSAN_HEALTH_LOG_LEVEL_ENUM_ENUM_MAP: phf::Map<&'static str, VsanHealthLogLevelEnumEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
-        (1, 0),
+        (4, 4),
     ],
     entries: &[
-        ("WARNING", VsanHealthLogLevelEnumEnum::Warning),
-        ("DEBUG", VsanHealthLogLevelEnumEnum::Debug),
         ("CRITICAL", VsanHealthLogLevelEnumEnum::Critical),
+        ("WARNING", VsanHealthLogLevelEnumEnum::Warning),
         ("INFO", VsanHealthLogLevelEnumEnum::Info),
         ("VsanHealthLogLevelEnum_Unknown", VsanHealthLogLevelEnumEnum::VsanHealthLogLevelEnumUnknown),
+        ("DEBUG", VsanHealthLogLevelEnumEnum::Debug),
         ("ERROR", VsanHealthLogLevelEnumEnum::Error),
     ],
 };
@@ -32710,15 +32874,16 @@ impl AsRef<str> for VsanHealthLogLevelEnumEnum {
 }
 
 static CNS_CLUSTER_FLAVOR_ENUM_MAP: phf::Map<&'static str, CnsClusterFlavorEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
         (2, 0),
+        (0, 1),
     ],
     entries: &[
+        ("WORKLOAD", CnsClusterFlavorEnum::Workload),
+        ("GUEST_CLUSTER", CnsClusterFlavorEnum::GuestCluster),
         ("VANILLA", CnsClusterFlavorEnum::Vanilla),
         ("ClusterFlavor_Unknown", CnsClusterFlavorEnum::ClusterFlavorUnknown),
-        ("GUEST_CLUSTER", CnsClusterFlavorEnum::GuestCluster),
-        ("WORKLOAD", CnsClusterFlavorEnum::Workload),
     ],
 };
 
@@ -32782,7 +32947,7 @@ impl AsRef<str> for CnsClusterFlavorEnum {
 }
 
 static CNS_CLUSTER_TYPE_ENUM_MAP: phf::Map<&'static str, CnsClusterTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -32850,15 +33015,16 @@ impl AsRef<str> for CnsClusterTypeEnum {
 }
 
 static CNS_KUBERNETES_ENTITY_TYPE_ENUM_MAP: phf::Map<&'static str, CnsKubernetesEntityTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("PERSISTENT_VOLUME", CnsKubernetesEntityTypeEnum::PersistentVolume),
-        ("POD", CnsKubernetesEntityTypeEnum::Pod),
-        ("PERSISTENT_VOLUME_CLAIM", CnsKubernetesEntityTypeEnum::PersistentVolumeClaim),
         ("KubernetesEntityType_Unknown", CnsKubernetesEntityTypeEnum::KubernetesEntityTypeUnknown),
+        ("PERSISTENT_VOLUME_CLAIM", CnsKubernetesEntityTypeEnum::PersistentVolumeClaim),
+        ("POD", CnsKubernetesEntityTypeEnum::Pod),
     ],
 };
 
@@ -32922,14 +33088,14 @@ impl AsRef<str> for CnsKubernetesEntityTypeEnum {
 }
 
 static METRIC_FORMAT_ENUM_MAP: phf::Map<&'static str, MetricFormatEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (2, 0),
     ],
     entries: &[
         ("MetricFormat_Unknown", MetricFormatEnum::MetricFormatUnknown),
-        ("WAVEFRONT", MetricFormatEnum::Wavefront),
         ("PROMETHEUS", MetricFormatEnum::Prometheus),
+        ("WAVEFRONT", MetricFormatEnum::Wavefront),
     ],
 };
 
@@ -32992,20 +33158,21 @@ impl AsRef<str> for MetricFormatEnum {
 }
 
 static METRIC_TYPE_ENUM_MAP: phf::Map<&'static str, MetricTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (7, 0),
-        (1, 5),
+        (1, 1),
+        (0, 0),
+        (2, 6),
     ],
     entries: &[
-        ("SAAS_METRICS", MetricTypeEnum::SaasMetrics),
-        ("MetricType_Unknown", MetricTypeEnum::MetricTypeUnknown),
-        ("STORAGE_POLICY", MetricTypeEnum::StoragePolicy),
-        ("CLUSTER", MetricTypeEnum::Cluster),
-        ("VOLUME", MetricTypeEnum::Volume),
-        ("DISTRIBUTION", MetricTypeEnum::Distribution),
-        ("OP_STATS", MetricTypeEnum::OpStats),
         ("DATASTORE", MetricTypeEnum::Datastore),
+        ("OP_STATS", MetricTypeEnum::OpStats),
+        ("CLUSTER", MetricTypeEnum::Cluster),
+        ("MetricType_Unknown", MetricTypeEnum::MetricTypeUnknown),
+        ("SAAS_METRICS", MetricTypeEnum::SaasMetrics),
+        ("DISTRIBUTION", MetricTypeEnum::Distribution),
+        ("STORAGE_POLICY", MetricTypeEnum::StoragePolicy),
+        ("VOLUME", MetricTypeEnum::Volume),
     ],
 };
 
@@ -33073,22 +33240,24 @@ impl AsRef<str> for MetricTypeEnum {
 }
 
 static QUERY_SELECTION_NAME_TYPE_ENUM_MAP: phf::Map<&'static str, QuerySelectionNameTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
+        (0, 1),
         (0, 0),
-        (3, 3),
+        (0, 0),
+        (1, 9),
     ],
     entries: &[
+        ("VOLUME_TYPE", QuerySelectionNameTypeEnum::VolumeType),
         ("VOLUME_NAME", QuerySelectionNameTypeEnum::VolumeName),
+        ("DATASTORE_ACCESSIBILITY_STATUS", QuerySelectionNameTypeEnum::DatastoreAccessibilityStatus),
+        ("BACKING_OBJECT_DETAILS", QuerySelectionNameTypeEnum::BackingObjectDetails),
         ("VOLUME_METADATA", QuerySelectionNameTypeEnum::VolumeMetadata),
+        ("HEALTH_STATUS", QuerySelectionNameTypeEnum::HealthStatus),
         ("POLICY_ID", QuerySelectionNameTypeEnum::PolicyId),
+        ("QuerySelectionNameType_Unknown", QuerySelectionNameTypeEnum::QuerySelectionNameTypeUnknown),
         ("COMPLIANCE_STATUS", QuerySelectionNameTypeEnum::ComplianceStatus),
         ("DATASTORE_URL", QuerySelectionNameTypeEnum::DatastoreUrl),
-        ("DATASTORE_ACCESSIBILITY_STATUS", QuerySelectionNameTypeEnum::DatastoreAccessibilityStatus),
-        ("VOLUME_TYPE", QuerySelectionNameTypeEnum::VolumeType),
-        ("HEALTH_STATUS", QuerySelectionNameTypeEnum::HealthStatus),
-        ("QuerySelectionNameType_Unknown", QuerySelectionNameTypeEnum::QuerySelectionNameTypeUnknown),
-        ("BACKING_OBJECT_DETAILS", QuerySelectionNameTypeEnum::BackingObjectDetails),
     ],
 };
 
@@ -33158,7 +33327,7 @@ impl AsRef<str> for QuerySelectionNameTypeEnum {
 }
 
 static CNS_SYNC_VOLUME_MODE_ENUM_MAP: phf::Map<&'static str, CnsSyncVolumeModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -33224,13 +33393,13 @@ impl AsRef<str> for CnsSyncVolumeModeEnum {
 }
 
 static CNS_UNREGISTER_TARGET_VOLUME_TYPE_ENUM_MAP: phf::Map<&'static str, CnsUnregisterTargetVolumeTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("LEGACY_DISK", CnsUnregisterTargetVolumeTypeEnum::LegacyDisk),
         ("FCD", CnsUnregisterTargetVolumeTypeEnum::Fcd),
+        ("LEGACY_DISK", CnsUnregisterTargetVolumeTypeEnum::LegacyDisk),
     ],
 };
 
@@ -33292,19 +33461,20 @@ impl AsRef<str> for CnsUnregisterTargetVolumeTypeEnum {
 }
 
 static CNS_VOLUME_BACKING_TYPE_ENUM_MAP: phf::Map<&'static str, CnsVolumeBackingTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
-        (2, 2),
+        (0, 0),
+        (0, 0),
+        (3, 2),
     ],
     entries: &[
-        ("FlatVer1BackingInfo", CnsVolumeBackingTypeEnum::FlatVer1BackingInfo),
-        ("RawDiskMappingVer1BackingInfo", CnsVolumeBackingTypeEnum::RawDiskMappingVer1BackingInfo),
-        ("FlatVer2BackingInfo", CnsVolumeBackingTypeEnum::FlatVer2BackingInfo),
-        ("SeSparseBackingInfo", CnsVolumeBackingTypeEnum::SeSparseBackingInfo),
-        ("SparseVer2BackingInfo", CnsVolumeBackingTypeEnum::SparseVer2BackingInfo),
-        ("SparseVer1BackingInfo", CnsVolumeBackingTypeEnum::SparseVer1BackingInfo),
         ("LocalPMemBackingInfo", CnsVolumeBackingTypeEnum::LocalPMemBackingInfo),
+        ("FlatVer1BackingInfo", CnsVolumeBackingTypeEnum::FlatVer1BackingInfo),
+        ("SeSparseBackingInfo", CnsVolumeBackingTypeEnum::SeSparseBackingInfo),
+        ("SparseVer1BackingInfo", CnsVolumeBackingTypeEnum::SparseVer1BackingInfo),
+        ("FlatVer2BackingInfo", CnsVolumeBackingTypeEnum::FlatVer2BackingInfo),
+        ("RawDiskMappingVer1BackingInfo", CnsVolumeBackingTypeEnum::RawDiskMappingVer1BackingInfo),
+        ("SparseVer2BackingInfo", CnsVolumeBackingTypeEnum::SparseVer2BackingInfo),
     ],
 };
 
@@ -33371,14 +33541,14 @@ impl AsRef<str> for CnsVolumeBackingTypeEnum {
 }
 
 static CNS_VOLUME_TYPE_ENUM_MAP: phf::Map<&'static str, CnsVolumeTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
         (2, 0),
     ],
     entries: &[
         ("VolumeType_Unknown", CnsVolumeTypeEnum::VolumeTypeUnknown),
-        ("BLOCK", CnsVolumeTypeEnum::Block),
         ("FILE", CnsVolumeTypeEnum::File),
+        ("BLOCK", CnsVolumeTypeEnum::Block),
     ],
 };
 
@@ -33441,7 +33611,7 @@ impl AsRef<str> for CnsVolumeTypeEnum {
 }
 
 static DVS_FILTER_ON_FAILURE_ENUM_MAP: phf::Map<&'static str, DvsFilterOnFailureEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -33509,15 +33679,16 @@ impl AsRef<str> for DvsFilterOnFailureEnum {
 }
 
 static DV_PORT_STATUS_VM_DIRECT_PATH_GEN_2_INACTIVE_REASON_NETWORK_ENUM_MAP: phf::Map<&'static str, DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum> = ::phf::Map {
-    key: 2126027241312876569,
+    key: 16287231350648472473,
     disps: &[
         (3, 0),
+        (0, 0),
     ],
     entries: &[
         ("portNptNoCompatibleNics", DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum::PortNptNoCompatibleNics),
+        ("portNptNoVirtualFunctionsAvailable", DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum::PortNptNoVirtualFunctionsAvailable),
         ("portNptIncompatibleDvs", DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum::PortNptIncompatibleDvs),
         ("portNptDisabledForPort", DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum::PortNptDisabledForPort),
-        ("portNptNoVirtualFunctionsAvailable", DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum::PortNptNoVirtualFunctionsAvailable),
     ],
 };
 
@@ -33581,13 +33752,13 @@ impl AsRef<str> for DvPortStatusVmDirectPathGen2InactiveReasonNetworkEnum {
 }
 
 static DV_PORT_STATUS_VM_DIRECT_PATH_GEN_2_INACTIVE_REASON_OTHER_ENUM_MAP: phf::Map<&'static str, DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("portNptIncompatibleHost", DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum::PortNptIncompatibleHost),
         ("portNptIncompatibleConnectee", DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum::PortNptIncompatibleConnectee),
+        ("portNptIncompatibleHost", DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum::PortNptIncompatibleHost),
     ],
 };
 
@@ -33649,13 +33820,13 @@ impl AsRef<str> for DvPortStatusVmDirectPathGen2InactiveReasonOtherEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_PORTGROUP_BACKING_TYPE_ENUM_MAP: phf::Map<&'static str, DistributedVirtualPortgroupBackingTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("nsx", DistributedVirtualPortgroupBackingTypeEnum::Nsx),
         ("standard", DistributedVirtualPortgroupBackingTypeEnum::Standard),
+        ("nsx", DistributedVirtualPortgroupBackingTypeEnum::Nsx),
     ],
 };
 
@@ -33717,14 +33888,14 @@ impl AsRef<str> for DistributedVirtualPortgroupBackingTypeEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_PORTGROUP_META_TAG_NAME_ENUM_MAP: phf::Map<&'static str, DistributedVirtualPortgroupMetaTagNameEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
-        ("dvsName", DistributedVirtualPortgroupMetaTagNameEnum::DvsName),
-        ("portIndex", DistributedVirtualPortgroupMetaTagNameEnum::PortIndex),
         ("portgroupName", DistributedVirtualPortgroupMetaTagNameEnum::PortgroupName),
+        ("portIndex", DistributedVirtualPortgroupMetaTagNameEnum::PortIndex),
+        ("dvsName", DistributedVirtualPortgroupMetaTagNameEnum::DvsName),
     ],
 };
 
@@ -33787,14 +33958,14 @@ impl AsRef<str> for DistributedVirtualPortgroupMetaTagNameEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_PORTGROUP_PORTGROUP_TYPE_ENUM_MAP: phf::Map<&'static str, DistributedVirtualPortgroupPortgroupTypeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("ephemeral", DistributedVirtualPortgroupPortgroupTypeEnum::Ephemeral),
         ("earlyBinding", DistributedVirtualPortgroupPortgroupTypeEnum::EarlyBinding),
         ("lateBinding", DistributedVirtualPortgroupPortgroupTypeEnum::LateBinding),
+        ("ephemeral", DistributedVirtualPortgroupPortgroupTypeEnum::Ephemeral),
     ],
 };
 
@@ -33857,13 +34028,13 @@ impl AsRef<str> for DistributedVirtualPortgroupPortgroupTypeEnum {
 }
 
 static ENTITY_TYPE_ENUM_MAP: phf::Map<&'static str, EntityTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("distributedVirtualSwitch", EntityTypeEnum::DistributedVirtualSwitch),
         ("distributedVirtualPortgroup", EntityTypeEnum::DistributedVirtualPortgroup),
+        ("distributedVirtualSwitch", EntityTypeEnum::DistributedVirtualSwitch),
     ],
 };
 
@@ -33925,13 +34096,13 @@ impl AsRef<str> for EntityTypeEnum {
 }
 
 static ENTITY_IMPORT_TYPE_ENUM_MAP: phf::Map<&'static str, EntityImportTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("createEntityWithOriginalIdentifier", EntityImportTypeEnum::CreateEntityWithOriginalIdentifier),
         ("applyToEntitySpecified", EntityImportTypeEnum::ApplyToEntitySpecified),
+        ("createEntityWithOriginalIdentifier", EntityImportTypeEnum::CreateEntityWithOriginalIdentifier),
         ("createEntityWithNewIdentifier", EntityImportTypeEnum::CreateEntityWithNewIdentifier),
     ],
 };
@@ -33995,13 +34166,13 @@ impl AsRef<str> for EntityImportTypeEnum {
 }
 
 static DVS_FILTER_SPEC_LINK_CONFIG_ENUM_MAP: phf::Map<&'static str, DvsFilterSpecLinkConfigEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("unblocked", DvsFilterSpecLinkConfigEnum::Unblocked),
         ("blocked", DvsFilterSpecLinkConfigEnum::Blocked),
+        ("unblocked", DvsFilterSpecLinkConfigEnum::Unblocked),
     ],
 };
 
@@ -34063,13 +34234,13 @@ impl AsRef<str> for DvsFilterSpecLinkConfigEnum {
 }
 
 static DVS_FILTER_SPEC_LINK_STATE_ENUM_MAP: phf::Map<&'static str, DvsFilterSpecLinkStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("up", DvsFilterSpecLinkStateEnum::Up),
         ("down", DvsFilterSpecLinkStateEnum::Down),
+        ("up", DvsFilterSpecLinkStateEnum::Up),
     ],
 };
 
@@ -34131,9 +34302,9 @@ impl AsRef<str> for DvsFilterSpecLinkStateEnum {
 }
 
 static HOST_DVS_CONFIG_SPEC_SWITCH_MODE_ENUM_MAP: phf::Map<&'static str, HostDvsConfigSpecSwitchModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("normal", HostDvsConfigSpecSwitchModeEnum::Normal),
@@ -34199,9 +34370,9 @@ impl AsRef<str> for HostDvsConfigSpecSwitchModeEnum {
 }
 
 static HOST_DISTRIBUTED_VIRTUAL_SWITCH_MANAGER_FAILOVER_REASON_ENUM_MAP: phf::Map<&'static str, HostDistributedVirtualSwitchManagerFailoverReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
         ("userInitiated", HostDistributedVirtualSwitchManagerFailoverReasonEnum::UserInitiated),
@@ -34269,7 +34440,7 @@ impl AsRef<str> for HostDistributedVirtualSwitchManagerFailoverReasonEnum {
 }
 
 static HOST_DISTRIBUTED_VIRTUAL_SWITCH_MANAGER_FAILOVER_STAGE_ENUM_MAP: phf::Map<&'static str, HostDistributedVirtualSwitchManagerFailoverStageEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -34335,16 +34506,16 @@ impl AsRef<str> for HostDistributedVirtualSwitchManagerFailoverStageEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_SWITCH_HOST_MEMBER_HOST_COMPONENT_STATE_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchHostMemberHostComponentStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
-        (2, 0),
+        (4, 0),
+        (1, 2),
     ],
     entries: &[
-        ("pending", DistributedVirtualSwitchHostMemberHostComponentStateEnum::Pending),
         ("up", DistributedVirtualSwitchHostMemberHostComponentStateEnum::Up),
         ("warning", DistributedVirtualSwitchHostMemberHostComponentStateEnum::Warning),
         ("down", DistributedVirtualSwitchHostMemberHostComponentStateEnum::Down),
+        ("pending", DistributedVirtualSwitchHostMemberHostComponentStateEnum::Pending),
         ("outOfSync", DistributedVirtualSwitchHostMemberHostComponentStateEnum::OutOfSync),
         ("disconnected", DistributedVirtualSwitchHostMemberHostComponentStateEnum::Disconnected),
     ],
@@ -34412,14 +34583,14 @@ impl AsRef<str> for DistributedVirtualSwitchHostMemberHostComponentStateEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_SWITCH_HOST_MEMBER_HOST_PERF_NIC_OFFLOAD_STATE_STATUS_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 2689841203009609170,
     disps: &[
         (0, 0),
     ],
     entries: &[
         ("FAILED", DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::Failed),
-        ("IN_PROGRESS", DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::InProgress),
         ("SUCCEEDED", DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::Succeeded),
+        ("IN_PROGRESS", DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum::InProgress),
     ],
 };
 
@@ -34482,13 +34653,13 @@ impl AsRef<str> for DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateSta
 }
 
 static DISTRIBUTED_VIRTUAL_SWITCH_HOST_MEMBER_HOST_UPLINK_STATE_STATE_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("standby", DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum::Standby),
         ("active", DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum::Active),
+        ("standby", DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum::Standby),
     ],
 };
 
@@ -34550,13 +34721,13 @@ impl AsRef<str> for DistributedVirtualSwitchHostMemberHostUplinkStateStateEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_SWITCH_HOST_MEMBER_TRANSPORT_ZONE_TYPE_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchHostMemberTransportZoneTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("vlan", DistributedVirtualSwitchHostMemberTransportZoneTypeEnum::Vlan),
         ("overlay", DistributedVirtualSwitchHostMemberTransportZoneTypeEnum::Overlay),
+        ("vlan", DistributedVirtualSwitchHostMemberTransportZoneTypeEnum::Vlan),
     ],
 };
 
@@ -34618,16 +34789,17 @@ impl AsRef<str> for DistributedVirtualSwitchHostMemberTransportZoneTypeEnum {
 }
 
 static DISTRIBUTED_VIRTUAL_SWITCH_PORT_CONNECTEE_CONNECTEE_TYPE_ENUM_MAP: phf::Map<&'static str, DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (3, 2),
+        (0, 0),
     ],
     entries: &[
-        ("pnic", DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::Pnic),
-        ("systemCrxVnic", DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::SystemCrxVnic),
-        ("vmVnic", DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::VmVnic),
         ("hostVmkVnic", DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::HostVmkVnic),
+        ("systemCrxVnic", DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::SystemCrxVnic),
         ("hostConsoleVnic", DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::HostConsoleVnic),
+        ("vmVnic", DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::VmVnic),
+        ("pnic", DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum::Pnic),
     ],
 };
 
@@ -34692,7 +34864,7 @@ impl AsRef<str> for DistributedVirtualSwitchPortConnecteeConnecteeTypeEnum {
 }
 
 static DVS_NETWORK_RULE_DIRECTION_TYPE_ENUM_MAP: phf::Map<&'static str, DvsNetworkRuleDirectionTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 2689841203009609170,
     disps: &[
         (0, 0),
     ],
@@ -34762,13 +34934,13 @@ impl AsRef<str> for DvsNetworkRuleDirectionTypeEnum {
 }
 
 static V_MWARE_DVS_LACP_API_VERSION_ENUM_MAP: phf::Map<&'static str, VMwareDvsLacpApiVersionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("multipleLag", VMwareDvsLacpApiVersionEnum::MultipleLag),
         ("singleLag", VMwareDvsLacpApiVersionEnum::SingleLag),
+        ("multipleLag", VMwareDvsLacpApiVersionEnum::MultipleLag),
     ],
 };
 
@@ -34830,34 +35002,37 @@ impl AsRef<str> for VMwareDvsLacpApiVersionEnum {
 }
 
 static V_MWARE_DVS_LACP_LOAD_BALANCE_ALGORITHM_ENUM_MAP: phf::Map<&'static str, VMwareDvsLacpLoadBalanceAlgorithmEnum> = ::phf::Map {
-    key: 106375038446233661,
+    key: 16287231350648472473,
     disps: &[
-        (0, 8),
-        (5, 2),
+        (0, 3),
+        (0, 4),
+        (5, 13),
+        (1, 0),
+        (1, 2),
         (2, 0),
-        (0, 11),
+        (0, 6),
     ],
     entries: &[
         ("destIpVlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestIpVlan),
-        ("destTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestTcpUdpPort),
-        ("srcIpVlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcIpVlan),
-        ("srcDestIpTcpUdpPortVlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestIpTcpUdpPortVlan),
-        ("srcPortId", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcPortId),
         ("srcIpTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcIpTcpUdpPort),
-        ("srcDestIpTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestIpTcpUdpPort),
-        ("vlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::Vlan),
-        ("srcMac", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcMac),
-        ("srcDestMac", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestMac),
-        ("srcIp", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcIp),
-        ("destIp", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestIp),
-        ("srcTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcTcpUdpPort),
-        ("srcDestIp", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestIp),
-        ("destIpTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestIpTcpUdpPort),
-        ("srcDestTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestTcpUdpPort),
         ("destIpTcpUdpPortVlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestIpTcpUdpPortVlan),
-        ("srcIpTcpUdpPortVlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcIpTcpUdpPortVlan),
-        ("destMac", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestMac),
+        ("srcPortId", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcPortId),
         ("srcDestIpVlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestIpVlan),
+        ("srcDestMac", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestMac),
+        ("srcDestIpTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestIpTcpUdpPort),
+        ("destIpTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestIpTcpUdpPort),
+        ("srcIpVlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcIpVlan),
+        ("destMac", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestMac),
+        ("destTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestTcpUdpPort),
+        ("srcDestTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestTcpUdpPort),
+        ("vlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::Vlan),
+        ("srcIp", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcIp),
+        ("srcDestIpTcpUdpPortVlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestIpTcpUdpPortVlan),
+        ("srcIpTcpUdpPortVlan", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcIpTcpUdpPortVlan),
+        ("srcTcpUdpPort", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcTcpUdpPort),
+        ("srcMac", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcMac),
+        ("srcDestIp", VMwareDvsLacpLoadBalanceAlgorithmEnum::SrcDestIp),
+        ("destIp", VMwareDvsLacpLoadBalanceAlgorithmEnum::DestIp),
     ],
 };
 
@@ -34937,7 +35112,7 @@ impl AsRef<str> for VMwareDvsLacpLoadBalanceAlgorithmEnum {
 }
 
 static DVS_MAC_LIMIT_POLICY_TYPE_ENUM_MAP: phf::Map<&'static str, DvsMacLimitPolicyTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -35005,13 +35180,13 @@ impl AsRef<str> for DvsMacLimitPolicyTypeEnum {
 }
 
 static V_MWARE_DVS_MULTICAST_FILTERING_MODE_ENUM_MAP: phf::Map<&'static str, VMwareDvsMulticastFilteringModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("legacyFiltering", VMwareDvsMulticastFilteringModeEnum::LegacyFiltering),
         ("snooping", VMwareDvsMulticastFilteringModeEnum::Snooping),
+        ("legacyFiltering", VMwareDvsMulticastFilteringModeEnum::LegacyFiltering),
     ],
 };
 
@@ -35073,14 +35248,14 @@ impl AsRef<str> for VMwareDvsMulticastFilteringModeEnum {
 }
 
 static VMWARE_DISTRIBUTED_VIRTUAL_SWITCH_PVLAN_PORT_TYPE_ENUM_MAP: phf::Map<&'static str, VmwareDistributedVirtualSwitchPvlanPortTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("promiscuous", VmwareDistributedVirtualSwitchPvlanPortTypeEnum::Promiscuous),
-        ("community", VmwareDistributedVirtualSwitchPvlanPortTypeEnum::Community),
         ("isolated", VmwareDistributedVirtualSwitchPvlanPortTypeEnum::Isolated),
+        ("community", VmwareDistributedVirtualSwitchPvlanPortTypeEnum::Community),
+        ("promiscuous", VmwareDistributedVirtualSwitchPvlanPortTypeEnum::Promiscuous),
     ],
 };
 
@@ -35143,15 +35318,16 @@ impl AsRef<str> for VmwareDistributedVirtualSwitchPvlanPortTypeEnum {
 }
 
 static V_MWARE_DVS_TEAMING_MATCH_STATUS_ENUM_MAP: phf::Map<&'static str, VMwareDvsTeamingMatchStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (1, 3),
     ],
     entries: &[
-        ("iphashMatch", VMwareDvsTeamingMatchStatusEnum::IphashMatch),
-        ("nonIphashMatch", VMwareDvsTeamingMatchStatusEnum::NonIphashMatch),
-        ("nonIphashMismatch", VMwareDvsTeamingMatchStatusEnum::NonIphashMismatch),
         ("iphashMismatch", VMwareDvsTeamingMatchStatusEnum::IphashMismatch),
+        ("nonIphashMismatch", VMwareDvsTeamingMatchStatusEnum::NonIphashMismatch),
+        ("nonIphashMatch", VMwareDvsTeamingMatchStatusEnum::NonIphashMatch),
+        ("iphashMatch", VMwareDvsTeamingMatchStatusEnum::IphashMatch),
     ],
 };
 
@@ -35215,13 +35391,13 @@ impl AsRef<str> for VMwareDvsTeamingMatchStatusEnum {
 }
 
 static V_MWARE_UPLINK_LACP_MODE_ENUM_MAP: phf::Map<&'static str, VMwareUplinkLacpModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("passive", VMwareUplinkLacpModeEnum::Passive),
         ("active", VMwareUplinkLacpModeEnum::Active),
+        ("passive", VMwareUplinkLacpModeEnum::Passive),
     ],
 };
 
@@ -35283,13 +35459,13 @@ impl AsRef<str> for VMwareUplinkLacpModeEnum {
 }
 
 static V_MWARE_UPLINK_LACP_TIMEOUT_MODE_ENUM_MAP: phf::Map<&'static str, VMwareUplinkLacpTimeoutModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("fast", VMwareUplinkLacpTimeoutModeEnum::Fast),
         ("slow", VMwareUplinkLacpTimeoutModeEnum::Slow),
+        ("fast", VMwareUplinkLacpTimeoutModeEnum::Fast),
     ],
 };
 
@@ -35351,13 +35527,13 @@ impl AsRef<str> for VMwareUplinkLacpTimeoutModeEnum {
 }
 
 static V_MWARE_DVS_VSPAN_SESSION_ENCAP_TYPE_ENUM_MAP: phf::Map<&'static str, VMwareDvsVspanSessionEncapTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
-        ("erspan3", VMwareDvsVspanSessionEncapTypeEnum::Erspan3),
         ("erspan2", VMwareDvsVspanSessionEncapTypeEnum::Erspan2),
+        ("erspan3", VMwareDvsVspanSessionEncapTypeEnum::Erspan3),
         ("gre", VMwareDvsVspanSessionEncapTypeEnum::Gre),
     ],
 };
@@ -35421,16 +35597,17 @@ impl AsRef<str> for VMwareDvsVspanSessionEncapTypeEnum {
 }
 
 static V_MWARE_DVS_VSPAN_SESSION_TYPE_ENUM_MAP: phf::Map<&'static str, VMwareDvsVspanSessionTypeEnum> = ::phf::Map {
-    key: 4594751852016600049,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 4),
     ],
     entries: &[
-        ("remoteMirrorDest", VMwareDvsVspanSessionTypeEnum::RemoteMirrorDest),
-        ("encapsulatedRemoteMirrorSource", VMwareDvsVspanSessionTypeEnum::EncapsulatedRemoteMirrorSource),
-        ("dvPortMirror", VMwareDvsVspanSessionTypeEnum::DvPortMirror),
-        ("mixedDestMirror", VMwareDvsVspanSessionTypeEnum::MixedDestMirror),
         ("remoteMirrorSource", VMwareDvsVspanSessionTypeEnum::RemoteMirrorSource),
+        ("mixedDestMirror", VMwareDvsVspanSessionTypeEnum::MixedDestMirror),
+        ("dvPortMirror", VMwareDvsVspanSessionTypeEnum::DvPortMirror),
+        ("encapsulatedRemoteMirrorSource", VMwareDvsVspanSessionTypeEnum::EncapsulatedRemoteMirrorSource),
+        ("remoteMirrorDest", VMwareDvsVspanSessionTypeEnum::RemoteMirrorDest),
     ],
 };
 
@@ -35495,14 +35672,14 @@ impl AsRef<str> for VMwareDvsVspanSessionTypeEnum {
 }
 
 static CRYPTO_MANAGER_HOST_KEY_MANAGEMENT_TYPE_ENUM_MAP: phf::Map<&'static str, CryptoManagerHostKeyManagementTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
+        ("internal", CryptoManagerHostKeyManagementTypeEnum::Internal),
         ("external", CryptoManagerHostKeyManagementTypeEnum::External),
         ("unknown", CryptoManagerHostKeyManagementTypeEnum::Unknown),
-        ("internal", CryptoManagerHostKeyManagementTypeEnum::Internal),
     ],
 };
 
@@ -35565,22 +35742,24 @@ impl AsRef<str> for CryptoManagerHostKeyManagementTypeEnum {
 }
 
 static CRYPTO_MANAGER_KMIP_CRYPTO_KEY_STATUS_KEY_UNAVAILABLE_REASON_ENUM_MAP: phf::Map<&'static str, CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (8, 2),
-        (5, 0),
+        (1, 0),
+        (0, 0),
+        (0, 1),
+        (1, 6),
     ],
     entries: &[
-        ("KeyStateManagedByNKP", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateManagedByNkp),
-        ("KeyStateClusterUnreachable", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateClusterUnreachable),
-        ("WrappingKeyMissingInKMS", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::WrappingKeyMissingInKms),
-        ("KeyStateMissingInCache", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateMissingInCache),
         ("KeyStateClusterInvalid", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateClusterInvalid),
         ("KeyStateMissingInKMS", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateMissingInKms),
-        ("KeyStateNotActiveOrEnabled", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateNotActiveOrEnabled),
-        ("WrappingKeyNotActiveOrEnabled", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::WrappingKeyNotActiveOrEnabled),
+        ("WrappingKeyMissingInKMS", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::WrappingKeyMissingInKms),
         ("KeyStateManagedByTrustAuthority", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateManagedByTrustAuthority),
+        ("WrappingKeyNotActiveOrEnabled", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::WrappingKeyNotActiveOrEnabled),
+        ("KeyStateManagedByNKP", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateManagedByNkp),
+        ("KeyStateClusterUnreachable", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateClusterUnreachable),
+        ("KeyStateNotActiveOrEnabled", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateNotActiveOrEnabled),
         ("NoPermissionToAccessKeyProvider", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::NoPermissionToAccessKeyProvider),
+        ("KeyStateMissingInCache", CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum::KeyStateMissingInCache),
     ],
 };
 
@@ -35650,13 +35829,13 @@ impl AsRef<str> for CryptoManagerKmipCryptoKeyStatusKeyUnavailableReasonEnum {
 }
 
 static KMIP_CLUSTER_INFO_KEY_TYPE_ENUM_MAP: phf::Map<&'static str, KmipClusterInfoKeyTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("rawKey", KmipClusterInfoKeyTypeEnum::RawKey),
         ("wrappedKey", KmipClusterInfoKeyTypeEnum::WrappedKey),
+        ("rawKey", KmipClusterInfoKeyTypeEnum::RawKey),
     ],
 };
 
@@ -35718,15 +35897,16 @@ impl AsRef<str> for KmipClusterInfoKeyTypeEnum {
 }
 
 static KMIP_CLUSTER_INFO_KMS_MANAGEMENT_TYPE_ENUM_MAP: phf::Map<&'static str, KmipClusterInfoKmsManagementTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("trustAuthority", KmipClusterInfoKmsManagementTypeEnum::TrustAuthority),
-        ("nativeProvider", KmipClusterInfoKmsManagementTypeEnum::NativeProvider),
-        ("unknown", KmipClusterInfoKmsManagementTypeEnum::Unknown),
         ("vCenter", KmipClusterInfoKmsManagementTypeEnum::VCenter),
+        ("trustAuthority", KmipClusterInfoKmsManagementTypeEnum::TrustAuthority),
+        ("unknown", KmipClusterInfoKmsManagementTypeEnum::Unknown),
+        ("nativeProvider", KmipClusterInfoKmsManagementTypeEnum::NativeProvider),
     ],
 };
 
@@ -35790,15 +35970,16 @@ impl AsRef<str> for KmipClusterInfoKmsManagementTypeEnum {
 }
 
 static CUSTOMIZATION_FAILED_REASON_CODE_ENUM_MAP: phf::Map<&'static str, CustomizationFailedReasonCodeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("rawDataIsNotSupported", CustomizationFailedReasonCodeEnum::RawDataIsNotSupported),
-        ("userDefinedScriptDisabled", CustomizationFailedReasonCodeEnum::UserDefinedScriptDisabled),
-        ("wrongMetadataFormat", CustomizationFailedReasonCodeEnum::WrongMetadataFormat),
         ("customizationDisabled", CustomizationFailedReasonCodeEnum::CustomizationDisabled),
+        ("rawDataIsNotSupported", CustomizationFailedReasonCodeEnum::RawDataIsNotSupported),
+        ("wrongMetadataFormat", CustomizationFailedReasonCodeEnum::WrongMetadataFormat),
+        ("userDefinedScriptDisabled", CustomizationFailedReasonCodeEnum::UserDefinedScriptDisabled),
     ],
 };
 
@@ -35862,14 +36043,15 @@ impl AsRef<str> for CustomizationFailedReasonCodeEnum {
 }
 
 static DVS_EVENT_PORT_BLOCK_STATE_ENUM_MAP: phf::Map<&'static str, DvsEventPortBlockStateEnum> = ::phf::Map {
-    key: 351906021642186605,
+    key: 16263683158343804936,
     disps: &[
+        (1, 0),
         (0, 0),
     ],
     entries: &[
         ("unknown", DvsEventPortBlockStateEnum::Unknown),
-        ("blocked", DvsEventPortBlockStateEnum::Blocked),
         ("unset", DvsEventPortBlockStateEnum::Unset),
+        ("blocked", DvsEventPortBlockStateEnum::Blocked),
         ("unblocked", DvsEventPortBlockStateEnum::Unblocked),
     ],
 };
@@ -35934,15 +36116,16 @@ impl AsRef<str> for DvsEventPortBlockStateEnum {
 }
 
 static EVENT_EVENT_SEVERITY_ENUM_MAP: phf::Map<&'static str, EventEventSeverityEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (2, 0),
+        (0, 1),
     ],
     entries: &[
-        ("error", EventEventSeverityEnum::Error),
-        ("info", EventEventSeverityEnum::Info),
-        ("warning", EventEventSeverityEnum::Warning),
         ("user", EventEventSeverityEnum::User),
+        ("info", EventEventSeverityEnum::Info),
+        ("error", EventEventSeverityEnum::Error),
+        ("warning", EventEventSeverityEnum::Warning),
     ],
 };
 
@@ -36006,15 +36189,16 @@ impl AsRef<str> for EventEventSeverityEnum {
 }
 
 static EVENT_CATEGORY_ENUM_MAP: phf::Map<&'static str, EventCategoryEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (2, 0),
+        (0, 1),
     ],
     entries: &[
-        ("error", EventCategoryEnum::Error),
-        ("info", EventCategoryEnum::Info),
-        ("warning", EventCategoryEnum::Warning),
         ("user", EventCategoryEnum::User),
+        ("info", EventCategoryEnum::Info),
+        ("error", EventCategoryEnum::Error),
+        ("warning", EventCategoryEnum::Warning),
     ],
 };
 
@@ -36078,9 +36262,9 @@ impl AsRef<str> for EventCategoryEnum {
 }
 
 static EVENT_FILTER_SPEC_RECURSION_OPTION_ENUM_MAP: phf::Map<&'static str, EventFilterSpecRecursionOptionEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("self", EventFilterSpecRecursionOptionEnum::Self_),
@@ -36148,20 +36332,21 @@ impl AsRef<str> for EventFilterSpecRecursionOptionEnum {
 }
 
 static HOST_DAS_ERROR_EVENT_HOST_DAS_ERROR_REASON_ENUM_MAP: phf::Map<&'static str, HostDasErrorEventHostDasErrorReasonEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (6, 0),
         (0, 0),
+        (4, 0),
+        (0, 1),
     ],
     entries: &[
-        ("communicationInitFailed", HostDasErrorEventHostDasErrorReasonEnum::CommunicationInitFailed),
-        ("timeout", HostDasErrorEventHostDasErrorReasonEnum::Timeout),
         ("agentShutdown", HostDasErrorEventHostDasErrorReasonEnum::AgentShutdown),
-        ("configFailed", HostDasErrorEventHostDasErrorReasonEnum::ConfigFailed),
         ("other", HostDasErrorEventHostDasErrorReasonEnum::Other),
-        ("isolationAddressUnpingable", HostDasErrorEventHostDasErrorReasonEnum::IsolationAddressUnpingable),
-        ("healthCheckScriptFailed", HostDasErrorEventHostDasErrorReasonEnum::HealthCheckScriptFailed),
         ("agentFailed", HostDasErrorEventHostDasErrorReasonEnum::AgentFailed),
+        ("configFailed", HostDasErrorEventHostDasErrorReasonEnum::ConfigFailed),
+        ("healthCheckScriptFailed", HostDasErrorEventHostDasErrorReasonEnum::HealthCheckScriptFailed),
+        ("timeout", HostDasErrorEventHostDasErrorReasonEnum::Timeout),
+        ("isolationAddressUnpingable", HostDasErrorEventHostDasErrorReasonEnum::IsolationAddressUnpingable),
+        ("communicationInitFailed", HostDasErrorEventHostDasErrorReasonEnum::CommunicationInitFailed),
     ],
 };
 
@@ -36229,21 +36414,22 @@ impl AsRef<str> for HostDasErrorEventHostDasErrorReasonEnum {
 }
 
 static HOST_DISCONNECTED_EVENT_REASON_CODE_ENUM_MAP: phf::Map<&'static str, HostDisconnectedEventReasonCodeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
-        (0, 0),
+        (0, 8),
+        (0, 5),
+        (1, 0),
     ],
     entries: &[
-        ("agentOutOfDate", HostDisconnectedEventReasonCodeEnum::AgentOutOfDate),
-        ("passwordDecryptFailure", HostDisconnectedEventReasonCodeEnum::PasswordDecryptFailure),
-        ("agentUpgrade", HostDisconnectedEventReasonCodeEnum::AgentUpgrade),
-        ("vcVRAMCapacityExceeded", HostDisconnectedEventReasonCodeEnum::VcVramCapacityExceeded),
         ("insufficientLicenses", HostDisconnectedEventReasonCodeEnum::InsufficientLicenses),
-        ("unknown", HostDisconnectedEventReasonCodeEnum::Unknown),
-        ("sslThumbprintVerifyFailed", HostDisconnectedEventReasonCodeEnum::SslThumbprintVerifyFailed),
         ("licenseExpired", HostDisconnectedEventReasonCodeEnum::LicenseExpired),
         ("userRequest", HostDisconnectedEventReasonCodeEnum::UserRequest),
+        ("agentUpgrade", HostDisconnectedEventReasonCodeEnum::AgentUpgrade),
+        ("passwordDecryptFailure", HostDisconnectedEventReasonCodeEnum::PasswordDecryptFailure),
+        ("agentOutOfDate", HostDisconnectedEventReasonCodeEnum::AgentOutOfDate),
+        ("unknown", HostDisconnectedEventReasonCodeEnum::Unknown),
+        ("sslThumbprintVerifyFailed", HostDisconnectedEventReasonCodeEnum::SslThumbprintVerifyFailed),
+        ("vcVRAMCapacityExceeded", HostDisconnectedEventReasonCodeEnum::VcVramCapacityExceeded),
     ],
 };
 
@@ -36312,15 +36498,16 @@ impl AsRef<str> for HostDisconnectedEventReasonCodeEnum {
 }
 
 static VM_DAS_BEING_RESET_EVENT_REASON_CODE_ENUM_MAP: phf::Map<&'static str, VmDasBeingResetEventReasonCodeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("vmcpResetApdCleared", VmDasBeingResetEventReasonCodeEnum::VmcpResetApdCleared),
-        ("appImmediateResetRequest", VmDasBeingResetEventReasonCodeEnum::AppImmediateResetRequest),
-        ("appHeartbeatFailure", VmDasBeingResetEventReasonCodeEnum::AppHeartbeatFailure),
         ("vmtoolsHeartbeatFailure", VmDasBeingResetEventReasonCodeEnum::VmtoolsHeartbeatFailure),
+        ("appHeartbeatFailure", VmDasBeingResetEventReasonCodeEnum::AppHeartbeatFailure),
+        ("appImmediateResetRequest", VmDasBeingResetEventReasonCodeEnum::AppImmediateResetRequest),
+        ("vmcpResetApdCleared", VmDasBeingResetEventReasonCodeEnum::VmcpResetApdCleared),
     ],
 };
 
@@ -36384,15 +36571,16 @@ impl AsRef<str> for VmDasBeingResetEventReasonCodeEnum {
 }
 
 static VM_FAILED_STARTING_SECONDARY_EVENT_FAILURE_REASON_ENUM_MAP: phf::Map<&'static str, VmFailedStartingSecondaryEventFailureReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
-        ("loginFailed", VmFailedStartingSecondaryEventFailureReasonEnum::LoginFailed),
         ("registerVmFailed", VmFailedStartingSecondaryEventFailureReasonEnum::RegisterVmFailed),
-        ("migrateFailed", VmFailedStartingSecondaryEventFailureReasonEnum::MigrateFailed),
+        ("loginFailed", VmFailedStartingSecondaryEventFailureReasonEnum::LoginFailed),
         ("incompatibleHost", VmFailedStartingSecondaryEventFailureReasonEnum::IncompatibleHost),
+        ("migrateFailed", VmFailedStartingSecondaryEventFailureReasonEnum::MigrateFailed),
     ],
 };
 
@@ -36456,13 +36644,13 @@ impl AsRef<str> for VmFailedStartingSecondaryEventFailureReasonEnum {
 }
 
 static VM_SHUTDOWN_ON_ISOLATION_EVENT_OPERATION_ENUM_MAP: phf::Map<&'static str, VmShutdownOnIsolationEventOperationEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("poweredOff", VmShutdownOnIsolationEventOperationEnum::PoweredOff),
         ("shutdown", VmShutdownOnIsolationEventOperationEnum::Shutdown),
+        ("poweredOff", VmShutdownOnIsolationEventOperationEnum::PoweredOff),
     ],
 };
 
@@ -36524,7 +36712,7 @@ impl AsRef<str> for VmShutdownOnIsolationEventOperationEnum {
 }
 
 static AFFINITY_TYPE_ENUM_MAP: phf::Map<&'static str, AffinityTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
         (0, 0),
     ],
@@ -36592,21 +36780,22 @@ impl AsRef<str> for AffinityTypeEnum {
 }
 
 static AGENT_INSTALL_FAILED_REASON_ENUM_MAP: phf::Map<&'static str, AgentInstallFailedReasonEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 16287231350648472473,
     disps: &[
-        (2, 3),
         (0, 0),
+        (5, 4),
+        (1, 1),
     ],
     entries: &[
-        ("InstallTimedout", AgentInstallFailedReasonEnum::InstallTimedout),
-        ("AgentUploadFailed", AgentInstallFailedReasonEnum::AgentUploadFailed),
-        ("AgentUploadTimedout", AgentInstallFailedReasonEnum::AgentUploadTimedout),
-        ("SignatureVerificationFailed", AgentInstallFailedReasonEnum::SignatureVerificationFailed),
-        ("PrepareToUpgradeFailed", AgentInstallFailedReasonEnum::PrepareToUpgradeFailed),
-        ("AgentNotReachable", AgentInstallFailedReasonEnum::AgentNotReachable),
         ("NotEnoughSpaceOnDevice", AgentInstallFailedReasonEnum::NotEnoughSpaceOnDevice),
-        ("AgentNotRunning", AgentInstallFailedReasonEnum::AgentNotRunning),
         ("UnknownInstallerError", AgentInstallFailedReasonEnum::UnknownInstallerError),
+        ("InstallTimedout", AgentInstallFailedReasonEnum::InstallTimedout),
+        ("SignatureVerificationFailed", AgentInstallFailedReasonEnum::SignatureVerificationFailed),
+        ("AgentUploadFailed", AgentInstallFailedReasonEnum::AgentUploadFailed),
+        ("AgentNotRunning", AgentInstallFailedReasonEnum::AgentNotRunning),
+        ("AgentUploadTimedout", AgentInstallFailedReasonEnum::AgentUploadTimedout),
+        ("AgentNotReachable", AgentInstallFailedReasonEnum::AgentNotReachable),
+        ("PrepareToUpgradeFailed", AgentInstallFailedReasonEnum::PrepareToUpgradeFailed),
     ],
 };
 
@@ -36675,7 +36864,7 @@ impl AsRef<str> for AgentInstallFailedReasonEnum {
 }
 
 static CANNOT_ENABLE_VMCP_FOR_CLUSTER_REASON_ENUM_MAP: phf::Map<&'static str, CannotEnableVmcpForClusterReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -36741,7 +36930,7 @@ impl AsRef<str> for CannotEnableVmcpForClusterReasonEnum {
 }
 
 static CANNOT_MOVE_FAULT_TOLERANCE_VM_MOVE_TYPE_ENUM_MAP: phf::Map<&'static str, CannotMoveFaultToleranceVmMoveTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -36809,15 +36998,16 @@ impl AsRef<str> for CannotMoveFaultToleranceVmMoveTypeEnum {
 }
 
 static CANNOT_POWER_OFF_VM_IN_CLUSTER_OPERATION_ENUM_MAP: phf::Map<&'static str, CannotPowerOffVmInClusterOperationEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
+        (2, 0),
         (0, 0),
     ],
     entries: &[
         ("guestSuspend", CannotPowerOffVmInClusterOperationEnum::GuestSuspend),
-        ("guestShutdown", CannotPowerOffVmInClusterOperationEnum::GuestShutdown),
         ("suspend", CannotPowerOffVmInClusterOperationEnum::Suspend),
         ("powerOff", CannotPowerOffVmInClusterOperationEnum::PowerOff),
+        ("guestShutdown", CannotPowerOffVmInClusterOperationEnum::GuestShutdown),
     ],
 };
 
@@ -36881,19 +37071,20 @@ impl AsRef<str> for CannotPowerOffVmInClusterOperationEnum {
 }
 
 static CANNOT_USE_NETWORK_REASON_ENUM_MAP: phf::Map<&'static str, CannotUseNetworkReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (5, 0),
-        (6, 2),
+        (0, 2),
+        (4, 0),
+        (0, 4),
     ],
     entries: &[
+        ("MismatchedRealTimeDvs", CannotUseNetworkReasonEnum::MismatchedRealTimeDvs),
+        ("VMotionToUnsupportedNetworkType", CannotUseNetworkReasonEnum::VMotionToUnsupportedNetworkType),
+        ("MismatchedDvsVersionOrVendor", CannotUseNetworkReasonEnum::MismatchedDvsVersionOrVendor),
         ("MismatchedEnsMode", CannotUseNetworkReasonEnum::MismatchedEnsMode),
-        ("NetworkUnderMaintenance", CannotUseNetworkReasonEnum::NetworkUnderMaintenance),
         ("NetworkReservationNotSupported", CannotUseNetworkReasonEnum::NetworkReservationNotSupported),
         ("MismatchedNetworkPolicies", CannotUseNetworkReasonEnum::MismatchedNetworkPolicies),
-        ("MismatchedDvsVersionOrVendor", CannotUseNetworkReasonEnum::MismatchedDvsVersionOrVendor),
-        ("VMotionToUnsupportedNetworkType", CannotUseNetworkReasonEnum::VMotionToUnsupportedNetworkType),
-        ("MismatchedRealTimeDvs", CannotUseNetworkReasonEnum::MismatchedRealTimeDvs),
+        ("NetworkUnderMaintenance", CannotUseNetworkReasonEnum::NetworkUnderMaintenance),
     ],
 };
 
@@ -36960,24 +37151,25 @@ impl AsRef<str> for CannotUseNetworkReasonEnum {
 }
 
 static DAS_CONFIG_FAULT_DAS_CONFIG_FAULT_REASON_ENUM_MAP: phf::Map<&'static str, DasConfigFaultDasConfigFaultReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (1, 5),
-        (9, 4),
+        (5, 7),
         (0, 0),
+        (0, 3),
+        (1, 8),
     ],
     entries: &[
-        ("HostNetworkMisconfiguration", DasConfigFaultDasConfigFaultReasonEnum::HostNetworkMisconfiguration),
-        ("CreateConfigVvolFailed", DasConfigFaultDasConfigFaultReasonEnum::CreateConfigVvolFailed),
-        ("Other", DasConfigFaultDasConfigFaultReasonEnum::Other),
-        ("NoPrimaryAgentAvailable", DasConfigFaultDasConfigFaultReasonEnum::NoPrimaryAgentAvailable),
-        ("InsufficientPrivileges", DasConfigFaultDasConfigFaultReasonEnum::InsufficientPrivileges),
         ("VSanNotSupportedOnHost", DasConfigFaultDasConfigFaultReasonEnum::VSanNotSupportedOnHost),
-        ("SetDesiredImageSpecFailed", DasConfigFaultDasConfigFaultReasonEnum::SetDesiredImageSpecFailed),
-        ("NoDatastoresConfigured", DasConfigFaultDasConfigFaultReasonEnum::NoDatastoresConfigured),
-        ("HostMisconfiguration", DasConfigFaultDasConfigFaultReasonEnum::HostMisconfiguration),
         ("DasNetworkMisconfiguration", DasConfigFaultDasConfigFaultReasonEnum::DasNetworkMisconfiguration),
+        ("NoPrimaryAgentAvailable", DasConfigFaultDasConfigFaultReasonEnum::NoPrimaryAgentAvailable),
+        ("CreateConfigVvolFailed", DasConfigFaultDasConfigFaultReasonEnum::CreateConfigVvolFailed),
+        ("NoDatastoresConfigured", DasConfigFaultDasConfigFaultReasonEnum::NoDatastoresConfigured),
+        ("InsufficientPrivileges", DasConfigFaultDasConfigFaultReasonEnum::InsufficientPrivileges),
+        ("HostNetworkMisconfiguration", DasConfigFaultDasConfigFaultReasonEnum::HostNetworkMisconfiguration),
+        ("HostMisconfiguration", DasConfigFaultDasConfigFaultReasonEnum::HostMisconfiguration),
         ("ApplyHAVibsOnClusterFailed", DasConfigFaultDasConfigFaultReasonEnum::ApplyHaVibsOnClusterFailed),
+        ("SetDesiredImageSpecFailed", DasConfigFaultDasConfigFaultReasonEnum::SetDesiredImageSpecFailed),
+        ("Other", DasConfigFaultDasConfigFaultReasonEnum::Other),
     ],
 };
 
@@ -37048,14 +37240,14 @@ impl AsRef<str> for DasConfigFaultDasConfigFaultReasonEnum {
 }
 
 static DEVICE_NOT_SUPPORTED_REASON_ENUM_MAP: phf::Map<&'static str, DeviceNotSupportedReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
+        ("guest", DeviceNotSupportedReasonEnum::Guest),
         ("ft", DeviceNotSupportedReasonEnum::Ft),
         ("host", DeviceNotSupportedReasonEnum::Host),
-        ("guest", DeviceNotSupportedReasonEnum::Guest),
     ],
 };
 
@@ -37118,7 +37310,7 @@ impl AsRef<str> for DeviceNotSupportedReasonEnum {
 }
 
 static DISALLOWED_CHANGE_BY_SERVICE_DISALLOWED_CHANGE_ENUM_MAP: phf::Map<&'static str, DisallowedChangeByServiceDisallowedChangeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -37184,9 +37376,9 @@ impl AsRef<str> for DisallowedChangeByServiceDisallowedChangeEnum {
 }
 
 static FT_ISSUES_ON_HOST_HOST_SELECTION_TYPE_ENUM_MAP: phf::Map<&'static str, FtIssuesOnHostHostSelectionTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("user", FtIssuesOnHostHostSelectionTypeEnum::User),
@@ -37254,7 +37446,7 @@ impl AsRef<str> for FtIssuesOnHostHostSelectionTypeEnum {
 }
 
 static HOST_HAS_COMPONENT_FAILURE_HOST_COMPONENT_TYPE_ENUM_MAP: phf::Map<&'static str, HostHasComponentFailureHostComponentTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -37320,7 +37512,7 @@ impl AsRef<str> for HostHasComponentFailureHostComponentTypeEnum {
 }
 
 static HOST_INCOMPATIBLE_FOR_FAULT_TOLERANCE_REASON_ENUM_MAP: phf::Map<&'static str, HostIncompatibleForFaultToleranceReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -37388,7 +37580,7 @@ impl AsRef<str> for HostIncompatibleForFaultToleranceReasonEnum {
 }
 
 static HOST_INCOMPATIBLE_FOR_RECORD_REPLAY_REASON_ENUM_MAP: phf::Map<&'static str, HostIncompatibleForRecordReplayReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -37456,13 +37648,13 @@ impl AsRef<str> for HostIncompatibleForRecordReplayReasonEnum {
 }
 
 static INCOMPATIBLE_HOST_FOR_VM_REPLICATION_INCOMPATIBLE_REASON_ENUM_MAP: phf::Map<&'static str, IncompatibleHostForVmReplicationIncompatibleReasonEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("netCompression", IncompatibleHostForVmReplicationIncompatibleReasonEnum::NetCompression),
         ("rpo", IncompatibleHostForVmReplicationIncompatibleReasonEnum::Rpo),
+        ("netCompression", IncompatibleHostForVmReplicationIncompatibleReasonEnum::NetCompression),
     ],
 };
 
@@ -37524,14 +37716,14 @@ impl AsRef<str> for IncompatibleHostForVmReplicationIncompatibleReasonEnum {
 }
 
 static INVALID_DAS_CONFIG_ARGUMENT_ENTRY_FOR_INVALID_ARGUMENT_ENUM_MAP: phf::Map<&'static str, InvalidDasConfigArgumentEntryForInvalidArgumentEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("userHeartbeatDs", InvalidDasConfigArgumentEntryForInvalidArgumentEnum::UserHeartbeatDs),
         ("admissionControl", InvalidDasConfigArgumentEntryForInvalidArgumentEnum::AdmissionControl),
         ("vmConfig", InvalidDasConfigArgumentEntryForInvalidArgumentEnum::VmConfig),
+        ("userHeartbeatDs", InvalidDasConfigArgumentEntryForInvalidArgumentEnum::UserHeartbeatDs),
     ],
 };
 
@@ -37594,9 +37786,9 @@ impl AsRef<str> for InvalidDasConfigArgumentEntryForInvalidArgumentEnum {
 }
 
 static INVALID_PROFILE_REFERENCE_HOST_REASON_ENUM_MAP: phf::Map<&'static str, InvalidProfileReferenceHostReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("incompatibleVersion", InvalidProfileReferenceHostReasonEnum::IncompatibleVersion),
@@ -37662,15 +37854,16 @@ impl AsRef<str> for InvalidProfileReferenceHostReasonEnum {
 }
 
 static LICENSE_ASSIGNMENT_FAILED_REASON_ENUM_MAP: phf::Map<&'static str, LicenseAssignmentFailedReasonEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 4203492208743950414,
     disps: &[
-        (2, 0),
+        (1, 0),
+        (0, 0),
     ],
     entries: &[
+        ("hostsUnmanageableByVirtualCenterWithoutLicenseServer", LicenseAssignmentFailedReasonEnum::HostsUnmanageableByVirtualCenterWithoutLicenseServer),
+        ("downgradeDisallowed", LicenseAssignmentFailedReasonEnum::DowngradeDisallowed),
         ("inventoryNotManageableByVirtualCenter", LicenseAssignmentFailedReasonEnum::InventoryNotManageableByVirtualCenter),
         ("keyEntityMismatch", LicenseAssignmentFailedReasonEnum::KeyEntityMismatch),
-        ("downgradeDisallowed", LicenseAssignmentFailedReasonEnum::DowngradeDisallowed),
-        ("hostsUnmanageableByVirtualCenterWithoutLicenseServer", LicenseAssignmentFailedReasonEnum::HostsUnmanageableByVirtualCenterWithoutLicenseServer),
     ],
 };
 
@@ -37734,7 +37927,7 @@ impl AsRef<str> for LicenseAssignmentFailedReasonEnum {
 }
 
 static NOT_SUPPORTED_DEVICE_FOR_FT_DEVICE_TYPE_ENUM_MAP: phf::Map<&'static str, NotSupportedDeviceForFtDeviceTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -37802,13 +37995,13 @@ impl AsRef<str> for NotSupportedDeviceForFtDeviceTypeEnum {
 }
 
 static NUM_VIRTUAL_CPUS_INCOMPATIBLE_REASON_ENUM_MAP: phf::Map<&'static str, NumVirtualCpusIncompatibleReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("recordReplay", NumVirtualCpusIncompatibleReasonEnum::RecordReplay),
         ("faultTolerance", NumVirtualCpusIncompatibleReasonEnum::FaultTolerance),
+        ("recordReplay", NumVirtualCpusIncompatibleReasonEnum::RecordReplay),
     ],
 };
 
@@ -37870,13 +38063,13 @@ impl AsRef<str> for NumVirtualCpusIncompatibleReasonEnum {
 }
 
 static QUARANTINE_MODE_FAULT_FAULT_TYPE_ENUM_MAP: phf::Map<&'static str, QuarantineModeFaultFaultTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("CorrectionDisallowed", QuarantineModeFaultFaultTypeEnum::CorrectionDisallowed),
         ("CorrectionImpact", QuarantineModeFaultFaultTypeEnum::CorrectionImpact),
+        ("CorrectionDisallowed", QuarantineModeFaultFaultTypeEnum::CorrectionDisallowed),
         ("NoCompatibleNonQuarantinedHost", QuarantineModeFaultFaultTypeEnum::NoCompatibleNonQuarantinedHost),
     ],
 };
@@ -37940,19 +38133,20 @@ impl AsRef<str> for QuarantineModeFaultFaultTypeEnum {
 }
 
 static REPLICATION_DISK_CONFIG_FAULT_REASON_FOR_FAULT_ENUM_MAP: phf::Map<&'static str, ReplicationDiskConfigFaultReasonForFaultEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 3),
-        (1, 0),
+        (0, 2),
+        (3, 0),
+        (0, 2),
     ],
     entries: &[
-        ("invalidDiskKey", ReplicationDiskConfigFaultReasonForFaultEnum::InvalidDiskKey),
-        ("reconfigureDiskReplicationIdNotAllowed", ReplicationDiskConfigFaultReasonForFaultEnum::ReconfigureDiskReplicationIdNotAllowed),
-        ("diskTypeNotSupported", ReplicationDiskConfigFaultReasonForFaultEnum::DiskTypeNotSupported),
         ("invalidPersistentFilePath", ReplicationDiskConfigFaultReasonForFaultEnum::InvalidPersistentFilePath),
+        ("reconfigureDiskReplicationIdNotAllowed", ReplicationDiskConfigFaultReasonForFaultEnum::ReconfigureDiskReplicationIdNotAllowed),
         ("duplicateDiskReplicationId", ReplicationDiskConfigFaultReasonForFaultEnum::DuplicateDiskReplicationId),
-        ("diskNotFound", ReplicationDiskConfigFaultReasonForFaultEnum::DiskNotFound),
         ("invalidDiskReplicationId", ReplicationDiskConfigFaultReasonForFaultEnum::InvalidDiskReplicationId),
+        ("invalidDiskKey", ReplicationDiskConfigFaultReasonForFaultEnum::InvalidDiskKey),
+        ("diskNotFound", ReplicationDiskConfigFaultReasonForFaultEnum::DiskNotFound),
+        ("diskTypeNotSupported", ReplicationDiskConfigFaultReasonForFaultEnum::DiskTypeNotSupported),
     ],
 };
 
@@ -38019,31 +38213,33 @@ impl AsRef<str> for ReplicationDiskConfigFaultReasonForFaultEnum {
 }
 
 static REPLICATION_VM_CONFIG_FAULT_REASON_FOR_FAULT_ENUM_MAP: phf::Map<&'static str, ReplicationVmConfigFaultReasonForFaultEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 1),
-        (11, 8),
-        (16, 7),
-        (12, 0),
+        (1, 0),
+        (0, 12),
+        (0, 12),
+        (0, 15),
+        (3, 7),
+        (0, 11),
     ],
     entries: &[
-        ("invalidPriorConfiguration", ReplicationVmConfigFaultReasonForFaultEnum::InvalidPriorConfiguration),
-        ("invalidGenerationNumber", ReplicationVmConfigFaultReasonForFaultEnum::InvalidGenerationNumber),
-        ("reconfigureVmReplicationIdNotAllowed", ReplicationVmConfigFaultReasonForFaultEnum::ReconfigureVmReplicationIdNotAllowed),
-        ("cannotRetrieveVmReplicationConfiguration", ReplicationVmConfigFaultReasonForFaultEnum::CannotRetrieveVmReplicationConfiguration),
-        ("staleGenerationNumber", ReplicationVmConfigFaultReasonForFaultEnum::StaleGenerationNumber),
-        ("replicationNotEnabled", ReplicationVmConfigFaultReasonForFaultEnum::ReplicationNotEnabled),
-        ("invalidVmReplicationId", ReplicationVmConfigFaultReasonForFaultEnum::InvalidVmReplicationId),
-        ("encryptedVm", ReplicationVmConfigFaultReasonForFaultEnum::EncryptedVm),
-        ("replicationConfigurationFailed", ReplicationVmConfigFaultReasonForFaultEnum::ReplicationConfigurationFailed),
-        ("invalidThumbprint", ReplicationVmConfigFaultReasonForFaultEnum::InvalidThumbprint),
-        ("incompatibleHwVersion", ReplicationVmConfigFaultReasonForFaultEnum::IncompatibleHwVersion),
-        ("incompatibleDevice", ReplicationVmConfigFaultReasonForFaultEnum::IncompatibleDevice),
         ("invalidExtraVmOptions", ReplicationVmConfigFaultReasonForFaultEnum::InvalidExtraVmOptions),
-        ("outOfBoundsRpoValue", ReplicationVmConfigFaultReasonForFaultEnum::OutOfBoundsRpoValue),
-        ("replicationAlreadyEnabled", ReplicationVmConfigFaultReasonForFaultEnum::ReplicationAlreadyEnabled),
-        ("invalidDestinationPort", ReplicationVmConfigFaultReasonForFaultEnum::InvalidDestinationPort),
+        ("encryptedVm", ReplicationVmConfigFaultReasonForFaultEnum::EncryptedVm),
+        ("reconfigureVmReplicationIdNotAllowed", ReplicationVmConfigFaultReasonForFaultEnum::ReconfigureVmReplicationIdNotAllowed),
+        ("invalidPriorConfiguration", ReplicationVmConfigFaultReasonForFaultEnum::InvalidPriorConfiguration),
+        ("incompatibleHwVersion", ReplicationVmConfigFaultReasonForFaultEnum::IncompatibleHwVersion),
+        ("invalidGenerationNumber", ReplicationVmConfigFaultReasonForFaultEnum::InvalidGenerationNumber),
+        ("invalidThumbprint", ReplicationVmConfigFaultReasonForFaultEnum::InvalidThumbprint),
+        ("incompatibleDevice", ReplicationVmConfigFaultReasonForFaultEnum::IncompatibleDevice),
+        ("staleGenerationNumber", ReplicationVmConfigFaultReasonForFaultEnum::StaleGenerationNumber),
+        ("invalidVmReplicationId", ReplicationVmConfigFaultReasonForFaultEnum::InvalidVmReplicationId),
         ("invalidDestinationIpAddress", ReplicationVmConfigFaultReasonForFaultEnum::InvalidDestinationIpAddress),
+        ("cannotRetrieveVmReplicationConfiguration", ReplicationVmConfigFaultReasonForFaultEnum::CannotRetrieveVmReplicationConfiguration),
+        ("invalidDestinationPort", ReplicationVmConfigFaultReasonForFaultEnum::InvalidDestinationPort),
+        ("replicationAlreadyEnabled", ReplicationVmConfigFaultReasonForFaultEnum::ReplicationAlreadyEnabled),
+        ("replicationConfigurationFailed", ReplicationVmConfigFaultReasonForFaultEnum::ReplicationConfigurationFailed),
+        ("outOfBoundsRpoValue", ReplicationVmConfigFaultReasonForFaultEnum::OutOfBoundsRpoValue),
+        ("replicationNotEnabled", ReplicationVmConfigFaultReasonForFaultEnum::ReplicationNotEnabled),
     ],
 };
 
@@ -38120,21 +38316,22 @@ impl AsRef<str> for ReplicationVmConfigFaultReasonForFaultEnum {
 }
 
 static REPLICATION_VM_FAULT_REASON_FOR_FAULT_ENUM_MAP: phf::Map<&'static str, ReplicationVmFaultReasonForFaultEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (1, 0),
+        (0, 0),
         (0, 2),
+        (1, 8),
     ],
     entries: &[
-        ("groupExist", ReplicationVmFaultReasonForFaultEnum::GroupExist),
         ("closeDiskError", ReplicationVmFaultReasonForFaultEnum::CloseDiskError),
         ("poweredOff", ReplicationVmFaultReasonForFaultEnum::PoweredOff),
         ("suspended", ReplicationVmFaultReasonForFaultEnum::Suspended),
+        ("groupExist", ReplicationVmFaultReasonForFaultEnum::GroupExist),
         ("offlineReplicating", ReplicationVmFaultReasonForFaultEnum::OfflineReplicating),
-        ("notConfigured", ReplicationVmFaultReasonForFaultEnum::NotConfigured),
-        ("invalidState", ReplicationVmFaultReasonForFaultEnum::InvalidState),
         ("poweredOn", ReplicationVmFaultReasonForFaultEnum::PoweredOn),
         ("invalidInstanceId", ReplicationVmFaultReasonForFaultEnum::InvalidInstanceId),
+        ("notConfigured", ReplicationVmFaultReasonForFaultEnum::NotConfigured),
+        ("invalidState", ReplicationVmFaultReasonForFaultEnum::InvalidState),
     ],
 };
 
@@ -38203,13 +38400,13 @@ impl AsRef<str> for ReplicationVmFaultReasonForFaultEnum {
 }
 
 static REPLICATION_VM_IN_PROGRESS_FAULT_ACTIVITY_ENUM_MAP: phf::Map<&'static str, ReplicationVmInProgressFaultActivityEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("delta", ReplicationVmInProgressFaultActivityEnum::Delta),
         ("fullSync", ReplicationVmInProgressFaultActivityEnum::FullSync),
+        ("delta", ReplicationVmInProgressFaultActivityEnum::Delta),
     ],
 };
 
@@ -38271,7 +38468,7 @@ impl AsRef<str> for ReplicationVmInProgressFaultActivityEnum {
 }
 
 static THIRD_PARTY_LICENSE_ASSIGNMENT_FAILED_REASON_ENUM_MAP: phf::Map<&'static str, ThirdPartyLicenseAssignmentFailedReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -38339,16 +38536,17 @@ impl AsRef<str> for ThirdPartyLicenseAssignmentFailedReasonEnum {
 }
 
 static V_FLASH_MODULE_NOT_SUPPORTED_REASON_ENUM_MAP: phf::Map<&'static str, VFlashModuleNotSupportedReasonEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
+        (4, 3),
     ],
     entries: &[
-        ("CacheConsistencyTypeNotSupported", VFlashModuleNotSupportedReasonEnum::CacheConsistencyTypeNotSupported),
         ("CacheBlockSizeNotSupported", VFlashModuleNotSupportedReasonEnum::CacheBlockSizeNotSupported),
-        ("DiskSizeNotSupported", VFlashModuleNotSupportedReasonEnum::DiskSizeNotSupported),
-        ("CacheModeNotSupported", VFlashModuleNotSupportedReasonEnum::CacheModeNotSupported),
         ("CacheReservationNotSupported", VFlashModuleNotSupportedReasonEnum::CacheReservationNotSupported),
+        ("DiskSizeNotSupported", VFlashModuleNotSupportedReasonEnum::DiskSizeNotSupported),
+        ("CacheConsistencyTypeNotSupported", VFlashModuleNotSupportedReasonEnum::CacheConsistencyTypeNotSupported),
+        ("CacheModeNotSupported", VFlashModuleNotSupportedReasonEnum::CacheModeNotSupported),
     ],
 };
 
@@ -38413,57 +38611,62 @@ impl AsRef<str> for VFlashModuleNotSupportedReasonEnum {
 }
 
 static VM_FAULT_TOLERANCE_CONFIG_ISSUE_REASON_FOR_ISSUE_ENUM_MAP: phf::Map<&'static str, VmFaultToleranceConfigIssueReasonForIssueEnum> = ::phf::Map {
-    key: 12213676231523076107,
+    key: 16287231350648472473,
     disps: &[
+        (0, 1),
+        (0, 15),
+        (0, 31),
+        (0, 1),
+        (0, 1),
+        (0, 8),
+        (0, 12),
+        (1, 18),
+        (9, 36),
         (0, 0),
-        (1, 0),
-        (0, 20),
-        (2, 31),
-        (3, 30),
-        (2, 10),
-        (9, 19),
-        (3, 30),
+        (0, 1),
+        (0, 24),
+        (0, 18),
     ],
     entries: &[
-        ("tooMuchMemory", VmFaultToleranceConfigIssueReasonForIssueEnum::TooMuchMemory),
-        ("hasNestedHVConfiguration", VmFaultToleranceConfigIssueReasonForIssueEnum::HasNestedHvConfiguration),
         ("tooManyVCPUs", VmFaultToleranceConfigIssueReasonForIssueEnum::TooManyVcpUs),
-        ("thinDisk", VmFaultToleranceConfigIssueReasonForIssueEnum::ThinDisk),
-        ("cpuHvDisabled", VmFaultToleranceConfigIssueReasonForIssueEnum::CpuHvDisabled),
-        ("recordReplayNotSupported", VmFaultToleranceConfigIssueReasonForIssueEnum::RecordReplayNotSupported),
-        ("hasLinkedCloneDisk", VmFaultToleranceConfigIssueReasonForIssueEnum::HasLinkedCloneDisk),
-        ("noHostGroupConfigured", VmFaultToleranceConfigIssueReasonForIssueEnum::NoHostGroupConfigured),
-        ("moreThanOneSecondary", VmFaultToleranceConfigIssueReasonForIssueEnum::MoreThanOneSecondary),
-        ("haAgentIssue", VmFaultToleranceConfigIssueReasonForIssueEnum::HaAgentIssue),
-        ("missingVMotionNic", VmFaultToleranceConfigIssueReasonForIssueEnum::MissingVMotionNic),
+        ("hasNestedHVConfiguration", VmFaultToleranceConfigIssueReasonForIssueEnum::HasNestedHvConfiguration),
         ("hostInactive", VmFaultToleranceConfigIssueReasonForIssueEnum::HostInactive),
-        ("video3dEnabled", VmFaultToleranceConfigIssueReasonForIssueEnum::Video3DEnabled),
-        ("vMotionNotLicensed", VmFaultToleranceConfigIssueReasonForIssueEnum::VMotionNotLicensed),
-        ("templateVm", VmFaultToleranceConfigIssueReasonForIssueEnum::TemplateVm),
-        ("unsupportedSPBM", VmFaultToleranceConfigIssueReasonForIssueEnum::UnsupportedSpbm),
+        ("missingVMotionNic", VmFaultToleranceConfigIssueReasonForIssueEnum::MissingVMotionNic),
         ("unsupportedProduct", VmFaultToleranceConfigIssueReasonForIssueEnum::UnsupportedProduct),
+        ("cpuHvDisabled", VmFaultToleranceConfigIssueReasonForIssueEnum::CpuHvDisabled),
+        ("cpuHvUnsupported", VmFaultToleranceConfigIssueReasonForIssueEnum::CpuHvUnsupported),
+        ("recordReplayNotSupported", VmFaultToleranceConfigIssueReasonForIssueEnum::RecordReplayNotSupported),
+        ("missingFTLoggingNic", VmFaultToleranceConfigIssueReasonForIssueEnum::MissingFtLoggingNic),
+        ("thinDisk", VmFaultToleranceConfigIssueReasonForIssueEnum::ThinDisk),
+        ("noConfig", VmFaultToleranceConfigIssueReasonForIssueEnum::NoConfig),
+        ("templateVm", VmFaultToleranceConfigIssueReasonForIssueEnum::TemplateVm),
         ("hasEFIFirmware", VmFaultToleranceConfigIssueReasonForIssueEnum::HasEfiFirmware),
+        ("verifySSLCertificateFlagNotSet", VmFaultToleranceConfigIssueReasonForIssueEnum::VerifySslCertificateFlagNotSet),
+        ("multipleVCPU", VmFaultToleranceConfigIssueReasonForIssueEnum::MultipleVcpu),
+        ("ftNotLicensed", VmFaultToleranceConfigIssueReasonForIssueEnum::FtNotLicensed),
+        ("hasLinkedCloneDisk", VmFaultToleranceConfigIssueReasonForIssueEnum::HasLinkedCloneDisk),
+        ("unsupportedPMemHAFailOver", VmFaultToleranceConfigIssueReasonForIssueEnum::UnsupportedPMemHaFailOver),
+        ("unsupportedSPBM", VmFaultToleranceConfigIssueReasonForIssueEnum::UnsupportedSpbm),
+        ("noHostGroupConfigured", VmFaultToleranceConfigIssueReasonForIssueEnum::NoHostGroupConfigured),
+        ("replayNotSupported", VmFaultToleranceConfigIssueReasonForIssueEnum::ReplayNotSupported),
+        ("insufficientBandwidth", VmFaultToleranceConfigIssueReasonForIssueEnum::InsufficientBandwidth),
+        ("unsupportedEncryptedDisk", VmFaultToleranceConfigIssueReasonForIssueEnum::UnsupportedEncryptedDisk),
+        ("ftUnsupportedProduct", VmFaultToleranceConfigIssueReasonForIssueEnum::FtUnsupportedProduct),
+        ("esxAgentVm", VmFaultToleranceConfigIssueReasonForIssueEnum::EsxAgentVm),
+        ("hasSnapshots", VmFaultToleranceConfigIssueReasonForIssueEnum::HasSnapshots),
+        ("hasVFlashConfiguration", VmFaultToleranceConfigIssueReasonForIssueEnum::HasVFlashConfiguration),
+        ("ftUnsupportedHardware", VmFaultToleranceConfigIssueReasonForIssueEnum::FtUnsupportedHardware),
+        ("haNotEnabled", VmFaultToleranceConfigIssueReasonForIssueEnum::HaNotEnabled),
+        ("vMotionNotLicensed", VmFaultToleranceConfigIssueReasonForIssueEnum::VMotionNotLicensed),
+        ("haAgentIssue", VmFaultToleranceConfigIssueReasonForIssueEnum::HaAgentIssue),
         ("ftSecondaryVm", VmFaultToleranceConfigIssueReasonForIssueEnum::FtSecondaryVm),
         ("hasUnsupportedDisk", VmFaultToleranceConfigIssueReasonForIssueEnum::HasUnsupportedDisk),
-        ("missingFTLoggingNic", VmFaultToleranceConfigIssueReasonForIssueEnum::MissingFtLoggingNic),
-        ("unsupportedPMemHAFailOver", VmFaultToleranceConfigIssueReasonForIssueEnum::UnsupportedPMemHaFailOver),
-        ("hasLocalDisk", VmFaultToleranceConfigIssueReasonForIssueEnum::HasLocalDisk),
-        ("haNotEnabled", VmFaultToleranceConfigIssueReasonForIssueEnum::HaNotEnabled),
-        ("ftUnsupportedProduct", VmFaultToleranceConfigIssueReasonForIssueEnum::FtUnsupportedProduct),
-        ("ftUnsupportedHardware", VmFaultToleranceConfigIssueReasonForIssueEnum::FtUnsupportedHardware),
-        ("verifySSLCertificateFlagNotSet", VmFaultToleranceConfigIssueReasonForIssueEnum::VerifySslCertificateFlagNotSet),
-        ("esxAgentVm", VmFaultToleranceConfigIssueReasonForIssueEnum::EsxAgentVm),
-        ("ftNotLicensed", VmFaultToleranceConfigIssueReasonForIssueEnum::FtNotLicensed),
-        ("cpuHvUnsupported", VmFaultToleranceConfigIssueReasonForIssueEnum::CpuHvUnsupported),
-        ("ftMetroClusterNotEditable", VmFaultToleranceConfigIssueReasonForIssueEnum::FtMetroClusterNotEditable),
-        ("insufficientBandwidth", VmFaultToleranceConfigIssueReasonForIssueEnum::InsufficientBandwidth),
-        ("hasVFlashConfiguration", VmFaultToleranceConfigIssueReasonForIssueEnum::HasVFlashConfiguration),
-        ("hasSnapshots", VmFaultToleranceConfigIssueReasonForIssueEnum::HasSnapshots),
-        ("noConfig", VmFaultToleranceConfigIssueReasonForIssueEnum::NoConfig),
-        ("replayNotSupported", VmFaultToleranceConfigIssueReasonForIssueEnum::ReplayNotSupported),
-        ("unsupportedEncryptedDisk", VmFaultToleranceConfigIssueReasonForIssueEnum::UnsupportedEncryptedDisk),
-        ("multipleVCPU", VmFaultToleranceConfigIssueReasonForIssueEnum::MultipleVcpu),
         ("cpuHwmmuUnsupported", VmFaultToleranceConfigIssueReasonForIssueEnum::CpuHwmmuUnsupported),
+        ("ftMetroClusterNotEditable", VmFaultToleranceConfigIssueReasonForIssueEnum::FtMetroClusterNotEditable),
+        ("moreThanOneSecondary", VmFaultToleranceConfigIssueReasonForIssueEnum::MoreThanOneSecondary),
+        ("tooMuchMemory", VmFaultToleranceConfigIssueReasonForIssueEnum::TooMuchMemory),
+        ("hasLocalDisk", VmFaultToleranceConfigIssueReasonForIssueEnum::HasLocalDisk),
+        ("video3dEnabled", VmFaultToleranceConfigIssueReasonForIssueEnum::Video3DEnabled),
     ],
 };
 
@@ -38562,16 +38765,17 @@ impl AsRef<str> for VmFaultToleranceConfigIssueReasonForIssueEnum {
 }
 
 static VM_FAULT_TOLERANCE_INVALID_FILE_BACKING_DEVICE_TYPE_ENUM_MAP: phf::Map<&'static str, VmFaultToleranceInvalidFileBackingDeviceTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
-        ("virtualSerialPort", VmFaultToleranceInvalidFileBackingDeviceTypeEnum::VirtualSerialPort),
+        ("virtualDisk", VmFaultToleranceInvalidFileBackingDeviceTypeEnum::VirtualDisk),
         ("virtualParallelPort", VmFaultToleranceInvalidFileBackingDeviceTypeEnum::VirtualParallelPort),
         ("virtualCdrom", VmFaultToleranceInvalidFileBackingDeviceTypeEnum::VirtualCdrom),
+        ("virtualSerialPort", VmFaultToleranceInvalidFileBackingDeviceTypeEnum::VirtualSerialPort),
         ("virtualFloppy", VmFaultToleranceInvalidFileBackingDeviceTypeEnum::VirtualFloppy),
-        ("virtualDisk", VmFaultToleranceInvalidFileBackingDeviceTypeEnum::VirtualDisk),
     ],
 };
 
@@ -38636,13 +38840,13 @@ impl AsRef<str> for VmFaultToleranceInvalidFileBackingDeviceTypeEnum {
 }
 
 static WILL_LOSE_HA_PROTECTION_RESOLUTION_ENUM_MAP: phf::Map<&'static str, WillLoseHaProtectionResolutionEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("relocate", WillLoseHaProtectionResolutionEnum::Relocate),
         ("svmotion", WillLoseHaProtectionResolutionEnum::Svmotion),
+        ("relocate", WillLoseHaProtectionResolutionEnum::Relocate),
     ],
 };
 
@@ -38704,7 +38908,7 @@ impl AsRef<str> for WillLoseHaProtectionResolutionEnum {
 }
 
 static HOST_ACTIVE_DIRECTORY_AUTHENTICATION_CERTIFICATE_DIGEST_ENUM_MAP: phf::Map<&'static str, HostActiveDirectoryAuthenticationCertificateDigestEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -38770,19 +38974,20 @@ impl AsRef<str> for HostActiveDirectoryAuthenticationCertificateDigestEnum {
 }
 
 static HOST_ACTIVE_DIRECTORY_INFO_DOMAIN_MEMBERSHIP_STATUS_ENUM_MAP: phf::Map<&'static str, HostActiveDirectoryInfoDomainMembershipStatusEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
-        (0, 4),
+        (0, 0),
+        (0, 1),
+        (2, 4),
     ],
     entries: &[
         ("otherProblem", HostActiveDirectoryInfoDomainMembershipStatusEnum::OtherProblem),
-        ("inconsistentTrust", HostActiveDirectoryInfoDomainMembershipStatusEnum::InconsistentTrust),
-        ("ok", HostActiveDirectoryInfoDomainMembershipStatusEnum::Ok),
-        ("noServers", HostActiveDirectoryInfoDomainMembershipStatusEnum::NoServers),
-        ("unknown", HostActiveDirectoryInfoDomainMembershipStatusEnum::Unknown),
-        ("clientTrustBroken", HostActiveDirectoryInfoDomainMembershipStatusEnum::ClientTrustBroken),
         ("serverTrustBroken", HostActiveDirectoryInfoDomainMembershipStatusEnum::ServerTrustBroken),
+        ("noServers", HostActiveDirectoryInfoDomainMembershipStatusEnum::NoServers),
+        ("ok", HostActiveDirectoryInfoDomainMembershipStatusEnum::Ok),
+        ("inconsistentTrust", HostActiveDirectoryInfoDomainMembershipStatusEnum::InconsistentTrust),
+        ("clientTrustBroken", HostActiveDirectoryInfoDomainMembershipStatusEnum::ClientTrustBroken),
+        ("unknown", HostActiveDirectoryInfoDomainMembershipStatusEnum::Unknown),
     ],
 };
 
@@ -38849,18 +39054,18 @@ impl AsRef<str> for HostActiveDirectoryInfoDomainMembershipStatusEnum {
 }
 
 static AUTO_START_ACTION_ENUM_MAP: phf::Map<&'static str, AutoStartActionEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
-        (0, 5),
+        (2, 0),
+        (0, 1),
     ],
     entries: &[
-        ("suspend", AutoStartActionEnum::Suspend),
-        ("none", AutoStartActionEnum::None),
         ("systemDefault", AutoStartActionEnum::SystemDefault),
         ("guestShutdown", AutoStartActionEnum::GuestShutdown),
-        ("powerOn", AutoStartActionEnum::PowerOn),
         ("powerOff", AutoStartActionEnum::PowerOff),
+        ("none", AutoStartActionEnum::None),
+        ("powerOn", AutoStartActionEnum::PowerOn),
+        ("suspend", AutoStartActionEnum::Suspend),
     ],
 };
 
@@ -38926,14 +39131,14 @@ impl AsRef<str> for AutoStartActionEnum {
 }
 
 static AUTO_START_WAIT_HEARTBEAT_SETTING_ENUM_MAP: phf::Map<&'static str, AutoStartWaitHeartbeatSettingEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("no", AutoStartWaitHeartbeatSettingEnum::No),
-        ("yes", AutoStartWaitHeartbeatSettingEnum::Yes),
         ("systemDefault", AutoStartWaitHeartbeatSettingEnum::SystemDefault),
+        ("yes", AutoStartWaitHeartbeatSettingEnum::Yes),
+        ("no", AutoStartWaitHeartbeatSettingEnum::No),
     ],
 };
 
@@ -38996,9 +39201,9 @@ impl AsRef<str> for AutoStartWaitHeartbeatSettingEnum {
 }
 
 static HOST_BIOS_INFO_FIRMWARE_TYPE_ENUM_MAP: phf::Map<&'static str, HostBiosInfoFirmwareTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("BIOS", HostBiosInfoFirmwareTypeEnum::Bios),
@@ -39064,14 +39269,14 @@ impl AsRef<str> for HostBiosInfoFirmwareTypeEnum {
 }
 
 static HOST_CAPABILITY_DRTM_TYPES_ENUM_MAP: phf::Map<&'static str, HostCapabilityDrtmTypesEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("amdSkinit", HostCapabilityDrtmTypesEnum::AmdSkinit),
-        ("none", HostCapabilityDrtmTypesEnum::None),
         ("intelTxt", HostCapabilityDrtmTypesEnum::IntelTxt),
+        ("none", HostCapabilityDrtmTypesEnum::None),
     ],
 };
 
@@ -39134,20 +39339,21 @@ impl AsRef<str> for HostCapabilityDrtmTypesEnum {
 }
 
 static HOST_CAPABILITY_FT_UNSUPPORTED_REASON_ENUM_MAP: phf::Map<&'static str, HostCapabilityFtUnsupportedReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (3, 7),
-        (6, 0),
+        (3, 0),
+        (0, 2),
+        (0, 0),
     ],
     entries: &[
+        ("vMotionNotLicensed", HostCapabilityFtUnsupportedReasonEnum::VMotionNotLicensed),
+        ("cpuHwmmuUnsupported", HostCapabilityFtUnsupportedReasonEnum::CpuHwmmuUnsupported),
+        ("missingFTLoggingNic", HostCapabilityFtUnsupportedReasonEnum::MissingFtLoggingNic),
         ("ftNotLicensed", HostCapabilityFtUnsupportedReasonEnum::FtNotLicensed),
+        ("missingVMotionNic", HostCapabilityFtUnsupportedReasonEnum::MissingVMotionNic),
+        ("cpuHvUnsupported", HostCapabilityFtUnsupportedReasonEnum::CpuHvUnsupported),
         ("haAgentIssue", HostCapabilityFtUnsupportedReasonEnum::HaAgentIssue),
         ("unsupportedProduct", HostCapabilityFtUnsupportedReasonEnum::UnsupportedProduct),
-        ("missingVMotionNic", HostCapabilityFtUnsupportedReasonEnum::MissingVMotionNic),
-        ("cpuHwmmuUnsupported", HostCapabilityFtUnsupportedReasonEnum::CpuHwmmuUnsupported),
-        ("vMotionNotLicensed", HostCapabilityFtUnsupportedReasonEnum::VMotionNotLicensed),
-        ("cpuHvUnsupported", HostCapabilityFtUnsupportedReasonEnum::CpuHvUnsupported),
-        ("missingFTLoggingNic", HostCapabilityFtUnsupportedReasonEnum::MissingFtLoggingNic),
         ("cpuHvDisabled", HostCapabilityFtUnsupportedReasonEnum::CpuHvDisabled),
     ],
 };
@@ -39217,18 +39423,18 @@ impl AsRef<str> for HostCapabilityFtUnsupportedReasonEnum {
 }
 
 static HOST_REPLAY_UNSUPPORTED_REASON_ENUM_MAP: phf::Map<&'static str, HostReplayUnsupportedReasonEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
         (0, 0),
+        (5, 5),
     ],
     entries: &[
-        ("unknown", HostReplayUnsupportedReasonEnum::Unknown),
-        ("incompatibleProduct", HostReplayUnsupportedReasonEnum::IncompatibleProduct),
         ("oldBIOS", HostReplayUnsupportedReasonEnum::OldBios),
         ("incompatibleCpu", HostReplayUnsupportedReasonEnum::IncompatibleCpu),
-        ("cpuidLimitSet", HostReplayUnsupportedReasonEnum::CpuidLimitSet),
+        ("unknown", HostReplayUnsupportedReasonEnum::Unknown),
         ("hvDisabled", HostReplayUnsupportedReasonEnum::HvDisabled),
+        ("incompatibleProduct", HostReplayUnsupportedReasonEnum::IncompatibleProduct),
+        ("cpuidLimitSet", HostReplayUnsupportedReasonEnum::CpuidLimitSet),
     ],
 };
 
@@ -39294,9 +39500,9 @@ impl AsRef<str> for HostReplayUnsupportedReasonEnum {
 }
 
 static HOST_CAPABILITY_UNMAP_METHOD_SUPPORTED_ENUM_MAP: phf::Map<&'static str, HostCapabilityUnmapMethodSupportedEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("priority", HostCapabilityUnmapMethodSupportedEnum::Priority),
@@ -39364,9 +39570,9 @@ impl AsRef<str> for HostCapabilityUnmapMethodSupportedEnum {
 }
 
 static HOST_CAPABILITY_VM_DIRECT_PATH_GEN_2_UNSUPPORTED_REASON_ENUM_MAP: phf::Map<&'static str, HostCapabilityVmDirectPathGen2UnsupportedReasonEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("hostNptDisabled", HostCapabilityVmDirectPathGen2UnsupportedReasonEnum::HostNptDisabled),
@@ -39434,16 +39640,16 @@ impl AsRef<str> for HostCapabilityVmDirectPathGen2UnsupportedReasonEnum {
 }
 
 static HOST_CERTIFICATE_MANAGER_CERTIFICATE_INFO_CERTIFICATE_STATUS_ENUM_MAP: phf::Map<&'static str, HostCertificateManagerCertificateInfoCertificateStatusEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
-        (0, 0),
+        (1, 0),
+        (1, 1),
     ],
     entries: &[
-        ("expiringShortly", HostCertificateManagerCertificateInfoCertificateStatusEnum::ExpiringShortly),
-        ("unknown", HostCertificateManagerCertificateInfoCertificateStatusEnum::Unknown),
         ("expiring", HostCertificateManagerCertificateInfoCertificateStatusEnum::Expiring),
         ("good", HostCertificateManagerCertificateInfoCertificateStatusEnum::Good),
+        ("expiringShortly", HostCertificateManagerCertificateInfoCertificateStatusEnum::ExpiringShortly),
+        ("unknown", HostCertificateManagerCertificateInfoCertificateStatusEnum::Unknown),
         ("expired", HostCertificateManagerCertificateInfoCertificateStatusEnum::Expired),
         ("expirationImminent", HostCertificateManagerCertificateInfoCertificateStatusEnum::ExpirationImminent),
     ],
@@ -39511,7 +39717,7 @@ impl AsRef<str> for HostCertificateManagerCertificateInfoCertificateStatusEnum {
 }
 
 static HOST_CERTIFICATE_MANAGER_CERTIFICATE_KIND_ENUM_MAP: phf::Map<&'static str, HostCertificateManagerCertificateKindEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -39579,14 +39785,14 @@ impl AsRef<str> for HostCertificateManagerCertificateKindEnum {
 }
 
 static HOST_CERTIFICATE_MANAGER_CRYPTO_ALGORITHM_ENUM_MAP: phf::Map<&'static str, HostCertificateManagerCryptoAlgorithmEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
         ("RSA_2048", HostCertificateManagerCryptoAlgorithmEnum::Rsa2048),
-        ("RSA_4096", HostCertificateManagerCryptoAlgorithmEnum::Rsa4096),
         ("RSA_3072", HostCertificateManagerCryptoAlgorithmEnum::Rsa3072),
+        ("RSA_4096", HostCertificateManagerCryptoAlgorithmEnum::Rsa4096),
     ],
 };
 
@@ -39649,9 +39855,9 @@ impl AsRef<str> for HostCertificateManagerCryptoAlgorithmEnum {
 }
 
 static HOST_CONFIG_CHANGE_MODE_ENUM_MAP: phf::Map<&'static str, HostConfigChangeModeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("modify", HostConfigChangeModeEnum::Modify),
@@ -39717,15 +39923,16 @@ impl AsRef<str> for HostConfigChangeModeEnum {
 }
 
 static HOST_CONFIG_CHANGE_OPERATION_ENUM_MAP: phf::Map<&'static str, HostConfigChangeOperationEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (2, 0),
+        (0, 2),
     ],
     entries: &[
         ("remove", HostConfigChangeOperationEnum::Remove),
-        ("edit", HostConfigChangeOperationEnum::Edit),
         ("add", HostConfigChangeOperationEnum::Add),
         ("ignore", HostConfigChangeOperationEnum::Ignore),
+        ("edit", HostConfigChangeOperationEnum::Edit),
     ],
 };
 
@@ -39789,13 +39996,13 @@ impl AsRef<str> for HostConfigChangeOperationEnum {
 }
 
 static HOST_CONFIG_CHANGE_OWNER_ENUM_MAP: phf::Map<&'static str, HostConfigChangeOwnerEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("VSAN", HostConfigChangeOwnerEnum::Vsan),
         ("NSX", HostConfigChangeOwnerEnum::Nsx),
+        ("VSAN", HostConfigChangeOwnerEnum::Vsan),
     ],
 };
 
@@ -39857,15 +40064,16 @@ impl AsRef<str> for HostConfigChangeOwnerEnum {
 }
 
 static HOST_CPU_PACKAGE_VENDOR_ENUM_MAP: phf::Map<&'static str, HostCpuPackageVendorEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
+        (3, 1),
     ],
     entries: &[
+        ("intel", HostCpuPackageVendorEnum::Intel),
         ("unknown", HostCpuPackageVendorEnum::Unknown),
         ("hygon", HostCpuPackageVendorEnum::Hygon),
         ("amd", HostCpuPackageVendorEnum::Amd),
-        ("intel", HostCpuPackageVendorEnum::Intel),
     ],
 };
 
@@ -39929,14 +40137,14 @@ impl AsRef<str> for HostCpuPackageVendorEnum {
 }
 
 static HOST_CPU_POWER_MANAGEMENT_INFO_POLICY_TYPE_ENUM_MAP: phf::Map<&'static str, HostCpuPowerManagementInfoPolicyTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
         ("staticPolicy", HostCpuPowerManagementInfoPolicyTypeEnum::StaticPolicy),
-        ("off", HostCpuPowerManagementInfoPolicyTypeEnum::Off),
         ("dynamicPolicy", HostCpuPowerManagementInfoPolicyTypeEnum::DynamicPolicy),
+        ("off", HostCpuPowerManagementInfoPolicyTypeEnum::Off),
     ],
 };
 
@@ -39999,14 +40207,14 @@ impl AsRef<str> for HostCpuPowerManagementInfoPolicyTypeEnum {
 }
 
 static HOST_CPU_SCHEDULER_INFO_CPU_SCHEDULER_POLICY_INFO_ENUM_MAP: phf::Map<&'static str, HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
-        ("scav2", HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum::Scav2),
-        ("scav1", HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum::Scav1),
         ("systemDefault", HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum::SystemDefault),
+        ("scav1", HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum::Scav1),
+        ("scav2", HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum::Scav2),
     ],
 };
 
@@ -40069,13 +40277,13 @@ impl AsRef<str> for HostCpuSchedulerInfoCpuSchedulerPolicyInfoEnum {
 }
 
 static HOST_DATE_TIME_INFO_PROTOCOL_ENUM_MAP: phf::Map<&'static str, HostDateTimeInfoProtocolEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("ntp", HostDateTimeInfoProtocolEnum::Ntp),
         ("ptp", HostDateTimeInfoProtocolEnum::Ptp),
+        ("ntp", HostDateTimeInfoProtocolEnum::Ntp),
     ],
 };
 
@@ -40137,9 +40345,9 @@ impl AsRef<str> for HostDateTimeInfoProtocolEnum {
 }
 
 static DIAGNOSTIC_PARTITION_TYPE_ENUM_MAP: phf::Map<&'static str, DiagnosticPartitionTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("singleHost", DiagnosticPartitionTypeEnum::SingleHost),
@@ -40205,7 +40413,7 @@ impl AsRef<str> for DiagnosticPartitionTypeEnum {
 }
 
 static DIAGNOSTIC_PARTITION_STORAGE_TYPE_ENUM_MAP: phf::Map<&'static str, DiagnosticPartitionStorageTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -40273,18 +40481,18 @@ impl AsRef<str> for DiagnosticPartitionStorageTypeEnum {
 }
 
 static HOST_DIGEST_INFO_DIGEST_METHOD_TYPE_ENUM_MAP: phf::Map<&'static str, HostDigestInfoDigestMethodTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
-        (2, 1),
+        (1, 3),
+        (4, 0),
     ],
     entries: &[
-        ("SM3_256", HostDigestInfoDigestMethodTypeEnum::Sm3256),
-        ("SHA512", HostDigestInfoDigestMethodTypeEnum::Sha512),
         ("MD5", HostDigestInfoDigestMethodTypeEnum::Md5),
         ("SHA384", HostDigestInfoDigestMethodTypeEnum::Sha384),
-        ("SHA256", HostDigestInfoDigestMethodTypeEnum::Sha256),
+        ("SHA512", HostDigestInfoDigestMethodTypeEnum::Sha512),
         ("SHA1", HostDigestInfoDigestMethodTypeEnum::Sha1),
+        ("SHA256", HostDigestInfoDigestMethodTypeEnum::Sha256),
+        ("SM3_256", HostDigestInfoDigestMethodTypeEnum::Sm3256),
     ],
 };
 
@@ -40350,15 +40558,16 @@ impl AsRef<str> for HostDigestInfoDigestMethodTypeEnum {
 }
 
 static HOST_DIGEST_VERIFICATION_SETTING_ENUM_MAP: phf::Map<&'static str, HostDigestVerificationSettingEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 1),
     ],
     entries: &[
         ("headerOnly", HostDigestVerificationSettingEnum::HeaderOnly),
-        ("headerAndData", HostDigestVerificationSettingEnum::HeaderAndData),
-        ("dataOnly", HostDigestVerificationSettingEnum::DataOnly),
         ("digestDisabled", HostDigestVerificationSettingEnum::DigestDisabled),
+        ("dataOnly", HostDigestVerificationSettingEnum::DataOnly),
+        ("headerAndData", HostDigestVerificationSettingEnum::HeaderAndData),
     ],
 };
 
@@ -40422,13 +40631,13 @@ impl AsRef<str> for HostDigestVerificationSettingEnum {
 }
 
 static HOST_DISK_PARTITION_INFO_PARTITION_FORMAT_ENUM_MAP: phf::Map<&'static str, HostDiskPartitionInfoPartitionFormatEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("gpt", HostDiskPartitionInfoPartitionFormatEnum::Gpt),
         ("mbr", HostDiskPartitionInfoPartitionFormatEnum::Mbr),
+        ("gpt", HostDiskPartitionInfoPartitionFormatEnum::Gpt),
         ("unknown", HostDiskPartitionInfoPartitionFormatEnum::Unknown),
     ],
 };
@@ -40492,20 +40701,21 @@ impl AsRef<str> for HostDiskPartitionInfoPartitionFormatEnum {
 }
 
 static HOST_DISK_PARTITION_INFO_TYPE_ENUM_MAP: phf::Map<&'static str, HostDiskPartitionInfoTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (1, 6),
         (0, 0),
+        (0, 4),
+        (0, 1),
     ],
     entries: &[
-        ("vmkDiagnostic", HostDiskPartitionInfoTypeEnum::VmkDiagnostic),
         ("ntfs", HostDiskPartitionInfoTypeEnum::Ntfs),
-        ("extended", HostDiskPartitionInfoTypeEnum::Extended),
+        ("vffs", HostDiskPartitionInfoTypeEnum::Vffs),
         ("vmfs", HostDiskPartitionInfoTypeEnum::Vmfs),
         ("linuxSwap", HostDiskPartitionInfoTypeEnum::LinuxSwap),
-        ("vffs", HostDiskPartitionInfoTypeEnum::Vffs),
-        ("linuxNative", HostDiskPartitionInfoTypeEnum::LinuxNative),
+        ("extended", HostDiskPartitionInfoTypeEnum::Extended),
         ("none", HostDiskPartitionInfoTypeEnum::None),
+        ("linuxNative", HostDiskPartitionInfoTypeEnum::LinuxNative),
+        ("vmkDiagnostic", HostDiskPartitionInfoTypeEnum::VmkDiagnostic),
     ],
 };
 
@@ -40573,7 +40783,7 @@ impl AsRef<str> for HostDiskPartitionInfoTypeEnum {
 }
 
 static HOST_FEATURE_VERSION_KEY_ENUM_MAP: phf::Map<&'static str, HostFeatureVersionKeyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -40639,15 +40849,16 @@ impl AsRef<str> for HostFeatureVersionKeyEnum {
 }
 
 static FIBRE_CHANNEL_PORT_TYPE_ENUM_MAP: phf::Map<&'static str, FibreChannelPortTypeEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 15995050791870030928,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (1, 1),
     ],
     entries: &[
-        ("loop", FibreChannelPortTypeEnum::Loop),
-        ("fabric", FibreChannelPortTypeEnum::Fabric),
         ("pointToPoint", FibreChannelPortTypeEnum::PointToPoint),
         ("unknown", FibreChannelPortTypeEnum::Unknown),
+        ("loop", FibreChannelPortTypeEnum::Loop),
+        ("fabric", FibreChannelPortTypeEnum::Fabric),
     ],
 };
 
@@ -40711,14 +40922,14 @@ impl AsRef<str> for FibreChannelPortTypeEnum {
 }
 
 static FILE_SYSTEM_MOUNT_INFO_V_STORAGE_SUPPORT_STATUS_ENUM_MAP: phf::Map<&'static str, FileSystemMountInfoVStorageSupportStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("vStorageUnsupported", FileSystemMountInfoVStorageSupportStatusEnum::VStorageUnsupported),
-        ("vStorageSupported", FileSystemMountInfoVStorageSupportStatusEnum::VStorageSupported),
         ("vStorageUnknown", FileSystemMountInfoVStorageSupportStatusEnum::VStorageUnknown),
+        ("vStorageSupported", FileSystemMountInfoVStorageSupportStatusEnum::VStorageSupported),
+        ("vStorageUnsupported", FileSystemMountInfoVStorageSupportStatusEnum::VStorageUnsupported),
     ],
 };
 
@@ -40781,22 +40992,24 @@ impl AsRef<str> for FileSystemMountInfoVStorageSupportStatusEnum {
 }
 
 static HOST_FILE_SYSTEM_VOLUME_FILE_SYSTEM_TYPE_ENUM_MAP: phf::Map<&'static str, HostFileSystemVolumeFileSystemTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
+        (3, 7),
+        (2, 0),
+        (4, 1),
         (0, 0),
-        (5, 7),
     ],
     entries: &[
         ("VFFS", HostFileSystemVolumeFileSystemTypeEnum::Vffs),
-        ("PMEM", HostFileSystemVolumeFileSystemTypeEnum::Pmem),
-        ("CIFS", HostFileSystemVolumeFileSystemTypeEnum::Cifs),
-        ("OTHER", HostFileSystemVolumeFileSystemTypeEnum::Other),
-        ("VMFS", HostFileSystemVolumeFileSystemTypeEnum::Vmfs),
-        ("vsanD", HostFileSystemVolumeFileSystemTypeEnum::VsanD),
-        ("NFS41", HostFileSystemVolumeFileSystemTypeEnum::Nfs41),
         ("vsan", HostFileSystemVolumeFileSystemTypeEnum::Vsan),
         ("NFS", HostFileSystemVolumeFileSystemTypeEnum::Nfs),
         ("VVOL", HostFileSystemVolumeFileSystemTypeEnum::Vvol),
+        ("PMEM", HostFileSystemVolumeFileSystemTypeEnum::Pmem),
+        ("OTHER", HostFileSystemVolumeFileSystemTypeEnum::Other),
+        ("NFS41", HostFileSystemVolumeFileSystemTypeEnum::Nfs41),
+        ("vsanD", HostFileSystemVolumeFileSystemTypeEnum::VsanD),
+        ("CIFS", HostFileSystemVolumeFileSystemTypeEnum::Cifs),
+        ("VMFS", HostFileSystemVolumeFileSystemTypeEnum::Vmfs),
     ],
 };
 
@@ -40866,15 +41079,16 @@ impl AsRef<str> for HostFileSystemVolumeFileSystemTypeEnum {
 }
 
 static HOST_FIREWALL_SYSTEM_RULE_SET_ID_ENUM_MAP: phf::Map<&'static str, HostFirewallSystemRuleSetIdEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
+        (0, 1),
     ],
     entries: &[
-        ("faultTolerance", HostFirewallSystemRuleSetIdEnum::FaultTolerance),
         ("fdm", HostFirewallSystemRuleSetIdEnum::Fdm),
-        ("updateManager", HostFirewallSystemRuleSetIdEnum::UpdateManager),
         ("vpxHeartbeats", HostFirewallSystemRuleSetIdEnum::VpxHeartbeats),
+        ("updateManager", HostFirewallSystemRuleSetIdEnum::UpdateManager),
+        ("faultTolerance", HostFirewallSystemRuleSetIdEnum::FaultTolerance),
     ],
 };
 
@@ -40938,7 +41152,7 @@ impl AsRef<str> for HostFirewallSystemRuleSetIdEnum {
 }
 
 static HOST_FIREWALL_SYSTEM_SERVICE_NAME_ENUM_MAP: phf::Map<&'static str, HostFirewallSystemServiceNameEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -41004,14 +41218,14 @@ impl AsRef<str> for HostFirewallSystemServiceNameEnum {
 }
 
 static HOST_FRU_FRU_TYPE_ENUM_MAP: phf::Map<&'static str, HostFruFruTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("product", HostFruFruTypeEnum::Product),
         ("board", HostFruFruTypeEnum::Board),
         ("undefined", HostFruFruTypeEnum::Undefined),
+        ("product", HostFruFruTypeEnum::Product),
     ],
 };
 
@@ -41074,13 +41288,13 @@ impl AsRef<str> for HostFruFruTypeEnum {
 }
 
 static HOST_GRAPHICS_CONFIG_GRAPHICS_TYPE_ENUM_MAP: phf::Map<&'static str, HostGraphicsConfigGraphicsTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("shared", HostGraphicsConfigGraphicsTypeEnum::Shared),
         ("sharedDirect", HostGraphicsConfigGraphicsTypeEnum::SharedDirect),
+        ("shared", HostGraphicsConfigGraphicsTypeEnum::Shared),
     ],
 };
 
@@ -41142,9 +41356,9 @@ impl AsRef<str> for HostGraphicsConfigGraphicsTypeEnum {
 }
 
 static HOST_GRAPHICS_CONFIG_SHARED_PASSTHRU_ASSIGNMENT_POLICY_ENUM_MAP: phf::Map<&'static str, HostGraphicsConfigSharedPassthruAssignmentPolicyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("consolidation", HostGraphicsConfigSharedPassthruAssignmentPolicyEnum::Consolidation),
@@ -41210,13 +41424,13 @@ impl AsRef<str> for HostGraphicsConfigSharedPassthruAssignmentPolicyEnum {
 }
 
 static HOST_GRAPHICS_CONFIG_VGPU_MODE_ENUM_MAP: phf::Map<&'static str, HostGraphicsConfigVgpuModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("sameSize", HostGraphicsConfigVgpuModeEnum::SameSize),
         ("mixedSize", HostGraphicsConfigVgpuModeEnum::MixedSize),
+        ("sameSize", HostGraphicsConfigVgpuModeEnum::SameSize),
     ],
 };
 
@@ -41278,14 +41492,15 @@ impl AsRef<str> for HostGraphicsConfigVgpuModeEnum {
 }
 
 static HOST_GRAPHICS_INFO_GRAPHICS_TYPE_ENUM_MAP: phf::Map<&'static str, HostGraphicsInfoGraphicsTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 3),
+        (0, 0),
     ],
     entries: &[
+        ("direct", HostGraphicsInfoGraphicsTypeEnum::Direct),
         ("basic", HostGraphicsInfoGraphicsTypeEnum::Basic),
         ("sharedDirect", HostGraphicsInfoGraphicsTypeEnum::SharedDirect),
-        ("direct", HostGraphicsInfoGraphicsTypeEnum::Direct),
         ("shared", HostGraphicsInfoGraphicsTypeEnum::Shared),
     ],
 };
@@ -41350,15 +41565,16 @@ impl AsRef<str> for HostGraphicsInfoGraphicsTypeEnum {
 }
 
 static HOST_GRAPHICS_INFO_VGPU_MODE_ENUM_MAP: phf::Map<&'static str, HostGraphicsInfoVgpuModeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("mixedSize", HostGraphicsInfoVgpuModeEnum::MixedSize),
-        ("multiInstanceGpu", HostGraphicsInfoVgpuModeEnum::MultiInstanceGpu),
-        ("sameSize", HostGraphicsInfoVgpuModeEnum::SameSize),
         ("none", HostGraphicsInfoVgpuModeEnum::None),
+        ("multiInstanceGpu", HostGraphicsInfoVgpuModeEnum::MultiInstanceGpu),
+        ("mixedSize", HostGraphicsInfoVgpuModeEnum::MixedSize),
+        ("sameSize", HostGraphicsInfoVgpuModeEnum::SameSize),
     ],
 };
 
@@ -41422,15 +41638,16 @@ impl AsRef<str> for HostGraphicsInfoVgpuModeEnum {
 }
 
 static HOST_HARDWARE_ELEMENT_STATUS_ENUM_MAP: phf::Map<&'static str, HostHardwareElementStatusEnum> = ::phf::Map {
-    key: 399332969041170284,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
+        (1, 1),
     ],
     entries: &[
-        ("Unknown", HostHardwareElementStatusEnum::Unknown),
-        ("Yellow", HostHardwareElementStatusEnum::Yellow),
-        ("Green", HostHardwareElementStatusEnum::Green),
         ("Red", HostHardwareElementStatusEnum::Red),
+        ("Unknown", HostHardwareElementStatusEnum::Unknown),
+        ("Green", HostHardwareElementStatusEnum::Green),
+        ("Yellow", HostHardwareElementStatusEnum::Yellow),
     ],
 };
 
@@ -41494,16 +41711,17 @@ impl AsRef<str> for HostHardwareElementStatusEnum {
 }
 
 static HOST_ACCESS_MODE_ENUM_MAP: phf::Map<&'static str, HostAccessModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
+        (0, 2),
     ],
     entries: &[
+        ("accessAdmin", HostAccessModeEnum::AccessAdmin),
+        ("accessNoAccess", HostAccessModeEnum::AccessNoAccess),
         ("accessOther", HostAccessModeEnum::AccessOther),
         ("accessNone", HostAccessModeEnum::AccessNone),
         ("accessReadOnly", HostAccessModeEnum::AccessReadOnly),
-        ("accessNoAccess", HostAccessModeEnum::AccessNoAccess),
-        ("accessAdmin", HostAccessModeEnum::AccessAdmin),
     ],
 };
 
@@ -41568,13 +41786,13 @@ impl AsRef<str> for HostAccessModeEnum {
 }
 
 static HOST_LOCKDOWN_MODE_ENUM_MAP: phf::Map<&'static str, HostLockdownModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("lockdownStrict", HostLockdownModeEnum::LockdownStrict),
         ("lockdownNormal", HostLockdownModeEnum::LockdownNormal),
+        ("lockdownStrict", HostLockdownModeEnum::LockdownStrict),
         ("lockdownDisabled", HostLockdownModeEnum::LockdownDisabled),
     ],
 };
@@ -41638,15 +41856,16 @@ impl AsRef<str> for HostLockdownModeEnum {
 }
 
 static HOST_IMAGE_ACCEPTANCE_LEVEL_ENUM_MAP: phf::Map<&'static str, HostImageAcceptanceLevelEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 3),
     ],
     entries: &[
+        ("vmware_accepted", HostImageAcceptanceLevelEnum::VmwareAccepted),
         ("partner", HostImageAcceptanceLevelEnum::Partner),
         ("community", HostImageAcceptanceLevelEnum::Community),
         ("vmware_certified", HostImageAcceptanceLevelEnum::VmwareCertified),
-        ("vmware_accepted", HostImageAcceptanceLevelEnum::VmwareAccepted),
     ],
 };
 
@@ -41710,15 +41929,16 @@ impl AsRef<str> for HostImageAcceptanceLevelEnum {
 }
 
 static HOST_INTERNET_SCSI_HBA_CHAP_AUTHENTICATION_TYPE_ENUM_MAP: phf::Map<&'static str, HostInternetScsiHbaChapAuthenticationTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
         ("chapPreferred", HostInternetScsiHbaChapAuthenticationTypeEnum::ChapPreferred),
+        ("chapProhibited", HostInternetScsiHbaChapAuthenticationTypeEnum::ChapProhibited),
         ("chapDiscouraged", HostInternetScsiHbaChapAuthenticationTypeEnum::ChapDiscouraged),
         ("chapRequired", HostInternetScsiHbaChapAuthenticationTypeEnum::ChapRequired),
-        ("chapProhibited", HostInternetScsiHbaChapAuthenticationTypeEnum::ChapProhibited),
     ],
 };
 
@@ -41782,15 +42002,16 @@ impl AsRef<str> for HostInternetScsiHbaChapAuthenticationTypeEnum {
 }
 
 static HOST_INTERNET_SCSI_HBA_DIGEST_TYPE_ENUM_MAP: phf::Map<&'static str, HostInternetScsiHbaDigestTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (0, 2),
         (0, 0),
     ],
     entries: &[
         ("digestDiscouraged", HostInternetScsiHbaDigestTypeEnum::DigestDiscouraged),
-        ("digestRequired", HostInternetScsiHbaDigestTypeEnum::DigestRequired),
         ("digestPreferred", HostInternetScsiHbaDigestTypeEnum::DigestPreferred),
         ("digestProhibited", HostInternetScsiHbaDigestTypeEnum::DigestProhibited),
+        ("digestRequired", HostInternetScsiHbaDigestTypeEnum::DigestRequired),
     ],
 };
 
@@ -41854,14 +42075,14 @@ impl AsRef<str> for HostInternetScsiHbaDigestTypeEnum {
 }
 
 static INTERNET_SCSI_SNS_DISCOVERY_METHOD_ENUM_MAP: phf::Map<&'static str, InternetScsiSnsDiscoveryMethodEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("isnsDhcp", InternetScsiSnsDiscoveryMethodEnum::IsnsDhcp),
         ("isnsSlp", InternetScsiSnsDiscoveryMethodEnum::IsnsSlp),
         ("isnsStatic", InternetScsiSnsDiscoveryMethodEnum::IsnsStatic),
+        ("isnsDhcp", InternetScsiSnsDiscoveryMethodEnum::IsnsDhcp),
     ],
 };
 
@@ -41924,15 +42145,16 @@ impl AsRef<str> for InternetScsiSnsDiscoveryMethodEnum {
 }
 
 static SLP_DISCOVERY_METHOD_ENUM_MAP: phf::Map<&'static str, SlpDiscoveryMethodEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (3, 0),
+        (1, 0),
+        (0, 3),
     ],
     entries: &[
         ("slpAutoMulticast", SlpDiscoveryMethodEnum::SlpAutoMulticast),
+        ("slpAutoUnicast", SlpDiscoveryMethodEnum::SlpAutoUnicast),
         ("slpManual", SlpDiscoveryMethodEnum::SlpManual),
         ("slpDhcp", SlpDiscoveryMethodEnum::SlpDhcp),
-        ("slpAutoUnicast", SlpDiscoveryMethodEnum::SlpAutoUnicast),
     ],
 };
 
@@ -41996,14 +42218,15 @@ impl AsRef<str> for SlpDiscoveryMethodEnum {
 }
 
 static HOST_INTERNET_SCSI_HBA_ISCSI_IPV_6_ADDRESS_ADDRESS_CONFIGURATION_TYPE_ENUM_MAP: phf::Map<&'static str, HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("AutoConfigured", HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum::AutoConfigured),
-        ("Other", HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum::Other),
         ("Static", HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum::Static),
+        ("Other", HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum::Other),
         ("DHCP", HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeEnum::Dhcp),
     ],
 };
@@ -42068,9 +42291,9 @@ impl AsRef<str> for HostInternetScsiHbaIscsiIpv6AddressAddressConfigurationTypeE
 }
 
 static HOST_INTERNET_SCSI_HBA_ISCSI_IPV_6_ADDRESS_I_PV_6_ADDRESS_OPERATION_ENUM_MAP: phf::Map<&'static str, HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("add", HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum::Add),
@@ -42136,14 +42359,14 @@ impl AsRef<str> for HostInternetScsiHbaIscsiIpv6AddressIPv6AddressOperationEnum 
 }
 
 static HOST_INTERNET_SCSI_HBA_NETWORK_BINDING_SUPPORT_TYPE_ENUM_MAP: phf::Map<&'static str, HostInternetScsiHbaNetworkBindingSupportTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
-        ("required", HostInternetScsiHbaNetworkBindingSupportTypeEnum::Required),
-        ("optional", HostInternetScsiHbaNetworkBindingSupportTypeEnum::Optional),
         ("notsupported", HostInternetScsiHbaNetworkBindingSupportTypeEnum::Notsupported),
+        ("optional", HostInternetScsiHbaNetworkBindingSupportTypeEnum::Optional),
+        ("required", HostInternetScsiHbaNetworkBindingSupportTypeEnum::Required),
     ],
 };
 
@@ -42206,15 +42429,16 @@ impl AsRef<str> for HostInternetScsiHbaNetworkBindingSupportTypeEnum {
 }
 
 static HOST_INTERNET_SCSI_HBA_STATIC_TARGET_TARGET_DISCOVERY_METHOD_ENUM_MAP: phf::Map<&'static str, HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
+        (1, 0),
+        (1, 3),
     ],
     entries: &[
-        ("unknownMethod", HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum::UnknownMethod),
-        ("slpMethod", HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum::SlpMethod),
         ("sendTargetMethod", HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum::SendTargetMethod),
         ("isnsMethod", HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum::IsnsMethod),
+        ("unknownMethod", HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum::UnknownMethod),
+        ("slpMethod", HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum::SlpMethod),
         ("staticMethod", HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum::StaticMethod),
     ],
 };
@@ -42280,15 +42504,16 @@ impl AsRef<str> for HostInternetScsiHbaStaticTargetTargetDiscoveryMethodEnum {
 }
 
 static HOST_IP_CONFIG_IP_V_6_ADDRESS_CONFIG_TYPE_ENUM_MAP: phf::Map<&'static str, HostIpConfigIpV6AddressConfigTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (2, 0),
+        (0, 2),
     ],
     entries: &[
-        ("linklayer", HostIpConfigIpV6AddressConfigTypeEnum::Linklayer),
-        ("dhcp", HostIpConfigIpV6AddressConfigTypeEnum::Dhcp),
         ("manual", HostIpConfigIpV6AddressConfigTypeEnum::Manual),
+        ("linklayer", HostIpConfigIpV6AddressConfigTypeEnum::Linklayer),
         ("random", HostIpConfigIpV6AddressConfigTypeEnum::Random),
+        ("dhcp", HostIpConfigIpV6AddressConfigTypeEnum::Dhcp),
         ("other", HostIpConfigIpV6AddressConfigTypeEnum::Other),
     ],
 };
@@ -42354,19 +42579,20 @@ impl AsRef<str> for HostIpConfigIpV6AddressConfigTypeEnum {
 }
 
 static HOST_IP_CONFIG_IP_V_6_ADDRESS_STATUS_ENUM_MAP: phf::Map<&'static str, HostIpConfigIpV6AddressStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (4, 6),
-        (1, 0),
+        (3, 0),
+        (0, 4),
+        (2, 0),
     ],
     entries: &[
-        ("tentative", HostIpConfigIpV6AddressStatusEnum::Tentative),
-        ("invalid", HostIpConfigIpV6AddressStatusEnum::Invalid),
-        ("unknown", HostIpConfigIpV6AddressStatusEnum::Unknown),
-        ("duplicate", HostIpConfigIpV6AddressStatusEnum::Duplicate),
-        ("preferred", HostIpConfigIpV6AddressStatusEnum::Preferred),
-        ("deprecated", HostIpConfigIpV6AddressStatusEnum::Deprecated),
         ("inaccessible", HostIpConfigIpV6AddressStatusEnum::Inaccessible),
+        ("tentative", HostIpConfigIpV6AddressStatusEnum::Tentative),
+        ("unknown", HostIpConfigIpV6AddressStatusEnum::Unknown),
+        ("deprecated", HostIpConfigIpV6AddressStatusEnum::Deprecated),
+        ("duplicate", HostIpConfigIpV6AddressStatusEnum::Duplicate),
+        ("invalid", HostIpConfigIpV6AddressStatusEnum::Invalid),
+        ("preferred", HostIpConfigIpV6AddressStatusEnum::Preferred),
     ],
 };
 
@@ -42433,15 +42659,16 @@ impl AsRef<str> for HostIpConfigIpV6AddressStatusEnum {
 }
 
 static ISCSI_PORT_INFO_PATH_STATUS_ENUM_MAP: phf::Map<&'static str, IscsiPortInfoPathStatusEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16287231350648472473,
     disps: &[
+        (0, 0),
         (0, 0),
     ],
     entries: &[
         ("standBy", IscsiPortInfoPathStatusEnum::StandBy),
         ("notUsed", IscsiPortInfoPathStatusEnum::NotUsed),
-        ("lastActive", IscsiPortInfoPathStatusEnum::LastActive),
         ("active", IscsiPortInfoPathStatusEnum::Active),
+        ("lastActive", IscsiPortInfoPathStatusEnum::LastActive),
     ],
 };
 
@@ -42505,15 +42732,16 @@ impl AsRef<str> for IscsiPortInfoPathStatusEnum {
 }
 
 static LINK_DISCOVERY_PROTOCOL_CONFIG_OPERATION_TYPE_ENUM_MAP: phf::Map<&'static str, LinkDiscoveryProtocolConfigOperationTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (0, 1),
         (0, 0),
     ],
     entries: &[
-        ("both", LinkDiscoveryProtocolConfigOperationTypeEnum::Both),
-        ("advertise", LinkDiscoveryProtocolConfigOperationTypeEnum::Advertise),
         ("none", LinkDiscoveryProtocolConfigOperationTypeEnum::None),
+        ("advertise", LinkDiscoveryProtocolConfigOperationTypeEnum::Advertise),
         ("listen", LinkDiscoveryProtocolConfigOperationTypeEnum::Listen),
+        ("both", LinkDiscoveryProtocolConfigOperationTypeEnum::Both),
     ],
 };
 
@@ -42577,13 +42805,13 @@ impl AsRef<str> for LinkDiscoveryProtocolConfigOperationTypeEnum {
 }
 
 static LINK_DISCOVERY_PROTOCOL_CONFIG_PROTOCOL_TYPE_ENUM_MAP: phf::Map<&'static str, LinkDiscoveryProtocolConfigProtocolTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("lldp", LinkDiscoveryProtocolConfigProtocolTypeEnum::Lldp),
         ("cdp", LinkDiscoveryProtocolConfigProtocolTypeEnum::Cdp),
+        ("lldp", LinkDiscoveryProtocolConfigProtocolTypeEnum::Lldp),
     ],
 };
 
@@ -42645,14 +42873,14 @@ impl AsRef<str> for LinkDiscoveryProtocolConfigProtocolTypeEnum {
 }
 
 static HOST_LOW_LEVEL_PROVISIONING_MANAGER_FILE_TYPE_ENUM_MAP: phf::Map<&'static str, HostLowLevelProvisioningManagerFileTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
         ("Directory", HostLowLevelProvisioningManagerFileTypeEnum::Directory),
-        ("File", HostLowLevelProvisioningManagerFileTypeEnum::File),
         ("VirtualDisk", HostLowLevelProvisioningManagerFileTypeEnum::VirtualDisk),
+        ("File", HostLowLevelProvisioningManagerFileTypeEnum::File),
     ],
 };
 
@@ -42715,13 +42943,13 @@ impl AsRef<str> for HostLowLevelProvisioningManagerFileTypeEnum {
 }
 
 static HOST_LOW_LEVEL_PROVISIONING_MANAGER_RELOAD_TARGET_ENUM_MAP: phf::Map<&'static str, HostLowLevelProvisioningManagerReloadTargetEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("snapshotConfig", HostLowLevelProvisioningManagerReloadTargetEnum::SnapshotConfig),
         ("currentConfig", HostLowLevelProvisioningManagerReloadTargetEnum::CurrentConfig),
+        ("snapshotConfig", HostLowLevelProvisioningManagerReloadTargetEnum::SnapshotConfig),
     ],
 };
 
@@ -42783,7 +43011,7 @@ impl AsRef<str> for HostLowLevelProvisioningManagerReloadTargetEnum {
 }
 
 static HOST_MAINTENANCE_SPEC_PURPOSE_ENUM_MAP: phf::Map<&'static str, HostMaintenanceSpecPurposeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -42849,13 +43077,13 @@ impl AsRef<str> for HostMaintenanceSpecPurposeEnum {
 }
 
 static VIRTUAL_MACHINE_MEMORY_ALLOCATION_POLICY_ENUM_MAP: phf::Map<&'static str, VirtualMachineMemoryAllocationPolicyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("swapSome", VirtualMachineMemoryAllocationPolicyEnum::SwapSome),
         ("swapMost", VirtualMachineMemoryAllocationPolicyEnum::SwapMost),
+        ("swapSome", VirtualMachineMemoryAllocationPolicyEnum::SwapSome),
         ("swapNone", VirtualMachineMemoryAllocationPolicyEnum::SwapNone),
     ],
 };
@@ -42919,15 +43147,16 @@ impl AsRef<str> for VirtualMachineMemoryAllocationPolicyEnum {
 }
 
 static HOST_MEMORY_TIER_FLAGS_ENUM_MAP: phf::Map<&'static str, HostMemoryTierFlagsEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
+        (0, 1),
         (0, 0),
     ],
     entries: &[
         ("cachingTier", HostMemoryTierFlagsEnum::CachingTier),
+        ("persistentTier", HostMemoryTierFlagsEnum::PersistentTier),
         ("memoryTier", HostMemoryTierFlagsEnum::MemoryTier),
         ("unmappableTier", HostMemoryTierFlagsEnum::UnmappableTier),
-        ("persistentTier", HostMemoryTierFlagsEnum::PersistentTier),
     ],
 };
 
@@ -42991,14 +43220,14 @@ impl AsRef<str> for HostMemoryTierFlagsEnum {
 }
 
 static HOST_MEMORY_TIER_TYPE_ENUM_MAP: phf::Map<&'static str, HostMemoryTierTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
-        ("PMem", HostMemoryTierTypeEnum::PMem),
         ("DRAM", HostMemoryTierTypeEnum::Dram),
         ("NVMe", HostMemoryTierTypeEnum::NvMe),
+        ("PMem", HostMemoryTierTypeEnum::PMem),
     ],
 };
 
@@ -43061,14 +43290,14 @@ impl AsRef<str> for HostMemoryTierTypeEnum {
 }
 
 static HOST_MEMORY_TIERING_TYPE_ENUM_MAP: phf::Map<&'static str, HostMemoryTieringTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
         ("softwareTiering", HostMemoryTieringTypeEnum::SoftwareTiering),
-        ("noTiering", HostMemoryTieringTypeEnum::NoTiering),
         ("hardwareTiering", HostMemoryTieringTypeEnum::HardwareTiering),
+        ("noTiering", HostMemoryTieringTypeEnum::NoTiering),
     ],
 };
 
@@ -43131,7 +43360,7 @@ impl AsRef<str> for HostMemoryTieringTypeEnum {
 }
 
 static HOST_MOUNT_MODE_ENUM_MAP: phf::Map<&'static str, HostMountModeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -43199,14 +43428,14 @@ impl AsRef<str> for HostMountModeEnum {
 }
 
 static HOST_MOUNT_INFO_INACCESSIBLE_REASON_ENUM_MAP: phf::Map<&'static str, HostMountInfoInaccessibleReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("AllPathsDown_Timeout", HostMountInfoInaccessibleReasonEnum::AllPathsDownTimeout),
         ("AllPathsDown_Start", HostMountInfoInaccessibleReasonEnum::AllPathsDownStart),
         ("PermanentDeviceLoss", HostMountInfoInaccessibleReasonEnum::PermanentDeviceLoss),
+        ("AllPathsDown_Timeout", HostMountInfoInaccessibleReasonEnum::AllPathsDownTimeout),
     ],
 };
 
@@ -43269,21 +43498,22 @@ impl AsRef<str> for HostMountInfoInaccessibleReasonEnum {
 }
 
 static HOST_MOUNT_INFO_MOUNT_FAILED_REASON_ENUM_MAP: phf::Map<&'static str, HostMountInfoMountFailedReasonEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (5, 0),
-        (1, 2),
+        (0, 6),
+        (1, 0),
+        (0, 4),
     ],
     entries: &[
-        ("MOUNT_EXISTS", HostMountInfoMountFailedReasonEnum::MountExists),
-        ("CONNECT_FAILURE", HostMountInfoMountFailedReasonEnum::ConnectFailure),
-        ("MOUNT_NOT_SUPPORTED", HostMountInfoMountFailedReasonEnum::MountNotSupported),
         ("CONN_LIMIT_EXCEEDED", HostMountInfoMountFailedReasonEnum::ConnLimitExceeded),
-        ("NFS_NOT_SUPPORTED", HostMountInfoMountFailedReasonEnum::NfsNotSupported),
-        ("MOUNT_NOT_DIR", HostMountInfoMountFailedReasonEnum::MountNotDir),
-        ("OTHERS", HostMountInfoMountFailedReasonEnum::Others),
-        ("MOUNT_DENIED", HostMountInfoMountFailedReasonEnum::MountDenied),
         ("VOLUME_LIMIT_EXCEEDED", HostMountInfoMountFailedReasonEnum::VolumeLimitExceeded),
+        ("CONNECT_FAILURE", HostMountInfoMountFailedReasonEnum::ConnectFailure),
+        ("MOUNT_EXISTS", HostMountInfoMountFailedReasonEnum::MountExists),
+        ("MOUNT_NOT_DIR", HostMountInfoMountFailedReasonEnum::MountNotDir),
+        ("MOUNT_DENIED", HostMountInfoMountFailedReasonEnum::MountDenied),
+        ("OTHERS", HostMountInfoMountFailedReasonEnum::Others),
+        ("NFS_NOT_SUPPORTED", HostMountInfoMountFailedReasonEnum::NfsNotSupported),
+        ("MOUNT_NOT_SUPPORTED", HostMountInfoMountFailedReasonEnum::MountNotSupported),
     ],
 };
 
@@ -43352,15 +43582,16 @@ impl AsRef<str> for HostMountInfoMountFailedReasonEnum {
 }
 
 static MULTIPATH_STATE_ENUM_MAP: phf::Map<&'static str, MultipathStateEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
+        (2, 1),
     ],
     entries: &[
         ("unknown", MultipathStateEnum::Unknown),
-        ("active", MultipathStateEnum::Active),
-        ("dead", MultipathStateEnum::Dead),
         ("standby", MultipathStateEnum::Standby),
+        ("dead", MultipathStateEnum::Dead),
+        ("active", MultipathStateEnum::Active),
         ("disabled", MultipathStateEnum::Disabled),
     ],
 };
@@ -43426,15 +43657,16 @@ impl AsRef<str> for MultipathStateEnum {
 }
 
 static HOST_NAS_VOLUME_SECURITY_TYPE_ENUM_MAP: phf::Map<&'static str, HostNasVolumeSecurityTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
+        (0, 3),
         (1, 0),
     ],
     entries: &[
         ("SEC_KRB5P", HostNasVolumeSecurityTypeEnum::SecKrb5P),
         ("SEC_KRB5", HostNasVolumeSecurityTypeEnum::SecKrb5),
-        ("AUTH_SYS", HostNasVolumeSecurityTypeEnum::AuthSys),
         ("SEC_KRB5I", HostNasVolumeSecurityTypeEnum::SecKrb5I),
+        ("AUTH_SYS", HostNasVolumeSecurityTypeEnum::AuthSys),
     ],
 };
 
@@ -43498,9 +43730,9 @@ impl AsRef<str> for HostNasVolumeSecurityTypeEnum {
 }
 
 static HOST_NET_STACK_INSTANCE_CONGESTION_CONTROL_ALGORITHM_TYPE_ENUM_MAP: phf::Map<&'static str, HostNetStackInstanceCongestionControlAlgorithmTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("cubic", HostNetStackInstanceCongestionControlAlgorithmTypeEnum::Cubic),
@@ -43566,18 +43798,18 @@ impl AsRef<str> for HostNetStackInstanceCongestionControlAlgorithmTypeEnum {
 }
 
 static HOST_NET_STACK_INSTANCE_SYSTEM_STACK_KEY_ENUM_MAP: phf::Map<&'static str, HostNetStackInstanceSystemStackKeyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 3),
         (1, 0),
+        (1, 4),
     ],
     entries: &[
-        ("ops", HostNetStackInstanceSystemStackKeyEnum::Ops),
         ("vnetworking", HostNetStackInstanceSystemStackKeyEnum::Vnetworking),
+        ("ops", HostNetStackInstanceSystemStackKeyEnum::Ops),
         ("defaultTcpipStack", HostNetStackInstanceSystemStackKeyEnum::DefaultTcpipStack),
-        ("vmotion", HostNetStackInstanceSystemStackKeyEnum::Vmotion),
         ("mirror", HostNetStackInstanceSystemStackKeyEnum::Mirror),
         ("vSphereProvisioning", HostNetStackInstanceSystemStackKeyEnum::VSphereProvisioning),
+        ("vmotion", HostNetStackInstanceSystemStackKeyEnum::Vmotion),
     ],
 };
 
@@ -43643,14 +43875,15 @@ impl AsRef<str> for HostNetStackInstanceSystemStackKeyEnum {
 }
 
 static HOST_NUMERIC_SENSOR_HEALTH_STATE_ENUM_MAP: phf::Map<&'static str, HostNumericSensorHealthStateEnum> = ::phf::Map {
-    key: 351906021642186605,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("red", HostNumericSensorHealthStateEnum::Red),
-        ("yellow", HostNumericSensorHealthStateEnum::Yellow),
         ("unknown", HostNumericSensorHealthStateEnum::Unknown),
+        ("yellow", HostNumericSensorHealthStateEnum::Yellow),
+        ("red", HostNumericSensorHealthStateEnum::Red),
         ("green", HostNumericSensorHealthStateEnum::Green),
     ],
 };
@@ -43715,26 +43948,28 @@ impl AsRef<str> for HostNumericSensorHealthStateEnum {
 }
 
 static HOST_NUMERIC_SENSOR_TYPE_ENUM_MAP: phf::Map<&'static str, HostNumericSensorTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (4, 6),
-        (5, 6),
-        (8, 0),
+        (0, 2),
+        (0, 0),
+        (1, 7),
+        (1, 7),
+        (0, 3),
     ],
     entries: &[
-        ("watchdog", HostNumericSensorTypeEnum::Watchdog),
+        ("cable", HostNumericSensorTypeEnum::Cable),
+        ("other", HostNumericSensorTypeEnum::Other),
+        ("systemBoard", HostNumericSensorTypeEnum::SystemBoard),
+        ("storage", HostNumericSensorTypeEnum::Storage),
+        ("fan", HostNumericSensorTypeEnum::Fan),
+        ("processor", HostNumericSensorTypeEnum::Processor),
         ("bios", HostNumericSensorTypeEnum::Bios),
+        ("memory", HostNumericSensorTypeEnum::Memory),
+        ("temperature", HostNumericSensorTypeEnum::Temperature),
+        ("watchdog", HostNumericSensorTypeEnum::Watchdog),
+        ("battery", HostNumericSensorTypeEnum::Battery),
         ("voltage", HostNumericSensorTypeEnum::Voltage),
         ("power", HostNumericSensorTypeEnum::Power),
-        ("systemBoard", HostNumericSensorTypeEnum::SystemBoard),
-        ("battery", HostNumericSensorTypeEnum::Battery),
-        ("temperature", HostNumericSensorTypeEnum::Temperature),
-        ("cable", HostNumericSensorTypeEnum::Cable),
-        ("fan", HostNumericSensorTypeEnum::Fan),
-        ("memory", HostNumericSensorTypeEnum::Memory),
-        ("storage", HostNumericSensorTypeEnum::Storage),
-        ("processor", HostNumericSensorTypeEnum::Processor),
-        ("other", HostNumericSensorTypeEnum::Other),
     ],
 };
 
@@ -43807,13 +44042,13 @@ impl AsRef<str> for HostNumericSensorTypeEnum {
 }
 
 static NVDIMM_NVDIMM_HEALTH_INFO_STATE_ENUM_MAP: phf::Map<&'static str, NvdimmNvdimmHealthInfoStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("normal", NvdimmNvdimmHealthInfoStateEnum::Normal),
         ("error", NvdimmNvdimmHealthInfoStateEnum::Error),
+        ("normal", NvdimmNvdimmHealthInfoStateEnum::Normal),
     ],
 };
 
@@ -43875,13 +44110,13 @@ impl AsRef<str> for NvdimmNvdimmHealthInfoStateEnum {
 }
 
 static NVDIMM_INTERLEAVE_SET_STATE_ENUM_MAP: phf::Map<&'static str, NvdimmInterleaveSetStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("invalid", NvdimmInterleaveSetStateEnum::Invalid),
         ("active", NvdimmInterleaveSetStateEnum::Active),
+        ("invalid", NvdimmInterleaveSetStateEnum::Invalid),
     ],
 };
 
@@ -43943,16 +44178,17 @@ impl AsRef<str> for NvdimmInterleaveSetStateEnum {
 }
 
 static NVDIMM_NAMESPACE_DETAILS_HEALTH_STATUS_ENUM_MAP: phf::Map<&'static str, NvdimmNamespaceDetailsHealthStatusEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 1),
     ],
     entries: &[
-        ("labelMissing", NvdimmNamespaceDetailsHealthStatusEnum::LabelMissing),
         ("normal", NvdimmNamespaceDetailsHealthStatusEnum::Normal),
+        ("labelMissing", NvdimmNamespaceDetailsHealthStatusEnum::LabelMissing),
         ("interleaveBroken", NvdimmNamespaceDetailsHealthStatusEnum::InterleaveBroken),
-        ("missing", NvdimmNamespaceDetailsHealthStatusEnum::Missing),
         ("labelInconsistent", NvdimmNamespaceDetailsHealthStatusEnum::LabelInconsistent),
+        ("missing", NvdimmNamespaceDetailsHealthStatusEnum::Missing),
     ],
 };
 
@@ -44017,14 +44253,14 @@ impl AsRef<str> for NvdimmNamespaceDetailsHealthStatusEnum {
 }
 
 static NVDIMM_NAMESPACE_DETAILS_STATE_ENUM_MAP: phf::Map<&'static str, NvdimmNamespaceDetailsStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 15995050791870030928,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("invalid", NvdimmNamespaceDetailsStateEnum::Invalid),
-        ("inUse", NvdimmNamespaceDetailsStateEnum::InUse),
         ("notInUse", NvdimmNamespaceDetailsStateEnum::NotInUse),
+        ("inUse", NvdimmNamespaceDetailsStateEnum::InUse),
     ],
 };
 
@@ -44087,19 +44323,20 @@ impl AsRef<str> for NvdimmNamespaceDetailsStateEnum {
 }
 
 static NVDIMM_NAMESPACE_HEALTH_STATUS_ENUM_MAP: phf::Map<&'static str, NvdimmNamespaceHealthStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (3, 2),
-        (2, 0),
+        (0, 1),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
+        ("badBlockSize", NvdimmNamespaceHealthStatusEnum::BadBlockSize),
+        ("normal", NvdimmNamespaceHealthStatusEnum::Normal),
+        ("missing", NvdimmNamespaceHealthStatusEnum::Missing),
+        ("labelMissing", NvdimmNamespaceHealthStatusEnum::LabelMissing),
+        ("labelInconsistent", NvdimmNamespaceHealthStatusEnum::LabelInconsistent),
         ("interleaveBroken", NvdimmNamespaceHealthStatusEnum::InterleaveBroken),
         ("bttCorrupt", NvdimmNamespaceHealthStatusEnum::BttCorrupt),
-        ("normal", NvdimmNamespaceHealthStatusEnum::Normal),
-        ("labelMissing", NvdimmNamespaceHealthStatusEnum::LabelMissing),
-        ("badBlockSize", NvdimmNamespaceHealthStatusEnum::BadBlockSize),
-        ("missing", NvdimmNamespaceHealthStatusEnum::Missing),
-        ("labelInconsistent", NvdimmNamespaceHealthStatusEnum::LabelInconsistent),
     ],
 };
 
@@ -44166,14 +44403,14 @@ impl AsRef<str> for NvdimmNamespaceHealthStatusEnum {
 }
 
 static NVDIMM_NAMESPACE_STATE_ENUM_MAP: phf::Map<&'static str, NvdimmNamespaceStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 15995050791870030928,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("invalid", NvdimmNamespaceStateEnum::Invalid),
-        ("inUse", NvdimmNamespaceStateEnum::InUse),
         ("notInUse", NvdimmNamespaceStateEnum::NotInUse),
+        ("inUse", NvdimmNamespaceStateEnum::InUse),
     ],
 };
 
@@ -44236,13 +44473,13 @@ impl AsRef<str> for NvdimmNamespaceStateEnum {
 }
 
 static NVDIMM_NAMESPACE_TYPE_ENUM_MAP: phf::Map<&'static str, NvdimmNamespaceTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("blockNamespace", NvdimmNamespaceTypeEnum::BlockNamespace),
         ("persistentNamespace", NvdimmNamespaceTypeEnum::PersistentNamespace),
+        ("blockNamespace", NvdimmNamespaceTypeEnum::BlockNamespace),
     ],
 };
 
@@ -44304,20 +44541,21 @@ impl AsRef<str> for NvdimmNamespaceTypeEnum {
 }
 
 static NVDIMM_RANGE_TYPE_ENUM_MAP: phf::Map<&'static str, NvdimmRangeTypeEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
-        (4, 7),
+        (1, 3),
+        (6, 0),
+        (0, 4),
     ],
     entries: &[
-        ("blockRange", NvdimmRangeTypeEnum::BlockRange),
-        ("persistentVirtualCDRange", NvdimmRangeTypeEnum::PersistentVirtualCdRange),
-        ("controlRange", NvdimmRangeTypeEnum::ControlRange),
-        ("volatileRange", NvdimmRangeTypeEnum::VolatileRange),
         ("volatileVirtualDiskRange", NvdimmRangeTypeEnum::VolatileVirtualDiskRange),
-        ("persistentRange", NvdimmRangeTypeEnum::PersistentRange),
-        ("volatileVirtualCDRange", NvdimmRangeTypeEnum::VolatileVirtualCdRange),
+        ("volatileRange", NvdimmRangeTypeEnum::VolatileRange),
+        ("controlRange", NvdimmRangeTypeEnum::ControlRange),
         ("persistentVirtualDiskRange", NvdimmRangeTypeEnum::PersistentVirtualDiskRange),
+        ("persistentRange", NvdimmRangeTypeEnum::PersistentRange),
+        ("persistentVirtualCDRange", NvdimmRangeTypeEnum::PersistentVirtualCdRange),
+        ("blockRange", NvdimmRangeTypeEnum::BlockRange),
+        ("volatileVirtualCDRange", NvdimmRangeTypeEnum::VolatileVirtualCdRange),
     ],
 };
 
@@ -44385,9 +44623,9 @@ impl AsRef<str> for NvdimmRangeTypeEnum {
 }
 
 static HOST_NVME_DISCOVERY_LOG_SUBSYSTEM_TYPE_ENUM_MAP: phf::Map<&'static str, HostNvmeDiscoveryLogSubsystemTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("nvm", HostNvmeDiscoveryLogSubsystemTypeEnum::Nvm),
@@ -44453,14 +44691,14 @@ impl AsRef<str> for HostNvmeDiscoveryLogSubsystemTypeEnum {
 }
 
 static HOST_NVME_DISCOVERY_LOG_TRANSPORT_REQUIREMENTS_ENUM_MAP: phf::Map<&'static str, HostNvmeDiscoveryLogTransportRequirementsEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
-        ("requirementsNotSpecified", HostNvmeDiscoveryLogTransportRequirementsEnum::RequirementsNotSpecified),
-        ("secureChannelRequired", HostNvmeDiscoveryLogTransportRequirementsEnum::SecureChannelRequired),
         ("secureChannelNotRequired", HostNvmeDiscoveryLogTransportRequirementsEnum::SecureChannelNotRequired),
+        ("secureChannelRequired", HostNvmeDiscoveryLogTransportRequirementsEnum::SecureChannelRequired),
+        ("requirementsNotSpecified", HostNvmeDiscoveryLogTransportRequirementsEnum::RequirementsNotSpecified),
     ],
 };
 
@@ -44523,18 +44761,18 @@ impl AsRef<str> for HostNvmeDiscoveryLogTransportRequirementsEnum {
 }
 
 static HOST_NVME_TRANSPORT_PARAMETERS_NVME_ADDRESS_FAMILY_ENUM_MAP: phf::Map<&'static str, HostNvmeTransportParametersNvmeAddressFamilyEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
-        (0, 0),
+        (2, 4),
+        (2, 0),
     ],
     entries: &[
-        ("fc", HostNvmeTransportParametersNvmeAddressFamilyEnum::Fc),
-        ("ipv6", HostNvmeTransportParametersNvmeAddressFamilyEnum::Ipv6),
-        ("loopback", HostNvmeTransportParametersNvmeAddressFamilyEnum::Loopback),
-        ("infiniBand", HostNvmeTransportParametersNvmeAddressFamilyEnum::InfiniBand),
-        ("unknown", HostNvmeTransportParametersNvmeAddressFamilyEnum::Unknown),
         ("ipv4", HostNvmeTransportParametersNvmeAddressFamilyEnum::Ipv4),
+        ("loopback", HostNvmeTransportParametersNvmeAddressFamilyEnum::Loopback),
+        ("unknown", HostNvmeTransportParametersNvmeAddressFamilyEnum::Unknown),
+        ("ipv6", HostNvmeTransportParametersNvmeAddressFamilyEnum::Ipv6),
+        ("fc", HostNvmeTransportParametersNvmeAddressFamilyEnum::Fc),
+        ("infiniBand", HostNvmeTransportParametersNvmeAddressFamilyEnum::InfiniBand),
     ],
 };
 
@@ -44600,16 +44838,16 @@ impl AsRef<str> for HostNvmeTransportParametersNvmeAddressFamilyEnum {
 }
 
 static HOST_NVME_TRANSPORT_TYPE_ENUM_MAP: phf::Map<&'static str, HostNvmeTransportTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
-        (0, 1),
+        (1, 0),
+        (1, 2),
     ],
     entries: &[
-        ("rdma", HostNvmeTransportTypeEnum::Rdma),
         ("unsupported", HostNvmeTransportTypeEnum::Unsupported),
-        ("loopback", HostNvmeTransportTypeEnum::Loopback),
         ("fibreChannel", HostNvmeTransportTypeEnum::FibreChannel),
+        ("rdma", HostNvmeTransportTypeEnum::Rdma),
+        ("loopback", HostNvmeTransportTypeEnum::Loopback),
         ("pcie", HostNvmeTransportTypeEnum::Pcie),
         ("tcp", HostNvmeTransportTypeEnum::Tcp),
     ],
@@ -44677,14 +44915,15 @@ impl AsRef<str> for HostNvmeTransportTypeEnum {
 }
 
 static HOST_OPAQUE_SWITCH_OPAQUE_SWITCH_STATE_ENUM_MAP: phf::Map<&'static str, HostOpaqueSwitchOpaqueSwitchStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
+        (0, 0),
         (0, 0),
     ],
     entries: &[
         ("maintenance", HostOpaqueSwitchOpaqueSwitchStateEnum::Maintenance),
-        ("down", HostOpaqueSwitchOpaqueSwitchStateEnum::Down),
         ("warning", HostOpaqueSwitchOpaqueSwitchStateEnum::Warning),
+        ("down", HostOpaqueSwitchOpaqueSwitchStateEnum::Down),
         ("up", HostOpaqueSwitchOpaqueSwitchStateEnum::Up),
     ],
 };
@@ -44749,7 +44988,7 @@ impl AsRef<str> for HostOpaqueSwitchOpaqueSwitchStateEnum {
 }
 
 static HOST_PARTIAL_MAINTENANCE_MODE_ID_ENUM_MAP: phf::Map<&'static str, HostPartialMaintenanceModeIdEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -44815,15 +45054,16 @@ impl AsRef<str> for HostPartialMaintenanceModeIdEnum {
 }
 
 static HOST_PARTIAL_MAINTENANCE_MODE_STATUS_ENUM_MAP: phf::Map<&'static str, HostPartialMaintenanceModeStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
-        ("enteringPartialMM", HostPartialMaintenanceModeStatusEnum::EnteringPartialMm),
-        ("inPartialMM", HostPartialMaintenanceModeStatusEnum::InPartialMm),
         ("notInPartialMM", HostPartialMaintenanceModeStatusEnum::NotInPartialMm),
+        ("enteringPartialMM", HostPartialMaintenanceModeStatusEnum::EnteringPartialMm),
         ("exitingPartialMM", HostPartialMaintenanceModeStatusEnum::ExitingPartialMm),
+        ("inPartialMM", HostPartialMaintenanceModeStatusEnum::InPartialMm),
     ],
 };
 
@@ -44887,9 +45127,9 @@ impl AsRef<str> for HostPartialMaintenanceModeStatusEnum {
 }
 
 static HOST_PATCH_MANAGER_INSTALL_STATE_ENUM_MAP: phf::Map<&'static str, HostPatchManagerInstallStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("hostRestarted", HostPatchManagerInstallStateEnum::HostRestarted),
@@ -44955,18 +45195,19 @@ impl AsRef<str> for HostPatchManagerInstallStateEnum {
 }
 
 static HOST_PATCH_MANAGER_INTEGRITY_STATUS_ENUM_MAP: phf::Map<&'static str, HostPatchManagerIntegrityStatusEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16263683158343804936,
     disps: &[
+        (0, 6),
         (1, 0),
-        (1, 5),
+        (2, 1),
     ],
     entries: &[
-        ("validationError", HostPatchManagerIntegrityStatusEnum::ValidationError),
-        ("notEnoughSignatures", HostPatchManagerIntegrityStatusEnum::NotEnoughSignatures),
-        ("validated", HostPatchManagerIntegrityStatusEnum::Validated),
-        ("keyExpired", HostPatchManagerIntegrityStatusEnum::KeyExpired),
-        ("keyNotFound", HostPatchManagerIntegrityStatusEnum::KeyNotFound),
         ("digestMismatch", HostPatchManagerIntegrityStatusEnum::DigestMismatch),
+        ("validated", HostPatchManagerIntegrityStatusEnum::Validated),
+        ("notEnoughSignatures", HostPatchManagerIntegrityStatusEnum::NotEnoughSignatures),
+        ("validationError", HostPatchManagerIntegrityStatusEnum::ValidationError),
+        ("keyNotFound", HostPatchManagerIntegrityStatusEnum::KeyNotFound),
+        ("keyExpired", HostPatchManagerIntegrityStatusEnum::KeyExpired),
         ("keyRevoked", HostPatchManagerIntegrityStatusEnum::KeyRevoked),
     ],
 };
@@ -45034,18 +45275,18 @@ impl AsRef<str> for HostPatchManagerIntegrityStatusEnum {
 }
 
 static HOST_PATCH_MANAGER_REASON_ENUM_MAP: phf::Map<&'static str, HostPatchManagerReasonEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 4),
         (0, 0),
+        (4, 3),
     ],
     entries: &[
-        ("obsoleted", HostPatchManagerReasonEnum::Obsoleted),
-        ("conflictLib", HostPatchManagerReasonEnum::ConflictLib),
-        ("conflictPatch", HostPatchManagerReasonEnum::ConflictPatch),
-        ("hasDependentPatch", HostPatchManagerReasonEnum::HasDependentPatch),
-        ("missingLib", HostPatchManagerReasonEnum::MissingLib),
         ("missingPatch", HostPatchManagerReasonEnum::MissingPatch),
+        ("missingLib", HostPatchManagerReasonEnum::MissingLib),
+        ("conflictLib", HostPatchManagerReasonEnum::ConflictLib),
+        ("hasDependentPatch", HostPatchManagerReasonEnum::HasDependentPatch),
+        ("obsoleted", HostPatchManagerReasonEnum::Obsoleted),
+        ("conflictPatch", HostPatchManagerReasonEnum::ConflictPatch),
     ],
 };
 
@@ -45111,19 +45352,20 @@ impl AsRef<str> for HostPatchManagerReasonEnum {
 }
 
 static HOST_PCI_PASSTHRU_INFO_DIRECT_PATH_DEVICE_MODE_ENUM_MAP: phf::Map<&'static str, HostPciPassthruInfoDirectPathDeviceModeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
-        (1, 3),
+        (0, 1),
+        (0, 0),
+        (0, 4),
     ],
     entries: &[
-        ("host", HostPciPassthruInfoDirectPathDeviceModeEnum::Host),
-        ("none", HostPciPassthruInfoDirectPathDeviceModeEnum::None),
-        ("directPath", HostPciPassthruInfoDirectPathDeviceModeEnum::DirectPath),
         ("vGpuMixedSize", HostPciPassthruInfoDirectPathDeviceModeEnum::VGpuMixedSize),
-        ("systemSelect", HostPciPassthruInfoDirectPathDeviceModeEnum::SystemSelect),
+        ("host", HostPciPassthruInfoDirectPathDeviceModeEnum::Host),
         ("enhancedDirectPath", HostPciPassthruInfoDirectPathDeviceModeEnum::EnhancedDirectPath),
         ("vGpuSameSize", HostPciPassthruInfoDirectPathDeviceModeEnum::VGpuSameSize),
+        ("none", HostPciPassthruInfoDirectPathDeviceModeEnum::None),
+        ("directPath", HostPciPassthruInfoDirectPathDeviceModeEnum::DirectPath),
+        ("systemSelect", HostPciPassthruInfoDirectPathDeviceModeEnum::SystemSelect),
     ],
 };
 
@@ -45190,7 +45432,7 @@ impl AsRef<str> for HostPciPassthruInfoDirectPathDeviceModeEnum {
 }
 
 static PHYSICAL_NIC_RESOURCE_POOL_SCHEDULER_DISALLOWED_REASON_ENUM_MAP: phf::Map<&'static str, PhysicalNicResourcePoolSchedulerDisallowedReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -45258,7 +45500,7 @@ impl AsRef<str> for PhysicalNicResourcePoolSchedulerDisallowedReasonEnum {
 }
 
 static PHYSICAL_NIC_VM_DIRECT_PATH_GEN_2_SUPPORTED_MODE_ENUM_MAP: phf::Map<&'static str, PhysicalNicVmDirectPathGen2SupportedModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -45324,13 +45566,14 @@ impl AsRef<str> for PhysicalNicVmDirectPathGen2SupportedModeEnum {
 }
 
 static PORT_GROUP_CONNECTEE_TYPE_ENUM_MAP: phf::Map<&'static str, PortGroupConnecteeTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16263683158343804936,
     disps: &[
-        (3, 0),
+        (1, 0),
+        (1, 0),
     ],
     entries: &[
-        ("systemManagement", PortGroupConnecteeTypeEnum::SystemManagement),
         ("unknown", PortGroupConnecteeTypeEnum::Unknown),
+        ("systemManagement", PortGroupConnecteeTypeEnum::SystemManagement),
         ("virtualMachine", PortGroupConnecteeTypeEnum::VirtualMachine),
         ("host", PortGroupConnecteeTypeEnum::Host),
     ],
@@ -45396,9 +45639,9 @@ impl AsRef<str> for PortGroupConnecteeTypeEnum {
 }
 
 static HOST_PROTOCOL_ENDPOINT_PE_TYPE_ENUM_MAP: phf::Map<&'static str, HostProtocolEndpointPeTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("nas", HostProtocolEndpointPeTypeEnum::Nas),
@@ -45464,9 +45707,9 @@ impl AsRef<str> for HostProtocolEndpointPeTypeEnum {
 }
 
 static HOST_PROTOCOL_ENDPOINT_PROTOCOL_ENDPOINT_TYPE_ENUM_MAP: phf::Map<&'static str, HostProtocolEndpointProtocolEndpointTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("nfs", HostProtocolEndpointProtocolEndpointTypeEnum::Nfs),
@@ -45534,14 +45777,14 @@ impl AsRef<str> for HostProtocolEndpointProtocolEndpointTypeEnum {
 }
 
 static HOST_PTP_CONFIG_DEVICE_TYPE_ENUM_MAP: phf::Map<&'static str, HostPtpConfigDeviceTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("none", HostPtpConfigDeviceTypeEnum::None),
         ("virtualNic", HostPtpConfigDeviceTypeEnum::VirtualNic),
         ("pciPassthruNic", HostPtpConfigDeviceTypeEnum::PciPassthruNic),
+        ("none", HostPtpConfigDeviceTypeEnum::None),
     ],
 };
 
@@ -45604,9 +45847,9 @@ impl AsRef<str> for HostPtpConfigDeviceTypeEnum {
 }
 
 static HOST_QUALIFIED_NAME_TYPE_ENUM_MAP: phf::Map<&'static str, HostQualifiedNameTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("nvmeQualifiedName", HostQualifiedNameTypeEnum::NvmeQualifiedName),
@@ -45672,18 +45915,18 @@ impl AsRef<str> for HostQualifiedNameTypeEnum {
 }
 
 static HOST_RDMA_DEVICE_CONNECTION_STATE_ENUM_MAP: phf::Map<&'static str, HostRdmaDeviceConnectionStateEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (2, 2),
-        (0, 0),
+        (4, 0),
+        (0, 3),
     ],
     entries: &[
+        ("unknown", HostRdmaDeviceConnectionStateEnum::Unknown),
         ("active", HostRdmaDeviceConnectionStateEnum::Active),
+        ("down", HostRdmaDeviceConnectionStateEnum::Down),
+        ("activeDefer", HostRdmaDeviceConnectionStateEnum::ActiveDefer),
         ("armed", HostRdmaDeviceConnectionStateEnum::Armed),
         ("init", HostRdmaDeviceConnectionStateEnum::Init),
-        ("down", HostRdmaDeviceConnectionStateEnum::Down),
-        ("unknown", HostRdmaDeviceConnectionStateEnum::Unknown),
-        ("activeDefer", HostRdmaDeviceConnectionStateEnum::ActiveDefer),
     ],
 };
 
@@ -45749,7 +45992,7 @@ impl AsRef<str> for HostRdmaDeviceConnectionStateEnum {
 }
 
 static RDMA_PROTOCOL_ENUM_MAP: phf::Map<&'static str, RdmaProtocolEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -45815,13 +46058,13 @@ impl AsRef<str> for RdmaProtocolEnum {
 }
 
 static HOST_FIREWALL_RULE_DIRECTION_ENUM_MAP: phf::Map<&'static str, HostFirewallRuleDirectionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("inbound", HostFirewallRuleDirectionEnum::Inbound),
         ("outbound", HostFirewallRuleDirectionEnum::Outbound),
+        ("inbound", HostFirewallRuleDirectionEnum::Inbound),
     ],
 };
 
@@ -45883,9 +46126,9 @@ impl AsRef<str> for HostFirewallRuleDirectionEnum {
 }
 
 static HOST_FIREWALL_RULE_PORT_TYPE_ENUM_MAP: phf::Map<&'static str, HostFirewallRulePortTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("dst", HostFirewallRulePortTypeEnum::Dst),
@@ -45951,7 +46194,7 @@ impl AsRef<str> for HostFirewallRulePortTypeEnum {
 }
 
 static HOST_FIREWALL_RULE_PROTOCOL_ENUM_MAP: phf::Map<&'static str, HostFirewallRuleProtocolEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
         (0, 0),
     ],
@@ -46019,15 +46262,16 @@ impl AsRef<str> for HostFirewallRuleProtocolEnum {
 }
 
 static HOST_RUNTIME_INFO_NET_STACK_INSTANCE_RUNTIME_INFO_STATE_ENUM_MAP: phf::Map<&'static str, HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 1),
     ],
     entries: &[
+        ("activating", HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum::Activating),
+        ("deactivating", HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum::Deactivating),
         ("inactive", HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum::Inactive),
         ("active", HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum::Active),
-        ("deactivating", HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum::Deactivating),
-        ("activating", HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum::Activating),
     ],
 };
 
@@ -46091,13 +46335,13 @@ impl AsRef<str> for HostRuntimeInfoNetStackInstanceRuntimeInfoStateEnum {
 }
 
 static HOST_RUNTIME_INFO_STATE_ENCRYPTION_INFO_PROTECTION_MODE_ENUM_MAP: phf::Map<&'static str, HostRuntimeInfoStateEncryptionInfoProtectionModeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("none", HostRuntimeInfoStateEncryptionInfoProtectionModeEnum::None),
         ("tpm", HostRuntimeInfoStateEncryptionInfoProtectionModeEnum::Tpm),
+        ("none", HostRuntimeInfoStateEncryptionInfoProtectionModeEnum::None),
     ],
 };
 
@@ -46159,14 +46403,14 @@ impl AsRef<str> for HostRuntimeInfoStateEncryptionInfoProtectionModeEnum {
 }
 
 static HOST_RUNTIME_INFO_STATELESS_NVDS_MIGRATION_STATE_ENUM_MAP: phf::Map<&'static str, HostRuntimeInfoStatelessNvdsMigrationStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("ready", HostRuntimeInfoStatelessNvdsMigrationStateEnum::Ready),
-        ("notNeeded", HostRuntimeInfoStatelessNvdsMigrationStateEnum::NotNeeded),
         ("unknown", HostRuntimeInfoStatelessNvdsMigrationStateEnum::Unknown),
+        ("notNeeded", HostRuntimeInfoStatelessNvdsMigrationStateEnum::NotNeeded),
+        ("ready", HostRuntimeInfoStatelessNvdsMigrationStateEnum::Ready),
     ],
 };
 
@@ -46229,16 +46473,17 @@ impl AsRef<str> for HostRuntimeInfoStatelessNvdsMigrationStateEnum {
 }
 
 static SCSI_DISK_TYPE_ENUM_MAP: phf::Map<&'static str, ScsiDiskTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 4),
+        (1, 0),
     ],
     entries: &[
+        ("unknown", ScsiDiskTypeEnum::Unknown),
+        ("native512", ScsiDiskTypeEnum::Native512),
+        ("emulated512", ScsiDiskTypeEnum::Emulated512),
         ("SoftwareEmulated4k", ScsiDiskTypeEnum::SoftwareEmulated4K),
         ("native4k", ScsiDiskTypeEnum::Native4K),
-        ("native512", ScsiDiskTypeEnum::Native512),
-        ("unknown", ScsiDiskTypeEnum::Unknown),
-        ("emulated512", ScsiDiskTypeEnum::Emulated512),
     ],
 };
 
@@ -46303,15 +46548,16 @@ impl AsRef<str> for ScsiDiskTypeEnum {
 }
 
 static SCSI_LUN_DESCRIPTOR_QUALITY_ENUM_MAP: phf::Map<&'static str, ScsiLunDescriptorQualityEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("lowQuality", ScsiLunDescriptorQualityEnum::LowQuality),
-        ("unknownQuality", ScsiLunDescriptorQualityEnum::UnknownQuality),
-        ("mediumQuality", ScsiLunDescriptorQualityEnum::MediumQuality),
         ("highQuality", ScsiLunDescriptorQualityEnum::HighQuality),
+        ("lowQuality", ScsiLunDescriptorQualityEnum::LowQuality),
+        ("mediumQuality", ScsiLunDescriptorQualityEnum::MediumQuality),
+        ("unknownQuality", ScsiLunDescriptorQualityEnum::UnknownQuality),
     ],
 };
 
@@ -46375,13 +46621,13 @@ impl AsRef<str> for ScsiLunDescriptorQualityEnum {
 }
 
 static DEVICE_PROTOCOL_ENUM_MAP: phf::Map<&'static str, DeviceProtocolEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("SCSI", DeviceProtocolEnum::Scsi),
         ("NVMe", DeviceProtocolEnum::NvMe),
+        ("SCSI", DeviceProtocolEnum::Scsi),
     ],
 };
 
@@ -46443,15 +46689,16 @@ impl AsRef<str> for DeviceProtocolEnum {
 }
 
 static SCSI_LUN_LUN_RESERVATION_STATUS_ENUM_MAP: phf::Map<&'static str, ScsiLunLunReservationStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
+        (0, 3),
     ],
     entries: &[
-        ("LUN_RESERVED_NO", ScsiLunLunReservationStatusEnum::LunReservedNo),
-        ("LUN_RESERVED_UNKNOWN", ScsiLunLunReservationStatusEnum::LunReservedUnknown),
         ("LUN_RESERVED_YES", ScsiLunLunReservationStatusEnum::LunReservedYes),
+        ("LUN_RESERVED_UNKNOWN", ScsiLunLunReservationStatusEnum::LunReservedUnknown),
         ("LUN_RESERVED_NOT_SUPPORTED", ScsiLunLunReservationStatusEnum::LunReservedNotSupported),
+        ("LUN_RESERVED_NO", ScsiLunLunReservationStatusEnum::LunReservedNo),
     ],
 };
 
@@ -46515,26 +46762,28 @@ impl AsRef<str> for ScsiLunLunReservationStatusEnum {
 }
 
 static SCSI_LUN_TYPE_ENUM_MAP: phf::Map<&'static str, ScsiLunTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 4),
-        (1, 12),
-        (12, 0),
+        (1, 1),
+        (0, 12),
+        (0, 0),
+        (11, 0),
+        (0, 1),
     ],
     entries: &[
-        ("communications", ScsiLunTypeEnum::Communications),
-        ("mediaChanger", ScsiLunTypeEnum::MediaChanger),
-        ("unknown", ScsiLunTypeEnum::Unknown),
         ("cdrom", ScsiLunTypeEnum::Cdrom),
-        ("enclosure", ScsiLunTypeEnum::Enclosure),
-        ("disk", ScsiLunTypeEnum::Disk),
-        ("printer", ScsiLunTypeEnum::Printer),
-        ("storageArrayController", ScsiLunTypeEnum::StorageArrayController),
-        ("scanner", ScsiLunTypeEnum::Scanner),
-        ("tape", ScsiLunTypeEnum::Tape),
         ("opticalDevice", ScsiLunTypeEnum::OpticalDevice),
-        ("processor", ScsiLunTypeEnum::Processor),
+        ("storageArrayController", ScsiLunTypeEnum::StorageArrayController),
+        ("unknown", ScsiLunTypeEnum::Unknown),
+        ("disk", ScsiLunTypeEnum::Disk),
+        ("mediaChanger", ScsiLunTypeEnum::MediaChanger),
+        ("printer", ScsiLunTypeEnum::Printer),
         ("worm", ScsiLunTypeEnum::Worm),
+        ("tape", ScsiLunTypeEnum::Tape),
+        ("scanner", ScsiLunTypeEnum::Scanner),
+        ("processor", ScsiLunTypeEnum::Processor),
+        ("communications", ScsiLunTypeEnum::Communications),
+        ("enclosure", ScsiLunTypeEnum::Enclosure),
     ],
 };
 
@@ -46607,20 +46856,21 @@ impl AsRef<str> for ScsiLunTypeEnum {
 }
 
 static SCSI_LUN_STATE_ENUM_MAP: phf::Map<&'static str, ScsiLunStateEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (1, 7),
+        (3, 0),
         (1, 0),
+        (0, 4),
     ],
     entries: &[
-        ("timeout", ScsiLunStateEnum::Timeout),
-        ("lostCommunication", ScsiLunStateEnum::LostCommunication),
-        ("degraded", ScsiLunStateEnum::Degraded),
-        ("unknownState", ScsiLunStateEnum::UnknownState),
+        ("error", ScsiLunStateEnum::Error),
         ("ok", ScsiLunStateEnum::Ok),
+        ("degraded", ScsiLunStateEnum::Degraded),
+        ("lostCommunication", ScsiLunStateEnum::LostCommunication),
+        ("unknownState", ScsiLunStateEnum::UnknownState),
+        ("timeout", ScsiLunStateEnum::Timeout),
         ("off", ScsiLunStateEnum::Off),
         ("quiesced", ScsiLunStateEnum::Quiesced),
-        ("error", ScsiLunStateEnum::Error),
     ],
 };
 
@@ -46688,14 +46938,14 @@ impl AsRef<str> for ScsiLunStateEnum {
 }
 
 static SCSI_LUN_V_STORAGE_SUPPORT_STATUS_ENUM_MAP: phf::Map<&'static str, ScsiLunVStorageSupportStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("vStorageUnsupported", ScsiLunVStorageSupportStatusEnum::VStorageUnsupported),
-        ("vStorageSupported", ScsiLunVStorageSupportStatusEnum::VStorageSupported),
         ("vStorageUnknown", ScsiLunVStorageSupportStatusEnum::VStorageUnknown),
+        ("vStorageSupported", ScsiLunVStorageSupportStatusEnum::VStorageSupported),
+        ("vStorageUnsupported", ScsiLunVStorageSupportStatusEnum::VStorageUnsupported),
     ],
 };
 
@@ -46758,14 +47008,14 @@ impl AsRef<str> for ScsiLunVStorageSupportStatusEnum {
 }
 
 static HOST_SERVICE_POLICY_ENUM_MAP: phf::Map<&'static str, HostServicePolicyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 2689841203009609170,
     disps: &[
         (1, 0),
     ],
     entries: &[
+        ("on", HostServicePolicyEnum::On),
         ("automatic", HostServicePolicyEnum::Automatic),
         ("off", HostServicePolicyEnum::Off),
-        ("on", HostServicePolicyEnum::On),
     ],
 };
 
@@ -46828,15 +47078,16 @@ impl AsRef<str> for HostServicePolicyEnum {
 }
 
 static HOST_SEV_INFO_SEV_STATE_ENUM_MAP: phf::Map<&'static str, HostSevInfoSevStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("disabledBios", HostSevInfoSevStateEnum::DisabledBios),
         ("working", HostSevInfoSevStateEnum::Working),
         ("uninitialized", HostSevInfoSevStateEnum::Uninitialized),
         ("initialized", HostSevInfoSevStateEnum::Initialized),
+        ("disabledBios", HostSevInfoSevStateEnum::DisabledBios),
     ],
 };
 
@@ -46900,14 +47151,14 @@ impl AsRef<str> for HostSevInfoSevStateEnum {
 }
 
 static HOST_SGX_INFO_FLC_MODES_ENUM_MAP: phf::Map<&'static str, HostSgxInfoFlcModesEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("locked", HostSgxInfoFlcModesEnum::Locked),
         ("off", HostSgxInfoFlcModesEnum::Off),
         ("unlocked", HostSgxInfoFlcModesEnum::Unlocked),
+        ("locked", HostSgxInfoFlcModesEnum::Locked),
     ],
 };
 
@@ -46970,20 +47221,21 @@ impl AsRef<str> for HostSgxInfoFlcModesEnum {
 }
 
 static HOST_SGX_INFO_SGX_STATES_ENUM_MAP: phf::Map<&'static str, HostSgxInfoSgxStatesEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 1),
-        (4, 0),
+        (0, 0),
+        (0, 5),
+        (0, 7),
     ],
     entries: &[
+        ("enabled", HostSgxInfoSgxStatesEnum::Enabled),
         ("disabledCPUMismatch", HostSgxInfoSgxStatesEnum::DisabledCpuMismatch),
         ("disabledMaxEPCRegs", HostSgxInfoSgxStatesEnum::DisabledMaxEpcRegs),
         ("disabledNUMAUnsup", HostSgxInfoSgxStatesEnum::DisabledNumaUnsup),
-        ("disabledNoFLC", HostSgxInfoSgxStatesEnum::DisabledNoFlc),
         ("disabledCFW101", HostSgxInfoSgxStatesEnum::DisabledCfw101),
         ("notPresent", HostSgxInfoSgxStatesEnum::NotPresent),
+        ("disabledNoFLC", HostSgxInfoSgxStatesEnum::DisabledNoFlc),
         ("disabledBIOS", HostSgxInfoSgxStatesEnum::DisabledBios),
-        ("enabled", HostSgxInfoSgxStatesEnum::Enabled),
     ],
 };
 
@@ -47051,9 +47303,9 @@ impl AsRef<str> for HostSgxInfoSgxStatesEnum {
 }
 
 static HOST_SGX_REGISTRATION_INFO_REGISTRATION_STATUS_ENUM_MAP: phf::Map<&'static str, HostSgxRegistrationInfoRegistrationStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("notApplicable", HostSgxRegistrationInfoRegistrationStatusEnum::NotApplicable),
@@ -47121,13 +47373,13 @@ impl AsRef<str> for HostSgxRegistrationInfoRegistrationStatusEnum {
 }
 
 static HOST_SGX_REGISTRATION_INFO_REGISTRATION_TYPE_ENUM_MAP: phf::Map<&'static str, HostSgxRegistrationInfoRegistrationTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("manifest", HostSgxRegistrationInfoRegistrationTypeEnum::Manifest),
         ("addPackage", HostSgxRegistrationInfoRegistrationTypeEnum::AddPackage),
+        ("manifest", HostSgxRegistrationInfoRegistrationTypeEnum::Manifest),
     ],
 };
 
@@ -47189,14 +47441,14 @@ impl AsRef<str> for HostSgxRegistrationInfoRegistrationTypeEnum {
 }
 
 static HOST_SNMP_AGENT_CAPABILITY_ENUM_MAP: phf::Map<&'static str, HostSnmpAgentCapabilityEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
+        ("COMPLETE", HostSnmpAgentCapabilityEnum::Complete),
         ("CONFIGURATION", HostSnmpAgentCapabilityEnum::Configuration),
         ("DIAGNOSTICS", HostSnmpAgentCapabilityEnum::Diagnostics),
-        ("COMPLETE", HostSnmpAgentCapabilityEnum::Complete),
     ],
 };
 
@@ -47259,16 +47511,17 @@ impl AsRef<str> for HostSnmpAgentCapabilityEnum {
 }
 
 static SOFTWARE_PACKAGE_CONSTRAINT_ENUM_MAP: phf::Map<&'static str, SoftwarePackageConstraintEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16287231350648472473,
     disps: &[
+        (1, 1),
         (0, 0),
     ],
     entries: &[
-        ("lessThanEqual", SoftwarePackageConstraintEnum::LessThanEqual),
-        ("greaterThan", SoftwarePackageConstraintEnum::GreaterThan),
+        ("lessThan", SoftwarePackageConstraintEnum::LessThan),
         ("greaterThanEqual", SoftwarePackageConstraintEnum::GreaterThanEqual),
         ("equals", SoftwarePackageConstraintEnum::Equals),
-        ("lessThan", SoftwarePackageConstraintEnum::LessThan),
+        ("greaterThan", SoftwarePackageConstraintEnum::GreaterThan),
+        ("lessThanEqual", SoftwarePackageConstraintEnum::LessThanEqual),
     ],
 };
 
@@ -47333,14 +47586,14 @@ impl AsRef<str> for SoftwarePackageConstraintEnum {
 }
 
 static SOFTWARE_PACKAGE_VIB_TYPE_ENUM_MAP: phf::Map<&'static str, SoftwarePackageVibTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("tools", SoftwarePackageVibTypeEnum::Tools),
         ("meta", SoftwarePackageVibTypeEnum::Meta),
         ("bootbank", SoftwarePackageVibTypeEnum::Bootbank),
+        ("tools", SoftwarePackageVibTypeEnum::Tools),
     ],
 };
 
@@ -47403,7 +47656,7 @@ impl AsRef<str> for SoftwarePackageVibTypeEnum {
 }
 
 static HOST_STORAGE_PROTOCOL_ENUM_MAP: phf::Map<&'static str, HostStorageProtocolEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -47471,15 +47724,16 @@ impl AsRef<str> for HostStorageProtocolEnum {
 }
 
 static HOST_SYSTEM_IDENTIFICATION_INFO_IDENTIFIER_ENUM_MAP: phf::Map<&'static str, HostSystemIdentificationInfoIdentifierEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("ServiceTag", HostSystemIdentificationInfoIdentifierEnum::ServiceTag),
         ("SerialNumberTag", HostSystemIdentificationInfoIdentifierEnum::SerialNumberTag),
-        ("OemSpecificString", HostSystemIdentificationInfoIdentifierEnum::OemSpecificString),
+        ("ServiceTag", HostSystemIdentificationInfoIdentifierEnum::ServiceTag),
         ("AssetTag", HostSystemIdentificationInfoIdentifierEnum::AssetTag),
+        ("OemSpecificString", HostSystemIdentificationInfoIdentifierEnum::OemSpecificString),
         ("EnclosureSerialNumberTag", HostSystemIdentificationInfoIdentifierEnum::EnclosureSerialNumberTag),
     ],
 };
@@ -47545,15 +47799,16 @@ impl AsRef<str> for HostSystemIdentificationInfoIdentifierEnum {
 }
 
 static HOST_TDX_INFO_TDX_STATE_ENUM_MAP: phf::Map<&'static str, HostTdxInfoTdxStateEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 1),
+        (4, 0),
     ],
     entries: &[
         ("disabledBios", HostTdxInfoTdxStateEnum::DisabledBios),
-        ("ready", HostTdxInfoTdxStateEnum::Ready),
         ("configured", HostTdxInfoTdxStateEnum::Configured),
         ("initialized", HostTdxInfoTdxStateEnum::Initialized),
+        ("ready", HostTdxInfoTdxStateEnum::Ready),
         ("initializing", HostTdxInfoTdxStateEnum::Initializing),
     ],
 };
@@ -47619,7 +47874,7 @@ impl AsRef<str> for HostTdxInfoTdxStateEnum {
 }
 
 static HOST_TPM_ATTESTATION_INFO_ACCEPTANCE_STATUS_ENUM_MAP: phf::Map<&'static str, HostTpmAttestationInfoAcceptanceStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -47687,14 +47942,14 @@ impl AsRef<str> for HostTpmAttestationInfoAcceptanceStatusEnum {
 }
 
 static HOST_TRUST_AUTHORITY_ATTESTATION_INFO_ATTESTATION_STATUS_ENUM_MAP: phf::Map<&'static str, HostTrustAuthorityAttestationInfoAttestationStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("notAttested", HostTrustAuthorityAttestationInfoAttestationStatusEnum::NotAttested),
-        ("unknown", HostTrustAuthorityAttestationInfoAttestationStatusEnum::Unknown),
         ("attested", HostTrustAuthorityAttestationInfoAttestationStatusEnum::Attested),
+        ("unknown", HostTrustAuthorityAttestationInfoAttestationStatusEnum::Unknown),
     ],
 };
 
@@ -47757,13 +48012,13 @@ impl AsRef<str> for HostTrustAuthorityAttestationInfoAttestationStatusEnum {
 }
 
 static HOST_UNRESOLVED_VMFS_EXTENT_UNRESOLVED_REASON_ENUM_MAP: phf::Map<&'static str, HostUnresolvedVmfsExtentUnresolvedReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("diskIdMismatch", HostUnresolvedVmfsExtentUnresolvedReasonEnum::DiskIdMismatch),
         ("uuidConflict", HostUnresolvedVmfsExtentUnresolvedReasonEnum::UuidConflict),
+        ("diskIdMismatch", HostUnresolvedVmfsExtentUnresolvedReasonEnum::DiskIdMismatch),
     ],
 };
 
@@ -47825,13 +48080,13 @@ impl AsRef<str> for HostUnresolvedVmfsExtentUnresolvedReasonEnum {
 }
 
 static HOST_UNRESOLVED_VMFS_RESOLUTION_SPEC_VMFS_UUID_RESOLUTION_ENUM_MAP: phf::Map<&'static str, HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("resignature", HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum::Resignature),
         ("forceMount", HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum::ForceMount),
+        ("resignature", HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum::Resignature),
     ],
 };
 
@@ -47893,27 +48148,29 @@ impl AsRef<str> for HostUnresolvedVmfsResolutionSpecVmfsUuidResolutionEnum {
 }
 
 static HOST_VIRTUAL_NIC_MANAGER_NIC_TYPE_ENUM_MAP: phf::Map<&'static str, HostVirtualNicManagerNicTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (5, 0),
+        (0, 0),
+        (0, 3),
         (0, 13),
-        (1, 11),
+        (0, 5),
+        (1, 3),
     ],
     entries: &[
-        ("faultToleranceLogging", HostVirtualNicManagerNicTypeEnum::FaultToleranceLogging),
-        ("vsanExternal", HostVirtualNicManagerNicTypeEnum::VsanExternal),
-        ("nvmeRdma", HostVirtualNicManagerNicTypeEnum::NvmeRdma),
-        ("vSphereReplicationNFC", HostVirtualNicManagerNicTypeEnum::VSphereReplicationNfc),
+        ("vsanWitness", HostVirtualNicManagerNicTypeEnum::VsanWitness),
         ("vSphereProvisioning", HostVirtualNicManagerNicTypeEnum::VSphereProvisioning),
         ("ptp", HostVirtualNicManagerNicTypeEnum::Ptp),
         ("vSphereBackupNFC", HostVirtualNicManagerNicTypeEnum::VSphereBackupNfc),
-        ("vsanWitness", HostVirtualNicManagerNicTypeEnum::VsanWitness),
-        ("nvmeTcp", HostVirtualNicManagerNicTypeEnum::NvmeTcp),
-        ("management", HostVirtualNicManagerNicTypeEnum::Management),
-        ("vnetworking", HostVirtualNicManagerNicTypeEnum::Vnetworking),
-        ("vmotion", HostVirtualNicManagerNicTypeEnum::Vmotion),
+        ("vSphereReplicationNFC", HostVirtualNicManagerNicTypeEnum::VSphereReplicationNfc),
+        ("vsanExternal", HostVirtualNicManagerNicTypeEnum::VsanExternal),
         ("vsan", HostVirtualNicManagerNicTypeEnum::Vsan),
+        ("vnetworking", HostVirtualNicManagerNicTypeEnum::Vnetworking),
+        ("faultToleranceLogging", HostVirtualNicManagerNicTypeEnum::FaultToleranceLogging),
         ("vSphereReplication", HostVirtualNicManagerNicTypeEnum::VSphereReplication),
+        ("management", HostVirtualNicManagerNicTypeEnum::Management),
+        ("nvmeTcp", HostVirtualNicManagerNicTypeEnum::NvmeTcp),
+        ("vmotion", HostVirtualNicManagerNicTypeEnum::Vmotion),
+        ("nvmeRdma", HostVirtualNicManagerNicTypeEnum::NvmeRdma),
     ],
 };
 
@@ -47987,13 +48244,13 @@ impl AsRef<str> for HostVirtualNicManagerNicTypeEnum {
 }
 
 static HOST_VMCI_ACCESS_MANAGER_MODE_ENUM_MAP: phf::Map<&'static str, HostVmciAccessManagerModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("revoke", HostVmciAccessManagerModeEnum::Revoke),
         ("grant", HostVmciAccessManagerModeEnum::Grant),
+        ("revoke", HostVmciAccessManagerModeEnum::Revoke),
         ("replace", HostVmciAccessManagerModeEnum::Replace),
     ],
 };
@@ -48057,7 +48314,7 @@ impl AsRef<str> for HostVmciAccessManagerModeEnum {
 }
 
 static HOST_VMFS_VOLUME_UNMAP_BANDWIDTH_POLICY_ENUM_MAP: phf::Map<&'static str, HostVmfsVolumeUnmapBandwidthPolicyEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -48125,9 +48382,9 @@ impl AsRef<str> for HostVmfsVolumeUnmapBandwidthPolicyEnum {
 }
 
 static HOST_VMFS_VOLUME_UNMAP_PRIORITY_ENUM_MAP: phf::Map<&'static str, HostVmfsVolumeUnmapPriorityEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("none", HostVmfsVolumeUnmapPriorityEnum::None),
@@ -48193,14 +48450,14 @@ impl AsRef<str> for HostVmfsVolumeUnmapPriorityEnum {
 }
 
 static VSAN_CONTROLLER_TYPE_ENUM_MAP: phf::Map<&'static str, VsanControllerTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15995050791870030928,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("NVMe", VsanControllerTypeEnum::NvMe),
-        ("SCSI", VsanControllerTypeEnum::Scsi),
         ("VsanControllerType_Unknown", VsanControllerTypeEnum::VsanControllerTypeUnknown),
+        ("SCSI", VsanControllerTypeEnum::Scsi),
+        ("NVMe", VsanControllerTypeEnum::NvMe),
     ],
 };
 
@@ -48263,24 +48520,25 @@ impl AsRef<str> for VsanControllerTypeEnum {
 }
 
 static VSAN_DISK_BALANCE_STATE_ENUM_MAP: phf::Map<&'static str, VsanDiskBalanceStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (0, 5),
         (0, 0),
-        (0, 0),
-        (5, 8),
+        (1, 5),
+        (1, 0),
     ],
     entries: &[
-        ("proactiverebalanceinprogress", VsanDiskBalanceStateEnum::Proactiverebalanceinprogress),
-        ("imbalancewithintolerance", VsanDiskBalanceStateEnum::Imbalancewithintolerance),
-        ("proactivenotmustdo", VsanDiskBalanceStateEnum::Proactivenotmustdo),
-        ("rebalanceentitydecom", VsanDiskBalanceStateEnum::Rebalanceentitydecom),
-        ("rebalanceoff", VsanDiskBalanceStateEnum::Rebalanceoff),
+        ("VsanDiskBalanceState_Unknown", VsanDiskBalanceStateEnum::VsanDiskBalanceStateUnknown),
         ("rebalancediskunhealthy", VsanDiskBalanceStateEnum::Rebalancediskunhealthy),
+        ("proactiverebalanceinprogress", VsanDiskBalanceStateEnum::Proactiverebalanceinprogress),
         ("proactiverebalancefailed", VsanDiskBalanceStateEnum::Proactiverebalancefailed),
+        ("rebalanceoff", VsanDiskBalanceStateEnum::Rebalanceoff),
+        ("reactiverebalancefailed", VsanDiskBalanceStateEnum::Reactiverebalancefailed),
+        ("proactivenotmustdo", VsanDiskBalanceStateEnum::Proactivenotmustdo),
+        ("imbalancewithintolerance", VsanDiskBalanceStateEnum::Imbalancewithintolerance),
         ("reactiverebalanceinprogress", VsanDiskBalanceStateEnum::Reactiverebalanceinprogress),
         ("proactiveneededbutdisabled", VsanDiskBalanceStateEnum::Proactiveneededbutdisabled),
-        ("reactiverebalancefailed", VsanDiskBalanceStateEnum::Reactiverebalancefailed),
-        ("VsanDiskBalanceState_Unknown", VsanDiskBalanceStateEnum::VsanDiskBalanceStateUnknown),
+        ("rebalanceentitydecom", VsanDiskBalanceStateEnum::Rebalanceentitydecom),
     ],
 };
 
@@ -48351,45 +48609,49 @@ impl AsRef<str> for VsanDiskBalanceStateEnum {
 }
 
 static VSAN_ENCRYPTION_ISSUE_ENUM_MAP: phf::Map<&'static str, VsanEncryptionIssueEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (0, 1),
+        (0, 1),
+        (0, 16),
+        (0, 10),
         (2, 0),
-        (3, 20),
-        (18, 17),
-        (8, 11),
-        (1, 21),
-        (9, 13),
+        (0, 18),
+        (0, 5),
+        (0, 4),
+        (0, 17),
+        (2, 13),
     ],
     entries: &[
-        ("dataencryptionkeyinconsistent", VsanEncryptionIssueEnum::Dataencryptionkeyinconsistent),
-        ("objectencryptioninconsistent", VsanEncryptionIssueEnum::Objectencryptioninconsistent),
-        ("enabledwhenclusterdisabled", VsanEncryptionIssueEnum::Enabledwhenclusterdisabled),
-        ("VsanEncryptionIssue_Unknown", VsanEncryptionIssueEnum::VsanEncryptionIssueUnknown),
-        ("dataencryptionkeyverifierinconsistent", VsanEncryptionIssueEnum::Dataencryptionkeyverifierinconsistent),
-        ("disabledwhenclusterenabled", VsanEncryptionIssueEnum::Disabledwhenclusterenabled),
-        ("erasedisksbeforeuseinconsistent", VsanEncryptionIssueEnum::Erasedisksbeforeuseinconsistent),
+        ("servercertificatesinconsistent", VsanEncryptionIssueEnum::Servercertificatesinconsistent),
+        ("clientcertificateinconsistent", VsanEncryptionIssueEnum::Clientcertificateinconsistent),
+        ("changingstatenotfinished", VsanEncryptionIssueEnum::Changingstatenotfinished),
+        ("changingstateinconsistent", VsanEncryptionIssueEnum::Changingstateinconsistent),
+        ("keyencryptionkeyinconsistent", VsanEncryptionIssueEnum::Keyencryptionkeyinconsistent),
+        ("olddataencryptionkeyinconsistent", VsanEncryptionIssueEnum::Olddataencryptionkeyinconsistent),
+        ("cmknotinenabledstate", VsanEncryptionIssueEnum::Cmknotinenabledstate),
+        ("dataencryptionkeyverifierofdiskmetainconsistent", VsanEncryptionIssueEnum::Dataencryptionkeyverifierofdiskmetainconsistent),
         ("hosthaswrongolddekid", VsanEncryptionIssueEnum::Hosthaswrongolddekid),
         ("clientkeyinconsistent", VsanEncryptionIssueEnum::Clientkeyinconsistent),
-        ("keyencryptionkeyverifierinconsistent", VsanEncryptionIssueEnum::Keyencryptionkeyverifierinconsistent),
-        ("diskhaswrongdekid", VsanEncryptionIssueEnum::Diskhaswrongdekid),
-        ("keknotavailable", VsanEncryptionIssueEnum::Keknotavailable),
-        ("hosthaspendingdeeprekey", VsanEncryptionIssueEnum::Hosthaspendingdeeprekey),
-        ("diskhaspendingdeeprekey", VsanEncryptionIssueEnum::Diskhaspendingdeeprekey),
-        ("changingstatenotfinished", VsanEncryptionIssueEnum::Changingstatenotfinished),
-        ("hostkeyinconsistent", VsanEncryptionIssueEnum::Hostkeyinconsistent),
-        ("cmknotinenabledstate", VsanEncryptionIssueEnum::Cmknotinenabledstate),
-        ("hostencryptiondekidinconsistent", VsanEncryptionIssueEnum::Hostencryptiondekidinconsistent),
-        ("olddataencryptionkeyinconsistent", VsanEncryptionIssueEnum::Olddataencryptionkeyinconsistent),
-        ("cmkcannotretrieve", VsanEncryptionIssueEnum::Cmkcannotretrieve),
-        ("keyencryptionkeyinconsistent", VsanEncryptionIssueEnum::Keyencryptionkeyinconsistent),
-        ("hostkeynotavailable", VsanEncryptionIssueEnum::Hostkeynotavailable),
-        ("clientcertificateinconsistent", VsanEncryptionIssueEnum::Clientcertificateinconsistent),
+        ("erasedisksbeforeuseinconsistent", VsanEncryptionIssueEnum::Erasedisksbeforeuseinconsistent),
+        ("disabledwhenclusterenabled", VsanEncryptionIssueEnum::Disabledwhenclusterenabled),
         ("diskhaswrongpendingdekid", VsanEncryptionIssueEnum::Diskhaswrongpendingdekid),
-        ("hosthaswrongdekid", VsanEncryptionIssueEnum::Hosthaswrongdekid),
+        ("keknotavailable", VsanEncryptionIssueEnum::Keknotavailable),
+        ("dataencryptionkeyinconsistent", VsanEncryptionIssueEnum::Dataencryptionkeyinconsistent),
+        ("hostencryptiondekidinconsistent", VsanEncryptionIssueEnum::Hostencryptiondekidinconsistent),
+        ("keyencryptionkeyverifierinconsistent", VsanEncryptionIssueEnum::Keyencryptionkeyverifierinconsistent),
+        ("hostkeyinconsistent", VsanEncryptionIssueEnum::Hostkeyinconsistent),
+        ("diskhaswrongdekid", VsanEncryptionIssueEnum::Diskhaswrongdekid),
+        ("cmkcannotretrieve", VsanEncryptionIssueEnum::Cmkcannotretrieve),
+        ("VsanEncryptionIssue_Unknown", VsanEncryptionIssueEnum::VsanEncryptionIssueUnknown),
+        ("hostkeynotavailable", VsanEncryptionIssueEnum::Hostkeynotavailable),
+        ("objectencryptioninconsistent", VsanEncryptionIssueEnum::Objectencryptioninconsistent),
+        ("dataencryptionkeyverifierinconsistent", VsanEncryptionIssueEnum::Dataencryptionkeyverifierinconsistent),
         ("kmsinfoinconsistent", VsanEncryptionIssueEnum::Kmsinfoinconsistent),
-        ("changingstateinconsistent", VsanEncryptionIssueEnum::Changingstateinconsistent),
-        ("dataencryptionkeyverifierofdiskmetainconsistent", VsanEncryptionIssueEnum::Dataencryptionkeyverifierofdiskmetainconsistent),
-        ("servercertificatesinconsistent", VsanEncryptionIssueEnum::Servercertificatesinconsistent),
+        ("diskhaspendingdeeprekey", VsanEncryptionIssueEnum::Diskhaspendingdeeprekey),
+        ("hosthaspendingdeeprekey", VsanEncryptionIssueEnum::Hosthaspendingdeeprekey),
+        ("enabledwhenclusterdisabled", VsanEncryptionIssueEnum::Enabledwhenclusterdisabled),
+        ("hosthaswrongdekid", VsanEncryptionIssueEnum::Hosthaswrongdekid),
     ],
 };
 
@@ -48478,17 +48740,17 @@ impl AsRef<str> for VsanEncryptionIssueEnum {
 }
 
 static VSAN_HOST_QUERY_CHECK_LIMITS_OPTION_TYPE_ENUM_MAP: phf::Map<&'static str, VsanHostQueryCheckLimitsOptionTypeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (1, 4),
-        (3, 0),
+        (0, 5),
+        (1, 0),
     ],
     entries: &[
         ("dgTransientCapacityUsed", VsanHostQueryCheckLimitsOptionTypeEnum::DgTransientCapacityUsed),
-        ("logicalCapacityUsed", VsanHostQueryCheckLimitsOptionTypeEnum::LogicalCapacityUsed),
-        ("logicalCapacity", VsanHostQueryCheckLimitsOptionTypeEnum::LogicalCapacity),
-        ("VsanHostQueryCheckLimitsOptionType_Unknown", VsanHostQueryCheckLimitsOptionTypeEnum::VsanHostQueryCheckLimitsOptionTypeUnknown),
         ("diskTransientCapacityUsed", VsanHostQueryCheckLimitsOptionTypeEnum::DiskTransientCapacityUsed),
+        ("logicalCapacityUsed", VsanHostQueryCheckLimitsOptionTypeEnum::LogicalCapacityUsed),
+        ("VsanHostQueryCheckLimitsOptionType_Unknown", VsanHostQueryCheckLimitsOptionTypeEnum::VsanHostQueryCheckLimitsOptionTypeUnknown),
+        ("logicalCapacity", VsanHostQueryCheckLimitsOptionTypeEnum::LogicalCapacity),
         ("dedupMetadata", VsanHostQueryCheckLimitsOptionTypeEnum::DedupMetadata),
     ],
 };
@@ -48555,9 +48817,10 @@ impl AsRef<str> for VsanHostQueryCheckLimitsOptionTypeEnum {
 }
 
 static VSAN_IO_INSIGHT_STATE_ENUM_MAP: phf::Map<&'static str, VsanIoInsightStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 2),
+        (1, 0),
     ],
     entries: &[
         ("VsanIoInsightState_unknown", VsanIoInsightStateEnum::VsanIoInsightStateUnknown),
@@ -48627,30 +48890,32 @@ impl AsRef<str> for VsanIoInsightStateEnum {
 }
 
 static VSAN_OBJECT_HEALTH_STATE_ENUM_MAP: phf::Map<&'static str, VsanObjectHealthStateEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16263683158343804936,
     disps: &[
+        (1, 0),
+        (1, 5),
+        (0, 10),
         (0, 0),
-        (1, 12),
-        (1, 2),
-        (1, 15),
+        (0, 1),
+        (0, 0),
     ],
     entries: &[
-        ("VsanObjectHealthState_Unknown", VsanObjectHealthStateEnum::VsanObjectHealthStateUnknown),
-        ("nonavailabilityrelatedincompliancewithpolicypending", VsanObjectHealthStateEnum::Nonavailabilityrelatedincompliancewithpolicypending),
-        ("remoteAccessible", VsanObjectHealthStateEnum::RemoteAccessible),
-        ("inaccessible", VsanObjectHealthStateEnum::Inaccessible),
-        ("nonavailabilityrelatedincompliance", VsanObjectHealthStateEnum::Nonavailabilityrelatedincompliance),
-        ("reducedavailabilitywithnorebuild", VsanObjectHealthStateEnum::Reducedavailabilitywithnorebuild),
-        ("datamove", VsanObjectHealthStateEnum::Datamove),
-        ("reducedavailabilitywithnorebuilddelaytimer", VsanObjectHealthStateEnum::Reducedavailabilitywithnorebuilddelaytimer),
-        ("reducedavailabilitywithactiverebuild", VsanObjectHealthStateEnum::Reducedavailabilitywithactiverebuild),
-        ("healthy", VsanObjectHealthStateEnum::Healthy),
         ("reducedavailabilitywithpolicypending", VsanObjectHealthStateEnum::Reducedavailabilitywithpolicypending),
-        ("nonavailabilityrelatedincompliancewithpolicypendingfailed", VsanObjectHealthStateEnum::Nonavailabilityrelatedincompliancewithpolicypendingfailed),
-        ("nonavailabilityrelatedincompliancewithpausedrebuild", VsanObjectHealthStateEnum::Nonavailabilityrelatedincompliancewithpausedrebuild),
         ("reducedavailabilitywithpolicypendingfailed", VsanObjectHealthStateEnum::Reducedavailabilitywithpolicypendingfailed),
-        ("reducedavailabilitywithpausedrebuild", VsanObjectHealthStateEnum::Reducedavailabilitywithpausedrebuild),
+        ("reducedavailabilitywithnorebuild", VsanObjectHealthStateEnum::Reducedavailabilitywithnorebuild),
         ("nonavailabilityrelatedreconfig", VsanObjectHealthStateEnum::Nonavailabilityrelatedreconfig),
+        ("nonavailabilityrelatedincompliancewithpolicypendingfailed", VsanObjectHealthStateEnum::Nonavailabilityrelatedincompliancewithpolicypendingfailed),
+        ("nonavailabilityrelatedincompliancewithpolicypending", VsanObjectHealthStateEnum::Nonavailabilityrelatedincompliancewithpolicypending),
+        ("reducedavailabilitywithpausedrebuild", VsanObjectHealthStateEnum::Reducedavailabilitywithpausedrebuild),
+        ("reducedavailabilitywithactiverebuild", VsanObjectHealthStateEnum::Reducedavailabilitywithactiverebuild),
+        ("remoteAccessible", VsanObjectHealthStateEnum::RemoteAccessible),
+        ("datamove", VsanObjectHealthStateEnum::Datamove),
+        ("inaccessible", VsanObjectHealthStateEnum::Inaccessible),
+        ("reducedavailabilitywithnorebuilddelaytimer", VsanObjectHealthStateEnum::Reducedavailabilitywithnorebuilddelaytimer),
+        ("healthy", VsanObjectHealthStateEnum::Healthy),
+        ("nonavailabilityrelatedincompliancewithpausedrebuild", VsanObjectHealthStateEnum::Nonavailabilityrelatedincompliancewithpausedrebuild),
+        ("VsanObjectHealthState_Unknown", VsanObjectHealthStateEnum::VsanObjectHealthStateUnknown),
+        ("nonavailabilityrelatedincompliance", VsanObjectHealthStateEnum::Nonavailabilityrelatedincompliance),
     ],
 };
 
@@ -48726,21 +48991,23 @@ impl AsRef<str> for VsanObjectHealthStateEnum {
 }
 
 static VSAN_PEER_HOST_CONNECTIVITY_HEALTH_STATE_ENUM_MAP: phf::Map<&'static str, VsanPeerHostConnectivityHealthStateEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16287231350648472473,
     disps: &[
-        (6, 0),
-        (9, 8),
+        (1, 2),
+        (1, 0),
+        (0, 8),
+        (1, 8),
     ],
     entries: &[
+        ("STATE_GOOD", VsanPeerHostConnectivityHealthStateEnum::StateGood),
         ("STATE_SOCKET_TIMEOUT", VsanPeerHostConnectivityHealthStateEnum::StateSocketTimeout),
         ("STATE_SSL_ERROR", VsanPeerHostConnectivityHealthStateEnum::StateSslError),
-        ("STATE_OS_ERROR", VsanPeerHostConnectivityHealthStateEnum::StateOsError),
-        ("STATE_GENERAL_EXCEPTION", VsanPeerHostConnectivityHealthStateEnum::StateGeneralException),
-        ("STATE_SYSTEM_ERROR", VsanPeerHostConnectivityHealthStateEnum::StateSystemError),
-        ("STATE_GOOD", VsanPeerHostConnectivityHealthStateEnum::StateGood),
         ("STATE_HTTP_EXCEPTION", VsanPeerHostConnectivityHealthStateEnum::StateHttpException),
-        ("STATE_CONNECTION_REFUSED_ERROR", VsanPeerHostConnectivityHealthStateEnum::StateConnectionRefusedError),
         ("STATE_MEMORY_ERROR", VsanPeerHostConnectivityHealthStateEnum::StateMemoryError),
+        ("STATE_SYSTEM_ERROR", VsanPeerHostConnectivityHealthStateEnum::StateSystemError),
+        ("STATE_GENERAL_EXCEPTION", VsanPeerHostConnectivityHealthStateEnum::StateGeneralException),
+        ("STATE_CONNECTION_REFUSED_ERROR", VsanPeerHostConnectivityHealthStateEnum::StateConnectionRefusedError),
+        ("STATE_OS_ERROR", VsanPeerHostConnectivityHealthStateEnum::StateOsError),
         ("STATE_UNKNOWN", VsanPeerHostConnectivityHealthStateEnum::StateUnknown),
     ],
 };
@@ -48811,27 +49078,29 @@ impl AsRef<str> for VsanPeerHostConnectivityHealthStateEnum {
 }
 
 static VSAN_SMART_PARAMETER_TYPE_ENUM_MAP: phf::Map<&'static str, VsanSmartParameterTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (0, 2),
         (0, 0),
-        (10, 0),
-        (11, 2),
+        (3, 1),
+        (0, 9),
+        (1, 0),
     ],
     entries: &[
-        ("smartdriveratedmaxtemperature", VsanSmartParameterTypeEnum::Smartdriveratedmaxtemperature),
         ("VsanSmartParameterType_Unknown", VsanSmartParameterTypeEnum::VsanSmartParameterTypeUnknown),
-        ("smartreaderrorcount", VsanSmartParameterTypeEnum::Smartreaderrorcount),
-        ("smartreadsectorstotct", VsanSmartParameterTypeEnum::Smartreadsectorstotct),
-        ("smartwriteerrorcount", VsanSmartParameterTypeEnum::Smartwriteerrorcount),
-        ("smartpowercyclecount", VsanSmartParameterTypeEnum::Smartpowercyclecount),
+        ("smartinitialbadblockcount", VsanSmartParameterTypeEnum::Smartinitialbadblockcount),
         ("smartwritesectorstotct", VsanSmartParameterTypeEnum::Smartwritesectorstotct),
+        ("smartreallocatedsectorct", VsanSmartParameterTypeEnum::Smartreallocatedsectorct),
+        ("smartwriteerrorcount", VsanSmartParameterTypeEnum::Smartwriteerrorcount),
+        ("smartpoweronhours", VsanSmartParameterTypeEnum::Smartpoweronhours),
+        ("smartdriveratedmaxtemperature", VsanSmartParameterTypeEnum::Smartdriveratedmaxtemperature),
+        ("smartdrivetemperature", VsanSmartParameterTypeEnum::Smartdrivetemperature),
+        ("smartreadsectorstotct", VsanSmartParameterTypeEnum::Smartreadsectorstotct),
+        ("smartpowercyclecount", VsanSmartParameterTypeEnum::Smartpowercyclecount),
+        ("smartreaderrorcount", VsanSmartParameterTypeEnum::Smartreaderrorcount),
+        ("smartrawreaderrorrate", VsanSmartParameterTypeEnum::Smartrawreaderrorrate),
         ("smartmediawearoutindicator", VsanSmartParameterTypeEnum::Smartmediawearoutindicator),
         ("smarthealthstatus", VsanSmartParameterTypeEnum::Smarthealthstatus),
-        ("smartreallocatedsectorct", VsanSmartParameterTypeEnum::Smartreallocatedsectorct),
-        ("smartdrivetemperature", VsanSmartParameterTypeEnum::Smartdrivetemperature),
-        ("smartpoweronhours", VsanSmartParameterTypeEnum::Smartpoweronhours),
-        ("smartrawreaderrorrate", VsanSmartParameterTypeEnum::Smartrawreaderrorrate),
-        ("smartinitialbadblockcount", VsanSmartParameterTypeEnum::Smartinitialbadblockcount),
     ],
 };
 
@@ -48905,15 +49174,16 @@ impl AsRef<str> for VsanSmartParameterTypeEnum {
 }
 
 static NET_IP_CONFIG_INFO_IP_ADDRESS_ORIGIN_ENUM_MAP: phf::Map<&'static str, NetIpConfigInfoIpAddressOriginEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (2, 0),
+        (0, 2),
     ],
     entries: &[
-        ("linklayer", NetIpConfigInfoIpAddressOriginEnum::Linklayer),
-        ("dhcp", NetIpConfigInfoIpAddressOriginEnum::Dhcp),
         ("manual", NetIpConfigInfoIpAddressOriginEnum::Manual),
+        ("linklayer", NetIpConfigInfoIpAddressOriginEnum::Linklayer),
         ("random", NetIpConfigInfoIpAddressOriginEnum::Random),
+        ("dhcp", NetIpConfigInfoIpAddressOriginEnum::Dhcp),
         ("other", NetIpConfigInfoIpAddressOriginEnum::Other),
     ],
 };
@@ -48979,19 +49249,20 @@ impl AsRef<str> for NetIpConfigInfoIpAddressOriginEnum {
 }
 
 static NET_IP_CONFIG_INFO_IP_ADDRESS_STATUS_ENUM_MAP: phf::Map<&'static str, NetIpConfigInfoIpAddressStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (4, 6),
-        (1, 0),
+        (3, 0),
+        (0, 4),
+        (2, 0),
     ],
     entries: &[
-        ("tentative", NetIpConfigInfoIpAddressStatusEnum::Tentative),
-        ("invalid", NetIpConfigInfoIpAddressStatusEnum::Invalid),
-        ("unknown", NetIpConfigInfoIpAddressStatusEnum::Unknown),
-        ("duplicate", NetIpConfigInfoIpAddressStatusEnum::Duplicate),
-        ("preferred", NetIpConfigInfoIpAddressStatusEnum::Preferred),
-        ("deprecated", NetIpConfigInfoIpAddressStatusEnum::Deprecated),
         ("inaccessible", NetIpConfigInfoIpAddressStatusEnum::Inaccessible),
+        ("tentative", NetIpConfigInfoIpAddressStatusEnum::Tentative),
+        ("unknown", NetIpConfigInfoIpAddressStatusEnum::Unknown),
+        ("deprecated", NetIpConfigInfoIpAddressStatusEnum::Deprecated),
+        ("duplicate", NetIpConfigInfoIpAddressStatusEnum::Duplicate),
+        ("invalid", NetIpConfigInfoIpAddressStatusEnum::Invalid),
+        ("preferred", NetIpConfigInfoIpAddressStatusEnum::Preferred),
     ],
 };
 
@@ -49058,15 +49329,16 @@ impl AsRef<str> for NetIpConfigInfoIpAddressStatusEnum {
 }
 
 static NET_IP_STACK_INFO_ENTRY_TYPE_ENUM_MAP: phf::Map<&'static str, NetIpStackInfoEntryTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
-        ("dynamic", NetIpStackInfoEntryTypeEnum::Dynamic),
-        ("other", NetIpStackInfoEntryTypeEnum::Other),
         ("manual", NetIpStackInfoEntryTypeEnum::Manual),
         ("invalid", NetIpStackInfoEntryTypeEnum::Invalid),
+        ("other", NetIpStackInfoEntryTypeEnum::Other),
+        ("dynamic", NetIpStackInfoEntryTypeEnum::Dynamic),
     ],
 };
 
@@ -49130,15 +49402,16 @@ impl AsRef<str> for NetIpStackInfoEntryTypeEnum {
 }
 
 static NET_IP_STACK_INFO_PREFERENCE_ENUM_MAP: phf::Map<&'static str, NetIpStackInfoPreferenceEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
         ("reserved", NetIpStackInfoPreferenceEnum::Reserved),
-        ("low", NetIpStackInfoPreferenceEnum::Low),
-        ("medium", NetIpStackInfoPreferenceEnum::Medium),
         ("high", NetIpStackInfoPreferenceEnum::High),
+        ("medium", NetIpStackInfoPreferenceEnum::Medium),
+        ("low", NetIpStackInfoPreferenceEnum::Low),
     ],
 };
 
@@ -49202,15 +49475,16 @@ impl AsRef<str> for NetIpStackInfoPreferenceEnum {
 }
 
 static NET_BIOS_CONFIG_INFO_MODE_ENUM_MAP: phf::Map<&'static str, NetBiosConfigInfoModeEnum> = ::phf::Map {
-    key: 12213676231523076107,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (2, 0),
     ],
     entries: &[
-        ("enabled", NetBiosConfigInfoModeEnum::Enabled),
         ("unknown", NetBiosConfigInfoModeEnum::Unknown),
         ("enabledViaDHCP", NetBiosConfigInfoModeEnum::EnabledViaDhcp),
         ("disabled", NetBiosConfigInfoModeEnum::Disabled),
+        ("enabled", NetBiosConfigInfoModeEnum::Enabled),
     ],
 };
 
@@ -49274,14 +49548,14 @@ impl AsRef<str> for NetBiosConfigInfoModeEnum {
 }
 
 static ARRAY_UPDATE_OPERATION_ENUM_MAP: phf::Map<&'static str, ArrayUpdateOperationEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("add", ArrayUpdateOperationEnum::Add),
-        ("edit", ArrayUpdateOperationEnum::Edit),
         ("remove", ArrayUpdateOperationEnum::Remove),
+        ("edit", ArrayUpdateOperationEnum::Edit),
     ],
 };
 
@@ -49344,14 +49618,15 @@ impl AsRef<str> for ArrayUpdateOperationEnum {
 }
 
 static COMPLIANCE_RESULT_STATUS_ENUM_MAP: phf::Map<&'static str, ComplianceResultStatusEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
+        (2, 1),
     ],
     entries: &[
-        ("compliant", ComplianceResultStatusEnum::Compliant),
         ("unknown", ComplianceResultStatusEnum::Unknown),
         ("nonCompliant", ComplianceResultStatusEnum::NonCompliant),
+        ("compliant", ComplianceResultStatusEnum::Compliant),
         ("running", ComplianceResultStatusEnum::Running),
     ],
 };
@@ -49416,18 +49691,18 @@ impl AsRef<str> for ComplianceResultStatusEnum {
 }
 
 static PROFILE_NUMERIC_COMPARATOR_ENUM_MAP: phf::Map<&'static str, ProfileNumericComparatorEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (0, 5),
         (0, 0),
-        (0, 1),
     ],
     entries: &[
         ("lessThanEqual", ProfileNumericComparatorEnum::LessThanEqual),
         ("notEqual", ProfileNumericComparatorEnum::NotEqual),
-        ("greaterThan", ProfileNumericComparatorEnum::GreaterThan),
+        ("greaterThanEqual", ProfileNumericComparatorEnum::GreaterThanEqual),
         ("lessThan", ProfileNumericComparatorEnum::LessThan),
         ("equal", ProfileNumericComparatorEnum::Equal),
-        ("greaterThanEqual", ProfileNumericComparatorEnum::GreaterThanEqual),
+        ("greaterThan", ProfileNumericComparatorEnum::GreaterThan),
     ],
 };
 
@@ -49493,16 +49768,17 @@ impl AsRef<str> for ProfileNumericComparatorEnum {
 }
 
 static PROFILE_PARAMETER_METADATA_RELATION_TYPE_ENUM_MAP: phf::Map<&'static str, ProfileParameterMetadataRelationTypeEnum> = ::phf::Map {
-    key: 345707026197253659,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("dynamic_relation", ProfileParameterMetadataRelationTypeEnum::DynamicRelation),
-        ("static_relation", ProfileParameterMetadataRelationTypeEnum::StaticRelation),
+        ("validation_relation", ProfileParameterMetadataRelationTypeEnum::ValidationRelation),
         ("extensible_relation", ProfileParameterMetadataRelationTypeEnum::ExtensibleRelation),
         ("localizable_relation", ProfileParameterMetadataRelationTypeEnum::LocalizableRelation),
-        ("validation_relation", ProfileParameterMetadataRelationTypeEnum::ValidationRelation),
+        ("dynamic_relation", ProfileParameterMetadataRelationTypeEnum::DynamicRelation),
+        ("static_relation", ProfileParameterMetadataRelationTypeEnum::StaticRelation),
     ],
 };
 
@@ -49567,15 +49843,16 @@ impl AsRef<str> for ProfileParameterMetadataRelationTypeEnum {
 }
 
 static CLUSTER_PROFILE_SERVICE_TYPE_ENUM_MAP: phf::Map<&'static str, ClusterProfileServiceTypeEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 2),
+        (0, 0),
     ],
     entries: &[
-        ("DPM", ClusterProfileServiceTypeEnum::Dpm),
-        ("DRS", ClusterProfileServiceTypeEnum::Drs),
-        ("HA", ClusterProfileServiceTypeEnum::Ha),
         ("FT", ClusterProfileServiceTypeEnum::Ft),
+        ("HA", ClusterProfileServiceTypeEnum::Ha),
+        ("DRS", ClusterProfileServiceTypeEnum::Drs),
+        ("DPM", ClusterProfileServiceTypeEnum::Dpm),
     ],
 };
 
@@ -49639,14 +49916,14 @@ impl AsRef<str> for ClusterProfileServiceTypeEnum {
 }
 
 static PROFILE_EXECUTE_RESULT_STATUS_ENUM_MAP: phf::Map<&'static str, ProfileExecuteResultStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (2, 0),
     ],
     entries: &[
+        ("error", ProfileExecuteResultStatusEnum::Error),
         ("needInput", ProfileExecuteResultStatusEnum::NeedInput),
         ("success", ProfileExecuteResultStatusEnum::Success),
-        ("error", ProfileExecuteResultStatusEnum::Error),
     ],
 };
 
@@ -49709,14 +49986,15 @@ impl AsRef<str> for ProfileExecuteResultStatusEnum {
 }
 
 static HOST_PROFILE_VALIDATION_FAILURE_INFO_UPDATE_TYPE_ENUM_MAP: phf::Map<&'static str, HostProfileValidationFailureInfoUpdateTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 2),
     ],
     entries: &[
+        ("Import", HostProfileValidationFailureInfoUpdateTypeEnum::Import),
         ("Edit", HostProfileValidationFailureInfoUpdateTypeEnum::Edit),
         ("Compose", HostProfileValidationFailureInfoUpdateTypeEnum::Compose),
-        ("Import", HostProfileValidationFailureInfoUpdateTypeEnum::Import),
         ("HostBased", HostProfileValidationFailureInfoUpdateTypeEnum::HostBased),
     ],
 };
@@ -49781,9 +50059,9 @@ impl AsRef<str> for HostProfileValidationFailureInfoUpdateTypeEnum {
 }
 
 static HOST_PROFILE_VALIDATION_STATE_ENUM_MAP: phf::Map<&'static str, HostProfileValidationStateEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
         ("Failed", HostProfileValidationStateEnum::Failed),
@@ -49851,9 +50129,9 @@ impl AsRef<str> for HostProfileValidationStateEnum {
 }
 
 static HOST_PROFILE_MANAGER_ANSWER_FILE_STATUS_ENUM_MAP: phf::Map<&'static str, HostProfileManagerAnswerFileStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
         ("invalid", HostProfileManagerAnswerFileStatusEnum::Invalid),
@@ -49921,20 +50199,21 @@ impl AsRef<str> for HostProfileManagerAnswerFileStatusEnum {
 }
 
 static APPLY_HOST_PROFILE_CONFIGURATION_RESULT_STATUS_ENUM_MAP: phf::Map<&'static str, ApplyHostProfileConfigurationResultStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
-        (2, 5),
+        (5, 5),
+        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("failed", ApplyHostProfileConfigurationResultStatusEnum::Failed),
-        ("state_not_satisfied", ApplyHostProfileConfigurationResultStatusEnum::StateNotSatisfied),
-        ("canceled", ApplyHostProfileConfigurationResultStatusEnum::Canceled),
-        ("success", ApplyHostProfileConfigurationResultStatusEnum::Success),
-        ("exit_maintenancemode_failed", ApplyHostProfileConfigurationResultStatusEnum::ExitMaintenancemodeFailed),
-        ("check_compliance_failed", ApplyHostProfileConfigurationResultStatusEnum::CheckComplianceFailed),
-        ("stateless_reboot_failed", ApplyHostProfileConfigurationResultStatusEnum::StatelessRebootFailed),
         ("reboot_failed", ApplyHostProfileConfigurationResultStatusEnum::RebootFailed),
+        ("stateless_reboot_failed", ApplyHostProfileConfigurationResultStatusEnum::StatelessRebootFailed),
+        ("success", ApplyHostProfileConfigurationResultStatusEnum::Success),
+        ("failed", ApplyHostProfileConfigurationResultStatusEnum::Failed),
+        ("exit_maintenancemode_failed", ApplyHostProfileConfigurationResultStatusEnum::ExitMaintenancemodeFailed),
+        ("state_not_satisfied", ApplyHostProfileConfigurationResultStatusEnum::StateNotSatisfied),
+        ("check_compliance_failed", ApplyHostProfileConfigurationResultStatusEnum::CheckComplianceFailed),
+        ("canceled", ApplyHostProfileConfigurationResultStatusEnum::Canceled),
     ],
 };
 
@@ -50002,13 +50281,13 @@ impl AsRef<str> for ApplyHostProfileConfigurationResultStatusEnum {
 }
 
 static HOST_PROFILE_MANAGER_COMPOSITION_RESULT_RESULT_ELEMENT_STATUS_ENUM_MAP: phf::Map<&'static str, HostProfileManagerCompositionResultResultElementStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("success", HostProfileManagerCompositionResultResultElementStatusEnum::Success),
         ("error", HostProfileManagerCompositionResultResultElementStatusEnum::Error),
+        ("success", HostProfileManagerCompositionResultResultElementStatusEnum::Success),
     ],
 };
 
@@ -50070,13 +50349,13 @@ impl AsRef<str> for HostProfileManagerCompositionResultResultElementStatusEnum {
 }
 
 static HOST_PROFILE_MANAGER_COMPOSITION_VALIDATION_RESULT_RESULT_ELEMENT_STATUS_ENUM_MAP: phf::Map<&'static str, HostProfileManagerCompositionValidationResultResultElementStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("success", HostProfileManagerCompositionValidationResultResultElementStatusEnum::Success),
         ("error", HostProfileManagerCompositionValidationResultResultElementStatusEnum::Error),
+        ("success", HostProfileManagerCompositionValidationResultResultElementStatusEnum::Success),
     ],
 };
 
@@ -50138,13 +50417,13 @@ impl AsRef<str> for HostProfileManagerCompositionValidationResultResultElementSt
 }
 
 static HOST_PROFILE_MANAGER_TASK_LIST_REQUIREMENT_ENUM_MAP: phf::Map<&'static str, HostProfileManagerTaskListRequirementEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("rebootRequired", HostProfileManagerTaskListRequirementEnum::RebootRequired),
         ("maintenanceModeRequired", HostProfileManagerTaskListRequirementEnum::MaintenanceModeRequired),
+        ("rebootRequired", HostProfileManagerTaskListRequirementEnum::RebootRequired),
     ],
 };
 
@@ -50206,14 +50485,14 @@ impl AsRef<str> for HostProfileManagerTaskListRequirementEnum {
 }
 
 static ANSWER_FILE_VALIDATION_INFO_STATUS_ENUM_MAP: phf::Map<&'static str, AnswerFileValidationInfoStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15995050791870030928,
     disps: &[
         (2, 0),
     ],
     entries: &[
         ("failed_defaults", AnswerFileValidationInfoStatusEnum::FailedDefaults),
-        ("success", AnswerFileValidationInfoStatusEnum::Success),
         ("failed", AnswerFileValidationInfoStatusEnum::Failed),
+        ("success", AnswerFileValidationInfoStatusEnum::Success),
     ],
 };
 
@@ -50276,19 +50555,20 @@ impl AsRef<str> for AnswerFileValidationInfoStatusEnum {
 }
 
 static DAY_OF_WEEK_ENUM_MAP: phf::Map<&'static str, DayOfWeekEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (3, 6),
-        (6, 0),
+        (0, 0),
+        (2, 0),
+        (2, 0),
     ],
     entries: &[
         ("tuesday", DayOfWeekEnum::Tuesday),
+        ("monday", DayOfWeekEnum::Monday),
         ("wednesday", DayOfWeekEnum::Wednesday),
+        ("saturday", DayOfWeekEnum::Saturday),
         ("friday", DayOfWeekEnum::Friday),
         ("sunday", DayOfWeekEnum::Sunday),
-        ("saturday", DayOfWeekEnum::Saturday),
         ("thursday", DayOfWeekEnum::Thursday),
-        ("monday", DayOfWeekEnum::Monday),
     ],
 };
 
@@ -50355,16 +50635,17 @@ impl AsRef<str> for DayOfWeekEnum {
 }
 
 static WEEK_OF_MONTH_ENUM_MAP: phf::Map<&'static str, WeekOfMonthEnum> = ::phf::Map {
-    key: 351906021642186605,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
+        (0, 2),
     ],
     entries: &[
-        ("fourth", WeekOfMonthEnum::Fourth),
         ("second", WeekOfMonthEnum::Second),
-        ("third", WeekOfMonthEnum::Third),
-        ("first", WeekOfMonthEnum::First),
         ("last", WeekOfMonthEnum::Last),
+        ("third", WeekOfMonthEnum::Third),
+        ("fourth", WeekOfMonthEnum::Fourth),
+        ("first", WeekOfMonthEnum::First),
     ],
 };
 
@@ -50429,15 +50710,16 @@ impl AsRef<str> for WeekOfMonthEnum {
 }
 
 static PLACEMENT_AFFINITY_RULE_RULE_SCOPE_ENUM_MAP: phf::Map<&'static str, PlacementAffinityRuleRuleScopeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
+        (0, 1),
         (1, 0),
     ],
     entries: &[
-        ("datastore", PlacementAffinityRuleRuleScopeEnum::Datastore),
         ("storagePod", PlacementAffinityRuleRuleScopeEnum::StoragePod),
-        ("host", PlacementAffinityRuleRuleScopeEnum::Host),
         ("cluster", PlacementAffinityRuleRuleScopeEnum::Cluster),
+        ("datastore", PlacementAffinityRuleRuleScopeEnum::Datastore),
+        ("host", PlacementAffinityRuleRuleScopeEnum::Host),
     ],
 };
 
@@ -50501,14 +50783,15 @@ impl AsRef<str> for PlacementAffinityRuleRuleScopeEnum {
 }
 
 static PLACEMENT_AFFINITY_RULE_RULE_TYPE_ENUM_MAP: phf::Map<&'static str, PlacementAffinityRuleRuleTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (1, 1),
     ],
     entries: &[
+        ("antiAffinity", PlacementAffinityRuleRuleTypeEnum::AntiAffinity),
         ("softAntiAffinity", PlacementAffinityRuleRuleTypeEnum::SoftAntiAffinity),
         ("softAffinity", PlacementAffinityRuleRuleTypeEnum::SoftAffinity),
-        ("antiAffinity", PlacementAffinityRuleRuleTypeEnum::AntiAffinity),
         ("affinity", PlacementAffinityRuleRuleTypeEnum::Affinity),
     ],
 };
@@ -50573,13 +50856,13 @@ impl AsRef<str> for PlacementAffinityRuleRuleTypeEnum {
 }
 
 static STORAGE_DRS_POD_CONFIG_INFO_BEHAVIOR_ENUM_MAP: phf::Map<&'static str, StorageDrsPodConfigInfoBehaviorEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("manual", StorageDrsPodConfigInfoBehaviorEnum::Manual),
         ("automated", StorageDrsPodConfigInfoBehaviorEnum::Automated),
+        ("manual", StorageDrsPodConfigInfoBehaviorEnum::Manual),
     ],
 };
 
@@ -50641,7 +50924,7 @@ impl AsRef<str> for StorageDrsPodConfigInfoBehaviorEnum {
 }
 
 static STORAGE_DRS_SPACE_LOAD_BALANCE_CONFIG_SPACE_THRESHOLD_MODE_ENUM_MAP: phf::Map<&'static str, StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -50709,15 +50992,16 @@ impl AsRef<str> for StorageDrsSpaceLoadBalanceConfigSpaceThresholdModeEnum {
 }
 
 static STORAGE_PLACEMENT_SPEC_PLACEMENT_TYPE_ENUM_MAP: phf::Map<&'static str, StoragePlacementSpecPlacementTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 1),
     ],
     entries: &[
-        ("clone", StoragePlacementSpecPlacementTypeEnum::Clone),
         ("reconfigure", StoragePlacementSpecPlacementTypeEnum::Reconfigure),
-        ("relocate", StoragePlacementSpecPlacementTypeEnum::Relocate),
+        ("clone", StoragePlacementSpecPlacementTypeEnum::Clone),
         ("create", StoragePlacementSpecPlacementTypeEnum::Create),
+        ("relocate", StoragePlacementSpecPlacementTypeEnum::Relocate),
     ],
 };
 
@@ -50781,14 +51065,14 @@ impl AsRef<str> for StoragePlacementSpecPlacementTypeEnum {
 }
 
 static VIRTUAL_DISK_RULE_SPEC_RULE_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualDiskRuleSpecRuleTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
         ("affinity", VirtualDiskRuleSpecRuleTypeEnum::Affinity),
-        ("disabled", VirtualDiskRuleSpecRuleTypeEnum::Disabled),
         ("antiAffinity", VirtualDiskRuleSpecRuleTypeEnum::AntiAffinity),
+        ("disabled", VirtualDiskRuleSpecRuleTypeEnum::Disabled),
     ],
 };
 
@@ -50851,14 +51135,14 @@ impl AsRef<str> for VirtualDiskRuleSpecRuleTypeEnum {
 }
 
 static V_APP_CLONE_SPEC_PROVISIONING_TYPE_ENUM_MAP: phf::Map<&'static str, VAppCloneSpecProvisioningTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 2689841203009609170,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("thin", VAppCloneSpecProvisioningTypeEnum::Thin),
-        ("thick", VAppCloneSpecProvisioningTypeEnum::Thick),
         ("sameAsSource", VAppCloneSpecProvisioningTypeEnum::SameAsSource),
+        ("thick", VAppCloneSpecProvisioningTypeEnum::Thick),
+        ("thin", VAppCloneSpecProvisioningTypeEnum::Thin),
     ],
 };
 
@@ -50921,16 +51205,17 @@ impl AsRef<str> for VAppCloneSpecProvisioningTypeEnum {
 }
 
 static V_APP_AUTO_START_ACTION_ENUM_MAP: phf::Map<&'static str, VAppAutoStartActionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
+        (1, 4),
         (3, 0),
     ],
     entries: &[
-        ("none", VAppAutoStartActionEnum::None),
         ("guestShutdown", VAppAutoStartActionEnum::GuestShutdown),
-        ("suspend", VAppAutoStartActionEnum::Suspend),
+        ("none", VAppAutoStartActionEnum::None),
         ("powerOn", VAppAutoStartActionEnum::PowerOn),
         ("powerOff", VAppAutoStartActionEnum::PowerOff),
+        ("suspend", VAppAutoStartActionEnum::Suspend),
     ],
 };
 
@@ -50995,13 +51280,13 @@ impl AsRef<str> for VAppAutoStartActionEnum {
 }
 
 static V_APP_IP_ASSIGNMENT_INFO_ALLOCATION_SCHEMES_ENUM_MAP: phf::Map<&'static str, VAppIpAssignmentInfoAllocationSchemesEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("dhcp", VAppIpAssignmentInfoAllocationSchemesEnum::Dhcp),
         ("ovfenv", VAppIpAssignmentInfoAllocationSchemesEnum::Ovfenv),
+        ("dhcp", VAppIpAssignmentInfoAllocationSchemesEnum::Dhcp),
     ],
 };
 
@@ -51063,15 +51348,16 @@ impl AsRef<str> for VAppIpAssignmentInfoAllocationSchemesEnum {
 }
 
 static V_APP_IP_ASSIGNMENT_INFO_IP_ALLOCATION_POLICY_ENUM_MAP: phf::Map<&'static str, VAppIpAssignmentInfoIpAllocationPolicyEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("fixedPolicy", VAppIpAssignmentInfoIpAllocationPolicyEnum::FixedPolicy),
         ("transientPolicy", VAppIpAssignmentInfoIpAllocationPolicyEnum::TransientPolicy),
-        ("dhcpPolicy", VAppIpAssignmentInfoIpAllocationPolicyEnum::DhcpPolicy),
         ("fixedAllocatedPolicy", VAppIpAssignmentInfoIpAllocationPolicyEnum::FixedAllocatedPolicy),
+        ("dhcpPolicy", VAppIpAssignmentInfoIpAllocationPolicyEnum::DhcpPolicy),
+        ("fixedPolicy", VAppIpAssignmentInfoIpAllocationPolicyEnum::FixedPolicy),
     ],
 };
 
@@ -51135,13 +51421,13 @@ impl AsRef<str> for VAppIpAssignmentInfoIpAllocationPolicyEnum {
 }
 
 static V_APP_IP_ASSIGNMENT_INFO_PROTOCOLS_ENUM_MAP: phf::Map<&'static str, VAppIpAssignmentInfoProtocolsEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("IPv6", VAppIpAssignmentInfoProtocolsEnum::IPv6),
         ("IPv4", VAppIpAssignmentInfoProtocolsEnum::IPv4),
+        ("IPv6", VAppIpAssignmentInfoProtocolsEnum::IPv6),
     ],
 };
 
@@ -51203,15 +51489,16 @@ impl AsRef<str> for VAppIpAssignmentInfoProtocolsEnum {
 }
 
 static VCHA_STATE_ENUM_MAP: phf::Map<&'static str, VchaStateEnum> = ::phf::Map {
-    key: 2126027241312876569,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("notConfigured", VchaStateEnum::NotConfigured),
-        ("prepared", VchaStateEnum::Prepared),
-        ("configured", VchaStateEnum::Configured),
         ("invalid", VchaStateEnum::Invalid),
+        ("notConfigured", VchaStateEnum::NotConfigured),
+        ("configured", VchaStateEnum::Configured),
+        ("prepared", VchaStateEnum::Prepared),
     ],
 };
 
@@ -51275,14 +51562,14 @@ impl AsRef<str> for VchaStateEnum {
 }
 
 static VCHA_CLUSTER_MODE_ENUM_MAP: phf::Map<&'static str, VchaClusterModeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
+        ("enabled", VchaClusterModeEnum::Enabled),
         ("maintenance", VchaClusterModeEnum::Maintenance),
         ("disabled", VchaClusterModeEnum::Disabled),
-        ("enabled", VchaClusterModeEnum::Enabled),
     ],
 };
 
@@ -51345,14 +51632,14 @@ impl AsRef<str> for VchaClusterModeEnum {
 }
 
 static VCHA_CLUSTER_STATE_ENUM_MAP: phf::Map<&'static str, VchaClusterStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 2689841203009609170,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("healthy", VchaClusterStateEnum::Healthy),
-        ("degraded", VchaClusterStateEnum::Degraded),
         ("isolated", VchaClusterStateEnum::Isolated),
+        ("degraded", VchaClusterStateEnum::Degraded),
+        ("healthy", VchaClusterStateEnum::Healthy),
     ],
 };
 
@@ -51415,14 +51702,14 @@ impl AsRef<str> for VchaClusterStateEnum {
 }
 
 static VCHA_NODE_ROLE_ENUM_MAP: phf::Map<&'static str, VchaNodeRoleEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
         ("active", VchaNodeRoleEnum::Active),
-        ("passive", VchaNodeRoleEnum::Passive),
         ("witness", VchaNodeRoleEnum::Witness),
+        ("passive", VchaNodeRoleEnum::Passive),
     ],
 };
 
@@ -51485,13 +51772,13 @@ impl AsRef<str> for VchaNodeRoleEnum {
 }
 
 static VCHA_NODE_STATE_ENUM_MAP: phf::Map<&'static str, VchaNodeStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("up", VchaNodeStateEnum::Up),
         ("down", VchaNodeStateEnum::Down),
+        ("up", VchaNodeStateEnum::Up),
     ],
 };
 
@@ -51553,7 +51840,7 @@ impl AsRef<str> for VchaNodeStateEnum {
 }
 
 static VIRTUAL_MACHINE_BOOT_OPTIONS_NETWORK_BOOT_PROTOCOL_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineBootOptionsNetworkBootProtocolTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
@@ -51621,7 +51908,7 @@ impl AsRef<str> for VirtualMachineBootOptionsNetworkBootProtocolTypeEnum {
 }
 
 static VIRTUAL_MACHINE_CERT_THUMBPRINT_HASH_ALGORITHM_ENUM_MAP: phf::Map<&'static str, VirtualMachineCertThumbprintHashAlgorithmEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -51687,13 +51974,13 @@ impl AsRef<str> for VirtualMachineCertThumbprintHashAlgorithmEnum {
 }
 
 static VIRTUAL_MACHINE_CLONE_SPEC_TPM_PROVISION_POLICY_ENUM_MAP: phf::Map<&'static str, VirtualMachineCloneSpecTpmProvisionPolicyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("copy", VirtualMachineCloneSpecTpmProvisionPolicyEnum::Copy),
         ("replace", VirtualMachineCloneSpecTpmProvisionPolicyEnum::Replace),
+        ("copy", VirtualMachineCloneSpecTpmProvisionPolicyEnum::Copy),
     ],
 };
 
@@ -51755,14 +52042,14 @@ impl AsRef<str> for VirtualMachineCloneSpecTpmProvisionPolicyEnum {
 }
 
 static VIRTUAL_MACHINE_CONFIG_INFO_NPIV_WWN_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineConfigInfoNpivWwnTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("external", VirtualMachineConfigInfoNpivWwnTypeEnum::External),
-        ("host", VirtualMachineConfigInfoNpivWwnTypeEnum::Host),
         ("vc", VirtualMachineConfigInfoNpivWwnTypeEnum::Vc),
+        ("host", VirtualMachineConfigInfoNpivWwnTypeEnum::Host),
     ],
 };
 
@@ -51825,13 +52112,13 @@ impl AsRef<str> for VirtualMachineConfigInfoNpivWwnTypeEnum {
 }
 
 static VIRTUAL_MACHINE_CONFIG_INFO_SWAP_PLACEMENT_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineConfigInfoSwapPlacementTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
-        ("inherit", VirtualMachineConfigInfoSwapPlacementTypeEnum::Inherit),
         ("vmDirectory", VirtualMachineConfigInfoSwapPlacementTypeEnum::VmDirectory),
+        ("inherit", VirtualMachineConfigInfoSwapPlacementTypeEnum::Inherit),
         ("hostLocal", VirtualMachineConfigInfoSwapPlacementTypeEnum::HostLocal),
     ],
 };
@@ -51895,14 +52182,14 @@ impl AsRef<str> for VirtualMachineConfigInfoSwapPlacementTypeEnum {
 }
 
 static VIRTUAL_MACHINE_CONFIG_SPEC_ENCRYPTED_FT_MODES_ENUM_MAP: phf::Map<&'static str, VirtualMachineConfigSpecEncryptedFtModesEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
     ],
     entries: &[
         ("ftEncryptionDisabled", VirtualMachineConfigSpecEncryptedFtModesEnum::FtEncryptionDisabled),
-        ("ftEncryptionRequired", VirtualMachineConfigSpecEncryptedFtModesEnum::FtEncryptionRequired),
         ("ftEncryptionOpportunistic", VirtualMachineConfigSpecEncryptedFtModesEnum::FtEncryptionOpportunistic),
+        ("ftEncryptionRequired", VirtualMachineConfigSpecEncryptedFtModesEnum::FtEncryptionRequired),
     ],
 };
 
@@ -51965,14 +52252,14 @@ impl AsRef<str> for VirtualMachineConfigSpecEncryptedFtModesEnum {
 }
 
 static VIRTUAL_MACHINE_CONFIG_SPEC_ENCRYPTED_V_MOTION_MODES_ENUM_MAP: phf::Map<&'static str, VirtualMachineConfigSpecEncryptedVMotionModesEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("disabled", VirtualMachineConfigSpecEncryptedVMotionModesEnum::Disabled),
-        ("opportunistic", VirtualMachineConfigSpecEncryptedVMotionModesEnum::Opportunistic),
         ("required", VirtualMachineConfigSpecEncryptedVMotionModesEnum::Required),
+        ("opportunistic", VirtualMachineConfigSpecEncryptedVMotionModesEnum::Opportunistic),
+        ("disabled", VirtualMachineConfigSpecEncryptedVMotionModesEnum::Disabled),
     ],
 };
 
@@ -52035,15 +52322,16 @@ impl AsRef<str> for VirtualMachineConfigSpecEncryptedVMotionModesEnum {
 }
 
 static VIRTUAL_MACHINE_CONFIG_SPEC_NPIV_WWN_OP_ENUM_MAP: phf::Map<&'static str, VirtualMachineConfigSpecNpivWwnOpEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (0, 2),
     ],
     entries: &[
         ("set", VirtualMachineConfigSpecNpivWwnOpEnum::Set),
-        ("remove", VirtualMachineConfigSpecNpivWwnOpEnum::Remove),
         ("generate", VirtualMachineConfigSpecNpivWwnOpEnum::Generate),
         ("extend", VirtualMachineConfigSpecNpivWwnOpEnum::Extend),
+        ("remove", VirtualMachineConfigSpecNpivWwnOpEnum::Remove),
     ],
 };
 
@@ -52107,9 +52395,9 @@ impl AsRef<str> for VirtualMachineConfigSpecNpivWwnOpEnum {
 }
 
 static VIRTUAL_MACHINE_POWER_OP_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachinePowerOpTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 15995050791870030928,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
         ("hard", VirtualMachinePowerOpTypeEnum::Hard),
@@ -52177,13 +52465,13 @@ impl AsRef<str> for VirtualMachinePowerOpTypeEnum {
 }
 
 static VIRTUAL_MACHINE_STANDBY_ACTION_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineStandbyActionTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("checkpoint", VirtualMachineStandbyActionTypeEnum::Checkpoint),
         ("powerOnSuspend", VirtualMachineStandbyActionTypeEnum::PowerOnSuspend),
+        ("checkpoint", VirtualMachineStandbyActionTypeEnum::Checkpoint),
     ],
 };
 
@@ -52245,13 +52533,13 @@ impl AsRef<str> for VirtualMachineStandbyActionTypeEnum {
 }
 
 static VIRTUAL_MACHINE_DEVICE_RUNTIME_INFO_VIRTUAL_ETHERNET_CARD_RUNTIME_STATE_VM_DIRECT_PATH_GEN_2_INACTIVE_REASON_OTHER_ENUM_MAP: phf::Map<&'static str, VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("vmNptIncompatibleHost", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum::VmNptIncompatibleHost),
         ("vmNptIncompatibleNetwork", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum::VmNptIncompatibleNetwork),
+        ("vmNptIncompatibleHost", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonOtherEnum::VmNptIncompatibleHost),
     ],
 };
 
@@ -52313,27 +52601,29 @@ impl AsRef<str> for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeSta
 }
 
 static VIRTUAL_MACHINE_DEVICE_RUNTIME_INFO_VIRTUAL_ETHERNET_CARD_RUNTIME_STATE_VM_DIRECT_PATH_GEN_2_INACTIVE_REASON_VM_ENUM_MAP: phf::Map<&'static str, VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 13),
-        (6, 10),
-        (2, 0),
+        (5, 0),
+        (0, 0),
+        (0, 1),
+        (0, 12),
+        (0, 5),
     ],
     entries: &[
-        ("vmNptInsufficientMemoryReservation", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptInsufficientMemoryReservation),
-        ("vmNptIncompatibleBackingType", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptIncompatibleBackingType),
-        ("vmNptOutOfIntrVector", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptOutOfIntrVector),
+        ("vmNptRuntimeError", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptRuntimeError),
+        ("vmNptVMCIActive", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptVmciActive),
         ("vmNptConflictingOperationInProgress", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptConflictingOperationInProgress),
+        ("vmNptConflictingIOChainConfigured", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptConflictingIoChainConfigured),
+        ("vmNptOutOfIntrVector", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptOutOfIntrVector),
+        ("vmNptIncompatibleAdapterFeatures", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptIncompatibleAdapterFeatures),
+        ("vmNptIncompatibleGuest", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptIncompatibleGuest),
         ("vmNptIncompatibleAdapterType", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptIncompatibleAdapterType),
         ("vmNptMonitorBlocks", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptMonitorBlocks),
         ("vmNptFaultToleranceOrRecordReplayConfigured", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptFaultToleranceOrRecordReplayConfigured),
-        ("vmNptIncompatibleAdapterFeatures", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptIncompatibleAdapterFeatures),
-        ("vmNptDisabledOrDisconnectedAdapter", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptDisabledOrDisconnectedAdapter),
+        ("vmNptInsufficientMemoryReservation", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptInsufficientMemoryReservation),
+        ("vmNptIncompatibleBackingType", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptIncompatibleBackingType),
         ("vmNptIncompatibleGuestDriver", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptIncompatibleGuestDriver),
-        ("vmNptIncompatibleGuest", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptIncompatibleGuest),
-        ("vmNptConflictingIOChainConfigured", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptConflictingIoChainConfigured),
-        ("vmNptVMCIActive", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptVmciActive),
-        ("vmNptRuntimeError", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptRuntimeError),
+        ("vmNptDisabledOrDisconnectedAdapter", VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeStateVmDirectPathGen2InactiveReasonVmEnum::VmNptDisabledOrDisconnectedAdapter),
     ],
 };
 
@@ -52407,39 +52697,43 @@ impl AsRef<str> for VirtualMachineDeviceRuntimeInfoVirtualEthernetCardRuntimeSta
 }
 
 static VIRTUAL_MACHINE_FILE_LAYOUT_EX_FILE_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineFileLayoutExFileTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
+        (2, 12),
         (0, 0),
-        (5, 17),
-        (11, 5),
-        (1, 19),
-        (6, 10),
+        (0, 2),
+        (0, 0),
+        (0, 1),
+        (0, 1),
+        (0, 15),
+        (2, 2),
+        (0, 0),
     ],
     entries: &[
-        ("dataSetsDiskModeStore", VirtualMachineFileLayoutExFileTypeEnum::DataSetsDiskModeStore),
-        ("diskExtent", VirtualMachineFileLayoutExFileTypeEnum::DiskExtent),
-        ("uwswap", VirtualMachineFileLayoutExFileTypeEnum::Uwswap),
-        ("diskReplicationState", VirtualMachineFileLayoutExFileTypeEnum::DiskReplicationState),
-        ("swap", VirtualMachineFileLayoutExFileTypeEnum::Swap),
-        ("snapshotManifestList", VirtualMachineFileLayoutExFileTypeEnum::SnapshotManifestList),
-        ("snapshotData", VirtualMachineFileLayoutExFileTypeEnum::SnapshotData),
-        ("snapshotMemory", VirtualMachineFileLayoutExFileTypeEnum::SnapshotMemory),
-        ("extendedConfig", VirtualMachineFileLayoutExFileTypeEnum::ExtendedConfig),
-        ("log", VirtualMachineFileLayoutExFileTypeEnum::Log),
-        ("nvram", VirtualMachineFileLayoutExFileTypeEnum::Nvram),
-        ("diskDescriptor", VirtualMachineFileLayoutExFileTypeEnum::DiskDescriptor),
-        ("namespaceData", VirtualMachineFileLayoutExFileTypeEnum::NamespaceData),
         ("digestDescriptor", VirtualMachineFileLayoutExFileTypeEnum::DigestDescriptor),
-        ("screenshot", VirtualMachineFileLayoutExFileTypeEnum::Screenshot),
-        ("digestExtent", VirtualMachineFileLayoutExFileTypeEnum::DigestExtent),
+        ("snapshotList", VirtualMachineFileLayoutExFileTypeEnum::SnapshotList),
+        ("ftMetadata", VirtualMachineFileLayoutExFileTypeEnum::FtMetadata),
+        ("diskExtent", VirtualMachineFileLayoutExFileTypeEnum::DiskExtent),
+        ("snapshotData", VirtualMachineFileLayoutExFileTypeEnum::SnapshotData),
+        ("suspend", VirtualMachineFileLayoutExFileTypeEnum::Suspend),
+        ("swap", VirtualMachineFileLayoutExFileTypeEnum::Swap),
+        ("snapshotMemory", VirtualMachineFileLayoutExFileTypeEnum::SnapshotMemory),
+        ("diskDescriptor", VirtualMachineFileLayoutExFileTypeEnum::DiskDescriptor),
         ("core", VirtualMachineFileLayoutExFileTypeEnum::Core),
+        ("diskReplicationState", VirtualMachineFileLayoutExFileTypeEnum::DiskReplicationState),
+        ("snapshotManifestList", VirtualMachineFileLayoutExFileTypeEnum::SnapshotManifestList),
         ("config", VirtualMachineFileLayoutExFileTypeEnum::Config),
         ("dataSetsVmModeStore", VirtualMachineFileLayoutExFileTypeEnum::DataSetsVmModeStore),
+        ("digestExtent", VirtualMachineFileLayoutExFileTypeEnum::DigestExtent),
+        ("uwswap", VirtualMachineFileLayoutExFileTypeEnum::Uwswap),
+        ("namespaceData", VirtualMachineFileLayoutExFileTypeEnum::NamespaceData),
+        ("nvram", VirtualMachineFileLayoutExFileTypeEnum::Nvram),
+        ("screenshot", VirtualMachineFileLayoutExFileTypeEnum::Screenshot),
+        ("extendedConfig", VirtualMachineFileLayoutExFileTypeEnum::ExtendedConfig),
         ("suspendMemory", VirtualMachineFileLayoutExFileTypeEnum::SuspendMemory),
+        ("dataSetsDiskModeStore", VirtualMachineFileLayoutExFileTypeEnum::DataSetsDiskModeStore),
+        ("log", VirtualMachineFileLayoutExFileTypeEnum::Log),
         ("stat", VirtualMachineFileLayoutExFileTypeEnum::Stat),
-        ("ftMetadata", VirtualMachineFileLayoutExFileTypeEnum::FtMetadata),
-        ("snapshotList", VirtualMachineFileLayoutExFileTypeEnum::SnapshotList),
-        ("suspend", VirtualMachineFileLayoutExFileTypeEnum::Suspend),
         ("guestCustomization", VirtualMachineFileLayoutExFileTypeEnum::GuestCustomization),
     ],
 };
@@ -52525,14 +52819,14 @@ impl AsRef<str> for VirtualMachineFileLayoutExFileTypeEnum {
 }
 
 static VIRTUAL_MACHINE_HT_SHARING_ENUM_MAP: phf::Map<&'static str, VirtualMachineHtSharingEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (2, 0),
     ],
     entries: &[
-        ("internal", VirtualMachineHtSharingEnum::Internal),
         ("none", VirtualMachineHtSharingEnum::None),
         ("any", VirtualMachineHtSharingEnum::Any),
+        ("internal", VirtualMachineHtSharingEnum::Internal),
     ],
 };
 
@@ -52595,14 +52889,14 @@ impl AsRef<str> for VirtualMachineHtSharingEnum {
 }
 
 static VIRTUAL_MACHINE_FLAG_INFO_MONITOR_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineFlagInfoMonitorTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
+        ("release", VirtualMachineFlagInfoMonitorTypeEnum::Release),
         ("debug", VirtualMachineFlagInfoMonitorTypeEnum::Debug),
         ("stats", VirtualMachineFlagInfoMonitorTypeEnum::Stats),
-        ("release", VirtualMachineFlagInfoMonitorTypeEnum::Release),
     ],
 };
 
@@ -52665,15 +52959,16 @@ impl AsRef<str> for VirtualMachineFlagInfoMonitorTypeEnum {
 }
 
 static VIRTUAL_MACHINE_POWER_OFF_BEHAVIOR_ENUM_MAP: phf::Map<&'static str, VirtualMachinePowerOffBehaviorEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (1, 3),
     ],
     entries: &[
-        ("prompt", VirtualMachinePowerOffBehaviorEnum::Prompt),
-        ("take", VirtualMachinePowerOffBehaviorEnum::Take),
-        ("powerOff", VirtualMachinePowerOffBehaviorEnum::PowerOff),
         ("revert", VirtualMachinePowerOffBehaviorEnum::Revert),
+        ("take", VirtualMachinePowerOffBehaviorEnum::Take),
+        ("prompt", VirtualMachinePowerOffBehaviorEnum::Prompt),
+        ("powerOff", VirtualMachinePowerOffBehaviorEnum::PowerOff),
     ],
 };
 
@@ -52737,14 +53032,14 @@ impl AsRef<str> for VirtualMachinePowerOffBehaviorEnum {
 }
 
 static VIRTUAL_MACHINE_FLAG_INFO_VIRTUAL_EXEC_USAGE_ENUM_MAP: phf::Map<&'static str, VirtualMachineFlagInfoVirtualExecUsageEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
-        ("hvOff", VirtualMachineFlagInfoVirtualExecUsageEnum::HvOff),
-        ("hvAuto", VirtualMachineFlagInfoVirtualExecUsageEnum::HvAuto),
         ("hvOn", VirtualMachineFlagInfoVirtualExecUsageEnum::HvOn),
+        ("hvAuto", VirtualMachineFlagInfoVirtualExecUsageEnum::HvAuto),
+        ("hvOff", VirtualMachineFlagInfoVirtualExecUsageEnum::HvOff),
     ],
 };
 
@@ -52807,14 +53102,14 @@ impl AsRef<str> for VirtualMachineFlagInfoVirtualExecUsageEnum {
 }
 
 static VIRTUAL_MACHINE_FLAG_INFO_VIRTUAL_MMU_USAGE_ENUM_MAP: phf::Map<&'static str, VirtualMachineFlagInfoVirtualMmuUsageEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 2689841203009609170,
     disps: &[
         (1, 0),
     ],
     entries: &[
+        ("on", VirtualMachineFlagInfoVirtualMmuUsageEnum::On),
         ("automatic", VirtualMachineFlagInfoVirtualMmuUsageEnum::Automatic),
         ("off", VirtualMachineFlagInfoVirtualMmuUsageEnum::Off),
-        ("on", VirtualMachineFlagInfoVirtualMmuUsageEnum::On),
     ],
 };
 
@@ -52877,14 +53172,14 @@ impl AsRef<str> for VirtualMachineFlagInfoVirtualMmuUsageEnum {
 }
 
 static VIRTUAL_MACHINE_FORK_CONFIG_INFO_CHILD_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineForkConfigInfoChildTypeEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
-        ("none", VirtualMachineForkConfigInfoChildTypeEnum::None),
-        ("persistent", VirtualMachineForkConfigInfoChildTypeEnum::Persistent),
         ("nonpersistent", VirtualMachineForkConfigInfoChildTypeEnum::Nonpersistent),
+        ("persistent", VirtualMachineForkConfigInfoChildTypeEnum::Persistent),
+        ("none", VirtualMachineForkConfigInfoChildTypeEnum::None),
     ],
 };
 
@@ -52947,14 +53242,14 @@ impl AsRef<str> for VirtualMachineForkConfigInfoChildTypeEnum {
 }
 
 static GUEST_INFO_APP_STATE_TYPE_ENUM_MAP: phf::Map<&'static str, GuestInfoAppStateTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
         (2, 0),
     ],
     entries: &[
-        ("appStateOk", GuestInfoAppStateTypeEnum::AppStateOk),
         ("appStateNeedReset", GuestInfoAppStateTypeEnum::AppStateNeedReset),
         ("none", GuestInfoAppStateTypeEnum::None),
+        ("appStateOk", GuestInfoAppStateTypeEnum::AppStateOk),
     ],
 };
 
@@ -53017,16 +53312,17 @@ impl AsRef<str> for GuestInfoAppStateTypeEnum {
 }
 
 static GUEST_INFO_CUSTOMIZATION_STATUS_ENUM_MAP: phf::Map<&'static str, GuestInfoCustomizationStatusEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16263683158343804936,
     disps: &[
+        (0, 3),
         (0, 0),
     ],
     entries: &[
-        ("TOOLSDEPLOYPKG_RUNNING", GuestInfoCustomizationStatusEnum::ToolsdeploypkgRunning),
         ("TOOLSDEPLOYPKG_PENDING", GuestInfoCustomizationStatusEnum::ToolsdeploypkgPending),
-        ("TOOLSDEPLOYPKG_IDLE", GuestInfoCustomizationStatusEnum::ToolsdeploypkgIdle),
         ("TOOLSDEPLOYPKG_FAILED", GuestInfoCustomizationStatusEnum::ToolsdeploypkgFailed),
         ("TOOLSDEPLOYPKG_SUCCEEDED", GuestInfoCustomizationStatusEnum::ToolsdeploypkgSucceeded),
+        ("TOOLSDEPLOYPKG_RUNNING", GuestInfoCustomizationStatusEnum::ToolsdeploypkgRunning),
+        ("TOOLSDEPLOYPKG_IDLE", GuestInfoCustomizationStatusEnum::ToolsdeploypkgIdle),
     ],
 };
 
@@ -53091,18 +53387,18 @@ impl AsRef<str> for GuestInfoCustomizationStatusEnum {
 }
 
 static VIRTUAL_MACHINE_GUEST_STATE_ENUM_MAP: phf::Map<&'static str, VirtualMachineGuestStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (2, 0),
-        (0, 2),
+        (0, 0),
+        (3, 0),
     ],
     entries: &[
-        ("standby", VirtualMachineGuestStateEnum::Standby),
         ("notRunning", VirtualMachineGuestStateEnum::NotRunning),
-        ("resetting", VirtualMachineGuestStateEnum::Resetting),
-        ("unknown", VirtualMachineGuestStateEnum::Unknown),
         ("shuttingDown", VirtualMachineGuestStateEnum::ShuttingDown),
+        ("unknown", VirtualMachineGuestStateEnum::Unknown),
+        ("standby", VirtualMachineGuestStateEnum::Standby),
         ("running", VirtualMachineGuestStateEnum::Running),
+        ("resetting", VirtualMachineGuestStateEnum::Resetting),
     ],
 };
 
@@ -53168,16 +53464,17 @@ impl AsRef<str> for VirtualMachineGuestStateEnum {
 }
 
 static VIRTUAL_MACHINE_TOOLS_INSTALL_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineToolsInstallTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16263683158343804936,
     disps: &[
-        (4, 0),
+        (2, 0),
+        (0, 2),
     ],
     entries: &[
-        ("guestToolsTypeTar", VirtualMachineToolsInstallTypeEnum::GuestToolsTypeTar),
-        ("guestToolsTypeOSP", VirtualMachineToolsInstallTypeEnum::GuestToolsTypeOsp),
         ("guestToolsTypeMSI", VirtualMachineToolsInstallTypeEnum::GuestToolsTypeMsi),
         ("guestToolsTypeOpenVMTools", VirtualMachineToolsInstallTypeEnum::GuestToolsTypeOpenVmTools),
         ("guestToolsTypeUnknown", VirtualMachineToolsInstallTypeEnum::GuestToolsTypeUnknown),
+        ("guestToolsTypeOSP", VirtualMachineToolsInstallTypeEnum::GuestToolsTypeOsp),
+        ("guestToolsTypeTar", VirtualMachineToolsInstallTypeEnum::GuestToolsTypeTar),
     ],
 };
 
@@ -53242,14 +53539,14 @@ impl AsRef<str> for VirtualMachineToolsInstallTypeEnum {
 }
 
 static VIRTUAL_MACHINE_TOOLS_RUNNING_STATUS_ENUM_MAP: phf::Map<&'static str, VirtualMachineToolsRunningStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
         ("guestToolsExecutingScripts", VirtualMachineToolsRunningStatusEnum::GuestToolsExecutingScripts),
-        ("guestToolsRunning", VirtualMachineToolsRunningStatusEnum::GuestToolsRunning),
         ("guestToolsNotRunning", VirtualMachineToolsRunningStatusEnum::GuestToolsNotRunning),
+        ("guestToolsRunning", VirtualMachineToolsRunningStatusEnum::GuestToolsRunning),
     ],
 };
 
@@ -53312,15 +53609,16 @@ impl AsRef<str> for VirtualMachineToolsRunningStatusEnum {
 }
 
 static VIRTUAL_MACHINE_TOOLS_STATUS_ENUM_MAP: phf::Map<&'static str, VirtualMachineToolsStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
+        (2, 0),
         (0, 0),
     ],
     entries: &[
+        ("toolsNotRunning", VirtualMachineToolsStatusEnum::ToolsNotRunning),
+        ("toolsOk", VirtualMachineToolsStatusEnum::ToolsOk),
         ("toolsOld", VirtualMachineToolsStatusEnum::ToolsOld),
         ("toolsNotInstalled", VirtualMachineToolsStatusEnum::ToolsNotInstalled),
-        ("toolsOk", VirtualMachineToolsStatusEnum::ToolsOk),
-        ("toolsNotRunning", VirtualMachineToolsStatusEnum::ToolsNotRunning),
     ],
 };
 
@@ -53384,21 +53682,22 @@ impl AsRef<str> for VirtualMachineToolsStatusEnum {
 }
 
 static VIRTUAL_MACHINE_TOOLS_VERSION_STATUS_ENUM_MAP: phf::Map<&'static str, VirtualMachineToolsVersionStatusEnum> = ::phf::Map {
-    key: 3599879742736855518,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
-        (2, 5),
+        (1, 7),
+        (1, 0),
+        (1, 7),
     ],
     entries: &[
-        ("guestToolsCurrent", VirtualMachineToolsVersionStatusEnum::GuestToolsCurrent),
+        ("guestToolsTooNew", VirtualMachineToolsVersionStatusEnum::GuestToolsTooNew),
+        ("guestToolsUnmanaged", VirtualMachineToolsVersionStatusEnum::GuestToolsUnmanaged),
+        ("guestToolsNotInstalled", VirtualMachineToolsVersionStatusEnum::GuestToolsNotInstalled),
+        ("guestToolsSupportedOld", VirtualMachineToolsVersionStatusEnum::GuestToolsSupportedOld),
+        ("guestToolsTooOld", VirtualMachineToolsVersionStatusEnum::GuestToolsTooOld),
         ("guestToolsNeedUpgrade", VirtualMachineToolsVersionStatusEnum::GuestToolsNeedUpgrade),
         ("guestToolsBlacklisted", VirtualMachineToolsVersionStatusEnum::GuestToolsBlacklisted),
-        ("guestToolsNotInstalled", VirtualMachineToolsVersionStatusEnum::GuestToolsNotInstalled),
+        ("guestToolsCurrent", VirtualMachineToolsVersionStatusEnum::GuestToolsCurrent),
         ("guestToolsSupportedNew", VirtualMachineToolsVersionStatusEnum::GuestToolsSupportedNew),
-        ("guestToolsTooOld", VirtualMachineToolsVersionStatusEnum::GuestToolsTooOld),
-        ("guestToolsTooNew", VirtualMachineToolsVersionStatusEnum::GuestToolsTooNew),
-        ("guestToolsSupportedOld", VirtualMachineToolsVersionStatusEnum::GuestToolsSupportedOld),
-        ("guestToolsUnmanaged", VirtualMachineToolsVersionStatusEnum::GuestToolsUnmanaged),
     ],
 };
 
@@ -53467,7 +53766,7 @@ impl AsRef<str> for VirtualMachineToolsVersionStatusEnum {
 }
 
 static GUEST_OS_DESCRIPTOR_FIRMWARE_TYPE_ENUM_MAP: phf::Map<&'static str, GuestOsDescriptorFirmwareTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
@@ -53535,7 +53834,7 @@ impl AsRef<str> for GuestOsDescriptorFirmwareTypeEnum {
 }
 
 static VIRTUAL_MACHINE_GUEST_ARCHITECTURE_ENUM_MAP: phf::Map<&'static str, VirtualMachineGuestArchitectureEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -53603,18 +53902,18 @@ impl AsRef<str> for VirtualMachineGuestArchitectureEnum {
 }
 
 static VIRTUAL_MACHINE_GUEST_OS_FAMILY_ENUM_MAP: phf::Map<&'static str, VirtualMachineGuestOsFamilyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
-        (1, 1),
+        (1, 3),
     ],
     entries: &[
-        ("netwareGuest", VirtualMachineGuestOsFamilyEnum::NetwareGuest),
         ("solarisGuest", VirtualMachineGuestOsFamilyEnum::SolarisGuest),
         ("linuxGuest", VirtualMachineGuestOsFamilyEnum::LinuxGuest),
         ("windowsGuest", VirtualMachineGuestOsFamilyEnum::WindowsGuest),
-        ("darwinGuestFamily", VirtualMachineGuestOsFamilyEnum::DarwinGuestFamily),
         ("otherGuestFamily", VirtualMachineGuestOsFamilyEnum::OtherGuestFamily),
+        ("darwinGuestFamily", VirtualMachineGuestOsFamilyEnum::DarwinGuestFamily),
+        ("netwareGuest", VirtualMachineGuestOsFamilyEnum::NetwareGuest),
     ],
 };
 
@@ -53680,262 +53979,290 @@ impl AsRef<str> for VirtualMachineGuestOsFamilyEnum {
 }
 
 static VIRTUAL_MACHINE_GUEST_OS_IDENTIFIER_ENUM_MAP: phf::Map<&'static str, VirtualMachineGuestOsIdentifierEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
-        (0, 138),
-        (1, 46),
-        (0, 13),
-        (0, 8),
-        (0, 21),
-        (1, 1),
+        (0, 35),
         (0, 1),
-        (3, 115),
-        (0, 10),
-        (4, 7),
-        (0, 165),
-        (4, 3),
-        (0, 0),
-        (0, 184),
-        (0, 0),
-        (1, 0),
-        (0, 86),
-        (1, 0),
-        (0, 0),
+        (0, 1),
+        (0, 14),
         (0, 3),
-        (0, 7),
-        (2, 173),
-        (0, 94),
-        (0, 24),
-        (1, 168),
-        (0, 17),
+        (0, 0),
+        (0, 25),
         (0, 6),
-        (0, 30),
-        (2, 34),
-        (0, 187),
-        (1, 185),
-        (0, 151),
-        (0, 8),
-        (1, 25),
-        (6, 17),
-        (1, 56),
-        (0, 54),
-        (4, 205),
-        (50, 120),
-        (43, 90),
+        (0, 0),
+        (0, 1),
+        (0, 25),
+        (0, 55),
+        (0, 11),
+        (0, 59),
+        (0, 52),
+        (0, 1),
+        (0, 74),
+        (0, 2),
+        (0, 0),
+        (0, 7),
+        (0, 1),
+        (0, 0),
+        (0, 0),
+        (0, 0),
+        (0, 19),
+        (0, 18),
+        (0, 5),
+        (0, 65),
+        (0, 82),
         (0, 3),
+        (0, 5),
+        (0, 63),
+        (0, 28),
+        (0, 15),
+        (0, 26),
+        (0, 40),
+        (0, 79),
+        (0, 7),
+        (0, 101),
+        (0, 75),
+        (0, 19),
+        (0, 165),
+        (0, 34),
+        (0, 10),
+        (0, 46),
+        (0, 1),
+        (0, 21),
+        (0, 6),
+        (0, 179),
+        (0, 124),
+        (0, 0),
+        (0, 54),
+        (0, 1),
+        (0, 63),
+        (0, 0),
+        (0, 4),
+        (0, 61),
+        (0, 81),
+        (3, 185),
+        (0, 41),
+        (0, 23),
+        (0, 9),
+        (0, 183),
+        (0, 34),
+        (0, 131),
+        (0, 62),
+        (0, 203),
+        (0, 0),
+        (0, 7),
+        (0, 10),
     ],
     entries: &[
-        ("debian6Guest", VirtualMachineGuestOsIdentifierEnum::Debian6Guest),
-        ("sjdsGuest", VirtualMachineGuestOsIdentifierEnum::SjdsGuest),
-        ("centos7Guest", VirtualMachineGuestOsIdentifierEnum::Centos7Guest),
-        ("oracleLinux64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux64Guest),
-        ("other26xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other26XLinux64Guest),
-        ("darwin18_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1864Guest),
-        ("windows7Server64Guest", VirtualMachineGuestOsIdentifierEnum::Windows7Server64Guest),
-        ("darwin11Guest", VirtualMachineGuestOsIdentifierEnum::Darwin11Guest),
-        ("windows9Server64Guest", VirtualMachineGuestOsIdentifierEnum::Windows9Server64Guest),
-        ("centos64Guest", VirtualMachineGuestOsIdentifierEnum::Centos64Guest),
-        ("oesGuest", VirtualMachineGuestOsIdentifierEnum::OesGuest),
-        ("winNTGuest", VirtualMachineGuestOsIdentifierEnum::WinNtGuest),
-        ("windows8Server64Guest", VirtualMachineGuestOsIdentifierEnum::Windows8Server64Guest),
-        ("coreos64Guest", VirtualMachineGuestOsIdentifierEnum::Coreos64Guest),
-        ("winVista64Guest", VirtualMachineGuestOsIdentifierEnum::WinVista64Guest),
-        ("oracleLinux9_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux964Guest),
-        ("debian13_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian1364Guest),
-        ("otherLinuxGuest", VirtualMachineGuestOsIdentifierEnum::OtherLinuxGuest),
-        ("otherGuest", VirtualMachineGuestOsIdentifierEnum::OtherGuest),
-        ("other7xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other7XLinuxGuest),
-        ("vmkernel8Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel8Guest),
-        ("freebsd12_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1264Guest),
-        ("other24xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other24XLinuxGuest),
-        ("rhel3Guest", VirtualMachineGuestOsIdentifierEnum::Rhel3Guest),
-        ("sles10_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1064Guest),
-        ("winNetEnterpriseGuest", VirtualMachineGuestOsIdentifierEnum::WinNetEnterpriseGuest),
-        ("solaris8Guest", VirtualMachineGuestOsIdentifierEnum::Solaris8Guest),
-        ("darwin10_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1064Guest),
-        ("asianux8_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux864Guest),
-        ("darwin14_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1464Guest),
-        ("solaris10_64Guest", VirtualMachineGuestOsIdentifierEnum::Solaris1064Guest),
-        ("asianux4_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux464Guest),
-        ("winNetBusinessGuest", VirtualMachineGuestOsIdentifierEnum::WinNetBusinessGuest),
-        ("pardus_64Guest", VirtualMachineGuestOsIdentifierEnum::Pardus64Guest),
-        ("debian7Guest", VirtualMachineGuestOsIdentifierEnum::Debian7Guest),
-        ("turboLinux64Guest", VirtualMachineGuestOsIdentifierEnum::TurboLinux64Guest),
-        ("centos7_64Guest", VirtualMachineGuestOsIdentifierEnum::Centos764Guest),
-        ("winXPProGuest", VirtualMachineGuestOsIdentifierEnum::WinXpProGuest),
-        ("redhatGuest", VirtualMachineGuestOsIdentifierEnum::RedhatGuest),
-        ("rhel6_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel664Guest),
-        ("windows2019srv_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows2019Srv64Guest),
-        ("debian11_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian1164Guest),
-        ("rhel9_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel964Guest),
-        ("genericLinuxGuest", VirtualMachineGuestOsIdentifierEnum::GenericLinuxGuest),
-        ("debian8Guest", VirtualMachineGuestOsIdentifierEnum::Debian8Guest),
-        ("kylinlinux_64Guest", VirtualMachineGuestOsIdentifierEnum::Kylinlinux64Guest),
-        ("vmkernel7Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel7Guest),
-        ("rhel2Guest", VirtualMachineGuestOsIdentifierEnum::Rhel2Guest),
-        ("win2000ProGuest", VirtualMachineGuestOsIdentifierEnum::Win2000ProGuest),
-        ("debian10_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian1064Guest),
-        ("freebsd14_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1464Guest),
-        ("otherLinux64Guest", VirtualMachineGuestOsIdentifierEnum::OtherLinux64Guest),
-        ("asianux9_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux964Guest),
-        ("darwin19_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1964Guest),
-        ("sles16_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1664Guest),
-        ("rhel7_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel764Guest),
-        ("debian12Guest", VirtualMachineGuestOsIdentifierEnum::Debian12Guest),
-        ("sles15_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1564Guest),
-        ("rhel6Guest", VirtualMachineGuestOsIdentifierEnum::Rhel6Guest),
-        ("darwin23_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin2364Guest),
-        ("other6xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other6XLinux64Guest),
-        ("debian5Guest", VirtualMachineGuestOsIdentifierEnum::Debian5Guest),
-        ("windows2022srvNext_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows2022SrvNext64Guest),
-        ("crxSys1Guest", VirtualMachineGuestOsIdentifierEnum::CrxSys1Guest),
-        ("otherGuest64", VirtualMachineGuestOsIdentifierEnum::OtherGuest64),
-        ("sles11Guest", VirtualMachineGuestOsIdentifierEnum::Sles11Guest),
-        ("centos9_64Guest", VirtualMachineGuestOsIdentifierEnum::Centos964Guest),
-        ("darwinGuest", VirtualMachineGuestOsIdentifierEnum::DarwinGuest),
-        ("freebsd15_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1564Guest),
-        ("prolinux_64Guest", VirtualMachineGuestOsIdentifierEnum::Prolinux64Guest),
-        ("mandrivaGuest", VirtualMachineGuestOsIdentifierEnum::MandrivaGuest),
-        ("other6xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other6XLinuxGuest),
-        ("centos6_64Guest", VirtualMachineGuestOsIdentifierEnum::Centos664Guest),
-        ("other5xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other5XLinux64Guest),
-        ("asianux3_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux364Guest),
-        ("oracleLinux7_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux764Guest),
-        ("freebsdGuest", VirtualMachineGuestOsIdentifierEnum::FreebsdGuest),
-        ("winLonghorn64Guest", VirtualMachineGuestOsIdentifierEnum::WinLonghorn64Guest),
-        ("fusionos_64Guest", VirtualMachineGuestOsIdentifierEnum::Fusionos64Guest),
-        ("debian13Guest", VirtualMachineGuestOsIdentifierEnum::Debian13Guest),
-        ("asianux5_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux564Guest),
-        ("amazonlinux3_64Guest", VirtualMachineGuestOsIdentifierEnum::Amazonlinux364Guest),
-        ("freebsd64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd64Guest),
-        ("ubuntuGuest", VirtualMachineGuestOsIdentifierEnum::UbuntuGuest),
-        ("other5xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other5XLinuxGuest),
-        ("darwin13_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1364Guest),
-        ("vmkernel5Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel5Guest),
-        ("other26xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other26XLinuxGuest),
-        ("netware4Guest", VirtualMachineGuestOsIdentifierEnum::Netware4Guest),
-        ("freebsd13Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd13Guest),
-        ("centos6Guest", VirtualMachineGuestOsIdentifierEnum::Centos6Guest),
-        ("oracleLinuxGuest", VirtualMachineGuestOsIdentifierEnum::OracleLinuxGuest),
-        ("freebsd14Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd14Guest),
-        ("miraclelinux_64Guest", VirtualMachineGuestOsIdentifierEnum::Miraclelinux64Guest),
-        ("debian11Guest", VirtualMachineGuestOsIdentifierEnum::Debian11Guest),
-        ("sles11_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1164Guest),
-        ("rhel5_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel564Guest),
-        ("winXPPro64Guest", VirtualMachineGuestOsIdentifierEnum::WinXpPro64Guest),
-        ("dosGuest", VirtualMachineGuestOsIdentifierEnum::DosGuest),
-        ("freebsd15Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd15Guest),
-        ("windows7Guest", VirtualMachineGuestOsIdentifierEnum::Windows7Guest),
-        ("unixWare7Guest", VirtualMachineGuestOsIdentifierEnum::UnixWare7Guest),
-        ("oracleLinux10_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux1064Guest),
-        ("freebsd12Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd12Guest),
-        ("windowsHyperVGuest", VirtualMachineGuestOsIdentifierEnum::WindowsHyperVGuest),
-        ("openServer5Guest", VirtualMachineGuestOsIdentifierEnum::OpenServer5Guest),
-        ("fedoraGuest", VirtualMachineGuestOsIdentifierEnum::FedoraGuest),
-        ("asianux4Guest", VirtualMachineGuestOsIdentifierEnum::Asianux4Guest),
-        ("other4xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other4XLinuxGuest),
-        ("vmkernel6Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel6Guest),
-        ("freebsd11_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1164Guest),
-        ("other24xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other24XLinux64Guest),
-        ("debian9_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian964Guest),
-        ("winNetWebGuest", VirtualMachineGuestOsIdentifierEnum::WinNetWebGuest),
-        ("debian4_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian464Guest),
-        ("win2000ServGuest", VirtualMachineGuestOsIdentifierEnum::Win2000ServGuest),
-        ("win98Guest", VirtualMachineGuestOsIdentifierEnum::Win98Guest),
-        ("winMeGuest", VirtualMachineGuestOsIdentifierEnum::WinMeGuest),
-        ("slesGuest", VirtualMachineGuestOsIdentifierEnum::SlesGuest),
         ("windows11_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows1164Guest),
-        ("windows9Guest", VirtualMachineGuestOsIdentifierEnum::Windows9Guest),
-        ("darwin16_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1664Guest),
-        ("windows9_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows964Guest),
-        ("debian10Guest", VirtualMachineGuestOsIdentifierEnum::Debian10Guest),
-        ("centosGuest", VirtualMachineGuestOsIdentifierEnum::CentosGuest),
-        ("mandriva64Guest", VirtualMachineGuestOsIdentifierEnum::Mandriva64Guest),
-        ("winNetStandardGuest", VirtualMachineGuestOsIdentifierEnum::WinNetStandardGuest),
+        ("rhel9_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel964Guest),
+        ("crxSys1Guest", VirtualMachineGuestOsIdentifierEnum::CrxSys1Guest),
         ("suse64Guest", VirtualMachineGuestOsIdentifierEnum::Suse64Guest),
-        ("oracleLinux6_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux664Guest),
-        ("winNetEnterprise64Guest", VirtualMachineGuestOsIdentifierEnum::WinNetEnterprise64Guest),
-        ("windows2019srvNext_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows2019SrvNext64Guest),
-        ("mandrakeGuest", VirtualMachineGuestOsIdentifierEnum::MandrakeGuest),
-        ("netware6Guest", VirtualMachineGuestOsIdentifierEnum::Netware6Guest),
-        ("winLonghornGuest", VirtualMachineGuestOsIdentifierEnum::WinLonghornGuest),
-        ("debian4Guest", VirtualMachineGuestOsIdentifierEnum::Debian4Guest),
-        ("vmkernel65Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel65Guest),
-        ("debian9Guest", VirtualMachineGuestOsIdentifierEnum::Debian9Guest),
-        ("darwin10Guest", VirtualMachineGuestOsIdentifierEnum::Darwin10Guest),
-        ("darwin17_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1764Guest),
-        ("turboLinuxGuest", VirtualMachineGuestOsIdentifierEnum::TurboLinuxGuest),
-        ("ubuntu64Guest", VirtualMachineGuestOsIdentifierEnum::Ubuntu64Guest),
-        ("darwin64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin64Guest),
-        ("os2Guest", VirtualMachineGuestOsIdentifierEnum::Os2Guest),
-        ("rhel8_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel864Guest),
-        ("rhel3_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel364Guest),
-        ("netware5Guest", VirtualMachineGuestOsIdentifierEnum::Netware5Guest),
-        ("rhel5Guest", VirtualMachineGuestOsIdentifierEnum::Rhel5Guest),
-        ("opensuseGuest", VirtualMachineGuestOsIdentifierEnum::OpensuseGuest),
-        ("debian8_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian864Guest),
-        ("win31Guest", VirtualMachineGuestOsIdentifierEnum::Win31Guest),
-        ("oracleLinux7Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux7Guest),
-        ("sles10Guest", VirtualMachineGuestOsIdentifierEnum::Sles10Guest),
-        ("debian5_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian564Guest),
-        ("darwin12_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1264Guest),
-        ("debian7_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian764Guest),
-        ("sles12Guest", VirtualMachineGuestOsIdentifierEnum::Sles12Guest),
-        ("darwin21_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin2164Guest),
-        ("windows7_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows764Guest),
-        ("rhel4_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel464Guest),
-        ("winNetStandard64Guest", VirtualMachineGuestOsIdentifierEnum::WinNetStandard64Guest),
-        ("oracleLinux8_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux864Guest),
-        ("other3xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other3XLinux64Guest),
-        ("asianux7_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux764Guest),
-        ("other3xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other3XLinuxGuest),
-        ("vmkernelGuest", VirtualMachineGuestOsIdentifierEnum::VmkernelGuest),
-        ("eComStation2Guest", VirtualMachineGuestOsIdentifierEnum::EComStation2Guest),
-        ("windows12_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows1264Guest),
-        ("vmwarePhoton64Guest", VirtualMachineGuestOsIdentifierEnum::VmwarePhoton64Guest),
-        ("openServer6Guest", VirtualMachineGuestOsIdentifierEnum::OpenServer6Guest),
         ("nld9Guest", VirtualMachineGuestOsIdentifierEnum::Nld9Guest),
-        ("solaris7Guest", VirtualMachineGuestOsIdentifierEnum::Solaris7Guest),
-        ("vmkernel9Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel9Guest),
-        ("sles12_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1264Guest),
-        ("win2000AdvServGuest", VirtualMachineGuestOsIdentifierEnum::Win2000AdvServGuest),
-        ("freebsd11Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd11Guest),
-        ("rhel4Guest", VirtualMachineGuestOsIdentifierEnum::Rhel4Guest),
-        ("darwin11_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1164Guest),
-        ("suseGuest", VirtualMachineGuestOsIdentifierEnum::SuseGuest),
+        ("vmkernel5Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel5Guest),
         ("solaris10Guest", VirtualMachineGuestOsIdentifierEnum::Solaris10Guest),
-        ("crxPod1Guest", VirtualMachineGuestOsIdentifierEnum::CrxPod1Guest),
-        ("opensuse64Guest", VirtualMachineGuestOsIdentifierEnum::Opensuse64Guest),
+        ("fedoraGuest", VirtualMachineGuestOsIdentifierEnum::FedoraGuest),
+        ("centos7_64Guest", VirtualMachineGuestOsIdentifierEnum::Centos764Guest),
+        ("openServer6Guest", VirtualMachineGuestOsIdentifierEnum::OpenServer6Guest),
+        ("oracleLinux6_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux664Guest),
+        ("rhel6_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel664Guest),
+        ("os2Guest", VirtualMachineGuestOsIdentifierEnum::Os2Guest),
+        ("oracleLinux7_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux764Guest),
+        ("other6xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other6XLinuxGuest),
+        ("asianux4Guest", VirtualMachineGuestOsIdentifierEnum::Asianux4Guest),
         ("asianux3Guest", VirtualMachineGuestOsIdentifierEnum::Asianux3Guest),
-        ("centos8_64Guest", VirtualMachineGuestOsIdentifierEnum::Centos864Guest),
-        ("debian6_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian664Guest),
-        ("oracleLinux6Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux6Guest),
-        ("win95Guest", VirtualMachineGuestOsIdentifierEnum::Win95Guest),
+        ("sles12_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1264Guest),
+        ("winNetEnterprise64Guest", VirtualMachineGuestOsIdentifierEnum::WinNetEnterprise64Guest),
         ("winNetDatacenter64Guest", VirtualMachineGuestOsIdentifierEnum::WinNetDatacenter64Guest),
-        ("darwin20_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin2064Guest),
-        ("windows8Guest", VirtualMachineGuestOsIdentifierEnum::Windows8Guest),
-        ("freebsd13_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1364Guest),
-        ("rhel10_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel1064Guest),
-        ("winVistaGuest", VirtualMachineGuestOsIdentifierEnum::WinVistaGuest),
+        ("otherLinuxGuest", VirtualMachineGuestOsIdentifierEnum::OtherLinuxGuest),
+        ("win2000AdvServGuest", VirtualMachineGuestOsIdentifierEnum::Win2000AdvServGuest),
+        ("slesGuest", VirtualMachineGuestOsIdentifierEnum::SlesGuest),
+        ("centos9_64Guest", VirtualMachineGuestOsIdentifierEnum::Centos964Guest),
+        ("winXPProGuest", VirtualMachineGuestOsIdentifierEnum::WinXpProGuest),
+        ("rhel4Guest", VirtualMachineGuestOsIdentifierEnum::Rhel4Guest),
+        ("freebsd14Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd14Guest),
+        ("rhel5Guest", VirtualMachineGuestOsIdentifierEnum::Rhel5Guest),
+        ("windows7Guest", VirtualMachineGuestOsIdentifierEnum::Windows7Guest),
+        ("rhel3Guest", VirtualMachineGuestOsIdentifierEnum::Rhel3Guest),
+        ("oracleLinux64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux64Guest),
         ("fedora64Guest", VirtualMachineGuestOsIdentifierEnum::Fedora64Guest),
-        ("almalinux_64Guest", VirtualMachineGuestOsIdentifierEnum::Almalinux64Guest),
-        ("windows8_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows864Guest),
-        ("eComStationGuest", VirtualMachineGuestOsIdentifierEnum::EComStationGuest),
-        ("sles64Guest", VirtualMachineGuestOsIdentifierEnum::Sles64Guest),
-        ("other4xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other4XLinux64Guest),
+        ("turboLinuxGuest", VirtualMachineGuestOsIdentifierEnum::TurboLinuxGuest),
+        ("turboLinux64Guest", VirtualMachineGuestOsIdentifierEnum::TurboLinux64Guest),
+        ("debian8Guest", VirtualMachineGuestOsIdentifierEnum::Debian8Guest),
+        ("pardus_64Guest", VirtualMachineGuestOsIdentifierEnum::Pardus64Guest),
+        ("other6xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other6XLinux64Guest),
+        ("darwin23_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin2364Guest),
+        ("windows2022srvNext_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows2022SrvNext64Guest),
+        ("debian13_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian1364Guest),
+        ("freebsd13_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1364Guest),
+        ("darwin17_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1764Guest),
+        ("winVistaGuest", VirtualMachineGuestOsIdentifierEnum::WinVistaGuest),
         ("darwin22_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin2264Guest),
-        ("solaris9Guest", VirtualMachineGuestOsIdentifierEnum::Solaris9Guest),
-        ("solaris11_64Guest", VirtualMachineGuestOsIdentifierEnum::Solaris1164Guest),
+        ("winNetBusinessGuest", VirtualMachineGuestOsIdentifierEnum::WinNetBusinessGuest),
+        ("ubuntuGuest", VirtualMachineGuestOsIdentifierEnum::UbuntuGuest),
+        ("freebsd14_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1464Guest),
+        ("windows9Server64Guest", VirtualMachineGuestOsIdentifierEnum::Windows9Server64Guest),
+        ("win2000ServGuest", VirtualMachineGuestOsIdentifierEnum::Win2000ServGuest),
+        ("rhel7_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel764Guest),
+        ("debian8_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian864Guest),
+        ("oracleLinux10_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux1064Guest),
+        ("other26xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other26XLinux64Guest),
+        ("winVista64Guest", VirtualMachineGuestOsIdentifierEnum::WinVista64Guest),
         ("darwin15_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1564Guest),
-        ("winNetDatacenterGuest", VirtualMachineGuestOsIdentifierEnum::WinNetDatacenterGuest),
-        ("debian12_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian1264Guest),
-        ("solaris6Guest", VirtualMachineGuestOsIdentifierEnum::Solaris6Guest),
-        ("winXPHomeGuest", VirtualMachineGuestOsIdentifierEnum::WinXpHomeGuest),
-        ("amazonlinux2_64Guest", VirtualMachineGuestOsIdentifierEnum::Amazonlinux264Guest),
+        ("ubuntu64Guest", VirtualMachineGuestOsIdentifierEnum::Ubuntu64Guest),
+        ("solaris9Guest", VirtualMachineGuestOsIdentifierEnum::Solaris9Guest),
+        ("solaris10_64Guest", VirtualMachineGuestOsIdentifierEnum::Solaris1064Guest),
+        ("other4xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other4XLinux64Guest),
         ("other7xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other7XLinux64Guest),
-        ("rhel7Guest", VirtualMachineGuestOsIdentifierEnum::Rhel7Guest),
+        ("debian10Guest", VirtualMachineGuestOsIdentifierEnum::Debian10Guest),
+        ("winNetDatacenterGuest", VirtualMachineGuestOsIdentifierEnum::WinNetDatacenterGuest),
+        ("rhel8_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel864Guest),
+        ("windows2019srv_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows2019Srv64Guest),
+        ("sles12Guest", VirtualMachineGuestOsIdentifierEnum::Sles12Guest),
+        ("rhel6Guest", VirtualMachineGuestOsIdentifierEnum::Rhel6Guest),
+        ("coreos64Guest", VirtualMachineGuestOsIdentifierEnum::Coreos64Guest),
+        ("darwin64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin64Guest),
+        ("other3xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other3XLinuxGuest),
+        ("rhel4_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel464Guest),
+        ("centos64Guest", VirtualMachineGuestOsIdentifierEnum::Centos64Guest),
+        ("centosGuest", VirtualMachineGuestOsIdentifierEnum::CentosGuest),
+        ("debian6_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian664Guest),
+        ("windows7Server64Guest", VirtualMachineGuestOsIdentifierEnum::Windows7Server64Guest),
+        ("freebsd15_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1564Guest),
+        ("oracleLinux7Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux7Guest),
+        ("freebsd64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd64Guest),
+        ("asianux9_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux964Guest),
+        ("debian7_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian764Guest),
+        ("windows12_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows1264Guest),
+        ("centos8_64Guest", VirtualMachineGuestOsIdentifierEnum::Centos864Guest),
+        ("windows8_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows864Guest),
+        ("winNetStandardGuest", VirtualMachineGuestOsIdentifierEnum::WinNetStandardGuest),
+        ("winNetWebGuest", VirtualMachineGuestOsIdentifierEnum::WinNetWebGuest),
+        ("freebsd12_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1264Guest),
+        ("vmwarePhoton64Guest", VirtualMachineGuestOsIdentifierEnum::VmwarePhoton64Guest),
+        ("debian12Guest", VirtualMachineGuestOsIdentifierEnum::Debian12Guest),
+        ("oesGuest", VirtualMachineGuestOsIdentifierEnum::OesGuest),
+        ("sles11Guest", VirtualMachineGuestOsIdentifierEnum::Sles11Guest),
+        ("eComStationGuest", VirtualMachineGuestOsIdentifierEnum::EComStationGuest),
+        ("darwin11Guest", VirtualMachineGuestOsIdentifierEnum::Darwin11Guest),
+        ("winXPPro64Guest", VirtualMachineGuestOsIdentifierEnum::WinXpPro64Guest),
+        ("solaris7Guest", VirtualMachineGuestOsIdentifierEnum::Solaris7Guest),
+        ("freebsd11_64Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd1164Guest),
+        ("netware6Guest", VirtualMachineGuestOsIdentifierEnum::Netware6Guest),
+        ("sles11_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1164Guest),
+        ("windows8Server64Guest", VirtualMachineGuestOsIdentifierEnum::Windows8Server64Guest),
+        ("genericLinuxGuest", VirtualMachineGuestOsIdentifierEnum::GenericLinuxGuest),
+        ("mandrakeGuest", VirtualMachineGuestOsIdentifierEnum::MandrakeGuest),
+        ("kylinlinux_64Guest", VirtualMachineGuestOsIdentifierEnum::Kylinlinux64Guest),
+        ("rhel3_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel364Guest),
+        ("centos7Guest", VirtualMachineGuestOsIdentifierEnum::Centos7Guest),
+        ("prolinux_64Guest", VirtualMachineGuestOsIdentifierEnum::Prolinux64Guest),
+        ("solaris11_64Guest", VirtualMachineGuestOsIdentifierEnum::Solaris1164Guest),
+        ("amazonlinux3_64Guest", VirtualMachineGuestOsIdentifierEnum::Amazonlinux364Guest),
+        ("otherGuest", VirtualMachineGuestOsIdentifierEnum::OtherGuest),
+        ("winNetStandard64Guest", VirtualMachineGuestOsIdentifierEnum::WinNetStandard64Guest),
+        ("centos6Guest", VirtualMachineGuestOsIdentifierEnum::Centos6Guest),
+        ("darwin18_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1864Guest),
+        ("winMeGuest", VirtualMachineGuestOsIdentifierEnum::WinMeGuest),
+        ("darwin16_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1664Guest),
+        ("winNTGuest", VirtualMachineGuestOsIdentifierEnum::WinNtGuest),
+        ("sles15_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1564Guest),
+        ("almalinux_64Guest", VirtualMachineGuestOsIdentifierEnum::Almalinux64Guest),
+        ("freebsd11Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd11Guest),
+        ("asianux7_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux764Guest),
+        ("debian5_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian564Guest),
+        ("debian4_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian464Guest),
+        ("mandriva64Guest", VirtualMachineGuestOsIdentifierEnum::Mandriva64Guest),
+        ("sles64Guest", VirtualMachineGuestOsIdentifierEnum::Sles64Guest),
+        ("darwin14_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1464Guest),
+        ("sles10Guest", VirtualMachineGuestOsIdentifierEnum::Sles10Guest),
+        ("opensuseGuest", VirtualMachineGuestOsIdentifierEnum::OpensuseGuest),
+        ("debian7Guest", VirtualMachineGuestOsIdentifierEnum::Debian7Guest),
+        ("mandrivaGuest", VirtualMachineGuestOsIdentifierEnum::MandrivaGuest),
+        ("windows8Guest", VirtualMachineGuestOsIdentifierEnum::Windows8Guest),
+        ("darwin10_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1064Guest),
+        ("debian9_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian964Guest),
+        ("asianux3_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux364Guest),
+        ("amazonlinux2_64Guest", VirtualMachineGuestOsIdentifierEnum::Amazonlinux264Guest),
+        ("otherLinux64Guest", VirtualMachineGuestOsIdentifierEnum::OtherLinux64Guest),
+        ("solaris8Guest", VirtualMachineGuestOsIdentifierEnum::Solaris8Guest),
+        ("win98Guest", VirtualMachineGuestOsIdentifierEnum::Win98Guest),
+        ("windows9Guest", VirtualMachineGuestOsIdentifierEnum::Windows9Guest),
+        ("opensuse64Guest", VirtualMachineGuestOsIdentifierEnum::Opensuse64Guest),
+        ("other24xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other24XLinux64Guest),
+        ("debian5Guest", VirtualMachineGuestOsIdentifierEnum::Debian5Guest),
+        ("fusionos_64Guest", VirtualMachineGuestOsIdentifierEnum::Fusionos64Guest),
+        ("win95Guest", VirtualMachineGuestOsIdentifierEnum::Win95Guest),
+        ("freebsd12Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd12Guest),
+        ("asianux8_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux864Guest),
+        ("debian9Guest", VirtualMachineGuestOsIdentifierEnum::Debian9Guest),
+        ("debian6Guest", VirtualMachineGuestOsIdentifierEnum::Debian6Guest),
+        ("debian4Guest", VirtualMachineGuestOsIdentifierEnum::Debian4Guest),
+        ("windows2019srvNext_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows2019SrvNext64Guest),
+        ("other7xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other7XLinuxGuest),
+        ("darwin13_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1364Guest),
+        ("windows7_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows764Guest),
+        ("other5xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other5XLinuxGuest),
+        ("dosGuest", VirtualMachineGuestOsIdentifierEnum::DosGuest),
+        ("rhel2Guest", VirtualMachineGuestOsIdentifierEnum::Rhel2Guest),
+        ("crxPod1Guest", VirtualMachineGuestOsIdentifierEnum::CrxPod1Guest),
+        ("oracleLinux8_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux864Guest),
+        ("vmkernel8Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel8Guest),
+        ("vmkernel6Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel6Guest),
+        ("darwin11_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1164Guest),
+        ("unixWare7Guest", VirtualMachineGuestOsIdentifierEnum::UnixWare7Guest),
+        ("win31Guest", VirtualMachineGuestOsIdentifierEnum::Win31Guest),
+        ("eComStation2Guest", VirtualMachineGuestOsIdentifierEnum::EComStation2Guest),
+        ("debian13Guest", VirtualMachineGuestOsIdentifierEnum::Debian13Guest),
+        ("debian10_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian1064Guest),
+        ("darwin20_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin2064Guest),
+        ("oracleLinux9_64Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux964Guest),
+        ("vmkernel9Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel9Guest),
+        ("vmkernel65Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel65Guest),
+        ("debian11Guest", VirtualMachineGuestOsIdentifierEnum::Debian11Guest),
         ("rockylinux_64Guest", VirtualMachineGuestOsIdentifierEnum::Rockylinux64Guest),
+        ("darwin12_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1264Guest),
+        ("vmkernel7Guest", VirtualMachineGuestOsIdentifierEnum::Vmkernel7Guest),
+        ("darwin19_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin1964Guest),
+        ("other5xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other5XLinux64Guest),
+        ("winNetEnterpriseGuest", VirtualMachineGuestOsIdentifierEnum::WinNetEnterpriseGuest),
+        ("otherGuest64", VirtualMachineGuestOsIdentifierEnum::OtherGuest64),
+        ("darwinGuest", VirtualMachineGuestOsIdentifierEnum::DarwinGuest),
+        ("redhatGuest", VirtualMachineGuestOsIdentifierEnum::RedhatGuest),
+        ("windows9_64Guest", VirtualMachineGuestOsIdentifierEnum::Windows964Guest),
+        ("rhel10_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel1064Guest),
+        ("asianux4_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux464Guest),
+        ("winXPHomeGuest", VirtualMachineGuestOsIdentifierEnum::WinXpHomeGuest),
+        ("vmkernelGuest", VirtualMachineGuestOsIdentifierEnum::VmkernelGuest),
+        ("darwin21_64Guest", VirtualMachineGuestOsIdentifierEnum::Darwin2164Guest),
+        ("freebsd15Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd15Guest),
+        ("other4xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other4XLinuxGuest),
+        ("asianux5_64Guest", VirtualMachineGuestOsIdentifierEnum::Asianux564Guest),
+        ("sles10_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1064Guest),
+        ("win2000ProGuest", VirtualMachineGuestOsIdentifierEnum::Win2000ProGuest),
+        ("rhel5_64Guest", VirtualMachineGuestOsIdentifierEnum::Rhel564Guest),
+        ("centos6_64Guest", VirtualMachineGuestOsIdentifierEnum::Centos664Guest),
+        ("oracleLinux6Guest", VirtualMachineGuestOsIdentifierEnum::OracleLinux6Guest),
+        ("rhel7Guest", VirtualMachineGuestOsIdentifierEnum::Rhel7Guest),
+        ("netware4Guest", VirtualMachineGuestOsIdentifierEnum::Netware4Guest),
+        ("sles16_64Guest", VirtualMachineGuestOsIdentifierEnum::Sles1664Guest),
+        ("other26xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other26XLinuxGuest),
+        ("darwin10Guest", VirtualMachineGuestOsIdentifierEnum::Darwin10Guest),
+        ("sjdsGuest", VirtualMachineGuestOsIdentifierEnum::SjdsGuest),
+        ("winLonghorn64Guest", VirtualMachineGuestOsIdentifierEnum::WinLonghorn64Guest),
+        ("solaris6Guest", VirtualMachineGuestOsIdentifierEnum::Solaris6Guest),
+        ("miraclelinux_64Guest", VirtualMachineGuestOsIdentifierEnum::Miraclelinux64Guest),
+        ("oracleLinuxGuest", VirtualMachineGuestOsIdentifierEnum::OracleLinuxGuest),
+        ("debian11_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian1164Guest),
+        ("openServer5Guest", VirtualMachineGuestOsIdentifierEnum::OpenServer5Guest),
+        ("suseGuest", VirtualMachineGuestOsIdentifierEnum::SuseGuest),
+        ("other3xLinux64Guest", VirtualMachineGuestOsIdentifierEnum::Other3XLinux64Guest),
+        ("windowsHyperVGuest", VirtualMachineGuestOsIdentifierEnum::WindowsHyperVGuest),
+        ("other24xLinuxGuest", VirtualMachineGuestOsIdentifierEnum::Other24XLinuxGuest),
+        ("freebsdGuest", VirtualMachineGuestOsIdentifierEnum::FreebsdGuest),
+        ("winLonghornGuest", VirtualMachineGuestOsIdentifierEnum::WinLonghornGuest),
+        ("freebsd13Guest", VirtualMachineGuestOsIdentifierEnum::Freebsd13Guest),
+        ("debian12_64Guest", VirtualMachineGuestOsIdentifierEnum::Debian1264Guest),
+        ("netware5Guest", VirtualMachineGuestOsIdentifierEnum::Netware5Guest),
     ],
 };
 
@@ -54205,19 +54532,20 @@ impl AsRef<str> for VirtualMachineGuestOsIdentifierEnum {
 }
 
 static GUEST_OS_DESCRIPTOR_SUPPORT_LEVEL_ENUM_MAP: phf::Map<&'static str, GuestOsDescriptorSupportLevelEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (5, 0),
-        (4, 5),
+        (1, 0),
+        (0, 6),
+        (0, 2),
     ],
     entries: &[
-        ("experimental", GuestOsDescriptorSupportLevelEnum::Experimental),
-        ("legacy", GuestOsDescriptorSupportLevelEnum::Legacy),
         ("supported", GuestOsDescriptorSupportLevelEnum::Supported),
-        ("terminated", GuestOsDescriptorSupportLevelEnum::Terminated),
+        ("legacy", GuestOsDescriptorSupportLevelEnum::Legacy),
         ("techPreview", GuestOsDescriptorSupportLevelEnum::TechPreview),
-        ("unsupported", GuestOsDescriptorSupportLevelEnum::Unsupported),
         ("deprecated", GuestOsDescriptorSupportLevelEnum::Deprecated),
+        ("experimental", GuestOsDescriptorSupportLevelEnum::Experimental),
+        ("terminated", GuestOsDescriptorSupportLevelEnum::Terminated),
+        ("unsupported", GuestOsDescriptorSupportLevelEnum::Unsupported),
     ],
 };
 
@@ -54284,7 +54612,7 @@ impl AsRef<str> for GuestOsDescriptorSupportLevelEnum {
 }
 
 static GUEST_QUIESCE_END_GUEST_QUIESCE_ERROR_ENUM_MAP: phf::Map<&'static str, GuestQuiesceEndGuestQuiesceErrorEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -54350,13 +54678,13 @@ impl AsRef<str> for GuestQuiesceEndGuestQuiesceErrorEnum {
 }
 
 static VIRTUAL_MACHINE_METADATA_MANAGER_VM_METADATA_OP_ENUM_MAP: phf::Map<&'static str, VirtualMachineMetadataManagerVmMetadataOpEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("Update", VirtualMachineMetadataManagerVmMetadataOpEnum::Update),
         ("Remove", VirtualMachineMetadataManagerVmMetadataOpEnum::Remove),
+        ("Update", VirtualMachineMetadataManagerVmMetadataOpEnum::Update),
     ],
 };
 
@@ -54418,7 +54746,7 @@ impl AsRef<str> for VirtualMachineMetadataManagerVmMetadataOpEnum {
 }
 
 static VIRTUAL_MACHINE_METADATA_MANAGER_VM_METADATA_OWNER_OWNER_ENUM_MAP: phf::Map<&'static str, VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -54484,16 +54812,17 @@ impl AsRef<str> for VirtualMachineMetadataManagerVmMetadataOwnerOwnerEnum {
 }
 
 static VIRTUAL_MACHINE_RELOCATE_DISK_MOVE_OPTIONS_ENUM_MAP: phf::Map<&'static str, VirtualMachineRelocateDiskMoveOptionsEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 2),
+        (0, 0),
     ],
     entries: &[
-        ("moveAllDiskBackingsAndDisallowSharing", VirtualMachineRelocateDiskMoveOptionsEnum::MoveAllDiskBackingsAndDisallowSharing),
+        ("createNewChildDiskBacking", VirtualMachineRelocateDiskMoveOptionsEnum::CreateNewChildDiskBacking),
         ("moveChildMostDiskBacking", VirtualMachineRelocateDiskMoveOptionsEnum::MoveChildMostDiskBacking),
         ("moveAllDiskBackingsAndAllowSharing", VirtualMachineRelocateDiskMoveOptionsEnum::MoveAllDiskBackingsAndAllowSharing),
+        ("moveAllDiskBackingsAndDisallowSharing", VirtualMachineRelocateDiskMoveOptionsEnum::MoveAllDiskBackingsAndDisallowSharing),
         ("moveAllDiskBackingsAndConsolidate", VirtualMachineRelocateDiskMoveOptionsEnum::MoveAllDiskBackingsAndConsolidate),
-        ("createNewChildDiskBacking", VirtualMachineRelocateDiskMoveOptionsEnum::CreateNewChildDiskBacking),
     ],
 };
 
@@ -54558,9 +54887,9 @@ impl AsRef<str> for VirtualMachineRelocateDiskMoveOptionsEnum {
 }
 
 static VIRTUAL_MACHINE_RELOCATE_TRANSFORMATION_ENUM_MAP: phf::Map<&'static str, VirtualMachineRelocateTransformationEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("sparse", VirtualMachineRelocateTransformationEnum::Sparse),
@@ -54626,14 +54955,14 @@ impl AsRef<str> for VirtualMachineRelocateTransformationEnum {
 }
 
 static SCHEDULED_HARDWARE_UPGRADE_INFO_HARDWARE_UPGRADE_POLICY_ENUM_MAP: phf::Map<&'static str, ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
+        ("onSoftPowerOff", ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum::OnSoftPowerOff),
         ("never", ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum::Never),
         ("always", ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum::Always),
-        ("onSoftPowerOff", ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum::OnSoftPowerOff),
     ],
 };
 
@@ -54696,15 +55025,16 @@ impl AsRef<str> for ScheduledHardwareUpgradeInfoHardwareUpgradePolicyEnum {
 }
 
 static SCHEDULED_HARDWARE_UPGRADE_INFO_HARDWARE_UPGRADE_STATUS_ENUM_MAP: phf::Map<&'static str, ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
+        (0, 3),
     ],
     entries: &[
-        ("none", ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum::None),
         ("failed", ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum::Failed),
         ("success", ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum::Success),
         ("pending", ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum::Pending),
+        ("none", ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum::None),
     ],
 };
 
@@ -54768,25 +55098,26 @@ impl AsRef<str> for ScheduledHardwareUpgradeInfoHardwareUpgradeStatusEnum {
 }
 
 static VIRTUAL_MACHINE_SCSI_PASSTHROUGH_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineScsiPassthroughTypeEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 4203492208743950414,
     disps: &[
-        (0, 7),
-        (2, 10),
         (2, 0),
+        (0, 6),
+        (2, 10),
+        (0, 1),
     ],
     entries: &[
-        ("processor", VirtualMachineScsiPassthroughTypeEnum::Processor),
-        ("printer", VirtualMachineScsiPassthroughTypeEnum::Printer),
-        ("optical", VirtualMachineScsiPassthroughTypeEnum::Optical),
         ("disk", VirtualMachineScsiPassthroughTypeEnum::Disk),
-        ("com", VirtualMachineScsiPassthroughTypeEnum::Com),
-        ("cdrom", VirtualMachineScsiPassthroughTypeEnum::Cdrom),
-        ("media", VirtualMachineScsiPassthroughTypeEnum::Media),
-        ("unknown", VirtualMachineScsiPassthroughTypeEnum::Unknown),
         ("raid", VirtualMachineScsiPassthroughTypeEnum::Raid),
+        ("unknown", VirtualMachineScsiPassthroughTypeEnum::Unknown),
+        ("cdrom", VirtualMachineScsiPassthroughTypeEnum::Cdrom),
+        ("processor", VirtualMachineScsiPassthroughTypeEnum::Processor),
         ("scanner", VirtualMachineScsiPassthroughTypeEnum::Scanner),
-        ("tape", VirtualMachineScsiPassthroughTypeEnum::Tape),
+        ("optical", VirtualMachineScsiPassthroughTypeEnum::Optical),
+        ("printer", VirtualMachineScsiPassthroughTypeEnum::Printer),
         ("worm", VirtualMachineScsiPassthroughTypeEnum::Worm),
+        ("media", VirtualMachineScsiPassthroughTypeEnum::Media),
+        ("com", VirtualMachineScsiPassthroughTypeEnum::Com),
+        ("tape", VirtualMachineScsiPassthroughTypeEnum::Tape),
     ],
 };
 
@@ -54858,9 +55189,9 @@ impl AsRef<str> for VirtualMachineScsiPassthroughTypeEnum {
 }
 
 static VIRTUAL_MACHINE_SGX_INFO_FLC_MODES_ENUM_MAP: phf::Map<&'static str, VirtualMachineSgxInfoFlcModesEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("unlocked", VirtualMachineSgxInfoFlcModesEnum::Unlocked),
@@ -54926,7 +55257,7 @@ impl AsRef<str> for VirtualMachineSgxInfoFlcModesEnum {
 }
 
 static VIRTUAL_MACHINE_TARGET_INFO_CONFIGURATION_TAG_ENUM_MAP: phf::Map<&'static str, VirtualMachineTargetInfoConfigurationTagEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
@@ -54994,13 +55325,13 @@ impl AsRef<str> for VirtualMachineTargetInfoConfigurationTagEnum {
 }
 
 static UPGRADE_POLICY_ENUM_MAP: phf::Map<&'static str, UpgradePolicyEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("manual", UpgradePolicyEnum::Manual),
         ("upgradeAtPowerCycle", UpgradePolicyEnum::UpgradeAtPowerCycle),
+        ("manual", UpgradePolicyEnum::Manual),
     ],
 };
 
@@ -55062,33 +55393,36 @@ impl AsRef<str> for UpgradePolicyEnum {
 }
 
 static VIRTUAL_MACHINE_USB_INFO_FAMILY_ENUM_MAP: phf::Map<&'static str, VirtualMachineUsbInfoFamilyEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
-        (0, 4),
+        (0, 3),
+        (0, 8),
+        (0, 11),
+        (0, 9),
+        (0, 0),
         (1, 14),
-        (1, 7),
+        (0, 3),
     ],
     entries: &[
-        ("smart_card", VirtualMachineUsbInfoFamilyEnum::SmartCard),
-        ("video", VirtualMachineUsbInfoFamilyEnum::Video),
-        ("printer", VirtualMachineUsbInfoFamilyEnum::Printer),
         ("hub", VirtualMachineUsbInfoFamilyEnum::Hub),
-        ("storage", VirtualMachineUsbInfoFamilyEnum::Storage),
-        ("security", VirtualMachineUsbInfoFamilyEnum::Security),
-        ("physical", VirtualMachineUsbInfoFamilyEnum::Physical),
-        ("vendor_specific", VirtualMachineUsbInfoFamilyEnum::VendorSpecific),
-        ("pda", VirtualMachineUsbInfoFamilyEnum::Pda),
-        ("hid_bootable", VirtualMachineUsbInfoFamilyEnum::HidBootable),
-        ("wusb", VirtualMachineUsbInfoFamilyEnum::Wusb),
-        ("hid", VirtualMachineUsbInfoFamilyEnum::Hid),
-        ("imaging", VirtualMachineUsbInfoFamilyEnum::Imaging),
-        ("other", VirtualMachineUsbInfoFamilyEnum::Other),
         ("bluetooth", VirtualMachineUsbInfoFamilyEnum::Bluetooth),
-        ("audio", VirtualMachineUsbInfoFamilyEnum::Audio),
-        ("unknownFamily", VirtualMachineUsbInfoFamilyEnum::UnknownFamily),
-        ("communication", VirtualMachineUsbInfoFamilyEnum::Communication),
+        ("physical", VirtualMachineUsbInfoFamilyEnum::Physical),
         ("wireless", VirtualMachineUsbInfoFamilyEnum::Wireless),
+        ("pda", VirtualMachineUsbInfoFamilyEnum::Pda),
+        ("other", VirtualMachineUsbInfoFamilyEnum::Other),
+        ("vendor_specific", VirtualMachineUsbInfoFamilyEnum::VendorSpecific),
+        ("wusb", VirtualMachineUsbInfoFamilyEnum::Wusb),
+        ("communication", VirtualMachineUsbInfoFamilyEnum::Communication),
+        ("hid_bootable", VirtualMachineUsbInfoFamilyEnum::HidBootable),
+        ("unknownFamily", VirtualMachineUsbInfoFamilyEnum::UnknownFamily),
+        ("video", VirtualMachineUsbInfoFamilyEnum::Video),
+        ("imaging", VirtualMachineUsbInfoFamilyEnum::Imaging),
+        ("audio", VirtualMachineUsbInfoFamilyEnum::Audio),
+        ("security", VirtualMachineUsbInfoFamilyEnum::Security),
+        ("hid", VirtualMachineUsbInfoFamilyEnum::Hid),
+        ("printer", VirtualMachineUsbInfoFamilyEnum::Printer),
+        ("storage", VirtualMachineUsbInfoFamilyEnum::Storage),
+        ("smart_card", VirtualMachineUsbInfoFamilyEnum::SmartCard),
     ],
 };
 
@@ -55167,19 +55501,20 @@ impl AsRef<str> for VirtualMachineUsbInfoFamilyEnum {
 }
 
 static VIRTUAL_MACHINE_USB_INFO_SPEED_ENUM_MAP: phf::Map<&'static str, VirtualMachineUsbInfoSpeedEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (4, 0),
-        (6, 0),
+        (0, 3),
+        (0, 0),
+        (0, 4),
     ],
     entries: &[
-        ("low", VirtualMachineUsbInfoSpeedEnum::Low),
+        ("full", VirtualMachineUsbInfoSpeedEnum::Full),
         ("high", VirtualMachineUsbInfoSpeedEnum::High),
+        ("superSpeedPlus", VirtualMachineUsbInfoSpeedEnum::SuperSpeedPlus),
         ("unknownSpeed", VirtualMachineUsbInfoSpeedEnum::UnknownSpeed),
         ("superSpeed", VirtualMachineUsbInfoSpeedEnum::SuperSpeed),
+        ("low", VirtualMachineUsbInfoSpeedEnum::Low),
         ("superSpeed20Gbps", VirtualMachineUsbInfoSpeedEnum::SuperSpeed20Gbps),
-        ("superSpeedPlus", VirtualMachineUsbInfoSpeedEnum::SuperSpeedPlus),
-        ("full", VirtualMachineUsbInfoSpeedEnum::Full),
     ],
 };
 
@@ -55246,14 +55581,15 @@ impl AsRef<str> for VirtualMachineUsbInfoSpeedEnum {
 }
 
 static VIRTUAL_MACHINE_VENDOR_DEVICE_GROUP_INFO_COMPONENT_DEVICE_INFO_COMPONENT_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (0, 1),
+        (0, 0),
     ],
     entries: &[
-        ("dvx", VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum::Dvx),
-        ("sriovNic", VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum::SriovNic),
         ("pciPassthru", VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum::PciPassthru),
+        ("sriovNic", VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum::SriovNic),
+        ("dvx", VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum::Dvx),
         ("nvidiaVgpu", VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoComponentTypeEnum::NvidiaVgpu),
     ],
 };
@@ -55318,13 +55654,13 @@ impl AsRef<str> for VirtualMachineVendorDeviceGroupInfoComponentDeviceInfoCompon
 }
 
 static VIRTUAL_MACHINE_VGPU_PROFILE_INFO_PROFILE_CLASS_ENUM_MAP: phf::Map<&'static str, VirtualMachineVgpuProfileInfoProfileClassEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("quadro", VirtualMachineVgpuProfileInfoProfileClassEnum::Quadro),
         ("compute", VirtualMachineVgpuProfileInfoProfileClassEnum::Compute),
+        ("quadro", VirtualMachineVgpuProfileInfoProfileClassEnum::Quadro),
     ],
 };
 
@@ -55386,13 +55722,13 @@ impl AsRef<str> for VirtualMachineVgpuProfileInfoProfileClassEnum {
 }
 
 static VIRTUAL_MACHINE_VGPU_PROFILE_INFO_PROFILE_SHARING_ENUM_MAP: phf::Map<&'static str, VirtualMachineVgpuProfileInfoProfileSharingEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("timeSliced", VirtualMachineVgpuProfileInfoProfileSharingEnum::TimeSliced),
         ("mig", VirtualMachineVgpuProfileInfoProfileSharingEnum::Mig),
+        ("timeSliced", VirtualMachineVgpuProfileInfoProfileSharingEnum::TimeSliced),
     ],
 };
 
@@ -55454,15 +55790,16 @@ impl AsRef<str> for VirtualMachineVgpuProfileInfoProfileSharingEnum {
 }
 
 static VIRTUAL_MACHINE_VIRTUAL_DEVICE_SWAP_DEVICE_SWAP_STATUS_ENUM_MAP: phf::Map<&'static str, VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum> = ::phf::Map {
-    key: 12213676231523076107,
+    key: 16263683158343804936,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (0, 4),
     ],
     entries: &[
-        ("none", VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum::None),
-        ("completed", VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum::Completed),
         ("scheduled", VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum::Scheduled),
         ("inprogress", VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum::Inprogress),
+        ("none", VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum::None),
+        ("completed", VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum::Completed),
         ("failed", VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum::Failed),
     ],
 };
@@ -55528,13 +55865,13 @@ impl AsRef<str> for VirtualMachineVirtualDeviceSwapDeviceSwapStatusEnum {
 }
 
 static VIRTUAL_HARDWARE_MOTHERBOARD_LAYOUT_ENUM_MAP: phf::Map<&'static str, VirtualHardwareMotherboardLayoutEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("acpiHostBridges", VirtualHardwareMotherboardLayoutEnum::AcpiHostBridges),
         ("i440bxHostBridge", VirtualHardwareMotherboardLayoutEnum::I440BxHostBridge),
+        ("acpiHostBridges", VirtualHardwareMotherboardLayoutEnum::AcpiHostBridges),
     ],
 };
 
@@ -55596,13 +55933,13 @@ impl AsRef<str> for VirtualHardwareMotherboardLayoutEnum {
 }
 
 static VIRTUAL_MACHINE_VIRTUAL_P_MEM_SNAPSHOT_MODE_ENUM_MAP: phf::Map<&'static str, VirtualMachineVirtualPMemSnapshotModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("independent_persistent", VirtualMachineVirtualPMemSnapshotModeEnum::IndependentPersistent),
         ("independent_eraseonrevert", VirtualMachineVirtualPMemSnapshotModeEnum::IndependentEraseonrevert),
+        ("independent_persistent", VirtualMachineVirtualPMemSnapshotModeEnum::IndependentPersistent),
     ],
 };
 
@@ -55664,7 +56001,7 @@ impl AsRef<str> for VirtualMachineVirtualPMemSnapshotModeEnum {
 }
 
 static VM_PLACEMENT_POLICY_VM_PLACEMENT_POLICY_STRICTNESS_ENUM_MAP: phf::Map<&'static str, VmPlacementPolicyVmPlacementPolicyStrictnessEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -55732,14 +56069,14 @@ impl AsRef<str> for VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
 }
 
 static VM_PLACEMENT_POLICY_VM_PLACEMENT_POLICY_TOPOLOGY_ENUM_MAP: phf::Map<&'static str, VmPlacementPolicyVmPlacementPolicyTopologyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 15995050791870030928,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
-        ("ClusterComputeResource", VmPlacementPolicyVmPlacementPolicyTopologyEnum::ClusterComputeResource),
-        ("VSphereZone", VmPlacementPolicyVmPlacementPolicyTopologyEnum::VSphereZone),
         ("Host", VmPlacementPolicyVmPlacementPolicyTopologyEnum::Host),
+        ("VSphereZone", VmPlacementPolicyVmPlacementPolicyTopologyEnum::VSphereZone),
+        ("ClusterComputeResource", VmPlacementPolicyVmPlacementPolicyTopologyEnum::ClusterComputeResource),
     ],
 };
 
@@ -55802,14 +56139,14 @@ impl AsRef<str> for VmPlacementPolicyVmPlacementPolicyTopologyEnum {
 }
 
 static VIRTUAL_MACHINE_WINDOWS_QUIESCE_SPEC_VSS_BACKUP_CONTEXT_ENUM_MAP: phf::Map<&'static str, VirtualMachineWindowsQuiesceSpecVssBackupContextEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
-        ("ctx_backup", VirtualMachineWindowsQuiesceSpecVssBackupContextEnum::CtxBackup),
-        ("ctx_auto", VirtualMachineWindowsQuiesceSpecVssBackupContextEnum::CtxAuto),
         ("ctx_file_share_backup", VirtualMachineWindowsQuiesceSpecVssBackupContextEnum::CtxFileShareBackup),
+        ("ctx_auto", VirtualMachineWindowsQuiesceSpecVssBackupContextEnum::CtxAuto),
+        ("ctx_backup", VirtualMachineWindowsQuiesceSpecVssBackupContextEnum::CtxBackup),
     ],
 };
 
@@ -55872,15 +56209,16 @@ impl AsRef<str> for VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
 }
 
 static CHECK_TEST_TYPE_ENUM_MAP: phf::Map<&'static str, CheckTestTypeEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 16263683158343804936,
     disps: &[
-        (3, 0),
+        (4, 2),
+        (1, 0),
     ],
     entries: &[
         ("networkTests", CheckTestTypeEnum::NetworkTests),
-        ("datastoreTests", CheckTestTypeEnum::DatastoreTests),
         ("hostTests", CheckTestTypeEnum::HostTests),
         ("sourceTests", CheckTestTypeEnum::SourceTests),
+        ("datastoreTests", CheckTestTypeEnum::DatastoreTests),
         ("resourcePoolTests", CheckTestTypeEnum::ResourcePoolTests),
     ],
 };
@@ -55946,14 +56284,14 @@ impl AsRef<str> for CheckTestTypeEnum {
 }
 
 static CUSTOMIZATION_NET_BIOS_MODE_ENUM_MAP: phf::Map<&'static str, CustomizationNetBiosModeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("enableNetBIOSViaDhcp", CustomizationNetBiosModeEnum::EnableNetBiosViaDhcp),
-        ("disableNetBIOS", CustomizationNetBiosModeEnum::DisableNetBios),
         ("enableNetBIOS", CustomizationNetBiosModeEnum::EnableNetBios),
+        ("disableNetBIOS", CustomizationNetBiosModeEnum::DisableNetBios),
+        ("enableNetBIOSViaDhcp", CustomizationNetBiosModeEnum::EnableNetBiosViaDhcp),
     ],
 };
 
@@ -56016,9 +56354,9 @@ impl AsRef<str> for CustomizationNetBiosModeEnum {
 }
 
 static CUSTOMIZATION_LICENSE_DATA_MODE_ENUM_MAP: phf::Map<&'static str, CustomizationLicenseDataModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("perServer", CustomizationLicenseDataModeEnum::PerServer),
@@ -56084,14 +56422,14 @@ impl AsRef<str> for CustomizationLicenseDataModeEnum {
 }
 
 static CUSTOMIZATION_SYSPREP_REBOOT_OPTION_ENUM_MAP: phf::Map<&'static str, CustomizationSysprepRebootOptionEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("reboot", CustomizationSysprepRebootOptionEnum::Reboot),
         ("shutdown", CustomizationSysprepRebootOptionEnum::Shutdown),
         ("noreboot", CustomizationSysprepRebootOptionEnum::Noreboot),
+        ("reboot", CustomizationSysprepRebootOptionEnum::Reboot),
     ],
 };
 
@@ -56154,14 +56492,14 @@ impl AsRef<str> for CustomizationSysprepRebootOptionEnum {
 }
 
 static VIRTUAL_DEVICE_CONNECT_INFO_MIGRATE_CONNECT_OP_ENUM_MAP: phf::Map<&'static str, VirtualDeviceConnectInfoMigrateConnectOpEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 9838186554752179993,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("unset", VirtualDeviceConnectInfoMigrateConnectOpEnum::Unset),
         ("disconnect", VirtualDeviceConnectInfoMigrateConnectOpEnum::Disconnect),
         ("connect", VirtualDeviceConnectInfoMigrateConnectOpEnum::Connect),
+        ("unset", VirtualDeviceConnectInfoMigrateConnectOpEnum::Unset),
     ],
 };
 
@@ -56224,15 +56562,16 @@ impl AsRef<str> for VirtualDeviceConnectInfoMigrateConnectOpEnum {
 }
 
 static VIRTUAL_DEVICE_CONNECT_INFO_STATUS_ENUM_MAP: phf::Map<&'static str, VirtualDeviceConnectInfoStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
+        (0, 0),
         (2, 0),
     ],
     entries: &[
         ("recoverableError", VirtualDeviceConnectInfoStatusEnum::RecoverableError),
-        ("unrecoverableError", VirtualDeviceConnectInfoStatusEnum::UnrecoverableError),
-        ("untried", VirtualDeviceConnectInfoStatusEnum::Untried),
         ("ok", VirtualDeviceConnectInfoStatusEnum::Ok),
+        ("untried", VirtualDeviceConnectInfoStatusEnum::Untried),
+        ("unrecoverableError", VirtualDeviceConnectInfoStatusEnum::UnrecoverableError),
     ],
 };
 
@@ -56296,14 +56635,15 @@ impl AsRef<str> for VirtualDeviceConnectInfoStatusEnum {
 }
 
 static VIRTUAL_DEVICE_FILE_EXTENSION_ENUM_MAP: phf::Map<&'static str, VirtualDeviceFileExtensionEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 1),
     ],
     entries: &[
-        ("rdm", VirtualDeviceFileExtensionEnum::Rdm),
         ("iso", VirtualDeviceFileExtensionEnum::Iso),
         ("flp", VirtualDeviceFileExtensionEnum::Flp),
+        ("rdm", VirtualDeviceFileExtensionEnum::Rdm),
         ("vmdk", VirtualDeviceFileExtensionEnum::Vmdk),
         ("dsk", VirtualDeviceFileExtensionEnum::Dsk),
     ],
@@ -56370,13 +56710,13 @@ impl AsRef<str> for VirtualDeviceFileExtensionEnum {
 }
 
 static VIRTUAL_DEVICE_URI_BACKING_OPTION_DIRECTION_ENUM_MAP: phf::Map<&'static str, VirtualDeviceUriBackingOptionDirectionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("server", VirtualDeviceUriBackingOptionDirectionEnum::Server),
         ("client", VirtualDeviceUriBackingOptionDirectionEnum::Client),
+        ("server", VirtualDeviceUriBackingOptionDirectionEnum::Server),
     ],
 };
 
@@ -56438,13 +56778,13 @@ impl AsRef<str> for VirtualDeviceUriBackingOptionDirectionEnum {
 }
 
 static VIRTUAL_DEVICE_CONFIG_SPEC_CHANGE_MODE_ENUM_MAP: phf::Map<&'static str, VirtualDeviceConfigSpecChangeModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("skip", VirtualDeviceConfigSpecChangeModeEnum::Skip),
         ("fail", VirtualDeviceConfigSpecChangeModeEnum::Fail),
+        ("skip", VirtualDeviceConfigSpecChangeModeEnum::Skip),
     ],
 };
 
@@ -56506,14 +56846,14 @@ impl AsRef<str> for VirtualDeviceConfigSpecChangeModeEnum {
 }
 
 static VIRTUAL_DEVICE_CONFIG_SPEC_FILE_OPERATION_ENUM_MAP: phf::Map<&'static str, VirtualDeviceConfigSpecFileOperationEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("replace", VirtualDeviceConfigSpecFileOperationEnum::Replace),
         ("destroy", VirtualDeviceConfigSpecFileOperationEnum::Destroy),
         ("create", VirtualDeviceConfigSpecFileOperationEnum::Create),
+        ("replace", VirtualDeviceConfigSpecFileOperationEnum::Replace),
     ],
 };
 
@@ -56576,14 +56916,14 @@ impl AsRef<str> for VirtualDeviceConfigSpecFileOperationEnum {
 }
 
 static VIRTUAL_DEVICE_CONFIG_SPEC_OPERATION_ENUM_MAP: phf::Map<&'static str, VirtualDeviceConfigSpecOperationEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("add", VirtualDeviceConfigSpecOperationEnum::Add),
-        ("edit", VirtualDeviceConfigSpecOperationEnum::Edit),
         ("remove", VirtualDeviceConfigSpecOperationEnum::Remove),
+        ("edit", VirtualDeviceConfigSpecOperationEnum::Edit),
     ],
 };
 
@@ -56646,14 +56986,14 @@ impl AsRef<str> for VirtualDeviceConfigSpecOperationEnum {
 }
 
 static VIRTUAL_DISK_DELTA_DISK_FORMAT_ENUM_MAP: phf::Map<&'static str, VirtualDiskDeltaDiskFormatEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
+        ("redoLogFormat", VirtualDiskDeltaDiskFormatEnum::RedoLogFormat),
         ("nativeFormat", VirtualDiskDeltaDiskFormatEnum::NativeFormat),
         ("seSparseFormat", VirtualDiskDeltaDiskFormatEnum::SeSparseFormat),
-        ("redoLogFormat", VirtualDiskDeltaDiskFormatEnum::RedoLogFormat),
     ],
 };
 
@@ -56716,13 +57056,13 @@ impl AsRef<str> for VirtualDiskDeltaDiskFormatEnum {
 }
 
 static VIRTUAL_DISK_DELTA_DISK_FORMAT_VARIANT_ENUM_MAP: phf::Map<&'static str, VirtualDiskDeltaDiskFormatVariantEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("vmfsSparseVariant", VirtualDiskDeltaDiskFormatVariantEnum::VmfsSparseVariant),
         ("vsanSparseVariant", VirtualDiskDeltaDiskFormatVariantEnum::VsanSparseVariant),
+        ("vmfsSparseVariant", VirtualDiskDeltaDiskFormatVariantEnum::VmfsSparseVariant),
     ],
 };
 
@@ -56784,7 +57124,7 @@ impl AsRef<str> for VirtualDiskDeltaDiskFormatVariantEnum {
 }
 
 static VIRTUAL_DISK_DISK_CHAIN_BROKEN_ISSUE_ENUM_MAP: phf::Map<&'static str, VirtualDiskDiskChainBrokenIssueEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
@@ -56852,13 +57192,13 @@ impl AsRef<str> for VirtualDiskDiskChainBrokenIssueEnum {
 }
 
 static VIRTUAL_DISK_SHARING_ENUM_MAP: phf::Map<&'static str, VirtualDiskSharingEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("sharingMultiWriter", VirtualDiskSharingEnum::SharingMultiWriter),
         ("sharingNone", VirtualDiskSharingEnum::SharingNone),
+        ("sharingMultiWriter", VirtualDiskSharingEnum::SharingMultiWriter),
     ],
 };
 
@@ -56920,7 +57260,7 @@ impl AsRef<str> for VirtualDiskSharingEnum {
 }
 
 static VIRTUAL_DISK_V_FLASH_CACHE_CONFIG_INFO_CACHE_CONSISTENCY_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -56988,13 +57328,13 @@ impl AsRef<str> for VirtualDiskVFlashCacheConfigInfoCacheConsistencyTypeEnum {
 }
 
 static VIRTUAL_DISK_V_FLASH_CACHE_CONFIG_INFO_CACHE_MODE_ENUM_MAP: phf::Map<&'static str, VirtualDiskVFlashCacheConfigInfoCacheModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("write_thru", VirtualDiskVFlashCacheConfigInfoCacheModeEnum::WriteThru),
         ("write_back", VirtualDiskVFlashCacheConfigInfoCacheModeEnum::WriteBack),
+        ("write_thru", VirtualDiskVFlashCacheConfigInfoCacheModeEnum::WriteThru),
     ],
 };
 
@@ -57056,9 +57396,9 @@ impl AsRef<str> for VirtualDiskVFlashCacheConfigInfoCacheModeEnum {
 }
 
 static VIRTUAL_DISK_COMPATIBILITY_MODE_ENUM_MAP: phf::Map<&'static str, VirtualDiskCompatibilityModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
         ("virtualMode", VirtualDiskCompatibilityModeEnum::VirtualMode),
@@ -57124,18 +57464,18 @@ impl AsRef<str> for VirtualDiskCompatibilityModeEnum {
 }
 
 static VIRTUAL_DISK_MODE_ENUM_MAP: phf::Map<&'static str, VirtualDiskModeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
         (3, 0),
-        (0, 4),
+        (0, 3),
     ],
     entries: &[
-        ("append", VirtualDiskModeEnum::Append),
-        ("independent_nonpersistent", VirtualDiskModeEnum::IndependentNonpersistent),
-        ("independent_persistent", VirtualDiskModeEnum::IndependentPersistent),
         ("nonpersistent", VirtualDiskModeEnum::Nonpersistent),
+        ("append", VirtualDiskModeEnum::Append),
         ("persistent", VirtualDiskModeEnum::Persistent),
+        ("independent_nonpersistent", VirtualDiskModeEnum::IndependentNonpersistent),
         ("undoable", VirtualDiskModeEnum::Undoable),
+        ("independent_persistent", VirtualDiskModeEnum::IndependentPersistent),
     ],
 };
 
@@ -57201,7 +57541,7 @@ impl AsRef<str> for VirtualDiskModeEnum {
 }
 
 static VIRTUAL_ETHERNET_CARD_LEGACY_NETWORK_DEVICE_NAME_ENUM_MAP: phf::Map<&'static str, VirtualEthernetCardLegacyNetworkDeviceNameEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -57271,13 +57611,13 @@ impl AsRef<str> for VirtualEthernetCardLegacyNetworkDeviceNameEnum {
 }
 
 static VIRTUAL_ETHERNET_CARD_MAC_TYPE_ENUM_MAP: phf::Map<&'static str, VirtualEthernetCardMacTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("generated", VirtualEthernetCardMacTypeEnum::Generated),
         ("assigned", VirtualEthernetCardMacTypeEnum::Assigned),
+        ("generated", VirtualEthernetCardMacTypeEnum::Generated),
         ("manual", VirtualEthernetCardMacTypeEnum::Manual),
     ],
 };
@@ -57341,7 +57681,7 @@ impl AsRef<str> for VirtualEthernetCardMacTypeEnum {
 }
 
 static VIRTUAL_NVME_CONTROLLER_SHARING_ENUM_MAP: phf::Map<&'static str, VirtualNvmeControllerSharingEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -57409,20 +57749,21 @@ impl AsRef<str> for VirtualNvmeControllerSharingEnum {
 }
 
 static VIRTUAL_POINTING_DEVICE_HOST_CHOICE_ENUM_MAP: phf::Map<&'static str, VirtualPointingDeviceHostChoiceEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 4),
-        (4, 0),
+        (0, 0),
+        (0, 1),
+        (0, 3),
     ],
     entries: &[
+        ("intellimousePs2", VirtualPointingDeviceHostChoiceEnum::IntellimousePs2),
+        ("logitechMouseman", VirtualPointingDeviceHostChoiceEnum::LogitechMouseman),
+        ("autodetect", VirtualPointingDeviceHostChoiceEnum::Autodetect),
+        ("microsoft_serial", VirtualPointingDeviceHostChoiceEnum::MicrosoftSerial),
+        ("mouseSystems", VirtualPointingDeviceHostChoiceEnum::MouseSystems),
         ("ps2", VirtualPointingDeviceHostChoiceEnum::Ps2),
         ("intellimouseExplorer", VirtualPointingDeviceHostChoiceEnum::IntellimouseExplorer),
-        ("microsoft_serial", VirtualPointingDeviceHostChoiceEnum::MicrosoftSerial),
-        ("logitechMouseman", VirtualPointingDeviceHostChoiceEnum::LogitechMouseman),
         ("mousemanSerial", VirtualPointingDeviceHostChoiceEnum::MousemanSerial),
-        ("autodetect", VirtualPointingDeviceHostChoiceEnum::Autodetect),
-        ("intellimousePs2", VirtualPointingDeviceHostChoiceEnum::IntellimousePs2),
-        ("mouseSystems", VirtualPointingDeviceHostChoiceEnum::MouseSystems),
     ],
 };
 
@@ -57490,9 +57831,9 @@ impl AsRef<str> for VirtualPointingDeviceHostChoiceEnum {
 }
 
 static VIRTUAL_SCSI_SHARING_ENUM_MAP: phf::Map<&'static str, VirtualScsiSharingEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
         ("physicalSharing", VirtualScsiSharingEnum::PhysicalSharing),
@@ -57560,13 +57901,13 @@ impl AsRef<str> for VirtualScsiSharingEnum {
 }
 
 static VIRTUAL_SERIAL_PORT_END_POINT_ENUM_MAP: phf::Map<&'static str, VirtualSerialPortEndPointEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("server", VirtualSerialPortEndPointEnum::Server),
         ("client", VirtualSerialPortEndPointEnum::Client),
+        ("server", VirtualSerialPortEndPointEnum::Server),
     ],
 };
 
@@ -57628,9 +57969,9 @@ impl AsRef<str> for VirtualSerialPortEndPointEnum {
 }
 
 static VIRTUAL_MACHINE_VMCI_DEVICE_ACTION_ENUM_MAP: phf::Map<&'static str, VirtualMachineVmciDeviceActionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("allow", VirtualMachineVmciDeviceActionEnum::Allow),
@@ -57696,14 +58037,14 @@ impl AsRef<str> for VirtualMachineVmciDeviceActionEnum {
 }
 
 static VIRTUAL_MACHINE_VMCI_DEVICE_DIRECTION_ENUM_MAP: phf::Map<&'static str, VirtualMachineVmciDeviceDirectionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4636882946510197245,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
+        ("guest", VirtualMachineVmciDeviceDirectionEnum::Guest),
         ("anyDirection", VirtualMachineVmciDeviceDirectionEnum::AnyDirection),
         ("host", VirtualMachineVmciDeviceDirectionEnum::Host),
-        ("guest", VirtualMachineVmciDeviceDirectionEnum::Guest),
     ],
 };
 
@@ -57766,18 +58107,18 @@ impl AsRef<str> for VirtualMachineVmciDeviceDirectionEnum {
 }
 
 static VIRTUAL_MACHINE_VMCI_DEVICE_PROTOCOL_ENUM_MAP: phf::Map<&'static str, VirtualMachineVmciDeviceProtocolEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
-        (3, 0),
+        (0, 3),
         (1, 0),
     ],
     entries: &[
-        ("datagram", VirtualMachineVmciDeviceProtocolEnum::Datagram),
-        ("stream", VirtualMachineVmciDeviceProtocolEnum::Stream),
         ("doorbell", VirtualMachineVmciDeviceProtocolEnum::Doorbell),
-        ("queuepair", VirtualMachineVmciDeviceProtocolEnum::Queuepair),
         ("hypervisor", VirtualMachineVmciDeviceProtocolEnum::Hypervisor),
+        ("stream", VirtualMachineVmciDeviceProtocolEnum::Stream),
         ("anyProtocol", VirtualMachineVmciDeviceProtocolEnum::AnyProtocol),
+        ("queuepair", VirtualMachineVmciDeviceProtocolEnum::Queuepair),
+        ("datagram", VirtualMachineVmciDeviceProtocolEnum::Datagram),
     ],
 };
 
@@ -57843,14 +58184,14 @@ impl AsRef<str> for VirtualMachineVmciDeviceProtocolEnum {
 }
 
 static VIRTUAL_MACHINE_VIDEO_CARD_USE_3_D_RENDERER_ENUM_MAP: phf::Map<&'static str, VirtualMachineVideoCardUse3DRendererEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
         (0, 0),
     ],
     entries: &[
         ("software", VirtualMachineVideoCardUse3DRendererEnum::Software),
-        ("hardware", VirtualMachineVideoCardUse3DRendererEnum::Hardware),
         ("automatic", VirtualMachineVideoCardUse3DRendererEnum::Automatic),
+        ("hardware", VirtualMachineVideoCardUse3DRendererEnum::Hardware),
     ],
 };
 
@@ -57913,14 +58254,15 @@ impl AsRef<str> for VirtualMachineVideoCardUse3DRendererEnum {
 }
 
 static VIRTUAL_VMXNET_3_STRICT_LATENCY_CONFIG_DISABLE_OFFLOAD_ENUM_MAP: phf::Map<&'static str, VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("TSO_LRO", VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum::TsoLro),
-        ("NONE", VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum::None),
         ("LRO", VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum::Lro),
+        ("NONE", VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum::None),
         ("TSO", VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum::Tso),
     ],
 };
@@ -57985,13 +58327,13 @@ impl AsRef<str> for VirtualVmxnet3StrictLatencyConfigDisableOffloadEnum {
 }
 
 static VIRTUAL_VMXNET_3_VRDMA_OPTION_DEVICE_PROTOCOLS_ENUM_MAP: phf::Map<&'static str, VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("rocev1", VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum::Rocev1),
         ("rocev2", VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum::Rocev2),
+        ("rocev1", VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum::Rocev1),
     ],
 };
 
@@ -58053,14 +58395,14 @@ impl AsRef<str> for VirtualVmxnet3VrdmaOptionDeviceProtocolsEnum {
 }
 
 static GUEST_FILE_TYPE_ENUM_MAP: phf::Map<&'static str, GuestFileTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
         ("directory", GuestFileTypeEnum::Directory),
-        ("symlink", GuestFileTypeEnum::Symlink),
         ("file", GuestFileTypeEnum::File),
+        ("symlink", GuestFileTypeEnum::Symlink),
     ],
 };
 
@@ -58123,14 +58465,14 @@ impl AsRef<str> for GuestFileTypeEnum {
 }
 
 static GUEST_REG_KEY_WOW_SPEC_ENUM_MAP: phf::Map<&'static str, GuestRegKeyWowSpecEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
-        ("WOW64", GuestRegKeyWowSpecEnum::Wow64),
-        ("WOWNative", GuestRegKeyWowSpecEnum::WowNative),
         ("WOW32", GuestRegKeyWowSpecEnum::Wow32),
+        ("WOWNative", GuestRegKeyWowSpecEnum::WowNative),
+        ("WOW64", GuestRegKeyWowSpecEnum::Wow64),
     ],
 };
 
@@ -58193,16 +58535,17 @@ impl AsRef<str> for GuestRegKeyWowSpecEnum {
 }
 
 static VSAN_CAPACITY_RESERVATION_STATE_ENUM_MAP: phf::Map<&'static str, VsanCapacityReservationStateEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 1),
     ],
     entries: &[
         ("Enforced", VsanCapacityReservationStateEnum::Enforced),
         ("State_Unknown", VsanCapacityReservationStateEnum::StateUnknown),
-        ("Disabled", VsanCapacityReservationStateEnum::Disabled),
         ("Reported", VsanCapacityReservationStateEnum::Reported),
         ("Unsupported", VsanCapacityReservationStateEnum::Unsupported),
+        ("Disabled", VsanCapacityReservationStateEnum::Disabled),
     ],
 };
 
@@ -58267,7 +58610,7 @@ impl AsRef<str> for VsanCapacityReservationStateEnum {
 }
 
 static VSAN_FILE_SERVICE_CONFIG_OP_TYPE_ENUM_MAP: phf::Map<&'static str, VsanFileServiceConfigOpTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -58335,14 +58678,14 @@ impl AsRef<str> for VsanFileServiceConfigOpTypeEnum {
 }
 
 static VSAN_FILE_SERVICE_PREFLIGHT_CHECK_SCOPE_ENUM_MAP: phf::Map<&'static str, VsanFileServicePreflightCheckScopeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
         ("basic", VsanFileServicePreflightCheckScopeEnum::Basic),
-        ("advanced", VsanFileServicePreflightCheckScopeEnum::Advanced),
         ("FileServicePreflightCheckScope_Unknown", VsanFileServicePreflightCheckScopeEnum::FileServicePreflightCheckScopeUnknown),
+        ("advanced", VsanFileServicePreflightCheckScopeEnum::Advanced),
     ],
 };
 
@@ -58405,14 +58748,14 @@ impl AsRef<str> for VsanFileServicePreflightCheckScopeEnum {
 }
 
 static VSAN_FILE_SERVICE_VM_STATUS_ENUM_MAP: phf::Map<&'static str, VsanFileServiceVmStatusEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
     entries: &[
+        ("FileServiceVMStatus_Unknown", VsanFileServiceVmStatusEnum::FileServiceVmStatusUnknown),
         ("upgrading", VsanFileServiceVmStatusEnum::Upgrading),
         ("running", VsanFileServiceVmStatusEnum::Running),
-        ("FileServiceVMStatus_Unknown", VsanFileServiceVmStatusEnum::FileServiceVmStatusUnknown),
     ],
 };
 
@@ -58475,15 +58818,16 @@ impl AsRef<str> for VsanFileServiceVmStatusEnum {
 }
 
 static VSAN_FILE_SHARE_ACCESS_TYPE_ENUM_MAP: phf::Map<&'static str, VsanFileShareAccessTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("NO_ACCESS", VsanFileShareAccessTypeEnum::NoAccess),
-        ("FileShareAccessType_Unknown", VsanFileShareAccessTypeEnum::FileShareAccessTypeUnknown),
         ("READ_WRITE", VsanFileShareAccessTypeEnum::ReadWrite),
         ("READ_ONLY", VsanFileShareAccessTypeEnum::ReadOnly),
+        ("FileShareAccessType_Unknown", VsanFileShareAccessTypeEnum::FileShareAccessTypeUnknown),
+        ("NO_ACCESS", VsanFileShareAccessTypeEnum::NoAccess),
     ],
 };
 
@@ -58547,14 +58891,14 @@ impl AsRef<str> for VsanFileShareAccessTypeEnum {
 }
 
 static VSAN_FILE_SHARE_MANAGING_ENTITY_ENUM_MAP: phf::Map<&'static str, VsanFileShareManagingEntityEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
         ("user", VsanFileShareManagingEntityEnum::User),
-        ("cns", VsanFileShareManagingEntityEnum::Cns),
         ("FileShareManagingEntity_Unknown", VsanFileShareManagingEntityEnum::FileShareManagingEntityUnknown),
+        ("cns", VsanFileShareManagingEntityEnum::Cns),
     ],
 };
 
@@ -58617,9 +58961,10 @@ impl AsRef<str> for VsanFileShareManagingEntityEnum {
 }
 
 static VSAN_FILE_SHARE_NFS_SEC_TYPE_ENUM_MAP: phf::Map<&'static str, VsanFileShareNfsSecTypeEnum> = ::phf::Map {
-    key: 12213676231523076107,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 1),
+        (3, 0),
     ],
     entries: &[
         ("FileShareNfsSecType_Unknown", VsanFileShareNfsSecTypeEnum::FileShareNfsSecTypeUnknown),
@@ -58691,14 +59036,15 @@ impl AsRef<str> for VsanFileShareNfsSecTypeEnum {
 }
 
 static VSAN_FILE_PROTOCOL_ENUM_MAP: phf::Map<&'static str, VsanFileProtocolEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
+        (1, 0),
         (2, 0),
     ],
     entries: &[
         ("NFSv4", VsanFileProtocolEnum::NfSv4),
-        ("SMB", VsanFileProtocolEnum::Smb),
         ("NFSv3", VsanFileProtocolEnum::NfSv3),
+        ("SMB", VsanFileProtocolEnum::Smb),
         ("FileShareProtocol_Unknown", VsanFileProtocolEnum::FileShareProtocolUnknown),
     ],
 };
@@ -58763,13 +59109,13 @@ impl AsRef<str> for VsanFileProtocolEnum {
 }
 
 static VSAN_FILE_SHARE_SMB_ENCRYPTION_TYPE_ENUM_MAP: phf::Map<&'static str, VsanFileShareSmbEncryptionTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("mandatory", VsanFileShareSmbEncryptionTypeEnum::Mandatory),
         ("FileShareSmbEncryptionType_Unknown", VsanFileShareSmbEncryptionTypeEnum::FileShareSmbEncryptionTypeUnknown),
+        ("mandatory", VsanFileShareSmbEncryptionTypeEnum::Mandatory),
         ("disabled", VsanFileShareSmbEncryptionTypeEnum::Disabled),
     ],
 };
@@ -58833,20 +59179,21 @@ impl AsRef<str> for VsanFileShareSmbEncryptionTypeEnum {
 }
 
 static HCI_MESH_CLIENT_OPERATION_ENUM_MAP: phf::Map<&'static str, HciMeshClientOperationEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (3, 0),
+        (1, 2),
         (0, 1),
+        (1, 0),
     ],
     entries: &[
         ("updateDs", HciMeshClientOperationEnum::UpdateDs),
-        ("dryrun", HciMeshClientOperationEnum::Dryrun),
-        ("destroyDs", HciMeshClientOperationEnum::DestroyDs),
         ("HciMeshClientOperation_unknown", HciMeshClientOperationEnum::HciMeshClientOperationUnknown),
+        ("dryrun", HciMeshClientOperationEnum::Dryrun),
         ("update", HciMeshClientOperationEnum::Update),
+        ("destroyDs", HciMeshClientOperationEnum::DestroyDs),
         ("mount", HciMeshClientOperationEnum::Mount),
-        ("dryrunDs", HciMeshClientOperationEnum::DryrunDs),
         ("unmount", HciMeshClientOperationEnum::Unmount),
+        ("dryrunDs", HciMeshClientOperationEnum::DryrunDs),
     ],
 };
 
@@ -58914,30 +59261,32 @@ impl AsRef<str> for HciMeshClientOperationEnum {
 }
 
 static VSAN_IO_DIAGNOSTICS_FAILED_CHECK_TYPE_ENUM_MAP: phf::Map<&'static str, VsanIoDiagnosticsFailedCheckTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (5, 14),
-        (0, 1),
         (0, 0),
-        (1, 9),
+        (0, 7),
+        (0, 0),
+        (0, 2),
+        (4, 14),
+        (1, 5),
     ],
     entries: &[
+        ("invalidtarget", VsanIoDiagnosticsFailedCheckTypeEnum::Invalidtarget),
         ("vsandisabled", VsanIoDiagnosticsFailedCheckTypeEnum::Vsandisabled),
-        ("runninginstanceontarget", VsanIoDiagnosticsFailedCheckTypeEnum::Runninginstanceontarget),
-        ("computeonlycluster", VsanIoDiagnosticsFailedCheckTypeEnum::Computeonlycluster),
+        ("VsanIODiagnosticsFailedCheckType_Unknown", VsanIoDiagnosticsFailedCheckTypeEnum::VsanIoDiagnosticsFailedCheckTypeUnknown),
         ("perfsvcdisabled", VsanIoDiagnosticsFailedCheckTypeEnum::Perfsvcdisabled),
         ("nestedfaultdomain", VsanIoDiagnosticsFailedCheckTypeEnum::Nestedfaultdomain),
-        ("stretchedcluster", VsanIoDiagnosticsFailedCheckTypeEnum::Stretchedcluster),
         ("vmnotpoweredon", VsanIoDiagnosticsFailedCheckTypeEnum::Vmnotpoweredon),
-        ("invalidtarget", VsanIoDiagnosticsFailedCheckTypeEnum::Invalidtarget),
-        ("toomanytargets", VsanIoDiagnosticsFailedCheckTypeEnum::Toomanytargets),
-        ("invalidduration", VsanIoDiagnosticsFailedCheckTypeEnum::Invalidduration),
-        ("invalidobjuuid", VsanIoDiagnosticsFailedCheckTypeEnum::Invalidobjuuid),
-        ("toomanyobjects", VsanIoDiagnosticsFailedCheckTypeEnum::Toomanyobjects),
         ("runninginstance", VsanIoDiagnosticsFailedCheckTypeEnum::Runninginstance),
         ("vsanobjectinremotedatastore", VsanIoDiagnosticsFailedCheckTypeEnum::Vsanobjectinremotedatastore),
+        ("runninginstanceontarget", VsanIoDiagnosticsFailedCheckTypeEnum::Runninginstanceontarget),
         ("networkpartition", VsanIoDiagnosticsFailedCheckTypeEnum::Networkpartition),
-        ("VsanIODiagnosticsFailedCheckType_Unknown", VsanIoDiagnosticsFailedCheckTypeEnum::VsanIoDiagnosticsFailedCheckTypeUnknown),
+        ("computeonlycluster", VsanIoDiagnosticsFailedCheckTypeEnum::Computeonlycluster),
+        ("invalidduration", VsanIoDiagnosticsFailedCheckTypeEnum::Invalidduration),
+        ("toomanytargets", VsanIoDiagnosticsFailedCheckTypeEnum::Toomanytargets),
+        ("invalidobjuuid", VsanIoDiagnosticsFailedCheckTypeEnum::Invalidobjuuid),
+        ("toomanyobjects", VsanIoDiagnosticsFailedCheckTypeEnum::Toomanyobjects),
+        ("stretchedcluster", VsanIoDiagnosticsFailedCheckTypeEnum::Stretchedcluster),
     ],
 };
 
@@ -59013,18 +59362,19 @@ impl AsRef<str> for VsanIoDiagnosticsFailedCheckTypeEnum {
 }
 
 static VSAN_IO_DIAGNOSTICS_INSTANCE_EVENT_TYPE_ENUM_MAP: phf::Map<&'static str, VsanIoDiagnosticsInstanceEventTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (5, 3),
         (1, 0),
+        (0, 3),
+        (0, 2),
     ],
     entries: &[
-        ("objectOwnerTransfer", VsanIoDiagnosticsInstanceEventTypeEnum::ObjectOwnerTransfer),
         ("vsanmgmtdRestart", VsanIoDiagnosticsInstanceEventTypeEnum::VsanmgmtdRestart),
         ("objectRemoval", VsanIoDiagnosticsInstanceEventTypeEnum::ObjectRemoval),
-        ("objectProxyOwnerTransfer", VsanIoDiagnosticsInstanceEventTypeEnum::ObjectProxyOwnerTransfer),
         ("VsanIODiagnosticsInstanceEventType_Unknown", VsanIoDiagnosticsInstanceEventTypeEnum::VsanIoDiagnosticsInstanceEventTypeUnknown),
+        ("objectProxyOwnerTransfer", VsanIoDiagnosticsInstanceEventTypeEnum::ObjectProxyOwnerTransfer),
         ("objectComponentsLayoutChange", VsanIoDiagnosticsInstanceEventTypeEnum::ObjectComponentsLayoutChange),
+        ("objectOwnerTransfer", VsanIoDiagnosticsInstanceEventTypeEnum::ObjectOwnerTransfer),
         ("primaryHostTransfer", VsanIoDiagnosticsInstanceEventTypeEnum::PrimaryHostTransfer),
     ],
 };
@@ -59092,9 +59442,9 @@ impl AsRef<str> for VsanIoDiagnosticsInstanceEventTypeEnum {
 }
 
 static VSAN_IO_DIAGNOSTICS_INSTANCE_STATE_ENUM_MAP: phf::Map<&'static str, VsanIoDiagnosticsInstanceStateEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
         ("VsanIODiagnosticsInstanceRunning", VsanIoDiagnosticsInstanceStateEnum::VsanIoDiagnosticsInstanceRunning),
@@ -59162,13 +59512,13 @@ impl AsRef<str> for VsanIoDiagnosticsInstanceStateEnum {
 }
 
 static VSAN_IO_DIAGNOSTICS_TARGET_TYPE_ENUM_MAP: phf::Map<&'static str, VsanIoDiagnosticsTargetTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("VirtualMachine", VsanIoDiagnosticsTargetTypeEnum::VirtualMachine),
         ("VsanIODiagnosticsTargetType_Unknown", VsanIoDiagnosticsTargetTypeEnum::VsanIoDiagnosticsTargetTypeUnknown),
+        ("VirtualMachine", VsanIoDiagnosticsTargetTypeEnum::VirtualMachine),
     ],
 };
 
@@ -59230,25 +59580,26 @@ impl AsRef<str> for VsanIoDiagnosticsTargetTypeEnum {
 }
 
 static VSAN_IO_LATENCY_TYPE_ENUM_MAP: phf::Map<&'static str, VsanIoLatencyTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 4203492208743950414,
     disps: &[
-        (10, 6),
-        (2, 5),
-        (2, 0),
+        (3, 0),
+        (0, 2),
+        (0, 7),
+        (5, 1),
     ],
     entries: &[
-        ("PerfDomOwnerLatency", VsanIoLatencyTypeEnum::PerfDomOwnerLatency),
-        ("DomOwnerLatency", VsanIoLatencyTypeEnum::DomOwnerLatency),
-        ("VsanIOLatencyType_Unknown", VsanIoLatencyTypeEnum::VsanIoLatencyTypeUnknown),
-        ("CapacityNetworkLatency", VsanIoLatencyTypeEnum::CapacityNetworkLatency),
-        ("CapacityDomOwnerLatency", VsanIoLatencyTypeEnum::CapacityDomOwnerLatency),
-        ("PerfLsomLatency", VsanIoLatencyTypeEnum::PerfLsomLatency),
-        ("ZdomLatency", VsanIoLatencyTypeEnum::ZdomLatency),
-        ("NetworkLatency", VsanIoLatencyTypeEnum::NetworkLatency),
-        ("PerfNetworkLatency", VsanIoLatencyTypeEnum::PerfNetworkLatency),
-        ("CapacityLsomLatency", VsanIoLatencyTypeEnum::CapacityLsomLatency),
-        ("CrossSiteNetworkLatency", VsanIoLatencyTypeEnum::CrossSiteNetworkLatency),
         ("LsomLatency", VsanIoLatencyTypeEnum::LsomLatency),
+        ("NetworkLatency", VsanIoLatencyTypeEnum::NetworkLatency),
+        ("PerfDomOwnerLatency", VsanIoLatencyTypeEnum::PerfDomOwnerLatency),
+        ("VsanIOLatencyType_Unknown", VsanIoLatencyTypeEnum::VsanIoLatencyTypeUnknown),
+        ("CrossSiteNetworkLatency", VsanIoLatencyTypeEnum::CrossSiteNetworkLatency),
+        ("CapacityNetworkLatency", VsanIoLatencyTypeEnum::CapacityNetworkLatency),
+        ("CapacityLsomLatency", VsanIoLatencyTypeEnum::CapacityLsomLatency),
+        ("CapacityDomOwnerLatency", VsanIoLatencyTypeEnum::CapacityDomOwnerLatency),
+        ("DomOwnerLatency", VsanIoLatencyTypeEnum::DomOwnerLatency),
+        ("ZdomLatency", VsanIoLatencyTypeEnum::ZdomLatency),
+        ("PerfNetworkLatency", VsanIoLatencyTypeEnum::PerfNetworkLatency),
+        ("PerfLsomLatency", VsanIoLatencyTypeEnum::PerfLsomLatency),
     ],
 };
 
@@ -59320,7 +59671,7 @@ impl AsRef<str> for VsanIoLatencyTypeEnum {
 }
 
 static VIM_VSAN_LIFECYCLE_CHECK_OPERATION_ENUM_MAP: phf::Map<&'static str, VimVsanLifecycleCheckOperationEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -59388,14 +59739,15 @@ impl AsRef<str> for VimVsanLifecycleCheckOperationEnum {
 }
 
 static VIM_VSAN_LIFECYCLE_CLUSTER_TYPE_ENUM_MAP: phf::Map<&'static str, VimVsanLifecycleClusterTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (1, 2),
     ],
     entries: &[
         ("metadata", VimVsanLifecycleClusterTypeEnum::Metadata),
-        ("single", VimVsanLifecycleClusterTypeEnum::Single),
         ("stretched", VimVsanLifecycleClusterTypeEnum::Stretched),
+        ("single", VimVsanLifecycleClusterTypeEnum::Single),
         ("LifecycleClusterType_unknown", VimVsanLifecycleClusterTypeEnum::LifecycleClusterTypeUnknown),
     ],
 };
@@ -59460,14 +59812,15 @@ impl AsRef<str> for VimVsanLifecycleClusterTypeEnum {
 }
 
 static VIM_VSAN_LIFECYCLE_PRE_CHECK_TYPE_ENUM_MAP: phf::Map<&'static str, VimVsanLifecyclePreCheckTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
+        (0, 0),
         (1, 0),
     ],
     entries: &[
-        ("PreCheckType_unknown", VimVsanLifecyclePreCheckTypeEnum::PreCheckTypeUnknown),
         ("supportedWitnessVersion", VimVsanLifecyclePreCheckTypeEnum::SupportedWitnessVersion),
         ("virtualWitnessHost", VimVsanLifecyclePreCheckTypeEnum::VirtualWitnessHost),
+        ("PreCheckType_unknown", VimVsanLifecyclePreCheckTypeEnum::PreCheckTypeUnknown),
         ("sharedWitnessHost", VimVsanLifecyclePreCheckTypeEnum::SharedWitnessHost),
     ],
 };
@@ -59532,14 +59885,15 @@ impl AsRef<str> for VimVsanLifecyclePreCheckTypeEnum {
 }
 
 static VSAN_MODE_ENUM_MAP: phf::Map<&'static str, VsanModeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16263683158343804936,
     disps: &[
-        (2, 0),
+        (0, 2),
+        (0, 0),
     ],
     entries: &[
-        ("Mode_Compute", VsanModeEnum::ModeCompute),
-        ("Mode_Storage", VsanModeEnum::ModeStorage),
         ("Mode_Unknown", VsanModeEnum::ModeUnknown),
+        ("Mode_Storage", VsanModeEnum::ModeStorage),
+        ("Mode_Compute", VsanModeEnum::ModeCompute),
         ("Mode_None", VsanModeEnum::ModeNone),
     ],
 };
@@ -59604,37 +59958,40 @@ impl AsRef<str> for VsanModeEnum {
 }
 
 static VIM_VSAN_MOUNT_PRECHECK_TYPE_ENUM_MAP: phf::Map<&'static str, VimVsanMountPrecheckTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 12),
-        (11, 1),
-        (9, 13),
-        (0, 0),
-        (0, 18),
+        (3, 2),
+        (1, 0),
+        (1, 0),
+        (0, 3),
+        (1, 15),
+        (0, 2),
+        (0, 1),
+        (6, 3),
     ],
     entries: &[
-        ("serverVcenterLimit", VimVsanMountPrecheckTypeEnum::ServerVcenterLimit),
-        ("vsanFormatVersion", VimVsanMountPrecheckTypeEnum::VsanFormatVersion),
-        ("supportedConfiguration", VimVsanMountPrecheckTypeEnum::SupportedConfiguration),
-        ("datastoreExists", VimVsanMountPrecheckTypeEnum::DatastoreExists),
-        ("vcApiVersion", VimVsanMountPrecheckTypeEnum::VcApiVersion),
-        ("precheck_unknown", VimVsanMountPrecheckTypeEnum::PrecheckUnknown),
-        ("serverClusterLimit", VimVsanMountPrecheckTypeEnum::ServerClusterLimit),
+        ("clientVcenterLimit", VimVsanMountPrecheckTypeEnum::ClientVcenterLimit),
+        ("vcenterIdValid", VimVsanMountPrecheckTypeEnum::VcenterIdValid),
+        ("localVsanDatastore", VimVsanMountPrecheckTypeEnum::LocalVsanDatastore),
+        ("serverVersionForComputeMode", VimVsanMountPrecheckTypeEnum::ServerVersionForComputeMode),
         ("datastoreType", VimVsanMountPrecheckTypeEnum::DatastoreType),
-        ("remoteDatastoreLimit", VimVsanMountPrecheckTypeEnum::RemoteDatastoreLimit),
+        ("precheck_unknown", VimVsanMountPrecheckTypeEnum::PrecheckUnknown),
+        ("remoteVcConnection", VimVsanMountPrecheckTypeEnum::RemoteVcConnection),
+        ("checkServerVcenter", VimVsanMountPrecheckTypeEnum::CheckServerVcenter),
         ("datastorePolicy", VimVsanMountPrecheckTypeEnum::DatastorePolicy),
         ("datacenter", VimVsanMountPrecheckTypeEnum::Datacenter),
-        ("serverClusterHealth", VimVsanMountPrecheckTypeEnum::ServerClusterHealth),
-        ("remoteVcConnection", VimVsanMountPrecheckTypeEnum::RemoteVcConnection),
-        ("clientClusterLimit", VimVsanMountPrecheckTypeEnum::ClientClusterLimit),
-        ("serverVersionForComputeMode", VimVsanMountPrecheckTypeEnum::ServerVersionForComputeMode),
-        ("clientVcenterLimit", VimVsanMountPrecheckTypeEnum::ClientVcenterLimit),
+        ("datastoreExists", VimVsanMountPrecheckTypeEnum::DatastoreExists),
         ("connectivity", VimVsanMountPrecheckTypeEnum::Connectivity),
-        ("localVsanDatastore", VimVsanMountPrecheckTypeEnum::LocalVsanDatastore),
-        ("license", VimVsanMountPrecheckTypeEnum::License),
-        ("checkServerVcenter", VimVsanMountPrecheckTypeEnum::CheckServerVcenter),
+        ("serverClusterHealth", VimVsanMountPrecheckTypeEnum::ServerClusterHealth),
+        ("serverClusterLimit", VimVsanMountPrecheckTypeEnum::ServerClusterLimit),
+        ("clientClusterLimit", VimVsanMountPrecheckTypeEnum::ClientClusterLimit),
+        ("remoteDatastoreLimit", VimVsanMountPrecheckTypeEnum::RemoteDatastoreLimit),
         ("networkLatency", VimVsanMountPrecheckTypeEnum::NetworkLatency),
-        ("vcenterIdValid", VimVsanMountPrecheckTypeEnum::VcenterIdValid),
+        ("vcApiVersion", VimVsanMountPrecheckTypeEnum::VcApiVersion),
+        ("serverVcenterLimit", VimVsanMountPrecheckTypeEnum::ServerVcenterLimit),
+        ("license", VimVsanMountPrecheckTypeEnum::License),
+        ("vsanFormatVersion", VimVsanMountPrecheckTypeEnum::VsanFormatVersion),
+        ("supportedConfiguration", VimVsanMountPrecheckTypeEnum::SupportedConfiguration),
     ],
 };
 
@@ -59716,19 +60073,20 @@ impl AsRef<str> for VimVsanMountPrecheckTypeEnum {
 }
 
 static VIM_VSAN_MOUNT_PRECHECK_TYPE_DIT_ENUM_MAP: phf::Map<&'static str, VimVsanMountPrecheckTypeDitEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
-        (4, 5),
+        (2, 0),
+        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("datastoreBelongToServerCluster", VimVsanMountPrecheckTypeDitEnum::DatastoreBelongToServerCluster),
-        ("clientRemoteDITCapability", VimVsanMountPrecheckTypeDitEnum::ClientRemoteDitCapability),
-        ("remoteDITInfoRetrieval", VimVsanMountPrecheckTypeDitEnum::RemoteDitInfoRetrieval),
-        ("serverClusterConsistency", VimVsanMountPrecheckTypeDitEnum::ServerClusterConsistency),
-        ("serverRemoteDITCapability", VimVsanMountPrecheckTypeDitEnum::ServerRemoteDitCapability),
         ("rekeyIntervalValid", VimVsanMountPrecheckTypeDitEnum::RekeyIntervalValid),
         ("remoteDITVersionCheck", VimVsanMountPrecheckTypeDitEnum::RemoteDitVersionCheck),
+        ("serverRemoteDITCapability", VimVsanMountPrecheckTypeDitEnum::ServerRemoteDitCapability),
+        ("serverClusterConsistency", VimVsanMountPrecheckTypeDitEnum::ServerClusterConsistency),
+        ("clientRemoteDITCapability", VimVsanMountPrecheckTypeDitEnum::ClientRemoteDitCapability),
+        ("remoteDITInfoRetrieval", VimVsanMountPrecheckTypeDitEnum::RemoteDitInfoRetrieval),
+        ("datastoreBelongToServerCluster", VimVsanMountPrecheckTypeDitEnum::DatastoreBelongToServerCluster),
     ],
 };
 
@@ -59795,16 +60153,17 @@ impl AsRef<str> for VimVsanMountPrecheckTypeDitEnum {
 }
 
 static VSAN_PERFSVC_REMEDIATE_ACTION_ENUM_MAP: phf::Map<&'static str, VsanPerfsvcRemediateActionEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
         (1, 0),
+        (0, 0),
     ],
     entries: &[
+        ("enable", VsanPerfsvcRemediateActionEnum::Enable),
+        ("disable", VsanPerfsvcRemediateActionEnum::Disable),
         ("update_profile", VsanPerfsvcRemediateActionEnum::UpdateProfile),
         ("PerfsvcRemediateAction_Unknown", VsanPerfsvcRemediateActionEnum::PerfsvcRemediateActionUnknown),
-        ("enable", VsanPerfsvcRemediateActionEnum::Enable),
         ("no_action", VsanPerfsvcRemediateActionEnum::NoAction),
-        ("disable", VsanPerfsvcRemediateActionEnum::Disable),
     ],
 };
 
@@ -59869,15 +60228,16 @@ impl AsRef<str> for VsanPerfsvcRemediateActionEnum {
 }
 
 static PRECHECK_DATASTORE_SOURCE_OPERATION_ENUM_MAP: phf::Map<&'static str, PrecheckDatastoreSourceOperationEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (1, 3),
     ],
     entries: &[
         ("checkDestroyDs", PrecheckDatastoreSourceOperationEnum::CheckDestroyDs),
-        ("checkUpdateDs", PrecheckDatastoreSourceOperationEnum::CheckUpdateDs),
         ("checkCreateDs", PrecheckDatastoreSourceOperationEnum::CheckCreateDs),
         ("PrecheckDatastoreSourceOperation_unknown", PrecheckDatastoreSourceOperationEnum::PrecheckDatastoreSourceOperationUnknown),
+        ("checkUpdateDs", PrecheckDatastoreSourceOperationEnum::CheckUpdateDs),
     ],
 };
 
@@ -59941,7 +60301,7 @@ impl AsRef<str> for PrecheckDatastoreSourceOperationEnum {
 }
 
 static VSAN_REMOTE_VC_LINK_TYPE_ENUM_MAP: phf::Map<&'static str, VsanRemoteVcLinkTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
@@ -60009,13 +60369,13 @@ impl AsRef<str> for VsanRemoteVcLinkTypeEnum {
 }
 
 static REMOTE_VSAN_NETWORK_TOPOLOGY_ENUM_MAP: phf::Map<&'static str, RemoteVsanNetworkTopologyEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("Topology_Unknown", RemoteVsanNetworkTopologyEnum::TopologyUnknown),
         ("Symmetric", RemoteVsanNetworkTopologyEnum::Symmetric),
+        ("Topology_Unknown", RemoteVsanNetworkTopologyEnum::TopologyUnknown),
         ("Asymmetric", RemoteVsanNetworkTopologyEnum::Asymmetric),
     ],
 };
@@ -60079,9 +60439,9 @@ impl AsRef<str> for RemoteVsanNetworkTopologyEnum {
 }
 
 static VSAN_RESOURCE_CHECK_COMPONENT_TYPE_ENUM_MAP: phf::Map<&'static str, VsanResourceCheckComponentTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("vSAN", VsanResourceCheckComponentTypeEnum::VSan),
@@ -60149,13 +60509,13 @@ impl AsRef<str> for VsanResourceCheckComponentTypeEnum {
 }
 
 static RESOURCE_CHECK_DEDUP_STORE_HEALTH_STATE_ENUM_MAP: phf::Map<&'static str, ResourceCheckDedupStoreHealthStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("Noncompliant", ResourceCheckDedupStoreHealthStateEnum::Noncompliant),
         ("Inaccessible", ResourceCheckDedupStoreHealthStateEnum::Inaccessible),
+        ("Noncompliant", ResourceCheckDedupStoreHealthStateEnum::Noncompliant),
     ],
 };
 
@@ -60217,20 +60577,21 @@ impl AsRef<str> for ResourceCheckDedupStoreHealthStateEnum {
 }
 
 static VSAN_RESOURCE_CHECK_STATUS_TYPE_ENUM_MAP: phf::Map<&'static str, VsanResourceCheckStatusTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
-        (1, 7),
+        (0, 1),
+        (0, 2),
+        (2, 0),
     ],
     entries: &[
-        ("resourceCheckFailed", VsanResourceCheckStatusTypeEnum::ResourceCheckFailed),
-        ("resourceCheckNotSupported", VsanResourceCheckStatusTypeEnum::ResourceCheckNotSupported),
-        ("ResourceCheckStatusType_Unknown", VsanResourceCheckStatusTypeEnum::ResourceCheckStatusTypeUnknown),
-        ("resourceCheckCompleted", VsanResourceCheckStatusTypeEnum::ResourceCheckCompleted),
-        ("resourceCheckCancelled", VsanResourceCheckStatusTypeEnum::ResourceCheckCancelled),
-        ("resourceCheckUninitialized", VsanResourceCheckStatusTypeEnum::ResourceCheckUninitialized),
-        ("resourceCheckRunning", VsanResourceCheckStatusTypeEnum::ResourceCheckRunning),
         ("resourceCheckNoRecentValue", VsanResourceCheckStatusTypeEnum::ResourceCheckNoRecentValue),
+        ("resourceCheckCompleted", VsanResourceCheckStatusTypeEnum::ResourceCheckCompleted),
+        ("resourceCheckUninitialized", VsanResourceCheckStatusTypeEnum::ResourceCheckUninitialized),
+        ("ResourceCheckStatusType_Unknown", VsanResourceCheckStatusTypeEnum::ResourceCheckStatusTypeUnknown),
+        ("resourceCheckCancelled", VsanResourceCheckStatusTypeEnum::ResourceCheckCancelled),
+        ("resourceCheckNotSupported", VsanResourceCheckStatusTypeEnum::ResourceCheckNotSupported),
+        ("resourceCheckFailed", VsanResourceCheckStatusTypeEnum::ResourceCheckFailed),
+        ("resourceCheckRunning", VsanResourceCheckStatusTypeEnum::ResourceCheckRunning),
     ],
 };
 
@@ -60298,16 +60659,17 @@ impl AsRef<str> for VsanResourceCheckStatusTypeEnum {
 }
 
 static VSAN_SITE_MAINTENANCE_STATE_ENUM_MAP: phf::Map<&'static str, VsanSiteMaintenanceStateEnum> = ::phf::Map {
-    key: 345707026197253659,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (3, 0),
+        (0, 2),
     ],
     entries: &[
-        ("exitingMaintenanceMode", VsanSiteMaintenanceStateEnum::ExitingMaintenanceMode),
-        ("enteringMaintenanceMode", VsanSiteMaintenanceStateEnum::EnteringMaintenanceMode),
         ("inMaintenanceMode", VsanSiteMaintenanceStateEnum::InMaintenanceMode),
-        ("SiteMaintenanceState_Unknown", VsanSiteMaintenanceStateEnum::SiteMaintenanceStateUnknown),
+        ("enteringMaintenanceMode", VsanSiteMaintenanceStateEnum::EnteringMaintenanceMode),
         ("notInMaintenanceMode", VsanSiteMaintenanceStateEnum::NotInMaintenanceMode),
+        ("SiteMaintenanceState_Unknown", VsanSiteMaintenanceStateEnum::SiteMaintenanceStateUnknown),
+        ("exitingMaintenanceMode", VsanSiteMaintenanceStateEnum::ExitingMaintenanceMode),
     ],
 };
 
@@ -60372,13 +60734,13 @@ impl AsRef<str> for VsanSiteMaintenanceStateEnum {
 }
 
 static VSAN_SNAPSHOT_CREATOR_ENUM_MAP: phf::Map<&'static str, VsanSnapshotCreatorEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("SnapshotCreator_Unknown", VsanSnapshotCreatorEnum::SnapshotCreatorUnknown),
         ("SnapService", VsanSnapshotCreatorEnum::SnapService),
+        ("SnapshotCreator_Unknown", VsanSnapshotCreatorEnum::SnapshotCreatorUnknown),
     ],
 };
 
@@ -60440,14 +60802,14 @@ impl AsRef<str> for VsanSnapshotCreatorEnum {
 }
 
 static VSAN_SNAPSHOT_TYPE_ENUM_MAP: phf::Map<&'static str, VsanSnapshotTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (2, 0),
     ],
     entries: &[
+        ("Unmanaged", VsanSnapshotTypeEnum::Unmanaged),
         ("Managed", VsanSnapshotTypeEnum::Managed),
         ("SnapshotType_Unknown", VsanSnapshotTypeEnum::SnapshotTypeUnknown),
-        ("Unmanaged", VsanSnapshotTypeEnum::Unmanaged),
     ],
 };
 
@@ -60510,14 +60872,15 @@ impl AsRef<str> for VsanSnapshotTypeEnum {
 }
 
 static VSAN_ANALYTICS_EVENT_LOCATION_TYPE_ENUM_MAP: phf::Map<&'static str, VsanAnalyticsEventLocationTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 2),
     ],
     entries: &[
         ("DISK", VsanAnalyticsEventLocationTypeEnum::Disk),
-        ("CLUSTER", VsanAnalyticsEventLocationTypeEnum::Cluster),
         ("EVENT_LOCATION_UNKNOWN", VsanAnalyticsEventLocationTypeEnum::EventLocationUnknown),
+        ("CLUSTER", VsanAnalyticsEventLocationTypeEnum::Cluster),
         ("HOST", VsanAnalyticsEventLocationTypeEnum::Host),
     ],
 };
@@ -60582,16 +60945,17 @@ impl AsRef<str> for VsanAnalyticsEventLocationTypeEnum {
 }
 
 static VSAN_ANALYTICS_EVENT_SNAPSHOT_TYPE_ENUM_MAP: phf::Map<&'static str, VsanAnalyticsEventSnapshotTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (1, 3),
         (2, 0),
     ],
     entries: &[
-        ("HOST_SNAPSHOT", VsanAnalyticsEventSnapshotTypeEnum::HostSnapshot),
         ("SNAPSHOT_TYPE_UNKNOWN", VsanAnalyticsEventSnapshotTypeEnum::SnapshotTypeUnknown),
         ("DISK_SNAPSHOT", VsanAnalyticsEventSnapshotTypeEnum::DiskSnapshot),
-        ("OBJECT_SNAPSHOT", VsanAnalyticsEventSnapshotTypeEnum::ObjectSnapshot),
         ("POLICY_SNAPSHOT", VsanAnalyticsEventSnapshotTypeEnum::PolicySnapshot),
+        ("OBJECT_SNAPSHOT", VsanAnalyticsEventSnapshotTypeEnum::ObjectSnapshot),
+        ("HOST_SNAPSHOT", VsanAnalyticsEventSnapshotTypeEnum::HostSnapshot),
     ],
 };
 
@@ -60656,51 +61020,56 @@ impl AsRef<str> for VsanAnalyticsEventSnapshotTypeEnum {
 }
 
 static VSAN_ANALYTICS_EVENT_TYPE_ENUM_MAP: phf::Map<&'static str, VsanAnalyticsEventTypeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (9, 20),
-        (0, 3),
-        (0, 8),
         (0, 7),
-        (7, 4),
+        (0, 14),
         (0, 0),
-        (14, 2),
+        (0, 0),
+        (0, 2),
+        (0, 24),
+        (4, 9),
+        (1, 2),
+        (1, 2),
+        (0, 10),
+        (2, 7),
+        (0, 33),
     ],
     entries: &[
-        ("CLUSTER_MEMBERSHIP_CHANGED", VsanAnalyticsEventTypeEnum::ClusterMembershipChanged),
-        ("HOST_DECOM_START", VsanAnalyticsEventTypeEnum::HostDecomStart),
-        ("STORAGE_OBJECT_UNAVAILABLE", VsanAnalyticsEventTypeEnum::StorageObjectUnavailable),
-        ("STORAGE_OBJECT_LOST", VsanAnalyticsEventTypeEnum::StorageObjectLost),
         ("EVENT_TYPE_UNKNOWN", VsanAnalyticsEventTypeEnum::EventTypeUnknown),
-        ("DEVICE_ERROR", VsanAnalyticsEventTypeEnum::DeviceError),
         ("HOST_DECOM_END", VsanAnalyticsEventTypeEnum::HostDecomEnd),
         ("RESYNC_END", VsanAnalyticsEventTypeEnum::ResyncEnd),
-        ("STORAGE_DOM_OBJECT_CHANGE", VsanAnalyticsEventTypeEnum::StorageDomObjectChange),
-        ("HOST_NORMAL", VsanAnalyticsEventTypeEnum::HostNormal),
-        ("SDDC_DELETED", VsanAnalyticsEventTypeEnum::SddcDeleted),
-        ("STORAGE_OBJECT_AVAILABLE", VsanAnalyticsEventTypeEnum::StorageObjectAvailable),
-        ("DG_DECOM_END", VsanAnalyticsEventTypeEnum::DgDecomEnd),
-        ("STORAGE_OBJECT_CREATED", VsanAnalyticsEventTypeEnum::StorageObjectCreated),
-        ("CLUSTER_CREATED", VsanAnalyticsEventTypeEnum::ClusterCreated),
-        ("SDDC_CREATED", VsanAnalyticsEventTypeEnum::SddcCreated),
-        ("STORAGE_OBJECT_REPL_CHANGE", VsanAnalyticsEventTypeEnum::StorageObjectReplChange),
-        ("REPAIR_START", VsanAnalyticsEventTypeEnum::RepairStart),
-        ("REPAIR_END", VsanAnalyticsEventTypeEnum::RepairEnd),
-        ("HOST_FAILURE", VsanAnalyticsEventTypeEnum::HostFailure),
-        ("HOST_CREATED", VsanAnalyticsEventTypeEnum::HostCreated),
-        ("DEVICE_FAILURE", VsanAnalyticsEventTypeEnum::DeviceFailure),
+        ("PATCH_END", VsanAnalyticsEventTypeEnum::PatchEnd),
         ("DEVICE_OFFLINE", VsanAnalyticsEventTypeEnum::DeviceOffline),
+        ("HOST_DECOM_START", VsanAnalyticsEventTypeEnum::HostDecomStart),
+        ("REPAIR_END", VsanAnalyticsEventTypeEnum::RepairEnd),
+        ("HOST_DECOM_FAIL", VsanAnalyticsEventTypeEnum::HostDecomFail),
+        ("STORAGE_DOM_OBJECT_CHANGE", VsanAnalyticsEventTypeEnum::StorageDomObjectChange),
+        ("DG_DECOM_START", VsanAnalyticsEventTypeEnum::DgDecomStart),
+        ("CLUSTER_MEMBERSHIP_CHANGED", VsanAnalyticsEventTypeEnum::ClusterMembershipChanged),
         ("REBUILD_START", VsanAnalyticsEventTypeEnum::RebuildStart),
         ("REBUILD_END", VsanAnalyticsEventTypeEnum::RebuildEnd),
-        ("HOST_DELETED", VsanAnalyticsEventTypeEnum::HostDeleted),
-        ("PATCH_START", VsanAnalyticsEventTypeEnum::PatchStart),
-        ("STORAGE_OBJECT_DELETED", VsanAnalyticsEventTypeEnum::StorageObjectDeleted),
-        ("RESYNC_IN_PROGRESS", VsanAnalyticsEventTypeEnum::ResyncInProgress),
-        ("PATCH_END", VsanAnalyticsEventTypeEnum::PatchEnd),
-        ("DEVICE_NORMAL", VsanAnalyticsEventTypeEnum::DeviceNormal),
-        ("HOST_DECOM_FAIL", VsanAnalyticsEventTypeEnum::HostDecomFail),
-        ("DG_DECOM_START", VsanAnalyticsEventTypeEnum::DgDecomStart),
+        ("STORAGE_OBJECT_LOST", VsanAnalyticsEventTypeEnum::StorageObjectLost),
         ("CLUSTER_DELETED", VsanAnalyticsEventTypeEnum::ClusterDeleted),
+        ("DEVICE_ERROR", VsanAnalyticsEventTypeEnum::DeviceError),
+        ("REPAIR_START", VsanAnalyticsEventTypeEnum::RepairStart),
+        ("SDDC_CREATED", VsanAnalyticsEventTypeEnum::SddcCreated),
+        ("STORAGE_OBJECT_AVAILABLE", VsanAnalyticsEventTypeEnum::StorageObjectAvailable),
+        ("CLUSTER_CREATED", VsanAnalyticsEventTypeEnum::ClusterCreated),
+        ("STORAGE_OBJECT_DELETED", VsanAnalyticsEventTypeEnum::StorageObjectDeleted),
+        ("STORAGE_OBJECT_CREATED", VsanAnalyticsEventTypeEnum::StorageObjectCreated),
+        ("RESYNC_IN_PROGRESS", VsanAnalyticsEventTypeEnum::ResyncInProgress),
+        ("DEVICE_NORMAL", VsanAnalyticsEventTypeEnum::DeviceNormal),
+        ("HOST_FAILURE", VsanAnalyticsEventTypeEnum::HostFailure),
+        ("STORAGE_OBJECT_REPL_CHANGE", VsanAnalyticsEventTypeEnum::StorageObjectReplChange),
+        ("HOST_DELETED", VsanAnalyticsEventTypeEnum::HostDeleted),
+        ("HOST_NORMAL", VsanAnalyticsEventTypeEnum::HostNormal),
+        ("DG_DECOM_END", VsanAnalyticsEventTypeEnum::DgDecomEnd),
+        ("DEVICE_FAILURE", VsanAnalyticsEventTypeEnum::DeviceFailure),
+        ("SDDC_DELETED", VsanAnalyticsEventTypeEnum::SddcDeleted),
+        ("STORAGE_OBJECT_UNAVAILABLE", VsanAnalyticsEventTypeEnum::StorageObjectUnavailable),
+        ("PATCH_START", VsanAnalyticsEventTypeEnum::PatchStart),
+        ("HOST_CREATED", VsanAnalyticsEventTypeEnum::HostCreated),
     ],
 };
 
@@ -60794,14 +61163,14 @@ impl AsRef<str> for VsanAnalyticsEventTypeEnum {
 }
 
 static VSAN_CONFIG_TYPE_ENUM_MAP: phf::Map<&'static str, VsanConfigTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
         ("vsan", VsanConfigTypeEnum::Vsan),
-        ("vsanEsa", VsanConfigTypeEnum::VsanEsa),
         ("VsanConfigType_Unknown", VsanConfigTypeEnum::VsanConfigTypeUnknown),
+        ("vsanEsa", VsanConfigTypeEnum::VsanEsa),
     ],
 };
 
@@ -60864,14 +61233,15 @@ impl AsRef<str> for VsanConfigTypeEnum {
 }
 
 static VSAN_DISK_COMPATIBILITY_TYPE_ENUM_MAP: phf::Map<&'static str, VsanDiskCompatibilityTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
+        (0, 1),
         (1, 0),
     ],
     entries: &[
+        ("diskGroup", VsanDiskCompatibilityTypeEnum::DiskGroup),
         ("VsanDiskCompatibilityType_Unknown", VsanDiskCompatibilityTypeEnum::VsanDiskCompatibilityTypeUnknown),
         ("cyberRecoveryTier", VsanDiskCompatibilityTypeEnum::CyberRecoveryTier),
-        ("diskGroup", VsanDiskCompatibilityTypeEnum::DiskGroup),
         ("singleTier", VsanDiskCompatibilityTypeEnum::SingleTier),
     ],
 };
@@ -60936,16 +61306,17 @@ impl AsRef<str> for VsanDiskCompatibilityTypeEnum {
 }
 
 static VIM_VSAN_VSAN_HCI_MESH_CONFIG_LIMITS_ENUM_MAP: phf::Map<&'static str, VimVsanVsanHciMeshConfigLimitsEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 3),
+        (0, 0),
     ],
     entries: &[
+        ("MaxClientClusters", VimVsanVsanHciMeshConfigLimitsEnum::MaxClientClusters),
         ("MaxServerVcenters", VimVsanVsanHciMeshConfigLimitsEnum::MaxServerVcenters),
         ("ConfigLimitType_unknown", VimVsanVsanHciMeshConfigLimitsEnum::ConfigLimitTypeUnknown),
-        ("MaxClientClusters", VimVsanVsanHciMeshConfigLimitsEnum::MaxClientClusters),
-        ("MaxServerClusters", VimVsanVsanHciMeshConfigLimitsEnum::MaxServerClusters),
         ("MaxClientVcenters", VimVsanVsanHciMeshConfigLimitsEnum::MaxClientVcenters),
+        ("MaxServerClusters", VimVsanVsanHciMeshConfigLimitsEnum::MaxServerClusters),
     ],
 };
 
@@ -61010,39 +61381,42 @@ impl AsRef<str> for VimVsanVsanHciMeshConfigLimitsEnum {
 }
 
 static VSAN_HEALTH_PERSPECTIVE_ENUM_MAP: phf::Map<&'static str, VsanHealthPerspectiveEnum> = ::phf::Map {
-    key: 12213676231523076107,
+    key: 16287231350648472473,
     disps: &[
-        (0, 4),
-        (4, 1),
-        (13, 3),
-        (1, 21),
+        (0, 15),
         (0, 0),
+        (3, 4),
+        (2, 4),
+        (0, 16),
+        (0, 3),
+        (0, 3),
+        (0, 8),
     ],
     entries: &[
-        ("VsanEsaPreChecks", VsanHealthPerspectiveEnum::VsanEsaPreChecks),
-        ("upgradePreCheckPmanForVMC", VsanHealthPerspectiveEnum::UpgradePreCheckPmanForVmc),
         ("upgradeAfterExitMMPman", VsanHealthPerspectiveEnum::UpgradeAfterExitMmPman),
-        ("CreateExtendClusterView", VsanHealthPerspectiveEnum::CreateExtendClusterView),
-        ("vcsaInstallerForVsanEsa", VsanHealthPerspectiveEnum::VcsaInstallerForVsanEsa),
-        ("snapshotCreationPrecheck", VsanHealthPerspectiveEnum::SnapshotCreationPrecheck),
-        ("inPlaceUpgradeServiceMode", VsanHealthPerspectiveEnum::InPlaceUpgradeServiceMode),
-        ("upgradePreCheck", VsanHealthPerspectiveEnum::UpgradePreCheck),
         ("upgradeBeforeExitMMPman", VsanHealthPerspectiveEnum::UpgradeBeforeExitMmPman),
-        ("upgradePreCheckForVCF", VsanHealthPerspectiveEnum::UpgradePreCheckForVcf),
-        ("upgradePreCheckPman", VsanHealthPerspectiveEnum::UpgradePreCheckPman),
-        ("vmcUpgradePreChecks", VsanHealthPerspectiveEnum::VmcUpgradePreChecks),
         ("vsanUpgradePreCheck", VsanHealthPerspectiveEnum::VsanUpgradePreCheck),
-        ("beforeConfigureHost", VsanHealthPerspectiveEnum::BeforeConfigureHost),
-        ("VsanHealthPerspective_Unknown", VsanHealthPerspectiveEnum::VsanHealthPerspectiveUnknown),
+        ("upgradePreCheck", VsanHealthPerspectiveEnum::UpgradePreCheck),
         ("upgradeAfterExitMMPmanForVMC", VsanHealthPerspectiveEnum::UpgradeAfterExitMmPmanForVmc),
-        ("vsanUpgradeBeforeExitMM", VsanHealthPerspectiveEnum::VsanUpgradeBeforeExitMm),
-        ("upgradeBeforeExitMMPmanForVMC", VsanHealthPerspectiveEnum::UpgradeBeforeExitMmPmanForVmc),
-        ("upgradeAfterExitMM", VsanHealthPerspectiveEnum::UpgradeAfterExitMm),
-        ("upgradeBeforeExitMM", VsanHealthPerspectiveEnum::UpgradeBeforeExitMm),
+        ("vcsaInstallerForVsanEsa", VsanHealthPerspectiveEnum::VcsaInstallerForVsanEsa),
         ("clusterPowerOffPrecheck", VsanHealthPerspectiveEnum::ClusterPowerOffPrecheck),
-        ("deployAssist", VsanHealthPerspectiveEnum::DeployAssist),
-        ("defaultView", VsanHealthPerspectiveEnum::DefaultView),
+        ("vmcUpgradePreChecks", VsanHealthPerspectiveEnum::VmcUpgradePreChecks),
+        ("VsanEsaPreChecks", VsanHealthPerspectiveEnum::VsanEsaPreChecks),
         ("vsanUpgradeAfterExitMM", VsanHealthPerspectiveEnum::VsanUpgradeAfterExitMm),
+        ("upgradeBeforeExitMM", VsanHealthPerspectiveEnum::UpgradeBeforeExitMm),
+        ("upgradePreCheckPman", VsanHealthPerspectiveEnum::UpgradePreCheckPman),
+        ("upgradeAfterExitMM", VsanHealthPerspectiveEnum::UpgradeAfterExitMm),
+        ("defaultView", VsanHealthPerspectiveEnum::DefaultView),
+        ("upgradeBeforeExitMMPmanForVMC", VsanHealthPerspectiveEnum::UpgradeBeforeExitMmPmanForVmc),
+        ("vsanUpgradeBeforeExitMM", VsanHealthPerspectiveEnum::VsanUpgradeBeforeExitMm),
+        ("snapshotCreationPrecheck", VsanHealthPerspectiveEnum::SnapshotCreationPrecheck),
+        ("CreateExtendClusterView", VsanHealthPerspectiveEnum::CreateExtendClusterView),
+        ("upgradePreCheckPmanForVMC", VsanHealthPerspectiveEnum::UpgradePreCheckPmanForVmc),
+        ("VsanHealthPerspective_Unknown", VsanHealthPerspectiveEnum::VsanHealthPerspectiveUnknown),
+        ("upgradePreCheckForVCF", VsanHealthPerspectiveEnum::UpgradePreCheckForVcf),
+        ("inPlaceUpgradeServiceMode", VsanHealthPerspectiveEnum::InPlaceUpgradeServiceMode),
+        ("deployAssist", VsanHealthPerspectiveEnum::DeployAssist),
+        ("beforeConfigureHost", VsanHealthPerspectiveEnum::BeforeConfigureHost),
     ],
 };
 
@@ -61126,7 +61500,7 @@ impl AsRef<str> for VsanHealthPerspectiveEnum {
 }
 
 static VSAN_HEALTH_PERSPECTIVE_90_ENUM_MAP: phf::Map<&'static str, VsanHealthPerspective90Enum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -61192,14 +61566,15 @@ impl AsRef<str> for VsanHealthPerspective90Enum {
 }
 
 static VSAN_HEALTH_STATUS_TYPE_ENUM_MAP: phf::Map<&'static str, VsanHealthStatusTypeEnum> = ::phf::Map {
-    key: 351906021642186605,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (0, 0),
+        (0, 0),
     ],
     entries: &[
-        ("red", VsanHealthStatusTypeEnum::Red),
-        ("yellow", VsanHealthStatusTypeEnum::Yellow),
         ("unknown", VsanHealthStatusTypeEnum::Unknown),
+        ("yellow", VsanHealthStatusTypeEnum::Yellow),
+        ("red", VsanHealthStatusTypeEnum::Red),
         ("green", VsanHealthStatusTypeEnum::Green),
     ],
 };
@@ -61264,14 +61639,15 @@ impl AsRef<str> for VsanHealthStatusTypeEnum {
 }
 
 static VSAN_HEALTH_THRESHOLD_TARGET_ENUM_MAP: phf::Map<&'static str, VsanHealthThresholdTargetEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
+        (0, 2),
     ],
     entries: &[
-        ("diskspace_vsan_datastore", VsanHealthThresholdTargetEnum::DiskspaceVsanDatastore),
-        ("diskspace_vsan_pmem", VsanHealthThresholdTargetEnum::DiskspaceVsanPmem),
         ("VsanHealthThresholdTarget_Unknown", VsanHealthThresholdTargetEnum::VsanHealthThresholdTargetUnknown),
+        ("diskspace_vsan_pmem", VsanHealthThresholdTargetEnum::DiskspaceVsanPmem),
+        ("diskspace_vsan_datastore", VsanHealthThresholdTargetEnum::DiskspaceVsanDatastore),
         ("diskspace_vsan_direct", VsanHealthThresholdTargetEnum::DiskspaceVsanDirect),
     ],
 };
@@ -61336,14 +61712,14 @@ impl AsRef<str> for VsanHealthThresholdTargetEnum {
 }
 
 static VSAN_IO_TRIP_ANALYZER_RECURRENCE_STATUS_ENUM_MAP: phf::Map<&'static str, VsanIoTripAnalyzerRecurrenceStatusEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 15995050791870030928,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
         ("recurrenceEnabled", VsanIoTripAnalyzerRecurrenceStatusEnum::RecurrenceEnabled),
-        ("VsanIOTripAnalyzerRecurrenceStatus_Unknown", VsanIoTripAnalyzerRecurrenceStatusEnum::VsanIoTripAnalyzerRecurrenceStatusUnknown),
         ("recurrenceDisabled", VsanIoTripAnalyzerRecurrenceStatusEnum::RecurrenceDisabled),
+        ("VsanIOTripAnalyzerRecurrenceStatus_Unknown", VsanIoTripAnalyzerRecurrenceStatusEnum::VsanIoTripAnalyzerRecurrenceStatusUnknown),
     ],
 };
 
@@ -61406,16 +61782,17 @@ impl AsRef<str> for VsanIoTripAnalyzerRecurrenceStatusEnum {
 }
 
 static VSAN_POLICY_REGULATION_CHECK_OP_ENUM_ENUM_MAP: phf::Map<&'static str, VsanPolicyRegulationCheckOpEnumEnum> = ::phf::Map {
-    key: 12213676231523076107,
+    key: 16287231350648472473,
     disps: &[
         (2, 0),
+        (0, 2),
     ],
     entries: &[
-        ("less", VsanPolicyRegulationCheckOpEnumEnum::Less),
-        ("equal", VsanPolicyRegulationCheckOpEnumEnum::Equal),
         ("greater", VsanPolicyRegulationCheckOpEnumEnum::Greater),
-        ("noless", VsanPolicyRegulationCheckOpEnumEnum::Noless),
+        ("less", VsanPolicyRegulationCheckOpEnumEnum::Less),
         ("nogreater", VsanPolicyRegulationCheckOpEnumEnum::Nogreater),
+        ("noless", VsanPolicyRegulationCheckOpEnumEnum::Noless),
+        ("equal", VsanPolicyRegulationCheckOpEnumEnum::Equal),
     ],
 };
 
@@ -61480,14 +61857,14 @@ impl AsRef<str> for VsanPolicyRegulationCheckOpEnumEnum {
 }
 
 static VIM_VSAN_VSAN_SCAN_OBJECTS_ISSUE_TYPE_ENUM_MAP: phf::Map<&'static str, VimVsanVsanScanObjectsIssueTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
-        ("LEAKED_OBJECT", VimVsanVsanScanObjectsIssueTypeEnum::LeakedObject),
-        ("UNKNOWN", VimVsanVsanScanObjectsIssueTypeEnum::Unknown),
         ("BROKEN_CHAIN", VimVsanVsanScanObjectsIssueTypeEnum::BrokenChain),
+        ("UNKNOWN", VimVsanVsanScanObjectsIssueTypeEnum::Unknown),
+        ("LEAKED_OBJECT", VimVsanVsanScanObjectsIssueTypeEnum::LeakedObject),
     ],
 };
 
@@ -61550,14 +61927,14 @@ impl AsRef<str> for VimVsanVsanScanObjectsIssueTypeEnum {
 }
 
 static VSAN_SERVICE_STATUS_ENUM_MAP: phf::Map<&'static str, VsanServiceStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
     ],
     entries: &[
-        ("started", VsanServiceStatusEnum::Started),
         ("VsanServiceStatus_Unknown", VsanServiceStatusEnum::VsanServiceStatusUnknown),
         ("stopped", VsanServiceStatusEnum::Stopped),
+        ("started", VsanServiceStatusEnum::Started),
     ],
 };
 
@@ -61620,14 +61997,15 @@ impl AsRef<str> for VsanServiceStatusEnum {
 }
 
 static VSAN_SITE_LOCATION_TYPE_ENUM_MAP: phf::Map<&'static str, VsanSiteLocationTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4636882946510197245,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (0, 2),
     ],
     entries: &[
-        ("NonPreferred", VsanSiteLocationTypeEnum::NonPreferred),
         ("Preferred", VsanSiteLocationTypeEnum::Preferred),
         ("VsanSiteLocationType_Unknown", VsanSiteLocationTypeEnum::VsanSiteLocationTypeUnknown),
+        ("NonPreferred", VsanSiteLocationTypeEnum::NonPreferred),
         ("None", VsanSiteLocationTypeEnum::None),
     ],
 };
@@ -61692,19 +62070,20 @@ impl AsRef<str> for VsanSiteLocationTypeEnum {
 }
 
 static VSAN_SNAP_HEALTH_TYPE_ENUM_MAP: phf::Map<&'static str, VsanSnapHealthTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
-        (2, 4),
+        (1, 0),
+        (0, 6),
+        (0, 4),
     ],
     entries: &[
-        ("vmSnapshotsHealth", VsanSnapHealthTypeEnum::VmSnapshotsHealth),
-        ("VsanSnapHealthType_Unknown", VsanSnapHealthTypeEnum::VsanSnapHealthTypeUnknown),
-        ("pgSnapshotsHealth", VsanSnapHealthTypeEnum::PgSnapshotsHealth),
-        ("dpObjsInfo", VsanSnapHealthTypeEnum::DpObjsInfo),
-        ("vmMembershipChanges", VsanSnapHealthTypeEnum::VmMembershipChanges),
-        ("generalHealth", VsanSnapHealthTypeEnum::GeneralHealth),
         ("applianceHealth", VsanSnapHealthTypeEnum::ApplianceHealth),
+        ("vmSnapshotsHealth", VsanSnapHealthTypeEnum::VmSnapshotsHealth),
+        ("pgSnapshotsHealth", VsanSnapHealthTypeEnum::PgSnapshotsHealth),
+        ("generalHealth", VsanSnapHealthTypeEnum::GeneralHealth),
+        ("vmMembershipChanges", VsanSnapHealthTypeEnum::VmMembershipChanges),
+        ("VsanSnapHealthType_Unknown", VsanSnapHealthTypeEnum::VsanSnapHealthTypeUnknown),
+        ("dpObjsInfo", VsanSnapHealthTypeEnum::DpObjsInfo),
     ],
 };
 
@@ -61771,15 +62150,16 @@ impl AsRef<str> for VsanSnapHealthTypeEnum {
 }
 
 static VSAN_SNAP_STATS_EXPIRATION_TYPE_ENUM_MAP: phf::Map<&'static str, VsanSnapStatsExpirationTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("afterTtl", VsanSnapStatsExpirationTypeEnum::AfterTtl),
-        ("afterSet", VsanSnapStatsExpirationTypeEnum::AfterSet),
-        ("afterGet", VsanSnapStatsExpirationTypeEnum::AfterGet),
         ("never", VsanSnapStatsExpirationTypeEnum::Never),
+        ("afterSet", VsanSnapStatsExpirationTypeEnum::AfterSet),
+        ("afterTtl", VsanSnapStatsExpirationTypeEnum::AfterTtl),
+        ("afterGet", VsanSnapStatsExpirationTypeEnum::AfterGet),
         ("VsanSnapStatsExpirationType_Unknown", VsanSnapStatsExpirationTypeEnum::VsanSnapStatsExpirationTypeUnknown),
     ],
 };
@@ -61845,13 +62225,13 @@ impl AsRef<str> for VsanSnapStatsExpirationTypeEnum {
 }
 
 static VSAN_SNAP_VM_MEMBERSHIP_CHANGE_STATUS_ENUM_MAP: phf::Map<&'static str, VsanSnapVmMembershipChangeStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 9838186554752179993,
     disps: &[
-        (1, 0),
+        (0, 0),
     ],
     entries: &[
-        ("VsanSnapVmMembershipChangeStatus_Unknown", VsanSnapVmMembershipChangeStatusEnum::VsanSnapVmMembershipChangeStatusUnknown),
         ("added", VsanSnapVmMembershipChangeStatusEnum::Added),
+        ("VsanSnapVmMembershipChangeStatus_Unknown", VsanSnapVmMembershipChangeStatusEnum::VsanSnapVmMembershipChangeStatusUnknown),
         ("removed", VsanSnapVmMembershipChangeStatusEnum::Removed),
     ],
 };
@@ -61915,21 +62295,22 @@ impl AsRef<str> for VsanSnapVmMembershipChangeStatusEnum {
 }
 
 static VSAN_SYNC_REASON_ENUM_MAP: phf::Map<&'static str, VsanSyncReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (8, 6),
-        (7, 0),
+        (2, 0),
+        (0, 2),
+        (0, 6),
     ],
     entries: &[
-        ("reconfigure", VsanSyncReasonEnum::Reconfigure),
-        ("evacuate", VsanSyncReasonEnum::Evacuate),
-        ("dying_evacuate", VsanSyncReasonEnum::DyingEvacuate),
         ("stale", VsanSyncReasonEnum::Stale),
-        ("rebalance", VsanSyncReasonEnum::Rebalance),
-        ("VsanSyncReason_Unknown", VsanSyncReasonEnum::VsanSyncReasonUnknown),
-        ("object_format_change", VsanSyncReasonEnum::ObjectFormatChange),
-        ("merge_concat", VsanSyncReasonEnum::MergeConcat),
+        ("evacuate", VsanSyncReasonEnum::Evacuate),
         ("repair", VsanSyncReasonEnum::Repair),
+        ("dying_evacuate", VsanSyncReasonEnum::DyingEvacuate),
+        ("merge_concat", VsanSyncReasonEnum::MergeConcat),
+        ("VsanSyncReason_Unknown", VsanSyncReasonEnum::VsanSyncReasonUnknown),
+        ("reconfigure", VsanSyncReasonEnum::Reconfigure),
+        ("object_format_change", VsanSyncReasonEnum::ObjectFormatChange),
+        ("rebalance", VsanSyncReasonEnum::Rebalance),
     ],
 };
 
@@ -61998,15 +62379,16 @@ impl AsRef<str> for VsanSyncReasonEnum {
 }
 
 static VSAN_SYNC_STATUS_ENUM_MAP: phf::Map<&'static str, VsanSyncStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (0, 3),
+        (1, 0),
     ],
     entries: &[
-        ("queued", VsanSyncStatusEnum::Queued),
-        ("VsanSyncStatus_Unknown", VsanSyncStatusEnum::VsanSyncStatusUnknown),
-        ("active", VsanSyncStatusEnum::Active),
         ("suspended", VsanSyncStatusEnum::Suspended),
+        ("VsanSyncStatus_Unknown", VsanSyncStatusEnum::VsanSyncStatusUnknown),
+        ("queued", VsanSyncStatusEnum::Queued),
+        ("active", VsanSyncStatusEnum::Active),
     ],
 };
 
@@ -62070,13 +62452,13 @@ impl AsRef<str> for VsanSyncStatusEnum {
 }
 
 static VSAN_UPDATE_ITEM_IMPACT_TYPE_ENUM_MAP: phf::Map<&'static str, VsanUpdateItemImpactTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
     entries: &[
-        ("reboot", VsanUpdateItemImpactTypeEnum::Reboot),
         ("VsanUpdateItemImpactType_Unknown", VsanUpdateItemImpactTypeEnum::VsanUpdateItemImpactTypeUnknown),
+        ("reboot", VsanUpdateItemImpactTypeEnum::Reboot),
     ],
 };
 
@@ -62138,16 +62520,17 @@ impl AsRef<str> for VsanUpdateItemImpactTypeEnum {
 }
 
 static VSAN_UPDATE_ITEM_TYPE_ENUM_MAP: phf::Map<&'static str, VsanUpdateItemTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (4, 0),
+        (3, 0),
+        (0, 0),
     ],
     entries: &[
-        ("vmhbaFirmware", VsanUpdateItemTypeEnum::VmhbaFirmware),
+        ("fullStackFirmware", VsanUpdateItemTypeEnum::FullStackFirmware),
         ("vib", VsanUpdateItemTypeEnum::Vib),
         ("VsanUpdateItemType_Unknown", VsanUpdateItemTypeEnum::VsanUpdateItemTypeUnknown),
+        ("vmhbaFirmware", VsanUpdateItemTypeEnum::VmhbaFirmware),
         ("offlinebundle", VsanUpdateItemTypeEnum::Offlinebundle),
-        ("fullStackFirmware", VsanUpdateItemTypeEnum::FullStackFirmware),
     ],
 };
 
@@ -62212,21 +62595,22 @@ impl AsRef<str> for VsanUpdateItemTypeEnum {
 }
 
 static VIM_VSAN_VSAN_VCSA_DEPLOYMENT_PHASE_ENUM_MAP: phf::Map<&'static str, VimVsanVsanVcsaDeploymentPhaseEnum> = ::phf::Map {
-    key: 14108922650502679131,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
-        (1, 1),
+        (3, 0),
+        (1, 8),
+        (0, 4),
     ],
     entries: &[
-        ("done", VimVsanVsanVcsaDeploymentPhaseEnum::Done),
-        ("failed", VimVsanVsanVcsaDeploymentPhaseEnum::Failed),
-        ("vsanbootstrap", VimVsanVsanVcsaDeploymentPhaseEnum::Vsanbootstrap),
-        ("ovaunpack", VimVsanVsanVcsaDeploymentPhaseEnum::Ovaunpack),
-        ("vcconfig", VimVsanVsanVcsaDeploymentPhaseEnum::Vcconfig),
-        ("initializing", VimVsanVsanVcsaDeploymentPhaseEnum::Initializing),
-        ("validation", VimVsanVsanVcsaDeploymentPhaseEnum::Validation),
         ("VsanVcsaDeploymentPhase_Unknown", VimVsanVsanVcsaDeploymentPhaseEnum::VsanVcsaDeploymentPhaseUnknown),
         ("vcsadeploy", VimVsanVsanVcsaDeploymentPhaseEnum::Vcsadeploy),
+        ("ovaunpack", VimVsanVsanVcsaDeploymentPhaseEnum::Ovaunpack),
+        ("vsanbootstrap", VimVsanVsanVcsaDeploymentPhaseEnum::Vsanbootstrap),
+        ("initializing", VimVsanVsanVcsaDeploymentPhaseEnum::Initializing),
+        ("done", VimVsanVsanVcsaDeploymentPhaseEnum::Done),
+        ("vcconfig", VimVsanVsanVcsaDeploymentPhaseEnum::Vcconfig),
+        ("validation", VimVsanVsanVcsaDeploymentPhaseEnum::Validation),
+        ("failed", VimVsanVsanVcsaDeploymentPhaseEnum::Failed),
     ],
 };
 
@@ -62295,14 +62679,14 @@ impl AsRef<str> for VimVsanVsanVcsaDeploymentPhaseEnum {
 }
 
 static VSAN_VIB_TYPE_ENUM_MAP: phf::Map<&'static str, VsanVibTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("VsanVibType_Unknown", VsanVibTypeEnum::VsanVibTypeUnknown),
         ("driver", VsanVibTypeEnum::Driver),
         ("tool", VsanVibTypeEnum::Tool),
+        ("VsanVibType_Unknown", VsanVibTypeEnum::VsanVibTypeUnknown),
     ],
 };
 
@@ -62365,25 +62749,26 @@ impl AsRef<str> for VsanVibTypeEnum {
 }
 
 static VSAN_XVC_QUERY_CRITERIA_OPERATOR_ENUM_MAP: phf::Map<&'static str, VsanXvcQueryCriteriaOperatorEnum> = ::phf::Map {
-    key: 106375038446233661,
+    key: 16287231350648472473,
     disps: &[
-        (3, 2),
-        (2, 0),
-        (1, 2),
+        (3, 0),
+        (3, 5),
+        (0, 11),
+        (0, 4),
     ],
     entries: &[
-        ("Like", VsanXvcQueryCriteriaOperatorEnum::Like),
         ("Unset", VsanXvcQueryCriteriaOperatorEnum::Unset),
-        ("LessOrEqual", VsanXvcQueryCriteriaOperatorEnum::LessOrEqual),
-        ("NotEqual", VsanXvcQueryCriteriaOperatorEnum::NotEqual),
-        ("Equal", VsanXvcQueryCriteriaOperatorEnum::Equal),
-        ("GreaterOrEqual", VsanXvcQueryCriteriaOperatorEnum::GreaterOrEqual),
-        ("Less", VsanXvcQueryCriteriaOperatorEnum::Less),
         ("VsanXvcQueryCriteriaOperator_unknown", VsanXvcQueryCriteriaOperatorEnum::VsanXvcQueryCriteriaOperatorUnknown),
-        ("NotIn", VsanXvcQueryCriteriaOperatorEnum::NotIn),
-        ("In", VsanXvcQueryCriteriaOperatorEnum::In),
-        ("NotLike", VsanXvcQueryCriteriaOperatorEnum::NotLike),
         ("Greater", VsanXvcQueryCriteriaOperatorEnum::Greater),
+        ("LessOrEqual", VsanXvcQueryCriteriaOperatorEnum::LessOrEqual),
+        ("GreaterOrEqual", VsanXvcQueryCriteriaOperatorEnum::GreaterOrEqual),
+        ("NotLike", VsanXvcQueryCriteriaOperatorEnum::NotLike),
+        ("Like", VsanXvcQueryCriteriaOperatorEnum::Like),
+        ("NotEqual", VsanXvcQueryCriteriaOperatorEnum::NotEqual),
+        ("Less", VsanXvcQueryCriteriaOperatorEnum::Less),
+        ("NotIn", VsanXvcQueryCriteriaOperatorEnum::NotIn),
+        ("Equal", VsanXvcQueryCriteriaOperatorEnum::Equal),
+        ("In", VsanXvcQueryCriteriaOperatorEnum::In),
     ],
 };
 
@@ -62455,14 +62840,14 @@ impl AsRef<str> for VsanXvcQueryCriteriaOperatorEnum {
 }
 
 static VSAN_XVC_QUERY_FILTER_OPERATOR_ENUM_MAP: phf::Map<&'static str, VsanXvcQueryFilterOperatorEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 2689841203009609170,
     disps: &[
         (0, 0),
     ],
     entries: &[
+        ("Or", VsanXvcQueryFilterOperatorEnum::Or),
         ("Op_unknown", VsanXvcQueryFilterOperatorEnum::OpUnknown),
         ("And", VsanXvcQueryFilterOperatorEnum::And),
-        ("Or", VsanXvcQueryFilterOperatorEnum::Or),
     ],
 };
 
@@ -62525,16 +62910,17 @@ impl AsRef<str> for VsanXvcQueryFilterOperatorEnum {
 }
 
 static VIM_VSAN_CLUSTER_COMPLIANCE_RESOURCE_CHECK_STATUS_TYPE_ENUM_MAP: phf::Map<&'static str, VimVsanClusterComplianceResourceCheckStatusTypeEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
+        (1, 3),
         (0, 0),
     ],
     entries: &[
-        ("aborted", VimVsanClusterComplianceResourceCheckStatusTypeEnum::Aborted),
-        ("ComplianceResourceCheckStatusType_Unknown", VimVsanClusterComplianceResourceCheckStatusTypeEnum::ComplianceResourceCheckStatusTypeUnknown),
-        ("completed", VimVsanClusterComplianceResourceCheckStatusTypeEnum::Completed),
-        ("uninitialized", VimVsanClusterComplianceResourceCheckStatusTypeEnum::Uninitialized),
         ("inProgress", VimVsanClusterComplianceResourceCheckStatusTypeEnum::InProgress),
+        ("completed", VimVsanClusterComplianceResourceCheckStatusTypeEnum::Completed),
+        ("ComplianceResourceCheckStatusType_Unknown", VimVsanClusterComplianceResourceCheckStatusTypeEnum::ComplianceResourceCheckStatusTypeUnknown),
+        ("uninitialized", VimVsanClusterComplianceResourceCheckStatusTypeEnum::Uninitialized),
+        ("aborted", VimVsanClusterComplianceResourceCheckStatusTypeEnum::Aborted),
     ],
 };
 
@@ -62599,14 +62985,14 @@ impl AsRef<str> for VimVsanClusterComplianceResourceCheckStatusTypeEnum {
 }
 
 static VIM_VSAN_CLUSTER_VSAN_MANAGED_STORAGE_TYPE_ENUM_MAP: phf::Map<&'static str, VimVsanClusterVsanManagedStorageTypeEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("pmem", VimVsanClusterVsanManagedStorageTypeEnum::Pmem),
         ("VsanManagedStorageType_Unknown", VimVsanClusterVsanManagedStorageTypeEnum::VsanManagedStorageTypeUnknown),
         ("vsandirect", VimVsanClusterVsanManagedStorageTypeEnum::Vsandirect),
+        ("pmem", VimVsanClusterVsanManagedStorageTypeEnum::Pmem),
     ],
 };
 
@@ -62669,16 +63055,17 @@ impl AsRef<str> for VimVsanClusterVsanManagedStorageTypeEnum {
 }
 
 static CLUSTER_POWER_STATE_ENUM_MAP: phf::Map<&'static str, ClusterPowerStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
+        (2, 4),
         (1, 0),
     ],
     entries: &[
-        ("ClusterPowerState_Unknown", ClusterPowerStateEnum::ClusterPowerStateUnknown),
         ("poweringOn", ClusterPowerStateEnum::PoweringOn),
         ("poweredOn", ClusterPowerStateEnum::PoweredOn),
-        ("poweringOff", ClusterPowerStateEnum::PoweringOff),
         ("poweredOff", ClusterPowerStateEnum::PoweredOff),
+        ("poweringOff", ClusterPowerStateEnum::PoweringOff),
+        ("ClusterPowerState_Unknown", ClusterPowerStateEnum::ClusterPowerStateUnknown),
     ],
 };
 
@@ -62743,18 +63130,18 @@ impl AsRef<str> for ClusterPowerStateEnum {
 }
 
 static VSAN_COMPLIANCE_STATUS_ENUM_MAP: phf::Map<&'static str, VsanComplianceStatusEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (1, 0),
-        (1, 0),
+        (4, 0),
+        (0, 1),
     ],
     entries: &[
-        ("ComplianceStatus_Unknown", VsanComplianceStatusEnum::ComplianceStatusUnknown),
-        ("compliant", VsanComplianceStatusEnum::Compliant),
-        ("outOfDate", VsanComplianceStatusEnum::OutOfDate),
-        ("nonCompliant", VsanComplianceStatusEnum::NonCompliant),
         ("unknown", VsanComplianceStatusEnum::Unknown),
+        ("ComplianceStatus_Unknown", VsanComplianceStatusEnum::ComplianceStatusUnknown),
+        ("outOfDate", VsanComplianceStatusEnum::OutOfDate),
+        ("compliant", VsanComplianceStatusEnum::Compliant),
         ("notApplicable", VsanComplianceStatusEnum::NotApplicable),
+        ("nonCompliant", VsanComplianceStatusEnum::NonCompliant),
     ],
 };
 
@@ -62820,13 +63207,13 @@ impl AsRef<str> for VsanComplianceStatusEnum {
 }
 
 static VSAN_HOST_DECOMMISSION_MODE_OBJECT_ACTION_ENUM_MAP: phf::Map<&'static str, VsanHostDecommissionModeObjectActionEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 2689841203009609170,
     disps: &[
-        (1, 0),
+        (2, 0),
     ],
     entries: &[
-        ("evacuateAllData", VsanHostDecommissionModeObjectActionEnum::EvacuateAllData),
         ("ensureObjectAccessibility", VsanHostDecommissionModeObjectActionEnum::EnsureObjectAccessibility),
+        ("evacuateAllData", VsanHostDecommissionModeObjectActionEnum::EvacuateAllData),
         ("noAction", VsanHostDecommissionModeObjectActionEnum::NoAction),
     ],
 };
@@ -62890,16 +63277,17 @@ impl AsRef<str> for VsanHostDecommissionModeObjectActionEnum {
 }
 
 static VIM_VSAN_HOST_DISK_MAPPING_CREATION_TYPE_ENUM_MAP: phf::Map<&'static str, VimVsanHostDiskMappingCreationTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
-        ("pmem", VimVsanHostDiskMappingCreationTypeEnum::Pmem),
-        ("DiskMappingCreationType_Unknown", VimVsanHostDiskMappingCreationTypeEnum::DiskMappingCreationTypeUnknown),
-        ("hybrid", VimVsanHostDiskMappingCreationTypeEnum::Hybrid),
         ("vsandirect", VimVsanHostDiskMappingCreationTypeEnum::Vsandirect),
         ("allFlash", VimVsanHostDiskMappingCreationTypeEnum::AllFlash),
+        ("hybrid", VimVsanHostDiskMappingCreationTypeEnum::Hybrid),
+        ("pmem", VimVsanHostDiskMappingCreationTypeEnum::Pmem),
+        ("DiskMappingCreationType_Unknown", VimVsanHostDiskMappingCreationTypeEnum::DiskMappingCreationTypeUnknown),
     ],
 };
 
@@ -62964,13 +63352,13 @@ impl AsRef<str> for VimVsanHostDiskMappingCreationTypeEnum {
 }
 
 static VSAN_HOST_DISK_RESULT_STATE_ENUM_MAP: phf::Map<&'static str, VsanHostDiskResultStateEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
-        ("eligible", VsanHostDiskResultStateEnum::Eligible),
         ("ineligible", VsanHostDiskResultStateEnum::Ineligible),
+        ("eligible", VsanHostDiskResultStateEnum::Eligible),
         ("inUse", VsanHostDiskResultStateEnum::InUse),
     ],
 };
@@ -63034,16 +63422,17 @@ impl AsRef<str> for VsanHostDiskResultStateEnum {
 }
 
 static VSAN_ENCRYPTION_OPERATION_ENUM_MAP: phf::Map<&'static str, VsanEncryptionOperationEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
+        (2, 4),
     ],
     entries: &[
-        ("deepRekey", VsanEncryptionOperationEnum::DeepRekey),
         ("EncryptionOperation_Unknown", VsanEncryptionOperationEnum::EncryptionOperationUnknown),
-        ("enablement", VsanEncryptionOperationEnum::Enablement),
         ("disablement", VsanEncryptionOperationEnum::Disablement),
         ("shallowRekey", VsanEncryptionOperationEnum::ShallowRekey),
+        ("deepRekey", VsanEncryptionOperationEnum::DeepRekey),
+        ("enablement", VsanEncryptionOperationEnum::Enablement),
     ],
 };
 
@@ -63108,15 +63497,16 @@ impl AsRef<str> for VsanEncryptionOperationEnum {
 }
 
 static VSAN_ENCRYPTION_TRANSITION_STATE_ENUM_MAP: phf::Map<&'static str, VsanEncryptionTransitionStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 1),
     ],
     entries: &[
         ("prepared", VsanEncryptionTransitionStateEnum::Prepared),
-        ("EncryptionTransitionState_Unknown", VsanEncryptionTransitionStateEnum::EncryptionTransitionStateUnknown),
-        ("settled", VsanEncryptionTransitionStateEnum::Settled),
         ("preparing", VsanEncryptionTransitionStateEnum::Preparing),
+        ("settled", VsanEncryptionTransitionStateEnum::Settled),
+        ("EncryptionTransitionState_Unknown", VsanEncryptionTransitionStateEnum::EncryptionTransitionStateUnknown),
     ],
 };
 
@@ -63180,7 +63570,7 @@ impl AsRef<str> for VsanEncryptionTransitionStateEnum {
 }
 
 static VSAN_HOST_HEALTH_STATE_ENUM_MAP: phf::Map<&'static str, VsanHostHealthStateEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 4203492208743950414,
     disps: &[
         (2, 0),
     ],
@@ -63250,22 +63640,24 @@ impl AsRef<str> for VsanHostHealthStateEnum {
 }
 
 static VSAN_HOST_NODE_STATE_ENUM_MAP: phf::Map<&'static str, VsanHostNodeStateEnum> = ::phf::Map {
-    key: 345707026197253659,
+    key: 16287231350648472473,
     disps: &[
+        (7, 6),
+        (0, 3),
         (0, 0),
-        (6, 3),
+        (0, 0),
     ],
     entries: &[
+        ("agent", VsanHostNodeStateEnum::Agent),
+        ("backup", VsanHostNodeStateEnum::Backup),
+        ("disabled", VsanHostNodeStateEnum::Disabled),
+        ("master", VsanHostNodeStateEnum::Master),
+        ("starting", VsanHostNodeStateEnum::Starting),
+        ("exitingMaintenanceMode", VsanHostNodeStateEnum::ExitingMaintenanceMode),
         ("enteringMaintenanceMode", VsanHostNodeStateEnum::EnteringMaintenanceMode),
         ("decommissioning", VsanHostNodeStateEnum::Decommissioning),
-        ("agent", VsanHostNodeStateEnum::Agent),
-        ("starting", VsanHostNodeStateEnum::Starting),
-        ("disabled", VsanHostNodeStateEnum::Disabled),
-        ("exitingMaintenanceMode", VsanHostNodeStateEnum::ExitingMaintenanceMode),
-        ("stopping", VsanHostNodeStateEnum::Stopping),
         ("error", VsanHostNodeStateEnum::Error),
-        ("master", VsanHostNodeStateEnum::Master),
-        ("backup", VsanHostNodeStateEnum::Backup),
+        ("stopping", VsanHostNodeStateEnum::Stopping),
     ],
 };
 
@@ -63335,13 +63727,13 @@ impl AsRef<str> for VsanHostNodeStateEnum {
 }
 
 static VIM_VSAN_HOST_TRAFFIC_TYPE_ENUM_MAP: phf::Map<&'static str, VimVsanHostTrafficTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16263683158343804936,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("vsan", VimVsanHostTrafficTypeEnum::Vsan),
         ("TrafficType_Unknown", VimVsanHostTrafficTypeEnum::TrafficTypeUnknown),
+        ("vsan", VimVsanHostTrafficTypeEnum::Vsan),
         ("witness", VimVsanHostTrafficTypeEnum::Witness),
     ],
 };
@@ -63405,7 +63797,7 @@ impl AsRef<str> for VimVsanHostTrafficTypeEnum {
 }
 
 static VIM_VSAN_HOST_TRAFFIC_TYPE_90_ENUM_MAP: phf::Map<&'static str, VimVsanHostTrafficType90Enum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -63471,15 +63863,16 @@ impl AsRef<str> for VimVsanHostTrafficType90Enum {
 }
 
 static SERVER_NODE_TYPE_ENUM_MAP: phf::Map<&'static str, ServerNodeTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (0, 3),
     ],
     entries: &[
-        ("REMOTE_METADATA_NODE", ServerNodeTypeEnum::RemoteMetadataNode),
         ("REMOTE_WITNESS_NODE", ServerNodeTypeEnum::RemoteWitnessNode),
-        ("REMOTE_NODE", ServerNodeTypeEnum::RemoteNode),
         ("NodeType_Unknown", ServerNodeTypeEnum::NodeTypeUnknown),
+        ("REMOTE_METADATA_NODE", ServerNodeTypeEnum::RemoteMetadataNode),
+        ("REMOTE_NODE", ServerNodeTypeEnum::RemoteNode),
     ],
 };
 
@@ -63543,19 +63936,20 @@ impl AsRef<str> for ServerNodeTypeEnum {
 }
 
 static VSAN_HOST_STATS_TYPE_ENUM_MAP: phf::Map<&'static str, VsanHostStatsTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16263683158343804936,
     disps: &[
-        (6, 1),
         (0, 0),
+        (1, 1),
+        (2, 2),
     ],
     entries: &[
-        ("maxWitnessClusters", VsanHostStatsTypeEnum::MaxWitnessClusters),
-        ("repairTimerInfo", VsanHostStatsTypeEnum::RepairTimerInfo),
         ("supportedClusterSize", VsanHostStatsTypeEnum::SupportedClusterSize),
-        ("resyncIopsInfo", VsanHostStatsTypeEnum::ResyncIopsInfo),
         ("componentLimitPerCluster", VsanHostStatsTypeEnum::ComponentLimitPerCluster),
-        ("StatsType_Unknown", VsanHostStatsTypeEnum::StatsTypeUnknown),
+        ("resyncIopsInfo", VsanHostStatsTypeEnum::ResyncIopsInfo),
         ("configGeneration", VsanHostStatsTypeEnum::ConfigGeneration),
+        ("repairTimerInfo", VsanHostStatsTypeEnum::RepairTimerInfo),
+        ("StatsType_Unknown", VsanHostStatsTypeEnum::StatsTypeUnknown),
+        ("maxWitnessClusters", VsanHostStatsTypeEnum::MaxWitnessClusters),
     ],
 };
 
@@ -63622,13 +64016,13 @@ impl AsRef<str> for VsanHostStatsTypeEnum {
 }
 
 static STORAGE_POOL_DISK_TYPE_ENUM_MAP: phf::Map<&'static str, StoragePoolDiskTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("StoragePoolDiskType_Unknown", StoragePoolDiskTypeEnum::StoragePoolDiskTypeUnknown),
         ("singleTier", StoragePoolDiskTypeEnum::SingleTier),
+        ("StoragePoolDiskType_Unknown", StoragePoolDiskTypeEnum::StoragePoolDiskTypeUnknown),
     ],
 };
 
@@ -63690,14 +64084,14 @@ impl AsRef<str> for StoragePoolDiskTypeEnum {
 }
 
 static TRIM_DISK_TYPE_ENUM_MAP: phf::Map<&'static str, TrimDiskTypeEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
+        ("capacityDisk", TrimDiskTypeEnum::CapacityDisk),
         ("cacheDisk", TrimDiskTypeEnum::CacheDisk),
         ("TrimDiskType_Unknown", TrimDiskTypeEnum::TrimDiskTypeUnknown),
-        ("capacityDisk", TrimDiskTypeEnum::CapacityDisk),
     ],
 };
 
@@ -63760,18 +64154,19 @@ impl AsRef<str> for TrimDiskTypeEnum {
 }
 
 static VSAN_DISK_EVAC_REASON_ENUM_MAP: phf::Map<&'static str, VsanDiskEvacReasonEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (5, 2),
+        (0, 5),
         (0, 0),
+        (2, 1),
     ],
     entries: &[
         ("Ure", VsanDiskEvacReasonEnum::Ure),
         ("SmartDiskFailures", VsanDiskEvacReasonEnum::SmartDiskFailures),
-        ("Latency", VsanDiskEvacReasonEnum::Latency),
-        ("VsanDiskEvacReason_Unknow", VsanDiskEvacReasonEnum::VsanDiskEvacReasonUnknow),
-        ("Congestion", VsanDiskEvacReasonEnum::Congestion),
         ("TransientDeviceError", VsanDiskEvacReasonEnum::TransientDeviceError),
+        ("Congestion", VsanDiskEvacReasonEnum::Congestion),
+        ("VsanDiskEvacReason_Unknow", VsanDiskEvacReasonEnum::VsanDiskEvacReasonUnknow),
+        ("Latency", VsanDiskEvacReasonEnum::Latency),
         ("User", VsanDiskEvacReasonEnum::User),
     ],
 };
@@ -63839,14 +64234,14 @@ impl AsRef<str> for VsanDiskEvacReasonEnum {
 }
 
 static VSAN_DISK_TRIM_OPTION_ENUM_MAP: phf::Map<&'static str, VsanDiskTrimOptionEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("VsanDiskTrimOption_Unknown", VsanDiskTrimOptionEnum::VsanDiskTrimOptionUnknown),
         ("metaDataOnly", VsanDiskTrimOptionEnum::MetaDataOnly),
         ("fullDisk", VsanDiskTrimOptionEnum::FullDisk),
+        ("VsanDiskTrimOption_Unknown", VsanDiskTrimOptionEnum::VsanDiskTrimOptionUnknown),
     ],
 };
 
@@ -63909,15 +64304,16 @@ impl AsRef<str> for VsanDiskTrimOptionEnum {
 }
 
 static VSAN_DISK_TYPE_ENUM_MAP: phf::Map<&'static str, VsanDiskTypeEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 4203492208743950414,
     disps: &[
-        (2, 0),
+        (0, 0),
+        (1, 0),
     ],
     entries: &[
+        ("diskGroup", VsanDiskTypeEnum::DiskGroup),
         ("VsanDiskType_Unknown", VsanDiskTypeEnum::VsanDiskTypeUnknown),
         ("directDisk", VsanDiskTypeEnum::DirectDisk),
         ("storagePool", VsanDiskTypeEnum::StoragePool),
-        ("diskGroup", VsanDiskTypeEnum::DiskGroup),
     ],
 };
 
@@ -63981,13 +64377,13 @@ impl AsRef<str> for VsanDiskTypeEnum {
 }
 
 static VSAN_DISKGROUP_CAPABILITY_ENUM_MAP: phf::Map<&'static str, VsanDiskgroupCapabilityEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("VsanDiskgroupCapability_Unknown", VsanDiskgroupCapabilityEnum::VsanDiskgroupCapabilityUnknown),
         ("supportLargerThan16TB", VsanDiskgroupCapabilityEnum::SupportLargerThan16Tb),
+        ("VsanDiskgroupCapability_Unknown", VsanDiskgroupCapabilityEnum::VsanDiskgroupCapabilityUnknown),
     ],
 };
 
@@ -64049,14 +64445,14 @@ impl AsRef<str> for VsanDiskgroupCapabilityEnum {
 }
 
 static VSAN_DISK_ISSUE_TYPE_ENUM_MAP: phf::Map<&'static str, VsanDiskIssueTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
         (2, 0),
     ],
     entries: &[
         ("unknown", VsanDiskIssueTypeEnum::Unknown),
-        ("nonExist", VsanDiskIssueTypeEnum::NonExist),
         ("stampMismatch", VsanDiskIssueTypeEnum::StampMismatch),
+        ("nonExist", VsanDiskIssueTypeEnum::NonExist),
     ],
 };
 
@@ -64119,15 +64515,16 @@ impl AsRef<str> for VsanDiskIssueTypeEnum {
 }
 
 static VSAN_HOST_WIPE_DISK_ELIGIBLE_ENUM_MAP: phf::Map<&'static str, VsanHostWipeDiskEligibleEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
+        (0, 1),
     ],
     entries: &[
         ("Yes", VsanHostWipeDiskEligibleEnum::Yes),
         ("Unknown", VsanHostWipeDiskEligibleEnum::Unknown),
-        ("WipeDiskEligible_Unknown", VsanHostWipeDiskEligibleEnum::WipeDiskEligibleUnknown),
         ("No", VsanHostWipeDiskEligibleEnum::No),
+        ("WipeDiskEligible_Unknown", VsanHostWipeDiskEligibleEnum::WipeDiskEligibleUnknown),
     ],
 };
 
@@ -64191,15 +64588,16 @@ impl AsRef<str> for VsanHostWipeDiskEligibleEnum {
 }
 
 static VSAN_HOST_WIPE_DISK_STATE_ENUM_MAP: phf::Map<&'static str, VsanHostWipeDiskStateEnum> = ::phf::Map {
-    key: 2980949210194914378,
+    key: 16263683158343804936,
     disps: &[
+        (0, 0),
         (1, 0),
     ],
     entries: &[
-        ("WipeDiskState_Unknown", VsanHostWipeDiskStateEnum::WipeDiskStateUnknown),
-        ("Failure", VsanHostWipeDiskStateEnum::Failure),
         ("Success", VsanHostWipeDiskStateEnum::Success),
+        ("Failure", VsanHostWipeDiskStateEnum::Failure),
         ("Wiping", VsanHostWipeDiskStateEnum::Wiping),
+        ("WipeDiskState_Unknown", VsanHostWipeDiskStateEnum::WipeDiskStateUnknown),
     ],
 };
 
@@ -64263,14 +64661,14 @@ impl AsRef<str> for VsanHostWipeDiskStateEnum {
 }
 
 static BASE_CONFIG_INFO_DISK_FILE_BACKING_INFO_PROVISIONING_TYPE_ENUM_MAP: phf::Map<&'static str, BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum> = ::phf::Map {
-    key: 10121458955350035957,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (0, 0),
     ],
     entries: &[
         ("thin", BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum::Thin),
-        ("eagerZeroedThick", BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum::EagerZeroedThick),
         ("lazyZeroedThick", BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum::LazyZeroedThick),
+        ("eagerZeroedThick", BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum::EagerZeroedThick),
     ],
 };
 
@@ -64333,39 +64731,42 @@ impl AsRef<str> for BaseConfigInfoDiskFileBackingInfoProvisioningTypeEnum {
 }
 
 static VSLM_DISK_INFO_FLAG_ENUM_MAP: phf::Map<&'static str, VslmDiskInfoFlagEnum> = ::phf::Map {
-    key: 8694567506910003252,
+    key: 16287231350648472473,
     disps: &[
-        (0, 13),
-        (13, 8),
-        (15, 0),
-        (2, 8),
-        (9, 0),
+        (0, 0),
+        (0, 9),
+        (0, 5),
+        (0, 6),
+        (0, 17),
+        (0, 14),
+        (0, 0),
+        (1, 18),
     ],
     entries: &[
-        ("cbtEnabled", VslmDiskInfoFlagEnum::CbtEnabled),
-        ("sharedFileBacking", VslmDiskInfoFlagEnum::SharedFileBacking),
-        ("id", VslmDiskInfoFlagEnum::Id),
-        ("tentativeState", VslmDiskInfoFlagEnum::TentativeState),
-        ("nativeSnapshotSupported", VslmDiskInfoFlagEnum::NativeSnapshotSupported),
-        ("linkedCloneDetails", VslmDiskInfoFlagEnum::LinkedCloneDetails),
-        ("backingObjectId", VslmDiskInfoFlagEnum::BackingObjectId),
-        ("descriptorVersion", VslmDiskInfoFlagEnum::DescriptorVersion),
-        ("controlFlags", VslmDiskInfoFlagEnum::ControlFlags),
-        ("createTime", VslmDiskInfoFlagEnum::CreateTime),
-        ("deviceName", VslmDiskInfoFlagEnum::DeviceName),
+        ("virtualDiskFormat", VslmDiskInfoFlagEnum::VirtualDiskFormat),
         ("relocationDisabled", VslmDiskInfoFlagEnum::RelocationDisabled),
-        ("keyId", VslmDiskInfoFlagEnum::KeyId),
-        ("name", VslmDiskInfoFlagEnum::Name),
+        ("controlFlags", VslmDiskInfoFlagEnum::ControlFlags),
+        ("ioFilter", VslmDiskInfoFlagEnum::IoFilter),
+        ("type", VslmDiskInfoFlagEnum::Type),
+        ("sharedFileBacking", VslmDiskInfoFlagEnum::SharedFileBacking),
+        ("path", VslmDiskInfoFlagEnum::Path),
+        ("createTime", VslmDiskInfoFlagEnum::CreateTime),
+        ("nativeSnapshotSupported", VslmDiskInfoFlagEnum::NativeSnapshotSupported),
         ("parentPath", VslmDiskInfoFlagEnum::ParentPath),
         ("allocated", VslmDiskInfoFlagEnum::Allocated),
+        ("cbtEnabled", VslmDiskInfoFlagEnum::CbtEnabled),
+        ("deviceName", VslmDiskInfoFlagEnum::DeviceName),
+        ("keyProviderId", VslmDiskInfoFlagEnum::KeyProviderId),
+        ("descriptorVersion", VslmDiskInfoFlagEnum::DescriptorVersion),
+        ("keyId", VslmDiskInfoFlagEnum::KeyId),
+        ("id", VslmDiskInfoFlagEnum::Id),
+        ("consumers", VslmDiskInfoFlagEnum::Consumers),
+        ("name", VslmDiskInfoFlagEnum::Name),
+        ("backingObjectId", VslmDiskInfoFlagEnum::BackingObjectId),
+        ("linkedCloneDetails", VslmDiskInfoFlagEnum::LinkedCloneDetails),
         ("keepAfterVmDelete", VslmDiskInfoFlagEnum::KeepAfterVmDelete),
         ("capacity", VslmDiskInfoFlagEnum::Capacity),
-        ("keyProviderId", VslmDiskInfoFlagEnum::KeyProviderId),
-        ("type", VslmDiskInfoFlagEnum::Type),
-        ("consumers", VslmDiskInfoFlagEnum::Consumers),
-        ("ioFilter", VslmDiskInfoFlagEnum::IoFilter),
-        ("virtualDiskFormat", VslmDiskInfoFlagEnum::VirtualDiskFormat),
-        ("path", VslmDiskInfoFlagEnum::Path),
+        ("tentativeState", VslmDiskInfoFlagEnum::TentativeState),
     ],
 };
 
@@ -64449,7 +64850,7 @@ impl AsRef<str> for VslmDiskInfoFlagEnum {
 }
 
 static V_STORAGE_OBJECT_CONSUMPTION_TYPE_ENUM_MAP: phf::Map<&'static str, VStorageObjectConsumptionTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (0, 0),
     ],
@@ -64515,14 +64916,14 @@ impl AsRef<str> for VStorageObjectConsumptionTypeEnum {
 }
 
 static VSLM_V_STORAGE_OBJECT_CONTROL_FLAG_ENUM_MAP: phf::Map<&'static str, VslmVStorageObjectControlFlagEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
         ("disableRelocation", VslmVStorageObjectControlFlagEnum::DisableRelocation),
-        ("keepAfterDeleteVm", VslmVStorageObjectControlFlagEnum::KeepAfterDeleteVm),
         ("enableChangedBlockTracking", VslmVStorageObjectControlFlagEnum::EnableChangedBlockTracking),
+        ("keepAfterDeleteVm", VslmVStorageObjectControlFlagEnum::KeepAfterDeleteVm),
     ],
 };
 
@@ -64585,7 +64986,7 @@ impl AsRef<str> for VslmVStorageObjectControlFlagEnum {
 }
 
 static VSLM_VSO_POST_RELOCATE_CHANGE_METADATA_OPERATION_ENUM_MAP: phf::Map<&'static str, VslmVsoPostRelocateChangeMetadataOperationEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
         (1, 0),
     ],
@@ -64655,13 +65056,13 @@ impl AsRef<str> for VslmVsoPostRelocateChangeMetadataOperationEnum {
 }
 
 static AUTHENTICATION_REQUIRED_AUTHENTICATION_SCHEME_ENUM_MAP: phf::Map<&'static str, AuthenticationRequiredAuthenticationSchemeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("Bearer", AuthenticationRequiredAuthenticationSchemeEnum::Bearer),
         ("Basic", AuthenticationRequiredAuthenticationSchemeEnum::Basic),
+        ("Bearer", AuthenticationRequiredAuthenticationSchemeEnum::Bearer),
     ],
 };
 
@@ -64723,15 +65124,16 @@ impl AsRef<str> for AuthenticationRequiredAuthenticationSchemeEnum {
 }
 
 static AUTHENTICATION_REQUIRED_ERROR_TYPE_ENUM_MAP: phf::Map<&'static str, AuthenticationRequiredErrorTypeEnum> = ::phf::Map {
-    key: 2126027241312876569,
+    key: 4203492208743950414,
     disps: &[
+        (0, 0),
         (0, 0),
     ],
     entries: &[
-        ("invalid_request", AuthenticationRequiredErrorTypeEnum::InvalidRequest),
         ("invalid_token", AuthenticationRequiredErrorTypeEnum::InvalidToken),
-        ("insufficient_scope", AuthenticationRequiredErrorTypeEnum::InsufficientScope),
         ("registration_required", AuthenticationRequiredErrorTypeEnum::RegistrationRequired),
+        ("invalid_request", AuthenticationRequiredErrorTypeEnum::InvalidRequest),
+        ("insufficient_scope", AuthenticationRequiredErrorTypeEnum::InsufficientScope),
     ],
 };
 
@@ -64795,14 +65197,15 @@ impl AsRef<str> for AuthenticationRequiredErrorTypeEnum {
 }
 
 static PROPERTY_CHANGE_OP_ENUM_MAP: phf::Map<&'static str, PropertyChangeOpEnum> = ::phf::Map {
-    key: 15467950696543387533,
+    key: 16263683158343804936,
     disps: &[
-        (3, 0),
+        (0, 0),
+        (0, 1),
     ],
     entries: &[
-        ("assign", PropertyChangeOpEnum::Assign),
         ("remove", PropertyChangeOpEnum::Remove),
         ("add", PropertyChangeOpEnum::Add),
+        ("assign", PropertyChangeOpEnum::Assign),
         ("indirectRemove", PropertyChangeOpEnum::IndirectRemove),
     ],
 };
@@ -64867,13 +65270,13 @@ impl AsRef<str> for PropertyChangeOpEnum {
 }
 
 static OBJECT_UPDATE_KIND_ENUM_MAP: phf::Map<&'static str, ObjectUpdateKindEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (2, 0),
+        (1, 0),
     ],
     entries: &[
-        ("leave", ObjectUpdateKindEnum::Leave),
         ("enter", ObjectUpdateKindEnum::Enter),
+        ("leave", ObjectUpdateKindEnum::Leave),
         ("modify", ObjectUpdateKindEnum::Modify),
     ],
 };
@@ -64937,15 +65340,16 @@ impl AsRef<str> for ObjectUpdateKindEnum {
 }
 
 static VSLM_TASK_INFO_STATE_ENUM_MAP: phf::Map<&'static str, VslmTaskInfoStateEnum> = ::phf::Map {
-    key: 7485420634051515786,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (2, 0),
+        (0, 3),
     ],
     entries: &[
-        ("running", VslmTaskInfoStateEnum::Running),
-        ("error", VslmTaskInfoStateEnum::Error),
         ("success", VslmTaskInfoStateEnum::Success),
         ("queued", VslmTaskInfoStateEnum::Queued),
+        ("error", VslmTaskInfoStateEnum::Error),
+        ("running", VslmTaskInfoStateEnum::Running),
     ],
 };
 
@@ -65009,7 +65413,7 @@ impl AsRef<str> for VslmTaskInfoStateEnum {
 }
 
 static VSLM_EVENT_TYPE_ENUM_MAP: phf::Map<&'static str, VslmEventTypeEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 4203492208743950414,
     disps: &[
         (0, 0),
     ],
@@ -65077,13 +65481,13 @@ impl AsRef<str> for VslmEventTypeEnum {
 }
 
 static VSLM_EVENT_VSLM_EVENT_INFO_STATE_ENUM_MAP: phf::Map<&'static str, VslmEventVslmEventInfoStateEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 16287231350648472473,
     disps: &[
-        (0, 0),
+        (1, 0),
     ],
     entries: &[
-        ("success", VslmEventVslmEventInfoStateEnum::Success),
         ("error", VslmEventVslmEventInfoStateEnum::Error),
+        ("success", VslmEventVslmEventInfoStateEnum::Success),
     ],
 };
 
@@ -65145,20 +65549,21 @@ impl AsRef<str> for VslmEventVslmEventInfoStateEnum {
 }
 
 static VSLM_VSO_V_STORAGE_OBJECT_QUERY_SPEC_QUERY_FIELD_ENUM_ENUM_MAP: phf::Map<&'static str, VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum> = ::phf::Map {
-    key: 12913932095322966823,
+    key: 2689841203009609170,
     disps: &[
-        (0, 0),
-        (2, 1),
+        (4, 0),
+        (1, 3),
+        (0, 7),
     ],
     entries: &[
-        ("name", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::Name),
-        ("capacity", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::Capacity),
-        ("backingObjectId", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::BackingObjectId),
         ("id", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::Id),
+        ("metadataKey", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::MetadataKey),
+        ("backingObjectId", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::BackingObjectId),
         ("createTime", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::CreateTime),
         ("datastoreMoId", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::DatastoreMoId),
+        ("capacity", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::Capacity),
+        ("name", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::Name),
         ("metadataValue", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::MetadataValue),
-        ("metadataKey", VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum::MetadataKey),
     ],
 };
 
@@ -65226,21 +65631,22 @@ impl AsRef<str> for VslmVsoVStorageObjectQuerySpecQueryFieldEnumEnum {
 }
 
 static VSLM_VSO_V_STORAGE_OBJECT_QUERY_SPEC_QUERY_OPERATOR_ENUM_ENUM_MAP: phf::Map<&'static str, VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum> = ::phf::Map {
-    key: 2126027241312876569,
+    key: 16287231350648472473,
     disps: &[
-        (7, 7),
+        (0, 8),
         (1, 0),
+        (0, 3),
     ],
     entries: &[
-        ("lessThan", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::LessThan),
-        ("greaterThanOrEqual", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::GreaterThanOrEqual),
-        ("equals", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::Equals),
-        ("contains", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::Contains),
         ("endsWith", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::EndsWith),
+        ("contains", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::Contains),
+        ("greaterThanOrEqual", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::GreaterThanOrEqual),
         ("lessThanOrEqual", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::LessThanOrEqual),
-        ("greaterThan", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::GreaterThan),
-        ("notEquals", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::NotEquals),
         ("startsWith", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::StartsWith),
+        ("equals", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::Equals),
+        ("lessThan", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::LessThan),
+        ("notEquals", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::NotEquals),
+        ("greaterThan", VslmVsoVStorageObjectQuerySpecQueryOperatorEnumEnum::GreaterThan),
     ],
 };
 

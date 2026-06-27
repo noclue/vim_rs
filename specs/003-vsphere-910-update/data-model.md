@@ -57,10 +57,28 @@ This feature transforms an **OpenAPI specification artifact** into **generated R
 | Attribute | Description |
 |-----------|-------------|
 | **Path** | `mcp/data/api_database.bin` |
-| **Built by** | `data-transformer` (`cargo run -p data-transformer --release`) |
+| **Git tracking** | **No** — `mcp/data/` is `.gitignore`d (R12) |
+| **Built by** | `data-transformer` (`cargo run -p data-transformer --release --features cuda`) |
 | **Inputs** | 9.1.0.0 OpenAPI JSON, `examples/` sources, embedding model cache |
-| **Validated by** | `mcp/server/build.rs` staleness check |
+| **Serialization** | `bincode` **3.x** (after FR-018 migration) |
+| **Validated by** | `mcp/server/build.rs` staleness check at compile time |
 | **Hand-editable** | **No** (rebuild via pipeline) |
+
+### Dependency Refresh Matrix
+
+| Package | From | To | Crates affected |
+|---------|------|-----|-----------------|
+| `phf` | 0.11 / 0.13 | **0.14** | `vim_macros`, `vim_rs`, `mcp/server` |
+| `phf_codegen` | 0.11 | **0.14** | `vim_build` |
+| `quick-xml` | 0.39 | **0.40** | `vim_rs` (`xml`) |
+| `criterion` | 0.5 | **0.8** | `vim_rs` (dev) |
+| `convert_case` | 0.8 | **0.11** | `vim_build` |
+| `check_keyword` | 0.3 | **0.4** | `vim_build` |
+| `bincode` | 1.3 | **3** | `mcp/server`, `data-transformer` |
+| `tera` | 1.20 | **2** | `mcp/server` (`web-ui`) |
+| Minor/patch | various | latest | All in-scope crates — see [research R16](./research.md#r16--dependency-refresh-matrix) |
+
+**Invariant**: After refresh, `vim_rs/Cargo.lock` contains exactly one resolved `phf` major version (0.14.x) — SC-013.
 
 ### Release Artifacts (0.6.0)
 
@@ -82,6 +100,8 @@ This feature transforms an **OpenAPI specification artifact** into **generated R
 ```text
 [vi-json.yaml] ──yq──► [9.1.0.0 JSON] ──validate──► [OK | fix spec]
                               │
+                    bump phf_codegen 0.14 (vim_build)
+                              │
                               ▼
                     vim_build::emit_vim_bindings
                               │
@@ -90,14 +110,16 @@ This feature transforms an **OpenAPI specification artifact** into **generated R
         vim_rs/src/   vim_macros/      mcp/server/
         (bindings)    field_data.rs    field_data.rs
                               │
-                              ▼
-                    data-transformer
+              bump remaining deps + lockfiles
                               │
                               ▼
-                    api_database.bin
+                    data-transformer (bincode 3)
                               │
                               ▼
-                    vim_mcp_server build
+              mcp/data/api_database.bin  (gitignored, local)
+                              │
+                              ▼
+                    vim_mcp_server build (manual test)
                               │
                               ▼
               cargo test / cargo build (full validation)
@@ -117,6 +139,10 @@ This feature transforms an **OpenAPI specification artifact** into **generated R
 | FR-005 | data-transformer run produces fresh `api_database.bin` |
 | FR-006/007 | Cargo.toml versions = **0.6.0** |
 | FR-015 | No 0.5.1 release-target references in manifests/docs (SC-011) |
+| FR-016–FR-020 | Full dependency refresh; `phf` 0.14 alignment; lockfiles committed |
+| FR-021 | `quickstart.md` documents local MCP DB regen |
 | FR-008 | Full monorepo compile matrix passes |
 | FR-013 | Spec triage documented on failure (SC-009) |
 | SC-005 | Re-run generator → zero diff on generated files |
+| SC-012 | `cargo outdated --root-deps-only` clean per in-scope crate |
+| SC-013 | Single `phf` 0.14.x in `vim_rs/Cargo.lock` |
