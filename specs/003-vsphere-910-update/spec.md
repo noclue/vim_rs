@@ -22,6 +22,9 @@ The authoritative OpenAPI definition for 9.1.0.0 has already been obtained and c
 - Q: How should the MCP API database embedding step be run during this update? → A: Enable the data-transformer `cuda` feature (`--features cuda`) when rebuilding the MCP database on a machine with NVIDIA CUDA, to reduce rebuild time and energy versus CPU-only embedding generation.
 - Q: Must hand-written project references to the binding target API version be audited for stale 9.0.x mentions? → A: Yes — scan and update hand-written docs, constants, and LLM/MCP guidance (e.g. `README.md`, `CLAUDE.md`, `vim_rs/src/core/client.rs` `API_RELEASE` / `COMPATIBLE_API_RELEASES`, MCP READMEs) so they state 9.1.0.0 where they describe the **current binding target**; exclude generated VMware API metadata (e.g. `***Since:*** vSphere API Release 9.0.0.0` in generated rustdoc) and intentional historical references (prior spec file under `vim_build/data/`).
 - Q: Should release semver be 0.5.1 (patch) or 0.6.0 given breaking API changes from the 9.1.0.0 spec diff (e.g. new required `EventFilterSpec` fields)? → A: **0.6.0 minor** — breaking VIM API surface changes warrant a minor semver bump, not a patch. Align `vim_rs`, `vim_macros`, all example path dependencies, `CHANGELOG.md`, MCP/LLM docs, and in-repo spec/plan/contracts artifacts to **0.6.0**. Version **0.5.1 MUST NOT** be published or remain as the target release version anywhere in the repository.
+- Q: What scope should the third-party dependency refresh take for the 0.6.0 release? → A: **Full monorepo refresh** — bump all direct dependencies across every in-repository crate to their latest compatible versions, including major-version upgrades (not only `phf` 0.14 alignment). Minimum crate surface: `vim_rs`, `vim_macros`, `vim_build`, `openapi30`, MCP workspace (`mcp/server`, `mcp/api_database`, `mcp/data_processing/*`), `examples/*`, and `tls_rustls_only`. Regenerate PHF-backed artifacts after aligning `phf` / `phf_codegen` to **0.14** everywhere they are consumed or emitted.
+- Q: How should dependency version changes be documented in release notes? → A: **Enumerate each major bump** (old→new version) in the `[0.6.0]` `CHANGELOG.md` entry; summarize minor and patch updates in a single summary line (not per-crate enumeration).
+- Q: Should `mcp/data/api_database.bin` be committed after `bincode` migration? → A: **No** — `mcp/data/` is `.gitignore`d. Regenerate `api_database.bin` locally via the data-transformer pipeline for **manual MCP validation** documented in `quickstart.md`; the binary is a local build artifact, not a release commit.
 
 ## User Scenarios & Testing *(mandatory)*
 
@@ -70,6 +73,7 @@ A developer using property-path macros or the MCP exploration server expects fie
 1. **Given** a fresh generator run against 9.1.0.0, **When** field-path reference data for procedural macros is emitted, **Then** it is regenerated from the same model as the core bindings (not hand-edited).
 2. **Given** the same generator run, **When** field-path reference data for the MCP server is emitted, **Then** it matches the macro crate's data source and reflects 9.1.0.0 paths.
 3. **Given** updated bindings, **When** the MCP data pipeline is executed with GPU acceleration enabled (`cuda` feature), **Then** the MCP server and its API database rebuild successfully in less time than a CPU-only embedding run.
+4. **Given** a `bincode` major migration, **When** an implementer follows `quickstart.md` Step 4 (local data-transformer run into gitignored `mcp/data/`), **Then** `vim_mcp_server` builds and manual MCP testing can proceed without committing `api_database.bin`.
 
 ---
 
@@ -84,9 +88,25 @@ A downstream consumer upgrading from 0.5.0 sees aligned version numbers on the c
 **Acceptance Scenarios**:
 
 1. **Given** the completed update, **When** crate versions are inspected, **Then** both the core library and macro crate report version 0.6.0.
-2. **Given** the release, **When** a consumer reads the changelog, **Then** they find a `[0.6.0]` entry stating the binding now targets vSphere API 9.1.0.0, classifying it as a breaking minor release, and listing breaking changes from the spec diff (including struct field additions such as `EventFilterSpec`).
+2. **Given** the release, **When** a consumer reads the changelog, **Then** they find a `[0.6.0]` entry stating the binding now targets vSphere API 9.1.0.0, classifying it as a breaking minor release, listing breaking changes from the spec diff (including struct field additions such as `EventFilterSpec`), enumerating each major third-party dependency bump as old→new (e.g. `phf` 0.11/0.13→0.14, `bincode` 1→3), and summarizing minor/patch dependency updates in one line.
 3. **Given** the release, **When** a maintainer audits hand-written project docs and constants, **Then** no stale references remain that imply 9.0.0.0 is the current binding target or that 0.5.1 is the release version (excluding generated API metadata and the archived 9.0.x spec file).
 4. **Given** the completed update, **When** a repository search is run for `0.5.1` in version-bearing manifests and release docs, **Then** zero hits remain outside historical git history or intentional changelog comparison text referencing the superseded plan.
+
+---
+
+### User Story 5 - Monorepo dependencies current and aligned (Priority: P2)
+
+A maintainer shipping 0.6.0 expects third-party crates across the repository to be on recent, aligned versions — especially `phf` 0.14 shared by generated lookup tables in `vim_rs`, `vim_macros`, `vim_build` codegen, and the MCP server — so lockfiles do not resolve duplicate major versions of the same runtime crate.
+
+**Why this priority**: Stale or split dependency versions (e.g. `phf` 0.11 via `vim_macros` alongside 0.13 in `vim_rs`) increase compile time, risk subtle runtime mismatches in generated PHF maps, and leave security/maintenance debt on a release consumers will treat as current.
+
+**Independent Test**: Run `cargo outdated --root-deps-only` in each in-scope crate; verify zero outdated direct dependencies remain (or any exception is documented). Confirm `vim_rs/Cargo.lock` resolves a single `phf` major version (0.14). Rebuild and test after lockfile refresh.
+
+**Acceptance Scenarios**:
+
+1. **Given** the dependency refresh, **When** `vim_macros`, `vim_rs`, `vim_build`, and `mcp/server` manifests are inspected, **Then** `phf` (runtime) and `phf_codegen` (build-time) both target **0.14** and generated PHF maps are regenerated from `vim_build`.
+2. **Given** the full monorepo scope, **When** each in-scope crate's direct dependencies are compared to crates.io latest, **Then** all major, minor, and patch updates identified at clarification time are applied or explicitly documented as blocked with remediation notes.
+3. **Given** updated lockfiles, **When** the full build and test matrix runs, **Then** no new failures are attributable to dependency version skew (including MCP `bincode` / `tera` major migrations and `vim_rs` `quick-xml` / `criterion` major bumps).
 
 ---
 
@@ -100,6 +120,10 @@ A downstream consumer upgrading from 0.5.0 sees aligned version numbers on the c
 - **Generator-only changes**: If the 9.1.0.0 spec exposes constructs the generator cannot yet emit, fixes belong in the generator or model layer — not in hand-edits to generated files.
 - **MCP database rebuild without CUDA**: If NVIDIA CUDA is unavailable, the data-transformer MAY fall back to CPU embedding generation; the resulting `api_database.bin` MUST be equivalent. CUDA is the preferred path when hardware is present (FR-005).
 - **Stale 9.0.x references in hand-written sources**: Generated rustdoc lines such as `***Since:*** vSphere API Release 9.0.0.0` reflect upstream VMware API history and MUST NOT be hand-edited. Stale **project** references — binding-target constants (`API_RELEASE`), README/CLAUDE.md/MCP guidance, old OpenAPI filenames in docs — MUST be updated to 9.1.0.0 (FR-014).
+- **PHF version skew**: `vim_macros` on `phf` 0.11 while `vim_rs` uses 0.13 causes duplicate `phf` copies in the dependency graph; alignment to **0.14** MUST include `vim_build` `phf_codegen` 0.14 and a clean generator rerun so emitted maps match the runtime crate.
+- **High-risk major migrations**: `bincode` 1→3 (MCP API database serialization) and `tera` 1→2 (MCP web UI) may require source changes beyond manifest bumps; migration fixes are in scope for 0.6.0, not deferred, per full-monorepo refresh decision.
+- **Gitignored MCP database**: `mcp/data/` (including `api_database.bin`) is listed in `.gitignore` and MUST NOT be committed. After dependency or spec changes affecting serialization or embeddings, implementers regenerate the database locally via data-transformer; `quickstart.md` Step 4 is the authoritative manual-validation runbook.
+- **Optional-feature dependency paths**: `quick-xml` 0.40 (`vim_rs` `xml` / `vcsim_compat`) and `criterion` 0.8 (`vim_rs` benches) MUST compile under their respective feature/dev configurations after bump.
 
 ## Requirements *(mandatory)*
 
@@ -109,17 +133,23 @@ A downstream consumer upgrading from 0.5.0 sees aligned version numbers on the c
 - **FR-002**: All generated binding output for the core library MUST be produced by a clean generator run with no manual edits to generated source files.
 - **FR-003**: Field-path reference data used by procedural macros MUST be regenerated from the same generator run and model as the core bindings.
 - **FR-004**: Field-path reference data used by the MCP server MUST be regenerated from the same generator run and model as the core bindings.
-- **FR-005**: The MCP API database and server artifacts MUST be rebuilt so they reflect the 9.1.0.0 API surface. The embedding generation step MUST use the data-transformer `cuda` feature (`--features cuda`) on machines with NVIDIA CUDA available, to minimize rebuild time and energy consumption.
+- **FR-005**: The MCP API database and server artifacts MUST be rebuilt so they reflect the 9.1.0.0 API surface and updated dependency versions (including `bincode` 3 serialization). The embedding generation step MUST use the data-transformer `cuda` feature (`--features cuda`) on machines with NVIDIA CUDA available, to minimize rebuild time and energy consumption. Output is written to gitignored `mcp/data/api_database.bin` via local data-transformer execution — not committed to the repository.
 - **FR-006**: The core library version MUST be bumped to **0.6.0** (not 0.5.1).
 - **FR-007**: The procedural macro crate version MUST be bumped to **0.6.0** (not 0.5.1).
 - **FR-008**: The core library, macro crate, generator, OpenAPI parser, MCP workspace, and all in-repository sample projects MUST compile successfully after the update.
 - **FR-009**: Existing automated tests for the core library, macros, generator, and OpenAPI parser MUST pass after the update (integration tests requiring live vCenter may remain `#[ignore]` but must not be broken structurally).
 - **FR-010**: Any compile failures in sample projects caused by API renames or removals in 9.1.0.0 MUST be resolved as part of this feature, not deferred.
-- **FR-011**: User-visible release notes MUST document the move to vSphere API 9.1.0.0, version **0.6.0** as a **breaking minor release**, and all breaking changes attributable to the spec diff (including struct field additions such as `EventFilterSpec`).
+- **FR-011**: User-visible release notes MUST document the move to vSphere API 9.1.0.0, version **0.6.0** as a **breaking minor release**, all breaking changes attributable to the spec diff (including struct field additions such as `EventFilterSpec`), and all major third-party dependency bumps as explicit old→new version lines in `CHANGELOG.md` `[0.6.0]` (minimum: `phf`, `phf_codegen`, `quick-xml`, `criterion`, `convert_case`, `check_keyword`, `bincode`, `tera`). Minor and patch dependency updates MUST be summarized in a single CHANGELOG line, not enumerated per crate.
 - **FR-012**: The prior 9.0.x OpenAPI input file MAY remain in the repository for reference, but the generator MUST point exclusively at the 9.1.0.0 JSON file for this release.
 - **FR-013**: When generation, compilation, or tests fail during this update, the team MUST validate OpenAPI input correctness (YAML source, JSON output, and known type-coercion pitfalls such as boolean literals where string enum values are required) before attributing the failure solely to the generator, OpenAPI parser, or downstream crates.
 - **FR-014**: Before release, hand-written project sources that describe the **current binding target** MUST be audited and updated from 9.0.x to 9.1.0.0 where applicable. Scope includes at minimum: `README.md`, `CLAUDE.md`, `vim_rs/src/core/client.rs` (`API_RELEASE`, `COMPATIBLE_API_RELEASES`), and MCP/LLM guidance docs (`mcp/README.md`, related MCP docs). Excludes generated binding rustdoc (VMware `Since` metadata) and the archived 9.0.x OpenAPI file retained under `vim_build/data/`.
 - **FR-015**: All version-bearing artifacts MUST be updated from **0.5.1** to **0.6.0** and MUST NOT retain 0.5.1 as a release target. Minimum scope: `vim_rs/Cargo.toml`, `vim_macros/Cargo.toml`, `vim_rs` path dependency version in `examples/snippets/Cargo.toml` and `examples/vtui/Cargo.toml`, `CHANGELOG.md` (`[0.6.0]` entry replacing any `[0.5.1]` draft), `mcp/README.md`, and in-repository spec kit artifacts under `specs/003-vsphere-910-update/` (`plan.md`, `tasks.md`, `contracts/README.md`, `data-model.md`, `quickstart.md`, `research.md`).
+- **FR-016**: All in-scope crates (`vim_rs`, `vim_macros`, `vim_build`, `openapi30`, MCP workspace crates, `examples/*`, `tls_rustls_only`) MUST have direct dependencies bumped to the latest published versions on crates.io as of this release, including semver-major upgrades where applicable.
+- **FR-017**: `phf` MUST be aligned to **0.14** in `vim_rs`, `vim_macros`, and `mcp/server`; `phf_codegen` MUST be aligned to **0.14** in `vim_build`. After bumping, PHF-backed generated files (`struct_enum.rs`, `field_data.rs`, `deser.rs` type registry, enum PHF maps, macro/MCP `field_data.rs`) MUST be regenerated via `vim_build` — not hand-edited.
+- **FR-018**: The following major direct-dependency upgrades identified at clarification time MUST be included in this release (manifest bump plus any required source migration): `quick-xml` 0.39→0.40 (`vim_rs`), `criterion` 0.5→0.8 (`vim_rs` dev), `convert_case` 0.8→0.11 and `check_keyword` 0.3→0.4 (`vim_build`), `bincode` 1→3 and `tera` 1→2 (`mcp/server`).
+- **FR-019**: Semver-compatible stale direct dependencies MUST receive minor and patch bumps in the same pass. Baseline from clarification analysis: `bytes`, `env_logger`, `log` (`vim_rs`); `chrono`, `indexmap`, `log`, `serde`, `serde_json`, `thiserror` (`vim_build`); `actix-web`, `anyhow`, `fastembed`, `regex`, `rmcp` (`mcp/server`); plus equivalent refresh for `examples/*`, `openapi30`, `tls_rustls_only`, and remaining MCP pipeline crates.
+- **FR-020**: All in-scope `Cargo.lock` files MUST be updated and committed so a clean checkout resolves the bumped dependency graph without duplicate major versions of `phf` in `vim_rs`.
+- **FR-021**: `quickstart.md` MUST document the local MCP database regeneration workflow (Step 4): run data-transformer into gitignored `mcp/data/`, then build `vim_mcp_server` for manual MCP testing — explicitly noting that `api_database.bin` is not tracked in git and must be regenerated after spec or `bincode`/embedding pipeline changes.
 
 ### Key Entities
 
@@ -128,22 +158,26 @@ A downstream consumer upgrading from 0.5.0 sees aligned version numbers on the c
 - **Field-Path Reference Data**: Generated lookup tables mapping VIM property paths to Rust types; consumed by procedural macros and the MCP server.
 - **MCP API Database**: Processed, searchable representation of the VIM API used by the MCP exploration server.
 - **Release Artifacts (0.6.0)**: Versioned core library and macro crate packages published together with changelog documentation; semver signals breaking VIM API changes from 9.1.0.0.
+- **Dependency Refresh Matrix**: Per-crate manifest of direct third-party dependencies and their target versions; major bumps (`phf` 0.14, `quick-xml` 0.40, `criterion` 0.8, `convert_case` 0.11, `check_keyword` 0.4, `bincode` 3, `tera` 2) tracked for migration and changelog disclosure.
 
 ## Success Criteria *(mandatory)*
 
 ### Measurable Outcomes
 
-- **SC-001**: 100% of in-repository crates and sample projects compile with zero errors on a clean checkout after the update (default features).
+- **SC-001**: 100% of in-repository crates and sample projects compile with zero errors on a clean checkout after the update (default features), **except** `vim_mcp_server` which requires a local data-transformer run per `quickstart.md` Step 4 to produce gitignored `mcp/data/api_database.bin`.
 - **SC-002**: Builds with all documented optional features enabled complete with zero errors.
 - **SC-003**: The core library and macro crate both report version **0.6.0** in their package metadata; no manifest or release doc targets 0.5.1.
 - **SC-004**: Automated test suites for the core library, macros, generator, and OpenAPI parser pass (`cargo test` equivalent) with no new failures attributable to the spec update.
 - **SC-005**: Zero hand-edited lines exist in generated binding files or generated field-path reference files (verifiable by regeneration producing no diff).
-- **SC-006**: Changelog contains a `[0.6.0]` entry identifying vSphere API 9.1.0.0 as the new binding target, classifying the release as a breaking minor bump, and enumerating breaking API changes from the spec diff (including `EventFilterSpec` field additions).
-- **SC-007**: MCP server and its data pipeline complete a full rebuild without errors.
+- **SC-006**: Changelog contains a `[0.6.0]` entry identifying vSphere API 9.1.0.0 as the new binding target, classifying the release as a breaking minor bump, enumerating breaking API changes from the spec diff (including `EventFilterSpec` field additions), listing each major dependency bump as old→new, and including one summary line for minor/patch dependency updates.
+- **SC-007**: Following `quickstart.md` Step 4 (local data-transformer into `mcp/data/`, then `vim_mcp_server` build), the MCP data pipeline and server complete without errors; `api_database.bin` remains gitignored.
 - **SC-008**: Build-time and binary-size metrics for the core library and the primary consumer benchmark are captured for comparison against the 0.5.0 baseline (per project release gates); any regression beyond tolerance is documented with justification.
 - **SC-009**: Any failure encountered during the update has a documented root-cause classification distinguishing OpenAPI input defects (including YAML-to-JSON coercion errors) from generator or downstream crate defects; input defects are resolved by correcting the spec, not by patching generated output.
 - **SC-010**: A repository-wide audit of hand-written sources (FR-014 scope) finds zero stale references that present 9.0.0.0 as the current binding target; verifiable via search for `9_0_0`, `9.0.0.0`, and `vi_json_openapi_specification_v9_0` outside generated code and intentional archives.
 - **SC-011**: A repository-wide search for `0.5.1` in version manifests and release documentation (FR-015 scope) finds zero remaining release-target references; any `[0.5.1]` CHANGELOG draft is retitled to `[0.6.0]`.
+- **SC-012**: `cargo outdated --root-deps-only` reports zero outdated direct dependencies for each in-scope crate (`vim_rs`, `vim_macros`, `vim_build`, `mcp/server`, `examples/snippets`, `examples/vtui`, `tls_rustls_only`, `openapi30`), or every remaining outdated line has a documented exception in `research.md`.
+- **SC-013**: `vim_rs/Cargo.lock` contains exactly one resolved major version of the `phf` crate (0.14.x) after `vim_macros` alignment; no `phf` 0.11.x or 0.13.x entries remain.
+- **SC-014**: PHF-backed generated sources rebuild identically from `vim_build` after `phf_codegen` 0.14 upgrade (regeneration produces no unexpected diff beyond the version bump itself).
 
 ## Assumptions
 
@@ -154,6 +188,8 @@ A downstream consumer upgrading from 0.5.0 sees aligned version numbers on the c
 - Version **0.6.0** is a **minor breaking release** (not 0.5.1 patch): the 9.1.0.0 spec diff introduces compile-breaking struct changes (e.g. new fields on `EventFilterSpec`) that require consumer source updates or the `defaults` feature; all such breaks are documented in CHANGELOG under `[0.6.0]`. Version 0.5.1 MUST NOT be published.
 - Sample project source updates are limited to fixes required by spec-driven API changes, not opportunistic refactors.
 - The developer machine performing the MCP database rebuild has NVIDIA CUDA available; embedding generation uses the data-transformer's `cuda` feature for this release.
+- `phf` 0.14 MSRV (Rust 1.66+) is acceptable for this project; no separate MSRV bump is required unless toolchain gate fails.
+- `bincode` 3 and `tera` 2 API migrations are feasible within this release cycle; `api_database.bin` regeneration after `bincode` migration is a **local** data-transformer step (gitignored `mcp/data/`), documented in `quickstart.md` for manual MCP validation — not a committed artifact.
 
 ## Dependencies
 
@@ -161,3 +197,4 @@ A downstream consumer upgrading from 0.5.0 sees aligned version numbers on the c
 - NVIDIA CUDA (optional but preferred) for MCP embedding generation via data-transformer `cuda` feature.
 - Existing in-tree generator (`vim_build`), OpenAPI parser (`openapi30`), MCP data pipeline, and procedural macro infrastructure — all regenerated, not replaced.
 - Project constitution principles I (generated from authoritative specs), III (build-time budgets), VII (ecosystem tooling is part of the product).
+- crates.io availability of target versions: `phf` / `phf_codegen` **0.14.0**, `quick-xml` **0.40.x**, `criterion` **0.8.x**, `convert_case` **0.11.x**, `bincode` **3.x**, `tera` **2.x**, and current minor/patch releases for remaining direct dependencies.

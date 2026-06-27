@@ -8,19 +8,19 @@
 
 ## Summary
 
-Mechanically regenerate all `vim_rs` bindings, `vim_macros`/`mcp` field-path metadata, and the MCP API database from the new **vSphere 9.1.0.0** VI/JSON OpenAPI input (`vim_build/data/vi_json_openapi_specification_v9_1_0_0.json`), bump **`vim_rs`** and **`vim_macros`** to **0.6.0** (breaking minor — not 0.5.1 patch), purge all **0.5.1** release-target references (FR-015), and validate full monorepo compilation. On failure, triage **OpenAPI input correctness first** (YAML→JSON coercion, string enum values) before changing the generator or downstream crates (FR-013, spec clarification 2026-06-26).
+Mechanically regenerate all `vim_rs` bindings, `vim_macros`/`mcp` field-path metadata, and (locally) the MCP API database from **vSphere 9.1.0.0** OpenAPI input; perform a **full monorepo third-party dependency refresh** (FR-016–FR-020) with **`phf` / `phf_codegen` 0.14** alignment; bump **`vim_rs`** and **`vim_macros`** to **0.6.0**; purge **0.5.1** release-target references; validate compilation and tests. On failure, triage **OpenAPI input correctness first** (FR-013). `mcp/data/api_database.bin` is **gitignored** — regenerate locally per [quickstart.md](./quickstart.md) Step 4 for manual MCP testing (FR-021).
 
 ## Technical Context
 
-**Language/Version**: Rust 2021, stable  
-**Primary Dependencies**: In-tree `vim_build`, `openapi30`, `vim_macros`; `miniserde`, `tokio` (unchanged)  
-**Storage**: Generated Rust sources under `vim_rs/src/`; `vim_macros/src/field_data.rs`; `mcp/server/src/field_data.rs`; `mcp/data/api_database.bin`  
-**Testing**: `cargo test` in `vim_rs`, `vim_build`, `vim_macros`, `openapi30`; `cargo build --bins` in `examples/`; `cargo build -p vim_mcp_server` in `mcp/` (after data-transformer)  
+**Language/Version**: Rust 2021, stable (MSRV effectively **1.66+** after `phf` 0.14 — see [research R10](./research.md#r10--phf-014-alignment))  
+**Primary Dependencies**: In-tree `vim_build`, `openapi30`, `vim_macros`; runtime `miniserde`, `tokio`, `reqwest`; **aligned `phf` 0.14** across binding stack  
+**Storage**: Generated Rust under `vim_rs/src/`; `vim_macros`/`mcp/server` `field_data.rs`; **local** `mcp/data/api_database.bin` (gitignored)  
+**Testing**: `cargo test` in core crates; `cargo build --bins` in `examples/`; MCP via quickstart Step 4 after local DB regen  
 **Target Platform**: Cross-platform library (Linux/macOS/Windows)  
 **Project Type**: Multi-crate monorepo (generated bindings + tooling)  
-**Performance Goals**: No unjustified regression vs 0.5.0 release gates (Principle III): `vim_rs` debug/release build time, `examples/vtui` binary size  
-**Constraints**: No hand-edits to generated files (Principle I); `PRUNED_TYPES` unchanged unless generator blocked; `DatastoreAccessible_enum` must use `"True"`/`"False"` strings in JSON  
-**Scale/Scope**: ~322K-line OpenAPI JSON; ~200K+ LOC generated `structs.rs`; all `vim_rs/src/mo/*.rs`; two ~13K-line `field_data.rs` files; MCP pipeline rebuild
+**Performance Goals**: No unjustified regression vs 0.5.0 release gates (Principle III)  
+**Constraints**: No hand-edits to generated files (Principle I); `PRUNED_TYPES` unchanged unless blocked; full dependency refresh per clarification 2026-06-26  
+**Scale/Scope**: ~322K-line OpenAPI JSON; ~200K+ LOC `structs.rs`; PHF maps in `struct_enum.rs`, `deser.rs`, `field_data.rs`; 8+ `Cargo.lock` files; major migrations: `phf` 0.14, `quick-xml` 0.40, `criterion` 0.8, `convert_case` 0.11, `check_keyword` 0.4, `bincode` 3, `tera` 2
 
 ## Constitution Check
 
@@ -28,17 +28,18 @@ Mechanically regenerate all `vim_rs` bindings, `vim_macros`/`mcp` field-path met
 
 | Principle / standard | Status | Evidence |
 |---------------------|--------|----------|
-| **I. Generated from authoritative specs** | Pass | Single generator run from 9.1.0.0 JSON; zero hand-edits to generated output |
-| **II. Complete type-safe surface** | Pass | Full regeneration; `PRUNED_TYPES` preserved for `MethodFault`/`Event` |
-| **III. Build-time & binary budgets** | Pass* | Capture metrics vs 0.5.0; document if spec growth causes regression (*measure in implement) |
-| **IV. Multi-transport parity** | Pass* | Compile/test gate in scope; live vCenter run deferred per spec assumptions |
-| **V. Documented public surfaces** | Pass | CHANGELOG `[0.6.0]` entry; classify as breaking minor; document API diffs (e.g. `EventFilterSpec`) |
-| **VI. Readable source** | Pass | Generator output only; no readability regressions in hand-written code |
-| **VII. Ecosystem tooling** | Pass | `vim_macros` field_data + MCP database regenerated and version-aligned |
-| **OpenAPI ingestion** | Pass | Pre-flight validate `DatastoreAccessible_enum`; triage spec on failure (FR-013) |
-| **CHANGELOG discipline** | Pass | `[Unreleased]` → `[0.6.0]` with spec version, semver rationale, and breaking changes; **0.5.1 MUST NOT** be published |
+| **I. Generated from authoritative specs** | Pass | Single generator run from 9.1.0.0 JSON; PHF maps regenerated after `phf_codegen` 0.14 — not hand-edited |
+| **II. Complete type-safe surface** | Pass | Full regeneration; `PRUNED_TYPES` preserved |
+| **III. Build-time & binary budgets** | Pass* | Capture metrics vs 0.5.0; dependency bumps may affect compile time — document in CHANGELOG (*measure in implement) |
+| **IV. Multi-transport parity** | Pass* | Compile/test gate; live vCenter deferred per spec assumptions |
+| **V. Documented public surfaces** | Pass | CHANGELOG `[0.6.0]` with API breaks + **enumerated major dependency bumps** (FR-011) |
+| **VI. Readable source** | Pass | Generator output only |
+| **VII. Ecosystem tooling** | Pass | `vim_macros`, MCP pipeline, dependency alignment including `bincode`/`tera` migrations |
+| **OpenAPI ingestion** | Pass | Pre-flight `DatastoreAccessible_enum`; FR-013 triage |
+| **CHANGELOG discipline** | Pass | Major deps old→new lines; minor/patch summary line; 0.5.1 MUST NOT ship |
+| **Marshalling: miniserde** | Pass | No `serde` added to `vim_rs`; `serde` in `vim_build`/`openapi30` unchanged pattern |
 
-**Post-design re-check**: [research.md](./research.md), [data-model.md](./data-model.md), [contracts/](./contracts/) align with gates. **Documented deferral**: live vCenter integration (Principle IV) is recommended post-release, not blocking this mechanical update.
+**Post-design re-check**: [research.md](./research.md) R10–R16 resolve dependency decisions. **Documented deferral**: live vCenter integration (Principle IV) recommended post-release.
 
 ## Project Structure
 
@@ -47,45 +48,27 @@ Mechanically regenerate all `vim_rs` bindings, `vim_macros`/`mcp` field-path met
 ```text
 specs/003-vsphere-910-update/
 ├── plan.md              # This file
-├── research.md          # Phase 0
+├── research.md          # Phase 0 (R1–R16)
 ├── data-model.md        # Phase 1
-├── quickstart.md        # Phase 1
-├── contracts/           # Phase 1
+├── quickstart.md        # Phase 1 validation runbook
+├── contracts/           # Phase 1 release contract
 ├── spec.md
-└── tasks.md             # /speckit-tasks (not created by /speckit-plan)
+└── tasks.md             # /speckit-tasks
 ```
 
 ### Source Code (repository root)
 
 ```text
-vim_build/
-├── data/
-│   ├── vi-json.yaml                              # source (reference)
-│   ├── vi_json_openapi_specification_v9_1_0_0.json  # NEW canonical input
-│   └── vi_json_openapi_specification_v9_0_0_0_24798170.json  # prior (reference)
-└── src/main.rs                                   # point at 9.1.0.0 JSON
-
-vim_rs/src/                                       # GENERATED (full regen)
-├── types/  (structs.rs, enums.rs, traits.rs, …)
-└── mo/     (per managed-object stubs)
-
-vim_macros/src/field_data.rs                      # GENERATED
-mcp/server/src/field_data.rs                      # GENERATED
-mcp/data/api_database.bin                         # REBUILT via data-transformer
-
-openapi30/src/openapi.rs                          # test fixture path (update)
-mcp/data_processing/data_transformer/src/main.rs  # spec path (update)
-mcp/server/build.rs                               # staleness check path (update)
-
-vim_rs/Cargo.toml                                 # 0.6.0
-vim_macros/Cargo.toml                             # 0.6.0
-examples/snippets/Cargo.toml                      # path dep 0.6.0
-examples/vtui/Cargo.toml                          # path dep 0.6.0
-CHANGELOG.md                                      # [0.6.0] (retitle any [0.5.1] draft)
-mcp/README.md                                     # aligned version mention
+vim_build/                    # phf_codegen 0.14; convert_case 0.11; check_keyword 0.4
+vim_rs/                       # phf 0.14; quick-xml 0.40; criterion 0.8 (dev)
+vim_macros/                   # phf 0.14
+mcp/server/                   # phf 0.14; bincode 3; tera 2
+mcp/data_processing/data_transformer/  # bincode 3
+openapi30/, examples/*, tls_rustls_only/  # minor/patch refresh
+mcp/data/api_database.bin     # LOCAL ONLY (.gitignore)
 ```
 
-**Structure Decision**: Changes are **input-path wiring + regeneration + version bump + validation + semver artifact purge**. No new modules; hand-written edits limited to path constants, manifest versions, sample fixes for spec-driven breaks, release notes, and FR-015 scope (eliminate 0.5.1 as release target).
+**Structure Decision**: **Input-path wiring + dependency refresh + PHF-aligned regeneration + version bump + validation**. Hand-written edits: manifests, lockfiles, migration fixes (`bincode`, `tera`, `quick-xml`, `criterion`, `convert_case`), docs, sample fixes for spec breaks — never generated binding bodies.
 
 ## Complexity Tracking
 
@@ -101,20 +84,7 @@ mcp/README.md                                     # aligned version mention
 
 **Status**: Complete → [research.md](./research.md)
 
-Resolved decisions:
-
-| ID | Topic | Outcome |
-|----|-------|---------|
-| R1 | Canonical spec file | `vi_json_openapi_specification_v9_1_0_0.json` |
-| R2 | Generation command | `cd vim_build && cargo run --bin generate --release` |
-| R3 | Spec validation | Pre-flight `DatastoreAccessible_enum` + FR-013 triage on failure |
-| R4 | Path constant updates | 5 locations reference old 9.0.x filename |
-| R5 | MCP rebuild | `cargo run -p data-transformer --release --features cuda --features cuda` then `cargo build -p vim_mcp_server` |
-| R6 | Version bump scope | `vim_rs` + `vim_macros` to **0.6.0**; path deps in examples; purge 0.5.1 (FR-015) |
-| R7 | Build metrics | Record debug/release `vim_rs` + `examples/vtui` size vs 0.5.0 |
-| R9 | Semver classification | **0.6.0 minor breaking** — struct field additions (e.g. `EventFilterSpec`) break literals without `defaults` feature |
-
-No open **NEEDS CLARIFICATION** items.
+Resolved decisions R1–R9 (spec bump, paths, MCP) plus **R10–R16** (dependency refresh). No open **NEEDS CLARIFICATION** items.
 
 ---
 
@@ -127,58 +97,58 @@ No open **NEEDS CLARIFICATION** items.
 #### Phase A — Pre-flight spec validation
 
 1. Confirm `vim_build/data/vi_json_openapi_specification_v9_1_0_0.json` exists and parses.
-2. Spot-check `DatastoreAccessible_enum`: values MUST be `"True"` / `"False"` strings (verified in plan research — already correct in supplied JSON).
-3. If generator or tests fail, inspect YAML/JSON for boolean coercion **before** editing `vim_build` (FR-013).
+2. Spot-check `DatastoreAccessible_enum` string values (FR-013).
+3. `cd openapi30 && cargo test`.
 
 #### Phase B — Wire generator to 9.1.0.0
 
-Update hard-coded spec paths from `vi_json_openapi_specification_v9_0_0_0_24798170.json` → `vi_json_openapi_specification_v9_1_0_0.json`:
+Update hard-coded paths `vi_json_openapi_specification_v9_0_0_0_24798170.json` → `vi_json_openapi_specification_v9_1_0_0.json` in five locations ([research R4](./research.md#r4--hard-coded-spec-path-updates)).
 
-| File | Purpose |
-|------|---------|
-| `vim_build/src/main.rs` | Generator entry point |
-| `mcp/data_processing/data_transformer/src/main.rs` | MCP API database input |
-| `mcp/server/build.rs` | Staleness detection |
-| `openapi30/src/openapi.rs` | Embedded test fixture |
-| `vim_build/src/vim_model/loader.rs` | Unit test fixture path |
+#### Phase C — Dependency refresh: PHF alignment first (FR-017)
 
-#### Phase C — Regenerate bindings
+**Order matters**: bump `phf_codegen` before regenerating PHF-backed output.
+
+| Crate | Manifest change |
+|-------|-----------------|
+| `vim_build/Cargo.toml` | `phf_codegen = "0.14"` |
+| `vim_macros/Cargo.toml` | `phf = "0.14"` |
+| `vim_rs/Cargo.toml` | `phf = "0.14"` |
+| `mcp/server/Cargo.toml` | `phf = "0.14"` |
+
+Run `cargo update -p phf -p phf_codegen` in affected crates; refresh locks.
+
+#### Phase D — Regenerate bindings
 
 ```bash
 cd vim_build
 cargo run --bin generate --release
 ```
 
-**Outputs** (single run, no hand-edits):
+Outputs: `vim_rs/src/types/*`, `vim_rs/src/mo/*`, `vim_macros/src/field_data.rs`, `mcp/server/src/field_data.rs`, PHF maps in `struct_enum.rs` / `deser.rs` / enum impls.
 
-- `vim_rs/src/types/*` (structs, enums, traits, ser/de, defaults, …)
-- `vim_rs/src/mo/*.rs`
-- `vim_macros/src/field_data.rs`
-- `mcp/server/src/field_data.rs`
+Verify idempotency (SC-005, SC-014).
 
-Verify idempotency: second run produces no diff (SC-005).
+#### Phase E — Dependency refresh: remaining majors + migrations (FR-018)
 
-#### Phase D — Version bump to 0.6.0 (FR-006, FR-007, FR-015)
+| Crate | Bump | Migration touchpoints |
+|-------|------|----------------------|
+| `vim_build` | `convert_case` 0.11, `check_keyword` 0.4 | `vim_model/types.rs`, `names.rs`, emitters — verify `Case`/`Casing`/`CheckKeyword` APIs |
+| `vim_rs` | `quick-xml` 0.40 | `vim_rs/src/xml/*` if compile errors |
+| `vim_rs` (dev) | `criterion` 0.8 | `benches/miniserde_bench.rs`, `Cargo.toml` bench harness |
+| `mcp/server`, `data-transformer` | `bincode` 3 | `mcp/server/src/model.rs`, `data_transformer/src/main.rs` — use `bincode::serde::encode_to_vec` / `decode_from_slice` or equivalent v3 API |
+| `mcp/server` (optional `web-ui`) | `tera` 2 | `mcp/server/src/web_ui/handlers.rs` |
 
-| File | Field |
-|------|-------|
-| `vim_rs/Cargo.toml` | `version`, `vim_macros` path dep version → **0.6.0** |
-| `vim_macros/Cargo.toml` | `version` → **0.6.0** |
-| `examples/snippets/Cargo.toml` | `vim_rs` path dep version → **0.6.0** |
-| `examples/vtui/Cargo.toml` | `vim_rs` path dep version → **0.6.0** |
-| `CHANGELOG.md` | Retitle `[0.5.1]` → `[0.6.0]`; add breaking-minor classification |
-| `mcp/README.md` | Version alignment mention → **0.6.0** |
-| `specs/003-vsphere-910-update/*` | Plan/contracts/data-model/quickstart/research/tasks — no 0.5.1 release targets |
+#### Phase F — Dependency refresh: minor/patch + lockfiles (FR-019, FR-020)
 
-**Semver audit** (SC-011):
+Bump stale compat/patch deps per [research R16](./research.md#r16--dependency-refresh-matrix); run `cargo update` per crate; commit all in-scope `Cargo.lock` files.
 
-```bash
-rg '0\.5\.1' --glob '!**/Cargo.lock' --glob '!specs/**/spec.md'
-# Expected after implement: zero hits in manifests and release docs
-# (spec.md Input line may retain original user quote for history)
-```
+Verify SC-012 (`cargo outdated --root-deps-only` clean) and SC-013 (single `phf` 0.14.x in `vim_rs/Cargo.lock`).
 
-#### Phase E — MCP pipeline rebuild
+#### Phase G — Version bump to 0.6.0 (FR-006, FR-007, FR-015)
+
+`vim_rs`, `vim_macros`, example path deps → **0.6.0**; CHANGELOG `[0.6.0]`; purge 0.5.1 (SC-011).
+
+#### Phase H — MCP local rebuild (FR-005, FR-021)
 
 ```bash
 cd mcp
@@ -186,50 +156,44 @@ cargo run -p data-transformer --release --features cuda
 cargo build --release -p vim_mcp_server
 ```
 
-#### Phase F — Compile & test validation
+Output: gitignored `mcp/data/api_database.bin`. Required for SC-007 manual validation, not committed.
 
-See [quickstart.md](./quickstart.md) for full command matrix. Minimum gates:
+#### Phase I — Compile & test validation
 
-- `cargo build --release` / `cargo test` in `vim_rs`, `vim_build`, `vim_macros`, `openapi30`
-- `cargo build --bins` in `examples/` (default features)
-- `cargo build --bins --all-features` where applicable
-- Fix sample/test code only for spec-driven API renames/removals (FR-010)
+Full matrix in [quickstart.md](./quickstart.md). Minimum: `vim_rs`, `vim_macros`, `vim_build`, `openapi30` tests; examples `--bins`; `tls_rustls_only` build; MCP after Phase H.
 
-#### Phase G — Release notes & metrics
+#### Phase J — Release notes & metrics (FR-011, SC-006, SC-008)
 
-- `CHANGELOG.md`: `[0.6.0]` entry — target API 9.1.0.0, **breaking minor release** rationale, breaking changes from spec diff (include `EventFilterSpec` field additions), build/size metrics (SC-008)
-- Document failure root-cause if any triage occurred (SC-009)
-- Confirm no manifest or release doc still targets 0.5.1 (SC-011)
+`CHANGELOG.md` `[0.6.0]` must include:
+
+- vSphere API 9.1.0.0 target + breaking minor rationale
+- Spec-driven breaks (e.g. `EventFilterSpec`)
+- **Each major dependency bump** as old→new (minimum set in FR-011)
+- **One line** summarizing minor/patch dependency refresh
+- Build/size metrics vs 0.5.0
 
 ### Tests
 
-| Test / gate | Purpose |
-|-------------|---------|
-| Regeneration idempotency | SC-005 — re-run generator, expect clean git diff on generated files |
-| `cargo test -p vim_rs` | Core library regression |
-| `cargo test -p vim_rs --all-features` | Optional feature surface |
-| `cargo test -p openapi30` | OpenAPI loader against embedded 9.1.0.0 fixture |
-| `cargo test -p vim_macros` | Macro + field_data resolution |
-| `cargo build --bins` (examples) | SC-001 sample projects |
-| `cargo build -p vim_mcp_server` | SC-007 MCP rebuild |
-| Build timing + vtui size | SC-008 release gate |
-| Semver artifact audit | SC-011 — no 0.5.1 in manifests/release docs |
-
-### Documentation deliverables
-
-- **CHANGELOG [0.6.0]**: API 9.1.0.0 target, breaking minor classification, breaking changes, build metrics
-- **contracts/**: release artifact and validation contract ([contracts/README.md](./contracts/README.md))
-- **quickstart.md**: ordered validation commands for implementers
+| Gate | Purpose | Spec ref |
+|------|---------|----------|
+| Regen idempotency | Second generator run → no diff | SC-005, SC-014 |
+| `cargo test -p vim_rs` (+ `--all-features`) | Core regression | SC-004, SC-002 |
+| `cargo test -p vim_macros` | PHF field_data + macros | SC-004 |
+| `cargo outdated --root-deps-only` | Zero outdated direct deps | SC-012 |
+| `vim_rs/Cargo.lock` phf count | Single 0.14.x major | SC-013 |
+| Examples + tls_rustls_only | Monorepo compile | SC-001 |
+| MCP after local DB regen | Manual validation | SC-007 |
+| CHANGELOG audit | Majors enumerated + minor summary | SC-006 |
 
 ### Design artifacts
 
-- [research.md](./research.md) — decisions R1–R9
-- [data-model.md](./data-model.md) — entities and regeneration flow
+- [research.md](./research.md) — R1–R16
+- [data-model.md](./data-model.md) — entities + dependency matrix
 - [quickstart.md](./quickstart.md) — validation runbook
-- [contracts/README.md](./contracts/README.md) — release contract
+- [contracts/README.md](./contracts/README.md) — release + dependency contract
 
 ---
 
 ## Phase 2
 
-**Not in scope for `/speckit-plan`**. Run **`/speckit-tasks`** to refresh `tasks.md` for the **0.6.0** semver correction (Phase D/G updates, SC-011 audit task) if not already present.
+**Not in scope for `/speckit-plan`**. Run **`/speckit-tasks`** to generate actionable `tasks.md` from phases A–J.

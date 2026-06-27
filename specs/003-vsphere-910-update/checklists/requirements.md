@@ -31,6 +31,6 @@
 
 ## Notes
 
-- Validation passed on first iteration (2026-06-26); re-validated after CUDA, stale-reference, and **0.6.0 semver** clarifications (2026-06-26).
+- Validation passed on first iteration (2026-06-26); re-validated after CUDA, stale-reference, **0.6.0 semver**, full-monorepo dependency refresh, CHANGELOG major-bump enumeration, and gitignored MCP database clarifications (2026-06-26).
 - Some domain-specific terms (OpenAPI, VIM, MCP) are inherent to this library-update feature and refer to product components rather than implementation choices; requirements are framed as outcomes and verifiable gates.
 - Ready for `/speckit-plan`.

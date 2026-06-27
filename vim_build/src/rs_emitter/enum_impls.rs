@@ -70,11 +70,16 @@ fn generate_enum_phf_map(
     printer: &mut dyn Printer,
 ) -> Result<()> {
     let map_name = format!("{}_MAP", enum_name.to_case(Case::UpperSnake));
-    let mut map_builder = phf_codegen::Map::new();
+    let mut entries: Vec<(String, String)> = Vec::new();
     
     for value in &vim_enum.variants {
         let variant = to_enum_variant(value);
-        map_builder.entry(value.clone(), &format!("{}::{}", enum_name, variant));
+        entries.push((value.clone(), format!("{}::{}", enum_name, variant)));
+    }
+
+    let mut map_builder = phf_codegen::Map::new();
+    for (key, value) in &entries {
+        map_builder.entry(key, value);
     }
     
     printer.println(&format!(

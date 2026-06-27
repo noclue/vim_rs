@@ -4,7 +4,7 @@ use build_examples::collect_examples;
 use build_embeddings::generate_embeddings;
 use api_database::{ApiData, ApiDatabase};
 use std::fs::File;
-use std::io::BufWriter;
+use std::io::{BufWriter, Write};
 use std::path::PathBuf;
 use std::time::Instant;
 use tracing::{info, error};
@@ -155,10 +155,12 @@ async fn main() -> Result<()> {
 
     let file = File::create(&output_path)
         .context("Failed to create output file")?;
-    let writer = BufWriter::new(file);
+    let mut writer = BufWriter::new(file);
 
-    bincode::serialize_into(writer, &database)
+    let encoded = bincode::serde::encode_to_vec(&database, bincode::config::standard())
         .context("Failed to serialize database")?;
+    writer.write_all(&encoded)
+        .context("Failed to write database")?;
 
     let file_size = std::fs::metadata(&output_path)?.len();
     info!("✓ Wrote {} items with embeddings ({:.2} MB)",
