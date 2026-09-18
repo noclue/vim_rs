@@ -334,7 +334,7 @@ impl McpServer {
         let id = &params.0.id;
         
         if let Some(item) = self.api_db.get(id) {
-            Ok(CallToolResult::success(vec![Content::text(item.detailed_document())]))
+            Ok(CallToolResult::success(vec![ContentBlock::text(item.detailed_document())]))
         } else {
             // Try to provide helpful suggestions
             let mut suggestions = Vec::new();
@@ -370,7 +370,7 @@ impl McpServer {
                 id,
                 suggestions_text
             );
-            Ok(CallToolResult::success(vec![Content::text(msg)]))
+            Ok(CallToolResult::success(vec![ContentBlock::text(msg)]))
         }
     }
 
@@ -378,7 +378,7 @@ impl McpServer {
     #[tool(description = "CALL THIS FIRST! Returns the complete vim_rs starter guide with connection patterns, property collector usage, code snippets, and best practices. Essential for writing correct vim_rs code on the first try.")]
     async fn get_starter_guide(&self, _params: Parameters<GetStarterGuideInput>) -> Result<CallToolResult, McpError> {
         // Return the embedded starter guide (compiled into the binary)
-        Ok(CallToolResult::success(vec![Content::text(STARTER_GUIDE)]))
+        Ok(CallToolResult::success(vec![ContentBlock::text(STARTER_GUIDE)]))
     }
 
     /// List all supported managed object types
@@ -400,7 +400,7 @@ impl McpServer {
         output.push_str("get_property_path(managed_object=\"VirtualMachine\", property_path=\"guest.ip_address\")\n");
         output.push_str("```\n");
 
-        Ok(CallToolResult::success(vec![Content::text(output)]))
+        Ok(CallToolResult::success(vec![ContentBlock::text(output)]))
     }
 
     /// Get property information for a managed object and property path
@@ -412,7 +412,7 @@ impl McpServer {
         let info = match property_collector::get_property_path(managed_object, property_path) {
             Ok(info) => info,
             Err(e) => {
-                return Ok(CallToolResult::success(vec![Content::text(format!(
+                return Ok(CallToolResult::success(vec![ContentBlock::text(format!(
                     "Error getting property info for {}.{}:\n\n{}\n\n\
                     Use `list_managed_object_types` to see all supported types.",
                     managed_object,
@@ -474,7 +474,7 @@ impl McpServer {
             output.push_str("```\n");
         }
 
-        Ok(CallToolResult::success(vec![Content::text(output)]))
+        Ok(CallToolResult::success(vec![ContentBlock::text(output)]))
     }
 
     /// Get the complete property tree for a managed object type
@@ -490,7 +490,7 @@ impl McpServer {
             match regex::Regex::new(filter) {
                 Ok(re) => Some(re),
                 Err(e) => {
-                    return Ok(CallToolResult::error(vec![Content::text(format!(
+                    return Ok(CallToolResult::error(vec![ContentBlock::text(format!(
                         "Invalid regex filter `{}`: {}\n\n\
                         Provide a valid Rust-flavour regex, or omit the filter to return all paths.",
                         filter, e
@@ -512,10 +512,10 @@ impl McpServer {
                     tree.trim_end(),
                     depth.clamp(1, 5)
                 );
-                Ok(CallToolResult::success(vec![Content::text(output)]))
+                Ok(CallToolResult::success(vec![ContentBlock::text(output)]))
             }
             Err(e) => {
-                Ok(CallToolResult::success(vec![Content::text(format!(
+                Ok(CallToolResult::success(vec![ContentBlock::text(format!(
                     "Error getting property tree for {}:\n\n{}\n\n\
                     Use `list_property_collector_root_types` to see all supported types.",
                     managed_object,
@@ -533,7 +533,7 @@ impl McpServer {
             Some(e) => e,
             None => {
                 let message = "Semantic search is not available. No embeddings in database.".to_string();
-                return Ok(CallToolResult::success(vec![Content::text(message)]));
+                return Ok(CallToolResult::success(vec![ContentBlock::text(message)]));
             }
         };
 
@@ -541,7 +541,7 @@ impl McpServer {
             Some(m) => m,
             None => {
                 let message = "Semantic search is not available. Embedding model not loaded.".to_string();
-                return Ok(CallToolResult::success(vec![Content::text(message)]));
+                return Ok(CallToolResult::success(vec![ContentBlock::text(message)]));
             }
         };
 
@@ -606,7 +606,7 @@ impl McpServer {
 
         if formatted_results.is_empty() {
             let message = format!("No results found for query: '{}'", params.0.query);
-            Ok(CallToolResult::success(vec![Content::text(message)]))
+            Ok(CallToolResult::success(vec![ContentBlock::text(message)]))
         } else {
             let filter_info = if *filter != SearchFilter::All {
                 format!(" (filtered by: {})", filter.as_str())
@@ -619,7 +619,7 @@ impl McpServer {
                 params.0.query,
                 formatted_results.join("\n")
             );
-            Ok(CallToolResult::success(vec![Content::text(message)]))
+            Ok(CallToolResult::success(vec![ContentBlock::text(message)]))
         }
     }
 }
@@ -665,8 +665,8 @@ impl McpServer {
 
 #[tool_handler]
 impl ServerHandler for McpServer {
-    fn get_info(&self) -> ServerInfo {
-        ServerInfo::new(
+    fn get_info(&self) -> ServerConfig {
+        ServerConfig::new(
             ServerCapabilities::builder()
                 .enable_tools()
                 .build(),
