@@ -20,7 +20,7 @@ impl StorageResourceManager {
     /// 
     /// The changes are applied to all the backing storage devices for the datastore.
     /// Currently we only support storage I/O resource management on VMFS volumes.
-    /// In order to enable storage I/O resource management on a datstore, we require
+    /// In order to enable storage I/O resource management on a datastore, we require
     /// that all the hosts that are attached to the datastore support this feature.
     /// The privilege Datastore.ConfigIOManagement is required on the target
     /// datastore.

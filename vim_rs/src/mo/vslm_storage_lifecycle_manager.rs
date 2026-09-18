@@ -64,7 +64,7 @@ impl VslmStorageLifecycleManager {
     /// datastore's catalog
     ///
     /// ### fcd_id
-    /// If set, this call blocks until fcdId is persisited into db
+    /// If set, this call blocks until fcdId is persisted into db
     /// if this fcdId is not found in queue, assume persisted and return
     ///
     /// ## Errors:
@@ -75,7 +75,7 @@ impl VslmStorageLifecycleManager {
     /// ***NotFound***: If matching datastore could not be found for the given
     /// datastoreMoId.
     /// 
-    /// ***VslmSyncFault***: If an exception occured during datastore sync.
+    /// ***VslmSyncFault***: If an exception occurred during datastore sync.
     /// 
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_sync_datastore(&self, datastore_url: &str, full_sync: bool, fcd_id: Option<&crate::types::structs::Id>) -> Result<()> {

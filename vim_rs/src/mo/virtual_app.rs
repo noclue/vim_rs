@@ -952,7 +952,7 @@ impl VirtualApp {
     ///
     /// ### add_change_set
     /// a set of LinkInfo objects that either add a new link
-    /// or modify an exisiting link.
+    /// or modify an existing link.
     ///
     /// ### remove_set
     /// a set of entities that should no longer link to this vApp.
@@ -1361,7 +1361,7 @@ impl VirtualApp {
             None => Ok(None),
         }
     }
-    /// List of permissions defined for this entity.
+    /// List of the permissions explicitly defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let pv_opt = self.client.fetch_property_raw("", "VirtualApp", &self.mo_id, "permission").await?;
         match pv_opt {

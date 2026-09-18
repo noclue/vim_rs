@@ -19,6 +19,64 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.6.0] - 2026-06-26
+
+> **Breaking minor release.** Bindings regenerated from the vSphere **9.1.0.0** VI/JSON
+> OpenAPI specification. The 9.1.0.0 spec diff introduces compile-breaking struct changes
+> (e.g. new fields on generated types); semver **0.6.0** reflects that impact. No
+> intentional changes to client transport, TLS, or macro semantics.
+
+### Changed
+
+- Regenerated `vim_rs` types, managed-object stubs, and serialization code from
+  `vim_build/data/vi_json_openapi_specification_v9_1_0_0.json`.
+- Regenerated `vim_macros` and MCP server `field_data.rs` from the same generator run.
+- Generator, data-transformer, MCP staleness checks, and OpenAPI test fixtures now
+  reference the 9.1.0.0 JSON input file.
+- `API_RELEASE` default and `COMPATIBLE_API_RELEASES` negotiation list updated to
+  **9.1.0.0** (9.0.0.0 retained for older vCenter negotiation).
+
+### Breaking
+
+- **(vSphere 9.1.0.0): new optional fields** for example `EventFilterSpec`** gained 
+  `auditable` and `audit_id`. Existing struct literals fail to compile unless the 
+  `defaults` feature is enabled or the new fields are set explicitly. Updated
+  `examples/snippets/src/eventster.rs` accordingly.
+- **Upgrade from 0.5.0:** review generated struct literals against the 9.1.0.0 binding
+  diff; enable `defaults` or assign new fields where the spec added properties.
+
+### Dependencies
+
+Full monorepo third-party dependency refresh (FR-016–FR-020). Major direct-dependency
+bumps:
+
+| Package | From | To | Crates |
+|---------|------|-----|--------|
+| `phf` | 0.11 / 0.13 | **0.14** | `vim_macros`, `vim_rs`, `mcp/server` |
+| `phf_codegen` | 0.11 | **0.14** | `vim_build` |
+| `quick-xml` | 0.39 | **0.40** | `vim_rs` (`xml` feature) |
+| `criterion` | 0.5 | **0.8** | `vim_rs` (dev) |
+| `convert_case` | 0.8 | **0.11** | `vim_build` |
+| `check_keyword` | 0.3 | **0.4** | `vim_build` |
+| `bincode` | 1.3 | **2.0** | `mcp/server`, `data-transformer` |
+| `tera` | 1.20 | **2** | `mcp/server` (`web-ui` feature) |
+
+- **`phf` 0.14:** PHF-backed generated files (`struct_enum.rs`, `deserialize.rs`,
+  `field_data.rs`) were regenerated; consecutive generator runs are idempotent.
+  `vim_build` emitters stage map entries in owned `Vec`s before `phf_codegen::build()`
+  (0.14 lifetime requirements).
+- **`bincode` 2.0:** MCP API database serialization uses `bincode::serde::encode_to_vec` /
+  `decode_from_slice` with the `serde` feature. **Not** crates.io `3.0.0` — that release
+  is an unmaintained placeholder that does not compile. Regenerate gitignored
+  `mcp/data/api_database.bin` locally via `cargo run -p data-transformer --release
+  --features cuda` from `mcp/` before building `vim_mcp_server`.
+- **`quick-xml` 0.40:** attribute unescaping uses `Attribute::normalized_value` with
+  `XmlVersion::Implicit1_0` (replaces deprecated `unescape_value`).
+- **Minor/patch:** refreshed stale direct dependencies and `Cargo.lock` files across
+  `vim_rs`, `vim_macros`, `vim_build`, `openapi30`, `examples/`, `mcp/`, and
+  `tls_rustls_only/` (e.g. `bytes`, `log`, `env_logger`, `chrono`, `serde`, `actix-web`,
+  `rmcp`, `fastembed`, `ratatui`, `rustls`).
+
 ## [0.5.0] - 2026-06-02
 
 > **Breaking release.** This version moves the HTTP stack to **reqwest 0.13** with a

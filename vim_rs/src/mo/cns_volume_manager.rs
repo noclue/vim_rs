@@ -134,7 +134,7 @@ impl CnsVolumeManager {
     ///   
     /// Faults that can be set in individual result entry, corresponding to each
     /// *CnsVolumeACLConfigureSpec* instance in input:
-    /// - vmodl.fault.InvalidArgument Set if the input spec has invlid field.
+    /// - vmodl.fault.InvalidArgument Set if the input spec has invalid field.
     /// - vim.fault.NotFound Set in case of the volume can not be found.
     /// - vim.fault.CnsFault Set in case of any other failure scenarios.
     ///
@@ -187,10 +187,8 @@ impl CnsVolumeManager {
     /// - vim.fault.NotFound set in case the existing disk that should
     ///   be used to back the container volume cannot be found.
     /// - vim.fault.CnsFault set in case of any other failure scenario.
-    /// - vim.fault.CnsAlreadyRegisteredFault
-    ///   set in case where the backing disk (either specified with
-    ///   URL path for VMDK volume or disk id for FCD volume) is
-    ///   already registered as CNS volume.
+    /// - vim.fault.CnsVolumeAlreadyExistsFault
+    ///   set in case volume already exists on a different datastore.
     ///
     /// ## Parameters:
     ///
@@ -407,7 +405,7 @@ impl CnsVolumeManager {
     ///   empty strings, invalid formats, invalid
     ///   combination of inputs, such as the volume is
     ///   not attached to any VM, or the volume is not
-    ///   attached to the VM specfied, volume type if
+    ///   attached to the VM specified, volume type if
     ///   FILE etc.
     /// - vmodl.fault.ManagedObjectNotFound set in case of the VM can not be
     ///   found.
@@ -500,13 +498,15 @@ impl CnsVolumeManager {
     /// Returns container volumes matching criteria set in the filter.
     /// 
     ///   
-    /// This API will not return partial result in case of invalid input, like empty
-    /// volume ID, volume name fields and so on. In case of valid inputs, e.g.
-    /// non-empty volume ID, if the output doesn't contain information for that
-    /// volume that would mean that CNS is not aware of the existence of that volume.
-    /// Note that there could be duplicate volumes or missing volumes across
-    /// multiple pages returned by this API when there are parallel volume
-    /// provisioning operations like create, delete are in progress.
+    /// This API will return partial results even when some of the volume IDs
+    /// are invalid or non-existent. Invalid inputs, like empty volume ID or
+    /// unknown volume ID, will be excluded from the results. For valid inputs,
+    /// if the output doesn't contain information for that volume that would
+    /// mean that CNS is not aware of the existence of that volume. Note that
+    /// there could be duplicate volumes or missing volumes across multiple
+    /// pages returned by this API when there are parallel volume provisioning
+    /// operations like create, delete are in
+    /// progress.
     ///   
     /// Following privileges will be required on specified entities, to perform
     /// this operation:
@@ -546,13 +546,14 @@ impl CnsVolumeManager {
     /// Returns container volumes matching criteria set in the filter.
     /// 
     ///   
-    /// This API will not return partial result in case of invalid input, like empty
-    /// volume ID, volume name fields and so on. In case of valid inputs, e.g.
-    /// non-empty volume ID, if the output doesn't contain information for that
-    /// volume that would mean that CNS is not aware of the existence of that volume.
-    /// Note that there could be duplicate volumes or missing volumes across
-    /// multiple pages returned by this API when there are parallel volume
-    /// provisioning operations like create, delete are in progress.
+    /// This API will return partial results even when some of the volume IDs
+    /// are invalid or non-existent. Invalid inputs, like empty volume ID or
+    /// unknown volume ID, will be excluded from the results. For valid inputs,
+    /// if the output doesn't contain information for that volume that would
+    /// mean that CNS is not aware of the existence of that volume. Note that
+    /// there could be duplicate volumes or missing volumes across multiple
+    /// pages returned by this API when there are parallel volume provisioning
+    /// operations like create, delete are in progress.
     ///   
     /// Following privileges will be required on specified entities, to perform
     /// this operation:
@@ -699,6 +700,168 @@ impl CnsVolumeManager {
     pub async fn cns_relocate_volume(&self, relocate_specs: &[Box<dyn crate::types::traits::CnsVolumeRelocateSpecTrait>]) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CnsRelocateVolumeRequestType {relocate_specs, };
         let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsRelocateVolume", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
+    /// Initiates a task to synchronize one or more volumes based on the provided specifications.
+    /// 
+    /// This method allows for syncing volume properties for a single volume only.
+    /// The operation is asynchronous and returns a \`Task\` object that can be used
+    /// to monitor the progress and outcome of the synchronization. This API supported only
+    /// for block volume.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### sync_specs
+    /// Specification for volume to be synchronized.
+    /// At most one specification is supported for this operation.
+    ///
+    /// ## Returns:
+    ///
+    /// \`vim.Task\` vCenter Task to track the progress and overall state
+    /// of this operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: if:
+    /// - The volume ID in an input spec is empty or malformed
+    /// - This API supports input size of 1 only. If
+    ///   more or less than one entries are passed as
+    ///   input, this exception will be thrown.
+    ///   
+    /// ***NotFound***: if a volume specified in \`syncSpecs\` does not exist on the system.
+    /// 
+    /// ***CnsFault***: Thrown for all other CNS-related failure scenarios, such as issues
+    /// with the CNS infrastructure or backend storage.
+    pub async fn cns_sync_volume(&self, sync_specs: Option<&[crate::types::structs::CnsSyncVolumeSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsSyncVolumeRequestType {sync_specs, };
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsSyncVolume", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
+    /// Initiates an asynchronous operation to unregister volume.
+    /// 
+    ///   
+    /// Unregistration removes the CNS metadata associated with the specified volumes,
+    /// it also optionally converts to a targer volume type as specified in the
+    /// *CnsUnregisterVolumeSpec.targetVolumeType*. This API is only
+    /// supported for the block volume.
+    ///   
+    /// This is an asynchronous operation, it returns a *Task* object
+    /// which can be used to monitor the progress and completion status of the
+    /// unregistration process.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### unregister_spec
+    /// An array of *CnsUnregisterVolumeSpec* objects,
+    /// each specifying a unique volume or PVC to be unregistered
+    /// along with optional parameters for its post-unregistration
+    /// state. At most one specification is supported for this operation.
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* to track the progress and result of this operation.
+    /// The task's result will indicate the success of the unregistration
+    /// for all specified volumes.
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on datastores specified in input, required for
+    ///   block volume only
+    ///   
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***NotFound***: Thrown if any of the `volumeId`s specified in the
+    /// `unregisterSpec` do not correspond to an
+    /// existing PVC in the CNS inventory.
+    /// 
+    /// ***InvalidState***: Thrown if a volume specified is in a state that prevents
+    /// unregistration.
+    /// 
+    /// ***InvalidDatastore***: Thrown if the operation cannot be performed on the datastore.
+    /// 
+    /// ***TaskInProgress***: Thrown if the virtual storage object is busy.
+    /// 
+    /// ***InvalidArgument***: if:
+    /// - This API supports input size of 1 only. If
+    ///   more or less than one entries are passed as
+    ///   input, this exception will be thrown.
+    /// - This exception will be thrown when invalid
+    ///   format for VolumeId *CnsVolumeId.id*
+    ///   is passed, or volume IDs are empty.
+    /// - This exception will be thrown when volume Id does
+    ///   not belong to block volume. 
+    ///   
+    /// ***CnsFault***: Thrown if a general CNS-specific error occurs during the
+    /// unregistration process that is not covered by more
+    /// specific faults.
+    /// 
+    /// ***CnsNotRegisteredFault***: if the volume exists in VC but not registered as CNS
+    /// volume.
+    pub async fn cns_unregister_volume(&self, unregister_spec: Option<&[crate::types::structs::CnsUnregisterVolumeSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsUnregisterVolumeRequestType {unregister_spec, };
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsUnregisterVolume", Some(&input)).await?;
+        let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
+    /// Updates volume crypto, namely encrypt, deep recrypt, shallow recrypt,
+    /// and decrypt for the container block volumes and all the disks in the chain.
+    /// 
+    ///   
+    /// Following privileges will be required on specified entities, to perform
+    /// this operation:
+    /// - Datastore.FileManagement on all involved datastores, required for
+    ///   block volumes only
+    /// - Cryptographer.Encrypt on all involved datastores and on the virtual machines volumes
+    ///   are attached to, required for block volumes update encrypt
+    /// - Cryptographer.Recrypt on all involved datastores and on the virtual machines volumes
+    ///   are attached to, required for block volumes update deep or shallow recrypt
+    /// - Cryptographer.Decrypt on all involved datastores and on the virtual machines volumes
+    ///   are attached to, required for block volumes update decrypt
+    ///   
+    /// Faults that can be set in individual result entry, corresponding to each
+    /// VolumeCryptoUpdateSpec instance in input:
+    /// - vmodl.fault.InvalidArgument set in case of invalid but non-empty
+    ///   volume id.
+    /// - vim.fault.NotFound set in case of the volume can not be found.
+    /// - vim.fault.CnsFault set in case of any other failure scenario.
+    ///
+    /// ## Parameters:
+    ///
+    /// ### update_specs
+    /// Specifications for volumes to be crypted.
+    ///
+    /// ## Returns:
+    ///
+    /// *Task* vCenter Task to track the progress and overall state
+    /// of this operation.
+    /// 
+    /// Refers instance of *Task*.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: if:
+    /// - Input size is not equal to 1
+    /// - Volume id in input spec is empty.
+    /// - *VolumeCryptoUpdateSpec.disksCrypto.crypto*
+    ///   is unset.
+    /// - *VolumeCryptoUpdateSpec.disksCrypto.parent*
+    ///   is set.
+    ///   
+    /// ***NotFound***: if the volume can not be found.
+    /// 
+    /// ***CnsNotRegisteredFault***: if the volume exists in VC but not registered as CNS
+    /// volume.
+    /// 
+    /// ***CnsFault***: Thrown for all other failure scenario.
+    pub async fn cns_update_volume_crypto(&self, update_specs: Option<&[crate::types::structs::CnsVolumeCryptoUpdateSpec]>) -> Result<crate::types::structs::ManagedObjectReference> {
+        let input = CnsUpdateVolumeCryptoRequestType {update_specs, };
+        let bytes = self.client.invoke("vsan", "CnsVolumeManager", &self.mo_id, "CnsUpdateVolumeCrypto", Some(&input)).await?;
         let result: crate::types::structs::ManagedObjectReference = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
@@ -1087,6 +1250,99 @@ impl<'b, 'a> miniserde::ser::Map for CnsRelocateVolumeRequestTypeSer<'b, 'a> {
             0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsRelocateVolumeRequestType")),
             1 => return Some((std::borrow::Cow::Borrowed("relocateSpecs"), &self.data.relocate_specs as &dyn miniserde::Serialize)),
             _ => return None,
+        }
+    }
+}
+struct CnsSyncVolumeRequestType<'a> {
+    sync_specs: Option<&'a [crate::types::structs::CnsSyncVolumeSpec]>,
+}
+
+impl<'a> miniserde::Serialize for CnsSyncVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsSyncVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsSyncVolumeRequestTypeSer<'b, 'a> {
+    data: &'b CnsSyncVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CnsSyncVolumeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsSyncVolumeRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.sync_specs else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("syncSpecs"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
+struct CnsUnregisterVolumeRequestType<'a> {
+    unregister_spec: Option<&'a [crate::types::structs::CnsUnregisterVolumeSpec]>,
+}
+
+impl<'a> miniserde::Serialize for CnsUnregisterVolumeRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsUnregisterVolumeRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsUnregisterVolumeRequestTypeSer<'b, 'a> {
+    data: &'b CnsUnregisterVolumeRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CnsUnregisterVolumeRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsUnregisterVolumeRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.unregister_spec else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("unregisterSpec"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
+struct CnsUpdateVolumeCryptoRequestType<'a> {
+    update_specs: Option<&'a [crate::types::structs::CnsVolumeCryptoUpdateSpec]>,
+}
+
+impl<'a> miniserde::Serialize for CnsUpdateVolumeCryptoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(CnsUpdateVolumeCryptoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct CnsUpdateVolumeCryptoRequestTypeSer<'b, 'a> {
+    data: &'b CnsUpdateVolumeCryptoRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for CnsUpdateVolumeCryptoRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"CnsUpdateVolumeCryptoRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.update_specs else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("updateSpecs"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
         }
     }
 }

@@ -357,6 +357,65 @@ impl SearchIndex {
             None => Ok(None),
         }
     }
+    /// API for efficient query/search over the managed objects (resource
+    /// model) data.
+    /// 
+    /// It provides means to filter and retrieve projections (subsets)
+    /// onto the matched resources' properties.
+    /// Executes the provided *SearchIndexQuerySpec* instance, i.e., retrieves a
+    /// snapshot of the resource model data as specified in the query.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    /// 
+    /// ***Required privileges:*** System.View
+    ///
+    /// ## Parameters:
+    ///
+    /// ### query_spec
+    /// The query that defines the
+    /// managed objects data to retrieve.
+    ///
+    /// ## Returns:
+    ///
+    /// Result set with data retrieved for the provided query.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: if *SearchIndexQuerySpec* is not specified correctly
+    pub async fn query(&self, query_spec: &crate::types::structs::SearchIndexQuerySpec) -> Result<crate::types::structs::SearchIndexResultSet> {
+        let input = QueryRequestType {query_spec, };
+        let bytes = self.client.invoke("", "SearchIndex", &self.mo_id, "Query", Some(&input)).await?;
+        let result: crate::types::structs::SearchIndexResultSet = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
+    /// API to fetch the next page during pagination.
+    /// 
+    /// The marker for the *SearchIndexIterationSpec* is provided
+    /// by the *SearchIndexResultSet* from the initial query request.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    /// 
+    /// ***Required privileges:*** System.View
+    ///
+    /// ## Parameters:
+    ///
+    /// ### iteration_spec
+    /// Marker of the place to continiue iteration from.
+    /// It recalculates the result again to return the rest of result.
+    ///
+    /// ## Returns:
+    ///
+    /// Result set with data retrieved for the provided query.
+    ///
+    /// ## Errors:
+    ///
+    /// ***InvalidArgument***: if *SearchIndexIterationSpec* is not specified correctly
+    pub async fn query_next(&self, iteration_spec: &crate::types::structs::SearchIndexIterationSpec) -> Result<crate::types::structs::SearchIndexResultSet> {
+        let input = QueryNextRequestType {iteration_spec, };
+        let bytes = self.client.invoke("", "SearchIndex", &self.mo_id, "QueryNext", Some(&input)).await?;
+        let result: crate::types::structs::SearchIndexResultSet = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
+        Ok(result)
+    }
 }
 struct FindAllByDnsNameRequestType<'a> {
     datacenter: Option<&'a crate::types::structs::ManagedObjectReference>,
@@ -656,6 +715,58 @@ impl<'b, 'a> miniserde::ser::Map for FindChildRequestTypeSer<'b, 'a> {
             0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"FindChildRequestType")),
             1 => return Some((std::borrow::Cow::Borrowed("entity"), &self.data.entity as &dyn miniserde::Serialize)),
             2 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
+struct QueryRequestType<'a> {
+    query_spec: &'a crate::types::structs::SearchIndexQuerySpec,
+}
+
+impl<'a> miniserde::Serialize for QueryRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryRequestTypeSer<'b, 'a> {
+    data: &'b QueryRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("querySpec"), &self.data.query_spec as &dyn miniserde::Serialize)),
+            _ => return None,
+        }
+    }
+}
+struct QueryNextRequestType<'a> {
+    iteration_spec: &'a crate::types::structs::SearchIndexIterationSpec,
+}
+
+impl<'a> miniserde::Serialize for QueryNextRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(QueryNextRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct QueryNextRequestTypeSer<'b, 'a> {
+    data: &'b QueryNextRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for QueryNextRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"QueryNextRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("iterationSpec"), &self.data.iteration_spec as &dyn miniserde::Serialize)),
             _ => return None,
         }
     }

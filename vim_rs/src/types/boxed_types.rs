@@ -956,7 +956,7 @@ pub enum ValueElements {
     /// A boxed array of *PbmPlacementCapabilityProfileRequirement*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/pbm`.
-    ArrayOfPbmPlacementCapabilityProfileRequirement(Vec<super::structs::PbmPlacementCapabilityProfileRequirement>),
+    ArrayOfPbmPlacementCapabilityProfileRequirement(Vec<Box<dyn super::traits::PbmPlacementCapabilityProfileRequirementTrait>>),
     /// A boxed array of *PbmPlacementCompatibilityResult*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/pbm`.
@@ -973,6 +973,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/pbm`.
     ArrayOfPbmPlacementHub(Vec<super::structs::PbmPlacementHub>),
+    /// A boxed array of *PbmPlacementHubInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementHubInfo(Vec<super::structs::PbmPlacementHubInfo>),
     /// A boxed array of *PbmPlacementRequirement*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/pbm`.
@@ -981,6 +985,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/pbm`.
     ArrayOfPbmPlacementResourceUtilization(Vec<super::structs::PbmPlacementResourceUtilization>),
+    /// A boxed array of *PbmPlacementZoneTopologyRequirement*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmPlacementZoneTopologyRequirement(Vec<super::structs::PbmPlacementZoneTopologyRequirement>),
     /// A boxed array of *PbmCapabilityProfile*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/pbm`.
@@ -1017,6 +1025,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/pbm`.
     ArrayOfPbmProfileId(Vec<super::structs::PbmProfileId>),
+    /// A boxed array of *PbmProfileK8sCompliantNameSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/pbm`.
+    ArrayOfPbmProfileK8SCompliantNameSpec(Vec<super::structs::PbmProfileK8SCompliantNameSpec>),
     /// A boxed array of *PbmProfileOperationOutcome*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/pbm`.
@@ -2051,6 +2063,10 @@ pub enum ValueElements {
     ArrayOfPerfQuerySpec(Vec<super::structs::PerfQuerySpec>),
     /// A boxed array of *PerfSampleInfo*. To be used in *Any* placeholders.
     ArrayOfPerfSampleInfo(Vec<super::structs::PerfSampleInfo>),
+    /// A boxed array of *PlaceVmsXClusterSpecCandidateNetworks*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfPlaceVmsXClusterSpecCandidateNetworks(Vec<super::structs::PlaceVmsXClusterSpecCandidateNetworks>),
     /// A boxed array of *PosixUserSearchResult*. To be used in *Any* placeholders.
     ArrayOfPosixUserSearchResult(Vec<super::structs::PosixUserSearchResult>),
     /// A boxed array of *PrivilegePolicyDef*. To be used in *Any* placeholders.
@@ -2081,6 +2097,34 @@ pub enum ValueElements {
     ArrayOfResourcePoolQuickStats(Vec<super::structs::ResourcePoolQuickStats>),
     /// A boxed array of *SDDCBase*. To be used in *Any* placeholders.
     ArrayOfSddcBase(Vec<Box<dyn super::traits::SddcBaseTrait>>),
+    /// A boxed array of *SearchIndexFilter*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfSearchIndexFilter(Vec<super::structs::SearchIndexFilter>),
+    /// A boxed array of *SearchIndexIterationSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfSearchIndexIterationSpec(Vec<super::structs::SearchIndexIterationSpec>),
+    /// A boxed array of *SearchIndexOptionalValue*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfSearchIndexOptionalValue(Vec<super::structs::SearchIndexOptionalValue>),
+    /// A boxed array of *SearchIndexPredicate*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfSearchIndexPredicate(Vec<super::structs::SearchIndexPredicate>),
+    /// A boxed array of *SearchIndexQuerySpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfSearchIndexQuerySpec(Vec<super::structs::SearchIndexQuerySpec>),
+    /// A boxed array of *SearchIndexResourceItem*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfSearchIndexResourceItem(Vec<super::structs::SearchIndexResourceItem>),
+    /// A boxed array of *SearchIndexResultSet*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfSearchIndexResultSet(Vec<super::structs::SearchIndexResultSet>),
     /// A boxed array of *SelectionSet*. To be used in *Any* placeholders.
     ArrayOfSelectionSet(Vec<Box<dyn super::traits::SelectionSetTrait>>),
     /// A boxed array of *HostVMotionCompatibility*. To be used in *Any* placeholders.
@@ -2143,6 +2187,18 @@ pub enum ValueElements {
     ArrayOfStringPolicy(Vec<super::structs::StringPolicy>),
     /// A boxed array of *Tag*. To be used in *Any* placeholders.
     ArrayOfTag(Vec<super::structs::Tag>),
+    /// A boxed array of *TagId*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfTagId(Vec<super::structs::TagId>),
+    /// A boxed array of *TagIdNameId*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfTagIdNameId(Vec<super::structs::TagIdNameId>),
+    /// A boxed array of *TagSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfTagSpec(Vec<super::structs::TagSpec>),
     /// A boxed array of *TaskDescription*. To be used in *Any* placeholders.
     ArrayOfTaskDescription(Vec<super::structs::TaskDescription>),
     /// A boxed array of *TaskFilterSpec*. To be used in *Any* placeholders.
@@ -2181,6 +2237,12 @@ pub enum ValueElements {
     ArrayOfTaskReasonSystem(Vec<super::structs::TaskReasonSystem>),
     /// A boxed array of *TaskReasonUser*. To be used in *Any* placeholders.
     ArrayOfTaskReasonUser(Vec<super::structs::TaskReasonUser>),
+    /// A boxed array of *TransitGatewayConfigInfo*. To be used in *Any* placeholders.
+    ArrayOfTransitGatewayConfigInfo(Vec<super::structs::TransitGatewayConfigInfo>),
+    /// A boxed array of *TransitGatewayConfigSpec*. To be used in *Any* placeholders.
+    ArrayOfTransitGatewayConfigSpec(Vec<super::structs::TransitGatewayConfigSpec>),
+    /// A boxed array of *TransitGatewayCreateSpec*. To be used in *Any* placeholders.
+    ArrayOfTransitGatewayCreateSpec(Vec<super::structs::TransitGatewayCreateSpec>),
     /// A boxed array of *TypeDescription*. To be used in *Any* placeholders.
     ArrayOfTypeDescription(Vec<Box<dyn super::traits::TypeDescriptionTrait>>),
     /// A boxed array of *UpdateVirtualMachineFilesResult*. To be used in *Any* placeholders.
@@ -2627,6 +2689,10 @@ pub enum ValueElements {
     ArrayOfVsanAttachToSrOperation(Vec<super::structs::VsanAttachToSrOperation>),
     /// A boxed array of *VsanCapability*. To be used in *Any* placeholders.
     ArrayOfVsanCapability(Vec<super::structs::VsanCapability>),
+    /// A boxed array of *VsanClientServerHciMeshDitEncryptionHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClientServerHciMeshDitEncryptionHealthSummary(Vec<super::structs::VsanClientServerHciMeshDitEncryptionHealthSummary>),
     /// A boxed array of *VsanClusterAdvCfgSyncHostResult*. To be used in *Any* placeholders.
     ArrayOfVsanClusterAdvCfgSyncHostResult(Vec<super::structs::VsanClusterAdvCfgSyncHostResult>),
     /// A boxed array of *VsanClusterAdvCfgSyncResult*. To be used in *Any* placeholders.
@@ -2657,6 +2723,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanClusterGlobalDedupHealthSummary(Vec<super::structs::VsanClusterGlobalDedupHealthSummary>),
+    /// A boxed array of *VsanClusterHciMeshDitEncryptionHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClusterHciMeshDitEncryptionHealthSummary(Vec<super::structs::VsanClusterHciMeshDitEncryptionHealthSummary>),
     /// A boxed array of *VsanClusterHclInfo*. To be used in *Any* placeholders.
     ArrayOfVsanClusterHclInfo(Vec<super::structs::VsanClusterHclInfo>),
     /// A boxed array of *VsanClusterHealthAction*. To be used in *Any* placeholders.
@@ -2731,6 +2801,14 @@ pub enum ValueElements {
     ArrayOfVsanClusterVmdkLoadTestResult(Vec<super::structs::VsanClusterVmdkLoadTestResult>),
     /// A boxed array of *VsanClusterWhatifHostFailuresResult*. To be used in *Any* placeholders.
     ArrayOfVsanClusterWhatifHostFailuresResult(Vec<super::structs::VsanClusterWhatifHostFailuresResult>),
+    /// A boxed array of *VsanComponentBasicInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanComponentBasicInfo(Vec<super::structs::VsanComponentBasicInfo>),
+    /// A boxed array of *VsanComponentPlacement*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanComponentPlacement(Vec<super::structs::VsanComponentPlacement>),
     /// A boxed array of *VsanConfigGeneration*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -2749,6 +2827,10 @@ pub enum ValueElements {
     ArrayOfVsanDiskFormatConversionSpec(Vec<super::structs::VsanDiskFormatConversionSpec>),
     /// A boxed array of *VimClusterVsanDiskMappingsConfigSpec*. To be used in *Any* placeholders.
     ArrayOfVimClusterVsanDiskMappingsConfigSpec(Vec<super::structs::VimClusterVsanDiskMappingsConfigSpec>),
+    /// A boxed array of *VsanEffectiveSpaceUsage*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanEffectiveSpaceUsage(Vec<super::structs::VsanEffectiveSpaceUsage>),
     /// A boxed array of *VsanEntitySpaceUsage*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -2787,6 +2869,10 @@ pub enum ValueElements {
     ArrayOfVsanHealthDataDrivenAction(Vec<super::structs::VsanHealthDataDrivenAction>),
     /// A boxed array of *VsanHealthExtMgmtPreCheckResult*. To be used in *Any* placeholders.
     ArrayOfVsanHealthExtMgmtPreCheckResult(Vec<super::structs::VsanHealthExtMgmtPreCheckResult>),
+    /// A boxed array of *VsanHealthStatusCounts*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthStatusCounts(Vec<super::structs::VsanHealthStatusCounts>),
     /// A boxed array of *VsanHealthTroubleshooting*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -2865,6 +2951,14 @@ pub enum ValueElements {
     ArrayOfVsanObjectIdentityAndHealth(Vec<super::structs::VsanObjectIdentityAndHealth>),
     /// A boxed array of *VsanObjectInformation*. To be used in *Any* placeholders.
     ArrayOfVsanObjectInformation(Vec<super::structs::VsanObjectInformation>),
+    /// A boxed array of *VsanObjectPlacement*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanObjectPlacement(Vec<super::structs::VsanObjectPlacement>),
+    /// A boxed array of *VsanObjectPlacementDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanObjectPlacementDetails(Vec<super::structs::VsanObjectPlacementDetails>),
     /// A boxed array of *VsanObjectQuerySpec*. To be used in *Any* placeholders.
     ArrayOfVsanObjectQuerySpec(Vec<super::structs::VsanObjectQuerySpec>),
     /// A boxed array of *VsanObjectSpaceSummary*. To be used in *Any* placeholders.
@@ -2891,6 +2985,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanPerfHotspotEntitiesMetrics(Vec<super::structs::VsanPerfHotspotEntitiesMetrics>),
+    /// A boxed array of *VsanPerfHotspotEntityType*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanPerfHotspotEntityType(Vec<super::structs::VsanPerfHotspotEntityType>),
     /// A boxed array of *VsanPerfHotspotQuerySpec*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -2929,10 +3027,18 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanPerfsvcConfig(Vec<super::structs::VsanPerfsvcConfig>),
+    /// A boxed array of *VsanQueryPhysicalPlacementSpecs*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanQueryPhysicalPlacementSpecs(Vec<super::structs::VsanQueryPhysicalPlacementSpecs>),
     /// A boxed array of *VsanRemoteClusterQuerySpec*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanRemoteClusterQuerySpec(Vec<super::structs::VsanRemoteClusterQuerySpec>),
+    /// A boxed array of *VsanSnapshotSpace*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSnapshotSpace(Vec<super::structs::VsanSnapshotSpace>),
     /// A boxed array of *VsanSpaceQuerySpec*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -3011,10 +3117,18 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfCnsBlockBackingDetails(Vec<super::structs::CnsBlockBackingDetails>),
+    /// A boxed array of *CnsBlockCreateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsBlockCreateSpec(Vec<super::structs::CnsBlockCreateSpec>),
     /// A boxed array of *CnsBlockVolumeRelocateSpec*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfCnsBlockVolumeRelocateSpec(Vec<super::structs::CnsBlockVolumeRelocateSpec>),
+    /// A boxed array of *CnsCloneVolumeSource*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsCloneVolumeSource(Vec<super::structs::CnsCloneVolumeSource>),
     /// A boxed array of *CnsContainerCluster*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -3083,6 +3197,14 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfCnsSnapshotVolumeSource(Vec<super::structs::CnsSnapshotVolumeSource>),
+    /// A boxed array of *CnsSyncVolumeSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsSyncVolumeSpec(Vec<super::structs::CnsSyncVolumeSpec>),
+    /// A boxed array of *CnsUnregisterVolumeSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsUnregisterVolumeSpec(Vec<super::structs::CnsUnregisterVolumeSpec>),
     /// A boxed array of *CnsVSANFileCreateSpec*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -3111,6 +3233,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfCnsVolumeCreateSpec(Vec<super::structs::CnsVolumeCreateSpec>),
+    /// A boxed array of *CnsVolumeCryptoUpdateSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeCryptoUpdateSpec(Vec<super::structs::CnsVolumeCryptoUpdateSpec>),
     /// A boxed array of *CnsVolumeExtendSpec*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -3185,12 +3311,20 @@ pub enum ValueElements {
     ArrayOfDvPortgroupConfigInfo(Vec<super::structs::DvPortgroupConfigInfo>),
     /// A boxed array of *DVPortgroupConfigSpec*. To be used in *Any* placeholders.
     ArrayOfDvPortgroupConfigSpec(Vec<super::structs::DvPortgroupConfigSpec>),
+    /// A boxed array of *DVPortgroupNsxConfig*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfDvPortgroupNsxConfig(Vec<super::structs::DvPortgroupNsxConfig>),
     /// A boxed array of *DistributedVirtualPortgroupNsxPortgroupOperationResult*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult(Vec<super::structs::DistributedVirtualPortgroupNsxPortgroupOperationResult>),
     /// A boxed array of *DVPortgroupPolicy*. To be used in *Any* placeholders.
     ArrayOfDvPortgroupPolicy(Vec<Box<dyn super::traits::DvPortgroupPolicyTrait>>),
     /// A boxed array of *DistributedVirtualPortgroupProblem*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualPortgroupProblem(Vec<super::structs::DistributedVirtualPortgroupProblem>),
+    /// A boxed array of *DVPortgroupNsxSubnetAddressInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfDvPortgroupNsxSubnetAddressInfo(Vec<super::structs::DvPortgroupNsxSubnetAddressInfo>),
     /// A boxed array of *DistributedVirtualPortgroupInfo*. To be used in *Any* placeholders.
     ArrayOfDistributedVirtualPortgroupInfo(Vec<super::structs::DistributedVirtualPortgroupInfo>),
     /// A boxed array of *DVPortgroupSelection*. To be used in *Any* placeholders.
@@ -3219,6 +3353,10 @@ pub enum ValueElements {
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
     ArrayOfDvsManagerPhysicalNicsList(Vec<super::structs::DvsManagerPhysicalNicsList>),
+    /// A boxed array of *DistributedVirtualSwitchManagerSpanInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfDistributedVirtualSwitchManagerSpanInfo(Vec<super::structs::DistributedVirtualSwitchManagerSpanInfo>),
     /// A boxed array of *DVSSelection*. To be used in *Any* placeholders.
     ArrayOfDvsSelection(Vec<super::structs::DvsSelection>),
     /// A boxed array of *EntityBackup*. To be used in *Any* placeholders.
@@ -3267,6 +3405,10 @@ pub enum ValueElements {
     ArrayOfDistributedVirtualSwitchHostMemberConfigSpec(Vec<super::structs::DistributedVirtualSwitchHostMemberConfigSpec>),
     /// A boxed array of *HostMemberHealthCheckResult*. To be used in *Any* placeholders.
     ArrayOfHostMemberHealthCheckResult(Vec<Box<dyn super::traits::HostMemberHealthCheckResultTrait>>),
+    /// A boxed array of *DistributedVirtualSwitchHostMemberHostPerfNicOffloadState*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfDistributedVirtualSwitchHostMemberHostPerfNicOffloadState(Vec<super::structs::DistributedVirtualSwitchHostMemberHostPerfNicOffloadState>),
     /// A boxed array of *DistributedVirtualSwitchHostMemberHostUplinkState*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.3.0
@@ -3399,6 +3541,10 @@ pub enum ValueElements {
     /// 
     /// ***Since:*** vSphere API Release 8.0.3.0
     ArrayOfVmwareDistributedVirtualSwitchNetworkOffloadConfig(Vec<super::structs::VmwareDistributedVirtualSwitchNetworkOffloadConfig>),
+    /// A boxed array of *VMwareDvsPerfNicOffloadCapability*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfVMwareDvsPerfNicOffloadCapability(Vec<super::structs::VMwareDvsPerfNicOffloadCapability>),
     /// A boxed array of *VMwareDVSPvlanConfigSpec*. To be used in *Any* placeholders.
     ArrayOfVMwareDvsPvlanConfigSpec(Vec<super::structs::VMwareDvsPvlanConfigSpec>),
     /// A boxed array of *VMwareDVSPvlanMapEntry*. To be used in *Any* placeholders.
@@ -3415,6 +3561,10 @@ pub enum ValueElements {
     ArrayOfVmwareDistributedVirtualSwitchRealTimeLanAnnotation(Vec<super::structs::VmwareDistributedVirtualSwitchRealTimeLanAnnotation>),
     /// A boxed array of *DVSSecurityPolicy*. To be used in *Any* placeholders.
     ArrayOfDvsSecurityPolicy(Vec<super::structs::DvsSecurityPolicy>),
+    /// A boxed array of *VMwareDvsSystemTrafficCapabilities*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfVMwareDvsSystemTrafficCapabilities(Vec<super::structs::VMwareDvsSystemTrafficCapabilities>),
     /// A boxed array of *VMwareDVSTeamingHealthCheckConfig*. To be used in *Any* placeholders.
     ArrayOfVMwareDvsTeamingHealthCheckConfig(Vec<super::structs::VMwareDvsTeamingHealthCheckConfig>),
     /// A boxed array of *VMwareDVSTeamingHealthCheckResult*. To be used in *Any* placeholders.
@@ -4199,6 +4349,10 @@ pub enum ValueElements {
     ArrayOfTemplateUpgradeFailedEvent(Vec<super::structs::Event>),
     /// A boxed array of *TemplateUpgradedEvent*. To be used in *Any* placeholders.
     ArrayOfTemplateUpgradedEvent(Vec<super::structs::Event>),
+    /// A boxed array of *TgwEventArgument*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfTgwEventArgument(Vec<super::structs::TgwEventArgument>),
     /// A boxed array of *TimedOutHostOperationEvent*. To be used in *Any* placeholders.
     ArrayOfTimedOutHostOperationEvent(Vec<super::structs::Event>),
     /// A boxed array of *UnlicensedVirtualMachinesEvent*. To be used in *Any* placeholders.
@@ -4641,6 +4795,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfCnsSnapshotNotFoundFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *CnsVolumeAlreadyExistsFault*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsVolumeAlreadyExistsFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *CnsVolumeNotFoundFault*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -6373,6 +6531,10 @@ pub enum ValueElements {
     ArrayOfHostLowLevelProvisioningManagerVmRecoveryInfo(Vec<super::structs::HostLowLevelProvisioningManagerVmRecoveryInfo>),
     /// A boxed array of *HostMaintenanceSpec*. To be used in *Any* placeholders.
     ArrayOfHostMaintenanceSpec(Vec<super::structs::HostMaintenanceSpec>),
+    /// A boxed array of *HostMaintenanceSpecEvacuationMode*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfHostMaintenanceSpecEvacuationMode(Vec<super::structs::HostMaintenanceSpecEvacuationMode>),
     /// A boxed array of *ServiceConsoleReservationInfo*. To be used in *Any* placeholders.
     ArrayOfServiceConsoleReservationInfo(Vec<super::structs::ServiceConsoleReservationInfo>),
     /// A boxed array of *VirtualMachineMemoryReservationInfo*. To be used in *Any* placeholders.
@@ -6551,10 +6713,18 @@ pub enum ValueElements {
     ArrayOfHostPathSelectionPolicyOption(Vec<super::structs::HostPathSelectionPolicyOption>),
     /// A boxed array of *HostPciDevice*. To be used in *Any* placeholders.
     ArrayOfHostPciDevice(Vec<super::structs::HostPciDevice>),
+    /// A boxed array of *HostPciDeviceDirectPathInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfHostPciDeviceDirectPathInfo(Vec<super::structs::HostPciDeviceDirectPathInfo>),
     /// A boxed array of *HostPciPassthruConfig*. To be used in *Any* placeholders.
     ArrayOfHostPciPassthruConfig(Vec<Box<dyn super::traits::HostPciPassthruConfigTrait>>),
     /// A boxed array of *HostPciPassthruInfo*. To be used in *Any* placeholders.
     ArrayOfHostPciPassthruInfo(Vec<Box<dyn super::traits::HostPciPassthruInfoTrait>>),
+    /// A boxed array of *HostPciPassthruInfoDirectPathState*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfHostPciPassthruInfoDirectPathState(Vec<super::structs::HostPciPassthruInfoDirectPathState>),
     /// A boxed array of *HostPcieHba*. To be used in *Any* placeholders.
     ArrayOfHostPcieHba(Vec<super::structs::HostPcieHba>),
     /// A boxed array of *HostPcieTargetTransport*. To be used in *Any* placeholders.
@@ -6599,6 +6769,14 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfPnicTsoInfo(Vec<super::structs::PnicTsoInfo>),
+    /// A boxed array of *PodVMInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfPodVmInfo(Vec<super::structs::PodVmInfo>),
+    /// A boxed array of *PodVMOverheadInfo*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfPodVmOverheadInfo(Vec<super::structs::PodVmOverheadInfo>),
     /// A boxed array of *HostPortGroup*. To be used in *Any* placeholders.
     ArrayOfHostPortGroup(Vec<super::structs::HostPortGroup>),
     /// A boxed array of *HostPortGroupConfig*. To be used in *Any* placeholders.
@@ -6829,6 +7007,10 @@ pub enum ValueElements {
     ArrayOfHostTpmSignerEventDetails(Vec<super::structs::HostTpmSignerEventDetails>),
     /// A boxed array of *HostTpmSoftwareComponentEventDetails*. To be used in *Any* placeholders.
     ArrayOfHostTpmSoftwareComponentEventDetails(Vec<super::structs::HostTpmSoftwareComponentEventDetails>),
+    /// A boxed array of *HostTpmSystemVersionEventDetails*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfHostTpmSystemVersionEventDetails(Vec<super::structs::HostTpmSystemVersionEventDetails>),
     /// A boxed array of *HostTpmVersionEventDetails*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.0.1
@@ -7033,6 +7215,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanHclNicInfo(Vec<super::structs::VsanHclNicInfo>),
+    /// A boxed array of *VsanHealthObjectStats*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHealthObjectStats(Vec<super::structs::VsanHealthObjectStats>),
     /// A boxed array of *VsanHealthQuerySpec*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -7051,6 +7237,14 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanHostGlobalDedupConfigHealthSummary(Vec<super::structs::VsanHostGlobalDedupConfigHealthSummary>),
+    /// A boxed array of *VsanHostHciMeshDitEncryptionHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostHciMeshDitEncryptionHealth(Vec<super::structs::VsanHostHciMeshDitEncryptionHealth>),
+    /// A boxed array of *VsanHostHciMeshDitEncryptionHealthSummary*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostHciMeshDitEncryptionHealthSummary(Vec<super::structs::VsanHostHciMeshDitEncryptionHealthSummary>),
     /// A boxed array of *VsanHostHclInfo*. To be used in *Any* placeholders.
     ArrayOfVsanHostHclInfo(Vec<super::structs::VsanHostHclInfo>),
     /// A boxed array of *VsanHostHealthSystemStatusResult*. To be used in *Any* placeholders.
@@ -7107,6 +7301,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanKmsHealth(Vec<super::structs::VsanKmsHealth>),
+    /// A boxed array of *VsanLicensedDiskResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanLicensedDiskResult(Vec<super::structs::VsanLicensedDiskResult>),
     /// A boxed array of *VsanLimitHealthResult*. To be used in *Any* placeholders.
     ArrayOfVsanLimitHealthResult(Vec<super::structs::VsanLimitHealthResult>),
     /// A boxed array of *VsanNetworkDiagnosticsHealthInfo*. To be used in *Any* placeholders.
@@ -7727,6 +7925,10 @@ pub enum ValueElements {
     ArrayOfGuestInfoCustomizationInfo(Vec<super::structs::GuestInfoCustomizationInfo>),
     /// A boxed array of *GuestDiskInfo*. To be used in *Any* placeholders.
     ArrayOfGuestDiskInfo(Vec<super::structs::GuestDiskInfo>),
+    /// A boxed array of *VirtualMachineGuestRebootStatus*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfVirtualMachineGuestRebootStatus(Vec<super::structs::VirtualMachineGuestRebootStatus>),
     /// A boxed array of *GuestInfoNamespaceGenerationInfo*. To be used in *Any* placeholders.
     ArrayOfGuestInfoNamespaceGenerationInfo(Vec<super::structs::GuestInfoNamespaceGenerationInfo>),
     /// A boxed array of *GuestNicInfo*. To be used in *Any* placeholders.
@@ -7933,6 +8135,22 @@ pub enum ValueElements {
     ArrayOfVirtualMachineVirtualPMem(Vec<super::structs::VirtualMachineVirtualPMem>),
     /// A boxed array of *VirtualMachineImportSpec*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineImportSpec(Vec<super::structs::VirtualMachineImportSpec>),
+    /// A boxed array of *VmPlacementPolicy*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfVmPlacementPolicy(Vec<Box<dyn super::traits::VmPlacementPolicyTrait>>),
+    /// A boxed array of *VmToVmGroupsAntiAffinity*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfVmToVmGroupsAntiAffinity(Vec<super::structs::VmToVmGroupsAntiAffinity>),
+    /// A boxed array of *VmVmAffinity*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfVmVmAffinity(Vec<super::structs::VmVmAffinity>),
+    /// A boxed array of *VmVmAntiAffinity*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfVmVmAntiAffinity(Vec<super::structs::VmVmAntiAffinity>),
     /// A boxed array of *VirtualMachineWindowsQuiesceSpec*. To be used in *Any* placeholders.
     ArrayOfVirtualMachineWindowsQuiesceSpec(Vec<super::structs::VirtualMachineWindowsQuiesceSpec>),
     /// A boxed array of *CheckResult*. To be used in *Any* placeholders.
@@ -7955,6 +8173,10 @@ pub enum ValueElements {
     ArrayOfCustomizationDhcpIpGenerator(Vec<super::structs::CustomizationDhcpIpGenerator>),
     /// A boxed array of *CustomizationDhcpIpV6Generator*. To be used in *Any* placeholders.
     ArrayOfCustomizationDhcpIpV6Generator(Vec<super::structs::CustomizationDhcpIpV6Generator>),
+    /// A boxed array of *CustomizationDisableIpV4*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfCustomizationDisableIpV4(Vec<super::structs::CustomizationDisableIpV4>),
     /// A boxed array of *CustomizationFixedIp*. To be used in *Any* placeholders.
     ArrayOfCustomizationFixedIp(Vec<super::structs::CustomizationFixedIp>),
     /// A boxed array of *CustomizationFixedIpV6*. To be used in *Any* placeholders.
@@ -7981,6 +8203,10 @@ pub enum ValueElements {
     ArrayOfCustomizationIpV6Generator(Vec<Box<dyn super::traits::CustomizationIpV6GeneratorTrait>>),
     /// A boxed array of *CustomizationLicenseFilePrintData*. To be used in *Any* placeholders.
     ArrayOfCustomizationLicenseFilePrintData(Vec<super::structs::CustomizationLicenseFilePrintData>),
+    /// A boxed array of *CustomizationLinuxFlexPrep*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfCustomizationLinuxFlexPrep(Vec<super::structs::CustomizationLinuxFlexPrep>),
     /// A boxed array of *CustomizationLinuxOptions*. To be used in *Any* placeholders.
     ArrayOfCustomizationLinuxOptions(Vec<super::structs::CustomizationLinuxOptions>),
     /// A boxed array of *CustomizationLinuxPrep*. To be used in *Any* placeholders.
@@ -8013,6 +8239,10 @@ pub enum ValueElements {
     ArrayOfCustomizationVirtualMachineName(Vec<super::structs::CustomizationVirtualMachineName>),
     /// A boxed array of *CustomizationWinOptions*. To be used in *Any* placeholders.
     ArrayOfCustomizationWinOptions(Vec<super::structs::CustomizationWinOptions>),
+    /// A boxed array of *CustomizationWindowsFlexPrep*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfCustomizationWindowsFlexPrep(Vec<super::structs::CustomizationWindowsFlexPrep>),
     /// A boxed array of *HostDiskMappingInfo*. To be used in *Any* placeholders.
     ArrayOfHostDiskMappingInfo(Vec<super::structs::HostDiskMappingInfo>),
     /// A boxed array of *HostDiskMappingPartitionInfo*. To be used in *Any* placeholders.
@@ -8531,6 +8761,14 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanAdvancedDatastoreConfig(Vec<super::structs::VsanAdvancedDatastoreConfig>),
+    /// A boxed array of *VsanAutoRAIDConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanAutoRaidConfig(Vec<super::structs::VsanAutoRaidConfig>),
+    /// A boxed array of *VsanAutoRAIDInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanAutoRaidInfo(Vec<super::structs::VsanAutoRaidInfo>),
     /// A boxed array of *VsanCapacityReservationInfo*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -8539,6 +8777,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanClientDatastoreConfig(Vec<super::structs::VsanClientDatastoreConfig>),
+    /// A boxed array of *VsanClientUnicastConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanClientUnicastConfig(Vec<super::structs::VsanClientUnicastConfig>),
     /// A boxed array of *VsanClusterConfigPrecheckItem*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -8551,6 +8793,10 @@ pub enum ValueElements {
     ArrayOfVsanCompatibilityCheckResult(Vec<super::structs::VsanCompatibilityCheckResult>),
     /// A boxed array of *VsanConfigInfoEx*. To be used in *Any* placeholders.
     ArrayOfVsanConfigInfoEx(Vec<super::structs::VsanConfigInfoEx>),
+    /// A boxed array of *VsanCyberRecoveryConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanCyberRecoveryConfig(Vec<super::structs::VsanCyberRecoveryConfig>),
     /// A boxed array of *VimVsanDataEfficiencyCapacityState*. To be used in *Any* placeholders.
     ArrayOfVimVsanDataEfficiencyCapacityState(Vec<super::structs::VimVsanDataEfficiencyCapacityState>),
     /// A boxed array of *VsanDataEfficiencyConfig*. To be used in *Any* placeholders.
@@ -8603,10 +8849,18 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanDiskGroupResourceCheckResult(Vec<super::structs::VsanDiskGroupResourceCheckResult>),
+    /// A boxed array of *DiskInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfDiskInfo(Vec<super::structs::DiskInfo>),
     /// A boxed array of *VsanDiskResourceCheckResult*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanDiskResourceCheckResult(Vec<Box<dyn super::traits::VsanDiskResourceCheckResultTrait>>),
+    /// A boxed array of *DpDaemonHealth*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfDpDaemonHealth(Vec<super::structs::DpDaemonHealth>),
     /// A boxed array of *VSANEntityCompatibilityResult*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -8695,6 +8949,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanHostResourceCheckResult(Vec<super::structs::VsanHostResourceCheckResult>),
+    /// A boxed array of *VsanHostSiteMaintenanceStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostSiteMaintenanceStatus(Vec<super::structs::VsanHostSiteMaintenanceStatus>),
     /// A boxed array of *VsanIODiagnosticsFailedCheck*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -8860,7 +9118,7 @@ pub enum ValueElements {
     /// A boxed array of *VsanResourceCheckVsanResult*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
-    ArrayOfVsanResourceCheckVsanResult(Vec<super::structs::VsanResourceCheckVsanResult>),
+    ArrayOfVsanResourceCheckVsanResult(Vec<Box<dyn super::traits::VsanResourceCheckVsanResultTrait>>),
     /// A boxed array of *ResyncIopsInfo*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -8883,6 +9141,30 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanSharedWitnessCompatibilityResult(Vec<super::structs::VsanSharedWitnessCompatibilityResult>),
+    /// A boxed array of *VsanSiteMaintenanceCheckTaskDetails*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteMaintenanceCheckTaskDetails(Vec<super::structs::VsanSiteMaintenanceCheckTaskDetails>),
+    /// A boxed array of *VsanSiteMaintenanceInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteMaintenanceInfo(Vec<super::structs::VsanSiteMaintenanceInfo>),
+    /// A boxed array of *VsanSiteMaintenancePrecheckDetail*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteMaintenancePrecheckDetail(Vec<super::structs::VsanSiteMaintenancePrecheckDetail>),
+    /// A boxed array of *VsanSiteMaintenancePrecheckStatus*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteMaintenancePrecheckStatus(Vec<super::structs::VsanSiteMaintenancePrecheckStatus>),
+    /// A boxed array of *VsanSiteMaintenanceResourceCheckResult*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteMaintenanceResourceCheckResult(Vec<super::structs::VsanSiteMaintenanceResourceCheckResult>),
+    /// A boxed array of *VsanSiteMaintenanceSpec*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteMaintenanceSpec(Vec<super::structs::VsanSiteMaintenanceSpec>),
     /// A boxed array of *VsanSnapServiceConfig*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -8897,6 +9179,18 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanStoragePoolResourceCheckResult(Vec<super::structs::VsanStoragePoolResourceCheckResult>),
+    /// A boxed array of *VsanSiteMaintenanceVMPowerOffInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteMaintenanceVmPowerOffInfo(Vec<super::structs::VsanSiteMaintenanceVmPowerOffInfo>),
+    /// A boxed array of *VsanVbossConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVbossConfig(Vec<Box<dyn super::traits::VsanVbossConfigTrait>>),
+    /// A boxed array of *VsanVbossObjectStoreConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVbossObjectStoreConfig(Vec<super::structs::VsanVbossObjectStoreConfig>),
     /// A boxed array of *VcRemoteVsanServerClusterConfig*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -9167,6 +9461,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanUpdateItem(Vec<super::structs::VsanUpdateItem>),
+    /// A boxed array of *VsanValidationItem*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanValidationItem(Vec<super::structs::VsanValidationItem>),
     /// A boxed array of *VsanVcPostDeployConfigSpec*. To be used in *Any* placeholders.
     ArrayOfVsanVcPostDeployConfigSpec(Vec<super::structs::VsanVcPostDeployConfigSpec>),
     /// A boxed array of *VsanVcStretchedClusterConfigSpec*. To be used in *Any* placeholders.
@@ -9275,6 +9573,10 @@ pub enum ValueElements {
     /// 
     /// ***Since:*** vSphere API Release 9.0.0.0
     ArrayOfVsanClusterCoreConfigSpec(Vec<super::structs::VsanClusterCoreConfigSpec>),
+    /// A boxed array of *VsanVbossClusterConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVbossClusterConfig(Vec<super::structs::VsanVbossClusterConfig>),
     /// A boxed array of *VsanHostAbortWipeDiskStatus*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -9287,6 +9589,18 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVsanAddStoragePoolDiskSpec(Vec<super::structs::VsanAddStoragePoolDiskSpec>),
+    /// A boxed array of *VsanHostClientClusterUnicastConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostClientClusterUnicastConfig(Vec<super::structs::VsanHostClientClusterUnicastConfig>),
+    /// A boxed array of *VsanHostClientClusterUnicastInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostClientClusterUnicastInfo(Vec<super::structs::VsanHostClientClusterUnicastInfo>),
+    /// A boxed array of *VsanHostClientHostUnicastInfo*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanHostClientHostUnicastInfo(Vec<super::structs::VsanHostClientHostUnicastInfo>),
     /// A boxed array of *VsanHostClusterStatus*. To be used in *Any* placeholders.
     ArrayOfVsanHostClusterStatus(Vec<super::structs::VsanHostClusterStatus>),
     /// A boxed array of *VsanHostClusterStatusState*. To be used in *Any* placeholders.
@@ -9391,6 +9705,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfSiteAffinityInfo(Vec<super::structs::SiteAffinityInfo>),
+    /// A boxed array of *VsanSiteTakeoverConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanSiteTakeoverConfig(Vec<super::structs::VsanSiteTakeoverConfig>),
     /// A boxed array of *VsanStoragePoolDisk*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -9415,6 +9733,10 @@ pub enum ValueElements {
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
     ArrayOfVimVsanHostUpdateStoragePoolDiskSpec(Vec<super::structs::VimVsanHostUpdateStoragePoolDiskSpec>),
+    /// A boxed array of *VsanVbossHostConfig*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfVsanVbossHostConfig(Vec<super::structs::VsanVbossHostConfig>),
     /// A boxed array of *VsanHostAssociatedObjects*. To be used in *Any* placeholders.
     /// 
     /// This structure may be used only with operations rendered under `/vsan`.
@@ -9585,6 +9907,14 @@ pub enum ValueElements {
     ArrayOfVStorageObject(Vec<super::structs::VStorageObject>),
     /// A boxed array of *VStorageObjectConfigInfo*. To be used in *Any* placeholders.
     ArrayOfVStorageObjectConfigInfo(Vec<super::structs::VStorageObjectConfigInfo>),
+    /// A boxed array of *VStorageObjectAttachResult*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfVStorageObjectAttachResult(Vec<super::structs::VStorageObjectAttachResult>),
+    /// A boxed array of *VStorageObjectAttachSpec*. To be used in *Any* placeholders.
+    /// 
+    /// ***Since:*** vSphere API Release 9.1.0.0
+    ArrayOfVStorageObjectAttachSpec(Vec<super::structs::VStorageObjectAttachSpec>),
     /// A boxed array of *VStorageObjectSnapshot*. To be used in *Any* placeholders.
     /// 
     /// ***Since:*** vSphere API Release 8.0.2.0
@@ -9617,6 +9947,10 @@ pub enum ValueElements {
     ArrayOfMethodFault(Vec<super::structs::MethodFault>),
     /// A boxed array of *RuntimeFault*. To be used in *Any* placeholders.
     ArrayOfRuntimeFault(Vec<super::structs::MethodFault>),
+    /// A boxed array of *AuthenticationRequired*. To be used in *Any* placeholders.
+    ArrayOfAuthenticationRequired(Vec<super::structs::MethodFault>),
+    /// A boxed array of *AuthenticationRequiredChallenge*. To be used in *Any* placeholders.
+    ArrayOfAuthenticationRequiredChallenge(Vec<super::structs::AuthenticationRequiredChallenge>),
     /// A boxed array of *HostCommunication*. To be used in *Any* placeholders.
     ArrayOfHostCommunication(Vec<super::structs::MethodFault>),
     /// A boxed array of *HostNotConnected*. To be used in *Any* placeholders.
@@ -9627,6 +9961,8 @@ pub enum ValueElements {
     ArrayOfInvalidArgument(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidRequest*. To be used in *Any* placeholders.
     ArrayOfInvalidRequest(Vec<super::structs::MethodFault>),
+    /// A boxed array of *InvalidToken*. To be used in *Any* placeholders.
+    ArrayOfInvalidToken(Vec<super::structs::MethodFault>),
     /// A boxed array of *InvalidType*. To be used in *Any* placeholders.
     ArrayOfInvalidType(Vec<super::structs::MethodFault>),
     /// A boxed array of *ManagedObjectNotFound*. To be used in *Any* placeholders.
@@ -9643,6 +9979,8 @@ pub enum ValueElements {
     ArrayOfRequestCanceled(Vec<super::structs::MethodFault>),
     /// A boxed array of *SecurityError*. To be used in *Any* placeholders.
     ArrayOfSecurityError(Vec<super::structs::MethodFault>),
+    /// A boxed array of *SessionNotFound*. To be used in *Any* placeholders.
+    ArrayOfSessionNotFound(Vec<super::structs::MethodFault>),
     /// A boxed array of *SystemError*. To be used in *Any* placeholders.
     ArrayOfSystemError(Vec<super::structs::MethodFault>),
     /// A boxed array of *UnexpectedFault*. To be used in *Any* placeholders.
@@ -9889,6 +10227,14 @@ pub enum ValueElements {
     HostPowerOperationType(super::enums::HostPowerOperationTypeEnum),
     /// A boxed array of *HostPowerOperationType_enum*. To be used in *Any* placeholders.
     ArrayOfHostPowerOperationType(Vec<super::enums::HostPowerOperationTypeEnum>),
+    /// A boxed *CnsSyncVolumeMode_enum*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    CnsSyncVolumeMode(super::enums::CnsSyncVolumeModeEnum),
+    /// A boxed array of *CnsSyncVolumeMode_enum*. To be used in *Any* placeholders.
+    /// 
+    /// This structure may be used only with operations rendered under `/vsan`.
+    ArrayOfCnsSyncVolumeMode(Vec<super::enums::CnsSyncVolumeModeEnum>),
     /// A boxed *EventFilterSpecRecursionOption_enum*. To be used in *Any* placeholders.
     EventFilterSpecRecursionOption(super::enums::EventFilterSpecRecursionOptionEnum),
     /// A boxed array of *EventFilterSpecRecursionOption_enum*. To be used in *Any* placeholders.
@@ -10021,6 +10367,14 @@ pub enum ValueElements {
     VsanHostNodeState(super::enums::VsanHostNodeStateEnum),
     /// A boxed array of *VsanHostNodeState_enum*. To be used in *Any* placeholders.
     ArrayOfVsanHostNodeState(Vec<super::enums::VsanHostNodeStateEnum>),
+    /// A boxed *AuthenticationRequiredAuthenticationScheme_enum*. To be used in *Any* placeholders.
+    AuthenticationRequiredAuthenticationScheme(super::enums::AuthenticationRequiredAuthenticationSchemeEnum),
+    /// A boxed array of *AuthenticationRequiredAuthenticationScheme_enum*. To be used in *Any* placeholders.
+    ArrayOfAuthenticationRequiredAuthenticationScheme(Vec<super::enums::AuthenticationRequiredAuthenticationSchemeEnum>),
+    /// A boxed *AuthenticationRequiredErrorType_enum*. To be used in *Any* placeholders.
+    AuthenticationRequiredErrorType(super::enums::AuthenticationRequiredErrorTypeEnum),
+    /// A boxed array of *AuthenticationRequiredErrorType_enum*. To be used in *Any* placeholders.
+    ArrayOfAuthenticationRequiredErrorType(Vec<super::enums::AuthenticationRequiredErrorTypeEnum>),
     /// A boxed *PropertyChangeOp_enum*. To be used in *Any* placeholders.
     PropertyChangeOp(super::enums::PropertyChangeOpEnum),
     /// A boxed array of *PropertyChangeOp_enum*. To be used in *Any* placeholders.
@@ -10295,8 +10649,10 @@ impl ValueElements {
             ValueElements::ArrayOfPbmPlacementMatchingReplicationResources(_) => "ArrayOfPbmPlacementMatchingReplicationResources",
             ValueElements::ArrayOfPbmPlacementMatchingResources(_) => "ArrayOfPbmPlacementMatchingResources",
             ValueElements::ArrayOfPbmPlacementHub(_) => "ArrayOfPbmPlacementHub",
+            ValueElements::ArrayOfPbmPlacementHubInfo(_) => "ArrayOfPbmPlacementHubInfo",
             ValueElements::ArrayOfPbmPlacementRequirement(_) => "ArrayOfPbmPlacementRequirement",
             ValueElements::ArrayOfPbmPlacementResourceUtilization(_) => "ArrayOfPbmPlacementResourceUtilization",
+            ValueElements::ArrayOfPbmPlacementZoneTopologyRequirement(_) => "ArrayOfPbmPlacementZoneTopologyRequirement",
             ValueElements::ArrayOfPbmCapabilityProfile(_) => "ArrayOfPbmCapabilityProfile",
             ValueElements::ArrayOfPbmCapabilityProfileCreateSpec(_) => "ArrayOfPbmCapabilityProfileCreateSpec",
             ValueElements::ArrayOfPbmCapabilityProfileUpdateSpec(_) => "ArrayOfPbmCapabilityProfileUpdateSpec",
@@ -10306,6 +10662,7 @@ impl ValueElements {
             ValueElements::ArrayOfPbmDefaultProfileInfo(_) => "ArrayOfPbmDefaultProfileInfo",
             ValueElements::ArrayOfPbmProfile(_) => "ArrayOfPbmProfile",
             ValueElements::ArrayOfPbmProfileId(_) => "ArrayOfPbmProfileId",
+            ValueElements::ArrayOfPbmProfileK8SCompliantNameSpec(_) => "ArrayOfPbmProfileK8sCompliantNameSpec",
             ValueElements::ArrayOfPbmProfileOperationOutcome(_) => "ArrayOfPbmProfileOperationOutcome",
             ValueElements::ArrayOfPbmProfileType(_) => "ArrayOfPbmProfileType",
             ValueElements::ArrayOfPbmQueryProfileResult(_) => "ArrayOfPbmQueryProfileResult",
@@ -10655,6 +11012,7 @@ impl ValueElements {
             ValueElements::ArrayOfPerfProviderSummary(_) => "ArrayOfPerfProviderSummary",
             ValueElements::ArrayOfPerfQuerySpec(_) => "ArrayOfPerfQuerySpec",
             ValueElements::ArrayOfPerfSampleInfo(_) => "ArrayOfPerfSampleInfo",
+            ValueElements::ArrayOfPlaceVmsXClusterSpecCandidateNetworks(_) => "ArrayOfPlaceVmsXClusterSpecCandidateNetworks",
             ValueElements::ArrayOfPosixUserSearchResult(_) => "ArrayOfPosixUserSearchResult",
             ValueElements::ArrayOfPrivilegePolicyDef(_) => "ArrayOfPrivilegePolicyDef",
             ValueElements::ArrayOfResourceAllocationInfo(_) => "ArrayOfResourceAllocationInfo",
@@ -10670,6 +11028,13 @@ impl ValueElements {
             ValueElements::ArrayOfResourcePoolSummary(_) => "ArrayOfResourcePoolSummary",
             ValueElements::ArrayOfResourcePoolQuickStats(_) => "ArrayOfResourcePoolQuickStats",
             ValueElements::ArrayOfSddcBase(_) => "ArrayOfSDDCBase",
+            ValueElements::ArrayOfSearchIndexFilter(_) => "ArrayOfSearchIndexFilter",
+            ValueElements::ArrayOfSearchIndexIterationSpec(_) => "ArrayOfSearchIndexIterationSpec",
+            ValueElements::ArrayOfSearchIndexOptionalValue(_) => "ArrayOfSearchIndexOptionalValue",
+            ValueElements::ArrayOfSearchIndexPredicate(_) => "ArrayOfSearchIndexPredicate",
+            ValueElements::ArrayOfSearchIndexQuerySpec(_) => "ArrayOfSearchIndexQuerySpec",
+            ValueElements::ArrayOfSearchIndexResourceItem(_) => "ArrayOfSearchIndexResourceItem",
+            ValueElements::ArrayOfSearchIndexResultSet(_) => "ArrayOfSearchIndexResultSet",
             ValueElements::ArrayOfSelectionSet(_) => "ArrayOfSelectionSet",
             ValueElements::ArrayOfHostVMotionCompatibility(_) => "ArrayOfHostVMotionCompatibility",
             ValueElements::ArrayOfProductComponentInfo(_) => "ArrayOfProductComponentInfo",
@@ -10701,6 +11066,9 @@ impl ValueElements {
             ValueElements::ArrayOfStringExpression(_) => "ArrayOfStringExpression",
             ValueElements::ArrayOfStringPolicy(_) => "ArrayOfStringPolicy",
             ValueElements::ArrayOfTag(_) => "ArrayOfTag",
+            ValueElements::ArrayOfTagId(_) => "ArrayOfTagId",
+            ValueElements::ArrayOfTagIdNameId(_) => "ArrayOfTagIdNameId",
+            ValueElements::ArrayOfTagSpec(_) => "ArrayOfTagSpec",
             ValueElements::ArrayOfTaskDescription(_) => "ArrayOfTaskDescription",
             ValueElements::ArrayOfTaskFilterSpec(_) => "ArrayOfTaskFilterSpec",
             ValueElements::ArrayOfTaskFilterSpecByEntity(_) => "ArrayOfTaskFilterSpecByEntity",
@@ -10716,6 +11084,9 @@ impl ValueElements {
             ValueElements::ArrayOfTaskReasonSchedule(_) => "ArrayOfTaskReasonSchedule",
             ValueElements::ArrayOfTaskReasonSystem(_) => "ArrayOfTaskReasonSystem",
             ValueElements::ArrayOfTaskReasonUser(_) => "ArrayOfTaskReasonUser",
+            ValueElements::ArrayOfTransitGatewayConfigInfo(_) => "ArrayOfTransitGatewayConfigInfo",
+            ValueElements::ArrayOfTransitGatewayConfigSpec(_) => "ArrayOfTransitGatewayConfigSpec",
+            ValueElements::ArrayOfTransitGatewayCreateSpec(_) => "ArrayOfTransitGatewayCreateSpec",
             ValueElements::ArrayOfTypeDescription(_) => "ArrayOfTypeDescription",
             ValueElements::ArrayOfUpdateVirtualMachineFilesResult(_) => "ArrayOfUpdateVirtualMachineFilesResult",
             ValueElements::ArrayOfUpdateVirtualMachineFilesResultFailedVmFileInfo(_) => "ArrayOfUpdateVirtualMachineFilesResultFailedVmFileInfo",
@@ -10906,6 +11277,7 @@ impl ValueElements {
             ValueElements::ArrayOfClusterVmToolsMonitoringSettings(_) => "ArrayOfClusterVmToolsMonitoringSettings",
             ValueElements::ArrayOfVsanAttachToSrOperation(_) => "ArrayOfVsanAttachToSrOperation",
             ValueElements::ArrayOfVsanCapability(_) => "ArrayOfVsanCapability",
+            ValueElements::ArrayOfVsanClientServerHciMeshDitEncryptionHealthSummary(_) => "ArrayOfVsanClientServerHciMeshDitEncryptionHealthSummary",
             ValueElements::ArrayOfVsanClusterAdvCfgSyncHostResult(_) => "ArrayOfVsanClusterAdvCfgSyncHostResult",
             ValueElements::ArrayOfVsanClusterAdvCfgSyncResult(_) => "ArrayOfVsanClusterAdvCfgSyncResult",
             ValueElements::ArrayOfVsanClusterBalancePerDiskInfo(_) => "ArrayOfVsanClusterBalancePerDiskInfo",
@@ -10917,6 +11289,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanClusterEncryptionHealthSummary(_) => "ArrayOfVsanClusterEncryptionHealthSummary",
             ValueElements::ArrayOfVsanClusterFileServiceHealthSummary(_) => "ArrayOfVsanClusterFileServiceHealthSummary",
             ValueElements::ArrayOfVsanClusterGlobalDedupHealthSummary(_) => "ArrayOfVsanClusterGlobalDedupHealthSummary",
+            ValueElements::ArrayOfVsanClusterHciMeshDitEncryptionHealthSummary(_) => "ArrayOfVsanClusterHciMeshDitEncryptionHealthSummary",
             ValueElements::ArrayOfVsanClusterHclInfo(_) => "ArrayOfVsanClusterHclInfo",
             ValueElements::ArrayOfVsanClusterHealthAction(_) => "ArrayOfVsanClusterHealthAction",
             ValueElements::ArrayOfVsanClusterHealthCheckInfo(_) => "ArrayOfVsanClusterHealthCheckInfo",
@@ -10948,12 +11321,15 @@ impl ValueElements {
             ValueElements::ArrayOfVsanClusterVMsHealthSummaryResult(_) => "ArrayOfVsanClusterVMsHealthSummaryResult",
             ValueElements::ArrayOfVsanClusterVmdkLoadTestResult(_) => "ArrayOfVsanClusterVmdkLoadTestResult",
             ValueElements::ArrayOfVsanClusterWhatifHostFailuresResult(_) => "ArrayOfVsanClusterWhatifHostFailuresResult",
+            ValueElements::ArrayOfVsanComponentBasicInfo(_) => "ArrayOfVsanComponentBasicInfo",
+            ValueElements::ArrayOfVsanComponentPlacement(_) => "ArrayOfVsanComponentPlacement",
             ValueElements::ArrayOfVsanConfigGeneration(_) => "ArrayOfVsanConfigGeneration",
             ValueElements::ArrayOfVsanDataDrivenApiAction(_) => "ArrayOfVsanDataDrivenAPIAction",
             ValueElements::ArrayOfVsanDiagnosticsThreshold(_) => "ArrayOfVsanDiagnosticsThreshold",
             ValueElements::ArrayOfVsanDiskFormatConversionCheckResult(_) => "ArrayOfVsanDiskFormatConversionCheckResult",
             ValueElements::ArrayOfVsanDiskFormatConversionSpec(_) => "ArrayOfVsanDiskFormatConversionSpec",
             ValueElements::ArrayOfVimClusterVsanDiskMappingsConfigSpec(_) => "ArrayOfVimClusterVsanDiskMappingsConfigSpec",
+            ValueElements::ArrayOfVsanEffectiveSpaceUsage(_) => "ArrayOfVsanEffectiveSpaceUsage",
             ValueElements::ArrayOfVsanEntitySpaceUsage(_) => "ArrayOfVsanEntitySpaceUsage",
             ValueElements::ArrayOfVimClusterVsanFaultDomainSpec(_) => "ArrayOfVimClusterVsanFaultDomainSpec",
             ValueElements::ArrayOfVimClusterVsanFaultDomainsConfigSpec(_) => "ArrayOfVimClusterVsanFaultDomainsConfigSpec",
@@ -10965,6 +11341,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanHealthCorrelation(_) => "ArrayOfVsanHealthCorrelation",
             ValueElements::ArrayOfVsanHealthDataDrivenAction(_) => "ArrayOfVsanHealthDataDrivenAction",
             ValueElements::ArrayOfVsanHealthExtMgmtPreCheckResult(_) => "ArrayOfVsanHealthExtMgmtPreCheckResult",
+            ValueElements::ArrayOfVsanHealthStatusCounts(_) => "ArrayOfVsanHealthStatusCounts",
             ValueElements::ArrayOfVsanHealthTroubleshooting(_) => "ArrayOfVsanHealthTroubleshooting",
             ValueElements::ArrayOfVsanHealthTxtBasedAction(_) => "ArrayOfVsanHealthTxtBasedAction",
             ValueElements::ArrayOfVsanHistoricalHealthQuerySpec(_) => "ArrayOfVsanHistoricalHealthQuerySpec",
@@ -10995,6 +11372,8 @@ impl ValueElements {
             ValueElements::ArrayOfVsanObjectIdentity(_) => "ArrayOfVsanObjectIdentity",
             ValueElements::ArrayOfVsanObjectIdentityAndHealth(_) => "ArrayOfVsanObjectIdentityAndHealth",
             ValueElements::ArrayOfVsanObjectInformation(_) => "ArrayOfVsanObjectInformation",
+            ValueElements::ArrayOfVsanObjectPlacement(_) => "ArrayOfVsanObjectPlacement",
+            ValueElements::ArrayOfVsanObjectPlacementDetails(_) => "ArrayOfVsanObjectPlacementDetails",
             ValueElements::ArrayOfVsanObjectQuerySpec(_) => "ArrayOfVsanObjectQuerySpec",
             ValueElements::ArrayOfVsanObjectSpaceSummary(_) => "ArrayOfVsanObjectSpaceSummary",
             ValueElements::ArrayOfVsanPerfDiagnoseQuerySpec(_) => "ArrayOfVsanPerfDiagnoseQuerySpec",
@@ -11004,6 +11383,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanPerfEntityType(_) => "ArrayOfVsanPerfEntityType",
             ValueElements::ArrayOfVsanPerfGraph(_) => "ArrayOfVsanPerfGraph",
             ValueElements::ArrayOfVsanPerfHotspotEntitiesMetrics(_) => "ArrayOfVsanPerfHotspotEntitiesMetrics",
+            ValueElements::ArrayOfVsanPerfHotspotEntityType(_) => "ArrayOfVsanPerfHotspotEntityType",
             ValueElements::ArrayOfVsanPerfHotspotQuerySpec(_) => "ArrayOfVsanPerfHotspotQuerySpec",
             ValueElements::ArrayOfVsanPerfMasterInformation(_) => "ArrayOfVsanPerfMasterInformation",
             ValueElements::ArrayOfVsanPerfMemberInfo(_) => "ArrayOfVsanPerfMemberInfo",
@@ -11018,7 +11398,9 @@ impl ValueElements {
             ValueElements::ArrayOfVsanPerfTopEntity(_) => "ArrayOfVsanPerfTopEntity",
             ValueElements::ArrayOfVsanPerfTopQuerySpec(_) => "ArrayOfVsanPerfTopQuerySpec",
             ValueElements::ArrayOfVsanPerfsvcConfig(_) => "ArrayOfVsanPerfsvcConfig",
+            ValueElements::ArrayOfVsanQueryPhysicalPlacementSpecs(_) => "ArrayOfVsanQueryPhysicalPlacementSpecs",
             ValueElements::ArrayOfVsanRemoteClusterQuerySpec(_) => "ArrayOfVsanRemoteClusterQuerySpec",
+            ValueElements::ArrayOfVsanSnapshotSpace(_) => "ArrayOfVsanSnapshotSpace",
             ValueElements::ArrayOfVsanSpaceQuerySpec(_) => "ArrayOfVsanSpaceQuerySpec",
             ValueElements::ArrayOfVsanSpaceUsage(_) => "ArrayOfVsanSpaceUsage",
             ValueElements::ArrayOfVsanSpaceUsageDetailResult(_) => "ArrayOfVsanSpaceUsageDetailResult",
@@ -11042,7 +11424,9 @@ impl ValueElements {
             ValueElements::ArrayOfCnsBackingObjectDetails(_) => "ArrayOfCnsBackingObjectDetails",
             ValueElements::ArrayOfCnsBaseCreateSpec(_) => "ArrayOfCnsBaseCreateSpec",
             ValueElements::ArrayOfCnsBlockBackingDetails(_) => "ArrayOfCnsBlockBackingDetails",
+            ValueElements::ArrayOfCnsBlockCreateSpec(_) => "ArrayOfCnsBlockCreateSpec",
             ValueElements::ArrayOfCnsBlockVolumeRelocateSpec(_) => "ArrayOfCnsBlockVolumeRelocateSpec",
+            ValueElements::ArrayOfCnsCloneVolumeSource(_) => "ArrayOfCnsCloneVolumeSource",
             ValueElements::ArrayOfCnsContainerCluster(_) => "ArrayOfCnsContainerCluster",
             ValueElements::ArrayOfCnsCursor(_) => "ArrayOfCnsCursor",
             ValueElements::ArrayOfCnsEntityMetadata(_) => "ArrayOfCnsEntityMetadata",
@@ -11060,6 +11444,8 @@ impl ValueElements {
             ValueElements::ArrayOfCnsSnapshotDeleteSpec(_) => "ArrayOfCnsSnapshotDeleteSpec",
             ValueElements::ArrayOfCnsSnapshotId(_) => "ArrayOfCnsSnapshotId",
             ValueElements::ArrayOfCnsSnapshotVolumeSource(_) => "ArrayOfCnsSnapshotVolumeSource",
+            ValueElements::ArrayOfCnsSyncVolumeSpec(_) => "ArrayOfCnsSyncVolumeSpec",
+            ValueElements::ArrayOfCnsUnregisterVolumeSpec(_) => "ArrayOfCnsUnregisterVolumeSpec",
             ValueElements::ArrayOfCnsVsanFileCreateSpec(_) => "ArrayOfCnsVSANFileCreateSpec",
             ValueElements::ArrayOfCnsVolume(_) => "ArrayOfCnsVolume",
             ValueElements::ArrayOfCnsVolumeAclConfigureSpec(_) => "ArrayOfCnsVolumeACLConfigureSpec",
@@ -11067,6 +11453,7 @@ impl ValueElements {
             ValueElements::ArrayOfCnsVolumeAttachResult(_) => "ArrayOfCnsVolumeAttachResult",
             ValueElements::ArrayOfCnsVolumeCreateResult(_) => "ArrayOfCnsVolumeCreateResult",
             ValueElements::ArrayOfCnsVolumeCreateSpec(_) => "ArrayOfCnsVolumeCreateSpec",
+            ValueElements::ArrayOfCnsVolumeCryptoUpdateSpec(_) => "ArrayOfCnsVolumeCryptoUpdateSpec",
             ValueElements::ArrayOfCnsVolumeExtendSpec(_) => "ArrayOfCnsVolumeExtendSpec",
             ValueElements::ArrayOfCnsVolumeId(_) => "ArrayOfCnsVolumeId",
             ValueElements::ArrayOfCnsVolumeMetadata(_) => "ArrayOfCnsVolumeMetadata",
@@ -11094,9 +11481,11 @@ impl ValueElements {
             ValueElements::ArrayOfDvsVendorSpecificConfig(_) => "ArrayOfDVSVendorSpecificConfig",
             ValueElements::ArrayOfDvPortgroupConfigInfo(_) => "ArrayOfDVPortgroupConfigInfo",
             ValueElements::ArrayOfDvPortgroupConfigSpec(_) => "ArrayOfDVPortgroupConfigSpec",
+            ValueElements::ArrayOfDvPortgroupNsxConfig(_) => "ArrayOfDVPortgroupNsxConfig",
             ValueElements::ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult(_) => "ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult",
             ValueElements::ArrayOfDvPortgroupPolicy(_) => "ArrayOfDVPortgroupPolicy",
             ValueElements::ArrayOfDistributedVirtualPortgroupProblem(_) => "ArrayOfDistributedVirtualPortgroupProblem",
+            ValueElements::ArrayOfDvPortgroupNsxSubnetAddressInfo(_) => "ArrayOfDVPortgroupNsxSubnetAddressInfo",
             ValueElements::ArrayOfDistributedVirtualPortgroupInfo(_) => "ArrayOfDistributedVirtualPortgroupInfo",
             ValueElements::ArrayOfDvPortgroupSelection(_) => "ArrayOfDVPortgroupSelection",
             ValueElements::ArrayOfDistributedVirtualSwitchInfo(_) => "ArrayOfDistributedVirtualSwitchInfo",
@@ -11110,6 +11499,7 @@ impl ValueElements {
             ValueElements::ArrayOfDistributedVirtualSwitchManagerHostDvsMembershipFilter(_) => "ArrayOfDistributedVirtualSwitchManagerHostDvsMembershipFilter",
             ValueElements::ArrayOfDistributedVirtualSwitchManagerImportResult(_) => "ArrayOfDistributedVirtualSwitchManagerImportResult",
             ValueElements::ArrayOfDvsManagerPhysicalNicsList(_) => "ArrayOfDVSManagerPhysicalNicsList",
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerSpanInfo(_) => "ArrayOfDistributedVirtualSwitchManagerSpanInfo",
             ValueElements::ArrayOfDvsSelection(_) => "ArrayOfDVSSelection",
             ValueElements::ArrayOfEntityBackup(_) => "ArrayOfEntityBackup",
             ValueElements::ArrayOfEntityBackupConfig(_) => "ArrayOfEntityBackupConfig",
@@ -11126,6 +11516,7 @@ impl ValueElements {
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberConfigInfo(_) => "ArrayOfDistributedVirtualSwitchHostMemberConfigInfo",
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberConfigSpec(_) => "ArrayOfDistributedVirtualSwitchHostMemberConfigSpec",
             ValueElements::ArrayOfHostMemberHealthCheckResult(_) => "ArrayOfHostMemberHealthCheckResult",
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberHostPerfNicOffloadState(_) => "ArrayOfDistributedVirtualSwitchHostMemberHostPerfNicOffloadState",
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberHostUplinkState(_) => "ArrayOfDistributedVirtualSwitchHostMemberHostUplinkState",
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberPnicBacking(_) => "ArrayOfDistributedVirtualSwitchHostMemberPnicBacking",
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberPnicSpec(_) => "ArrayOfDistributedVirtualSwitchHostMemberPnicSpec",
@@ -11186,12 +11577,14 @@ impl ValueElements {
             ValueElements::ArrayOfVMwareDvsMtuCapability(_) => "ArrayOfVMwareDvsMtuCapability",
             ValueElements::ArrayOfVMwareDvsMtuHealthCheckResult(_) => "ArrayOfVMwareDVSMtuHealthCheckResult",
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchNetworkOffloadConfig(_) => "ArrayOfVmwareDistributedVirtualSwitchNetworkOffloadConfig",
+            ValueElements::ArrayOfVMwareDvsPerfNicOffloadCapability(_) => "ArrayOfVMwareDvsPerfNicOffloadCapability",
             ValueElements::ArrayOfVMwareDvsPvlanConfigSpec(_) => "ArrayOfVMwareDVSPvlanConfigSpec",
             ValueElements::ArrayOfVMwareDvsPvlanMapEntry(_) => "ArrayOfVMwareDVSPvlanMapEntry",
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchPvlanSpec(_) => "ArrayOfVmwareDistributedVirtualSwitchPvlanSpec",
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchRealTimeConfig(_) => "ArrayOfVmwareDistributedVirtualSwitchRealTimeConfig",
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchRealTimeLanAnnotation(_) => "ArrayOfVmwareDistributedVirtualSwitchRealTimeLanAnnotation",
             ValueElements::ArrayOfDvsSecurityPolicy(_) => "ArrayOfDVSSecurityPolicy",
+            ValueElements::ArrayOfVMwareDvsSystemTrafficCapabilities(_) => "ArrayOfVMwareDvsSystemTrafficCapabilities",
             ValueElements::ArrayOfVMwareDvsTeamingHealthCheckConfig(_) => "ArrayOfVMwareDVSTeamingHealthCheckConfig",
             ValueElements::ArrayOfVMwareDvsTeamingHealthCheckResult(_) => "ArrayOfVMwareDVSTeamingHealthCheckResult",
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchTrunkVlanSpec(_) => "ArrayOfVmwareDistributedVirtualSwitchTrunkVlanSpec",
@@ -11569,6 +11962,7 @@ impl ValueElements {
             ValueElements::ArrayOfTemplateUpgradeEvent(_) => "ArrayOfTemplateUpgradeEvent",
             ValueElements::ArrayOfTemplateUpgradeFailedEvent(_) => "ArrayOfTemplateUpgradeFailedEvent",
             ValueElements::ArrayOfTemplateUpgradedEvent(_) => "ArrayOfTemplateUpgradedEvent",
+            ValueElements::ArrayOfTgwEventArgument(_) => "ArrayOfTgwEventArgument",
             ValueElements::ArrayOfTimedOutHostOperationEvent(_) => "ArrayOfTimedOutHostOperationEvent",
             ValueElements::ArrayOfUnlicensedVirtualMachinesEvent(_) => "ArrayOfUnlicensedVirtualMachinesEvent",
             ValueElements::ArrayOfUnlicensedVirtualMachinesFoundEvent(_) => "ArrayOfUnlicensedVirtualMachinesFoundEvent",
@@ -11781,6 +12175,7 @@ impl ValueElements {
             ValueElements::ArrayOfCnsPlacementFault(_) => "ArrayOfCnsPlacementFault",
             ValueElements::ArrayOfCnsRankedLowerFault(_) => "ArrayOfCnsRankedLowerFault",
             ValueElements::ArrayOfCnsSnapshotNotFoundFault(_) => "ArrayOfCnsSnapshotNotFoundFault",
+            ValueElements::ArrayOfCnsVolumeAlreadyExistsFault(_) => "ArrayOfCnsVolumeAlreadyExistsFault",
             ValueElements::ArrayOfCnsVolumeNotFoundFault(_) => "ArrayOfCnsVolumeNotFoundFault",
             ValueElements::ArrayOfCollectorAddressUnset(_) => "ArrayOfCollectorAddressUnset",
             ValueElements::ArrayOfConcurrentAccess(_) => "ArrayOfConcurrentAccess",
@@ -12623,6 +13018,7 @@ impl ValueElements {
             ValueElements::ArrayOfHostLowLevelProvisioningManagerVmMigrationStatus(_) => "ArrayOfHostLowLevelProvisioningManagerVmMigrationStatus",
             ValueElements::ArrayOfHostLowLevelProvisioningManagerVmRecoveryInfo(_) => "ArrayOfHostLowLevelProvisioningManagerVmRecoveryInfo",
             ValueElements::ArrayOfHostMaintenanceSpec(_) => "ArrayOfHostMaintenanceSpec",
+            ValueElements::ArrayOfHostMaintenanceSpecEvacuationMode(_) => "ArrayOfHostMaintenanceSpecEvacuationMode",
             ValueElements::ArrayOfServiceConsoleReservationInfo(_) => "ArrayOfServiceConsoleReservationInfo",
             ValueElements::ArrayOfVirtualMachineMemoryReservationInfo(_) => "ArrayOfVirtualMachineMemoryReservationInfo",
             ValueElements::ArrayOfVirtualMachineMemoryReservationSpec(_) => "ArrayOfVirtualMachineMemoryReservationSpec",
@@ -12708,8 +13104,10 @@ impl ValueElements {
             ValueElements::ArrayOfHostPatchManagerStatusPrerequisitePatch(_) => "ArrayOfHostPatchManagerStatusPrerequisitePatch",
             ValueElements::ArrayOfHostPathSelectionPolicyOption(_) => "ArrayOfHostPathSelectionPolicyOption",
             ValueElements::ArrayOfHostPciDevice(_) => "ArrayOfHostPciDevice",
+            ValueElements::ArrayOfHostPciDeviceDirectPathInfo(_) => "ArrayOfHostPciDeviceDirectPathInfo",
             ValueElements::ArrayOfHostPciPassthruConfig(_) => "ArrayOfHostPciPassthruConfig",
             ValueElements::ArrayOfHostPciPassthruInfo(_) => "ArrayOfHostPciPassthruInfo",
+            ValueElements::ArrayOfHostPciPassthruInfoDirectPathState(_) => "ArrayOfHostPciPassthruInfoDirectPathState",
             ValueElements::ArrayOfHostPcieHba(_) => "ArrayOfHostPcieHba",
             ValueElements::ArrayOfHostPcieTargetTransport(_) => "ArrayOfHostPcieTargetTransport",
             ValueElements::ArrayOfHostPersistentMemoryInfo(_) => "ArrayOfHostPersistentMemoryInfo",
@@ -12731,6 +13129,8 @@ impl ValueElements {
             ValueElements::ArrayOfHostPlugStoreTopologyPlugin(_) => "ArrayOfHostPlugStoreTopologyPlugin",
             ValueElements::ArrayOfHostPlugStoreTopologyTarget(_) => "ArrayOfHostPlugStoreTopologyTarget",
             ValueElements::ArrayOfPnicTsoInfo(_) => "ArrayOfPnicTSOInfo",
+            ValueElements::ArrayOfPodVmInfo(_) => "ArrayOfPodVMInfo",
+            ValueElements::ArrayOfPodVmOverheadInfo(_) => "ArrayOfPodVMOverheadInfo",
             ValueElements::ArrayOfHostPortGroup(_) => "ArrayOfHostPortGroup",
             ValueElements::ArrayOfHostPortGroupConfig(_) => "ArrayOfHostPortGroupConfig",
             ValueElements::ArrayOfHostPortGroupPort(_) => "ArrayOfHostPortGroupPort",
@@ -12833,6 +13233,7 @@ impl ValueElements {
             ValueElements::ArrayOfHostTpmOptionEventDetails(_) => "ArrayOfHostTpmOptionEventDetails",
             ValueElements::ArrayOfHostTpmSignerEventDetails(_) => "ArrayOfHostTpmSignerEventDetails",
             ValueElements::ArrayOfHostTpmSoftwareComponentEventDetails(_) => "ArrayOfHostTpmSoftwareComponentEventDetails",
+            ValueElements::ArrayOfHostTpmSystemVersionEventDetails(_) => "ArrayOfHostTpmSystemVersionEventDetails",
             ValueElements::ArrayOfHostTpmVersionEventDetails(_) => "ArrayOfHostTpmVersionEventDetails",
             ValueElements::ArrayOfHostTrustAuthorityAttestationInfo(_) => "ArrayOfHostTrustAuthorityAttestationInfo",
             ValueElements::ArrayOfHostUnresolvedVmfsExtent(_) => "ArrayOfHostUnresolvedVmfsExtent",
@@ -12913,11 +13314,14 @@ impl ValueElements {
             ValueElements::ArrayOfVsanHclFirmwareUpdateSpec(_) => "ArrayOfVsanHclFirmwareUpdateSpec",
             ValueElements::ArrayOfVsanHclMemInfo(_) => "ArrayOfVsanHclMemInfo",
             ValueElements::ArrayOfVsanHclNicInfo(_) => "ArrayOfVsanHclNicInfo",
+            ValueElements::ArrayOfVsanHealthObjectStats(_) => "ArrayOfVsanHealthObjectStats",
             ValueElements::ArrayOfVsanHealthQuerySpec(_) => "ArrayOfVsanHealthQuerySpec",
             ValueElements::ArrayOfVsanHostCimProviderInfo(_) => "ArrayOfVsanHostCimProviderInfo",
             ValueElements::ArrayOfVsanHostEmmSummary(_) => "ArrayOfVsanHostEMMSummary",
             ValueElements::ArrayOfVsanHostFwComponent(_) => "ArrayOfVsanHostFwComponent",
             ValueElements::ArrayOfVsanHostGlobalDedupConfigHealthSummary(_) => "ArrayOfVsanHostGlobalDedupConfigHealthSummary",
+            ValueElements::ArrayOfVsanHostHciMeshDitEncryptionHealth(_) => "ArrayOfVsanHostHciMeshDitEncryptionHealth",
+            ValueElements::ArrayOfVsanHostHciMeshDitEncryptionHealthSummary(_) => "ArrayOfVsanHostHciMeshDitEncryptionHealthSummary",
             ValueElements::ArrayOfVsanHostHclInfo(_) => "ArrayOfVsanHostHclInfo",
             ValueElements::ArrayOfVsanHostHealthSystemStatusResult(_) => "ArrayOfVsanHostHealthSystemStatusResult",
             ValueElements::ArrayOfVsanHostHwDeviceId(_) => "ArrayOfVsanHostHwDeviceId",
@@ -12938,6 +13342,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanIoInsightInfo(_) => "ArrayOfVsanIoInsightInfo",
             ValueElements::ArrayOfVsanIperfClientSpec(_) => "ArrayOfVsanIperfClientSpec",
             ValueElements::ArrayOfVsanKmsHealth(_) => "ArrayOfVsanKmsHealth",
+            ValueElements::ArrayOfVsanLicensedDiskResult(_) => "ArrayOfVsanLicensedDiskResult",
             ValueElements::ArrayOfVsanLimitHealthResult(_) => "ArrayOfVsanLimitHealthResult",
             ValueElements::ArrayOfVsanNetworkDiagnosticsHealthInfo(_) => "ArrayOfVsanNetworkDiagnosticsHealthInfo",
             ValueElements::ArrayOfVsanNetworkHealthResult(_) => "ArrayOfVsanNetworkHealthResult",
@@ -13234,6 +13639,7 @@ impl ValueElements {
             ValueElements::ArrayOfGuestInfo(_) => "ArrayOfGuestInfo",
             ValueElements::ArrayOfGuestInfoCustomizationInfo(_) => "ArrayOfGuestInfoCustomizationInfo",
             ValueElements::ArrayOfGuestDiskInfo(_) => "ArrayOfGuestDiskInfo",
+            ValueElements::ArrayOfVirtualMachineGuestRebootStatus(_) => "ArrayOfVirtualMachineGuestRebootStatus",
             ValueElements::ArrayOfGuestInfoNamespaceGenerationInfo(_) => "ArrayOfGuestInfoNamespaceGenerationInfo",
             ValueElements::ArrayOfGuestNicInfo(_) => "ArrayOfGuestNicInfo",
             ValueElements::ArrayOfGuestScreenInfo(_) => "ArrayOfGuestScreenInfo",
@@ -13321,6 +13727,10 @@ impl ValueElements {
             ValueElements::ArrayOfVirtualMachineVirtualNumaInfo(_) => "ArrayOfVirtualMachineVirtualNumaInfo",
             ValueElements::ArrayOfVirtualMachineVirtualPMem(_) => "ArrayOfVirtualMachineVirtualPMem",
             ValueElements::ArrayOfVirtualMachineImportSpec(_) => "ArrayOfVirtualMachineImportSpec",
+            ValueElements::ArrayOfVmPlacementPolicy(_) => "ArrayOfVmPlacementPolicy",
+            ValueElements::ArrayOfVmToVmGroupsAntiAffinity(_) => "ArrayOfVmToVmGroupsAntiAffinity",
+            ValueElements::ArrayOfVmVmAffinity(_) => "ArrayOfVmVmAffinity",
+            ValueElements::ArrayOfVmVmAntiAffinity(_) => "ArrayOfVmVmAntiAffinity",
             ValueElements::ArrayOfVirtualMachineWindowsQuiesceSpec(_) => "ArrayOfVirtualMachineWindowsQuiesceSpec",
             ValueElements::ArrayOfCheckResult(_) => "ArrayOfCheckResult",
             ValueElements::ArrayOfCustomizationAdapterMapping(_) => "ArrayOfCustomizationAdapterMapping",
@@ -13331,6 +13741,7 @@ impl ValueElements {
             ValueElements::ArrayOfCustomizationCustomName(_) => "ArrayOfCustomizationCustomName",
             ValueElements::ArrayOfCustomizationDhcpIpGenerator(_) => "ArrayOfCustomizationDhcpIpGenerator",
             ValueElements::ArrayOfCustomizationDhcpIpV6Generator(_) => "ArrayOfCustomizationDhcpIpV6Generator",
+            ValueElements::ArrayOfCustomizationDisableIpV4(_) => "ArrayOfCustomizationDisableIpV4",
             ValueElements::ArrayOfCustomizationFixedIp(_) => "ArrayOfCustomizationFixedIp",
             ValueElements::ArrayOfCustomizationFixedIpV6(_) => "ArrayOfCustomizationFixedIpV6",
             ValueElements::ArrayOfCustomizationFixedName(_) => "ArrayOfCustomizationFixedName",
@@ -13344,6 +13755,7 @@ impl ValueElements {
             ValueElements::ArrayOfCustomizationIpGenerator(_) => "ArrayOfCustomizationIpGenerator",
             ValueElements::ArrayOfCustomizationIpV6Generator(_) => "ArrayOfCustomizationIpV6Generator",
             ValueElements::ArrayOfCustomizationLicenseFilePrintData(_) => "ArrayOfCustomizationLicenseFilePrintData",
+            ValueElements::ArrayOfCustomizationLinuxFlexPrep(_) => "ArrayOfCustomizationLinuxFlexPrep",
             ValueElements::ArrayOfCustomizationLinuxOptions(_) => "ArrayOfCustomizationLinuxOptions",
             ValueElements::ArrayOfCustomizationLinuxPrep(_) => "ArrayOfCustomizationLinuxPrep",
             ValueElements::ArrayOfCustomizationName(_) => "ArrayOfCustomizationName",
@@ -13360,6 +13772,7 @@ impl ValueElements {
             ValueElements::ArrayOfCustomizationUserData(_) => "ArrayOfCustomizationUserData",
             ValueElements::ArrayOfCustomizationVirtualMachineName(_) => "ArrayOfCustomizationVirtualMachineName",
             ValueElements::ArrayOfCustomizationWinOptions(_) => "ArrayOfCustomizationWinOptions",
+            ValueElements::ArrayOfCustomizationWindowsFlexPrep(_) => "ArrayOfCustomizationWindowsFlexPrep",
             ValueElements::ArrayOfHostDiskMappingInfo(_) => "ArrayOfHostDiskMappingInfo",
             ValueElements::ArrayOfHostDiskMappingPartitionInfo(_) => "ArrayOfHostDiskMappingPartitionInfo",
             ValueElements::ArrayOfHostDiskMappingOption(_) => "ArrayOfHostDiskMappingOption",
@@ -13612,12 +14025,16 @@ impl ValueElements {
             ValueElements::ArrayOfReplicationSpec(_) => "ArrayOfReplicationSpec",
             ValueElements::ArrayOfActiveVsanDirectoryServerConfig(_) => "ArrayOfActiveVsanDirectoryServerConfig",
             ValueElements::ArrayOfVsanAdvancedDatastoreConfig(_) => "ArrayOfVsanAdvancedDatastoreConfig",
+            ValueElements::ArrayOfVsanAutoRaidConfig(_) => "ArrayOfVsanAutoRAIDConfig",
+            ValueElements::ArrayOfVsanAutoRaidInfo(_) => "ArrayOfVsanAutoRAIDInfo",
             ValueElements::ArrayOfVsanCapacityReservationInfo(_) => "ArrayOfVsanCapacityReservationInfo",
             ValueElements::ArrayOfVsanClientDatastoreConfig(_) => "ArrayOfVsanClientDatastoreConfig",
+            ValueElements::ArrayOfVsanClientUnicastConfig(_) => "ArrayOfVsanClientUnicastConfig",
             ValueElements::ArrayOfVsanClusterConfigPrecheckItem(_) => "ArrayOfVsanClusterConfigPrecheckItem",
             ValueElements::ArrayOfClusterRuntimeInfo(_) => "ArrayOfClusterRuntimeInfo",
             ValueElements::ArrayOfVsanCompatibilityCheckResult(_) => "ArrayOfVsanCompatibilityCheckResult",
             ValueElements::ArrayOfVsanConfigInfoEx(_) => "ArrayOfVsanConfigInfoEx",
+            ValueElements::ArrayOfVsanCyberRecoveryConfig(_) => "ArrayOfVsanCyberRecoveryConfig",
             ValueElements::ArrayOfVimVsanDataEfficiencyCapacityState(_) => "ArrayOfVimVsanDataEfficiencyCapacityState",
             ValueElements::ArrayOfVsanDataEfficiencyConfig(_) => "ArrayOfVsanDataEfficiencyConfig",
             ValueElements::ArrayOfVsanDataEfficiencyConfigEx(_) => "ArrayOfVsanDataEfficiencyConfigEx",
@@ -13632,7 +14049,9 @@ impl ValueElements {
             ValueElements::ArrayOfDiskClaimConfiguration(_) => "ArrayOfDiskClaimConfiguration",
             ValueElements::ArrayOfVsanDiskDataEvacuationResourceCheckTaskDetails(_) => "ArrayOfVsanDiskDataEvacuationResourceCheckTaskDetails",
             ValueElements::ArrayOfVsanDiskGroupResourceCheckResult(_) => "ArrayOfVsanDiskGroupResourceCheckResult",
+            ValueElements::ArrayOfDiskInfo(_) => "ArrayOfDiskInfo",
             ValueElements::ArrayOfVsanDiskResourceCheckResult(_) => "ArrayOfVsanDiskResourceCheckResult",
+            ValueElements::ArrayOfDpDaemonHealth(_) => "ArrayOfDpDaemonHealth",
             ValueElements::ArrayOfVsanEntityCompatibilityResult(_) => "ArrayOfVSANEntityCompatibilityResult",
             ValueElements::ArrayOfEntityResourceCheckDetails(_) => "ArrayOfEntityResourceCheckDetails",
             ValueElements::ArrayOfVsanFaultDomainResourceCheckResult(_) => "ArrayOfVsanFaultDomainResourceCheckResult",
@@ -13655,6 +14074,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanFileShareSnapshotQuerySpec(_) => "ArrayOfVsanFileShareSnapshotQuerySpec",
             ValueElements::ArrayOfVsanHciMeshDatastoreSource(_) => "ArrayOfVsanHciMeshDatastoreSource",
             ValueElements::ArrayOfVsanHostResourceCheckResult(_) => "ArrayOfVsanHostResourceCheckResult",
+            ValueElements::ArrayOfVsanHostSiteMaintenanceStatus(_) => "ArrayOfVsanHostSiteMaintenanceStatus",
             ValueElements::ArrayOfVsanIoDiagnosticsFailedCheck(_) => "ArrayOfVsanIODiagnosticsFailedCheck",
             ValueElements::ArrayOfVsanIoDiagnosticsInstance(_) => "ArrayOfVsanIODiagnosticsInstance",
             ValueElements::ArrayOfVsanIoDiagnosticsInstanceEvent(_) => "ArrayOfVsanIODiagnosticsInstanceEvent",
@@ -13702,9 +14122,18 @@ impl ValueElements {
             ValueElements::ArrayOfSsdEnduranceThresholdSpec(_) => "ArrayOfSSDEnduranceThresholdSpec",
             ValueElements::ArrayOfVsanServerHostUnicastInfo(_) => "ArrayOfVsanServerHostUnicastInfo",
             ValueElements::ArrayOfVsanSharedWitnessCompatibilityResult(_) => "ArrayOfVSANSharedWitnessCompatibilityResult",
+            ValueElements::ArrayOfVsanSiteMaintenanceCheckTaskDetails(_) => "ArrayOfVsanSiteMaintenanceCheckTaskDetails",
+            ValueElements::ArrayOfVsanSiteMaintenanceInfo(_) => "ArrayOfVsanSiteMaintenanceInfo",
+            ValueElements::ArrayOfVsanSiteMaintenancePrecheckDetail(_) => "ArrayOfVsanSiteMaintenancePrecheckDetail",
+            ValueElements::ArrayOfVsanSiteMaintenancePrecheckStatus(_) => "ArrayOfVsanSiteMaintenancePrecheckStatus",
+            ValueElements::ArrayOfVsanSiteMaintenanceResourceCheckResult(_) => "ArrayOfVsanSiteMaintenanceResourceCheckResult",
+            ValueElements::ArrayOfVsanSiteMaintenanceSpec(_) => "ArrayOfVsanSiteMaintenanceSpec",
             ValueElements::ArrayOfVsanSnapServiceConfig(_) => "ArrayOfVsanSnapServiceConfig",
             ValueElements::ArrayOfVsanStoragePoolDiskResourceCheckResult(_) => "ArrayOfVsanStoragePoolDiskResourceCheckResult",
             ValueElements::ArrayOfVsanStoragePoolResourceCheckResult(_) => "ArrayOfVsanStoragePoolResourceCheckResult",
+            ValueElements::ArrayOfVsanSiteMaintenanceVmPowerOffInfo(_) => "ArrayOfVsanSiteMaintenanceVMPowerOffInfo",
+            ValueElements::ArrayOfVsanVbossConfig(_) => "ArrayOfVsanVbossConfig",
+            ValueElements::ArrayOfVsanVbossObjectStoreConfig(_) => "ArrayOfVsanVbossObjectStoreConfig",
             ValueElements::ArrayOfVcRemoteVsanServerClusterConfig(_) => "ArrayOfVcRemoteVsanServerClusterConfig",
             ValueElements::ArrayOfVcRemoteVsanServerClusterInfo(_) => "ArrayOfVcRemoteVsanServerClusterInfo",
             ValueElements::ArrayOfVsanIscsiVipConfig(_) => "ArrayOfVsanIscsiVipConfig",
@@ -13769,6 +14198,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanSpaceEfficiencyRatio(_) => "ArrayOfVsanSpaceEfficiencyRatio",
             ValueElements::ArrayOfVsanUnmapConfig(_) => "ArrayOfVsanUnmapConfig",
             ValueElements::ArrayOfVsanUpdateItem(_) => "ArrayOfVsanUpdateItem",
+            ValueElements::ArrayOfVsanValidationItem(_) => "ArrayOfVsanValidationItem",
             ValueElements::ArrayOfVsanVcPostDeployConfigSpec(_) => "ArrayOfVsanVcPostDeployConfigSpec",
             ValueElements::ArrayOfVsanVcStretchedClusterConfigSpec(_) => "ArrayOfVsanVcStretchedClusterConfigSpec",
             ValueElements::ArrayOfVsanVcsaDeploymentProgress(_) => "ArrayOfVsanVcsaDeploymentProgress",
@@ -13798,9 +14228,13 @@ impl ValueElements {
             ValueElements::ArrayOfVsanClusterConfigInfoHostDefaultInfo(_) => "ArrayOfVsanClusterConfigInfoHostDefaultInfo",
             ValueElements::ArrayOfVsanClusterCoreConfig(_) => "ArrayOfVsanClusterCoreConfig",
             ValueElements::ArrayOfVsanClusterCoreConfigSpec(_) => "ArrayOfVsanClusterCoreConfigSpec",
+            ValueElements::ArrayOfVsanVbossClusterConfig(_) => "ArrayOfVsanVbossClusterConfig",
             ValueElements::ArrayOfVsanHostAbortWipeDiskStatus(_) => "ArrayOfVsanHostAbortWipeDiskStatus",
             ValueElements::ArrayOfVsanHostAboutInfoEx(_) => "ArrayOfVsanHostAboutInfoEx",
             ValueElements::ArrayOfVsanAddStoragePoolDiskSpec(_) => "ArrayOfVsanAddStoragePoolDiskSpec",
+            ValueElements::ArrayOfVsanHostClientClusterUnicastConfig(_) => "ArrayOfVsanHostClientClusterUnicastConfig",
+            ValueElements::ArrayOfVsanHostClientClusterUnicastInfo(_) => "ArrayOfVsanHostClientClusterUnicastInfo",
+            ValueElements::ArrayOfVsanHostClientHostUnicastInfo(_) => "ArrayOfVsanHostClientHostUnicastInfo",
             ValueElements::ArrayOfVsanHostClusterStatus(_) => "ArrayOfVsanHostClusterStatus",
             ValueElements::ArrayOfVsanHostClusterStatusState(_) => "ArrayOfVsanHostClusterStatusState",
             ValueElements::ArrayOfVsanHostClusterStatusStateCompletionEstimate(_) => "ArrayOfVsanHostClusterStatusStateCompletionEstimate",
@@ -13837,12 +14271,14 @@ impl ValueElements {
             ValueElements::ArrayOfVsanHostServerClusterUnicastConfig(_) => "ArrayOfVsanHostServerClusterUnicastConfig",
             ValueElements::ArrayOfVsanHostServerClusterUnicastInfo(_) => "ArrayOfVsanHostServerClusterUnicastInfo",
             ValueElements::ArrayOfSiteAffinityInfo(_) => "ArrayOfSiteAffinityInfo",
+            ValueElements::ArrayOfVsanSiteTakeoverConfig(_) => "ArrayOfVsanSiteTakeoverConfig",
             ValueElements::ArrayOfVsanStoragePoolDisk(_) => "ArrayOfVsanStoragePoolDisk",
             ValueElements::ArrayOfVimVsanHostStoragePoolDiskInfo(_) => "ArrayOfVimVsanHostStoragePoolDiskInfo",
             ValueElements::ArrayOfVimVsanHostStoragePoolInfo(_) => "ArrayOfVimVsanHostStoragePoolInfo",
             ValueElements::ArrayOfVimVsanHostTrimDiskEntry(_) => "ArrayOfVimVsanHostTrimDiskEntry",
             ValueElements::ArrayOfVimVsanHostTrimDiskSpec(_) => "ArrayOfVimVsanHostTrimDiskSpec",
             ValueElements::ArrayOfVimVsanHostUpdateStoragePoolDiskSpec(_) => "ArrayOfVimVsanHostUpdateStoragePoolDiskSpec",
+            ValueElements::ArrayOfVsanVbossHostConfig(_) => "ArrayOfVsanVbossHostConfig",
             ValueElements::ArrayOfVsanHostAssociatedObjects(_) => "ArrayOfVsanHostAssociatedObjects",
             ValueElements::ArrayOfVsanHostAssociatedObjectsResult(_) => "ArrayOfVsanHostAssociatedObjectsResult",
             ValueElements::ArrayOfVsanComplianceQuerySpec(_) => "ArrayOfVsanComplianceQuerySpec",
@@ -13903,6 +14339,8 @@ impl ValueElements {
             ValueElements::ArrayOfvslmVClockInfo(_) => "ArrayOfvslmVClockInfo",
             ValueElements::ArrayOfVStorageObject(_) => "ArrayOfVStorageObject",
             ValueElements::ArrayOfVStorageObjectConfigInfo(_) => "ArrayOfVStorageObjectConfigInfo",
+            ValueElements::ArrayOfVStorageObjectAttachResult(_) => "ArrayOfVStorageObjectAttachResult",
+            ValueElements::ArrayOfVStorageObjectAttachSpec(_) => "ArrayOfVStorageObjectAttachSpec",
             ValueElements::ArrayOfVStorageObjectSnapshot(_) => "ArrayOfVStorageObjectSnapshot",
             ValueElements::ArrayOfVStorageObjectSnapshotDetails(_) => "ArrayOfVStorageObjectSnapshotDetails",
             ValueElements::ArrayOfVStorageObjectSnapshotInfo(_) => "ArrayOfVStorageObjectSnapshotInfo",
@@ -13918,11 +14356,14 @@ impl ValueElements {
             ValueElements::ArrayOfLocalizedMethodFault(_) => "ArrayOfLocalizedMethodFault",
             ValueElements::ArrayOfMethodFault(_) => "ArrayOfMethodFault",
             ValueElements::ArrayOfRuntimeFault(_) => "ArrayOfRuntimeFault",
+            ValueElements::ArrayOfAuthenticationRequired(_) => "ArrayOfAuthenticationRequired",
+            ValueElements::ArrayOfAuthenticationRequiredChallenge(_) => "ArrayOfAuthenticationRequiredChallenge",
             ValueElements::ArrayOfHostCommunication(_) => "ArrayOfHostCommunication",
             ValueElements::ArrayOfHostNotConnected(_) => "ArrayOfHostNotConnected",
             ValueElements::ArrayOfHostNotReachable(_) => "ArrayOfHostNotReachable",
             ValueElements::ArrayOfInvalidArgument(_) => "ArrayOfInvalidArgument",
             ValueElements::ArrayOfInvalidRequest(_) => "ArrayOfInvalidRequest",
+            ValueElements::ArrayOfInvalidToken(_) => "ArrayOfInvalidToken",
             ValueElements::ArrayOfInvalidType(_) => "ArrayOfInvalidType",
             ValueElements::ArrayOfManagedObjectNotFound(_) => "ArrayOfManagedObjectNotFound",
             ValueElements::ArrayOfMethodNotFound(_) => "ArrayOfMethodNotFound",
@@ -13931,6 +14372,7 @@ impl ValueElements {
             ValueElements::ArrayOfNotSupported(_) => "ArrayOfNotSupported",
             ValueElements::ArrayOfRequestCanceled(_) => "ArrayOfRequestCanceled",
             ValueElements::ArrayOfSecurityError(_) => "ArrayOfSecurityError",
+            ValueElements::ArrayOfSessionNotFound(_) => "ArrayOfSessionNotFound",
             ValueElements::ArrayOfSystemError(_) => "ArrayOfSystemError",
             ValueElements::ArrayOfUnexpectedFault(_) => "ArrayOfUnexpectedFault",
             ValueElements::ArrayOfInvalidCollectorVersion(_) => "ArrayOfInvalidCollectorVersion",
@@ -14034,6 +14476,8 @@ impl ValueElements {
             ValueElements::ArrayOfDrsBehavior(_) => "ArrayOfDrsBehavior",
             ValueElements::HostPowerOperationType(_) => "HostPowerOperationType",
             ValueElements::ArrayOfHostPowerOperationType(_) => "ArrayOfHostPowerOperationType",
+            ValueElements::CnsSyncVolumeMode(_) => "CnsSyncVolumeMode",
+            ValueElements::ArrayOfCnsSyncVolumeMode(_) => "ArrayOfCnsSyncVolumeMode",
             ValueElements::EventFilterSpecRecursionOption(_) => "EventFilterSpecRecursionOption",
             ValueElements::ArrayOfEventFilterSpecRecursionOption(_) => "ArrayOfEventFilterSpecRecursionOption",
             ValueElements::FtIssuesOnHostHostSelectionType(_) => "FtIssuesOnHostHostSelectionType",
@@ -14098,6 +14542,10 @@ impl ValueElements {
             ValueElements::ArrayOfVsanHostHealthState(_) => "ArrayOfVsanHostHealthState",
             ValueElements::VsanHostNodeState(_) => "VsanHostNodeState",
             ValueElements::ArrayOfVsanHostNodeState(_) => "ArrayOfVsanHostNodeState",
+            ValueElements::AuthenticationRequiredAuthenticationScheme(_) => "AuthenticationRequiredAuthenticationScheme",
+            ValueElements::ArrayOfAuthenticationRequiredAuthenticationScheme(_) => "ArrayOfAuthenticationRequiredAuthenticationScheme",
+            ValueElements::AuthenticationRequiredErrorType(_) => "AuthenticationRequiredErrorType",
+            ValueElements::ArrayOfAuthenticationRequiredErrorType(_) => "ArrayOfAuthenticationRequiredErrorType",
             ValueElements::PropertyChangeOp(_) => "PropertyChangeOp",
             ValueElements::ArrayOfPropertyChangeOp(_) => "ArrayOfPropertyChangeOp",
             ValueElements::ObjectUpdateKind(_) => "ObjectUpdateKind",
@@ -14359,8 +14807,10 @@ impl ValueElements {
             ValueElements::ArrayOfPbmPlacementMatchingReplicationResources(v) => Box::new(v),
             ValueElements::ArrayOfPbmPlacementMatchingResources(v) => Box::new(v),
             ValueElements::ArrayOfPbmPlacementHub(v) => Box::new(v),
+            ValueElements::ArrayOfPbmPlacementHubInfo(v) => Box::new(v),
             ValueElements::ArrayOfPbmPlacementRequirement(v) => Box::new(v),
             ValueElements::ArrayOfPbmPlacementResourceUtilization(v) => Box::new(v),
+            ValueElements::ArrayOfPbmPlacementZoneTopologyRequirement(v) => Box::new(v),
             ValueElements::ArrayOfPbmCapabilityProfile(v) => Box::new(v),
             ValueElements::ArrayOfPbmCapabilityProfileCreateSpec(v) => Box::new(v),
             ValueElements::ArrayOfPbmCapabilityProfileUpdateSpec(v) => Box::new(v),
@@ -14370,6 +14820,7 @@ impl ValueElements {
             ValueElements::ArrayOfPbmDefaultProfileInfo(v) => Box::new(v),
             ValueElements::ArrayOfPbmProfile(v) => Box::new(v),
             ValueElements::ArrayOfPbmProfileId(v) => Box::new(v),
+            ValueElements::ArrayOfPbmProfileK8SCompliantNameSpec(v) => Box::new(v),
             ValueElements::ArrayOfPbmProfileOperationOutcome(v) => Box::new(v),
             ValueElements::ArrayOfPbmProfileType(v) => Box::new(v),
             ValueElements::ArrayOfPbmQueryProfileResult(v) => Box::new(v),
@@ -14719,6 +15170,7 @@ impl ValueElements {
             ValueElements::ArrayOfPerfProviderSummary(v) => Box::new(v),
             ValueElements::ArrayOfPerfQuerySpec(v) => Box::new(v),
             ValueElements::ArrayOfPerfSampleInfo(v) => Box::new(v),
+            ValueElements::ArrayOfPlaceVmsXClusterSpecCandidateNetworks(v) => Box::new(v),
             ValueElements::ArrayOfPosixUserSearchResult(v) => Box::new(v),
             ValueElements::ArrayOfPrivilegePolicyDef(v) => Box::new(v),
             ValueElements::ArrayOfResourceAllocationInfo(v) => Box::new(v),
@@ -14734,6 +15186,13 @@ impl ValueElements {
             ValueElements::ArrayOfResourcePoolSummary(v) => Box::new(v),
             ValueElements::ArrayOfResourcePoolQuickStats(v) => Box::new(v),
             ValueElements::ArrayOfSddcBase(v) => Box::new(v),
+            ValueElements::ArrayOfSearchIndexFilter(v) => Box::new(v),
+            ValueElements::ArrayOfSearchIndexIterationSpec(v) => Box::new(v),
+            ValueElements::ArrayOfSearchIndexOptionalValue(v) => Box::new(v),
+            ValueElements::ArrayOfSearchIndexPredicate(v) => Box::new(v),
+            ValueElements::ArrayOfSearchIndexQuerySpec(v) => Box::new(v),
+            ValueElements::ArrayOfSearchIndexResourceItem(v) => Box::new(v),
+            ValueElements::ArrayOfSearchIndexResultSet(v) => Box::new(v),
             ValueElements::ArrayOfSelectionSet(v) => Box::new(v),
             ValueElements::ArrayOfHostVMotionCompatibility(v) => Box::new(v),
             ValueElements::ArrayOfProductComponentInfo(v) => Box::new(v),
@@ -14765,6 +15224,9 @@ impl ValueElements {
             ValueElements::ArrayOfStringExpression(v) => Box::new(v),
             ValueElements::ArrayOfStringPolicy(v) => Box::new(v),
             ValueElements::ArrayOfTag(v) => Box::new(v),
+            ValueElements::ArrayOfTagId(v) => Box::new(v),
+            ValueElements::ArrayOfTagIdNameId(v) => Box::new(v),
+            ValueElements::ArrayOfTagSpec(v) => Box::new(v),
             ValueElements::ArrayOfTaskDescription(v) => Box::new(v),
             ValueElements::ArrayOfTaskFilterSpec(v) => Box::new(v),
             ValueElements::ArrayOfTaskFilterSpecByEntity(v) => Box::new(v),
@@ -14780,6 +15242,9 @@ impl ValueElements {
             ValueElements::ArrayOfTaskReasonSchedule(v) => Box::new(v),
             ValueElements::ArrayOfTaskReasonSystem(v) => Box::new(v),
             ValueElements::ArrayOfTaskReasonUser(v) => Box::new(v),
+            ValueElements::ArrayOfTransitGatewayConfigInfo(v) => Box::new(v),
+            ValueElements::ArrayOfTransitGatewayConfigSpec(v) => Box::new(v),
+            ValueElements::ArrayOfTransitGatewayCreateSpec(v) => Box::new(v),
             ValueElements::ArrayOfTypeDescription(v) => Box::new(v),
             ValueElements::ArrayOfUpdateVirtualMachineFilesResult(v) => Box::new(v),
             ValueElements::ArrayOfUpdateVirtualMachineFilesResultFailedVmFileInfo(v) => Box::new(v),
@@ -14970,6 +15435,7 @@ impl ValueElements {
             ValueElements::ArrayOfClusterVmToolsMonitoringSettings(v) => Box::new(v),
             ValueElements::ArrayOfVsanAttachToSrOperation(v) => Box::new(v),
             ValueElements::ArrayOfVsanCapability(v) => Box::new(v),
+            ValueElements::ArrayOfVsanClientServerHciMeshDitEncryptionHealthSummary(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterAdvCfgSyncHostResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterAdvCfgSyncResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterBalancePerDiskInfo(v) => Box::new(v),
@@ -14981,6 +15447,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanClusterEncryptionHealthSummary(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterFileServiceHealthSummary(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterGlobalDedupHealthSummary(v) => Box::new(v),
+            ValueElements::ArrayOfVsanClusterHciMeshDitEncryptionHealthSummary(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterHclInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterHealthAction(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterHealthCheckInfo(v) => Box::new(v),
@@ -15012,12 +15479,15 @@ impl ValueElements {
             ValueElements::ArrayOfVsanClusterVMsHealthSummaryResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterVmdkLoadTestResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterWhatifHostFailuresResult(v) => Box::new(v),
+            ValueElements::ArrayOfVsanComponentBasicInfo(v) => Box::new(v),
+            ValueElements::ArrayOfVsanComponentPlacement(v) => Box::new(v),
             ValueElements::ArrayOfVsanConfigGeneration(v) => Box::new(v),
             ValueElements::ArrayOfVsanDataDrivenApiAction(v) => Box::new(v),
             ValueElements::ArrayOfVsanDiagnosticsThreshold(v) => Box::new(v),
             ValueElements::ArrayOfVsanDiskFormatConversionCheckResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanDiskFormatConversionSpec(v) => Box::new(v),
             ValueElements::ArrayOfVimClusterVsanDiskMappingsConfigSpec(v) => Box::new(v),
+            ValueElements::ArrayOfVsanEffectiveSpaceUsage(v) => Box::new(v),
             ValueElements::ArrayOfVsanEntitySpaceUsage(v) => Box::new(v),
             ValueElements::ArrayOfVimClusterVsanFaultDomainSpec(v) => Box::new(v),
             ValueElements::ArrayOfVimClusterVsanFaultDomainsConfigSpec(v) => Box::new(v),
@@ -15029,6 +15499,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanHealthCorrelation(v) => Box::new(v),
             ValueElements::ArrayOfVsanHealthDataDrivenAction(v) => Box::new(v),
             ValueElements::ArrayOfVsanHealthExtMgmtPreCheckResult(v) => Box::new(v),
+            ValueElements::ArrayOfVsanHealthStatusCounts(v) => Box::new(v),
             ValueElements::ArrayOfVsanHealthTroubleshooting(v) => Box::new(v),
             ValueElements::ArrayOfVsanHealthTxtBasedAction(v) => Box::new(v),
             ValueElements::ArrayOfVsanHistoricalHealthQuerySpec(v) => Box::new(v),
@@ -15059,6 +15530,8 @@ impl ValueElements {
             ValueElements::ArrayOfVsanObjectIdentity(v) => Box::new(v),
             ValueElements::ArrayOfVsanObjectIdentityAndHealth(v) => Box::new(v),
             ValueElements::ArrayOfVsanObjectInformation(v) => Box::new(v),
+            ValueElements::ArrayOfVsanObjectPlacement(v) => Box::new(v),
+            ValueElements::ArrayOfVsanObjectPlacementDetails(v) => Box::new(v),
             ValueElements::ArrayOfVsanObjectQuerySpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanObjectSpaceSummary(v) => Box::new(v),
             ValueElements::ArrayOfVsanPerfDiagnoseQuerySpec(v) => Box::new(v),
@@ -15068,6 +15541,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanPerfEntityType(v) => Box::new(v),
             ValueElements::ArrayOfVsanPerfGraph(v) => Box::new(v),
             ValueElements::ArrayOfVsanPerfHotspotEntitiesMetrics(v) => Box::new(v),
+            ValueElements::ArrayOfVsanPerfHotspotEntityType(v) => Box::new(v),
             ValueElements::ArrayOfVsanPerfHotspotQuerySpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanPerfMasterInformation(v) => Box::new(v),
             ValueElements::ArrayOfVsanPerfMemberInfo(v) => Box::new(v),
@@ -15082,7 +15556,9 @@ impl ValueElements {
             ValueElements::ArrayOfVsanPerfTopEntity(v) => Box::new(v),
             ValueElements::ArrayOfVsanPerfTopQuerySpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanPerfsvcConfig(v) => Box::new(v),
+            ValueElements::ArrayOfVsanQueryPhysicalPlacementSpecs(v) => Box::new(v),
             ValueElements::ArrayOfVsanRemoteClusterQuerySpec(v) => Box::new(v),
+            ValueElements::ArrayOfVsanSnapshotSpace(v) => Box::new(v),
             ValueElements::ArrayOfVsanSpaceQuerySpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanSpaceUsage(v) => Box::new(v),
             ValueElements::ArrayOfVsanSpaceUsageDetailResult(v) => Box::new(v),
@@ -15106,7 +15582,9 @@ impl ValueElements {
             ValueElements::ArrayOfCnsBackingObjectDetails(v) => Box::new(v),
             ValueElements::ArrayOfCnsBaseCreateSpec(v) => Box::new(v),
             ValueElements::ArrayOfCnsBlockBackingDetails(v) => Box::new(v),
+            ValueElements::ArrayOfCnsBlockCreateSpec(v) => Box::new(v),
             ValueElements::ArrayOfCnsBlockVolumeRelocateSpec(v) => Box::new(v),
+            ValueElements::ArrayOfCnsCloneVolumeSource(v) => Box::new(v),
             ValueElements::ArrayOfCnsContainerCluster(v) => Box::new(v),
             ValueElements::ArrayOfCnsCursor(v) => Box::new(v),
             ValueElements::ArrayOfCnsEntityMetadata(v) => Box::new(v),
@@ -15124,6 +15602,8 @@ impl ValueElements {
             ValueElements::ArrayOfCnsSnapshotDeleteSpec(v) => Box::new(v),
             ValueElements::ArrayOfCnsSnapshotId(v) => Box::new(v),
             ValueElements::ArrayOfCnsSnapshotVolumeSource(v) => Box::new(v),
+            ValueElements::ArrayOfCnsSyncVolumeSpec(v) => Box::new(v),
+            ValueElements::ArrayOfCnsUnregisterVolumeSpec(v) => Box::new(v),
             ValueElements::ArrayOfCnsVsanFileCreateSpec(v) => Box::new(v),
             ValueElements::ArrayOfCnsVolume(v) => Box::new(v),
             ValueElements::ArrayOfCnsVolumeAclConfigureSpec(v) => Box::new(v),
@@ -15131,6 +15611,7 @@ impl ValueElements {
             ValueElements::ArrayOfCnsVolumeAttachResult(v) => Box::new(v),
             ValueElements::ArrayOfCnsVolumeCreateResult(v) => Box::new(v),
             ValueElements::ArrayOfCnsVolumeCreateSpec(v) => Box::new(v),
+            ValueElements::ArrayOfCnsVolumeCryptoUpdateSpec(v) => Box::new(v),
             ValueElements::ArrayOfCnsVolumeExtendSpec(v) => Box::new(v),
             ValueElements::ArrayOfCnsVolumeId(v) => Box::new(v),
             ValueElements::ArrayOfCnsVolumeMetadata(v) => Box::new(v),
@@ -15158,9 +15639,11 @@ impl ValueElements {
             ValueElements::ArrayOfDvsVendorSpecificConfig(v) => Box::new(v),
             ValueElements::ArrayOfDvPortgroupConfigInfo(v) => Box::new(v),
             ValueElements::ArrayOfDvPortgroupConfigSpec(v) => Box::new(v),
+            ValueElements::ArrayOfDvPortgroupNsxConfig(v) => Box::new(v),
             ValueElements::ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult(v) => Box::new(v),
             ValueElements::ArrayOfDvPortgroupPolicy(v) => Box::new(v),
             ValueElements::ArrayOfDistributedVirtualPortgroupProblem(v) => Box::new(v),
+            ValueElements::ArrayOfDvPortgroupNsxSubnetAddressInfo(v) => Box::new(v),
             ValueElements::ArrayOfDistributedVirtualPortgroupInfo(v) => Box::new(v),
             ValueElements::ArrayOfDvPortgroupSelection(v) => Box::new(v),
             ValueElements::ArrayOfDistributedVirtualSwitchInfo(v) => Box::new(v),
@@ -15174,6 +15657,7 @@ impl ValueElements {
             ValueElements::ArrayOfDistributedVirtualSwitchManagerHostDvsMembershipFilter(v) => Box::new(v),
             ValueElements::ArrayOfDistributedVirtualSwitchManagerImportResult(v) => Box::new(v),
             ValueElements::ArrayOfDvsManagerPhysicalNicsList(v) => Box::new(v),
+            ValueElements::ArrayOfDistributedVirtualSwitchManagerSpanInfo(v) => Box::new(v),
             ValueElements::ArrayOfDvsSelection(v) => Box::new(v),
             ValueElements::ArrayOfEntityBackup(v) => Box::new(v),
             ValueElements::ArrayOfEntityBackupConfig(v) => Box::new(v),
@@ -15190,6 +15674,7 @@ impl ValueElements {
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberConfigInfo(v) => Box::new(v),
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberConfigSpec(v) => Box::new(v),
             ValueElements::ArrayOfHostMemberHealthCheckResult(v) => Box::new(v),
+            ValueElements::ArrayOfDistributedVirtualSwitchHostMemberHostPerfNicOffloadState(v) => Box::new(v),
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberHostUplinkState(v) => Box::new(v),
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberPnicBacking(v) => Box::new(v),
             ValueElements::ArrayOfDistributedVirtualSwitchHostMemberPnicSpec(v) => Box::new(v),
@@ -15250,12 +15735,14 @@ impl ValueElements {
             ValueElements::ArrayOfVMwareDvsMtuCapability(v) => Box::new(v),
             ValueElements::ArrayOfVMwareDvsMtuHealthCheckResult(v) => Box::new(v),
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchNetworkOffloadConfig(v) => Box::new(v),
+            ValueElements::ArrayOfVMwareDvsPerfNicOffloadCapability(v) => Box::new(v),
             ValueElements::ArrayOfVMwareDvsPvlanConfigSpec(v) => Box::new(v),
             ValueElements::ArrayOfVMwareDvsPvlanMapEntry(v) => Box::new(v),
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchPvlanSpec(v) => Box::new(v),
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchRealTimeConfig(v) => Box::new(v),
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchRealTimeLanAnnotation(v) => Box::new(v),
             ValueElements::ArrayOfDvsSecurityPolicy(v) => Box::new(v),
+            ValueElements::ArrayOfVMwareDvsSystemTrafficCapabilities(v) => Box::new(v),
             ValueElements::ArrayOfVMwareDvsTeamingHealthCheckConfig(v) => Box::new(v),
             ValueElements::ArrayOfVMwareDvsTeamingHealthCheckResult(v) => Box::new(v),
             ValueElements::ArrayOfVmwareDistributedVirtualSwitchTrunkVlanSpec(v) => Box::new(v),
@@ -15633,6 +16120,7 @@ impl ValueElements {
             ValueElements::ArrayOfTemplateUpgradeEvent(v) => Box::new(v),
             ValueElements::ArrayOfTemplateUpgradeFailedEvent(v) => Box::new(v),
             ValueElements::ArrayOfTemplateUpgradedEvent(v) => Box::new(v),
+            ValueElements::ArrayOfTgwEventArgument(v) => Box::new(v),
             ValueElements::ArrayOfTimedOutHostOperationEvent(v) => Box::new(v),
             ValueElements::ArrayOfUnlicensedVirtualMachinesEvent(v) => Box::new(v),
             ValueElements::ArrayOfUnlicensedVirtualMachinesFoundEvent(v) => Box::new(v),
@@ -15845,6 +16333,7 @@ impl ValueElements {
             ValueElements::ArrayOfCnsPlacementFault(v) => Box::new(v),
             ValueElements::ArrayOfCnsRankedLowerFault(v) => Box::new(v),
             ValueElements::ArrayOfCnsSnapshotNotFoundFault(v) => Box::new(v),
+            ValueElements::ArrayOfCnsVolumeAlreadyExistsFault(v) => Box::new(v),
             ValueElements::ArrayOfCnsVolumeNotFoundFault(v) => Box::new(v),
             ValueElements::ArrayOfCollectorAddressUnset(v) => Box::new(v),
             ValueElements::ArrayOfConcurrentAccess(v) => Box::new(v),
@@ -16687,6 +17176,7 @@ impl ValueElements {
             ValueElements::ArrayOfHostLowLevelProvisioningManagerVmMigrationStatus(v) => Box::new(v),
             ValueElements::ArrayOfHostLowLevelProvisioningManagerVmRecoveryInfo(v) => Box::new(v),
             ValueElements::ArrayOfHostMaintenanceSpec(v) => Box::new(v),
+            ValueElements::ArrayOfHostMaintenanceSpecEvacuationMode(v) => Box::new(v),
             ValueElements::ArrayOfServiceConsoleReservationInfo(v) => Box::new(v),
             ValueElements::ArrayOfVirtualMachineMemoryReservationInfo(v) => Box::new(v),
             ValueElements::ArrayOfVirtualMachineMemoryReservationSpec(v) => Box::new(v),
@@ -16772,8 +17262,10 @@ impl ValueElements {
             ValueElements::ArrayOfHostPatchManagerStatusPrerequisitePatch(v) => Box::new(v),
             ValueElements::ArrayOfHostPathSelectionPolicyOption(v) => Box::new(v),
             ValueElements::ArrayOfHostPciDevice(v) => Box::new(v),
+            ValueElements::ArrayOfHostPciDeviceDirectPathInfo(v) => Box::new(v),
             ValueElements::ArrayOfHostPciPassthruConfig(v) => Box::new(v),
             ValueElements::ArrayOfHostPciPassthruInfo(v) => Box::new(v),
+            ValueElements::ArrayOfHostPciPassthruInfoDirectPathState(v) => Box::new(v),
             ValueElements::ArrayOfHostPcieHba(v) => Box::new(v),
             ValueElements::ArrayOfHostPcieTargetTransport(v) => Box::new(v),
             ValueElements::ArrayOfHostPersistentMemoryInfo(v) => Box::new(v),
@@ -16795,6 +17287,8 @@ impl ValueElements {
             ValueElements::ArrayOfHostPlugStoreTopologyPlugin(v) => Box::new(v),
             ValueElements::ArrayOfHostPlugStoreTopologyTarget(v) => Box::new(v),
             ValueElements::ArrayOfPnicTsoInfo(v) => Box::new(v),
+            ValueElements::ArrayOfPodVmInfo(v) => Box::new(v),
+            ValueElements::ArrayOfPodVmOverheadInfo(v) => Box::new(v),
             ValueElements::ArrayOfHostPortGroup(v) => Box::new(v),
             ValueElements::ArrayOfHostPortGroupConfig(v) => Box::new(v),
             ValueElements::ArrayOfHostPortGroupPort(v) => Box::new(v),
@@ -16897,6 +17391,7 @@ impl ValueElements {
             ValueElements::ArrayOfHostTpmOptionEventDetails(v) => Box::new(v),
             ValueElements::ArrayOfHostTpmSignerEventDetails(v) => Box::new(v),
             ValueElements::ArrayOfHostTpmSoftwareComponentEventDetails(v) => Box::new(v),
+            ValueElements::ArrayOfHostTpmSystemVersionEventDetails(v) => Box::new(v),
             ValueElements::ArrayOfHostTpmVersionEventDetails(v) => Box::new(v),
             ValueElements::ArrayOfHostTrustAuthorityAttestationInfo(v) => Box::new(v),
             ValueElements::ArrayOfHostUnresolvedVmfsExtent(v) => Box::new(v),
@@ -16977,11 +17472,14 @@ impl ValueElements {
             ValueElements::ArrayOfVsanHclFirmwareUpdateSpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanHclMemInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanHclNicInfo(v) => Box::new(v),
+            ValueElements::ArrayOfVsanHealthObjectStats(v) => Box::new(v),
             ValueElements::ArrayOfVsanHealthQuerySpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostCimProviderInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostEmmSummary(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostFwComponent(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostGlobalDedupConfigHealthSummary(v) => Box::new(v),
+            ValueElements::ArrayOfVsanHostHciMeshDitEncryptionHealth(v) => Box::new(v),
+            ValueElements::ArrayOfVsanHostHciMeshDitEncryptionHealthSummary(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostHclInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostHealthSystemStatusResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostHwDeviceId(v) => Box::new(v),
@@ -17002,6 +17500,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanIoInsightInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanIperfClientSpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanKmsHealth(v) => Box::new(v),
+            ValueElements::ArrayOfVsanLicensedDiskResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanLimitHealthResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanNetworkDiagnosticsHealthInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanNetworkHealthResult(v) => Box::new(v),
@@ -17298,6 +17797,7 @@ impl ValueElements {
             ValueElements::ArrayOfGuestInfo(v) => Box::new(v),
             ValueElements::ArrayOfGuestInfoCustomizationInfo(v) => Box::new(v),
             ValueElements::ArrayOfGuestDiskInfo(v) => Box::new(v),
+            ValueElements::ArrayOfVirtualMachineGuestRebootStatus(v) => Box::new(v),
             ValueElements::ArrayOfGuestInfoNamespaceGenerationInfo(v) => Box::new(v),
             ValueElements::ArrayOfGuestNicInfo(v) => Box::new(v),
             ValueElements::ArrayOfGuestScreenInfo(v) => Box::new(v),
@@ -17385,6 +17885,10 @@ impl ValueElements {
             ValueElements::ArrayOfVirtualMachineVirtualNumaInfo(v) => Box::new(v),
             ValueElements::ArrayOfVirtualMachineVirtualPMem(v) => Box::new(v),
             ValueElements::ArrayOfVirtualMachineImportSpec(v) => Box::new(v),
+            ValueElements::ArrayOfVmPlacementPolicy(v) => Box::new(v),
+            ValueElements::ArrayOfVmToVmGroupsAntiAffinity(v) => Box::new(v),
+            ValueElements::ArrayOfVmVmAffinity(v) => Box::new(v),
+            ValueElements::ArrayOfVmVmAntiAffinity(v) => Box::new(v),
             ValueElements::ArrayOfVirtualMachineWindowsQuiesceSpec(v) => Box::new(v),
             ValueElements::ArrayOfCheckResult(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationAdapterMapping(v) => Box::new(v),
@@ -17395,6 +17899,7 @@ impl ValueElements {
             ValueElements::ArrayOfCustomizationCustomName(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationDhcpIpGenerator(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationDhcpIpV6Generator(v) => Box::new(v),
+            ValueElements::ArrayOfCustomizationDisableIpV4(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationFixedIp(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationFixedIpV6(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationFixedName(v) => Box::new(v),
@@ -17408,6 +17913,7 @@ impl ValueElements {
             ValueElements::ArrayOfCustomizationIpGenerator(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationIpV6Generator(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationLicenseFilePrintData(v) => Box::new(v),
+            ValueElements::ArrayOfCustomizationLinuxFlexPrep(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationLinuxOptions(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationLinuxPrep(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationName(v) => Box::new(v),
@@ -17424,6 +17930,7 @@ impl ValueElements {
             ValueElements::ArrayOfCustomizationUserData(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationVirtualMachineName(v) => Box::new(v),
             ValueElements::ArrayOfCustomizationWinOptions(v) => Box::new(v),
+            ValueElements::ArrayOfCustomizationWindowsFlexPrep(v) => Box::new(v),
             ValueElements::ArrayOfHostDiskMappingInfo(v) => Box::new(v),
             ValueElements::ArrayOfHostDiskMappingPartitionInfo(v) => Box::new(v),
             ValueElements::ArrayOfHostDiskMappingOption(v) => Box::new(v),
@@ -17676,12 +18183,16 @@ impl ValueElements {
             ValueElements::ArrayOfReplicationSpec(v) => Box::new(v),
             ValueElements::ArrayOfActiveVsanDirectoryServerConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanAdvancedDatastoreConfig(v) => Box::new(v),
+            ValueElements::ArrayOfVsanAutoRaidConfig(v) => Box::new(v),
+            ValueElements::ArrayOfVsanAutoRaidInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanCapacityReservationInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanClientDatastoreConfig(v) => Box::new(v),
+            ValueElements::ArrayOfVsanClientUnicastConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterConfigPrecheckItem(v) => Box::new(v),
             ValueElements::ArrayOfClusterRuntimeInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanCompatibilityCheckResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanConfigInfoEx(v) => Box::new(v),
+            ValueElements::ArrayOfVsanCyberRecoveryConfig(v) => Box::new(v),
             ValueElements::ArrayOfVimVsanDataEfficiencyCapacityState(v) => Box::new(v),
             ValueElements::ArrayOfVsanDataEfficiencyConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanDataEfficiencyConfigEx(v) => Box::new(v),
@@ -17696,7 +18207,9 @@ impl ValueElements {
             ValueElements::ArrayOfDiskClaimConfiguration(v) => Box::new(v),
             ValueElements::ArrayOfVsanDiskDataEvacuationResourceCheckTaskDetails(v) => Box::new(v),
             ValueElements::ArrayOfVsanDiskGroupResourceCheckResult(v) => Box::new(v),
+            ValueElements::ArrayOfDiskInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanDiskResourceCheckResult(v) => Box::new(v),
+            ValueElements::ArrayOfDpDaemonHealth(v) => Box::new(v),
             ValueElements::ArrayOfVsanEntityCompatibilityResult(v) => Box::new(v),
             ValueElements::ArrayOfEntityResourceCheckDetails(v) => Box::new(v),
             ValueElements::ArrayOfVsanFaultDomainResourceCheckResult(v) => Box::new(v),
@@ -17719,6 +18232,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanFileShareSnapshotQuerySpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanHciMeshDatastoreSource(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostResourceCheckResult(v) => Box::new(v),
+            ValueElements::ArrayOfVsanHostSiteMaintenanceStatus(v) => Box::new(v),
             ValueElements::ArrayOfVsanIoDiagnosticsFailedCheck(v) => Box::new(v),
             ValueElements::ArrayOfVsanIoDiagnosticsInstance(v) => Box::new(v),
             ValueElements::ArrayOfVsanIoDiagnosticsInstanceEvent(v) => Box::new(v),
@@ -17766,9 +18280,18 @@ impl ValueElements {
             ValueElements::ArrayOfSsdEnduranceThresholdSpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanServerHostUnicastInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanSharedWitnessCompatibilityResult(v) => Box::new(v),
+            ValueElements::ArrayOfVsanSiteMaintenanceCheckTaskDetails(v) => Box::new(v),
+            ValueElements::ArrayOfVsanSiteMaintenanceInfo(v) => Box::new(v),
+            ValueElements::ArrayOfVsanSiteMaintenancePrecheckDetail(v) => Box::new(v),
+            ValueElements::ArrayOfVsanSiteMaintenancePrecheckStatus(v) => Box::new(v),
+            ValueElements::ArrayOfVsanSiteMaintenanceResourceCheckResult(v) => Box::new(v),
+            ValueElements::ArrayOfVsanSiteMaintenanceSpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanSnapServiceConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanStoragePoolDiskResourceCheckResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanStoragePoolResourceCheckResult(v) => Box::new(v),
+            ValueElements::ArrayOfVsanSiteMaintenanceVmPowerOffInfo(v) => Box::new(v),
+            ValueElements::ArrayOfVsanVbossConfig(v) => Box::new(v),
+            ValueElements::ArrayOfVsanVbossObjectStoreConfig(v) => Box::new(v),
             ValueElements::ArrayOfVcRemoteVsanServerClusterConfig(v) => Box::new(v),
             ValueElements::ArrayOfVcRemoteVsanServerClusterInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanIscsiVipConfig(v) => Box::new(v),
@@ -17833,6 +18356,7 @@ impl ValueElements {
             ValueElements::ArrayOfVsanSpaceEfficiencyRatio(v) => Box::new(v),
             ValueElements::ArrayOfVsanUnmapConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanUpdateItem(v) => Box::new(v),
+            ValueElements::ArrayOfVsanValidationItem(v) => Box::new(v),
             ValueElements::ArrayOfVsanVcPostDeployConfigSpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanVcStretchedClusterConfigSpec(v) => Box::new(v),
             ValueElements::ArrayOfVsanVcsaDeploymentProgress(v) => Box::new(v),
@@ -17862,9 +18386,13 @@ impl ValueElements {
             ValueElements::ArrayOfVsanClusterConfigInfoHostDefaultInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterCoreConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanClusterCoreConfigSpec(v) => Box::new(v),
+            ValueElements::ArrayOfVsanVbossClusterConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostAbortWipeDiskStatus(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostAboutInfoEx(v) => Box::new(v),
             ValueElements::ArrayOfVsanAddStoragePoolDiskSpec(v) => Box::new(v),
+            ValueElements::ArrayOfVsanHostClientClusterUnicastConfig(v) => Box::new(v),
+            ValueElements::ArrayOfVsanHostClientClusterUnicastInfo(v) => Box::new(v),
+            ValueElements::ArrayOfVsanHostClientHostUnicastInfo(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostClusterStatus(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostClusterStatusState(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostClusterStatusStateCompletionEstimate(v) => Box::new(v),
@@ -17901,12 +18429,14 @@ impl ValueElements {
             ValueElements::ArrayOfVsanHostServerClusterUnicastConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostServerClusterUnicastInfo(v) => Box::new(v),
             ValueElements::ArrayOfSiteAffinityInfo(v) => Box::new(v),
+            ValueElements::ArrayOfVsanSiteTakeoverConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanStoragePoolDisk(v) => Box::new(v),
             ValueElements::ArrayOfVimVsanHostStoragePoolDiskInfo(v) => Box::new(v),
             ValueElements::ArrayOfVimVsanHostStoragePoolInfo(v) => Box::new(v),
             ValueElements::ArrayOfVimVsanHostTrimDiskEntry(v) => Box::new(v),
             ValueElements::ArrayOfVimVsanHostTrimDiskSpec(v) => Box::new(v),
             ValueElements::ArrayOfVimVsanHostUpdateStoragePoolDiskSpec(v) => Box::new(v),
+            ValueElements::ArrayOfVsanVbossHostConfig(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostAssociatedObjects(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostAssociatedObjectsResult(v) => Box::new(v),
             ValueElements::ArrayOfVsanComplianceQuerySpec(v) => Box::new(v),
@@ -17967,6 +18497,8 @@ impl ValueElements {
             ValueElements::ArrayOfvslmVClockInfo(v) => Box::new(v),
             ValueElements::ArrayOfVStorageObject(v) => Box::new(v),
             ValueElements::ArrayOfVStorageObjectConfigInfo(v) => Box::new(v),
+            ValueElements::ArrayOfVStorageObjectAttachResult(v) => Box::new(v),
+            ValueElements::ArrayOfVStorageObjectAttachSpec(v) => Box::new(v),
             ValueElements::ArrayOfVStorageObjectSnapshot(v) => Box::new(v),
             ValueElements::ArrayOfVStorageObjectSnapshotDetails(v) => Box::new(v),
             ValueElements::ArrayOfVStorageObjectSnapshotInfo(v) => Box::new(v),
@@ -17982,11 +18514,14 @@ impl ValueElements {
             ValueElements::ArrayOfLocalizedMethodFault(v) => Box::new(v),
             ValueElements::ArrayOfMethodFault(v) => Box::new(v),
             ValueElements::ArrayOfRuntimeFault(v) => Box::new(v),
+            ValueElements::ArrayOfAuthenticationRequired(v) => Box::new(v),
+            ValueElements::ArrayOfAuthenticationRequiredChallenge(v) => Box::new(v),
             ValueElements::ArrayOfHostCommunication(v) => Box::new(v),
             ValueElements::ArrayOfHostNotConnected(v) => Box::new(v),
             ValueElements::ArrayOfHostNotReachable(v) => Box::new(v),
             ValueElements::ArrayOfInvalidArgument(v) => Box::new(v),
             ValueElements::ArrayOfInvalidRequest(v) => Box::new(v),
+            ValueElements::ArrayOfInvalidToken(v) => Box::new(v),
             ValueElements::ArrayOfInvalidType(v) => Box::new(v),
             ValueElements::ArrayOfManagedObjectNotFound(v) => Box::new(v),
             ValueElements::ArrayOfMethodNotFound(v) => Box::new(v),
@@ -17995,6 +18530,7 @@ impl ValueElements {
             ValueElements::ArrayOfNotSupported(v) => Box::new(v),
             ValueElements::ArrayOfRequestCanceled(v) => Box::new(v),
             ValueElements::ArrayOfSecurityError(v) => Box::new(v),
+            ValueElements::ArrayOfSessionNotFound(v) => Box::new(v),
             ValueElements::ArrayOfSystemError(v) => Box::new(v),
             ValueElements::ArrayOfUnexpectedFault(v) => Box::new(v),
             ValueElements::ArrayOfInvalidCollectorVersion(v) => Box::new(v),
@@ -18098,6 +18634,8 @@ impl ValueElements {
             ValueElements::ArrayOfDrsBehavior(v) => Box::new(v),
             ValueElements::HostPowerOperationType(v) => Box::new(v),
             ValueElements::ArrayOfHostPowerOperationType(v) => Box::new(v),
+            ValueElements::CnsSyncVolumeMode(v) => Box::new(v),
+            ValueElements::ArrayOfCnsSyncVolumeMode(v) => Box::new(v),
             ValueElements::EventFilterSpecRecursionOption(v) => Box::new(v),
             ValueElements::ArrayOfEventFilterSpecRecursionOption(v) => Box::new(v),
             ValueElements::FtIssuesOnHostHostSelectionType(v) => Box::new(v),
@@ -18162,6 +18700,10 @@ impl ValueElements {
             ValueElements::ArrayOfVsanHostHealthState(v) => Box::new(v),
             ValueElements::VsanHostNodeState(v) => Box::new(v),
             ValueElements::ArrayOfVsanHostNodeState(v) => Box::new(v),
+            ValueElements::AuthenticationRequiredAuthenticationScheme(v) => Box::new(v),
+            ValueElements::ArrayOfAuthenticationRequiredAuthenticationScheme(v) => Box::new(v),
+            ValueElements::AuthenticationRequiredErrorType(v) => Box::new(v),
+            ValueElements::ArrayOfAuthenticationRequiredErrorType(v) => Box::new(v),
             ValueElements::PropertyChangeOp(v) => Box::new(v),
             ValueElements::ArrayOfPropertyChangeOp(v) => Box::new(v),
             ValueElements::ObjectUpdateKind(v) => Box::new(v),
@@ -18450,8 +18992,10 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfPbmPlacementMatchingReplicationResources(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmPlacementMatchingResources(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmPlacementHub(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfPbmPlacementHubInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmPlacementRequirement(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmPlacementResourceUtilization(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfPbmPlacementZoneTopologyRequirement(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmCapabilityProfile(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmCapabilityProfileCreateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmCapabilityProfileUpdateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -18461,6 +19005,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfPbmDefaultProfileInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmProfile(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmProfileId(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfPbmProfileK8SCompliantNameSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmProfileOperationOutcome(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmProfileType(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPbmQueryProfileResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -18810,6 +19355,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfPerfProviderSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPerfQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPerfSampleInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfPlaceVmsXClusterSpecCandidateNetworks(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPosixUserSearchResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPrivilegePolicyDef(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfResourceAllocationInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -18825,6 +19371,13 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfResourcePoolSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfResourcePoolQuickStats(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfSddcBase(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfSearchIndexFilter(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfSearchIndexIterationSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfSearchIndexOptionalValue(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfSearchIndexPredicate(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfSearchIndexQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfSearchIndexResourceItem(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfSearchIndexResultSet(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfSelectionSet(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostVMotionCompatibility(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfProductComponentInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -18856,6 +19409,9 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfStringExpression(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfStringPolicy(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTag(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfTagId(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfTagIdNameId(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfTagSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTaskDescription(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTaskFilterSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTaskFilterSpecByEntity(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -18871,6 +19427,9 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfTaskReasonSchedule(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTaskReasonSystem(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTaskReasonUser(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfTransitGatewayConfigInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfTransitGatewayConfigSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfTransitGatewayCreateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTypeDescription(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfUpdateVirtualMachineFilesResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfUpdateVirtualMachineFilesResultFailedVmFileInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19061,6 +19620,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfClusterVmToolsMonitoringSettings(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanAttachToSrOperation(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanCapability(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanClientServerHciMeshDitEncryptionHealthSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterAdvCfgSyncHostResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterAdvCfgSyncResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterBalancePerDiskInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19072,6 +19632,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanClusterEncryptionHealthSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterFileServiceHealthSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterGlobalDedupHealthSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanClusterHciMeshDitEncryptionHealthSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterHclInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterHealthAction(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterHealthCheckInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19103,12 +19664,15 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanClusterVMsHealthSummaryResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterVmdkLoadTestResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterWhatifHostFailuresResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanComponentBasicInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanComponentPlacement(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanConfigGeneration(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanDataDrivenApiAction(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanDiagnosticsThreshold(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanDiskFormatConversionCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanDiskFormatConversionSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVimClusterVsanDiskMappingsConfigSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanEffectiveSpaceUsage(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanEntitySpaceUsage(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVimClusterVsanFaultDomainSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVimClusterVsanFaultDomainsConfigSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19120,6 +19684,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanHealthCorrelation(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHealthDataDrivenAction(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHealthExtMgmtPreCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanHealthStatusCounts(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHealthTroubleshooting(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHealthTxtBasedAction(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHistoricalHealthQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19150,6 +19715,8 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanObjectIdentity(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanObjectIdentityAndHealth(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanObjectInformation(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanObjectPlacement(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanObjectPlacementDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanObjectQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanObjectSpaceSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanPerfDiagnoseQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19159,6 +19726,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanPerfEntityType(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanPerfGraph(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanPerfHotspotEntitiesMetrics(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanPerfHotspotEntityType(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanPerfHotspotQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanPerfMasterInformation(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanPerfMemberInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19173,7 +19741,9 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanPerfTopEntity(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanPerfTopQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanPerfsvcConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanQueryPhysicalPlacementSpecs(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanRemoteClusterQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanSnapshotSpace(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanSpaceQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanSpaceUsage(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanSpaceUsageDetailResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19197,7 +19767,9 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfCnsBackingObjectDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsBaseCreateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsBlockBackingDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCnsBlockCreateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsBlockVolumeRelocateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCnsCloneVolumeSource(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsContainerCluster(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsCursor(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsEntityMetadata(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19215,6 +19787,8 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfCnsSnapshotDeleteSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsSnapshotId(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsSnapshotVolumeSource(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCnsSyncVolumeSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCnsUnregisterVolumeSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsVsanFileCreateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsVolume(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsVolumeAclConfigureSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19222,6 +19796,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfCnsVolumeAttachResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsVolumeCreateResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsVolumeCreateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCnsVolumeCryptoUpdateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsVolumeExtendSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsVolumeId(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsVolumeMetadata(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19249,9 +19824,11 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfDvsVendorSpecificConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDvPortgroupConfigInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDvPortgroupConfigSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfDvPortgroupNsxConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDistributedVirtualPortgroupNsxPortgroupOperationResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDvPortgroupPolicy(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDistributedVirtualPortgroupProblem(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfDvPortgroupNsxSubnetAddressInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDistributedVirtualPortgroupInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDvPortgroupSelection(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDistributedVirtualSwitchInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19265,6 +19842,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfDistributedVirtualSwitchManagerHostDvsMembershipFilter(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDistributedVirtualSwitchManagerImportResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDvsManagerPhysicalNicsList(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfDistributedVirtualSwitchManagerSpanInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDvsSelection(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfEntityBackup(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfEntityBackupConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19281,6 +19859,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfDistributedVirtualSwitchHostMemberConfigInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDistributedVirtualSwitchHostMemberConfigSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostMemberHealthCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfDistributedVirtualSwitchHostMemberHostPerfNicOffloadState(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDistributedVirtualSwitchHostMemberHostUplinkState(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDistributedVirtualSwitchHostMemberPnicBacking(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDistributedVirtualSwitchHostMemberPnicSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19341,12 +19920,14 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVMwareDvsMtuCapability(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVMwareDvsMtuHealthCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVmwareDistributedVirtualSwitchNetworkOffloadConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVMwareDvsPerfNicOffloadCapability(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVMwareDvsPvlanConfigSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVMwareDvsPvlanMapEntry(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVmwareDistributedVirtualSwitchPvlanSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVmwareDistributedVirtualSwitchRealTimeConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVmwareDistributedVirtualSwitchRealTimeLanAnnotation(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfDvsSecurityPolicy(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVMwareDvsSystemTrafficCapabilities(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVMwareDvsTeamingHealthCheckConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVMwareDvsTeamingHealthCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVmwareDistributedVirtualSwitchTrunkVlanSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19724,6 +20305,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfTemplateUpgradeEvent(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTemplateUpgradeFailedEvent(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTemplateUpgradedEvent(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfTgwEventArgument(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfTimedOutHostOperationEvent(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfUnlicensedVirtualMachinesEvent(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfUnlicensedVirtualMachinesFoundEvent(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -19936,6 +20518,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfCnsPlacementFault(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsRankedLowerFault(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsSnapshotNotFoundFault(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCnsVolumeAlreadyExistsFault(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCnsVolumeNotFoundFault(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCollectorAddressUnset(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfConcurrentAccess(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -20778,6 +21361,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfHostLowLevelProvisioningManagerVmMigrationStatus(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostLowLevelProvisioningManagerVmRecoveryInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostMaintenanceSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfHostMaintenanceSpecEvacuationMode(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfServiceConsoleReservationInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVirtualMachineMemoryReservationInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVirtualMachineMemoryReservationSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -20863,8 +21447,10 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfHostPatchManagerStatusPrerequisitePatch(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPathSelectionPolicyOption(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPciDevice(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfHostPciDeviceDirectPathInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPciPassthruConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPciPassthruInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfHostPciPassthruInfoDirectPathState(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPcieHba(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPcieTargetTransport(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPersistentMemoryInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -20886,6 +21472,8 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfHostPlugStoreTopologyPlugin(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPlugStoreTopologyTarget(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPnicTsoInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfPodVmInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfPodVmOverheadInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPortGroup(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPortGroupConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPortGroupPort(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -20988,6 +21576,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfHostTpmOptionEventDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostTpmSignerEventDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostTpmSoftwareComponentEventDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfHostTpmSystemVersionEventDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostTpmVersionEventDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostTrustAuthorityAttestationInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostUnresolvedVmfsExtent(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21068,11 +21657,14 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanHclFirmwareUpdateSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHclMemInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHclNicInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanHealthObjectStats(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHealthQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostCimProviderInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostEmmSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostFwComponent(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostGlobalDedupConfigHealthSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanHostHciMeshDitEncryptionHealth(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanHostHciMeshDitEncryptionHealthSummary(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostHclInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostHealthSystemStatusResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostHwDeviceId(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21093,6 +21685,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanIoInsightInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanIperfClientSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanKmsHealth(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanLicensedDiskResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanLimitHealthResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanNetworkDiagnosticsHealthInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanNetworkHealthResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21389,6 +21982,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfGuestInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfGuestInfoCustomizationInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfGuestDiskInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVirtualMachineGuestRebootStatus(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfGuestInfoNamespaceGenerationInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfGuestNicInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfGuestScreenInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21476,6 +22070,10 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVirtualMachineVirtualNumaInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVirtualMachineVirtualPMem(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVirtualMachineImportSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVmPlacementPolicy(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVmToVmGroupsAntiAffinity(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVmVmAffinity(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVmVmAntiAffinity(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVirtualMachineWindowsQuiesceSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationAdapterMapping(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21486,6 +22084,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfCustomizationCustomName(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationDhcpIpGenerator(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationDhcpIpV6Generator(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCustomizationDisableIpV4(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationFixedIp(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationFixedIpV6(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationFixedName(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21499,6 +22098,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfCustomizationIpGenerator(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationIpV6Generator(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationLicenseFilePrintData(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCustomizationLinuxFlexPrep(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationLinuxOptions(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationLinuxPrep(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationName(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21515,6 +22115,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfCustomizationUserData(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationVirtualMachineName(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfCustomizationWinOptions(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCustomizationWindowsFlexPrep(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostDiskMappingInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostDiskMappingPartitionInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostDiskMappingOption(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21767,12 +22368,16 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfReplicationSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfActiveVsanDirectoryServerConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanAdvancedDatastoreConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanAutoRaidConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanAutoRaidInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanCapacityReservationInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClientDatastoreConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanClientUnicastConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterConfigPrecheckItem(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfClusterRuntimeInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanCompatibilityCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanConfigInfoEx(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanCyberRecoveryConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVimVsanDataEfficiencyCapacityState(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanDataEfficiencyConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanDataEfficiencyConfigEx(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21787,7 +22392,9 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfDiskClaimConfiguration(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanDiskDataEvacuationResourceCheckTaskDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanDiskGroupResourceCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfDiskInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanDiskResourceCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfDpDaemonHealth(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanEntityCompatibilityResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfEntityResourceCheckDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanFaultDomainResourceCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21810,6 +22417,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanFileShareSnapshotQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHciMeshDatastoreSource(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostResourceCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanHostSiteMaintenanceStatus(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanIoDiagnosticsFailedCheck(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanIoDiagnosticsInstance(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanIoDiagnosticsInstanceEvent(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21857,9 +22465,18 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfSsdEnduranceThresholdSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanServerHostUnicastInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanSharedWitnessCompatibilityResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanSiteMaintenanceCheckTaskDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanSiteMaintenanceInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanSiteMaintenancePrecheckDetail(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanSiteMaintenancePrecheckStatus(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanSiteMaintenanceResourceCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanSiteMaintenanceSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanSnapServiceConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanStoragePoolDiskResourceCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanStoragePoolResourceCheckResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanSiteMaintenanceVmPowerOffInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanVbossConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanVbossObjectStoreConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVcRemoteVsanServerClusterConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVcRemoteVsanServerClusterInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanIscsiVipConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21924,6 +22541,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanSpaceEfficiencyRatio(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanUnmapConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanUpdateItem(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanValidationItem(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanVcPostDeployConfigSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanVcStretchedClusterConfigSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanVcsaDeploymentProgress(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21953,9 +22571,13 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanClusterConfigInfoHostDefaultInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterCoreConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanClusterCoreConfigSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanVbossClusterConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostAbortWipeDiskStatus(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostAboutInfoEx(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanAddStoragePoolDiskSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanHostClientClusterUnicastConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanHostClientClusterUnicastInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanHostClientHostUnicastInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostClusterStatus(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostClusterStatusState(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostClusterStatusStateCompletionEstimate(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -21992,12 +22614,14 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanHostServerClusterUnicastConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostServerClusterUnicastInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfSiteAffinityInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanSiteTakeoverConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanStoragePoolDisk(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVimVsanHostStoragePoolDiskInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVimVsanHostStoragePoolInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVimVsanHostTrimDiskEntry(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVimVsanHostTrimDiskSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVimVsanHostUpdateStoragePoolDiskSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVsanVbossHostConfig(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostAssociatedObjects(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostAssociatedObjectsResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanComplianceQuerySpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -22058,6 +22682,8 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfvslmVClockInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVStorageObject(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVStorageObjectConfigInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVStorageObjectAttachResult(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfVStorageObjectAttachSpec(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVStorageObjectSnapshot(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVStorageObjectSnapshotDetails(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVStorageObjectSnapshotInfo(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -22073,11 +22699,14 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfLocalizedMethodFault(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfMethodFault(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfRuntimeFault(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfAuthenticationRequired(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfAuthenticationRequiredChallenge(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostCommunication(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostNotConnected(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostNotReachable(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfInvalidArgument(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfInvalidRequest(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfInvalidToken(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfInvalidType(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfManagedObjectNotFound(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfMethodNotFound(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -22086,6 +22715,7 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfNotSupported(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfRequestCanceled(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfSecurityError(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfSessionNotFound(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfSystemError(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfUnexpectedFault(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfInvalidCollectorVersion(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -22189,6 +22819,8 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfDrsBehavior(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::HostPowerOperationType(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfHostPowerOperationType(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::CnsSyncVolumeMode(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfCnsSyncVolumeMode(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::EventFilterSpecRecursionOption(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfEventFilterSpecRecursionOption(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::FtIssuesOnHostHostSelectionType(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
@@ -22253,6 +22885,10 @@ impl<'a> miniserde::ser::Map for ValueElementsSerializer<'a> {
                     ValueElements::ArrayOfVsanHostHealthState(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::VsanHostNodeState(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfVsanHostNodeState(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::AuthenticationRequiredAuthenticationScheme(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfAuthenticationRequiredAuthenticationScheme(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::AuthenticationRequiredErrorType(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
+                    ValueElements::ArrayOfAuthenticationRequiredErrorType(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::PropertyChangeOp(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ArrayOfPropertyChangeOp(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),
                     ValueElements::ObjectUpdateKind(value) => Some((Cow::Borrowed("_value"), value as &dyn miniserde::Serialize)),

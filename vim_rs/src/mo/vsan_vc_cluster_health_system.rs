@@ -227,7 +227,7 @@ impl VsanVcClusterHealthSystem {
     /// A list of VsanHclReleaseConstraint consists of: Hcl Constraints for
     /// one recommended minor release(if applicable) and Hcl Constraints for
     /// one recommended major release(if applicable). If none of the minor or
-    /// major releases are prefered by vSAN, an empty list will be returned.
+    /// major releases are preferred by vSAN, an empty list will be returned.
     ///
     /// ## Errors:
     ///
@@ -523,7 +523,7 @@ impl VsanVcClusterHealthSystem {
     ///
     /// ### timeout
     /// The timeout in seconds for the VM creation test.
-    /// The suggested value could be 2 mintues
+    /// The suggested value could be 2 minutes
     ///
     /// ### datastore
     /// The datastore where the VM creation test will be run. It
@@ -598,7 +598,7 @@ impl VsanVcClusterHealthSystem {
     /// network bandwidth and deserialization effort. The possible value is the
     /// field from the VsanClusterHealthSummary class like 'objectHealth',
     /// 'networkHealth' etc
-    /// If unset, following properities are included in the result.
+    /// If unset, following properties are included in the result.
     /// 'clusterStatus',
     /// 'timestamp',
     /// 'clusterVersions',
@@ -667,7 +667,7 @@ impl VsanVcClusterHealthSystem {
     /// or unset and the parameter hosts should keep the same while leaving the other
     /// parameters as unset.
     /// If a new task is triggered while there's running task for same cluster,
-    /// the new triggered task will be pending and return immediatelly once the
+    /// the new triggered task will be pending and return immediately once the
     /// running task is completed. The new triggered task will share the same
     /// health summary result as the running one.
     ///
@@ -735,7 +735,7 @@ impl VsanVcClusterHealthSystem {
     ///
     /// ## Returns:
     ///
-    /// vSAN cluster health summary with historical infomation.
+    /// vSAN cluster health summary with historical information.
     ///
     /// ## Errors:
     ///
@@ -1018,15 +1018,28 @@ impl VsanVcClusterHealthSystem {
         let result: Vec<crate::types::structs::VsanSmartStatsHostSummary> = crate::core::client::unmarshal_array(self.client.transport(), &bytes)?;
         Ok(result)
     }
-    /// Querying version information of vSAN health service installed on all the hosts
-    /// in the cluster requested and vCenter Server.
+    /// Query the version information of the vSAN health service all hosts in the
+    /// specified cluster and on the vCenter Server.
     /// 
-    /// It will verify the consistency of the version numbers.
+    /// The operation verifies the
+    /// consistency of version numbers across all hosts and reports any inconsistencies
+    /// or issues found during the query.
+    /// 
+    /// The query result includes all connected hosts in the cluster, excluding
+    /// disconnected hosts and hosts that fail to respond.
+    /// 
+    /// As of vSphere API version 9.0, this API is deprecated and should not
+    /// be used. There is no dedicated vSAN health service version as the vSAN
+    /// health functionality is always part of vCenter Server and ESX host.
+    /// The vSAN health version will always equal the vCenter Server or ESX
+    /// host version, which can be queried directly from the vCenter Server or
+    /// ESX host APIs. Use *AboutInfo.version* from vCenter Server or
+    /// the appropriate ESX host version API instead.
     ///
     /// ## Parameters:
     ///
     /// ### cluster
-    /// The target cluster
+    /// The target cluster to query.
     /// 
     /// ***Required privileges:*** System.Read
     /// 
@@ -1034,7 +1047,11 @@ impl VsanVcClusterHealthSystem {
     ///
     /// ## Returns:
     ///
-    /// The vSAN health service version
+    /// The vSAN health service version result containing version
+    /// information for all hosts in the cluster, the vCenter Server
+    /// version, and flags indicating whether issues were found or
+    /// upgrades are possible. The result includes per-host version
+    /// information and any errors encountered during the query.
     ///
     /// ## Errors:
     ///
@@ -1437,7 +1454,7 @@ impl VsanVcClusterHealthSystem {
         let input = VsanHealthSetVsanClusterTelemetryConfigRequestType {cluster, vsan_cluster_health_config, };
         self.client.invoke_void("vsan", "VsanVcClusterHealthSystem", &self.mo_id, "VsanHealthSetVsanClusterTelemetryConfig", Some(&input)).await
     }
-    /// This API can help to build up the mapping from the hardware infomation to
+    /// This API can help to build up the mapping from the hardware information to
     /// the vSAN VCG entry.
     /// 
     /// The hardware information in the spec can be fetched by

@@ -20,10 +20,11 @@ const LIB_VERSION: &str = env!("CARGO_PKG_VERSION");
 const RUSTC_VERSION: &str = env!("RUSTC_VERSION");
 
 /// Compatible API releases i.e. current and older API releases that can be negotiated with a server
-pub const COMPATIBLE_API_RELEASES: [&str; 4] = ["9.0.0.0", "8.0.3.0", "8.0.2.0", "8.0.1.0"];
+pub const COMPATIBLE_API_RELEASES: [&str; 5] =
+    ["9.1.0.0", "9.0.0.0", "8.0.3.0", "8.0.2.0", "8.0.1.0"];
 
 /// The default API version found in the OpenAPI specification
-pub const API_RELEASE: &str = "9.0.0.0";
+pub const API_RELEASE: &str = "9.1.0.0";
 
 /// The header key for the session key
 const AUTHN_HEADER: &str = "vmware-api-session-id";

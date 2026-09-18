@@ -1852,6 +1852,16 @@ impl VimObjectTrait for PbmPlacementHub {
     }
 }
 
+impl VimObjectTrait for PbmPlacementHubInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::PbmPlacementHubInfo
+    }
+}
+
 impl VimObjectTrait for PbmPlacementRequirement {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -1879,6 +1889,16 @@ impl VimObjectTrait for PbmPlacementCapabilityProfileRequirement {
     
     fn data_type(&self) -> StructType {
         StructType::PbmPlacementCapabilityProfileRequirement
+    }
+}
+
+impl VimObjectTrait for PbmPlacementZoneTopologyRequirement {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::PbmPlacementZoneTopologyRequirement
     }
 }
 
@@ -1989,6 +2009,16 @@ impl VimObjectTrait for PbmProfileId {
     
     fn data_type(&self) -> StructType {
         StructType::PbmProfileId
+    }
+}
+
+impl VimObjectTrait for PbmProfileK8SCompliantNameSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::PbmProfileK8SCompliantNameSpec
     }
 }
 
@@ -3099,6 +3129,16 @@ impl VimObjectTrait for VsanClusterConfigPrecheckItem {
     
     fn data_type(&self) -> StructType {
         StructType::VsanClusterConfigPrecheckItem
+    }
+}
+
+impl VimObjectTrait for VsanValidationItem {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanValidationItem
     }
 }
 
@@ -5502,6 +5542,16 @@ impl VimObjectTrait for PerfSampleInfo {
     }
 }
 
+impl VimObjectTrait for PlaceVmsXClusterSpecCandidateNetworks {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::PlaceVmsXClusterSpecCandidateNetworks
+    }
+}
+
 impl VimObjectTrait for PrivilegePolicyDef {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -5659,6 +5709,76 @@ impl VimObjectTrait for VimVsanReconfigSpec {
     
     fn data_type(&self) -> StructType {
         StructType::VimVsanReconfigSpec
+    }
+}
+
+impl VimObjectTrait for SearchIndexFilter {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::SearchIndexFilter
+    }
+}
+
+impl VimObjectTrait for SearchIndexIterationSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::SearchIndexIterationSpec
+    }
+}
+
+impl VimObjectTrait for SearchIndexOptionalValue {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::SearchIndexOptionalValue
+    }
+}
+
+impl VimObjectTrait for SearchIndexPredicate {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::SearchIndexPredicate
+    }
+}
+
+impl VimObjectTrait for SearchIndexQuerySpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::SearchIndexQuerySpec
+    }
+}
+
+impl VimObjectTrait for SearchIndexResourceItem {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::SearchIndexResourceItem
+    }
+}
+
+impl VimObjectTrait for SearchIndexResultSet {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::SearchIndexResultSet
     }
 }
 
@@ -5952,6 +6072,26 @@ impl VimObjectTrait for Tag {
     }
 }
 
+impl VimObjectTrait for TagId {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::TagId
+    }
+}
+
+impl VimObjectTrait for TagIdNameId {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::TagIdNameId
+    }
+}
+
 impl VimObjectTrait for TaskDescription {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -6099,6 +6239,36 @@ impl VimObjectTrait for TaskReasonUser {
     
     fn data_type(&self) -> StructType {
         StructType::TaskReasonUser
+    }
+}
+
+impl VimObjectTrait for TransitGatewayConfigInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::TransitGatewayConfigInfo
+    }
+}
+
+impl VimObjectTrait for TransitGatewayConfigSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::TransitGatewayConfigSpec
+    }
+}
+
+impl VimObjectTrait for TransitGatewayCreateSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::TransitGatewayCreateSpec
     }
 }
 
@@ -8092,6 +8262,16 @@ impl VimObjectTrait for VsanCapability {
     }
 }
 
+impl VimObjectTrait for VsanClientServerHciMeshDitEncryptionHealthSummary {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanClientServerHciMeshDitEncryptionHealthSummary
+    }
+}
+
 impl VimObjectTrait for VsanClusterAdvCfgSyncHostResult {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -8199,6 +8379,16 @@ impl VimObjectTrait for VsanClusterGlobalDedupHealthSummary {
     
     fn data_type(&self) -> StructType {
         StructType::VsanClusterGlobalDedupHealthSummary
+    }
+}
+
+impl VimObjectTrait for VsanClusterHciMeshDitEncryptionHealthSummary {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanClusterHciMeshDitEncryptionHealthSummary
     }
 }
 
@@ -8512,6 +8702,26 @@ impl VimObjectTrait for VsanClusterWhatifHostFailuresResult {
     }
 }
 
+impl VimObjectTrait for VsanComponentBasicInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanComponentBasicInfo
+    }
+}
+
+impl VimObjectTrait for VsanComponentPlacement {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanComponentPlacement
+    }
+}
+
 impl VimObjectTrait for VsanConfigGeneration {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -8559,6 +8769,16 @@ impl VimObjectTrait for VimClusterVsanDiskMappingsConfigSpec {
     
     fn data_type(&self) -> StructType {
         StructType::VimClusterVsanDiskMappingsConfigSpec
+    }
+}
+
+impl VimObjectTrait for VsanEffectiveSpaceUsage {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanEffectiveSpaceUsage
     }
 }
 
@@ -8699,6 +8919,16 @@ impl VimObjectTrait for VsanHealthExtMgmtPreCheckResult {
     
     fn data_type(&self) -> StructType {
         StructType::VsanHealthExtMgmtPreCheckResult
+    }
+}
+
+impl VimObjectTrait for VsanHealthStatusCounts {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanHealthStatusCounts
     }
 }
 
@@ -8992,6 +9222,26 @@ impl VimObjectTrait for VsanObjectInformation {
     }
 }
 
+impl VimObjectTrait for VsanObjectPlacement {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanObjectPlacement
+    }
+}
+
+impl VimObjectTrait for VsanObjectPlacementDetails {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanObjectPlacementDetails
+    }
+}
+
 impl VimObjectTrait for VsanObjectQuerySpec {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -9079,6 +9329,16 @@ impl VimObjectTrait for VsanPerfHotspotEntitiesMetrics {
     
     fn data_type(&self) -> StructType {
         StructType::VsanPerfHotspotEntitiesMetrics
+    }
+}
+
+impl VimObjectTrait for VsanPerfHotspotEntityType {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanPerfHotspotEntityType
     }
 }
 
@@ -9222,6 +9482,16 @@ impl VimObjectTrait for VsanPerfsvcConfig {
     }
 }
 
+impl VimObjectTrait for VsanQueryPhysicalPlacementSpecs {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanQueryPhysicalPlacementSpecs
+    }
+}
+
 impl VimObjectTrait for VsanRemoteClusterQuerySpec {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -9229,6 +9499,16 @@ impl VimObjectTrait for VsanRemoteClusterQuerySpec {
     
     fn data_type(&self) -> StructType {
         StructType::VsanRemoteClusterQuerySpec
+    }
+}
+
+impl VimObjectTrait for VsanSnapshotSpace {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanSnapshotSpace
     }
 }
 
@@ -9462,6 +9742,16 @@ impl VimObjectTrait for CnsBaseCreateSpec {
     }
 }
 
+impl VimObjectTrait for CnsBlockCreateSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::CnsBlockCreateSpec
+    }
+}
+
 impl VimObjectTrait for CnsFileCreateSpec {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -9612,6 +9902,26 @@ impl VimObjectTrait for CnsSnapshotId {
     }
 }
 
+impl VimObjectTrait for CnsSyncVolumeSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::CnsSyncVolumeSpec
+    }
+}
+
+impl VimObjectTrait for CnsUnregisterVolumeSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::CnsUnregisterVolumeSpec
+    }
+}
+
 impl VimObjectTrait for CnsVolume {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -9649,6 +9959,16 @@ impl VimObjectTrait for CnsVolumeCreateSpec {
     
     fn data_type(&self) -> StructType {
         StructType::CnsVolumeCreateSpec
+    }
+}
+
+impl VimObjectTrait for CnsVolumeCryptoUpdateSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::CnsVolumeCryptoUpdateSpec
     }
 }
 
@@ -9782,6 +10102,16 @@ impl VimObjectTrait for CnsVolumeSource {
     }
 }
 
+impl VimObjectTrait for CnsCloneVolumeSource {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::CnsCloneVolumeSource
+    }
+}
+
 impl VimObjectTrait for CnsSnapshotVolumeSource {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -9902,6 +10232,16 @@ impl VimObjectTrait for DvPortgroupConfigSpec {
     }
 }
 
+impl VimObjectTrait for DvPortgroupNsxConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::DvPortgroupNsxConfig
+    }
+}
+
 impl VimObjectTrait for DistributedVirtualPortgroupNsxPortgroupOperationResult {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -9939,6 +10279,16 @@ impl VimObjectTrait for DistributedVirtualPortgroupProblem {
     
     fn data_type(&self) -> StructType {
         StructType::DistributedVirtualPortgroupProblem
+    }
+}
+
+impl VimObjectTrait for DvPortgroupNsxSubnetAddressInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::DvPortgroupNsxSubnetAddressInfo
     }
 }
 
@@ -10059,6 +10409,16 @@ impl VimObjectTrait for DvsManagerPhysicalNicsList {
     
     fn data_type(&self) -> StructType {
         StructType::DvsManagerPhysicalNicsList
+    }
+}
+
+impl VimObjectTrait for DistributedVirtualSwitchManagerSpanInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::DistributedVirtualSwitchManagerSpanInfo
     }
 }
 
@@ -10259,6 +10619,16 @@ impl VimObjectTrait for VMwareDvsTeamingHealthCheckResult {
     
     fn data_type(&self) -> StructType {
         StructType::VMwareDvsTeamingHealthCheckResult
+    }
+}
+
+impl VimObjectTrait for DistributedVirtualSwitchHostMemberHostPerfNicOffloadState {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::DistributedVirtualSwitchHostMemberHostPerfNicOffloadState
     }
 }
 
@@ -10742,6 +11112,16 @@ impl VimObjectTrait for VmwareDistributedVirtualSwitchNetworkOffloadConfig {
     }
 }
 
+impl VimObjectTrait for VMwareDvsPerfNicOffloadCapability {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VMwareDvsPerfNicOffloadCapability
+    }
+}
+
 impl VimObjectTrait for VMwareDvsPvlanConfigSpec {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -10779,6 +11159,16 @@ impl VimObjectTrait for VmwareDistributedVirtualSwitchRealTimeLanAnnotation {
     
     fn data_type(&self) -> StructType {
         StructType::VmwareDistributedVirtualSwitchRealTimeLanAnnotation
+    }
+}
+
+impl VimObjectTrait for VMwareDvsSystemTrafficCapabilities {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VMwareDvsSystemTrafficCapabilities
     }
 }
 
@@ -11309,6 +11699,16 @@ impl VimObjectTrait for ScheduledTaskEventArgument {
     
     fn data_type(&self) -> StructType {
         StructType::ScheduledTaskEventArgument
+    }
+}
+
+impl VimObjectTrait for TgwEventArgument {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::TgwEventArgument
     }
 }
 
@@ -13752,6 +14152,16 @@ impl VimObjectTrait for HostMaintenanceSpec {
     }
 }
 
+impl VimObjectTrait for HostMaintenanceSpecEvacuationMode {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::HostMaintenanceSpecEvacuationMode
+    }
+}
+
 impl VimObjectTrait for ServiceConsoleReservationInfo {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -14532,6 +14942,16 @@ impl VimObjectTrait for HostPciDevice {
     }
 }
 
+impl VimObjectTrait for HostPciDeviceDirectPathInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::HostPciDeviceDirectPathInfo
+    }
+}
+
 impl VimObjectTrait for HostPciPassthruConfig {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -14569,6 +14989,16 @@ impl VimObjectTrait for HostSriovInfo {
     
     fn data_type(&self) -> StructType {
         StructType::HostSriovInfo
+    }
+}
+
+impl VimObjectTrait for HostPciPassthruInfoDirectPathState {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::HostPciPassthruInfoDirectPathState
     }
 }
 
@@ -14759,6 +15189,26 @@ impl VimObjectTrait for PnicTsoInfo {
     
     fn data_type(&self) -> StructType {
         StructType::PnicTsoInfo
+    }
+}
+
+impl VimObjectTrait for PodVmInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::PodVmInfo
+    }
+}
+
+impl VimObjectTrait for PodVmOverheadInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::PodVmOverheadInfo
     }
 }
 
@@ -15742,6 +16192,16 @@ impl VimObjectTrait for HostTpmSoftwareComponentEventDetails {
     }
 }
 
+impl VimObjectTrait for HostTpmSystemVersionEventDetails {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::HostTpmSystemVersionEventDetails
+    }
+}
+
 impl VimObjectTrait for HostTpmVersionEventDetails {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -16502,6 +16962,16 @@ impl VimObjectTrait for VsanHclMemInfo {
     }
 }
 
+impl VimObjectTrait for VsanHealthObjectStats {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanHealthObjectStats
+    }
+}
+
 impl VimObjectTrait for VsanHealthQuerySpec {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -16549,6 +17019,26 @@ impl VimObjectTrait for VsanHostGlobalDedupConfigHealthSummary {
     
     fn data_type(&self) -> StructType {
         StructType::VsanHostGlobalDedupConfigHealthSummary
+    }
+}
+
+impl VimObjectTrait for VsanHostHciMeshDitEncryptionHealth {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanHostHciMeshDitEncryptionHealth
+    }
+}
+
+impl VimObjectTrait for VsanHostHciMeshDitEncryptionHealthSummary {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanHostHciMeshDitEncryptionHealthSummary
     }
 }
 
@@ -16749,6 +17239,16 @@ impl VimObjectTrait for VsanKmsHealth {
     
     fn data_type(&self) -> StructType {
         StructType::VsanKmsHealth
+    }
+}
+
+impl VimObjectTrait for VsanLicensedDiskResult {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanLicensedDiskResult
     }
 }
 
@@ -17239,6 +17739,16 @@ impl VimObjectTrait for ArrayUpdateSpec {
     
     fn data_type(&self) -> StructType {
         StructType::ArrayUpdateSpec
+    }
+}
+
+impl VimObjectTrait for TagSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::TagSpec
     }
 }
 
@@ -19642,6 +20152,16 @@ impl VimObjectTrait for GuestDiskInfo {
     }
 }
 
+impl VimObjectTrait for VirtualMachineGuestRebootStatus {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VirtualMachineGuestRebootStatus
+    }
+}
+
 impl VimObjectTrait for GuestInfoNamespaceGenerationInfo {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -20582,6 +21102,46 @@ impl VimObjectTrait for VirtualMachineVirtualPMem {
     }
 }
 
+impl VimObjectTrait for VmPlacementPolicy {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VmPlacementPolicy
+    }
+}
+
+impl VimObjectTrait for VmToVmGroupsAntiAffinity {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VmToVmGroupsAntiAffinity
+    }
+}
+
+impl VimObjectTrait for VmVmAffinity {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VmVmAffinity
+    }
+}
+
+impl VimObjectTrait for VmVmAntiAffinity {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VmVmAntiAffinity
+    }
+}
+
 impl VimObjectTrait for CheckResult {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -20682,6 +21242,16 @@ impl VimObjectTrait for CustomizationCloudinitPrep {
     }
 }
 
+impl VimObjectTrait for CustomizationLinuxFlexPrep {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::CustomizationLinuxFlexPrep
+    }
+}
+
 impl VimObjectTrait for CustomizationLinuxPrep {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -20712,6 +21282,16 @@ impl VimObjectTrait for CustomizationSysprepText {
     }
 }
 
+impl VimObjectTrait for CustomizationWindowsFlexPrep {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::CustomizationWindowsFlexPrep
+    }
+}
+
 impl VimObjectTrait for CustomizationIpGenerator {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -20739,6 +21319,16 @@ impl VimObjectTrait for CustomizationDhcpIpGenerator {
     
     fn data_type(&self) -> StructType {
         StructType::CustomizationDhcpIpGenerator
+    }
+}
+
+impl VimObjectTrait for CustomizationDisableIpV4 {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::CustomizationDisableIpV4
     }
 }
 
@@ -23472,6 +24062,26 @@ impl VimObjectTrait for ReplicationSpec {
     }
 }
 
+impl VimObjectTrait for VsanAutoRaidConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanAutoRaidConfig
+    }
+}
+
+impl VimObjectTrait for VsanAutoRaidInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanAutoRaidInfo
+    }
+}
+
 impl VimObjectTrait for VsanCapacityReservationInfo {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -23479,6 +24089,16 @@ impl VimObjectTrait for VsanCapacityReservationInfo {
     
     fn data_type(&self) -> StructType {
         StructType::VsanCapacityReservationInfo
+    }
+}
+
+impl VimObjectTrait for VsanClientUnicastConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanClientUnicastConfig
     }
 }
 
@@ -23499,6 +24119,16 @@ impl VimObjectTrait for VsanCompatibilityCheckResult {
     
     fn data_type(&self) -> StructType {
         StructType::VsanCompatibilityCheckResult
+    }
+}
+
+impl VimObjectTrait for VsanCyberRecoveryConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanCyberRecoveryConfig
     }
 }
 
@@ -23642,6 +24272,26 @@ impl VimObjectTrait for DiskClaimConfiguration {
     }
 }
 
+impl VimObjectTrait for DiskInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::DiskInfo
+    }
+}
+
+impl VimObjectTrait for DpDaemonHealth {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::DpDaemonHealth
+    }
+}
+
 impl VimObjectTrait for VsanEntityCompatibilityResult {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -23749,6 +24399,16 @@ impl VimObjectTrait for VsanResourceCheckVsanResult {
     
     fn data_type(&self) -> StructType {
         StructType::VsanResourceCheckVsanResult
+    }
+}
+
+impl VimObjectTrait for VsanSiteMaintenanceResourceCheckResult {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanSiteMaintenanceResourceCheckResult
     }
 }
 
@@ -23929,6 +24589,16 @@ impl VimObjectTrait for VsanHciMeshDatastoreSource {
     
     fn data_type(&self) -> StructType {
         StructType::VsanHciMeshDatastoreSource
+    }
+}
+
+impl VimObjectTrait for VsanHostSiteMaintenanceStatus {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanHostSiteMaintenanceStatus
     }
 }
 
@@ -24332,6 +25002,16 @@ impl VimObjectTrait for VsanDiskDataEvacuationResourceCheckTaskDetails {
     }
 }
 
+impl VimObjectTrait for VsanSiteMaintenanceCheckTaskDetails {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanSiteMaintenanceCheckTaskDetails
+    }
+}
+
 impl VimObjectTrait for ResyncIopsInfo {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -24382,6 +25062,46 @@ impl VimObjectTrait for VsanSharedWitnessCompatibilityResult {
     }
 }
 
+impl VimObjectTrait for VsanSiteMaintenanceInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanSiteMaintenanceInfo
+    }
+}
+
+impl VimObjectTrait for VsanSiteMaintenancePrecheckDetail {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanSiteMaintenancePrecheckDetail
+    }
+}
+
+impl VimObjectTrait for VsanSiteMaintenancePrecheckStatus {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanSiteMaintenancePrecheckStatus
+    }
+}
+
+impl VimObjectTrait for VsanSiteMaintenanceSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanSiteMaintenanceSpec
+    }
+}
+
 impl VimObjectTrait for VsanSnapServiceConfig {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -24389,6 +25109,56 @@ impl VimObjectTrait for VsanSnapServiceConfig {
     
     fn data_type(&self) -> StructType {
         StructType::VsanSnapServiceConfig
+    }
+}
+
+impl VimObjectTrait for VsanSiteMaintenanceVmPowerOffInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanSiteMaintenanceVmPowerOffInfo
+    }
+}
+
+impl VimObjectTrait for VsanVbossConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanVbossConfig
+    }
+}
+
+impl VimObjectTrait for VsanVbossClusterConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanVbossClusterConfig
+    }
+}
+
+impl VimObjectTrait for VsanVbossHostConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanVbossHostConfig
+    }
+}
+
+impl VimObjectTrait for VsanVbossObjectStoreConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanVbossObjectStoreConfig
     }
 }
 
@@ -25352,6 +26122,36 @@ impl VimObjectTrait for VsanAddStoragePoolDiskSpec {
     }
 }
 
+impl VimObjectTrait for VsanHostClientClusterUnicastConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanHostClientClusterUnicastConfig
+    }
+}
+
+impl VimObjectTrait for VsanHostClientClusterUnicastInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanHostClientClusterUnicastInfo
+    }
+}
+
+impl VimObjectTrait for VsanHostClientHostUnicastInfo {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanHostClientHostUnicastInfo
+    }
+}
+
 impl VimObjectTrait for VsanHostClusterStatus {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -25709,6 +26509,16 @@ impl VimObjectTrait for SiteAffinityInfo {
     
     fn data_type(&self) -> StructType {
         StructType::SiteAffinityInfo
+    }
+}
+
+impl VimObjectTrait for VsanSiteTakeoverConfig {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VsanSiteTakeoverConfig
     }
 }
 
@@ -26222,6 +27032,26 @@ impl VimObjectTrait for VStorageObject {
     }
 }
 
+impl VimObjectTrait for VStorageObjectAttachResult {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VStorageObjectAttachResult
+    }
+}
+
+impl VimObjectTrait for VStorageObjectAttachSpec {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::VStorageObjectAttachSpec
+    }
+}
+
 impl VimObjectTrait for VStorageObjectSnapshot {
     fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
         self
@@ -26339,6 +27169,16 @@ impl VimObjectTrait for LocalizedMethodFault {
     
     fn data_type(&self) -> StructType {
         StructType::LocalizedMethodFault
+    }
+}
+
+impl VimObjectTrait for AuthenticationRequiredChallenge {
+    fn as_vim_object_ref<'a>(self: &'a Self) -> &'a dyn VimObjectTrait {
+        self
+    }
+    
+    fn data_type(&self) -> StructType {
+        StructType::AuthenticationRequiredChallenge
     }
 }
 

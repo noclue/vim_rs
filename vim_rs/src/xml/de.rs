@@ -185,7 +185,10 @@ fn extract_attrs(resolver: &NamespaceResolver, start: &BytesStart<'_>) -> Result
             let raw_name = std::str::from_utf8(a.key.as_ref())
                 .map_err(|_| Error)?
                 .to_string();
-            let value = a.unescape_value().map_err(|_| Error)?.into_owned();
+            let value = a
+                .normalized_value(quick_xml::XmlVersion::Implicit1_0)
+                .map_err(|_| Error)?
+                .into_owned();
             let is_xmlns = is_xmlns_attr(&raw_name);
             let is_schema_instance_type = if is_xmlns {
                 false

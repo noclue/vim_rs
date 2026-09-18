@@ -148,7 +148,7 @@ impl AuthorizationManager {
     /// Refers instances of *ManagedEntity*.
     ///
     /// ### session_id
-    /// The session ID to check privileges for. A sesssion ID can be
+    /// The session ID to check privileges for. A session ID can be
     /// obtained from *UserSession.key*.
     ///
     /// ### priv_id
@@ -183,7 +183,7 @@ impl AuthorizationManager {
     /// Refers instance of *ManagedEntity*.
     ///
     /// ### session_id
-    /// The session ID to check privileges for. A sesssion ID can be
+    /// The session ID to check privileges for. A session ID can be
     /// obtained from *UserSession.key*.
     ///
     /// ### priv_id

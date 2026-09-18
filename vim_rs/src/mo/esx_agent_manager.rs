@@ -25,7 +25,7 @@ use crate::core::client::{VimClient, Result};
 ///     <code>EAM.View</code>.
 ///     
 /// In vCenter 6.5 every _solution_, which is making VMODL API calls to
-/// EsxAgentManager, should be aware of the posibility, that the data from
+/// EsxAgentManager, should be aware of the possibility, that the data from
 /// vCenter database might not be fully loaded. In all such cases the clients
 /// will receive an _ESX Agent Manager_ runtime fault:
 /// _EamServiceNotInitialized_.
@@ -59,7 +59,7 @@ impl EsxAgentManager {
     /// created agency.
     ///
     /// ### initial_goal_state
-    /// Deprecated. No sence to create agency in other state than
+    /// Deprecated. No sense to create agency in other state than
     /// <code>enabled</code>. <code>disabled</code> is deprecated
     /// whereas <code>uninstalled</code> is useless.
     /// The initial goal state of the agency. See
@@ -81,7 +81,7 @@ impl EsxAgentManager {
     /// folder where the VMs to be deployed.
     /// 
     /// ***EamInvalidUrl***: Thrown if either the agent virtual machine URL or VIB URL
-    /// cannot be parsed or if the resource refered to cannot be
+    /// cannot be parsed or if the resource referred to cannot be
     /// downloaded.
     pub async fn create_agency(&self, agency_config_info: &crate::types::structs::AgencyConfigInfo, initial_goal_state: &str) -> Result<crate::types::structs::ManagedObjectReference> {
         let input = CreateAgencyRequestType {agency_config_info, initial_goal_state, };
@@ -178,7 +178,7 @@ impl EsxAgentManager {
     ///
     /// A possibly empty array of issue keys for the issues that were not found on the
     /// entity. This can happen if <code>resolve</code> is called with issue keys that were
-    /// resolved just prior to calling <code>resolve</code> or if an issue is currenly not resolvable.
+    /// resolved just prior to calling <code>resolve</code> or if an issue is currently not resolvable.
     pub async fn resolve(&self, issue_key: &[i32]) -> Result<Option<Vec<i32>>> {
         let input = ResolveRequestType {issue_key, };
         let bytes_opt = self.client.invoke_optional("eam", "EsxAgentManager", &self.mo_id, "Resolve", Some(&input)).await?;

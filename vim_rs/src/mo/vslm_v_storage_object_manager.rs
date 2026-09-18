@@ -4,7 +4,7 @@ use crate::core::client::{VimClient, Result};
 /// 
 /// VStorageObjectManager and SPBM policy support:
 /// All of the VStorageObjectManager APIs requiring ESXi host
-/// uses "Programatically selected" host to perform the actual operation.
+/// uses "Programmatically selected" host to perform the actual operation.
 /// If the selected host is of 6.5 version then policy would not be passed
 /// down to host. In that case, user operation would succeed but if user checks
 /// SPBM Entity Compliance, it will show "Mismatch" / "Non Compliant" as a
@@ -28,7 +28,7 @@ impl VslmVStorageObjectManager {
     /// a *DeviceUnsupportedForVmVersion* fault will be thrown.
     /// 
     /// *VslmSyncFault* will set in the task error if the
-    /// the FCD was attached successfully in the backend, however, there
+    /// FCD was attached successfully in the backend, however, there
     /// was a failure in syncing the datastore or FCD. The attach disk
     /// operation is not idempotent, implying, any attempt to re-attach
     /// the FCD to the same VM would cause an error. The sync fault can
@@ -272,7 +272,7 @@ impl VslmVStorageObjectManager {
     /// ### path
     /// Relative location in the specified datastore where disk needs
     /// to be created. If not specified disk gets created at the
-    /// defualt VStorageObject location on the specified datastore.
+    /// default VStorageObject location on the specified datastore.
     ///
     /// ## Returns:
     ///
@@ -379,7 +379,7 @@ impl VslmVStorageObjectManager {
     /// risk of Pandora DB having stale FCDs consequently affecting the
     /// return of *VslmVStorageObjectManager.VslmListVStorageObjectForSpec* and
     /// *VslmVStorageObjectManager.VslmRetrieveVStorageObjects* APIs.
-    /// Any subsequent operation on the FCD is guranteed to fail.
+    /// Any subsequent operation on the FCD is guaranteed to fail.
     ///
     /// ## Parameters:
     ///
@@ -448,7 +448,7 @@ impl VslmVStorageObjectManager {
     /// If new capacity is smaller than current disk capacity, then
     /// operation fails due to invalid capacity. If new capacity is greater
     /// than current disk capacity, then operation proceeds. If new capacity
-    /// is equal to current disk ccapcity, then operation succeeds without
+    /// is equal to current disk capacity, then operation succeeds without
     /// any actual extension.
     /// The extended disk region will be the same as the original disk:
     /// \- For a zerothick disk, the extended disk region will be zeroedthick.
@@ -609,7 +609,7 @@ impl VslmVStorageObjectManager {
     /// Expect that not all results will be returned. If all results are not
     /// returned, *VslmVsoVStorageObjectQueryResult.allRecordsReturned*
     /// flag will be set to false. Results will be returned in
-    /// *VslmVsoVStorageObjectQueryResult.id* order. To query for addtional
+    /// *VslmVsoVStorageObjectQueryResult.id* order. To query for additional
     /// objects, "add ID &gt; last ID returned" to the query and call
     /// *VslmVStorageObjectManager.VslmListVStorageObjectForSpec* again.
     ///
@@ -678,7 +678,7 @@ impl VslmVStorageObjectManager {
     /// ## Returns:
     ///
     /// Returns a data structure specifying extents of the virtual disk
-    /// that have changed since the thime the changeId string was
+    /// that have changed since the time the changeId string was
     /// obtained.
     ///
     /// ## Errors:
@@ -797,10 +797,10 @@ impl VslmVStorageObjectManager {
     /// ***AlreadyExists***: If disk is already registered as a
     /// virtual storage object.
     /// 
-    /// ***VslmSyncFault***: If an error occurs during datastore synchornization,
+    /// ***VslmSyncFault***: If an error occurs during datastore synchronization,
     /// implies the registerDisk completed successfully,
     /// however, there was an exception during datastore
-    /// synchornization.
+    /// synchronization.
     /// 
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_register_disk(&self, path: &str, name: Option<&str>) -> Result<crate::types::structs::VStorageObject> {
@@ -882,10 +882,10 @@ impl VslmVStorageObjectManager {
     /// ***InvalidDatastore***: If the operation cannot be performed on the
     /// datastore.
     /// 
-    /// ***VslmSyncFault***: If an error occurs during datastore synchornization,
+    /// ***VslmSyncFault***: If an error occurs during datastore synchronization,
     /// implies the renameVStorageObject completed
     /// successfully, however, there was an exception during
-    /// datastore synchornization.
+    /// datastore synchronization.
     /// 
     /// ***VslmFault***: If a VSLM internal server error occurred.
     pub async fn vslm_rename_v_storage_object(&self, id: &crate::types::structs::Id, name: &str) -> Result<()> {
@@ -1087,7 +1087,7 @@ impl VslmVStorageObjectManager {
     /// The ID of the snapshot of virtual storage object.
     ///
     /// ### key
-    /// The key for the the virtual storage object
+    /// The key for the virtual storage object
     ///
     /// ## Returns:
     ///

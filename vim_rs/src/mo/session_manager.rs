@@ -347,8 +347,17 @@ impl SessionManager {
     ///
     /// ## Errors:
     ///
-    /// ***InvalidLogin***: if there is no token provided or the token
-    /// could not be validated.
+    /// ***InvalidLogin***: if there is no token provided or the token could not be
+    /// validated or trying to login with an already authenticated
+    /// session. In the case of an already authenticated session
+    /// the fault message key will be set to
+    /// "vim.fault.InvalidLoginWithReason" with value:
+    /// 1\. "vim.fault.InvalidLoginReasonRegisterFailed" if client
+    /// tries to login to an already authenticated session.
+    /// 2\. "vim.fault.InvalidLoginReasonTerminating" if current
+    /// session is being terminated.
+    /// 3\. "vim.fault.InvalidLoginReasonAlreadyClosed" if current
+    /// session is already closed.
     /// 
     /// ***NoPermission***: if the principal is valid, but has no access granted.
     /// 
@@ -498,7 +507,7 @@ impl SessionManager {
     /// 
     /// ***NoSubjectName***: if the extension was registered without a subject name
     /// 
-    /// ***InvalidClientCertificate***: if the client cerificate fails the verification at the server
+    /// ***InvalidClientCertificate***: if the client certificate fails the verification at the server
     pub async fn login_extension_by_subject_name(&self, extension_key: &str, locale: Option<&str>) -> Result<crate::types::structs::UserSession> {
         let input = LoginExtensionBySubjectNameRequestType {extension_key, locale, };
         let bytes = self.client.invoke("", "SessionManager", &self.mo_id, "LoginExtensionBySubjectName", Some(&input)).await?;

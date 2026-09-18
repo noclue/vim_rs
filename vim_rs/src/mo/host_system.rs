@@ -592,7 +592,7 @@ impl HostSystem {
     /// without disconnecting it.
     /// 
     /// Any changes made to the resource hierarchy on the host when the host
-    /// was disconnected are overriden by VirtualCenter settings on
+    /// was disconnected are overridden by VirtualCenter settings on
     /// reconnect.
     /// 
     /// This method is only supported through VirtualCenter.
@@ -712,7 +712,7 @@ impl HostSystem {
     }
     /// Return the hardware uptime of the host in seconds.
     /// 
-    /// The harware uptime of a host is not affected by NTP and changes to its
+    /// The hardware uptime of a host is not affected by NTP and changes to its
     /// wall clock time and can be used by clients to provide a common time
     /// reference for all hosts.
     /// 
@@ -1263,7 +1263,7 @@ impl HostSystem {
             None => Ok(None),
         }
     }
-    /// List of permissions defined for this entity.
+    /// List of the permissions explicitly defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let pv_opt = self.client.fetch_property_raw("", "HostSystem", &self.mo_id, "permission").await?;
         match pv_opt {

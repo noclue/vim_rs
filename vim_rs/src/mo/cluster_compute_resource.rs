@@ -888,7 +888,7 @@ impl ClusterComputeResource {
     ///
     /// ### policy
     /// The encryption mode policy for the cluster. When no policy
-    /// is specified, host keys will be automcatically generated
+    /// is specified, host keys will be automatically generated
     /// using the current default key provider.
     /// 
     /// ***Since:*** vSphere API Release 8.0.3.0
@@ -1439,7 +1439,7 @@ impl ClusterComputeResource {
             None => Ok(None),
         }
     }
-    /// List of permissions defined for this entity.
+    /// List of the permissions explicitly defined for this entity.
     pub async fn permission(&self) -> Result<Option<Vec<crate::types::structs::Permission>>> {
         let pv_opt = self.client.fetch_property_raw("", "ClusterComputeResource", &self.mo_id, "permission").await?;
         match pv_opt {

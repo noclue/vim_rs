@@ -268,10 +268,49 @@ impl VsanPerformanceManager {
     /// Then front-end/client can compose
     /// query specs using the information from the VsanPerfEntityType list and entity instance
     /// UUIDs to retrieved wanted performance statistics.
+    /// The parameter "cluster" is optional, when calling this API from a vCenter-managed object,
+    /// if this parameter is specified, the API will return the cluster-level supported entity type of
+    /// against the cluster. If not specified, the API will return the supported entity type
+    /// of vCenter; when calling this API from a ESXi host-managed object, this parameter will be ignored,
+    /// the API will return the supported entity type of the host.
     /// 
     /// ***Required privileges:*** System.Read
-    pub async fn vsan_perf_get_supported_entity_types(&self) -> Result<Option<Vec<crate::types::structs::VsanPerfEntityType>>> {
-        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfGetSupportedEntityTypes", None).await?;
+    ///
+    /// ## Parameters:
+    ///
+    /// ### cluster
+    /// Refers instance of *ComputeResource*.
+    pub async fn vsan_perf_get_supported_entity_types(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanPerfEntityType>>> {
+        let input = VsanPerfGetSupportedEntityTypesRequestType {cluster, };
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfGetSupportedEntityTypes", Some(&input)).await?;
+        match bytes_opt {
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+            None => Ok(None),
+        }
+    }
+    /// This API is used to build hotspot performance dashboard in a data-driven and dynamic way.
+    /// 
+    /// Before querying stats, you need to know the entity type for specifying entity ID of the
+    /// query spec. If you want to query the entity by sorting specific metrics, you need to know
+    /// what metrics are supported by that type of entities. And you may want to know how to query
+    /// the raw metrics that are used to calculate the hotspot. The returned list of
+    /// *VsanPerfHotspotEntityType* data model
+    /// tells you all the information you needed for above questions.
+    /// The parameter "cluster" is optional, when calling this API from a vCenter manage object,
+    /// if this parameter is specified, the API will return the cluster level supported entity type of
+    /// against cluster, if this parameter is not specified, the API will return the supported entity type
+    /// of vCenter; when calling this API from a ESXi host manage object, this parameter will be ignored,
+    /// the API will return the supported entity type of the host.
+    /// 
+    /// ***Required privileges:*** System.Read
+    ///
+    /// ## Parameters:
+    ///
+    /// ### cluster
+    /// Refers instance of *ComputeResource*.
+    pub async fn vsan_perf_get_supported_hotspot_entity_types(&self, cluster: Option<&crate::types::structs::ManagedObjectReference>) -> Result<Option<Vec<crate::types::structs::VsanPerfHotspotEntityType>>> {
+        let input = VsanPerfGetSupportedHotspotEntityTypesRequestType {cluster, };
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanPerformanceManager", &self.mo_id, "VsanPerfGetSupportedHotspotEntityTypes", Some(&input)).await?;
         match bytes_opt {
             Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
@@ -1555,6 +1594,68 @@ impl<'b, 'a> miniserde::ser::Map for VsanPerfDeleteTimeRangeRequestTypeSer<'b, '
                     return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
                 }
                 2 => return Some((std::borrow::Cow::Borrowed("name"), &self.data.name as &dyn miniserde::Serialize)),
+                _ => return None,
+            }
+        }
+    }
+}
+struct VsanPerfGetSupportedEntityTypesRequestType<'a> {
+    cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
+}
+
+impl<'a> miniserde::Serialize for VsanPerfGetSupportedEntityTypesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanPerfGetSupportedEntityTypesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanPerfGetSupportedEntityTypesRequestTypeSer<'b, 'a> {
+    data: &'b VsanPerfGetSupportedEntityTypesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanPerfGetSupportedEntityTypesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanPerfGetSupportedEntityTypesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
+                _ => return None,
+            }
+        }
+    }
+}
+struct VsanPerfGetSupportedHotspotEntityTypesRequestType<'a> {
+    cluster: Option<&'a crate::types::structs::ManagedObjectReference>,
+}
+
+impl<'a> miniserde::Serialize for VsanPerfGetSupportedHotspotEntityTypesRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanPerfGetSupportedHotspotEntityTypesRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanPerfGetSupportedHotspotEntityTypesRequestTypeSer<'b, 'a> {
+    data: &'b VsanPerfGetSupportedHotspotEntityTypesRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanPerfGetSupportedHotspotEntityTypesRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        loop {
+            let seq = self.seq;
+            self.seq += 1;
+            match seq {
+                0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanPerfGetSupportedHotspotEntityTypesRequestType")),
+                1 => {
+                    let Some(ref val) = self.data.cluster else { continue; };
+                    return Some((std::borrow::Cow::Borrowed("cluster"), val as &dyn miniserde::Serialize));
+                }
                 _ => return None,
             }
         }

@@ -31,7 +31,7 @@ impl DatastoreNamespaceManager {
     /// Refers instance of *Datacenter*.
     ///
     /// ### namespace_url
-    /// Namesapce URL of the form
+    /// Namespace URL of the form
     /// > \[ds://\]/vmfs/volumes/\[_datastore-uuid_\]/\[_directory-name_\]/...
     /// >
     ///

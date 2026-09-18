@@ -411,11 +411,15 @@ impl DataObjectTrait for PbmPlacementMatchingReplicationResources {
 }
 impl DataObjectTrait for PbmPlacementHub {
 }
+impl DataObjectTrait for PbmPlacementHubInfo {
+}
 impl DataObjectTrait for PbmPlacementRequirement {
 }
 impl DataObjectTrait for PbmPlacementCapabilityConstraintsRequirement {
 }
 impl DataObjectTrait for PbmPlacementCapabilityProfileRequirement {
+}
+impl DataObjectTrait for PbmPlacementZoneTopologyRequirement {
 }
 impl DataObjectTrait for PbmPlacementResourceUtilization {
 }
@@ -438,6 +442,8 @@ impl DataObjectTrait for PbmCapabilityProfile {
 impl DataObjectTrait for PbmDefaultCapabilityProfile {
 }
 impl DataObjectTrait for PbmProfileId {
+}
+impl DataObjectTrait for PbmProfileK8SCompliantNameSpec {
 }
 impl DataObjectTrait for PbmProfileOperationOutcome {
 }
@@ -660,6 +666,8 @@ impl DataObjectTrait for ClusterComputeResourceDvsConfigurationValidation {
 impl DataObjectTrait for ClusterComputeResourceHostConfigurationValidation {
 }
 impl DataObjectTrait for VsanClusterConfigPrecheckItem {
+}
+impl DataObjectTrait for VsanValidationItem {
 }
 impl DataObjectTrait for ClusterComputeResourceVcsSlots {
 }
@@ -1141,6 +1149,8 @@ impl DataObjectTrait for PerfQuerySpec {
 }
 impl DataObjectTrait for PerfSampleInfo {
 }
+impl DataObjectTrait for PlaceVmsXClusterSpecCandidateNetworks {
+}
 impl DataObjectTrait for PrivilegePolicyDef {
 }
 impl DataObjectTrait for ResourceAllocationInfo {
@@ -1172,6 +1182,20 @@ impl DataObjectTrait for ResourcePoolQuickStats {
 impl DataObjectTrait for SddcBase {
 }
 impl DataObjectTrait for VimVsanReconfigSpec {
+}
+impl DataObjectTrait for SearchIndexFilter {
+}
+impl DataObjectTrait for SearchIndexIterationSpec {
+}
+impl DataObjectTrait for SearchIndexOptionalValue {
+}
+impl DataObjectTrait for SearchIndexPredicate {
+}
+impl DataObjectTrait for SearchIndexQuerySpec {
+}
+impl DataObjectTrait for SearchIndexResourceItem {
+}
+impl DataObjectTrait for SearchIndexResultSet {
 }
 impl DataObjectTrait for SelectionSet {
 }
@@ -1231,6 +1255,10 @@ impl DataObjectTrait for StorageResourceManagerStorageProfileStatistics {
 }
 impl DataObjectTrait for Tag {
 }
+impl DataObjectTrait for TagId {
+}
+impl DataObjectTrait for TagIdNameId {
+}
 impl DataObjectTrait for TaskDescription {
 }
 impl DataObjectTrait for TaskFilterSpec {
@@ -1260,6 +1288,12 @@ impl DataObjectTrait for TaskReasonSchedule {
 impl DataObjectTrait for TaskReasonSystem {
 }
 impl DataObjectTrait for TaskReasonUser {
+}
+impl DataObjectTrait for TransitGatewayConfigInfo {
+}
+impl DataObjectTrait for TransitGatewayConfigSpec {
+}
+impl DataObjectTrait for TransitGatewayCreateSpec {
 }
 impl DataObjectTrait for UpdateVirtualMachineFilesResult {
 }
@@ -1659,6 +1693,8 @@ impl DataObjectTrait for VsanAttachToSrOperation {
 }
 impl DataObjectTrait for VsanCapability {
 }
+impl DataObjectTrait for VsanClientServerHciMeshDitEncryptionHealthSummary {
+}
 impl DataObjectTrait for VsanClusterAdvCfgSyncHostResult {
 }
 impl DataObjectTrait for VsanClusterAdvCfgSyncResult {
@@ -1680,6 +1716,8 @@ impl DataObjectTrait for VsanClusterEncryptionHealthSummary {
 impl DataObjectTrait for VsanClusterFileServiceHealthSummary {
 }
 impl DataObjectTrait for VsanClusterGlobalDedupHealthSummary {
+}
+impl DataObjectTrait for VsanClusterHciMeshDitEncryptionHealthSummary {
 }
 impl DataObjectTrait for VsanClusterHclInfo {
 }
@@ -1743,6 +1781,10 @@ impl DataObjectTrait for VsanClusterVmdkLoadTestResult {
 }
 impl DataObjectTrait for VsanClusterWhatifHostFailuresResult {
 }
+impl DataObjectTrait for VsanComponentBasicInfo {
+}
+impl DataObjectTrait for VsanComponentPlacement {
+}
 impl DataObjectTrait for VsanConfigGeneration {
 }
 impl DataObjectTrait for VsanDataDrivenApiAction {
@@ -1752,6 +1794,8 @@ impl DataObjectTrait for VsanDiagnosticsThreshold {
 impl DataObjectTrait for VsanDiskFormatConversionSpec {
 }
 impl DataObjectTrait for VimClusterVsanDiskMappingsConfigSpec {
+}
+impl DataObjectTrait for VsanEffectiveSpaceUsage {
 }
 impl DataObjectTrait for VsanEntitySpaceUsage {
 }
@@ -1780,6 +1824,8 @@ impl DataObjectTrait for VsanHealthConfirmationDialog {
 impl DataObjectTrait for VsanHealthCorrelation {
 }
 impl DataObjectTrait for VsanHealthExtMgmtPreCheckResult {
+}
+impl DataObjectTrait for VsanHealthStatusCounts {
 }
 impl DataObjectTrait for VsanHealthTroubleshooting {
 }
@@ -1839,6 +1885,10 @@ impl DataObjectTrait for VsanObjectIdentityAndHealth {
 }
 impl DataObjectTrait for VsanObjectInformation {
 }
+impl DataObjectTrait for VsanObjectPlacement {
+}
+impl DataObjectTrait for VsanObjectPlacementDetails {
+}
 impl DataObjectTrait for VsanObjectQuerySpec {
 }
 impl DataObjectTrait for VsanObjectSpaceSummary {
@@ -1856,6 +1906,8 @@ impl DataObjectTrait for VsanPerfEntityType {
 impl DataObjectTrait for VsanPerfGraph {
 }
 impl DataObjectTrait for VsanPerfHotspotEntitiesMetrics {
+}
+impl DataObjectTrait for VsanPerfHotspotEntityType {
 }
 impl DataObjectTrait for VsanPerfHotspotQuerySpec {
 }
@@ -1885,7 +1937,11 @@ impl DataObjectTrait for VsanPerfTopQuerySpec {
 }
 impl DataObjectTrait for VsanPerfsvcConfig {
 }
+impl DataObjectTrait for VsanQueryPhysicalPlacementSpecs {
+}
 impl DataObjectTrait for VsanRemoteClusterQuerySpec {
+}
+impl DataObjectTrait for VsanSnapshotSpace {
 }
 impl DataObjectTrait for VsanSpaceQuerySpec {
 }
@@ -1933,6 +1989,8 @@ impl DataObjectTrait for CnsVsanFileShareBackingDetails {
 }
 impl DataObjectTrait for CnsBaseCreateSpec {
 }
+impl DataObjectTrait for CnsBlockCreateSpec {
+}
 impl DataObjectTrait for CnsFileCreateSpec {
 }
 impl DataObjectTrait for CnsVsanFileCreateSpec {
@@ -1963,6 +2021,10 @@ impl DataObjectTrait for CnsSnapshotDeleteSpec {
 }
 impl DataObjectTrait for CnsSnapshotId {
 }
+impl DataObjectTrait for CnsSyncVolumeSpec {
+}
+impl DataObjectTrait for CnsUnregisterVolumeSpec {
+}
 impl DataObjectTrait for CnsVolume {
 }
 impl DataObjectTrait for CnsVolumeAclConfigureSpec {
@@ -1970,6 +2032,8 @@ impl DataObjectTrait for CnsVolumeAclConfigureSpec {
 impl DataObjectTrait for CnsVolumeAttachDetachSpec {
 }
 impl DataObjectTrait for CnsVolumeCreateSpec {
+}
+impl DataObjectTrait for CnsVolumeCryptoUpdateSpec {
 }
 impl DataObjectTrait for CnsVolumeExtendSpec {
 }
@@ -1997,6 +2061,8 @@ impl DataObjectTrait for CnsBlockVolumeRelocateSpec {
 }
 impl DataObjectTrait for CnsVolumeSource {
 }
+impl DataObjectTrait for CnsCloneVolumeSource {
+}
 impl DataObjectTrait for CnsSnapshotVolumeSource {
 }
 impl DataObjectTrait for DistributedVirtualPort {
@@ -2021,6 +2087,8 @@ impl DataObjectTrait for DvPortgroupConfigInfo {
 }
 impl DataObjectTrait for DvPortgroupConfigSpec {
 }
+impl DataObjectTrait for DvPortgroupNsxConfig {
+}
 impl DataObjectTrait for DistributedVirtualPortgroupNsxPortgroupOperationResult {
 }
 impl DataObjectTrait for DvPortgroupPolicy {
@@ -2028,6 +2096,8 @@ impl DataObjectTrait for DvPortgroupPolicy {
 impl DataObjectTrait for VMwareDvsPortgroupPolicy {
 }
 impl DataObjectTrait for DistributedVirtualPortgroupProblem {
+}
+impl DataObjectTrait for DvPortgroupNsxSubnetAddressInfo {
 }
 impl DataObjectTrait for DistributedVirtualPortgroupInfo {
 }
@@ -2052,6 +2122,8 @@ impl DataObjectTrait for DistributedVirtualSwitchManagerHostDvsMembershipFilter 
 impl DataObjectTrait for DistributedVirtualSwitchManagerImportResult {
 }
 impl DataObjectTrait for DvsManagerPhysicalNicsList {
+}
+impl DataObjectTrait for DistributedVirtualSwitchManagerSpanInfo {
 }
 impl DataObjectTrait for EntityBackup {
 }
@@ -2092,6 +2164,8 @@ impl DataObjectTrait for VMwareDvsMtuHealthCheckResult {
 impl DataObjectTrait for VMwareDvsVlanHealthCheckResult {
 }
 impl DataObjectTrait for VMwareDvsTeamingHealthCheckResult {
+}
+impl DataObjectTrait for DistributedVirtualSwitchHostMemberHostPerfNicOffloadState {
 }
 impl DataObjectTrait for DistributedVirtualSwitchHostMemberHostUplinkState {
 }
@@ -2189,6 +2263,8 @@ impl DataObjectTrait for VMwareDvsMtuCapability {
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchNetworkOffloadConfig {
 }
+impl DataObjectTrait for VMwareDvsPerfNicOffloadCapability {
+}
 impl DataObjectTrait for VMwareDvsPvlanConfigSpec {
 }
 impl DataObjectTrait for VMwareDvsPvlanMapEntry {
@@ -2196,6 +2272,8 @@ impl DataObjectTrait for VMwareDvsPvlanMapEntry {
 impl DataObjectTrait for VmwareDistributedVirtualSwitchRealTimeConfig {
 }
 impl DataObjectTrait for VmwareDistributedVirtualSwitchRealTimeLanAnnotation {
+}
+impl DataObjectTrait for VMwareDvsSystemTrafficCapabilities {
 }
 impl DataObjectTrait for VMwareDvsVspanConfigSpec {
 }
@@ -2302,6 +2380,8 @@ impl DataObjectTrait for NetworkEventArgument {
 impl DataObjectTrait for ResourcePoolEventArgument {
 }
 impl DataObjectTrait for ScheduledTaskEventArgument {
+}
+impl DataObjectTrait for TgwEventArgument {
 }
 impl DataObjectTrait for VmEventArgument {
 }
@@ -2791,6 +2871,8 @@ impl DataObjectTrait for HostLowLevelProvisioningManagerVmRecoveryInfo {
 }
 impl DataObjectTrait for HostMaintenanceSpec {
 }
+impl DataObjectTrait for HostMaintenanceSpecEvacuationMode {
+}
 impl DataObjectTrait for ServiceConsoleReservationInfo {
 }
 impl DataObjectTrait for VirtualMachineMemoryReservationInfo {
@@ -2947,6 +3029,8 @@ impl DataObjectTrait for HostPathSelectionPolicyOption {
 }
 impl DataObjectTrait for HostPciDevice {
 }
+impl DataObjectTrait for HostPciDeviceDirectPathInfo {
+}
 impl DataObjectTrait for HostPciPassthruConfig {
 }
 impl DataObjectTrait for HostSriovConfig {
@@ -2954,6 +3038,8 @@ impl DataObjectTrait for HostSriovConfig {
 impl DataObjectTrait for HostPciPassthruInfo {
 }
 impl DataObjectTrait for HostSriovInfo {
+}
+impl DataObjectTrait for HostPciPassthruInfoDirectPathState {
 }
 impl DataObjectTrait for HostPersistentMemoryInfo {
 }
@@ -2992,6 +3078,10 @@ impl DataObjectTrait for HostPlugStoreTopologyPlugin {
 impl DataObjectTrait for HostPlugStoreTopologyTarget {
 }
 impl DataObjectTrait for PnicTsoInfo {
+}
+impl DataObjectTrait for PodVmInfo {
+}
+impl DataObjectTrait for PodVmOverheadInfo {
 }
 impl DataObjectTrait for HostPortGroup {
 }
@@ -3189,6 +3279,8 @@ impl DataObjectTrait for HostTpmOptionEventDetails {
 }
 impl DataObjectTrait for HostTpmSoftwareComponentEventDetails {
 }
+impl DataObjectTrait for HostTpmSystemVersionEventDetails {
+}
 impl DataObjectTrait for HostTpmVersionEventDetails {
 }
 impl DataObjectTrait for HostTpmEventLogEntry {
@@ -3341,6 +3433,8 @@ impl DataObjectTrait for VsanHclFirmwareUpdateSpec {
 }
 impl DataObjectTrait for VsanHclMemInfo {
 }
+impl DataObjectTrait for VsanHealthObjectStats {
+}
 impl DataObjectTrait for VsanHealthQuerySpec {
 }
 impl DataObjectTrait for VsanHostCimProviderInfo {
@@ -3350,6 +3444,10 @@ impl DataObjectTrait for VsanHostEmmSummary {
 impl DataObjectTrait for VsanHostFwComponent {
 }
 impl DataObjectTrait for VsanHostGlobalDedupConfigHealthSummary {
+}
+impl DataObjectTrait for VsanHostHciMeshDitEncryptionHealth {
+}
+impl DataObjectTrait for VsanHostHciMeshDitEncryptionHealthSummary {
 }
 impl DataObjectTrait for VsanHostHclInfo {
 }
@@ -3390,6 +3488,8 @@ impl DataObjectTrait for VsanIoInsightInfo {
 impl DataObjectTrait for VsanIperfClientSpec {
 }
 impl DataObjectTrait for VsanKmsHealth {
+}
+impl DataObjectTrait for VsanLicensedDiskResult {
 }
 impl DataObjectTrait for VsanLimitHealthResult {
 }
@@ -3488,6 +3588,8 @@ impl DataObjectTrait for NetBiosConfigInfo {
 impl DataObjectTrait for WinNetBiosConfigInfo {
 }
 impl DataObjectTrait for ArrayUpdateSpec {
+}
+impl DataObjectTrait for TagSpec {
 }
 impl DataObjectTrait for ClusterDasVmConfigSpec {
 }
@@ -3969,6 +4071,8 @@ impl DataObjectTrait for GuestInfoCustomizationInfo {
 }
 impl DataObjectTrait for GuestDiskInfo {
 }
+impl DataObjectTrait for VirtualMachineGuestRebootStatus {
+}
 impl DataObjectTrait for GuestInfoNamespaceGenerationInfo {
 }
 impl DataObjectTrait for GuestNicInfo {
@@ -4157,6 +4261,14 @@ impl DataObjectTrait for VirtualMachineVirtualNumaInfo {
 }
 impl DataObjectTrait for VirtualMachineVirtualPMem {
 }
+impl DataObjectTrait for VmPlacementPolicy {
+}
+impl DataObjectTrait for VmToVmGroupsAntiAffinity {
+}
+impl DataObjectTrait for VmVmAffinity {
+}
+impl DataObjectTrait for VmVmAntiAffinity {
+}
 impl DataObjectTrait for CheckResult {
 }
 impl DataObjectTrait for CustomizationAdapterMapping {
@@ -4177,17 +4289,23 @@ impl DataObjectTrait for CustomizationIdentitySettings {
 }
 impl DataObjectTrait for CustomizationCloudinitPrep {
 }
+impl DataObjectTrait for CustomizationLinuxFlexPrep {
+}
 impl DataObjectTrait for CustomizationLinuxPrep {
 }
 impl DataObjectTrait for CustomizationSysprep {
 }
 impl DataObjectTrait for CustomizationSysprepText {
 }
+impl DataObjectTrait for CustomizationWindowsFlexPrep {
+}
 impl DataObjectTrait for CustomizationIpGenerator {
 }
 impl DataObjectTrait for CustomizationCustomIpGenerator {
 }
 impl DataObjectTrait for CustomizationDhcpIpGenerator {
+}
+impl DataObjectTrait for CustomizationDisableIpV4 {
 }
 impl DataObjectTrait for CustomizationFixedIp {
 }
@@ -4735,11 +4853,19 @@ impl DataObjectTrait for ReplicationGroupId {
 }
 impl DataObjectTrait for ReplicationSpec {
 }
+impl DataObjectTrait for VsanAutoRaidConfig {
+}
+impl DataObjectTrait for VsanAutoRaidInfo {
+}
 impl DataObjectTrait for VsanCapacityReservationInfo {
+}
+impl DataObjectTrait for VsanClientUnicastConfig {
 }
 impl DataObjectTrait for ClusterRuntimeInfo {
 }
 impl DataObjectTrait for VsanCompatibilityCheckResult {
+}
+impl DataObjectTrait for VsanCyberRecoveryConfig {
 }
 impl DataObjectTrait for VimVsanDataEfficiencyCapacityState {
 }
@@ -4769,6 +4895,10 @@ impl DataObjectTrait for ActiveVsanDirectoryServerConfig {
 }
 impl DataObjectTrait for DiskClaimConfiguration {
 }
+impl DataObjectTrait for DiskInfo {
+}
+impl DataObjectTrait for DpDaemonHealth {
+}
 impl DataObjectTrait for VsanEntityCompatibilityResult {
 }
 impl DataObjectTrait for EntityResourceCheckDetails {
@@ -4790,6 +4920,8 @@ impl DataObjectTrait for VsanResourceCheckComponentResult {
 impl DataObjectTrait for VsanResourceCheckDataPersistenceResult {
 }
 impl DataObjectTrait for VsanResourceCheckVsanResult {
+}
+impl DataObjectTrait for VsanSiteMaintenanceResourceCheckResult {
 }
 impl DataObjectTrait for VsanStoragePoolResourceCheckResult {
 }
@@ -4826,6 +4958,8 @@ impl DataObjectTrait for VsanFileShareSnapshotQueryResult {
 impl DataObjectTrait for VsanFileShareSnapshotQuerySpec {
 }
 impl DataObjectTrait for VsanHciMeshDatastoreSource {
+}
+impl DataObjectTrait for VsanHostSiteMaintenanceStatus {
 }
 impl DataObjectTrait for VsanIoDiagnosticsFailedCheck {
 }
@@ -4907,6 +5041,8 @@ impl DataObjectTrait for VsanResourceCheckTaskDetails {
 }
 impl DataObjectTrait for VsanDiskDataEvacuationResourceCheckTaskDetails {
 }
+impl DataObjectTrait for VsanSiteMaintenanceCheckTaskDetails {
+}
 impl DataObjectTrait for ResyncIopsInfo {
 }
 impl DataObjectTrait for VsanRuntimeStatsHostMap {
@@ -4917,7 +5053,25 @@ impl DataObjectTrait for VsanServerHostUnicastInfo {
 }
 impl DataObjectTrait for VsanSharedWitnessCompatibilityResult {
 }
+impl DataObjectTrait for VsanSiteMaintenanceInfo {
+}
+impl DataObjectTrait for VsanSiteMaintenancePrecheckDetail {
+}
+impl DataObjectTrait for VsanSiteMaintenancePrecheckStatus {
+}
+impl DataObjectTrait for VsanSiteMaintenanceSpec {
+}
 impl DataObjectTrait for VsanSnapServiceConfig {
+}
+impl DataObjectTrait for VsanSiteMaintenanceVmPowerOffInfo {
+}
+impl DataObjectTrait for VsanVbossConfig {
+}
+impl DataObjectTrait for VsanVbossClusterConfig {
+}
+impl DataObjectTrait for VsanVbossHostConfig {
+}
+impl DataObjectTrait for VsanVbossObjectStoreConfig {
 }
 impl DataObjectTrait for VcRemoteVsanServerClusterConfig {
 }
@@ -5111,6 +5265,12 @@ impl DataObjectTrait for VsanHostAboutInfoEx {
 }
 impl DataObjectTrait for VsanAddStoragePoolDiskSpec {
 }
+impl DataObjectTrait for VsanHostClientClusterUnicastConfig {
+}
+impl DataObjectTrait for VsanHostClientClusterUnicastInfo {
+}
+impl DataObjectTrait for VsanHostClientHostUnicastInfo {
+}
 impl DataObjectTrait for VsanHostClusterStatus {
 }
 impl DataObjectTrait for VsanHostClusterStatusState {
@@ -5182,6 +5342,8 @@ impl DataObjectTrait for VsanHostServerClusterUnicastConfig {
 impl DataObjectTrait for VsanHostServerClusterUnicastInfo {
 }
 impl DataObjectTrait for SiteAffinityInfo {
+}
+impl DataObjectTrait for VsanSiteTakeoverConfig {
 }
 impl DataObjectTrait for VsanStoragePoolDisk {
 }
@@ -5285,6 +5447,10 @@ impl DataObjectTrait for VslmVClockInfo {
 }
 impl DataObjectTrait for VStorageObject {
 }
+impl DataObjectTrait for VStorageObjectAttachResult {
+}
+impl DataObjectTrait for VStorageObjectAttachSpec {
+}
 impl DataObjectTrait for VStorageObjectSnapshot {
 }
 impl DataObjectTrait for VStorageObjectSnapshotDetails {
@@ -5308,6 +5474,8 @@ impl DataObjectTrait for KeyAnyValue {
 impl DataObjectTrait for LocalizableMessage {
 }
 impl DataObjectTrait for LocalizedMethodFault {
+}
+impl DataObjectTrait for AuthenticationRequiredChallenge {
 }
 impl DataObjectTrait for PropertyChange {
 }
@@ -5558,9 +5726,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::PbmPlacementMatchingResources => Some(from.as_any_ref().downcast_ref::<PbmPlacementMatchingResources>()?),
             StructType::PbmPlacementMatchingReplicationResources => Some(from.as_any_ref().downcast_ref::<PbmPlacementMatchingReplicationResources>()?),
             StructType::PbmPlacementHub => Some(from.as_any_ref().downcast_ref::<PbmPlacementHub>()?),
+            StructType::PbmPlacementHubInfo => Some(from.as_any_ref().downcast_ref::<PbmPlacementHubInfo>()?),
             StructType::PbmPlacementRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementRequirement>()?),
             StructType::PbmPlacementCapabilityConstraintsRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementCapabilityConstraintsRequirement>()?),
             StructType::PbmPlacementCapabilityProfileRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementCapabilityProfileRequirement>()?),
+            StructType::PbmPlacementZoneTopologyRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementZoneTopologyRequirement>()?),
             StructType::PbmPlacementResourceUtilization => Some(from.as_any_ref().downcast_ref::<PbmPlacementResourceUtilization>()?),
             StructType::PbmCapabilityProfileCreateSpec => Some(from.as_any_ref().downcast_ref::<PbmCapabilityProfileCreateSpec>()?),
             StructType::PbmCapabilityProfileUpdateSpec => Some(from.as_any_ref().downcast_ref::<PbmCapabilityProfileUpdateSpec>()?),
@@ -5572,6 +5742,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::PbmCapabilityProfile => Some(from.as_any_ref().downcast_ref::<PbmCapabilityProfile>()?),
             StructType::PbmDefaultCapabilityProfile => Some(from.as_any_ref().downcast_ref::<PbmDefaultCapabilityProfile>()?),
             StructType::PbmProfileId => Some(from.as_any_ref().downcast_ref::<PbmProfileId>()?),
+            StructType::PbmProfileK8SCompliantNameSpec => Some(from.as_any_ref().downcast_ref::<PbmProfileK8SCompliantNameSpec>()?),
             StructType::PbmProfileOperationOutcome => Some(from.as_any_ref().downcast_ref::<PbmProfileOperationOutcome>()?),
             StructType::PbmProfileType => Some(from.as_any_ref().downcast_ref::<PbmProfileType>()?),
             StructType::PbmQueryProfileResult => Some(from.as_any_ref().downcast_ref::<PbmQueryProfileResult>()?),
@@ -5683,6 +5854,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::ClusterComputeResourceDvsConfigurationValidation => Some(from.as_any_ref().downcast_ref::<ClusterComputeResourceDvsConfigurationValidation>()?),
             StructType::ClusterComputeResourceHostConfigurationValidation => Some(from.as_any_ref().downcast_ref::<ClusterComputeResourceHostConfigurationValidation>()?),
             StructType::VsanClusterConfigPrecheckItem => Some(from.as_any_ref().downcast_ref::<VsanClusterConfigPrecheckItem>()?),
+            StructType::VsanValidationItem => Some(from.as_any_ref().downcast_ref::<VsanValidationItem>()?),
             StructType::ClusterComputeResourceVcsSlots => Some(from.as_any_ref().downcast_ref::<ClusterComputeResourceVcsSlots>()?),
             StructType::ComputeResourceConfigInfo => Some(from.as_any_ref().downcast_ref::<ComputeResourceConfigInfo>()?),
             StructType::ClusterConfigInfoEx => Some(from.as_any_ref().downcast_ref::<ClusterConfigInfoEx>()?),
@@ -5923,6 +6095,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::PerfProviderSummary => Some(from.as_any_ref().downcast_ref::<PerfProviderSummary>()?),
             StructType::PerfQuerySpec => Some(from.as_any_ref().downcast_ref::<PerfQuerySpec>()?),
             StructType::PerfSampleInfo => Some(from.as_any_ref().downcast_ref::<PerfSampleInfo>()?),
+            StructType::PlaceVmsXClusterSpecCandidateNetworks => Some(from.as_any_ref().downcast_ref::<PlaceVmsXClusterSpecCandidateNetworks>()?),
             StructType::PrivilegePolicyDef => Some(from.as_any_ref().downcast_ref::<PrivilegePolicyDef>()?),
             StructType::ResourceAllocationInfo => Some(from.as_any_ref().downcast_ref::<ResourceAllocationInfo>()?),
             StructType::ResourceAllocationOption => Some(from.as_any_ref().downcast_ref::<ResourceAllocationOption>()?),
@@ -5939,6 +6112,13 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::ResourcePoolQuickStats => Some(from.as_any_ref().downcast_ref::<ResourcePoolQuickStats>()?),
             StructType::SddcBase => Some(from.as_any_ref().downcast_ref::<SddcBase>()?),
             StructType::VimVsanReconfigSpec => Some(from.as_any_ref().downcast_ref::<VimVsanReconfigSpec>()?),
+            StructType::SearchIndexFilter => Some(from.as_any_ref().downcast_ref::<SearchIndexFilter>()?),
+            StructType::SearchIndexIterationSpec => Some(from.as_any_ref().downcast_ref::<SearchIndexIterationSpec>()?),
+            StructType::SearchIndexOptionalValue => Some(from.as_any_ref().downcast_ref::<SearchIndexOptionalValue>()?),
+            StructType::SearchIndexPredicate => Some(from.as_any_ref().downcast_ref::<SearchIndexPredicate>()?),
+            StructType::SearchIndexQuerySpec => Some(from.as_any_ref().downcast_ref::<SearchIndexQuerySpec>()?),
+            StructType::SearchIndexResourceItem => Some(from.as_any_ref().downcast_ref::<SearchIndexResourceItem>()?),
+            StructType::SearchIndexResultSet => Some(from.as_any_ref().downcast_ref::<SearchIndexResultSet>()?),
             StructType::SelectionSet => Some(from.as_any_ref().downcast_ref::<SelectionSet>()?),
             StructType::DvPortgroupSelection => Some(from.as_any_ref().downcast_ref::<DvPortgroupSelection>()?),
             StructType::DvsSelection => Some(from.as_any_ref().downcast_ref::<DvsSelection>()?),
@@ -5968,6 +6148,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::StoragePerformanceSummary => Some(from.as_any_ref().downcast_ref::<StoragePerformanceSummary>()?),
             StructType::StorageResourceManagerStorageProfileStatistics => Some(from.as_any_ref().downcast_ref::<StorageResourceManagerStorageProfileStatistics>()?),
             StructType::Tag => Some(from.as_any_ref().downcast_ref::<Tag>()?),
+            StructType::TagId => Some(from.as_any_ref().downcast_ref::<TagId>()?),
+            StructType::TagIdNameId => Some(from.as_any_ref().downcast_ref::<TagIdNameId>()?),
             StructType::TaskDescription => Some(from.as_any_ref().downcast_ref::<TaskDescription>()?),
             StructType::TaskFilterSpec => Some(from.as_any_ref().downcast_ref::<TaskFilterSpec>()?),
             StructType::TaskFilterSpecByEntity => Some(from.as_any_ref().downcast_ref::<TaskFilterSpecByEntity>()?),
@@ -5983,6 +6165,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::TaskReasonSchedule => Some(from.as_any_ref().downcast_ref::<TaskReasonSchedule>()?),
             StructType::TaskReasonSystem => Some(from.as_any_ref().downcast_ref::<TaskReasonSystem>()?),
             StructType::TaskReasonUser => Some(from.as_any_ref().downcast_ref::<TaskReasonUser>()?),
+            StructType::TransitGatewayConfigInfo => Some(from.as_any_ref().downcast_ref::<TransitGatewayConfigInfo>()?),
+            StructType::TransitGatewayConfigSpec => Some(from.as_any_ref().downcast_ref::<TransitGatewayConfigSpec>()?),
+            StructType::TransitGatewayCreateSpec => Some(from.as_any_ref().downcast_ref::<TransitGatewayCreateSpec>()?),
             StructType::UpdateVirtualMachineFilesResult => Some(from.as_any_ref().downcast_ref::<UpdateVirtualMachineFilesResult>()?),
             StructType::UpdateVirtualMachineFilesResultFailedVmFileInfo => Some(from.as_any_ref().downcast_ref::<UpdateVirtualMachineFilesResultFailedVmFileInfo>()?),
             StructType::UserSearchResult => Some(from.as_any_ref().downcast_ref::<UserSearchResult>()?),
@@ -6182,6 +6367,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::ClusterVmToolsMonitoringSettings => Some(from.as_any_ref().downcast_ref::<ClusterVmToolsMonitoringSettings>()?),
             StructType::VsanAttachToSrOperation => Some(from.as_any_ref().downcast_ref::<VsanAttachToSrOperation>()?),
             StructType::VsanCapability => Some(from.as_any_ref().downcast_ref::<VsanCapability>()?),
+            StructType::VsanClientServerHciMeshDitEncryptionHealthSummary => Some(from.as_any_ref().downcast_ref::<VsanClientServerHciMeshDitEncryptionHealthSummary>()?),
             StructType::VsanClusterAdvCfgSyncHostResult => Some(from.as_any_ref().downcast_ref::<VsanClusterAdvCfgSyncHostResult>()?),
             StructType::VsanClusterAdvCfgSyncResult => Some(from.as_any_ref().downcast_ref::<VsanClusterAdvCfgSyncResult>()?),
             StructType::VsanClusterBalancePerDiskInfo => Some(from.as_any_ref().downcast_ref::<VsanClusterBalancePerDiskInfo>()?),
@@ -6193,6 +6379,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanClusterEncryptionHealthSummary => Some(from.as_any_ref().downcast_ref::<VsanClusterEncryptionHealthSummary>()?),
             StructType::VsanClusterFileServiceHealthSummary => Some(from.as_any_ref().downcast_ref::<VsanClusterFileServiceHealthSummary>()?),
             StructType::VsanClusterGlobalDedupHealthSummary => Some(from.as_any_ref().downcast_ref::<VsanClusterGlobalDedupHealthSummary>()?),
+            StructType::VsanClusterHciMeshDitEncryptionHealthSummary => Some(from.as_any_ref().downcast_ref::<VsanClusterHciMeshDitEncryptionHealthSummary>()?),
             StructType::VsanClusterHclInfo => Some(from.as_any_ref().downcast_ref::<VsanClusterHclInfo>()?),
             StructType::VsanClusterHealthAction => Some(from.as_any_ref().downcast_ref::<VsanClusterHealthAction>()?),
             StructType::VsanClusterHealthCheckInfo => Some(from.as_any_ref().downcast_ref::<VsanClusterHealthCheckInfo>()?),
@@ -6224,11 +6411,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanClusterVMsHealthSummaryResult => Some(from.as_any_ref().downcast_ref::<VsanClusterVMsHealthSummaryResult>()?),
             StructType::VsanClusterVmdkLoadTestResult => Some(from.as_any_ref().downcast_ref::<VsanClusterVmdkLoadTestResult>()?),
             StructType::VsanClusterWhatifHostFailuresResult => Some(from.as_any_ref().downcast_ref::<VsanClusterWhatifHostFailuresResult>()?),
+            StructType::VsanComponentBasicInfo => Some(from.as_any_ref().downcast_ref::<VsanComponentBasicInfo>()?),
+            StructType::VsanComponentPlacement => Some(from.as_any_ref().downcast_ref::<VsanComponentPlacement>()?),
             StructType::VsanConfigGeneration => Some(from.as_any_ref().downcast_ref::<VsanConfigGeneration>()?),
             StructType::VsanDataDrivenApiAction => Some(from.as_any_ref().downcast_ref::<VsanDataDrivenApiAction>()?),
             StructType::VsanDiagnosticsThreshold => Some(from.as_any_ref().downcast_ref::<VsanDiagnosticsThreshold>()?),
             StructType::VsanDiskFormatConversionSpec => Some(from.as_any_ref().downcast_ref::<VsanDiskFormatConversionSpec>()?),
             StructType::VimClusterVsanDiskMappingsConfigSpec => Some(from.as_any_ref().downcast_ref::<VimClusterVsanDiskMappingsConfigSpec>()?),
+            StructType::VsanEffectiveSpaceUsage => Some(from.as_any_ref().downcast_ref::<VsanEffectiveSpaceUsage>()?),
             StructType::VsanEntitySpaceUsage => Some(from.as_any_ref().downcast_ref::<VsanEntitySpaceUsage>()?),
             StructType::VimClusterVsanFaultDomainSpec => Some(from.as_any_ref().downcast_ref::<VimClusterVsanFaultDomainSpec>()?),
             StructType::VsanFaultDomainDestroySpec => Some(from.as_any_ref().downcast_ref::<VsanFaultDomainDestroySpec>()?),
@@ -6243,6 +6433,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanHealthConfirmationDialog => Some(from.as_any_ref().downcast_ref::<VsanHealthConfirmationDialog>()?),
             StructType::VsanHealthCorrelation => Some(from.as_any_ref().downcast_ref::<VsanHealthCorrelation>()?),
             StructType::VsanHealthExtMgmtPreCheckResult => Some(from.as_any_ref().downcast_ref::<VsanHealthExtMgmtPreCheckResult>()?),
+            StructType::VsanHealthStatusCounts => Some(from.as_any_ref().downcast_ref::<VsanHealthStatusCounts>()?),
             StructType::VsanHealthTroubleshooting => Some(from.as_any_ref().downcast_ref::<VsanHealthTroubleshooting>()?),
             StructType::VsanHistoricalHealthQuerySpec => Some(from.as_any_ref().downcast_ref::<VsanHistoricalHealthQuerySpec>()?),
             StructType::VsanHistoricalHealthTest => Some(from.as_any_ref().downcast_ref::<VsanHistoricalHealthTest>()?),
@@ -6272,6 +6463,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanObjectIdentity => Some(from.as_any_ref().downcast_ref::<VsanObjectIdentity>()?),
             StructType::VsanObjectIdentityAndHealth => Some(from.as_any_ref().downcast_ref::<VsanObjectIdentityAndHealth>()?),
             StructType::VsanObjectInformation => Some(from.as_any_ref().downcast_ref::<VsanObjectInformation>()?),
+            StructType::VsanObjectPlacement => Some(from.as_any_ref().downcast_ref::<VsanObjectPlacement>()?),
+            StructType::VsanObjectPlacementDetails => Some(from.as_any_ref().downcast_ref::<VsanObjectPlacementDetails>()?),
             StructType::VsanObjectQuerySpec => Some(from.as_any_ref().downcast_ref::<VsanObjectQuerySpec>()?),
             StructType::VsanObjectSpaceSummary => Some(from.as_any_ref().downcast_ref::<VsanObjectSpaceSummary>()?),
             StructType::VsanPerfDiagnoseQuerySpec => Some(from.as_any_ref().downcast_ref::<VsanPerfDiagnoseQuerySpec>()?),
@@ -6281,6 +6474,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanPerfEntityType => Some(from.as_any_ref().downcast_ref::<VsanPerfEntityType>()?),
             StructType::VsanPerfGraph => Some(from.as_any_ref().downcast_ref::<VsanPerfGraph>()?),
             StructType::VsanPerfHotspotEntitiesMetrics => Some(from.as_any_ref().downcast_ref::<VsanPerfHotspotEntitiesMetrics>()?),
+            StructType::VsanPerfHotspotEntityType => Some(from.as_any_ref().downcast_ref::<VsanPerfHotspotEntityType>()?),
             StructType::VsanPerfHotspotQuerySpec => Some(from.as_any_ref().downcast_ref::<VsanPerfHotspotQuerySpec>()?),
             StructType::VsanPerfMasterInformation => Some(from.as_any_ref().downcast_ref::<VsanPerfMasterInformation>()?),
             StructType::VsanPerfMemberInfo => Some(from.as_any_ref().downcast_ref::<VsanPerfMemberInfo>()?),
@@ -6295,7 +6489,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanPerfTopEntity => Some(from.as_any_ref().downcast_ref::<VsanPerfTopEntity>()?),
             StructType::VsanPerfTopQuerySpec => Some(from.as_any_ref().downcast_ref::<VsanPerfTopQuerySpec>()?),
             StructType::VsanPerfsvcConfig => Some(from.as_any_ref().downcast_ref::<VsanPerfsvcConfig>()?),
+            StructType::VsanQueryPhysicalPlacementSpecs => Some(from.as_any_ref().downcast_ref::<VsanQueryPhysicalPlacementSpecs>()?),
             StructType::VsanRemoteClusterQuerySpec => Some(from.as_any_ref().downcast_ref::<VsanRemoteClusterQuerySpec>()?),
+            StructType::VsanSnapshotSpace => Some(from.as_any_ref().downcast_ref::<VsanSnapshotSpace>()?),
             StructType::VsanSpaceQuerySpec => Some(from.as_any_ref().downcast_ref::<VsanSpaceQuerySpec>()?),
             StructType::VsanSpaceUsage => Some(from.as_any_ref().downcast_ref::<VsanSpaceUsage>()?),
             StructType::VsanSpaceUsageDetailResult => Some(from.as_any_ref().downcast_ref::<VsanSpaceUsageDetailResult>()?),
@@ -6319,6 +6515,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::CnsFileBackingDetails => Some(from.as_any_ref().downcast_ref::<CnsFileBackingDetails>()?),
             StructType::CnsVsanFileShareBackingDetails => Some(from.as_any_ref().downcast_ref::<CnsVsanFileShareBackingDetails>()?),
             StructType::CnsBaseCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsBaseCreateSpec>()?),
+            StructType::CnsBlockCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsBlockCreateSpec>()?),
             StructType::CnsFileCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsFileCreateSpec>()?),
             StructType::CnsVsanFileCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsVsanFileCreateSpec>()?),
             StructType::CnsContainerCluster => Some(from.as_any_ref().downcast_ref::<CnsContainerCluster>()?),
@@ -6334,10 +6531,13 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::CnsSnapshotCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsSnapshotCreateSpec>()?),
             StructType::CnsSnapshotDeleteSpec => Some(from.as_any_ref().downcast_ref::<CnsSnapshotDeleteSpec>()?),
             StructType::CnsSnapshotId => Some(from.as_any_ref().downcast_ref::<CnsSnapshotId>()?),
+            StructType::CnsSyncVolumeSpec => Some(from.as_any_ref().downcast_ref::<CnsSyncVolumeSpec>()?),
+            StructType::CnsUnregisterVolumeSpec => Some(from.as_any_ref().downcast_ref::<CnsUnregisterVolumeSpec>()?),
             StructType::CnsVolume => Some(from.as_any_ref().downcast_ref::<CnsVolume>()?),
             StructType::CnsVolumeAclConfigureSpec => Some(from.as_any_ref().downcast_ref::<CnsVolumeAclConfigureSpec>()?),
             StructType::CnsVolumeAttachDetachSpec => Some(from.as_any_ref().downcast_ref::<CnsVolumeAttachDetachSpec>()?),
             StructType::CnsVolumeCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsVolumeCreateSpec>()?),
+            StructType::CnsVolumeCryptoUpdateSpec => Some(from.as_any_ref().downcast_ref::<CnsVolumeCryptoUpdateSpec>()?),
             StructType::CnsVolumeExtendSpec => Some(from.as_any_ref().downcast_ref::<CnsVolumeExtendSpec>()?),
             StructType::CnsVolumeId => Some(from.as_any_ref().downcast_ref::<CnsVolumeId>()?),
             StructType::CnsVolumeMetadata => Some(from.as_any_ref().downcast_ref::<CnsVolumeMetadata>()?),
@@ -6351,6 +6551,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::CnsVolumeRelocateSpec => Some(from.as_any_ref().downcast_ref::<CnsVolumeRelocateSpec>()?),
             StructType::CnsBlockVolumeRelocateSpec => Some(from.as_any_ref().downcast_ref::<CnsBlockVolumeRelocateSpec>()?),
             StructType::CnsVolumeSource => Some(from.as_any_ref().downcast_ref::<CnsVolumeSource>()?),
+            StructType::CnsCloneVolumeSource => Some(from.as_any_ref().downcast_ref::<CnsCloneVolumeSource>()?),
             StructType::CnsSnapshotVolumeSource => Some(from.as_any_ref().downcast_ref::<CnsSnapshotVolumeSource>()?),
             StructType::DistributedVirtualPort => Some(from.as_any_ref().downcast_ref::<DistributedVirtualPort>()?),
             StructType::DvPortConfigInfo => Some(from.as_any_ref().downcast_ref::<DvPortConfigInfo>()?),
@@ -6363,10 +6564,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::DvPortState => Some(from.as_any_ref().downcast_ref::<DvPortState>()?),
             StructType::DvPortgroupConfigInfo => Some(from.as_any_ref().downcast_ref::<DvPortgroupConfigInfo>()?),
             StructType::DvPortgroupConfigSpec => Some(from.as_any_ref().downcast_ref::<DvPortgroupConfigSpec>()?),
+            StructType::DvPortgroupNsxConfig => Some(from.as_any_ref().downcast_ref::<DvPortgroupNsxConfig>()?),
             StructType::DistributedVirtualPortgroupNsxPortgroupOperationResult => Some(from.as_any_ref().downcast_ref::<DistributedVirtualPortgroupNsxPortgroupOperationResult>()?),
             StructType::DvPortgroupPolicy => Some(from.as_any_ref().downcast_ref::<DvPortgroupPolicy>()?),
             StructType::VMwareDvsPortgroupPolicy => Some(from.as_any_ref().downcast_ref::<VMwareDvsPortgroupPolicy>()?),
             StructType::DistributedVirtualPortgroupProblem => Some(from.as_any_ref().downcast_ref::<DistributedVirtualPortgroupProblem>()?),
+            StructType::DvPortgroupNsxSubnetAddressInfo => Some(from.as_any_ref().downcast_ref::<DvPortgroupNsxSubnetAddressInfo>()?),
             StructType::DistributedVirtualPortgroupInfo => Some(from.as_any_ref().downcast_ref::<DistributedVirtualPortgroupInfo>()?),
             StructType::DistributedVirtualSwitchInfo => Some(from.as_any_ref().downcast_ref::<DistributedVirtualSwitchInfo>()?),
             StructType::DistributedVirtualSwitchManagerCompatibilityResult => Some(from.as_any_ref().downcast_ref::<DistributedVirtualSwitchManagerCompatibilityResult>()?),
@@ -6379,6 +6582,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::DistributedVirtualSwitchManagerHostDvsMembershipFilter => Some(from.as_any_ref().downcast_ref::<DistributedVirtualSwitchManagerHostDvsMembershipFilter>()?),
             StructType::DistributedVirtualSwitchManagerImportResult => Some(from.as_any_ref().downcast_ref::<DistributedVirtualSwitchManagerImportResult>()?),
             StructType::DvsManagerPhysicalNicsList => Some(from.as_any_ref().downcast_ref::<DvsManagerPhysicalNicsList>()?),
+            StructType::DistributedVirtualSwitchManagerSpanInfo => Some(from.as_any_ref().downcast_ref::<DistributedVirtualSwitchManagerSpanInfo>()?),
             StructType::EntityBackup => Some(from.as_any_ref().downcast_ref::<EntityBackup>()?),
             StructType::EntityBackupConfig => Some(from.as_any_ref().downcast_ref::<EntityBackupConfig>()?),
             StructType::DvsFilterSpecConnecteeSpec => Some(from.as_any_ref().downcast_ref::<DvsFilterSpecConnecteeSpec>()?),
@@ -6399,6 +6603,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VMwareDvsMtuHealthCheckResult => Some(from.as_any_ref().downcast_ref::<VMwareDvsMtuHealthCheckResult>()?),
             StructType::VMwareDvsVlanHealthCheckResult => Some(from.as_any_ref().downcast_ref::<VMwareDvsVlanHealthCheckResult>()?),
             StructType::VMwareDvsTeamingHealthCheckResult => Some(from.as_any_ref().downcast_ref::<VMwareDvsTeamingHealthCheckResult>()?),
+            StructType::DistributedVirtualSwitchHostMemberHostPerfNicOffloadState => Some(from.as_any_ref().downcast_ref::<DistributedVirtualSwitchHostMemberHostPerfNicOffloadState>()?),
             StructType::DistributedVirtualSwitchHostMemberHostUplinkState => Some(from.as_any_ref().downcast_ref::<DistributedVirtualSwitchHostMemberHostUplinkState>()?),
             StructType::DistributedVirtualSwitchHostMemberPnicSpec => Some(from.as_any_ref().downcast_ref::<DistributedVirtualSwitchHostMemberPnicSpec>()?),
             StructType::HostMemberRuntimeInfo => Some(from.as_any_ref().downcast_ref::<HostMemberRuntimeInfo>()?),
@@ -6447,10 +6652,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VMwareDvsLagVlanConfig => Some(from.as_any_ref().downcast_ref::<VMwareDvsLagVlanConfig>()?),
             StructType::VMwareDvsMtuCapability => Some(from.as_any_ref().downcast_ref::<VMwareDvsMtuCapability>()?),
             StructType::VmwareDistributedVirtualSwitchNetworkOffloadConfig => Some(from.as_any_ref().downcast_ref::<VmwareDistributedVirtualSwitchNetworkOffloadConfig>()?),
+            StructType::VMwareDvsPerfNicOffloadCapability => Some(from.as_any_ref().downcast_ref::<VMwareDvsPerfNicOffloadCapability>()?),
             StructType::VMwareDvsPvlanConfigSpec => Some(from.as_any_ref().downcast_ref::<VMwareDvsPvlanConfigSpec>()?),
             StructType::VMwareDvsPvlanMapEntry => Some(from.as_any_ref().downcast_ref::<VMwareDvsPvlanMapEntry>()?),
             StructType::VmwareDistributedVirtualSwitchRealTimeConfig => Some(from.as_any_ref().downcast_ref::<VmwareDistributedVirtualSwitchRealTimeConfig>()?),
             StructType::VmwareDistributedVirtualSwitchRealTimeLanAnnotation => Some(from.as_any_ref().downcast_ref::<VmwareDistributedVirtualSwitchRealTimeLanAnnotation>()?),
+            StructType::VMwareDvsSystemTrafficCapabilities => Some(from.as_any_ref().downcast_ref::<VMwareDvsSystemTrafficCapabilities>()?),
             StructType::VMwareDvsVspanConfigSpec => Some(from.as_any_ref().downcast_ref::<VMwareDvsVspanConfigSpec>()?),
             StructType::VMwareDvsVspanCapability => Some(from.as_any_ref().downcast_ref::<VMwareDvsVspanCapability>()?),
             StructType::VMwareVspanPort => Some(from.as_any_ref().downcast_ref::<VMwareVspanPort>()?),
@@ -6504,6 +6711,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::NetworkEventArgument => Some(from.as_any_ref().downcast_ref::<NetworkEventArgument>()?),
             StructType::ResourcePoolEventArgument => Some(from.as_any_ref().downcast_ref::<ResourcePoolEventArgument>()?),
             StructType::ScheduledTaskEventArgument => Some(from.as_any_ref().downcast_ref::<ScheduledTaskEventArgument>()?),
+            StructType::TgwEventArgument => Some(from.as_any_ref().downcast_ref::<TgwEventArgument>()?),
             StructType::VmEventArgument => Some(from.as_any_ref().downcast_ref::<VmEventArgument>()?),
             StructType::ProfileEventArgument => Some(from.as_any_ref().downcast_ref::<ProfileEventArgument>()?),
             StructType::RoleEventArgument => Some(from.as_any_ref().downcast_ref::<RoleEventArgument>()?),
@@ -6748,6 +6956,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::HostLowLevelProvisioningManagerVmMigrationStatus => Some(from.as_any_ref().downcast_ref::<HostLowLevelProvisioningManagerVmMigrationStatus>()?),
             StructType::HostLowLevelProvisioningManagerVmRecoveryInfo => Some(from.as_any_ref().downcast_ref::<HostLowLevelProvisioningManagerVmRecoveryInfo>()?),
             StructType::HostMaintenanceSpec => Some(from.as_any_ref().downcast_ref::<HostMaintenanceSpec>()?),
+            StructType::HostMaintenanceSpecEvacuationMode => Some(from.as_any_ref().downcast_ref::<HostMaintenanceSpecEvacuationMode>()?),
             StructType::ServiceConsoleReservationInfo => Some(from.as_any_ref().downcast_ref::<ServiceConsoleReservationInfo>()?),
             StructType::VirtualMachineMemoryReservationInfo => Some(from.as_any_ref().downcast_ref::<VirtualMachineMemoryReservationInfo>()?),
             StructType::VirtualMachineMemoryReservationSpec => Some(from.as_any_ref().downcast_ref::<VirtualMachineMemoryReservationSpec>()?),
@@ -6826,10 +7035,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::HostPatchManagerStatusPrerequisitePatch => Some(from.as_any_ref().downcast_ref::<HostPatchManagerStatusPrerequisitePatch>()?),
             StructType::HostPathSelectionPolicyOption => Some(from.as_any_ref().downcast_ref::<HostPathSelectionPolicyOption>()?),
             StructType::HostPciDevice => Some(from.as_any_ref().downcast_ref::<HostPciDevice>()?),
+            StructType::HostPciDeviceDirectPathInfo => Some(from.as_any_ref().downcast_ref::<HostPciDeviceDirectPathInfo>()?),
             StructType::HostPciPassthruConfig => Some(from.as_any_ref().downcast_ref::<HostPciPassthruConfig>()?),
             StructType::HostSriovConfig => Some(from.as_any_ref().downcast_ref::<HostSriovConfig>()?),
             StructType::HostPciPassthruInfo => Some(from.as_any_ref().downcast_ref::<HostPciPassthruInfo>()?),
             StructType::HostSriovInfo => Some(from.as_any_ref().downcast_ref::<HostSriovInfo>()?),
+            StructType::HostPciPassthruInfoDirectPathState => Some(from.as_any_ref().downcast_ref::<HostPciPassthruInfoDirectPathState>()?),
             StructType::HostPersistentMemoryInfo => Some(from.as_any_ref().downcast_ref::<HostPersistentMemoryInfo>()?),
             StructType::PhysicalNic => Some(from.as_any_ref().downcast_ref::<PhysicalNic>()?),
             StructType::PhysicalNicCdpDeviceCapability => Some(from.as_any_ref().downcast_ref::<PhysicalNicCdpDeviceCapability>()?),
@@ -6849,6 +7060,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::HostPlugStoreTopologyPlugin => Some(from.as_any_ref().downcast_ref::<HostPlugStoreTopologyPlugin>()?),
             StructType::HostPlugStoreTopologyTarget => Some(from.as_any_ref().downcast_ref::<HostPlugStoreTopologyTarget>()?),
             StructType::PnicTsoInfo => Some(from.as_any_ref().downcast_ref::<PnicTsoInfo>()?),
+            StructType::PodVmInfo => Some(from.as_any_ref().downcast_ref::<PodVmInfo>()?),
+            StructType::PodVmOverheadInfo => Some(from.as_any_ref().downcast_ref::<PodVmOverheadInfo>()?),
             StructType::HostPortGroup => Some(from.as_any_ref().downcast_ref::<HostPortGroup>()?),
             StructType::HostPortGroupConfig => Some(from.as_any_ref().downcast_ref::<HostPortGroupConfig>()?),
             StructType::HostPortGroupPort => Some(from.as_any_ref().downcast_ref::<HostPortGroupPort>()?),
@@ -6947,6 +7160,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::HostTpmCommandEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmCommandEventDetails>()?),
             StructType::HostTpmOptionEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmOptionEventDetails>()?),
             StructType::HostTpmSoftwareComponentEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmSoftwareComponentEventDetails>()?),
+            StructType::HostTpmSystemVersionEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmSystemVersionEventDetails>()?),
             StructType::HostTpmVersionEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmVersionEventDetails>()?),
             StructType::HostTpmEventLogEntry => Some(from.as_any_ref().downcast_ref::<HostTpmEventLogEntry>()?),
             StructType::HostTrustAuthorityAttestationInfo => Some(from.as_any_ref().downcast_ref::<HostTrustAuthorityAttestationInfo>()?),
@@ -7023,11 +7237,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanHclFirmwareFile => Some(from.as_any_ref().downcast_ref::<VsanHclFirmwareFile>()?),
             StructType::VsanHclFirmwareUpdateSpec => Some(from.as_any_ref().downcast_ref::<VsanHclFirmwareUpdateSpec>()?),
             StructType::VsanHclMemInfo => Some(from.as_any_ref().downcast_ref::<VsanHclMemInfo>()?),
+            StructType::VsanHealthObjectStats => Some(from.as_any_ref().downcast_ref::<VsanHealthObjectStats>()?),
             StructType::VsanHealthQuerySpec => Some(from.as_any_ref().downcast_ref::<VsanHealthQuerySpec>()?),
             StructType::VsanHostCimProviderInfo => Some(from.as_any_ref().downcast_ref::<VsanHostCimProviderInfo>()?),
             StructType::VsanHostEmmSummary => Some(from.as_any_ref().downcast_ref::<VsanHostEmmSummary>()?),
             StructType::VsanHostFwComponent => Some(from.as_any_ref().downcast_ref::<VsanHostFwComponent>()?),
             StructType::VsanHostGlobalDedupConfigHealthSummary => Some(from.as_any_ref().downcast_ref::<VsanHostGlobalDedupConfigHealthSummary>()?),
+            StructType::VsanHostHciMeshDitEncryptionHealth => Some(from.as_any_ref().downcast_ref::<VsanHostHciMeshDitEncryptionHealth>()?),
+            StructType::VsanHostHciMeshDitEncryptionHealthSummary => Some(from.as_any_ref().downcast_ref::<VsanHostHciMeshDitEncryptionHealthSummary>()?),
             StructType::VsanHostHclInfo => Some(from.as_any_ref().downcast_ref::<VsanHostHclInfo>()?),
             StructType::VsanHostHealthSystemStatusResult => Some(from.as_any_ref().downcast_ref::<VsanHostHealthSystemStatusResult>()?),
             StructType::VsanHostHwDeviceId => Some(from.as_any_ref().downcast_ref::<VsanHostHwDeviceId>()?),
@@ -7048,6 +7265,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanIoInsightInfo => Some(from.as_any_ref().downcast_ref::<VsanIoInsightInfo>()?),
             StructType::VsanIperfClientSpec => Some(from.as_any_ref().downcast_ref::<VsanIperfClientSpec>()?),
             StructType::VsanKmsHealth => Some(from.as_any_ref().downcast_ref::<VsanKmsHealth>()?),
+            StructType::VsanLicensedDiskResult => Some(from.as_any_ref().downcast_ref::<VsanLicensedDiskResult>()?),
             StructType::VsanLimitHealthResult => Some(from.as_any_ref().downcast_ref::<VsanLimitHealthResult>()?),
             StructType::VsanNetworkDiagnosticsHealthInfo => Some(from.as_any_ref().downcast_ref::<VsanNetworkDiagnosticsHealthInfo>()?),
             StructType::VsanNetworkHealthResult => Some(from.as_any_ref().downcast_ref::<VsanNetworkHealthResult>()?),
@@ -7097,6 +7315,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::NetBiosConfigInfo => Some(from.as_any_ref().downcast_ref::<NetBiosConfigInfo>()?),
             StructType::WinNetBiosConfigInfo => Some(from.as_any_ref().downcast_ref::<WinNetBiosConfigInfo>()?),
             StructType::ArrayUpdateSpec => Some(from.as_any_ref().downcast_ref::<ArrayUpdateSpec>()?),
+            StructType::TagSpec => Some(from.as_any_ref().downcast_ref::<TagSpec>()?),
             StructType::ClusterDasVmConfigSpec => Some(from.as_any_ref().downcast_ref::<ClusterDasVmConfigSpec>()?),
             StructType::ClusterDatastoreUpdateSpec => Some(from.as_any_ref().downcast_ref::<ClusterDatastoreUpdateSpec>()?),
             StructType::ClusterDpmHostConfigSpec => Some(from.as_any_ref().downcast_ref::<ClusterDpmHostConfigSpec>()?),
@@ -7337,6 +7556,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::GuestInfo => Some(from.as_any_ref().downcast_ref::<GuestInfo>()?),
             StructType::GuestInfoCustomizationInfo => Some(from.as_any_ref().downcast_ref::<GuestInfoCustomizationInfo>()?),
             StructType::GuestDiskInfo => Some(from.as_any_ref().downcast_ref::<GuestDiskInfo>()?),
+            StructType::VirtualMachineGuestRebootStatus => Some(from.as_any_ref().downcast_ref::<VirtualMachineGuestRebootStatus>()?),
             StructType::GuestInfoNamespaceGenerationInfo => Some(from.as_any_ref().downcast_ref::<GuestInfoNamespaceGenerationInfo>()?),
             StructType::GuestNicInfo => Some(from.as_any_ref().downcast_ref::<GuestNicInfo>()?),
             StructType::GuestScreenInfo => Some(from.as_any_ref().downcast_ref::<GuestScreenInfo>()?),
@@ -7431,6 +7651,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VirtualMachineVirtualNuma => Some(from.as_any_ref().downcast_ref::<VirtualMachineVirtualNuma>()?),
             StructType::VirtualMachineVirtualNumaInfo => Some(from.as_any_ref().downcast_ref::<VirtualMachineVirtualNumaInfo>()?),
             StructType::VirtualMachineVirtualPMem => Some(from.as_any_ref().downcast_ref::<VirtualMachineVirtualPMem>()?),
+            StructType::VmPlacementPolicy => Some(from.as_any_ref().downcast_ref::<VmPlacementPolicy>()?),
+            StructType::VmToVmGroupsAntiAffinity => Some(from.as_any_ref().downcast_ref::<VmToVmGroupsAntiAffinity>()?),
+            StructType::VmVmAffinity => Some(from.as_any_ref().downcast_ref::<VmVmAffinity>()?),
+            StructType::VmVmAntiAffinity => Some(from.as_any_ref().downcast_ref::<VmVmAntiAffinity>()?),
             StructType::CheckResult => Some(from.as_any_ref().downcast_ref::<CheckResult>()?),
             StructType::CustomizationAdapterMapping => Some(from.as_any_ref().downcast_ref::<CustomizationAdapterMapping>()?),
             StructType::CustomizationGlobalIpSettings => Some(from.as_any_ref().downcast_ref::<CustomizationGlobalIpSettings>()?),
@@ -7441,12 +7665,15 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::CustomizationIdentification => Some(from.as_any_ref().downcast_ref::<CustomizationIdentification>()?),
             StructType::CustomizationIdentitySettings => Some(from.as_any_ref().downcast_ref::<CustomizationIdentitySettings>()?),
             StructType::CustomizationCloudinitPrep => Some(from.as_any_ref().downcast_ref::<CustomizationCloudinitPrep>()?),
+            StructType::CustomizationLinuxFlexPrep => Some(from.as_any_ref().downcast_ref::<CustomizationLinuxFlexPrep>()?),
             StructType::CustomizationLinuxPrep => Some(from.as_any_ref().downcast_ref::<CustomizationLinuxPrep>()?),
             StructType::CustomizationSysprep => Some(from.as_any_ref().downcast_ref::<CustomizationSysprep>()?),
             StructType::CustomizationSysprepText => Some(from.as_any_ref().downcast_ref::<CustomizationSysprepText>()?),
+            StructType::CustomizationWindowsFlexPrep => Some(from.as_any_ref().downcast_ref::<CustomizationWindowsFlexPrep>()?),
             StructType::CustomizationIpGenerator => Some(from.as_any_ref().downcast_ref::<CustomizationIpGenerator>()?),
             StructType::CustomizationCustomIpGenerator => Some(from.as_any_ref().downcast_ref::<CustomizationCustomIpGenerator>()?),
             StructType::CustomizationDhcpIpGenerator => Some(from.as_any_ref().downcast_ref::<CustomizationDhcpIpGenerator>()?),
+            StructType::CustomizationDisableIpV4 => Some(from.as_any_ref().downcast_ref::<CustomizationDisableIpV4>()?),
             StructType::CustomizationFixedIp => Some(from.as_any_ref().downcast_ref::<CustomizationFixedIp>()?),
             StructType::CustomizationUnknownIpGenerator => Some(from.as_any_ref().downcast_ref::<CustomizationUnknownIpGenerator>()?),
             StructType::CustomizationIpV6Generator => Some(from.as_any_ref().downcast_ref::<CustomizationIpV6Generator>()?),
@@ -7720,9 +7947,13 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::FaultDomainInfo => Some(from.as_any_ref().downcast_ref::<FaultDomainInfo>()?),
             StructType::ReplicationGroupId => Some(from.as_any_ref().downcast_ref::<ReplicationGroupId>()?),
             StructType::ReplicationSpec => Some(from.as_any_ref().downcast_ref::<ReplicationSpec>()?),
+            StructType::VsanAutoRaidConfig => Some(from.as_any_ref().downcast_ref::<VsanAutoRaidConfig>()?),
+            StructType::VsanAutoRaidInfo => Some(from.as_any_ref().downcast_ref::<VsanAutoRaidInfo>()?),
             StructType::VsanCapacityReservationInfo => Some(from.as_any_ref().downcast_ref::<VsanCapacityReservationInfo>()?),
+            StructType::VsanClientUnicastConfig => Some(from.as_any_ref().downcast_ref::<VsanClientUnicastConfig>()?),
             StructType::ClusterRuntimeInfo => Some(from.as_any_ref().downcast_ref::<ClusterRuntimeInfo>()?),
             StructType::VsanCompatibilityCheckResult => Some(from.as_any_ref().downcast_ref::<VsanCompatibilityCheckResult>()?),
+            StructType::VsanCyberRecoveryConfig => Some(from.as_any_ref().downcast_ref::<VsanCyberRecoveryConfig>()?),
             StructType::VimVsanDataEfficiencyCapacityState => Some(from.as_any_ref().downcast_ref::<VimVsanDataEfficiencyCapacityState>()?),
             StructType::VsanDataEfficiencyConfig => Some(from.as_any_ref().downcast_ref::<VsanDataEfficiencyConfig>()?),
             StructType::VsanDataEfficiencyConfigEx => Some(from.as_any_ref().downcast_ref::<VsanDataEfficiencyConfigEx>()?),
@@ -7737,6 +7968,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanDirectoryServerConfig => Some(from.as_any_ref().downcast_ref::<VsanDirectoryServerConfig>()?),
             StructType::ActiveVsanDirectoryServerConfig => Some(from.as_any_ref().downcast_ref::<ActiveVsanDirectoryServerConfig>()?),
             StructType::DiskClaimConfiguration => Some(from.as_any_ref().downcast_ref::<DiskClaimConfiguration>()?),
+            StructType::DiskInfo => Some(from.as_any_ref().downcast_ref::<DiskInfo>()?),
+            StructType::DpDaemonHealth => Some(from.as_any_ref().downcast_ref::<DpDaemonHealth>()?),
             StructType::VsanEntityCompatibilityResult => Some(from.as_any_ref().downcast_ref::<VsanEntityCompatibilityResult>()?),
             StructType::EntityResourceCheckDetails => Some(from.as_any_ref().downcast_ref::<EntityResourceCheckDetails>()?),
             StructType::VsanDiskGroupResourceCheckResult => Some(from.as_any_ref().downcast_ref::<VsanDiskGroupResourceCheckResult>()?),
@@ -7748,6 +7981,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanResourceCheckComponentResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckComponentResult>()?),
             StructType::VsanResourceCheckDataPersistenceResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckDataPersistenceResult>()?),
             StructType::VsanResourceCheckVsanResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceResourceCheckResult>()?),
             StructType::VsanStoragePoolResourceCheckResult => Some(from.as_any_ref().downcast_ref::<VsanStoragePoolResourceCheckResult>()?),
             StructType::VsanFileServiceConfig => Some(from.as_any_ref().downcast_ref::<VsanFileServiceConfig>()?),
             StructType::VsanFileServiceDomain => Some(from.as_any_ref().downcast_ref::<VsanFileServiceDomain>()?),
@@ -7766,6 +8000,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanFileShareSnapshotQueryResult => Some(from.as_any_ref().downcast_ref::<VsanFileShareSnapshotQueryResult>()?),
             StructType::VsanFileShareSnapshotQuerySpec => Some(from.as_any_ref().downcast_ref::<VsanFileShareSnapshotQuerySpec>()?),
             StructType::VsanHciMeshDatastoreSource => Some(from.as_any_ref().downcast_ref::<VsanHciMeshDatastoreSource>()?),
+            StructType::VsanHostSiteMaintenanceStatus => Some(from.as_any_ref().downcast_ref::<VsanHostSiteMaintenanceStatus>()?),
             StructType::VsanIoDiagnosticsFailedCheck => Some(from.as_any_ref().downcast_ref::<VsanIoDiagnosticsFailedCheck>()?),
             StructType::VsanIoDiagnosticsInstance => Some(from.as_any_ref().downcast_ref::<VsanIoDiagnosticsInstance>()?),
             StructType::VsanIoDiagnosticsInstanceEvent => Some(from.as_any_ref().downcast_ref::<VsanIoDiagnosticsInstanceEvent>()?),
@@ -7806,12 +8041,22 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanResourceCheckStatus => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckStatus>()?),
             StructType::VsanResourceCheckTaskDetails => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckTaskDetails>()?),
             StructType::VsanDiskDataEvacuationResourceCheckTaskDetails => Some(from.as_any_ref().downcast_ref::<VsanDiskDataEvacuationResourceCheckTaskDetails>()?),
+            StructType::VsanSiteMaintenanceCheckTaskDetails => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceCheckTaskDetails>()?),
             StructType::ResyncIopsInfo => Some(from.as_any_ref().downcast_ref::<ResyncIopsInfo>()?),
             StructType::VsanRuntimeStatsHostMap => Some(from.as_any_ref().downcast_ref::<VsanRuntimeStatsHostMap>()?),
             StructType::SsdEnduranceThresholdSpec => Some(from.as_any_ref().downcast_ref::<SsdEnduranceThresholdSpec>()?),
             StructType::VsanServerHostUnicastInfo => Some(from.as_any_ref().downcast_ref::<VsanServerHostUnicastInfo>()?),
             StructType::VsanSharedWitnessCompatibilityResult => Some(from.as_any_ref().downcast_ref::<VsanSharedWitnessCompatibilityResult>()?),
+            StructType::VsanSiteMaintenanceInfo => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceInfo>()?),
+            StructType::VsanSiteMaintenancePrecheckDetail => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenancePrecheckDetail>()?),
+            StructType::VsanSiteMaintenancePrecheckStatus => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenancePrecheckStatus>()?),
+            StructType::VsanSiteMaintenanceSpec => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceSpec>()?),
             StructType::VsanSnapServiceConfig => Some(from.as_any_ref().downcast_ref::<VsanSnapServiceConfig>()?),
+            StructType::VsanSiteMaintenanceVmPowerOffInfo => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceVmPowerOffInfo>()?),
+            StructType::VsanVbossConfig => Some(from.as_any_ref().downcast_ref::<VsanVbossConfig>()?),
+            StructType::VsanVbossClusterConfig => Some(from.as_any_ref().downcast_ref::<VsanVbossClusterConfig>()?),
+            StructType::VsanVbossHostConfig => Some(from.as_any_ref().downcast_ref::<VsanVbossHostConfig>()?),
+            StructType::VsanVbossObjectStoreConfig => Some(from.as_any_ref().downcast_ref::<VsanVbossObjectStoreConfig>()?),
             StructType::VcRemoteVsanServerClusterConfig => Some(from.as_any_ref().downcast_ref::<VcRemoteVsanServerClusterConfig>()?),
             StructType::VcRemoteVsanServerClusterInfo => Some(from.as_any_ref().downcast_ref::<VcRemoteVsanServerClusterInfo>()?),
             StructType::VsanIscsiVipConfigSpec => Some(from.as_any_ref().downcast_ref::<VsanIscsiVipConfigSpec>()?),
@@ -7908,6 +8153,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanHostAbortWipeDiskStatus => Some(from.as_any_ref().downcast_ref::<VsanHostAbortWipeDiskStatus>()?),
             StructType::VsanHostAboutInfoEx => Some(from.as_any_ref().downcast_ref::<VsanHostAboutInfoEx>()?),
             StructType::VsanAddStoragePoolDiskSpec => Some(from.as_any_ref().downcast_ref::<VsanAddStoragePoolDiskSpec>()?),
+            StructType::VsanHostClientClusterUnicastConfig => Some(from.as_any_ref().downcast_ref::<VsanHostClientClusterUnicastConfig>()?),
+            StructType::VsanHostClientClusterUnicastInfo => Some(from.as_any_ref().downcast_ref::<VsanHostClientClusterUnicastInfo>()?),
+            StructType::VsanHostClientHostUnicastInfo => Some(from.as_any_ref().downcast_ref::<VsanHostClientHostUnicastInfo>()?),
             StructType::VsanHostClusterStatus => Some(from.as_any_ref().downcast_ref::<VsanHostClusterStatus>()?),
             StructType::VsanHostClusterStatusState => Some(from.as_any_ref().downcast_ref::<VsanHostClusterStatusState>()?),
             StructType::VsanHostClusterStatusStateCompletionEstimate => Some(from.as_any_ref().downcast_ref::<VsanHostClusterStatusStateCompletionEstimate>()?),
@@ -7944,6 +8192,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanHostServerClusterUnicastConfig => Some(from.as_any_ref().downcast_ref::<VsanHostServerClusterUnicastConfig>()?),
             StructType::VsanHostServerClusterUnicastInfo => Some(from.as_any_ref().downcast_ref::<VsanHostServerClusterUnicastInfo>()?),
             StructType::SiteAffinityInfo => Some(from.as_any_ref().downcast_ref::<SiteAffinityInfo>()?),
+            StructType::VsanSiteTakeoverConfig => Some(from.as_any_ref().downcast_ref::<VsanSiteTakeoverConfig>()?),
             StructType::VsanStoragePoolDisk => Some(from.as_any_ref().downcast_ref::<VsanStoragePoolDisk>()?),
             StructType::VimVsanHostStoragePoolDiskInfo => Some(from.as_any_ref().downcast_ref::<VimVsanHostStoragePoolDiskInfo>()?),
             StructType::VimVsanHostStoragePoolInfo => Some(from.as_any_ref().downcast_ref::<VimVsanHostStoragePoolInfo>()?),
@@ -7995,6 +8244,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VslmTagEntry => Some(from.as_any_ref().downcast_ref::<VslmTagEntry>()?),
             StructType::VslmVClockInfo => Some(from.as_any_ref().downcast_ref::<VslmVClockInfo>()?),
             StructType::VStorageObject => Some(from.as_any_ref().downcast_ref::<VStorageObject>()?),
+            StructType::VStorageObjectAttachResult => Some(from.as_any_ref().downcast_ref::<VStorageObjectAttachResult>()?),
+            StructType::VStorageObjectAttachSpec => Some(from.as_any_ref().downcast_ref::<VStorageObjectAttachSpec>()?),
             StructType::VStorageObjectSnapshot => Some(from.as_any_ref().downcast_ref::<VStorageObjectSnapshot>()?),
             StructType::VStorageObjectSnapshotDetails => Some(from.as_any_ref().downcast_ref::<VStorageObjectSnapshotDetails>()?),
             StructType::VStorageObjectSnapshotInfo => Some(from.as_any_ref().downcast_ref::<VStorageObjectSnapshotInfo>()?),
@@ -8007,6 +8258,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::KeyAnyValue => Some(from.as_any_ref().downcast_ref::<KeyAnyValue>()?),
             StructType::LocalizableMessage => Some(from.as_any_ref().downcast_ref::<LocalizableMessage>()?),
             StructType::LocalizedMethodFault => Some(from.as_any_ref().downcast_ref::<LocalizedMethodFault>()?),
+            StructType::AuthenticationRequiredChallenge => Some(from.as_any_ref().downcast_ref::<AuthenticationRequiredChallenge>()?),
             StructType::PropertyChange => Some(from.as_any_ref().downcast_ref::<PropertyChange>()?),
             StructType::PropertyFilterSpec => Some(from.as_any_ref().downcast_ref::<PropertyFilterSpec>()?),
             StructType::PropertyFilterUpdate => Some(from.as_any_ref().downcast_ref::<PropertyFilterUpdate>()?),
@@ -8228,9 +8480,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::PbmPlacementMatchingResources => Ok(from.as_any_box().downcast::<PbmPlacementMatchingResources>()?),
             StructType::PbmPlacementMatchingReplicationResources => Ok(from.as_any_box().downcast::<PbmPlacementMatchingReplicationResources>()?),
             StructType::PbmPlacementHub => Ok(from.as_any_box().downcast::<PbmPlacementHub>()?),
+            StructType::PbmPlacementHubInfo => Ok(from.as_any_box().downcast::<PbmPlacementHubInfo>()?),
             StructType::PbmPlacementRequirement => Ok(from.as_any_box().downcast::<PbmPlacementRequirement>()?),
             StructType::PbmPlacementCapabilityConstraintsRequirement => Ok(from.as_any_box().downcast::<PbmPlacementCapabilityConstraintsRequirement>()?),
             StructType::PbmPlacementCapabilityProfileRequirement => Ok(from.as_any_box().downcast::<PbmPlacementCapabilityProfileRequirement>()?),
+            StructType::PbmPlacementZoneTopologyRequirement => Ok(from.as_any_box().downcast::<PbmPlacementZoneTopologyRequirement>()?),
             StructType::PbmPlacementResourceUtilization => Ok(from.as_any_box().downcast::<PbmPlacementResourceUtilization>()?),
             StructType::PbmCapabilityProfileCreateSpec => Ok(from.as_any_box().downcast::<PbmCapabilityProfileCreateSpec>()?),
             StructType::PbmCapabilityProfileUpdateSpec => Ok(from.as_any_box().downcast::<PbmCapabilityProfileUpdateSpec>()?),
@@ -8242,6 +8496,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::PbmCapabilityProfile => Ok(from.as_any_box().downcast::<PbmCapabilityProfile>()?),
             StructType::PbmDefaultCapabilityProfile => Ok(from.as_any_box().downcast::<PbmDefaultCapabilityProfile>()?),
             StructType::PbmProfileId => Ok(from.as_any_box().downcast::<PbmProfileId>()?),
+            StructType::PbmProfileK8SCompliantNameSpec => Ok(from.as_any_box().downcast::<PbmProfileK8SCompliantNameSpec>()?),
             StructType::PbmProfileOperationOutcome => Ok(from.as_any_box().downcast::<PbmProfileOperationOutcome>()?),
             StructType::PbmProfileType => Ok(from.as_any_box().downcast::<PbmProfileType>()?),
             StructType::PbmQueryProfileResult => Ok(from.as_any_box().downcast::<PbmQueryProfileResult>()?),
@@ -8353,6 +8608,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::ClusterComputeResourceDvsConfigurationValidation => Ok(from.as_any_box().downcast::<ClusterComputeResourceDvsConfigurationValidation>()?),
             StructType::ClusterComputeResourceHostConfigurationValidation => Ok(from.as_any_box().downcast::<ClusterComputeResourceHostConfigurationValidation>()?),
             StructType::VsanClusterConfigPrecheckItem => Ok(from.as_any_box().downcast::<VsanClusterConfigPrecheckItem>()?),
+            StructType::VsanValidationItem => Ok(from.as_any_box().downcast::<VsanValidationItem>()?),
             StructType::ClusterComputeResourceVcsSlots => Ok(from.as_any_box().downcast::<ClusterComputeResourceVcsSlots>()?),
             StructType::ComputeResourceConfigInfo => Ok(from.as_any_box().downcast::<ComputeResourceConfigInfo>()?),
             StructType::ClusterConfigInfoEx => Ok(from.as_any_box().downcast::<ClusterConfigInfoEx>()?),
@@ -8593,6 +8849,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::PerfProviderSummary => Ok(from.as_any_box().downcast::<PerfProviderSummary>()?),
             StructType::PerfQuerySpec => Ok(from.as_any_box().downcast::<PerfQuerySpec>()?),
             StructType::PerfSampleInfo => Ok(from.as_any_box().downcast::<PerfSampleInfo>()?),
+            StructType::PlaceVmsXClusterSpecCandidateNetworks => Ok(from.as_any_box().downcast::<PlaceVmsXClusterSpecCandidateNetworks>()?),
             StructType::PrivilegePolicyDef => Ok(from.as_any_box().downcast::<PrivilegePolicyDef>()?),
             StructType::ResourceAllocationInfo => Ok(from.as_any_box().downcast::<ResourceAllocationInfo>()?),
             StructType::ResourceAllocationOption => Ok(from.as_any_box().downcast::<ResourceAllocationOption>()?),
@@ -8609,6 +8866,13 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::ResourcePoolQuickStats => Ok(from.as_any_box().downcast::<ResourcePoolQuickStats>()?),
             StructType::SddcBase => Ok(from.as_any_box().downcast::<SddcBase>()?),
             StructType::VimVsanReconfigSpec => Ok(from.as_any_box().downcast::<VimVsanReconfigSpec>()?),
+            StructType::SearchIndexFilter => Ok(from.as_any_box().downcast::<SearchIndexFilter>()?),
+            StructType::SearchIndexIterationSpec => Ok(from.as_any_box().downcast::<SearchIndexIterationSpec>()?),
+            StructType::SearchIndexOptionalValue => Ok(from.as_any_box().downcast::<SearchIndexOptionalValue>()?),
+            StructType::SearchIndexPredicate => Ok(from.as_any_box().downcast::<SearchIndexPredicate>()?),
+            StructType::SearchIndexQuerySpec => Ok(from.as_any_box().downcast::<SearchIndexQuerySpec>()?),
+            StructType::SearchIndexResourceItem => Ok(from.as_any_box().downcast::<SearchIndexResourceItem>()?),
+            StructType::SearchIndexResultSet => Ok(from.as_any_box().downcast::<SearchIndexResultSet>()?),
             StructType::SelectionSet => Ok(from.as_any_box().downcast::<SelectionSet>()?),
             StructType::DvPortgroupSelection => Ok(from.as_any_box().downcast::<DvPortgroupSelection>()?),
             StructType::DvsSelection => Ok(from.as_any_box().downcast::<DvsSelection>()?),
@@ -8638,6 +8902,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::StoragePerformanceSummary => Ok(from.as_any_box().downcast::<StoragePerformanceSummary>()?),
             StructType::StorageResourceManagerStorageProfileStatistics => Ok(from.as_any_box().downcast::<StorageResourceManagerStorageProfileStatistics>()?),
             StructType::Tag => Ok(from.as_any_box().downcast::<Tag>()?),
+            StructType::TagId => Ok(from.as_any_box().downcast::<TagId>()?),
+            StructType::TagIdNameId => Ok(from.as_any_box().downcast::<TagIdNameId>()?),
             StructType::TaskDescription => Ok(from.as_any_box().downcast::<TaskDescription>()?),
             StructType::TaskFilterSpec => Ok(from.as_any_box().downcast::<TaskFilterSpec>()?),
             StructType::TaskFilterSpecByEntity => Ok(from.as_any_box().downcast::<TaskFilterSpecByEntity>()?),
@@ -8653,6 +8919,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::TaskReasonSchedule => Ok(from.as_any_box().downcast::<TaskReasonSchedule>()?),
             StructType::TaskReasonSystem => Ok(from.as_any_box().downcast::<TaskReasonSystem>()?),
             StructType::TaskReasonUser => Ok(from.as_any_box().downcast::<TaskReasonUser>()?),
+            StructType::TransitGatewayConfigInfo => Ok(from.as_any_box().downcast::<TransitGatewayConfigInfo>()?),
+            StructType::TransitGatewayConfigSpec => Ok(from.as_any_box().downcast::<TransitGatewayConfigSpec>()?),
+            StructType::TransitGatewayCreateSpec => Ok(from.as_any_box().downcast::<TransitGatewayCreateSpec>()?),
             StructType::UpdateVirtualMachineFilesResult => Ok(from.as_any_box().downcast::<UpdateVirtualMachineFilesResult>()?),
             StructType::UpdateVirtualMachineFilesResultFailedVmFileInfo => Ok(from.as_any_box().downcast::<UpdateVirtualMachineFilesResultFailedVmFileInfo>()?),
             StructType::UserSearchResult => Ok(from.as_any_box().downcast::<UserSearchResult>()?),
@@ -8852,6 +9121,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::ClusterVmToolsMonitoringSettings => Ok(from.as_any_box().downcast::<ClusterVmToolsMonitoringSettings>()?),
             StructType::VsanAttachToSrOperation => Ok(from.as_any_box().downcast::<VsanAttachToSrOperation>()?),
             StructType::VsanCapability => Ok(from.as_any_box().downcast::<VsanCapability>()?),
+            StructType::VsanClientServerHciMeshDitEncryptionHealthSummary => Ok(from.as_any_box().downcast::<VsanClientServerHciMeshDitEncryptionHealthSummary>()?),
             StructType::VsanClusterAdvCfgSyncHostResult => Ok(from.as_any_box().downcast::<VsanClusterAdvCfgSyncHostResult>()?),
             StructType::VsanClusterAdvCfgSyncResult => Ok(from.as_any_box().downcast::<VsanClusterAdvCfgSyncResult>()?),
             StructType::VsanClusterBalancePerDiskInfo => Ok(from.as_any_box().downcast::<VsanClusterBalancePerDiskInfo>()?),
@@ -8863,6 +9133,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanClusterEncryptionHealthSummary => Ok(from.as_any_box().downcast::<VsanClusterEncryptionHealthSummary>()?),
             StructType::VsanClusterFileServiceHealthSummary => Ok(from.as_any_box().downcast::<VsanClusterFileServiceHealthSummary>()?),
             StructType::VsanClusterGlobalDedupHealthSummary => Ok(from.as_any_box().downcast::<VsanClusterGlobalDedupHealthSummary>()?),
+            StructType::VsanClusterHciMeshDitEncryptionHealthSummary => Ok(from.as_any_box().downcast::<VsanClusterHciMeshDitEncryptionHealthSummary>()?),
             StructType::VsanClusterHclInfo => Ok(from.as_any_box().downcast::<VsanClusterHclInfo>()?),
             StructType::VsanClusterHealthAction => Ok(from.as_any_box().downcast::<VsanClusterHealthAction>()?),
             StructType::VsanClusterHealthCheckInfo => Ok(from.as_any_box().downcast::<VsanClusterHealthCheckInfo>()?),
@@ -8894,11 +9165,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanClusterVMsHealthSummaryResult => Ok(from.as_any_box().downcast::<VsanClusterVMsHealthSummaryResult>()?),
             StructType::VsanClusterVmdkLoadTestResult => Ok(from.as_any_box().downcast::<VsanClusterVmdkLoadTestResult>()?),
             StructType::VsanClusterWhatifHostFailuresResult => Ok(from.as_any_box().downcast::<VsanClusterWhatifHostFailuresResult>()?),
+            StructType::VsanComponentBasicInfo => Ok(from.as_any_box().downcast::<VsanComponentBasicInfo>()?),
+            StructType::VsanComponentPlacement => Ok(from.as_any_box().downcast::<VsanComponentPlacement>()?),
             StructType::VsanConfigGeneration => Ok(from.as_any_box().downcast::<VsanConfigGeneration>()?),
             StructType::VsanDataDrivenApiAction => Ok(from.as_any_box().downcast::<VsanDataDrivenApiAction>()?),
             StructType::VsanDiagnosticsThreshold => Ok(from.as_any_box().downcast::<VsanDiagnosticsThreshold>()?),
             StructType::VsanDiskFormatConversionSpec => Ok(from.as_any_box().downcast::<VsanDiskFormatConversionSpec>()?),
             StructType::VimClusterVsanDiskMappingsConfigSpec => Ok(from.as_any_box().downcast::<VimClusterVsanDiskMappingsConfigSpec>()?),
+            StructType::VsanEffectiveSpaceUsage => Ok(from.as_any_box().downcast::<VsanEffectiveSpaceUsage>()?),
             StructType::VsanEntitySpaceUsage => Ok(from.as_any_box().downcast::<VsanEntitySpaceUsage>()?),
             StructType::VimClusterVsanFaultDomainSpec => Ok(from.as_any_box().downcast::<VimClusterVsanFaultDomainSpec>()?),
             StructType::VsanFaultDomainDestroySpec => Ok(from.as_any_box().downcast::<VsanFaultDomainDestroySpec>()?),
@@ -8913,6 +9187,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanHealthConfirmationDialog => Ok(from.as_any_box().downcast::<VsanHealthConfirmationDialog>()?),
             StructType::VsanHealthCorrelation => Ok(from.as_any_box().downcast::<VsanHealthCorrelation>()?),
             StructType::VsanHealthExtMgmtPreCheckResult => Ok(from.as_any_box().downcast::<VsanHealthExtMgmtPreCheckResult>()?),
+            StructType::VsanHealthStatusCounts => Ok(from.as_any_box().downcast::<VsanHealthStatusCounts>()?),
             StructType::VsanHealthTroubleshooting => Ok(from.as_any_box().downcast::<VsanHealthTroubleshooting>()?),
             StructType::VsanHistoricalHealthQuerySpec => Ok(from.as_any_box().downcast::<VsanHistoricalHealthQuerySpec>()?),
             StructType::VsanHistoricalHealthTest => Ok(from.as_any_box().downcast::<VsanHistoricalHealthTest>()?),
@@ -8942,6 +9217,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanObjectIdentity => Ok(from.as_any_box().downcast::<VsanObjectIdentity>()?),
             StructType::VsanObjectIdentityAndHealth => Ok(from.as_any_box().downcast::<VsanObjectIdentityAndHealth>()?),
             StructType::VsanObjectInformation => Ok(from.as_any_box().downcast::<VsanObjectInformation>()?),
+            StructType::VsanObjectPlacement => Ok(from.as_any_box().downcast::<VsanObjectPlacement>()?),
+            StructType::VsanObjectPlacementDetails => Ok(from.as_any_box().downcast::<VsanObjectPlacementDetails>()?),
             StructType::VsanObjectQuerySpec => Ok(from.as_any_box().downcast::<VsanObjectQuerySpec>()?),
             StructType::VsanObjectSpaceSummary => Ok(from.as_any_box().downcast::<VsanObjectSpaceSummary>()?),
             StructType::VsanPerfDiagnoseQuerySpec => Ok(from.as_any_box().downcast::<VsanPerfDiagnoseQuerySpec>()?),
@@ -8951,6 +9228,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanPerfEntityType => Ok(from.as_any_box().downcast::<VsanPerfEntityType>()?),
             StructType::VsanPerfGraph => Ok(from.as_any_box().downcast::<VsanPerfGraph>()?),
             StructType::VsanPerfHotspotEntitiesMetrics => Ok(from.as_any_box().downcast::<VsanPerfHotspotEntitiesMetrics>()?),
+            StructType::VsanPerfHotspotEntityType => Ok(from.as_any_box().downcast::<VsanPerfHotspotEntityType>()?),
             StructType::VsanPerfHotspotQuerySpec => Ok(from.as_any_box().downcast::<VsanPerfHotspotQuerySpec>()?),
             StructType::VsanPerfMasterInformation => Ok(from.as_any_box().downcast::<VsanPerfMasterInformation>()?),
             StructType::VsanPerfMemberInfo => Ok(from.as_any_box().downcast::<VsanPerfMemberInfo>()?),
@@ -8965,7 +9243,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanPerfTopEntity => Ok(from.as_any_box().downcast::<VsanPerfTopEntity>()?),
             StructType::VsanPerfTopQuerySpec => Ok(from.as_any_box().downcast::<VsanPerfTopQuerySpec>()?),
             StructType::VsanPerfsvcConfig => Ok(from.as_any_box().downcast::<VsanPerfsvcConfig>()?),
+            StructType::VsanQueryPhysicalPlacementSpecs => Ok(from.as_any_box().downcast::<VsanQueryPhysicalPlacementSpecs>()?),
             StructType::VsanRemoteClusterQuerySpec => Ok(from.as_any_box().downcast::<VsanRemoteClusterQuerySpec>()?),
+            StructType::VsanSnapshotSpace => Ok(from.as_any_box().downcast::<VsanSnapshotSpace>()?),
             StructType::VsanSpaceQuerySpec => Ok(from.as_any_box().downcast::<VsanSpaceQuerySpec>()?),
             StructType::VsanSpaceUsage => Ok(from.as_any_box().downcast::<VsanSpaceUsage>()?),
             StructType::VsanSpaceUsageDetailResult => Ok(from.as_any_box().downcast::<VsanSpaceUsageDetailResult>()?),
@@ -8989,6 +9269,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::CnsFileBackingDetails => Ok(from.as_any_box().downcast::<CnsFileBackingDetails>()?),
             StructType::CnsVsanFileShareBackingDetails => Ok(from.as_any_box().downcast::<CnsVsanFileShareBackingDetails>()?),
             StructType::CnsBaseCreateSpec => Ok(from.as_any_box().downcast::<CnsBaseCreateSpec>()?),
+            StructType::CnsBlockCreateSpec => Ok(from.as_any_box().downcast::<CnsBlockCreateSpec>()?),
             StructType::CnsFileCreateSpec => Ok(from.as_any_box().downcast::<CnsFileCreateSpec>()?),
             StructType::CnsVsanFileCreateSpec => Ok(from.as_any_box().downcast::<CnsVsanFileCreateSpec>()?),
             StructType::CnsContainerCluster => Ok(from.as_any_box().downcast::<CnsContainerCluster>()?),
@@ -9004,10 +9285,13 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::CnsSnapshotCreateSpec => Ok(from.as_any_box().downcast::<CnsSnapshotCreateSpec>()?),
             StructType::CnsSnapshotDeleteSpec => Ok(from.as_any_box().downcast::<CnsSnapshotDeleteSpec>()?),
             StructType::CnsSnapshotId => Ok(from.as_any_box().downcast::<CnsSnapshotId>()?),
+            StructType::CnsSyncVolumeSpec => Ok(from.as_any_box().downcast::<CnsSyncVolumeSpec>()?),
+            StructType::CnsUnregisterVolumeSpec => Ok(from.as_any_box().downcast::<CnsUnregisterVolumeSpec>()?),
             StructType::CnsVolume => Ok(from.as_any_box().downcast::<CnsVolume>()?),
             StructType::CnsVolumeAclConfigureSpec => Ok(from.as_any_box().downcast::<CnsVolumeAclConfigureSpec>()?),
             StructType::CnsVolumeAttachDetachSpec => Ok(from.as_any_box().downcast::<CnsVolumeAttachDetachSpec>()?),
             StructType::CnsVolumeCreateSpec => Ok(from.as_any_box().downcast::<CnsVolumeCreateSpec>()?),
+            StructType::CnsVolumeCryptoUpdateSpec => Ok(from.as_any_box().downcast::<CnsVolumeCryptoUpdateSpec>()?),
             StructType::CnsVolumeExtendSpec => Ok(from.as_any_box().downcast::<CnsVolumeExtendSpec>()?),
             StructType::CnsVolumeId => Ok(from.as_any_box().downcast::<CnsVolumeId>()?),
             StructType::CnsVolumeMetadata => Ok(from.as_any_box().downcast::<CnsVolumeMetadata>()?),
@@ -9021,6 +9305,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::CnsVolumeRelocateSpec => Ok(from.as_any_box().downcast::<CnsVolumeRelocateSpec>()?),
             StructType::CnsBlockVolumeRelocateSpec => Ok(from.as_any_box().downcast::<CnsBlockVolumeRelocateSpec>()?),
             StructType::CnsVolumeSource => Ok(from.as_any_box().downcast::<CnsVolumeSource>()?),
+            StructType::CnsCloneVolumeSource => Ok(from.as_any_box().downcast::<CnsCloneVolumeSource>()?),
             StructType::CnsSnapshotVolumeSource => Ok(from.as_any_box().downcast::<CnsSnapshotVolumeSource>()?),
             StructType::DistributedVirtualPort => Ok(from.as_any_box().downcast::<DistributedVirtualPort>()?),
             StructType::DvPortConfigInfo => Ok(from.as_any_box().downcast::<DvPortConfigInfo>()?),
@@ -9033,10 +9318,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::DvPortState => Ok(from.as_any_box().downcast::<DvPortState>()?),
             StructType::DvPortgroupConfigInfo => Ok(from.as_any_box().downcast::<DvPortgroupConfigInfo>()?),
             StructType::DvPortgroupConfigSpec => Ok(from.as_any_box().downcast::<DvPortgroupConfigSpec>()?),
+            StructType::DvPortgroupNsxConfig => Ok(from.as_any_box().downcast::<DvPortgroupNsxConfig>()?),
             StructType::DistributedVirtualPortgroupNsxPortgroupOperationResult => Ok(from.as_any_box().downcast::<DistributedVirtualPortgroupNsxPortgroupOperationResult>()?),
             StructType::DvPortgroupPolicy => Ok(from.as_any_box().downcast::<DvPortgroupPolicy>()?),
             StructType::VMwareDvsPortgroupPolicy => Ok(from.as_any_box().downcast::<VMwareDvsPortgroupPolicy>()?),
             StructType::DistributedVirtualPortgroupProblem => Ok(from.as_any_box().downcast::<DistributedVirtualPortgroupProblem>()?),
+            StructType::DvPortgroupNsxSubnetAddressInfo => Ok(from.as_any_box().downcast::<DvPortgroupNsxSubnetAddressInfo>()?),
             StructType::DistributedVirtualPortgroupInfo => Ok(from.as_any_box().downcast::<DistributedVirtualPortgroupInfo>()?),
             StructType::DistributedVirtualSwitchInfo => Ok(from.as_any_box().downcast::<DistributedVirtualSwitchInfo>()?),
             StructType::DistributedVirtualSwitchManagerCompatibilityResult => Ok(from.as_any_box().downcast::<DistributedVirtualSwitchManagerCompatibilityResult>()?),
@@ -9049,6 +9336,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::DistributedVirtualSwitchManagerHostDvsMembershipFilter => Ok(from.as_any_box().downcast::<DistributedVirtualSwitchManagerHostDvsMembershipFilter>()?),
             StructType::DistributedVirtualSwitchManagerImportResult => Ok(from.as_any_box().downcast::<DistributedVirtualSwitchManagerImportResult>()?),
             StructType::DvsManagerPhysicalNicsList => Ok(from.as_any_box().downcast::<DvsManagerPhysicalNicsList>()?),
+            StructType::DistributedVirtualSwitchManagerSpanInfo => Ok(from.as_any_box().downcast::<DistributedVirtualSwitchManagerSpanInfo>()?),
             StructType::EntityBackup => Ok(from.as_any_box().downcast::<EntityBackup>()?),
             StructType::EntityBackupConfig => Ok(from.as_any_box().downcast::<EntityBackupConfig>()?),
             StructType::DvsFilterSpecConnecteeSpec => Ok(from.as_any_box().downcast::<DvsFilterSpecConnecteeSpec>()?),
@@ -9069,6 +9357,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VMwareDvsMtuHealthCheckResult => Ok(from.as_any_box().downcast::<VMwareDvsMtuHealthCheckResult>()?),
             StructType::VMwareDvsVlanHealthCheckResult => Ok(from.as_any_box().downcast::<VMwareDvsVlanHealthCheckResult>()?),
             StructType::VMwareDvsTeamingHealthCheckResult => Ok(from.as_any_box().downcast::<VMwareDvsTeamingHealthCheckResult>()?),
+            StructType::DistributedVirtualSwitchHostMemberHostPerfNicOffloadState => Ok(from.as_any_box().downcast::<DistributedVirtualSwitchHostMemberHostPerfNicOffloadState>()?),
             StructType::DistributedVirtualSwitchHostMemberHostUplinkState => Ok(from.as_any_box().downcast::<DistributedVirtualSwitchHostMemberHostUplinkState>()?),
             StructType::DistributedVirtualSwitchHostMemberPnicSpec => Ok(from.as_any_box().downcast::<DistributedVirtualSwitchHostMemberPnicSpec>()?),
             StructType::HostMemberRuntimeInfo => Ok(from.as_any_box().downcast::<HostMemberRuntimeInfo>()?),
@@ -9117,10 +9406,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VMwareDvsLagVlanConfig => Ok(from.as_any_box().downcast::<VMwareDvsLagVlanConfig>()?),
             StructType::VMwareDvsMtuCapability => Ok(from.as_any_box().downcast::<VMwareDvsMtuCapability>()?),
             StructType::VmwareDistributedVirtualSwitchNetworkOffloadConfig => Ok(from.as_any_box().downcast::<VmwareDistributedVirtualSwitchNetworkOffloadConfig>()?),
+            StructType::VMwareDvsPerfNicOffloadCapability => Ok(from.as_any_box().downcast::<VMwareDvsPerfNicOffloadCapability>()?),
             StructType::VMwareDvsPvlanConfigSpec => Ok(from.as_any_box().downcast::<VMwareDvsPvlanConfigSpec>()?),
             StructType::VMwareDvsPvlanMapEntry => Ok(from.as_any_box().downcast::<VMwareDvsPvlanMapEntry>()?),
             StructType::VmwareDistributedVirtualSwitchRealTimeConfig => Ok(from.as_any_box().downcast::<VmwareDistributedVirtualSwitchRealTimeConfig>()?),
             StructType::VmwareDistributedVirtualSwitchRealTimeLanAnnotation => Ok(from.as_any_box().downcast::<VmwareDistributedVirtualSwitchRealTimeLanAnnotation>()?),
+            StructType::VMwareDvsSystemTrafficCapabilities => Ok(from.as_any_box().downcast::<VMwareDvsSystemTrafficCapabilities>()?),
             StructType::VMwareDvsVspanConfigSpec => Ok(from.as_any_box().downcast::<VMwareDvsVspanConfigSpec>()?),
             StructType::VMwareDvsVspanCapability => Ok(from.as_any_box().downcast::<VMwareDvsVspanCapability>()?),
             StructType::VMwareVspanPort => Ok(from.as_any_box().downcast::<VMwareVspanPort>()?),
@@ -9174,6 +9465,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::NetworkEventArgument => Ok(from.as_any_box().downcast::<NetworkEventArgument>()?),
             StructType::ResourcePoolEventArgument => Ok(from.as_any_box().downcast::<ResourcePoolEventArgument>()?),
             StructType::ScheduledTaskEventArgument => Ok(from.as_any_box().downcast::<ScheduledTaskEventArgument>()?),
+            StructType::TgwEventArgument => Ok(from.as_any_box().downcast::<TgwEventArgument>()?),
             StructType::VmEventArgument => Ok(from.as_any_box().downcast::<VmEventArgument>()?),
             StructType::ProfileEventArgument => Ok(from.as_any_box().downcast::<ProfileEventArgument>()?),
             StructType::RoleEventArgument => Ok(from.as_any_box().downcast::<RoleEventArgument>()?),
@@ -9418,6 +9710,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::HostLowLevelProvisioningManagerVmMigrationStatus => Ok(from.as_any_box().downcast::<HostLowLevelProvisioningManagerVmMigrationStatus>()?),
             StructType::HostLowLevelProvisioningManagerVmRecoveryInfo => Ok(from.as_any_box().downcast::<HostLowLevelProvisioningManagerVmRecoveryInfo>()?),
             StructType::HostMaintenanceSpec => Ok(from.as_any_box().downcast::<HostMaintenanceSpec>()?),
+            StructType::HostMaintenanceSpecEvacuationMode => Ok(from.as_any_box().downcast::<HostMaintenanceSpecEvacuationMode>()?),
             StructType::ServiceConsoleReservationInfo => Ok(from.as_any_box().downcast::<ServiceConsoleReservationInfo>()?),
             StructType::VirtualMachineMemoryReservationInfo => Ok(from.as_any_box().downcast::<VirtualMachineMemoryReservationInfo>()?),
             StructType::VirtualMachineMemoryReservationSpec => Ok(from.as_any_box().downcast::<VirtualMachineMemoryReservationSpec>()?),
@@ -9496,10 +9789,12 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::HostPatchManagerStatusPrerequisitePatch => Ok(from.as_any_box().downcast::<HostPatchManagerStatusPrerequisitePatch>()?),
             StructType::HostPathSelectionPolicyOption => Ok(from.as_any_box().downcast::<HostPathSelectionPolicyOption>()?),
             StructType::HostPciDevice => Ok(from.as_any_box().downcast::<HostPciDevice>()?),
+            StructType::HostPciDeviceDirectPathInfo => Ok(from.as_any_box().downcast::<HostPciDeviceDirectPathInfo>()?),
             StructType::HostPciPassthruConfig => Ok(from.as_any_box().downcast::<HostPciPassthruConfig>()?),
             StructType::HostSriovConfig => Ok(from.as_any_box().downcast::<HostSriovConfig>()?),
             StructType::HostPciPassthruInfo => Ok(from.as_any_box().downcast::<HostPciPassthruInfo>()?),
             StructType::HostSriovInfo => Ok(from.as_any_box().downcast::<HostSriovInfo>()?),
+            StructType::HostPciPassthruInfoDirectPathState => Ok(from.as_any_box().downcast::<HostPciPassthruInfoDirectPathState>()?),
             StructType::HostPersistentMemoryInfo => Ok(from.as_any_box().downcast::<HostPersistentMemoryInfo>()?),
             StructType::PhysicalNic => Ok(from.as_any_box().downcast::<PhysicalNic>()?),
             StructType::PhysicalNicCdpDeviceCapability => Ok(from.as_any_box().downcast::<PhysicalNicCdpDeviceCapability>()?),
@@ -9519,6 +9814,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::HostPlugStoreTopologyPlugin => Ok(from.as_any_box().downcast::<HostPlugStoreTopologyPlugin>()?),
             StructType::HostPlugStoreTopologyTarget => Ok(from.as_any_box().downcast::<HostPlugStoreTopologyTarget>()?),
             StructType::PnicTsoInfo => Ok(from.as_any_box().downcast::<PnicTsoInfo>()?),
+            StructType::PodVmInfo => Ok(from.as_any_box().downcast::<PodVmInfo>()?),
+            StructType::PodVmOverheadInfo => Ok(from.as_any_box().downcast::<PodVmOverheadInfo>()?),
             StructType::HostPortGroup => Ok(from.as_any_box().downcast::<HostPortGroup>()?),
             StructType::HostPortGroupConfig => Ok(from.as_any_box().downcast::<HostPortGroupConfig>()?),
             StructType::HostPortGroupPort => Ok(from.as_any_box().downcast::<HostPortGroupPort>()?),
@@ -9617,6 +9914,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::HostTpmCommandEventDetails => Ok(from.as_any_box().downcast::<HostTpmCommandEventDetails>()?),
             StructType::HostTpmOptionEventDetails => Ok(from.as_any_box().downcast::<HostTpmOptionEventDetails>()?),
             StructType::HostTpmSoftwareComponentEventDetails => Ok(from.as_any_box().downcast::<HostTpmSoftwareComponentEventDetails>()?),
+            StructType::HostTpmSystemVersionEventDetails => Ok(from.as_any_box().downcast::<HostTpmSystemVersionEventDetails>()?),
             StructType::HostTpmVersionEventDetails => Ok(from.as_any_box().downcast::<HostTpmVersionEventDetails>()?),
             StructType::HostTpmEventLogEntry => Ok(from.as_any_box().downcast::<HostTpmEventLogEntry>()?),
             StructType::HostTrustAuthorityAttestationInfo => Ok(from.as_any_box().downcast::<HostTrustAuthorityAttestationInfo>()?),
@@ -9693,11 +9991,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanHclFirmwareFile => Ok(from.as_any_box().downcast::<VsanHclFirmwareFile>()?),
             StructType::VsanHclFirmwareUpdateSpec => Ok(from.as_any_box().downcast::<VsanHclFirmwareUpdateSpec>()?),
             StructType::VsanHclMemInfo => Ok(from.as_any_box().downcast::<VsanHclMemInfo>()?),
+            StructType::VsanHealthObjectStats => Ok(from.as_any_box().downcast::<VsanHealthObjectStats>()?),
             StructType::VsanHealthQuerySpec => Ok(from.as_any_box().downcast::<VsanHealthQuerySpec>()?),
             StructType::VsanHostCimProviderInfo => Ok(from.as_any_box().downcast::<VsanHostCimProviderInfo>()?),
             StructType::VsanHostEmmSummary => Ok(from.as_any_box().downcast::<VsanHostEmmSummary>()?),
             StructType::VsanHostFwComponent => Ok(from.as_any_box().downcast::<VsanHostFwComponent>()?),
             StructType::VsanHostGlobalDedupConfigHealthSummary => Ok(from.as_any_box().downcast::<VsanHostGlobalDedupConfigHealthSummary>()?),
+            StructType::VsanHostHciMeshDitEncryptionHealth => Ok(from.as_any_box().downcast::<VsanHostHciMeshDitEncryptionHealth>()?),
+            StructType::VsanHostHciMeshDitEncryptionHealthSummary => Ok(from.as_any_box().downcast::<VsanHostHciMeshDitEncryptionHealthSummary>()?),
             StructType::VsanHostHclInfo => Ok(from.as_any_box().downcast::<VsanHostHclInfo>()?),
             StructType::VsanHostHealthSystemStatusResult => Ok(from.as_any_box().downcast::<VsanHostHealthSystemStatusResult>()?),
             StructType::VsanHostHwDeviceId => Ok(from.as_any_box().downcast::<VsanHostHwDeviceId>()?),
@@ -9718,6 +10019,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanIoInsightInfo => Ok(from.as_any_box().downcast::<VsanIoInsightInfo>()?),
             StructType::VsanIperfClientSpec => Ok(from.as_any_box().downcast::<VsanIperfClientSpec>()?),
             StructType::VsanKmsHealth => Ok(from.as_any_box().downcast::<VsanKmsHealth>()?),
+            StructType::VsanLicensedDiskResult => Ok(from.as_any_box().downcast::<VsanLicensedDiskResult>()?),
             StructType::VsanLimitHealthResult => Ok(from.as_any_box().downcast::<VsanLimitHealthResult>()?),
             StructType::VsanNetworkDiagnosticsHealthInfo => Ok(from.as_any_box().downcast::<VsanNetworkDiagnosticsHealthInfo>()?),
             StructType::VsanNetworkHealthResult => Ok(from.as_any_box().downcast::<VsanNetworkHealthResult>()?),
@@ -9767,6 +10069,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::NetBiosConfigInfo => Ok(from.as_any_box().downcast::<NetBiosConfigInfo>()?),
             StructType::WinNetBiosConfigInfo => Ok(from.as_any_box().downcast::<WinNetBiosConfigInfo>()?),
             StructType::ArrayUpdateSpec => Ok(from.as_any_box().downcast::<ArrayUpdateSpec>()?),
+            StructType::TagSpec => Ok(from.as_any_box().downcast::<TagSpec>()?),
             StructType::ClusterDasVmConfigSpec => Ok(from.as_any_box().downcast::<ClusterDasVmConfigSpec>()?),
             StructType::ClusterDatastoreUpdateSpec => Ok(from.as_any_box().downcast::<ClusterDatastoreUpdateSpec>()?),
             StructType::ClusterDpmHostConfigSpec => Ok(from.as_any_box().downcast::<ClusterDpmHostConfigSpec>()?),
@@ -10007,6 +10310,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::GuestInfo => Ok(from.as_any_box().downcast::<GuestInfo>()?),
             StructType::GuestInfoCustomizationInfo => Ok(from.as_any_box().downcast::<GuestInfoCustomizationInfo>()?),
             StructType::GuestDiskInfo => Ok(from.as_any_box().downcast::<GuestDiskInfo>()?),
+            StructType::VirtualMachineGuestRebootStatus => Ok(from.as_any_box().downcast::<VirtualMachineGuestRebootStatus>()?),
             StructType::GuestInfoNamespaceGenerationInfo => Ok(from.as_any_box().downcast::<GuestInfoNamespaceGenerationInfo>()?),
             StructType::GuestNicInfo => Ok(from.as_any_box().downcast::<GuestNicInfo>()?),
             StructType::GuestScreenInfo => Ok(from.as_any_box().downcast::<GuestScreenInfo>()?),
@@ -10101,6 +10405,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VirtualMachineVirtualNuma => Ok(from.as_any_box().downcast::<VirtualMachineVirtualNuma>()?),
             StructType::VirtualMachineVirtualNumaInfo => Ok(from.as_any_box().downcast::<VirtualMachineVirtualNumaInfo>()?),
             StructType::VirtualMachineVirtualPMem => Ok(from.as_any_box().downcast::<VirtualMachineVirtualPMem>()?),
+            StructType::VmPlacementPolicy => Ok(from.as_any_box().downcast::<VmPlacementPolicy>()?),
+            StructType::VmToVmGroupsAntiAffinity => Ok(from.as_any_box().downcast::<VmToVmGroupsAntiAffinity>()?),
+            StructType::VmVmAffinity => Ok(from.as_any_box().downcast::<VmVmAffinity>()?),
+            StructType::VmVmAntiAffinity => Ok(from.as_any_box().downcast::<VmVmAntiAffinity>()?),
             StructType::CheckResult => Ok(from.as_any_box().downcast::<CheckResult>()?),
             StructType::CustomizationAdapterMapping => Ok(from.as_any_box().downcast::<CustomizationAdapterMapping>()?),
             StructType::CustomizationGlobalIpSettings => Ok(from.as_any_box().downcast::<CustomizationGlobalIpSettings>()?),
@@ -10111,12 +10419,15 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::CustomizationIdentification => Ok(from.as_any_box().downcast::<CustomizationIdentification>()?),
             StructType::CustomizationIdentitySettings => Ok(from.as_any_box().downcast::<CustomizationIdentitySettings>()?),
             StructType::CustomizationCloudinitPrep => Ok(from.as_any_box().downcast::<CustomizationCloudinitPrep>()?),
+            StructType::CustomizationLinuxFlexPrep => Ok(from.as_any_box().downcast::<CustomizationLinuxFlexPrep>()?),
             StructType::CustomizationLinuxPrep => Ok(from.as_any_box().downcast::<CustomizationLinuxPrep>()?),
             StructType::CustomizationSysprep => Ok(from.as_any_box().downcast::<CustomizationSysprep>()?),
             StructType::CustomizationSysprepText => Ok(from.as_any_box().downcast::<CustomizationSysprepText>()?),
+            StructType::CustomizationWindowsFlexPrep => Ok(from.as_any_box().downcast::<CustomizationWindowsFlexPrep>()?),
             StructType::CustomizationIpGenerator => Ok(from.as_any_box().downcast::<CustomizationIpGenerator>()?),
             StructType::CustomizationCustomIpGenerator => Ok(from.as_any_box().downcast::<CustomizationCustomIpGenerator>()?),
             StructType::CustomizationDhcpIpGenerator => Ok(from.as_any_box().downcast::<CustomizationDhcpIpGenerator>()?),
+            StructType::CustomizationDisableIpV4 => Ok(from.as_any_box().downcast::<CustomizationDisableIpV4>()?),
             StructType::CustomizationFixedIp => Ok(from.as_any_box().downcast::<CustomizationFixedIp>()?),
             StructType::CustomizationUnknownIpGenerator => Ok(from.as_any_box().downcast::<CustomizationUnknownIpGenerator>()?),
             StructType::CustomizationIpV6Generator => Ok(from.as_any_box().downcast::<CustomizationIpV6Generator>()?),
@@ -10390,9 +10701,13 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::FaultDomainInfo => Ok(from.as_any_box().downcast::<FaultDomainInfo>()?),
             StructType::ReplicationGroupId => Ok(from.as_any_box().downcast::<ReplicationGroupId>()?),
             StructType::ReplicationSpec => Ok(from.as_any_box().downcast::<ReplicationSpec>()?),
+            StructType::VsanAutoRaidConfig => Ok(from.as_any_box().downcast::<VsanAutoRaidConfig>()?),
+            StructType::VsanAutoRaidInfo => Ok(from.as_any_box().downcast::<VsanAutoRaidInfo>()?),
             StructType::VsanCapacityReservationInfo => Ok(from.as_any_box().downcast::<VsanCapacityReservationInfo>()?),
+            StructType::VsanClientUnicastConfig => Ok(from.as_any_box().downcast::<VsanClientUnicastConfig>()?),
             StructType::ClusterRuntimeInfo => Ok(from.as_any_box().downcast::<ClusterRuntimeInfo>()?),
             StructType::VsanCompatibilityCheckResult => Ok(from.as_any_box().downcast::<VsanCompatibilityCheckResult>()?),
+            StructType::VsanCyberRecoveryConfig => Ok(from.as_any_box().downcast::<VsanCyberRecoveryConfig>()?),
             StructType::VimVsanDataEfficiencyCapacityState => Ok(from.as_any_box().downcast::<VimVsanDataEfficiencyCapacityState>()?),
             StructType::VsanDataEfficiencyConfig => Ok(from.as_any_box().downcast::<VsanDataEfficiencyConfig>()?),
             StructType::VsanDataEfficiencyConfigEx => Ok(from.as_any_box().downcast::<VsanDataEfficiencyConfigEx>()?),
@@ -10407,6 +10722,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanDirectoryServerConfig => Ok(from.as_any_box().downcast::<VsanDirectoryServerConfig>()?),
             StructType::ActiveVsanDirectoryServerConfig => Ok(from.as_any_box().downcast::<ActiveVsanDirectoryServerConfig>()?),
             StructType::DiskClaimConfiguration => Ok(from.as_any_box().downcast::<DiskClaimConfiguration>()?),
+            StructType::DiskInfo => Ok(from.as_any_box().downcast::<DiskInfo>()?),
+            StructType::DpDaemonHealth => Ok(from.as_any_box().downcast::<DpDaemonHealth>()?),
             StructType::VsanEntityCompatibilityResult => Ok(from.as_any_box().downcast::<VsanEntityCompatibilityResult>()?),
             StructType::EntityResourceCheckDetails => Ok(from.as_any_box().downcast::<EntityResourceCheckDetails>()?),
             StructType::VsanDiskGroupResourceCheckResult => Ok(from.as_any_box().downcast::<VsanDiskGroupResourceCheckResult>()?),
@@ -10418,6 +10735,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanResourceCheckComponentResult => Ok(from.as_any_box().downcast::<VsanResourceCheckComponentResult>()?),
             StructType::VsanResourceCheckDataPersistenceResult => Ok(from.as_any_box().downcast::<VsanResourceCheckDataPersistenceResult>()?),
             StructType::VsanResourceCheckVsanResult => Ok(from.as_any_box().downcast::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceResourceCheckResult>()?),
             StructType::VsanStoragePoolResourceCheckResult => Ok(from.as_any_box().downcast::<VsanStoragePoolResourceCheckResult>()?),
             StructType::VsanFileServiceConfig => Ok(from.as_any_box().downcast::<VsanFileServiceConfig>()?),
             StructType::VsanFileServiceDomain => Ok(from.as_any_box().downcast::<VsanFileServiceDomain>()?),
@@ -10436,6 +10754,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanFileShareSnapshotQueryResult => Ok(from.as_any_box().downcast::<VsanFileShareSnapshotQueryResult>()?),
             StructType::VsanFileShareSnapshotQuerySpec => Ok(from.as_any_box().downcast::<VsanFileShareSnapshotQuerySpec>()?),
             StructType::VsanHciMeshDatastoreSource => Ok(from.as_any_box().downcast::<VsanHciMeshDatastoreSource>()?),
+            StructType::VsanHostSiteMaintenanceStatus => Ok(from.as_any_box().downcast::<VsanHostSiteMaintenanceStatus>()?),
             StructType::VsanIoDiagnosticsFailedCheck => Ok(from.as_any_box().downcast::<VsanIoDiagnosticsFailedCheck>()?),
             StructType::VsanIoDiagnosticsInstance => Ok(from.as_any_box().downcast::<VsanIoDiagnosticsInstance>()?),
             StructType::VsanIoDiagnosticsInstanceEvent => Ok(from.as_any_box().downcast::<VsanIoDiagnosticsInstanceEvent>()?),
@@ -10476,12 +10795,22 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanResourceCheckStatus => Ok(from.as_any_box().downcast::<VsanResourceCheckStatus>()?),
             StructType::VsanResourceCheckTaskDetails => Ok(from.as_any_box().downcast::<VsanResourceCheckTaskDetails>()?),
             StructType::VsanDiskDataEvacuationResourceCheckTaskDetails => Ok(from.as_any_box().downcast::<VsanDiskDataEvacuationResourceCheckTaskDetails>()?),
+            StructType::VsanSiteMaintenanceCheckTaskDetails => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceCheckTaskDetails>()?),
             StructType::ResyncIopsInfo => Ok(from.as_any_box().downcast::<ResyncIopsInfo>()?),
             StructType::VsanRuntimeStatsHostMap => Ok(from.as_any_box().downcast::<VsanRuntimeStatsHostMap>()?),
             StructType::SsdEnduranceThresholdSpec => Ok(from.as_any_box().downcast::<SsdEnduranceThresholdSpec>()?),
             StructType::VsanServerHostUnicastInfo => Ok(from.as_any_box().downcast::<VsanServerHostUnicastInfo>()?),
             StructType::VsanSharedWitnessCompatibilityResult => Ok(from.as_any_box().downcast::<VsanSharedWitnessCompatibilityResult>()?),
+            StructType::VsanSiteMaintenanceInfo => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceInfo>()?),
+            StructType::VsanSiteMaintenancePrecheckDetail => Ok(from.as_any_box().downcast::<VsanSiteMaintenancePrecheckDetail>()?),
+            StructType::VsanSiteMaintenancePrecheckStatus => Ok(from.as_any_box().downcast::<VsanSiteMaintenancePrecheckStatus>()?),
+            StructType::VsanSiteMaintenanceSpec => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceSpec>()?),
             StructType::VsanSnapServiceConfig => Ok(from.as_any_box().downcast::<VsanSnapServiceConfig>()?),
+            StructType::VsanSiteMaintenanceVmPowerOffInfo => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceVmPowerOffInfo>()?),
+            StructType::VsanVbossConfig => Ok(from.as_any_box().downcast::<VsanVbossConfig>()?),
+            StructType::VsanVbossClusterConfig => Ok(from.as_any_box().downcast::<VsanVbossClusterConfig>()?),
+            StructType::VsanVbossHostConfig => Ok(from.as_any_box().downcast::<VsanVbossHostConfig>()?),
+            StructType::VsanVbossObjectStoreConfig => Ok(from.as_any_box().downcast::<VsanVbossObjectStoreConfig>()?),
             StructType::VcRemoteVsanServerClusterConfig => Ok(from.as_any_box().downcast::<VcRemoteVsanServerClusterConfig>()?),
             StructType::VcRemoteVsanServerClusterInfo => Ok(from.as_any_box().downcast::<VcRemoteVsanServerClusterInfo>()?),
             StructType::VsanIscsiVipConfigSpec => Ok(from.as_any_box().downcast::<VsanIscsiVipConfigSpec>()?),
@@ -10578,6 +10907,9 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanHostAbortWipeDiskStatus => Ok(from.as_any_box().downcast::<VsanHostAbortWipeDiskStatus>()?),
             StructType::VsanHostAboutInfoEx => Ok(from.as_any_box().downcast::<VsanHostAboutInfoEx>()?),
             StructType::VsanAddStoragePoolDiskSpec => Ok(from.as_any_box().downcast::<VsanAddStoragePoolDiskSpec>()?),
+            StructType::VsanHostClientClusterUnicastConfig => Ok(from.as_any_box().downcast::<VsanHostClientClusterUnicastConfig>()?),
+            StructType::VsanHostClientClusterUnicastInfo => Ok(from.as_any_box().downcast::<VsanHostClientClusterUnicastInfo>()?),
+            StructType::VsanHostClientHostUnicastInfo => Ok(from.as_any_box().downcast::<VsanHostClientHostUnicastInfo>()?),
             StructType::VsanHostClusterStatus => Ok(from.as_any_box().downcast::<VsanHostClusterStatus>()?),
             StructType::VsanHostClusterStatusState => Ok(from.as_any_box().downcast::<VsanHostClusterStatusState>()?),
             StructType::VsanHostClusterStatusStateCompletionEstimate => Ok(from.as_any_box().downcast::<VsanHostClusterStatusStateCompletionEstimate>()?),
@@ -10614,6 +10946,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VsanHostServerClusterUnicastConfig => Ok(from.as_any_box().downcast::<VsanHostServerClusterUnicastConfig>()?),
             StructType::VsanHostServerClusterUnicastInfo => Ok(from.as_any_box().downcast::<VsanHostServerClusterUnicastInfo>()?),
             StructType::SiteAffinityInfo => Ok(from.as_any_box().downcast::<SiteAffinityInfo>()?),
+            StructType::VsanSiteTakeoverConfig => Ok(from.as_any_box().downcast::<VsanSiteTakeoverConfig>()?),
             StructType::VsanStoragePoolDisk => Ok(from.as_any_box().downcast::<VsanStoragePoolDisk>()?),
             StructType::VimVsanHostStoragePoolDiskInfo => Ok(from.as_any_box().downcast::<VimVsanHostStoragePoolDiskInfo>()?),
             StructType::VimVsanHostStoragePoolInfo => Ok(from.as_any_box().downcast::<VimVsanHostStoragePoolInfo>()?),
@@ -10665,6 +10998,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::VslmTagEntry => Ok(from.as_any_box().downcast::<VslmTagEntry>()?),
             StructType::VslmVClockInfo => Ok(from.as_any_box().downcast::<VslmVClockInfo>()?),
             StructType::VStorageObject => Ok(from.as_any_box().downcast::<VStorageObject>()?),
+            StructType::VStorageObjectAttachResult => Ok(from.as_any_box().downcast::<VStorageObjectAttachResult>()?),
+            StructType::VStorageObjectAttachSpec => Ok(from.as_any_box().downcast::<VStorageObjectAttachSpec>()?),
             StructType::VStorageObjectSnapshot => Ok(from.as_any_box().downcast::<VStorageObjectSnapshot>()?),
             StructType::VStorageObjectSnapshotDetails => Ok(from.as_any_box().downcast::<VStorageObjectSnapshotDetails>()?),
             StructType::VStorageObjectSnapshotInfo => Ok(from.as_any_box().downcast::<VStorageObjectSnapshotInfo>()?),
@@ -10677,6 +11012,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DataObjectT
             StructType::KeyAnyValue => Ok(from.as_any_box().downcast::<KeyAnyValue>()?),
             StructType::LocalizableMessage => Ok(from.as_any_box().downcast::<LocalizableMessage>()?),
             StructType::LocalizedMethodFault => Ok(from.as_any_box().downcast::<LocalizedMethodFault>()?),
+            StructType::AuthenticationRequiredChallenge => Ok(from.as_any_box().downcast::<AuthenticationRequiredChallenge>()?),
             StructType::PropertyChange => Ok(from.as_any_box().downcast::<PropertyChange>()?),
             StructType::PropertyFilterSpec => Ok(from.as_any_box().downcast::<PropertyFilterSpec>()?),
             StructType::PropertyFilterUpdate => Ok(from.as_any_box().downcast::<PropertyFilterUpdate>()?),
@@ -11043,21 +11379,21 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EamObjectRu
         }
     }
 }
-/// An issue represents a problem encountered while deploying and configurating agents
+/// An issue represents a problem encountered while deploying and configuring agents
 /// in a vCenter installation.
 /// 
 /// An issue conveys the type of problem and the
-/// entitity on which the problem has been encountered. Most issues are related to agents,
+/// entity on which the problem has been encountered. Most issues are related to agents,
 /// but they can also relate to an agency or a host.
 /// 
-/// The set of issues provided by the vSphere ESX Agent Manager describes the discrepency between
+/// The set of issues provided by the vSphere ESX Agent Manager describes the discrepancy between
 /// the _desired_ agent deployment state, as defined by the agency configurations,
 /// and the _actual_ deployment. The (@link EamObject.RuntimeInfo.Status.status)
 /// of an agency or agent is green if it has reached its goal state. It is
 /// marked as yellow if the vSphere ESX Agent Manager is actively working to bring the object
-/// to its goal state. It is red if there is a discrepency between the current state and
+/// to its goal state. It is red if there is a discrepancy between the current state and
 /// the desired state. In the red state, a set of issues are filed on the object that
-/// describe the reason for the discrepency between the desired and actual states.
+/// describe the reason for the discrepancy between the desired and actual states.
 /// 
 /// Issues are characterized as either active or passive remediable issues. For an active
 /// remediable issue, the vSphere ESX Agent Manager can actively try to solve the issue. For
@@ -11067,7 +11403,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EamObjectRu
 /// caused by an incomplete host configuration.
 /// 
 /// When <code>resolve</code> is called for an active remediable issue, the vSphere ESX Agent Manager
-/// starts performing the appropiate remediation steps for the particular issue. For a passive
+/// starts performing the appropriate remediation steps for the particular issue. For a passive
 /// remediable issue, the EAM manager simply checks if the condition
 /// still exists, and if not it removes the issue.
 /// 
@@ -14367,7 +14703,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterAgen
     }
 }
 /// A cluster agent Virtual Machine is expected to be deployed on a cluster, but
-/// the cluster agent Virtual Machine has not been deployed or has been exlicitly
+/// the cluster agent Virtual Machine has not been deployed or has been explicitly
 /// deleted from the cluster.
 /// 
 /// Typically more specific issue (a subclass of this
@@ -15532,6 +15868,8 @@ impl PbmPlacementRequirementTrait for PbmPlacementCapabilityConstraintsRequireme
 }
 impl PbmPlacementRequirementTrait for PbmPlacementCapabilityProfileRequirement {
 }
+impl PbmPlacementRequirementTrait for PbmPlacementZoneTopologyRequirement {
+}
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacementRequirementTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
         let data_type = from.data_type();
@@ -15539,6 +15877,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacemen
             StructType::PbmPlacementRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementRequirement>()?),
             StructType::PbmPlacementCapabilityConstraintsRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementCapabilityConstraintsRequirement>()?),
             StructType::PbmPlacementCapabilityProfileRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementCapabilityProfileRequirement>()?),
+            StructType::PbmPlacementZoneTopologyRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementZoneTopologyRequirement>()?),
             _ => None,
         }
     }
@@ -15549,6 +15888,96 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacemen
             StructType::PbmPlacementRequirement => Ok(from.as_any_box().downcast::<PbmPlacementRequirement>()?),
             StructType::PbmPlacementCapabilityConstraintsRequirement => Ok(from.as_any_box().downcast::<PbmPlacementCapabilityConstraintsRequirement>()?),
             StructType::PbmPlacementCapabilityProfileRequirement => Ok(from.as_any_box().downcast::<PbmPlacementCapabilityProfileRequirement>()?),
+            StructType::PbmPlacementZoneTopologyRequirement => Ok(from.as_any_box().downcast::<PbmPlacementZoneTopologyRequirement>()?),
+            _ => Err(from.as_any_box()),
+        }
+    }
+}
+/// A Requirement for a particular *PbmCapabilityProfile*.
+/// 
+/// This structure may be used only with operations rendered under `/pbm`.
+///
+/// ### How to access
+/// - `PbmPlacementSolver::pbm_check_requirements(placement_subject_requirement)⇒PbmPlacementCapabilityProfileRequirementTrait`
+pub trait PbmPlacementCapabilityProfileRequirementTrait : super::traits::PbmPlacementRequirementTrait {
+    /// Get a reference to the PbmPlacementCapabilityProfileRequirement parent struct
+    fn get_pbm_placement_capability_profile_requirement(&self) -> &super::structs::PbmPlacementCapabilityProfileRequirement;
+    /// Get a mutable reference to the PbmPlacementCapabilityProfileRequirement parent struct
+    fn get_pbm_placement_capability_profile_requirement_mut(&mut self) -> &mut super::structs::PbmPlacementCapabilityProfileRequirement;
+}
+impl std::ops::Deref for dyn PbmPlacementCapabilityProfileRequirementTrait {
+    type Target = super::structs::PbmPlacementCapabilityProfileRequirement;
+
+    fn deref(&self) -> &Self::Target {
+        self.get_pbm_placement_capability_profile_requirement()
+    }
+}
+
+impl std::ops::DerefMut for dyn PbmPlacementCapabilityProfileRequirementTrait {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.get_pbm_placement_capability_profile_requirement_mut()
+    }
+}
+
+impl miniserde::Deserialize for Box<dyn PbmPlacementCapabilityProfileRequirementTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<Box<dyn PbmPlacementCapabilityProfileRequirementTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(PbmPlacementCapabilityProfileRequirementTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::with_default("PbmPlacementCapabilityProfileRequirement"),
+            __out: &mut self.out,
+        }))
+    }
+}
+
+struct PbmPlacementCapabilityProfileRequirementTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn PbmPlacementCapabilityProfileRequirementTrait>>,
+}
+
+impl miniserde::de::Map for PbmPlacementCapabilityProfileRequirementTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
+    }
+
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn PbmPlacementCapabilityProfileRequirementTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
+        }
+    }
+}
+
+impl PbmPlacementCapabilityProfileRequirementTrait for PbmPlacementCapabilityProfileRequirement {
+    fn get_pbm_placement_capability_profile_requirement(&self) -> &super::structs::PbmPlacementCapabilityProfileRequirement { &self }
+    fn get_pbm_placement_capability_profile_requirement_mut(&mut self) -> &mut super::structs::PbmPlacementCapabilityProfileRequirement { self }
+}
+impl PbmPlacementCapabilityProfileRequirementTrait for PbmPlacementZoneTopologyRequirement {
+    fn get_pbm_placement_capability_profile_requirement(&self) -> &super::structs::PbmPlacementCapabilityProfileRequirement { &self.pbm_placement_capability_profile_requirement_ }
+    fn get_pbm_placement_capability_profile_requirement_mut(&mut self) -> &mut super::structs::PbmPlacementCapabilityProfileRequirement { &mut self.pbm_placement_capability_profile_requirement_ }
+}
+impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn PbmPlacementCapabilityProfileRequirementTrait {
+    fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
+        let data_type = from.data_type();
+        match data_type {
+            StructType::PbmPlacementCapabilityProfileRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementCapabilityProfileRequirement>()?),
+            StructType::PbmPlacementZoneTopologyRequirement => Some(from.as_any_ref().downcast_ref::<PbmPlacementZoneTopologyRequirement>()?),
+            _ => None,
+        }
+    }
+    
+    fn from_box(from: Box<From>) -> Result<Box<Self>, Box<dyn std::any::Any + 'static>> {
+        let data_type = from.data_type();
+        match data_type {
+            StructType::PbmPlacementCapabilityProfileRequirement => Ok(from.as_any_box().downcast::<PbmPlacementCapabilityProfileRequirement>()?),
+            StructType::PbmPlacementZoneTopologyRequirement => Ok(from.as_any_box().downcast::<PbmPlacementZoneTopologyRequirement>()?),
             _ => Err(from.as_any_box()),
         }
     }
@@ -16795,6 +17224,10 @@ impl ClusterComputeResourceValidationResultBaseTrait for VsanClusterConfigPreche
     fn get_cluster_compute_resource_validation_result_base(&self) -> &super::structs::ClusterComputeResourceValidationResultBase { &self.cluster_compute_resource_validation_result_base_ }
     fn get_cluster_compute_resource_validation_result_base_mut(&mut self) -> &mut super::structs::ClusterComputeResourceValidationResultBase { &mut self.cluster_compute_resource_validation_result_base_ }
 }
+impl ClusterComputeResourceValidationResultBaseTrait for VsanValidationItem {
+    fn get_cluster_compute_resource_validation_result_base(&self) -> &super::structs::ClusterComputeResourceValidationResultBase { &self.cluster_compute_resource_validation_result_base_ }
+    fn get_cluster_compute_resource_validation_result_base_mut(&mut self) -> &mut super::structs::ClusterComputeResourceValidationResultBase { &mut self.cluster_compute_resource_validation_result_base_ }
+}
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterComputeResourceValidationResultBaseTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
         let data_type = from.data_type();
@@ -16803,6 +17236,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterComp
             StructType::ClusterComputeResourceDvsConfigurationValidation => Some(from.as_any_ref().downcast_ref::<ClusterComputeResourceDvsConfigurationValidation>()?),
             StructType::ClusterComputeResourceHostConfigurationValidation => Some(from.as_any_ref().downcast_ref::<ClusterComputeResourceHostConfigurationValidation>()?),
             StructType::VsanClusterConfigPrecheckItem => Some(from.as_any_ref().downcast_ref::<VsanClusterConfigPrecheckItem>()?),
+            StructType::VsanValidationItem => Some(from.as_any_ref().downcast_ref::<VsanValidationItem>()?),
             _ => None,
         }
     }
@@ -16814,6 +17248,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ClusterComp
             StructType::ClusterComputeResourceDvsConfigurationValidation => Ok(from.as_any_box().downcast::<ClusterComputeResourceDvsConfigurationValidation>()?),
             StructType::ClusterComputeResourceHostConfigurationValidation => Ok(from.as_any_box().downcast::<ClusterComputeResourceHostConfigurationValidation>()?),
             StructType::VsanClusterConfigPrecheckItem => Ok(from.as_any_box().downcast::<VsanClusterConfigPrecheckItem>()?),
+            StructType::VsanValidationItem => Ok(from.as_any_box().downcast::<VsanValidationItem>()?),
             _ => Err(from.as_any_box()),
         }
     }
@@ -17104,7 +17539,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ComputeReso
 /// - `Network::value`
 /// - `DistributedVirtualPortgroup::custom_value`
 /// 
-/// *(10 of 57 paths)*
+/// *(10 of 59 paths)*
 pub trait CustomFieldValueTrait : super::traits::DataObjectTrait {
     /// Get a reference to the CustomFieldValue parent struct
     fn get_custom_field_value(&self) -> &super::structs::CustomFieldValue;
@@ -18690,7 +19125,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HbrReplicat
 /// 
 /// This class is the abstract base for *VirtualMachineImportSpec* and
 /// *VirtualAppImportSpec*. These three classes form a composite structure
-/// that allows us to contain arbitrarily complex entitites in a single ImportSpec.
+/// that allows us to contain arbitrarily complex entities in a single ImportSpec.
 ///
 /// ### How to access
 /// - `ResourcePool::import_v_app(spec)`
@@ -19273,7 +19708,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn DvsTrafficF
         }
     }
 }
-/// Base class for Vlan Specifiation for ports.
+/// Base class for Vlan Specification for ports.
 ///
 /// ### How to access
 /// - `DistributedVirtualPortgroup::config.default_port_config?→VMwareDvsPortSetting.vlan?`
@@ -23610,14 +24045,14 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanCluster
 /// - `VsanPerformanceManager::vsan_perf_query_cluster_health().group_tests?[*].test_details?[*]`
 /// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().groups?[*].group_details?[*]`
 /// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().groups?[*].group_details?[*]`
+/// - `DataProtectionHealthSystem::vsan_query_health_summary().groups?[*].group_details?[*]`
+/// - `DataProtectionHealthSystem::vsan_query_historical_health().groups?[*].group_details?[*]`
 /// - `VsanClusterHealthSystem::vsan_query_cluster_create_vm_health_test().cluster_result.health_test?.test_details?[*]`
 /// - `VsanClusterHealthSystem::vsan_query_cluster_network_perf_test().cluster_result.health_test?.test_details?[*]`
 /// - `VsanPerformanceManager::vsan_perf_query_cluster_health().group_tests?[*].historical_results?[*].test_details?[*]`
 /// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_create_vm_health_history_test().cluster_result.health_test?.test_details?[*]`
-/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_create_vm_health_test().cluster_result.health_test?.test_details?[*]`
-/// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().groups?[*].group_tests?[*].test_details?[*]`
 /// 
-/// *(10 of 26 paths)*
+/// *(10 of 32 paths)*
 pub trait VsanClusterHealthResultBaseTrait : super::traits::DataObjectTrait {
     /// Get a reference to the VsanClusterHealthResultBase parent struct
     fn get_vsan_cluster_health_result_base(&self) -> &super::structs::VsanClusterHealthResultBase;
@@ -23817,10 +24252,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VimClusterV
 /// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().groups?[*].group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.remediations?[*]`
 /// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().groups?[*].group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.diagnostic_steps?[*]`
 /// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().groups?[*].group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.remediations?[*]`
-/// - `VsanClusterHealthSystem::vsan_query_cluster_create_vm_health_test().cluster_result.health_test?.test_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.diagnostic_steps?[*]`
-/// - `VsanClusterHealthSystem::vsan_query_cluster_create_vm_health_test().cluster_result.health_test?.test_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.remediations?[*]`
+/// - `DataProtectionHealthSystem::vsan_query_health_summary().groups?[*].group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.diagnostic_steps?[*]`
+/// - `DataProtectionHealthSystem::vsan_query_health_summary().groups?[*].group_details?[*]→VsanClusterHealthResultWithRemediation.troubleshooting?.remediations?[*]`
 /// 
-/// *(10 of 52 paths)*
+/// *(10 of 64 paths)*
 pub trait VsanHealthActionBaseTrait : super::traits::DataObjectTrait {
     /// Get a reference to the VsanHealthActionBase parent struct
     fn get_vsan_health_action_base(&self) -> &super::structs::VsanHealthActionBase;
@@ -24634,6 +25069,8 @@ impl miniserde::de::Map for CnsBaseCreateSpecTraitBoxBuilder<'_> {
 
 impl CnsBaseCreateSpecTrait for CnsBaseCreateSpec {
 }
+impl CnsBaseCreateSpecTrait for CnsBlockCreateSpec {
+}
 impl CnsBaseCreateSpecTrait for CnsFileCreateSpec {
 }
 impl CnsBaseCreateSpecTrait for CnsVsanFileCreateSpec {
@@ -24643,6 +25080,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsBaseCrea
         let data_type = from.data_type();
         match data_type {
             StructType::CnsBaseCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsBaseCreateSpec>()?),
+            StructType::CnsBlockCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsBlockCreateSpec>()?),
             StructType::CnsFileCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsFileCreateSpec>()?),
             StructType::CnsVsanFileCreateSpec => Some(from.as_any_ref().downcast_ref::<CnsVsanFileCreateSpec>()?),
             _ => None,
@@ -24653,6 +25091,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsBaseCrea
         let data_type = from.data_type();
         match data_type {
             StructType::CnsBaseCreateSpec => Ok(from.as_any_box().downcast::<CnsBaseCreateSpec>()?),
+            StructType::CnsBlockCreateSpec => Ok(from.as_any_box().downcast::<CnsBlockCreateSpec>()?),
             StructType::CnsFileCreateSpec => Ok(from.as_any_box().downcast::<CnsFileCreateSpec>()?),
             StructType::CnsVsanFileCreateSpec => Ok(from.as_any_box().downcast::<CnsVsanFileCreateSpec>()?),
             _ => Err(from.as_any_box()),
@@ -25166,6 +25605,8 @@ impl miniserde::de::Map for CnsVolumeSourceTraitBoxBuilder<'_> {
 
 impl CnsVolumeSourceTrait for CnsVolumeSource {
 }
+impl CnsVolumeSourceTrait for CnsCloneVolumeSource {
+}
 impl CnsVolumeSourceTrait for CnsSnapshotVolumeSource {
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsVolumeSourceTrait {
@@ -25173,6 +25614,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsVolumeSo
         let data_type = from.data_type();
         match data_type {
             StructType::CnsVolumeSource => Some(from.as_any_ref().downcast_ref::<CnsVolumeSource>()?),
+            StructType::CnsCloneVolumeSource => Some(from.as_any_ref().downcast_ref::<CnsCloneVolumeSource>()?),
             StructType::CnsSnapshotVolumeSource => Some(from.as_any_ref().downcast_ref::<CnsSnapshotVolumeSource>()?),
             _ => None,
         }
@@ -25182,6 +25624,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CnsVolumeSo
         let data_type = from.data_type();
         match data_type {
             StructType::CnsVolumeSource => Ok(from.as_any_box().downcast::<CnsVolumeSource>()?),
+            StructType::CnsCloneVolumeSource => Ok(from.as_any_box().downcast::<CnsCloneVolumeSource>()?),
             StructType::CnsSnapshotVolumeSource => Ok(from.as_any_box().downcast::<CnsSnapshotVolumeSource>()?),
             _ => Err(from.as_any_box()),
         }
@@ -26486,7 +26929,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn KmipCluster
 /// - `StoragePod::create_cluster_ex(spec).vsan_host_config_spec?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
 /// - `StoragePod::add_standalone_host_task(comp_res_spec)→ClusterConfigSpecEx.vsan_host_config_spec?[*]→VsanHostConfigInfoEx.encryption_info?.kmip_servers?[*].key_spec?`
 /// 
-/// *(10 of 25 paths)*
+/// *(10 of 27 paths)*
 pub trait KmipServerSpecKeySpecTrait : super::traits::DataObjectTrait {
 }
 impl miniserde::Deserialize for Box<dyn KmipServerSpecKeySpecTrait> {
@@ -26621,6 +27064,8 @@ impl EventArgumentTrait for ResourcePoolEventArgument {
 }
 impl EventArgumentTrait for ScheduledTaskEventArgument {
 }
+impl EventArgumentTrait for TgwEventArgument {
+}
 impl EventArgumentTrait for VmEventArgument {
 }
 impl EventArgumentTrait for ProfileEventArgument {
@@ -26644,6 +27089,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EventArgume
             StructType::NetworkEventArgument => Some(from.as_any_ref().downcast_ref::<NetworkEventArgument>()?),
             StructType::ResourcePoolEventArgument => Some(from.as_any_ref().downcast_ref::<ResourcePoolEventArgument>()?),
             StructType::ScheduledTaskEventArgument => Some(from.as_any_ref().downcast_ref::<ScheduledTaskEventArgument>()?),
+            StructType::TgwEventArgument => Some(from.as_any_ref().downcast_ref::<TgwEventArgument>()?),
             StructType::VmEventArgument => Some(from.as_any_ref().downcast_ref::<VmEventArgument>()?),
             StructType::ProfileEventArgument => Some(from.as_any_ref().downcast_ref::<ProfileEventArgument>()?),
             StructType::RoleEventArgument => Some(from.as_any_ref().downcast_ref::<RoleEventArgument>()?),
@@ -26667,6 +27113,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EventArgume
             StructType::NetworkEventArgument => Ok(from.as_any_box().downcast::<NetworkEventArgument>()?),
             StructType::ResourcePoolEventArgument => Ok(from.as_any_box().downcast::<ResourcePoolEventArgument>()?),
             StructType::ScheduledTaskEventArgument => Ok(from.as_any_box().downcast::<ScheduledTaskEventArgument>()?),
+            StructType::TgwEventArgument => Ok(from.as_any_box().downcast::<TgwEventArgument>()?),
             StructType::VmEventArgument => Ok(from.as_any_box().downcast::<VmEventArgument>()?),
             StructType::ProfileEventArgument => Ok(from.as_any_box().downcast::<ProfileEventArgument>()?),
             StructType::RoleEventArgument => Ok(from.as_any_box().downcast::<RoleEventArgument>()?),
@@ -26782,6 +27229,10 @@ impl EntityEventArgumentTrait for ScheduledTaskEventArgument {
     fn get_entity_event_argument(&self) -> &super::structs::EntityEventArgument { &self.entity_event_argument_ }
     fn get_entity_event_argument_mut(&mut self) -> &mut super::structs::EntityEventArgument { &mut self.entity_event_argument_ }
 }
+impl EntityEventArgumentTrait for TgwEventArgument {
+    fn get_entity_event_argument(&self) -> &super::structs::EntityEventArgument { &self.entity_event_argument_ }
+    fn get_entity_event_argument_mut(&mut self) -> &mut super::structs::EntityEventArgument { &mut self.entity_event_argument_ }
+}
 impl EntityEventArgumentTrait for VmEventArgument {
     fn get_entity_event_argument(&self) -> &super::structs::EntityEventArgument { &self.entity_event_argument_ }
     fn get_entity_event_argument_mut(&mut self) -> &mut super::structs::EntityEventArgument { &mut self.entity_event_argument_ }
@@ -26802,6 +27253,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EntityEvent
             StructType::NetworkEventArgument => Some(from.as_any_ref().downcast_ref::<NetworkEventArgument>()?),
             StructType::ResourcePoolEventArgument => Some(from.as_any_ref().downcast_ref::<ResourcePoolEventArgument>()?),
             StructType::ScheduledTaskEventArgument => Some(from.as_any_ref().downcast_ref::<ScheduledTaskEventArgument>()?),
+            StructType::TgwEventArgument => Some(from.as_any_ref().downcast_ref::<TgwEventArgument>()?),
             StructType::VmEventArgument => Some(from.as_any_ref().downcast_ref::<VmEventArgument>()?),
             _ => None,
         }
@@ -26822,6 +27274,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EntityEvent
             StructType::NetworkEventArgument => Ok(from.as_any_box().downcast::<NetworkEventArgument>()?),
             StructType::ResourcePoolEventArgument => Ok(from.as_any_box().downcast::<ResourcePoolEventArgument>()?),
             StructType::ScheduledTaskEventArgument => Ok(from.as_any_box().downcast::<ScheduledTaskEventArgument>()?),
+            StructType::TgwEventArgument => Ok(from.as_any_box().downcast::<TgwEventArgument>()?),
             StructType::VmEventArgument => Ok(from.as_any_box().downcast::<VmEventArgument>()?),
             _ => Err(from.as_any_box()),
         }
@@ -28190,7 +28643,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostDnsConf
 /// This is a base type for derived types
 /// that have more specific details about specific filesystem types.
 /// 
-/// Typically a FileSystem is exposed as a datatore
+/// Typically a FileSystem is exposed as a datastore
 /// 
 /// See also *DatastoreInfo*, *HostVmfsVolume*, *HostNasVolume*, *HostVffsVolume*, *HostLocalFileSystemVolume*
 /// 
@@ -30145,6 +30598,10 @@ impl HostTpmEventDetailsTrait for HostTpmSoftwareComponentEventDetails {
     fn get_host_tpm_event_details(&self) -> &super::structs::HostTpmEventDetails { &self.host_tpm_event_details_ }
     fn get_host_tpm_event_details_mut(&mut self) -> &mut super::structs::HostTpmEventDetails { &mut self.host_tpm_event_details_ }
 }
+impl HostTpmEventDetailsTrait for HostTpmSystemVersionEventDetails {
+    fn get_host_tpm_event_details(&self) -> &super::structs::HostTpmEventDetails { &self.host_tpm_event_details_ }
+    fn get_host_tpm_event_details_mut(&mut self) -> &mut super::structs::HostTpmEventDetails { &mut self.host_tpm_event_details_ }
+}
 impl HostTpmEventDetailsTrait for HostTpmVersionEventDetails {
     fn get_host_tpm_event_details(&self) -> &super::structs::HostTpmEventDetails { &self.host_tpm_event_details_ }
     fn get_host_tpm_event_details_mut(&mut self) -> &mut super::structs::HostTpmEventDetails { &mut self.host_tpm_event_details_ }
@@ -30161,6 +30618,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostTpmEven
             StructType::HostTpmCommandEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmCommandEventDetails>()?),
             StructType::HostTpmOptionEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmOptionEventDetails>()?),
             StructType::HostTpmSoftwareComponentEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmSoftwareComponentEventDetails>()?),
+            StructType::HostTpmSystemVersionEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmSystemVersionEventDetails>()?),
             StructType::HostTpmVersionEventDetails => Some(from.as_any_ref().downcast_ref::<HostTpmVersionEventDetails>()?),
             _ => None,
         }
@@ -30177,6 +30635,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostTpmEven
             StructType::HostTpmCommandEventDetails => Ok(from.as_any_box().downcast::<HostTpmCommandEventDetails>()?),
             StructType::HostTpmOptionEventDetails => Ok(from.as_any_box().downcast::<HostTpmOptionEventDetails>()?),
             StructType::HostTpmSoftwareComponentEventDetails => Ok(from.as_any_box().downcast::<HostTpmSoftwareComponentEventDetails>()?),
+            StructType::HostTpmSystemVersionEventDetails => Ok(from.as_any_box().downcast::<HostTpmSystemVersionEventDetails>()?),
             StructType::HostTpmVersionEventDetails => Ok(from.as_any_box().downcast::<HostTpmVersionEventDetails>()?),
             _ => Err(from.as_any_box()),
         }
@@ -30188,7 +30647,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn HostTpmEven
 /// This event type exists to simplify parsing of the security-related information
 /// by internal and third-party solutions. Each boot option may be passed to kernel
 /// multiple times and/or in different forms. Replicating the parsing logic of the
-/// kernel would be neither convinient, nor secure for the client applications.
+/// kernel would be neither convenient, nor secure for the client applications.
 /// 
 /// Each instance of this event reports details of a single security-related
 /// boot option, as set in the kernel.
@@ -30916,6 +31375,10 @@ impl ArrayUpdateSpecTrait for ArrayUpdateSpec {
     fn get_array_update_spec(&self) -> &super::structs::ArrayUpdateSpec { &self }
     fn get_array_update_spec_mut(&mut self) -> &mut super::structs::ArrayUpdateSpec { self }
 }
+impl ArrayUpdateSpecTrait for TagSpec {
+    fn get_array_update_spec(&self) -> &super::structs::ArrayUpdateSpec { &self.array_update_spec_ }
+    fn get_array_update_spec_mut(&mut self) -> &mut super::structs::ArrayUpdateSpec { &mut self.array_update_spec_ }
+}
 impl ArrayUpdateSpecTrait for ClusterDasVmConfigSpec {
     fn get_array_update_spec(&self) -> &super::structs::ArrayUpdateSpec { &self.array_update_spec_ }
     fn get_array_update_spec_mut(&mut self) -> &mut super::structs::ArrayUpdateSpec { &mut self.array_update_spec_ }
@@ -30981,6 +31444,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ArrayUpdate
         let data_type = from.data_type();
         match data_type {
             StructType::ArrayUpdateSpec => Some(from.as_any_ref().downcast_ref::<ArrayUpdateSpec>()?),
+            StructType::TagSpec => Some(from.as_any_ref().downcast_ref::<TagSpec>()?),
             StructType::ClusterDasVmConfigSpec => Some(from.as_any_ref().downcast_ref::<ClusterDasVmConfigSpec>()?),
             StructType::ClusterDatastoreUpdateSpec => Some(from.as_any_ref().downcast_ref::<ClusterDatastoreUpdateSpec>()?),
             StructType::ClusterDpmHostConfigSpec => Some(from.as_any_ref().downcast_ref::<ClusterDpmHostConfigSpec>()?),
@@ -31004,6 +31468,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn ArrayUpdate
         let data_type = from.data_type();
         match data_type {
             StructType::ArrayUpdateSpec => Ok(from.as_any_box().downcast::<ArrayUpdateSpec>()?),
+            StructType::TagSpec => Ok(from.as_any_box().downcast::<TagSpec>()?),
             StructType::ClusterDasVmConfigSpec => Ok(from.as_any_box().downcast::<ClusterDasVmConfigSpec>()?),
             StructType::ClusterDatastoreUpdateSpec => Ok(from.as_any_box().downcast::<ClusterDatastoreUpdateSpec>()?),
             StructType::ClusterDpmHostConfigSpec => Ok(from.as_any_box().downcast::<ClusterDpmHostConfigSpec>()?),
@@ -31163,7 +31628,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn OptionTypeT
 /// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.drs_config.option?[*]`
 /// - `ClusterComputeResource::configuration_ex→ClusterConfigInfoEx.dpm_config_info?.option?[*]`
 /// - `Datacenter::power_on_multi_vm_task(option)`
-/// - `Datastore::datastore_enter_maintenance_mode().recommendations?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.extra_config?[*]`
+/// - `Datastore::datastore_enter_maintenance_mode().recommendations?[*].action?[*]→StoragePlacementAction.relocate_spec.disk?[*].disk_backing_info?→VirtualPciPassthroughDvxBackingInfo.config_params?[*]`
 /// 
 /// *(10 of 100 paths)*
 pub trait OptionValueTrait : super::traits::DataObjectTrait {
@@ -35114,6 +35579,124 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VirtualMach
         }
     }
 }
+/// Describes the constraints and/or preferences that can influence where a VM
+/// needs to be placed.
+/// 
+/// A *VmPlacementPolicy* for a VM can be specified in VM's
+/// *VirtualMachineConfigSpec* or *VirtualMachineRelocateSpec* and that policy will be enforced
+/// when that VM's placement decision is made. The placement policies specified
+/// via *VirtualMachineConfigSpec.vmPlacementPolicies* are enforced whenever a VM with
+/// that ConfigSpec needs to be placed for creation or power-on. Similarly,
+/// placement policies specified via *VirtualMachineRelocateSpec.vmPlacementPolicies*
+/// are enforced whenever a VM with that RelocateSpec needs to be placed for
+/// relocating.
+/// 
+/// This allows clients to express placement constraints/preferences directly as
+/// a part of *VirtualMachineConfigSpec* or *VirtualMachineRelocateSpec* instead of requiring the
+/// clients to first create separate vCenter constructs for expressing the same
+/// constraint/preference. For example, if a VM's *VirtualMachineConfigSpec* or
+/// *VirtualMachineRelocateSpec* has an affinity or anti-affinity towards other VMs
+/// (see *VmVmAffinity* and *VmVmAntiAffinity*), then vSphere DRS and
+/// vSphere HA can interpret and enforce that desired affinity/anti-affinity
+/// without requiring the client to first create a cluster level
+/// *ClusterAffinityRuleSpec* or
+/// *ClusterAntiAffinityRuleSpec* and then associate the VM with it.
+/// 
+/// Placement policies can be of different types. This base class only defines
+/// the common properties that the different types of policies can have. The
+/// specific constraints and/or preferences that dictate how exactly a VM's
+/// placement can be impacted are described in each sub-type of policy derived
+/// from this base *VmPlacementPolicy* class.
+/// 
+/// Note: *VmPlacementPolicy* is only applicable for VMs managed by
+/// Supervisor and they will be automatically populated by Supervisor based on
+/// the placement constraints defined in Supervisor. These placement policies
+/// will be ignored except when set by Supervisor.
+/// 
+/// ***Since:*** vSphere API Release 9.1.0.0
+///
+/// ### How to access
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StoragePlacementAction.relocate_spec.vm_placement_policies?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→StorageMigrationAction.relocate_spec.vm_placement_policies?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→PlacementAction.relocate_spec?.vm_placement_policies?[*]`
+/// - `StoragePod::pod_storage_drs_entry.recommendation?[*].action?[*]→ClusterClusterInitialPlacementAction.config_spec?.vm_placement_policies?[*]`
+/// - `StoragePod::pod_storage_drs_entry.action_history?[*].action→StoragePlacementAction.relocate_spec.vm_placement_policies?[*]`
+/// - `ClusterComputeResource::action_history.action→StoragePlacementAction.relocate_spec.vm_placement_policies?[*]`
+/// - `ClusterComputeResource::action_history.action→StorageMigrationAction.relocate_spec.vm_placement_policies?[*]`
+/// - `ClusterComputeResource::action_history.action→PlacementAction.relocate_spec?.vm_placement_policies?[*]`
+/// - `ClusterComputeResource::action_history.action→ClusterClusterInitialPlacementAction.config_spec?.vm_placement_policies?[*]`
+/// - `ClusterComputeResource::recommendation.action?[*]→StoragePlacementAction.relocate_spec.vm_placement_policies?[*]`
+/// 
+/// *(10 of 57 paths)*
+pub trait VmPlacementPolicyTrait : super::traits::DataObjectTrait {
+}
+impl miniserde::Deserialize for Box<dyn VmPlacementPolicyTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<Box<dyn VmPlacementPolicyTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VmPlacementPolicyTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::with_default("VmPlacementPolicy"),
+            __out: &mut self.out,
+        }))
+    }
+}
+
+struct VmPlacementPolicyTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VmPlacementPolicyTrait>>,
+}
+
+impl miniserde::de::Map for VmPlacementPolicyTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
+    }
+
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VmPlacementPolicyTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
+        }
+    }
+}
+
+impl VmPlacementPolicyTrait for VmPlacementPolicy {
+}
+impl VmPlacementPolicyTrait for VmToVmGroupsAntiAffinity {
+}
+impl VmPlacementPolicyTrait for VmVmAffinity {
+}
+impl VmPlacementPolicyTrait for VmVmAntiAffinity {
+}
+impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VmPlacementPolicyTrait {
+    fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
+        let data_type = from.data_type();
+        match data_type {
+            StructType::VmPlacementPolicy => Some(from.as_any_ref().downcast_ref::<VmPlacementPolicy>()?),
+            StructType::VmToVmGroupsAntiAffinity => Some(from.as_any_ref().downcast_ref::<VmToVmGroupsAntiAffinity>()?),
+            StructType::VmVmAffinity => Some(from.as_any_ref().downcast_ref::<VmVmAffinity>()?),
+            StructType::VmVmAntiAffinity => Some(from.as_any_ref().downcast_ref::<VmVmAntiAffinity>()?),
+            _ => None,
+        }
+    }
+    
+    fn from_box(from: Box<From>) -> Result<Box<Self>, Box<dyn std::any::Any + 'static>> {
+        let data_type = from.data_type();
+        match data_type {
+            StructType::VmPlacementPolicy => Ok(from.as_any_box().downcast::<VmPlacementPolicy>()?),
+            StructType::VmToVmGroupsAntiAffinity => Ok(from.as_any_box().downcast::<VmToVmGroupsAntiAffinity>()?),
+            StructType::VmVmAffinity => Ok(from.as_any_box().downcast::<VmVmAffinity>()?),
+            StructType::VmVmAntiAffinity => Ok(from.as_any_box().downcast::<VmVmAntiAffinity>()?),
+            _ => Err(from.as_any_box()),
+        }
+    }
+}
 /// Base type for sysprep, sysprepText, or linuxPrep object type.
 ///
 /// ### How to access
@@ -35171,11 +35754,15 @@ impl CustomizationIdentitySettingsTrait for CustomizationIdentitySettings {
 }
 impl CustomizationIdentitySettingsTrait for CustomizationCloudinitPrep {
 }
+impl CustomizationIdentitySettingsTrait for CustomizationLinuxFlexPrep {
+}
 impl CustomizationIdentitySettingsTrait for CustomizationLinuxPrep {
 }
 impl CustomizationIdentitySettingsTrait for CustomizationSysprep {
 }
 impl CustomizationIdentitySettingsTrait for CustomizationSysprepText {
+}
+impl CustomizationIdentitySettingsTrait for CustomizationWindowsFlexPrep {
 }
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn CustomizationIdentitySettingsTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
@@ -35183,9 +35770,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
         match data_type {
             StructType::CustomizationIdentitySettings => Some(from.as_any_ref().downcast_ref::<CustomizationIdentitySettings>()?),
             StructType::CustomizationCloudinitPrep => Some(from.as_any_ref().downcast_ref::<CustomizationCloudinitPrep>()?),
+            StructType::CustomizationLinuxFlexPrep => Some(from.as_any_ref().downcast_ref::<CustomizationLinuxFlexPrep>()?),
             StructType::CustomizationLinuxPrep => Some(from.as_any_ref().downcast_ref::<CustomizationLinuxPrep>()?),
             StructType::CustomizationSysprep => Some(from.as_any_ref().downcast_ref::<CustomizationSysprep>()?),
             StructType::CustomizationSysprepText => Some(from.as_any_ref().downcast_ref::<CustomizationSysprepText>()?),
+            StructType::CustomizationWindowsFlexPrep => Some(from.as_any_ref().downcast_ref::<CustomizationWindowsFlexPrep>()?),
             _ => None,
         }
     }
@@ -35195,9 +35784,11 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
         match data_type {
             StructType::CustomizationIdentitySettings => Ok(from.as_any_box().downcast::<CustomizationIdentitySettings>()?),
             StructType::CustomizationCloudinitPrep => Ok(from.as_any_box().downcast::<CustomizationCloudinitPrep>()?),
+            StructType::CustomizationLinuxFlexPrep => Ok(from.as_any_box().downcast::<CustomizationLinuxFlexPrep>()?),
             StructType::CustomizationLinuxPrep => Ok(from.as_any_box().downcast::<CustomizationLinuxPrep>()?),
             StructType::CustomizationSysprep => Ok(from.as_any_box().downcast::<CustomizationSysprep>()?),
             StructType::CustomizationSysprepText => Ok(from.as_any_box().downcast::<CustomizationSysprepText>()?),
+            StructType::CustomizationWindowsFlexPrep => Ok(from.as_any_box().downcast::<CustomizationWindowsFlexPrep>()?),
             _ => Err(from.as_any_box()),
         }
     }
@@ -35261,6 +35852,8 @@ impl CustomizationIpGeneratorTrait for CustomizationCustomIpGenerator {
 }
 impl CustomizationIpGeneratorTrait for CustomizationDhcpIpGenerator {
 }
+impl CustomizationIpGeneratorTrait for CustomizationDisableIpV4 {
+}
 impl CustomizationIpGeneratorTrait for CustomizationFixedIp {
 }
 impl CustomizationIpGeneratorTrait for CustomizationUnknownIpGenerator {
@@ -35272,6 +35865,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
             StructType::CustomizationIpGenerator => Some(from.as_any_ref().downcast_ref::<CustomizationIpGenerator>()?),
             StructType::CustomizationCustomIpGenerator => Some(from.as_any_ref().downcast_ref::<CustomizationCustomIpGenerator>()?),
             StructType::CustomizationDhcpIpGenerator => Some(from.as_any_ref().downcast_ref::<CustomizationDhcpIpGenerator>()?),
+            StructType::CustomizationDisableIpV4 => Some(from.as_any_ref().downcast_ref::<CustomizationDisableIpV4>()?),
             StructType::CustomizationFixedIp => Some(from.as_any_ref().downcast_ref::<CustomizationFixedIp>()?),
             StructType::CustomizationUnknownIpGenerator => Some(from.as_any_ref().downcast_ref::<CustomizationUnknownIpGenerator>()?),
             _ => None,
@@ -35284,6 +35878,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn Customizati
             StructType::CustomizationIpGenerator => Ok(from.as_any_box().downcast::<CustomizationIpGenerator>()?),
             StructType::CustomizationCustomIpGenerator => Ok(from.as_any_box().downcast::<CustomizationCustomIpGenerator>()?),
             StructType::CustomizationDhcpIpGenerator => Ok(from.as_any_box().downcast::<CustomizationDhcpIpGenerator>()?),
+            StructType::CustomizationDisableIpV4 => Ok(from.as_any_box().downcast::<CustomizationDisableIpV4>()?),
             StructType::CustomizationFixedIp => Ok(from.as_any_box().downcast::<CustomizationFixedIp>()?),
             StructType::CustomizationUnknownIpGenerator => Ok(from.as_any_box().downcast::<CustomizationUnknownIpGenerator>()?),
             _ => Err(from.as_any_box()),
@@ -41699,6 +42294,10 @@ impl EntityResourceCheckDetailsTrait for VsanResourceCheckVsanResult {
     fn get_entity_resource_check_details(&self) -> &super::structs::EntityResourceCheckDetails { &self.vsan_resource_check_component_result_.vsan_resource_check_result_.entity_resource_check_details_ }
     fn get_entity_resource_check_details_mut(&mut self) -> &mut super::structs::EntityResourceCheckDetails { &mut self.vsan_resource_check_component_result_.vsan_resource_check_result_.entity_resource_check_details_ }
 }
+impl EntityResourceCheckDetailsTrait for VsanSiteMaintenanceResourceCheckResult {
+    fn get_entity_resource_check_details(&self) -> &super::structs::EntityResourceCheckDetails { &self.vsan_resource_check_vsan_result_.vsan_resource_check_component_result_.vsan_resource_check_result_.entity_resource_check_details_ }
+    fn get_entity_resource_check_details_mut(&mut self) -> &mut super::structs::EntityResourceCheckDetails { &mut self.vsan_resource_check_vsan_result_.vsan_resource_check_component_result_.vsan_resource_check_result_.entity_resource_check_details_ }
+}
 impl EntityResourceCheckDetailsTrait for VsanStoragePoolResourceCheckResult {
     fn get_entity_resource_check_details(&self) -> &super::structs::EntityResourceCheckDetails { &self.entity_resource_check_details_ }
     fn get_entity_resource_check_details_mut(&mut self) -> &mut super::structs::EntityResourceCheckDetails { &mut self.entity_resource_check_details_ }
@@ -41717,6 +42316,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EntityResou
             StructType::VsanResourceCheckComponentResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckComponentResult>()?),
             StructType::VsanResourceCheckDataPersistenceResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckDataPersistenceResult>()?),
             StructType::VsanResourceCheckVsanResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceResourceCheckResult>()?),
             StructType::VsanStoragePoolResourceCheckResult => Some(from.as_any_ref().downcast_ref::<VsanStoragePoolResourceCheckResult>()?),
             _ => None,
         }
@@ -41735,6 +42335,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn EntityResou
             StructType::VsanResourceCheckComponentResult => Ok(from.as_any_box().downcast::<VsanResourceCheckComponentResult>()?),
             StructType::VsanResourceCheckDataPersistenceResult => Ok(from.as_any_box().downcast::<VsanResourceCheckDataPersistenceResult>()?),
             StructType::VsanResourceCheckVsanResult => Ok(from.as_any_box().downcast::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceResourceCheckResult>()?),
             StructType::VsanStoragePoolResourceCheckResult => Ok(from.as_any_box().downcast::<VsanStoragePoolResourceCheckResult>()?),
             _ => Err(from.as_any_box()),
         }
@@ -41926,6 +42527,10 @@ impl VsanResourceCheckResultTrait for VsanResourceCheckVsanResult {
     fn get_vsan_resource_check_result(&self) -> &super::structs::VsanResourceCheckResult { &self.vsan_resource_check_component_result_.vsan_resource_check_result_ }
     fn get_vsan_resource_check_result_mut(&mut self) -> &mut super::structs::VsanResourceCheckResult { &mut self.vsan_resource_check_component_result_.vsan_resource_check_result_ }
 }
+impl VsanResourceCheckResultTrait for VsanSiteMaintenanceResourceCheckResult {
+    fn get_vsan_resource_check_result(&self) -> &super::structs::VsanResourceCheckResult { &self.vsan_resource_check_vsan_result_.vsan_resource_check_component_result_.vsan_resource_check_result_ }
+    fn get_vsan_resource_check_result_mut(&mut self) -> &mut super::structs::VsanResourceCheckResult { &mut self.vsan_resource_check_vsan_result_.vsan_resource_check_component_result_.vsan_resource_check_result_ }
+}
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourceCheckResultTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
         let data_type = from.data_type();
@@ -41934,6 +42539,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourc
             StructType::VsanResourceCheckComponentResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckComponentResult>()?),
             StructType::VsanResourceCheckDataPersistenceResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckDataPersistenceResult>()?),
             StructType::VsanResourceCheckVsanResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceResourceCheckResult>()?),
             _ => None,
         }
     }
@@ -41945,6 +42551,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourc
             StructType::VsanResourceCheckComponentResult => Ok(from.as_any_box().downcast::<VsanResourceCheckComponentResult>()?),
             StructType::VsanResourceCheckDataPersistenceResult => Ok(from.as_any_box().downcast::<VsanResourceCheckDataPersistenceResult>()?),
             StructType::VsanResourceCheckVsanResult => Ok(from.as_any_box().downcast::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceResourceCheckResult>()?),
             _ => Err(from.as_any_box()),
         }
     }
@@ -42025,6 +42632,10 @@ impl VsanResourceCheckComponentResultTrait for VsanResourceCheckVsanResult {
     fn get_vsan_resource_check_component_result(&self) -> &super::structs::VsanResourceCheckComponentResult { &self.vsan_resource_check_component_result_ }
     fn get_vsan_resource_check_component_result_mut(&mut self) -> &mut super::structs::VsanResourceCheckComponentResult { &mut self.vsan_resource_check_component_result_ }
 }
+impl VsanResourceCheckComponentResultTrait for VsanSiteMaintenanceResourceCheckResult {
+    fn get_vsan_resource_check_component_result(&self) -> &super::structs::VsanResourceCheckComponentResult { &self.vsan_resource_check_vsan_result_.vsan_resource_check_component_result_ }
+    fn get_vsan_resource_check_component_result_mut(&mut self) -> &mut super::structs::VsanResourceCheckComponentResult { &mut self.vsan_resource_check_vsan_result_.vsan_resource_check_component_result_ }
+}
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourceCheckComponentResultTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
         let data_type = from.data_type();
@@ -42032,6 +42643,7 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourc
             StructType::VsanResourceCheckComponentResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckComponentResult>()?),
             StructType::VsanResourceCheckDataPersistenceResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckDataPersistenceResult>()?),
             StructType::VsanResourceCheckVsanResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceResourceCheckResult>()?),
             _ => None,
         }
     }
@@ -42042,6 +42654,97 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourc
             StructType::VsanResourceCheckComponentResult => Ok(from.as_any_box().downcast::<VsanResourceCheckComponentResult>()?),
             StructType::VsanResourceCheckDataPersistenceResult => Ok(from.as_any_box().downcast::<VsanResourceCheckDataPersistenceResult>()?),
             StructType::VsanResourceCheckVsanResult => Ok(from.as_any_box().downcast::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceResourceCheckResult>()?),
+            _ => Err(from.as_any_box()),
+        }
+    }
+}
+/// The resource check component result for regular vSAN.
+/// 
+/// This structure may be used only with operations rendered under `/vsan`.
+///
+/// ### How to access
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?⇒VsanResourceCheckVsanResultTrait`
+/// - `VsanResourceCheckSystem::vsan_get_resource_check_status().component_results?[*]⇒VsanResourceCheckVsanResultTrait`
+pub trait VsanResourceCheckVsanResultTrait : super::traits::VsanResourceCheckComponentResultTrait {
+    /// Get a reference to the VsanResourceCheckVsanResult parent struct
+    fn get_vsan_resource_check_vsan_result(&self) -> &super::structs::VsanResourceCheckVsanResult;
+    /// Get a mutable reference to the VsanResourceCheckVsanResult parent struct
+    fn get_vsan_resource_check_vsan_result_mut(&mut self) -> &mut super::structs::VsanResourceCheckVsanResult;
+}
+impl std::ops::Deref for dyn VsanResourceCheckVsanResultTrait {
+    type Target = super::structs::VsanResourceCheckVsanResult;
+
+    fn deref(&self) -> &Self::Target {
+        self.get_vsan_resource_check_vsan_result()
+    }
+}
+
+impl std::ops::DerefMut for dyn VsanResourceCheckVsanResultTrait {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.get_vsan_resource_check_vsan_result_mut()
+    }
+}
+
+impl miniserde::Deserialize for Box<dyn VsanResourceCheckVsanResultTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<Box<dyn VsanResourceCheckVsanResultTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanResourceCheckVsanResultTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::with_default("VsanResourceCheckVsanResult"),
+            __out: &mut self.out,
+        }))
+    }
+}
+
+struct VsanResourceCheckVsanResultTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanResourceCheckVsanResultTrait>>,
+}
+
+impl miniserde::de::Map for VsanResourceCheckVsanResultTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
+    }
+
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanResourceCheckVsanResultTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
+        }
+    }
+}
+
+impl VsanResourceCheckVsanResultTrait for VsanResourceCheckVsanResult {
+    fn get_vsan_resource_check_vsan_result(&self) -> &super::structs::VsanResourceCheckVsanResult { &self }
+    fn get_vsan_resource_check_vsan_result_mut(&mut self) -> &mut super::structs::VsanResourceCheckVsanResult { self }
+}
+impl VsanResourceCheckVsanResultTrait for VsanSiteMaintenanceResourceCheckResult {
+    fn get_vsan_resource_check_vsan_result(&self) -> &super::structs::VsanResourceCheckVsanResult { &self.vsan_resource_check_vsan_result_ }
+    fn get_vsan_resource_check_vsan_result_mut(&mut self) -> &mut super::structs::VsanResourceCheckVsanResult { &mut self.vsan_resource_check_vsan_result_ }
+}
+impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourceCheckVsanResultTrait {
+    fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
+        let data_type = from.data_type();
+        match data_type {
+            StructType::VsanResourceCheckVsanResult => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceResourceCheckResult>()?),
+            _ => None,
+        }
+    }
+    
+    fn from_box(from: Box<From>) -> Result<Box<Self>, Box<dyn std::any::Any + 'static>> {
+        let data_type = from.data_type();
+        match data_type {
+            StructType::VsanResourceCheckVsanResult => Ok(from.as_any_box().downcast::<VsanResourceCheckVsanResult>()?),
+            StructType::VsanSiteMaintenanceResourceCheckResult => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceResourceCheckResult>()?),
             _ => Err(from.as_any_box()),
         }
     }
@@ -42412,12 +43115,17 @@ impl VsanResourceCheckTaskDetailsTrait for VsanDiskDataEvacuationResourceCheckTa
     fn get_vsan_resource_check_task_details(&self) -> &super::structs::VsanResourceCheckTaskDetails { &self.vsan_resource_check_task_details_ }
     fn get_vsan_resource_check_task_details_mut(&mut self) -> &mut super::structs::VsanResourceCheckTaskDetails { &mut self.vsan_resource_check_task_details_ }
 }
+impl VsanResourceCheckTaskDetailsTrait for VsanSiteMaintenanceCheckTaskDetails {
+    fn get_vsan_resource_check_task_details(&self) -> &super::structs::VsanResourceCheckTaskDetails { &self.vsan_resource_check_task_details_ }
+    fn get_vsan_resource_check_task_details_mut(&mut self) -> &mut super::structs::VsanResourceCheckTaskDetails { &mut self.vsan_resource_check_task_details_ }
+}
 impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourceCheckTaskDetailsTrait {
     fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
         let data_type = from.data_type();
         match data_type {
             StructType::VsanResourceCheckTaskDetails => Some(from.as_any_ref().downcast_ref::<VsanResourceCheckTaskDetails>()?),
             StructType::VsanDiskDataEvacuationResourceCheckTaskDetails => Some(from.as_any_ref().downcast_ref::<VsanDiskDataEvacuationResourceCheckTaskDetails>()?),
+            StructType::VsanSiteMaintenanceCheckTaskDetails => Some(from.as_any_ref().downcast_ref::<VsanSiteMaintenanceCheckTaskDetails>()?),
             _ => None,
         }
     }
@@ -42427,6 +43135,100 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanResourc
         match data_type {
             StructType::VsanResourceCheckTaskDetails => Ok(from.as_any_box().downcast::<VsanResourceCheckTaskDetails>()?),
             StructType::VsanDiskDataEvacuationResourceCheckTaskDetails => Ok(from.as_any_box().downcast::<VsanDiskDataEvacuationResourceCheckTaskDetails>()?),
+            StructType::VsanSiteMaintenanceCheckTaskDetails => Ok(from.as_any_box().downcast::<VsanSiteMaintenanceCheckTaskDetails>()?),
+            _ => Err(from.as_any_box()),
+        }
+    }
+}
+/// Defines some common configuration properties for
+/// both cluster and host layers.
+/// 
+/// This structure may be used only with operations rendered under `/vsan`.
+pub trait VsanVbossConfigTrait : super::traits::DataObjectTrait {
+    /// Get a reference to the VsanVbossConfig parent struct
+    fn get_vsan_vboss_config(&self) -> &super::structs::VsanVbossConfig;
+    /// Get a mutable reference to the VsanVbossConfig parent struct
+    fn get_vsan_vboss_config_mut(&mut self) -> &mut super::structs::VsanVbossConfig;
+}
+impl std::ops::Deref for dyn VsanVbossConfigTrait {
+    type Target = super::structs::VsanVbossConfig;
+
+    fn deref(&self) -> &Self::Target {
+        self.get_vsan_vboss_config()
+    }
+}
+
+impl std::ops::DerefMut for dyn VsanVbossConfigTrait {
+    fn deref_mut(&mut self) -> &mut Self::Target {
+        self.get_vsan_vboss_config_mut()
+    }
+}
+
+impl miniserde::Deserialize for Box<dyn VsanVbossConfigTrait> {
+    fn begin(out: &mut Option<Self>) -> &mut dyn miniserde::de::Visitor {
+        Place::new(out)
+    }
+}
+
+impl miniserde::de::Visitor for Place<Box<dyn VsanVbossConfigTrait>> {
+    fn map(&mut self) -> miniserde::Result<Box<dyn miniserde::de::Map + '_>> {
+        Ok(Box::new(VsanVbossConfigTraitBoxBuilder {
+            core: super::mini_de_static::PolyCore::with_default("VsanVbossConfig"),
+            __out: &mut self.out,
+        }))
+    }
+}
+
+struct VsanVbossConfigTraitBoxBuilder<'a> {
+    core: super::mini_de_static::PolyCore,
+    __out: &'a mut Option<Box<dyn VsanVbossConfigTrait>>,
+}
+
+impl miniserde::de::Map for VsanVbossConfigTraitBoxBuilder<'_> {
+    fn key(&mut self, key: &str) -> miniserde::Result<&mut dyn miniserde::de::Visitor> {
+        self.core.key(key, super::deserialize::lookup_type)
+    }
+
+    fn finish(&mut self) -> miniserde::Result<()> {
+        match self.core.finish(super::deserialize::lookup_type)? {
+            super::vim_any::VimAny::Object(obj) => {
+                *self.__out = Some(<dyn VsanVbossConfigTrait>::from_box(obj).map_err(|_| miniserde::Error)?);
+                Ok(())
+            }
+            _ => Err(miniserde::Error),
+        }
+    }
+}
+
+impl VsanVbossConfigTrait for VsanVbossConfig {
+    fn get_vsan_vboss_config(&self) -> &super::structs::VsanVbossConfig { &self }
+    fn get_vsan_vboss_config_mut(&mut self) -> &mut super::structs::VsanVbossConfig { self }
+}
+impl VsanVbossConfigTrait for VsanVbossClusterConfig {
+    fn get_vsan_vboss_config(&self) -> &super::structs::VsanVbossConfig { &self.vsan_vboss_config_ }
+    fn get_vsan_vboss_config_mut(&mut self) -> &mut super::structs::VsanVbossConfig { &mut self.vsan_vboss_config_ }
+}
+impl VsanVbossConfigTrait for VsanVbossHostConfig {
+    fn get_vsan_vboss_config(&self) -> &super::structs::VsanVbossConfig { &self.vsan_vboss_config_ }
+    fn get_vsan_vboss_config_mut(&mut self) -> &mut super::structs::VsanVbossConfig { &mut self.vsan_vboss_config_ }
+}
+impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanVbossConfigTrait {
+    fn from_ref<'a>(from: &'a From) -> Option<&'a Self> {
+        let data_type = from.data_type();
+        match data_type {
+            StructType::VsanVbossConfig => Some(from.as_any_ref().downcast_ref::<VsanVbossConfig>()?),
+            StructType::VsanVbossClusterConfig => Some(from.as_any_ref().downcast_ref::<VsanVbossClusterConfig>()?),
+            StructType::VsanVbossHostConfig => Some(from.as_any_ref().downcast_ref::<VsanVbossHostConfig>()?),
+            _ => None,
+        }
+    }
+    
+    fn from_box(from: Box<From>) -> Result<Box<Self>, Box<dyn std::any::Any + 'static>> {
+        let data_type = from.data_type();
+        match data_type {
+            StructType::VsanVbossConfig => Ok(from.as_any_box().downcast::<VsanVbossConfig>()?),
+            StructType::VsanVbossClusterConfig => Ok(from.as_any_box().downcast::<VsanVbossClusterConfig>()?),
+            StructType::VsanVbossHostConfig => Ok(from.as_any_box().downcast::<VsanVbossHostConfig>()?),
             _ => Err(from.as_any_box()),
         }
     }
@@ -42538,6 +43340,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanIscsiVi
 /// ### How to access
 /// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().vsan_config?.issues?[*]`
 /// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().vsan_config?.issues?[*]`
+/// - `DataProtectionHealthSystem::vsan_query_health_summary().vsan_config?.issues?[*]`
+/// - `DataProtectionHealthSystem::vsan_query_historical_health().vsan_config?.issues?[*]`
 /// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.health?.vsan_config?.issues?[*]`
 pub trait VsanConfigBaseIssueTrait : super::traits::DataObjectTrait {
 }
@@ -42607,6 +43411,8 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanConfigB
 /// ### How to access
 /// - `VsanVcClusterHealthSystem::vsan_query_vc_cluster_health_summary().network_config?.issues?[*]`
 /// - `VsanVcClusterHealthSystem::vsan_query_cluster_historical_health().network_config?.issues?[*]`
+/// - `DataProtectionHealthSystem::vsan_query_health_summary().network_config?.issues?[*]`
+/// - `DataProtectionHealthSystem::vsan_query_historical_health().network_config?.issues?[*]`
 /// - `VsanResourceCheckSystem::vsan_get_resource_check_status().result?.health?.network_config?.issues?[*]`
 pub trait VsanNetworkConfigBaseIssueTrait : super::traits::DataObjectTrait {
 }
@@ -43089,6 +43895,10 @@ impl<From: VimObjectTrait + ?Sized + 'static> CastFrom<From> for dyn VsanHostDis
         }
     }
 }
+/// Deprecated as of vSphere API 9.1, vSAN has been using unicast only
+/// configuration in all supported releases. The multicast configuration has been
+/// deprecated.
+/// 
 /// An *VsanHostIpConfig* is a pair of multicast IP addresses for use by the VSAN
 /// service.
 /// 

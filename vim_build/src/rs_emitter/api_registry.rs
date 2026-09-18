@@ -149,11 +149,16 @@ fn emit_lookup_xml_tables(printer: &mut dyn Printer, model: &Model) -> Result<()
     let mut boxed_keys: Vec<String> = model.any_value_types.keys().cloned().collect();
     boxed_keys.sort();
 
-    let mut wrapper_map = PhfMapBuilder::new();
+    let mut wrapper_entries: Vec<(String, String)> = Vec::new();
     for k in &boxed_keys {
         let bt = model.any_value_types.get(k).expect("boxed key");
         let sym = data_type_to_expr(&bt.property_type, model)?;
-        wrapper_map.entry(k.clone(), &sym);
+        wrapper_entries.push((k.clone(), sym));
+    }
+
+    let mut wrapper_map = PhfMapBuilder::new();
+    for (key, value) in &wrapper_entries {
+        wrapper_map.entry(key, value);
     }
 
     printer.println(

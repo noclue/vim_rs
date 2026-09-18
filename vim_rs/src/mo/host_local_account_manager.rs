@@ -103,14 +103,10 @@ impl HostLocalAccountManager {
         let input = CreateGroupRequestType {group, };
         self.client.invoke_void("", "HostLocalAccountManager", &self.mo_id, "CreateGroup", Some(&input)).await
     }
-    /// Creates a local user account using the parameters defined in the
-    /// *HostLocalAccountManagerAccountSpecification*
-    /// data object type.
+    /// Creates a local user account using the specified parameters.
     /// 
-    /// For POSIX hosts,
-    /// passing *HostLocalAccountManagerPosixAccountSpecification* data object
-    /// type allows you to control the
-    /// format of the user ID of the user account being created.
+    /// As of vSphere API 9.1, it is allowed to create a user without a password
+    /// by not setting the corresponding property of the input argument.
     /// 
     /// ***Required privileges:*** Host.Local.ManageUserGroups
     ///

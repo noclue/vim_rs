@@ -207,7 +207,7 @@ impl DeserializationGenerator<'_> {
         self.printer
             .println("// PHF Type Registry for O(1) type name lookup")?;
 
-        let mut map_builder = phf_codegen::Map::new();
+        let mut registry_entries: Vec<(String, String)> = Vec::new();
 
         // 1. Object types (all structs)
         for (name, struct_cell) in &self.vim_model.structs {
@@ -217,10 +217,9 @@ impl DeserializationGenerator<'_> {
             let struct_ref = struct_cell.borrow();
             let struct_name = to_type_name(name);
 
-            match &struct_ref.emit_mode {
+            let builder_expr = match &struct_ref.emit_mode {
                 EmitMode::Emit | EmitMode::Prune => {
-                    // Normal struct or pruned type -> direct builder
-                    let builder_expr = if struct_ref.emit_mode == EmitMode::Prune {
+                    if struct_ref.emit_mode == EmitMode::Prune {
                         format!(
                             "TypeInfo::Object {{ name: \"{}\", builder_fn: || Box::new({}Fields::new(None)) }}",
                             struct_ref.discriminator(),
@@ -232,46 +231,52 @@ impl DeserializationGenerator<'_> {
                             struct_ref.discriminator(),
                             struct_name
                         )
-                    };
-                    map_builder.entry(struct_ref.discriminator(), &builder_expr);
+                    }
                 }
                 EmitMode::Skip(parent_type) => {
-                    // Skipped struct (pruned descendant) -> use parent's Fields with type_ preset
                     let parent_name = to_type_name(parent_type);
-                    let builder_expr = format!(
+                    format!(
                         "TypeInfo::Object {{ name: \"{}\", builder_fn: || Box::new({}Fields::new(Some(StructType::{}))) }}",
                         struct_ref.discriminator(),
                         parent_name,
                         struct_name
-                    );
-                    map_builder.entry(struct_ref.discriminator(), &builder_expr);
+                    )
                 }
-            }
+            };
+            registry_entries.push((struct_ref.discriminator(), builder_expr));
         }
 
         // 2. Value types (primitives and arrays)
         for (discriminator, box_type) in &self.any_value_types {
-            if self.is_polymorphic_array_type(&box_type.property_type) {
-                // Polymorphic array type - use cast functions
+            let value_expr = if self.is_polymorphic_array_type(&box_type.property_type) {
                 if let DataType::Array(inner) = &box_type.property_type {
                     if let DataType::Reference(ref_name) = inner.as_ref() {
                         let fn_name =
                             format!("cast_to_{}_array", super::to_field_name(ref_name));
-                        let value_expr = format!(
+                        Some(format!(
                             "TypeInfo::Value {{ name: \"{discriminator}\", make_deserializer: || Box::new(DelegatingDeserializer::<Vec<VimObjectHolder>>::new({fn_name})), from_value: |v| {fn_name}(from_value(v)?) }}"
-                        );
-                        map_builder.entry(discriminator.clone(), &value_expr);
+                        ))
+                    } else {
+                        None
                     }
+                } else {
+                    None
                 }
             } else {
-                // Simple value type - use per-variant wrapper functions
                 let rust_type = self.tdf.to_rust_field_type(&box_type.property_type)?;
                 let fn_name = format!("wrap_{}", super::to_field_name(&box_type.name));
-                let value_expr = format!(
+                Some(format!(
                     "TypeInfo::Value {{ name: \"{discriminator}\", make_deserializer: || make_deser_with::<{rust_type}>({fn_name}), from_value: |v| from_val_with::<{rust_type}>(v, {fn_name}) }}"
-                );
-                map_builder.entry(discriminator.clone(), &value_expr);
+                ))
+            };
+            if let Some(value_expr) = value_expr {
+                registry_entries.push((discriminator.clone(), value_expr));
             }
+        }
+
+        let mut map_builder = phf_codegen::Map::new();
+        for (key, value) in &registry_entries {
+            map_builder.entry(key, value);
         }
 
         self.printer.println(&format!(

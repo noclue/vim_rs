@@ -1111,6 +1111,12 @@ impl DataTypeAware for PbmPlacementHub {
     }
 }
 
+impl DataTypeAware for PbmPlacementHubInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::PbmPlacementHubInfo)
+    }
+}
+
 impl DataTypeAware for PbmPlacementRequirement {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::PbmPlacementRequirement)
@@ -1126,6 +1132,12 @@ impl DataTypeAware for PbmPlacementCapabilityConstraintsRequirement {
 impl DataTypeAware for PbmPlacementCapabilityProfileRequirement {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::PbmPlacementCapabilityProfileRequirement)
+    }
+}
+
+impl DataTypeAware for PbmPlacementZoneTopologyRequirement {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::PbmPlacementZoneTopologyRequirement)
     }
 }
 
@@ -1192,6 +1204,12 @@ impl DataTypeAware for PbmDefaultCapabilityProfile {
 impl DataTypeAware for PbmProfileId {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::PbmProfileId)
+    }
+}
+
+impl DataTypeAware for PbmProfileK8SCompliantNameSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::PbmProfileK8SCompliantNameSpec)
     }
 }
 
@@ -1858,6 +1876,12 @@ impl DataTypeAware for ClusterComputeResourceHostConfigurationValidation {
 impl DataTypeAware for VsanClusterConfigPrecheckItem {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanClusterConfigPrecheckItem)
+    }
+}
+
+impl DataTypeAware for VsanValidationItem {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanValidationItem)
     }
 }
 
@@ -3301,6 +3325,12 @@ impl DataTypeAware for PerfSampleInfo {
     }
 }
 
+impl DataTypeAware for PlaceVmsXClusterSpecCandidateNetworks {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::PlaceVmsXClusterSpecCandidateNetworks)
+    }
+}
+
 impl DataTypeAware for PrivilegePolicyDef {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::PrivilegePolicyDef)
@@ -3394,6 +3424,48 @@ impl DataTypeAware for SddcBase {
 impl DataTypeAware for VimVsanReconfigSpec {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VimVsanReconfigSpec)
+    }
+}
+
+impl DataTypeAware for SearchIndexFilter {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::SearchIndexFilter)
+    }
+}
+
+impl DataTypeAware for SearchIndexIterationSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::SearchIndexIterationSpec)
+    }
+}
+
+impl DataTypeAware for SearchIndexOptionalValue {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::SearchIndexOptionalValue)
+    }
+}
+
+impl DataTypeAware for SearchIndexPredicate {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::SearchIndexPredicate)
+    }
+}
+
+impl DataTypeAware for SearchIndexQuerySpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::SearchIndexQuerySpec)
+    }
+}
+
+impl DataTypeAware for SearchIndexResourceItem {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::SearchIndexResourceItem)
+    }
+}
+
+impl DataTypeAware for SearchIndexResultSet {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::SearchIndexResultSet)
     }
 }
 
@@ -3571,6 +3643,18 @@ impl DataTypeAware for Tag {
     }
 }
 
+impl DataTypeAware for TagId {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::TagId)
+    }
+}
+
+impl DataTypeAware for TagIdNameId {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::TagIdNameId)
+    }
+}
+
 impl DataTypeAware for TaskDescription {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::TaskDescription)
@@ -3658,6 +3742,24 @@ impl DataTypeAware for TaskReasonSystem {
 impl DataTypeAware for TaskReasonUser {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::TaskReasonUser)
+    }
+}
+
+impl DataTypeAware for TransitGatewayConfigInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::TransitGatewayConfigInfo)
+    }
+}
+
+impl DataTypeAware for TransitGatewayConfigSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::TransitGatewayConfigSpec)
+    }
+}
+
+impl DataTypeAware for TransitGatewayCreateSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::TransitGatewayCreateSpec)
     }
 }
 
@@ -4855,6 +4957,12 @@ impl DataTypeAware for VsanCapability {
     }
 }
 
+impl DataTypeAware for VsanClientServerHciMeshDitEncryptionHealthSummary {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanClientServerHciMeshDitEncryptionHealthSummary)
+    }
+}
+
 impl DataTypeAware for VsanClusterAdvCfgSyncHostResult {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanClusterAdvCfgSyncHostResult)
@@ -4918,6 +5026,12 @@ impl DataTypeAware for VsanClusterFileServiceHealthSummary {
 impl DataTypeAware for VsanClusterGlobalDedupHealthSummary {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanClusterGlobalDedupHealthSummary)
+    }
+}
+
+impl DataTypeAware for VsanClusterHciMeshDitEncryptionHealthSummary {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanClusterHciMeshDitEncryptionHealthSummary)
     }
 }
 
@@ -5107,6 +5221,18 @@ impl DataTypeAware for VsanClusterWhatifHostFailuresResult {
     }
 }
 
+impl DataTypeAware for VsanComponentBasicInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanComponentBasicInfo)
+    }
+}
+
+impl DataTypeAware for VsanComponentPlacement {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanComponentPlacement)
+    }
+}
+
 impl DataTypeAware for VsanConfigGeneration {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanConfigGeneration)
@@ -5134,6 +5260,12 @@ impl DataTypeAware for VsanDiskFormatConversionSpec {
 impl DataTypeAware for VimClusterVsanDiskMappingsConfigSpec {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VimClusterVsanDiskMappingsConfigSpec)
+    }
+}
+
+impl DataTypeAware for VsanEffectiveSpaceUsage {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanEffectiveSpaceUsage)
     }
 }
 
@@ -5218,6 +5350,12 @@ impl DataTypeAware for VsanHealthCorrelation {
 impl DataTypeAware for VsanHealthExtMgmtPreCheckResult {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanHealthExtMgmtPreCheckResult)
+    }
+}
+
+impl DataTypeAware for VsanHealthStatusCounts {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanHealthStatusCounts)
     }
 }
 
@@ -5395,6 +5533,18 @@ impl DataTypeAware for VsanObjectInformation {
     }
 }
 
+impl DataTypeAware for VsanObjectPlacement {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanObjectPlacement)
+    }
+}
+
+impl DataTypeAware for VsanObjectPlacementDetails {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanObjectPlacementDetails)
+    }
+}
+
 impl DataTypeAware for VsanObjectQuerySpec {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanObjectQuerySpec)
@@ -5446,6 +5596,12 @@ impl DataTypeAware for VsanPerfGraph {
 impl DataTypeAware for VsanPerfHotspotEntitiesMetrics {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanPerfHotspotEntitiesMetrics)
+    }
+}
+
+impl DataTypeAware for VsanPerfHotspotEntityType {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanPerfHotspotEntityType)
     }
 }
 
@@ -5533,9 +5689,21 @@ impl DataTypeAware for VsanPerfsvcConfig {
     }
 }
 
+impl DataTypeAware for VsanQueryPhysicalPlacementSpecs {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanQueryPhysicalPlacementSpecs)
+    }
+}
+
 impl DataTypeAware for VsanRemoteClusterQuerySpec {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanRemoteClusterQuerySpec)
+    }
+}
+
+impl DataTypeAware for VsanSnapshotSpace {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanSnapshotSpace)
     }
 }
 
@@ -5677,6 +5845,12 @@ impl DataTypeAware for CnsBaseCreateSpec {
     }
 }
 
+impl DataTypeAware for CnsBlockCreateSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::CnsBlockCreateSpec)
+    }
+}
+
 impl DataTypeAware for CnsFileCreateSpec {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::CnsFileCreateSpec)
@@ -5767,6 +5941,18 @@ impl DataTypeAware for CnsSnapshotId {
     }
 }
 
+impl DataTypeAware for CnsSyncVolumeSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::CnsSyncVolumeSpec)
+    }
+}
+
+impl DataTypeAware for CnsUnregisterVolumeSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::CnsUnregisterVolumeSpec)
+    }
+}
+
 impl DataTypeAware for CnsVolume {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::CnsVolume)
@@ -5788,6 +5974,12 @@ impl DataTypeAware for CnsVolumeAttachDetachSpec {
 impl DataTypeAware for CnsVolumeCreateSpec {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::CnsVolumeCreateSpec)
+    }
+}
+
+impl DataTypeAware for CnsVolumeCryptoUpdateSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::CnsVolumeCryptoUpdateSpec)
     }
 }
 
@@ -5869,6 +6061,12 @@ impl DataTypeAware for CnsVolumeSource {
     }
 }
 
+impl DataTypeAware for CnsCloneVolumeSource {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::CnsCloneVolumeSource)
+    }
+}
+
 impl DataTypeAware for CnsSnapshotVolumeSource {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::CnsSnapshotVolumeSource)
@@ -5941,6 +6139,12 @@ impl DataTypeAware for DvPortgroupConfigSpec {
     }
 }
 
+impl DataTypeAware for DvPortgroupNsxConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::DvPortgroupNsxConfig)
+    }
+}
+
 impl DataTypeAware for DistributedVirtualPortgroupNsxPortgroupOperationResult {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::DistributedVirtualPortgroupNsxPortgroupOperationResult)
@@ -5962,6 +6166,12 @@ impl DataTypeAware for VMwareDvsPortgroupPolicy {
 impl DataTypeAware for DistributedVirtualPortgroupProblem {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::DistributedVirtualPortgroupProblem)
+    }
+}
+
+impl DataTypeAware for DvPortgroupNsxSubnetAddressInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::DvPortgroupNsxSubnetAddressInfo)
     }
 }
 
@@ -6034,6 +6244,12 @@ impl DataTypeAware for DistributedVirtualSwitchManagerImportResult {
 impl DataTypeAware for DvsManagerPhysicalNicsList {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::DvsManagerPhysicalNicsList)
+    }
+}
+
+impl DataTypeAware for DistributedVirtualSwitchManagerSpanInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::DistributedVirtualSwitchManagerSpanInfo)
     }
 }
 
@@ -6154,6 +6370,12 @@ impl DataTypeAware for VMwareDvsVlanHealthCheckResult {
 impl DataTypeAware for VMwareDvsTeamingHealthCheckResult {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VMwareDvsTeamingHealthCheckResult)
+    }
+}
+
+impl DataTypeAware for DistributedVirtualSwitchHostMemberHostPerfNicOffloadState {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::DistributedVirtualSwitchHostMemberHostPerfNicOffloadState)
     }
 }
 
@@ -6445,6 +6667,12 @@ impl DataTypeAware for VmwareDistributedVirtualSwitchNetworkOffloadConfig {
     }
 }
 
+impl DataTypeAware for VMwareDvsPerfNicOffloadCapability {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VMwareDvsPerfNicOffloadCapability)
+    }
+}
+
 impl DataTypeAware for VMwareDvsPvlanConfigSpec {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VMwareDvsPvlanConfigSpec)
@@ -6466,6 +6694,12 @@ impl DataTypeAware for VmwareDistributedVirtualSwitchRealTimeConfig {
 impl DataTypeAware for VmwareDistributedVirtualSwitchRealTimeLanAnnotation {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VmwareDistributedVirtualSwitchRealTimeLanAnnotation)
+    }
+}
+
+impl DataTypeAware for VMwareDvsSystemTrafficCapabilities {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VMwareDvsSystemTrafficCapabilities)
     }
 }
 
@@ -6784,6 +7018,12 @@ impl DataTypeAware for ResourcePoolEventArgument {
 impl DataTypeAware for ScheduledTaskEventArgument {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::ScheduledTaskEventArgument)
+    }
+}
+
+impl DataTypeAware for TgwEventArgument {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::TgwEventArgument)
     }
 }
 
@@ -8251,6 +8491,12 @@ impl DataTypeAware for HostMaintenanceSpec {
     }
 }
 
+impl DataTypeAware for HostMaintenanceSpecEvacuationMode {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::HostMaintenanceSpecEvacuationMode)
+    }
+}
+
 impl DataTypeAware for ServiceConsoleReservationInfo {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::ServiceConsoleReservationInfo)
@@ -8719,6 +8965,12 @@ impl DataTypeAware for HostPciDevice {
     }
 }
 
+impl DataTypeAware for HostPciDeviceDirectPathInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::HostPciDeviceDirectPathInfo)
+    }
+}
+
 impl DataTypeAware for HostPciPassthruConfig {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::HostPciPassthruConfig)
@@ -8740,6 +8992,12 @@ impl DataTypeAware for HostPciPassthruInfo {
 impl DataTypeAware for HostSriovInfo {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::HostSriovInfo)
+    }
+}
+
+impl DataTypeAware for HostPciPassthruInfoDirectPathState {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::HostPciPassthruInfoDirectPathState)
     }
 }
 
@@ -8854,6 +9112,18 @@ impl DataTypeAware for HostPlugStoreTopologyTarget {
 impl DataTypeAware for PnicTsoInfo {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::PnicTsoInfo)
+    }
+}
+
+impl DataTypeAware for PodVmInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::PodVmInfo)
+    }
+}
+
+impl DataTypeAware for PodVmOverheadInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::PodVmOverheadInfo)
     }
 }
 
@@ -9445,6 +9715,12 @@ impl DataTypeAware for HostTpmSoftwareComponentEventDetails {
     }
 }
 
+impl DataTypeAware for HostTpmSystemVersionEventDetails {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::HostTpmSystemVersionEventDetails)
+    }
+}
+
 impl DataTypeAware for HostTpmVersionEventDetails {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::HostTpmVersionEventDetails)
@@ -9901,6 +10177,12 @@ impl DataTypeAware for VsanHclMemInfo {
     }
 }
 
+impl DataTypeAware for VsanHealthObjectStats {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanHealthObjectStats)
+    }
+}
+
 impl DataTypeAware for VsanHealthQuerySpec {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanHealthQuerySpec)
@@ -9928,6 +10210,18 @@ impl DataTypeAware for VsanHostFwComponent {
 impl DataTypeAware for VsanHostGlobalDedupConfigHealthSummary {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanHostGlobalDedupConfigHealthSummary)
+    }
+}
+
+impl DataTypeAware for VsanHostHciMeshDitEncryptionHealth {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanHostHciMeshDitEncryptionHealth)
+    }
+}
+
+impl DataTypeAware for VsanHostHciMeshDitEncryptionHealthSummary {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanHostHciMeshDitEncryptionHealthSummary)
     }
 }
 
@@ -10048,6 +10342,12 @@ impl DataTypeAware for VsanIperfClientSpec {
 impl DataTypeAware for VsanKmsHealth {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanKmsHealth)
+    }
+}
+
+impl DataTypeAware for VsanLicensedDiskResult {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanLicensedDiskResult)
     }
 }
 
@@ -10342,6 +10642,12 @@ impl DataTypeAware for WinNetBiosConfigInfo {
 impl DataTypeAware for ArrayUpdateSpec {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::ArrayUpdateSpec)
+    }
+}
+
+impl DataTypeAware for TagSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::TagSpec)
     }
 }
 
@@ -11785,6 +12091,12 @@ impl DataTypeAware for GuestDiskInfo {
     }
 }
 
+impl DataTypeAware for VirtualMachineGuestRebootStatus {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VirtualMachineGuestRebootStatus)
+    }
+}
+
 impl DataTypeAware for GuestInfoNamespaceGenerationInfo {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::GuestInfoNamespaceGenerationInfo)
@@ -12349,6 +12661,30 @@ impl DataTypeAware for VirtualMachineVirtualPMem {
     }
 }
 
+impl DataTypeAware for VmPlacementPolicy {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VmPlacementPolicy)
+    }
+}
+
+impl DataTypeAware for VmToVmGroupsAntiAffinity {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VmToVmGroupsAntiAffinity)
+    }
+}
+
+impl DataTypeAware for VmVmAffinity {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VmVmAffinity)
+    }
+}
+
+impl DataTypeAware for VmVmAntiAffinity {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VmVmAntiAffinity)
+    }
+}
+
 impl DataTypeAware for CheckResult {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::CheckResult)
@@ -12409,6 +12745,12 @@ impl DataTypeAware for CustomizationCloudinitPrep {
     }
 }
 
+impl DataTypeAware for CustomizationLinuxFlexPrep {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::CustomizationLinuxFlexPrep)
+    }
+}
+
 impl DataTypeAware for CustomizationLinuxPrep {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::CustomizationLinuxPrep)
@@ -12427,6 +12769,12 @@ impl DataTypeAware for CustomizationSysprepText {
     }
 }
 
+impl DataTypeAware for CustomizationWindowsFlexPrep {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::CustomizationWindowsFlexPrep)
+    }
+}
+
 impl DataTypeAware for CustomizationIpGenerator {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::CustomizationIpGenerator)
@@ -12442,6 +12790,12 @@ impl DataTypeAware for CustomizationCustomIpGenerator {
 impl DataTypeAware for CustomizationDhcpIpGenerator {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::CustomizationDhcpIpGenerator)
+    }
+}
+
+impl DataTypeAware for CustomizationDisableIpV4 {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::CustomizationDisableIpV4)
     }
 }
 
@@ -14083,9 +14437,27 @@ impl DataTypeAware for ReplicationSpec {
     }
 }
 
+impl DataTypeAware for VsanAutoRaidConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanAutoRaidConfig)
+    }
+}
+
+impl DataTypeAware for VsanAutoRaidInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanAutoRaidInfo)
+    }
+}
+
 impl DataTypeAware for VsanCapacityReservationInfo {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanCapacityReservationInfo)
+    }
+}
+
+impl DataTypeAware for VsanClientUnicastConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanClientUnicastConfig)
     }
 }
 
@@ -14098,6 +14470,12 @@ impl DataTypeAware for ClusterRuntimeInfo {
 impl DataTypeAware for VsanCompatibilityCheckResult {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanCompatibilityCheckResult)
+    }
+}
+
+impl DataTypeAware for VsanCyberRecoveryConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanCyberRecoveryConfig)
     }
 }
 
@@ -14185,6 +14563,18 @@ impl DataTypeAware for DiskClaimConfiguration {
     }
 }
 
+impl DataTypeAware for DiskInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::DiskInfo)
+    }
+}
+
+impl DataTypeAware for DpDaemonHealth {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::DpDaemonHealth)
+    }
+}
+
 impl DataTypeAware for VsanEntityCompatibilityResult {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanEntityCompatibilityResult)
@@ -14248,6 +14638,12 @@ impl DataTypeAware for VsanResourceCheckDataPersistenceResult {
 impl DataTypeAware for VsanResourceCheckVsanResult {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanResourceCheckVsanResult)
+    }
+}
+
+impl DataTypeAware for VsanSiteMaintenanceResourceCheckResult {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanSiteMaintenanceResourceCheckResult)
     }
 }
 
@@ -14356,6 +14752,12 @@ impl DataTypeAware for VsanFileShareSnapshotQuerySpec {
 impl DataTypeAware for VsanHciMeshDatastoreSource {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanHciMeshDatastoreSource)
+    }
+}
+
+impl DataTypeAware for VsanHostSiteMaintenanceStatus {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanHostSiteMaintenanceStatus)
     }
 }
 
@@ -14599,6 +15001,12 @@ impl DataTypeAware for VsanDiskDataEvacuationResourceCheckTaskDetails {
     }
 }
 
+impl DataTypeAware for VsanSiteMaintenanceCheckTaskDetails {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanSiteMaintenanceCheckTaskDetails)
+    }
+}
+
 impl DataTypeAware for ResyncIopsInfo {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::ResyncIopsInfo)
@@ -14629,9 +15037,63 @@ impl DataTypeAware for VsanSharedWitnessCompatibilityResult {
     }
 }
 
+impl DataTypeAware for VsanSiteMaintenanceInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanSiteMaintenanceInfo)
+    }
+}
+
+impl DataTypeAware for VsanSiteMaintenancePrecheckDetail {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanSiteMaintenancePrecheckDetail)
+    }
+}
+
+impl DataTypeAware for VsanSiteMaintenancePrecheckStatus {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanSiteMaintenancePrecheckStatus)
+    }
+}
+
+impl DataTypeAware for VsanSiteMaintenanceSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanSiteMaintenanceSpec)
+    }
+}
+
 impl DataTypeAware for VsanSnapServiceConfig {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanSnapServiceConfig)
+    }
+}
+
+impl DataTypeAware for VsanSiteMaintenanceVmPowerOffInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanSiteMaintenanceVmPowerOffInfo)
+    }
+}
+
+impl DataTypeAware for VsanVbossConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanVbossConfig)
+    }
+}
+
+impl DataTypeAware for VsanVbossClusterConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanVbossClusterConfig)
+    }
+}
+
+impl DataTypeAware for VsanVbossHostConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanVbossHostConfig)
+    }
+}
+
+impl DataTypeAware for VsanVbossObjectStoreConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanVbossObjectStoreConfig)
     }
 }
 
@@ -15211,6 +15673,24 @@ impl DataTypeAware for VsanAddStoragePoolDiskSpec {
     }
 }
 
+impl DataTypeAware for VsanHostClientClusterUnicastConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanHostClientClusterUnicastConfig)
+    }
+}
+
+impl DataTypeAware for VsanHostClientClusterUnicastInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanHostClientClusterUnicastInfo)
+    }
+}
+
+impl DataTypeAware for VsanHostClientHostUnicastInfo {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanHostClientHostUnicastInfo)
+    }
+}
+
 impl DataTypeAware for VsanHostClusterStatus {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanHostClusterStatus)
@@ -15424,6 +15904,12 @@ impl DataTypeAware for VsanHostServerClusterUnicastInfo {
 impl DataTypeAware for SiteAffinityInfo {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::SiteAffinityInfo)
+    }
+}
+
+impl DataTypeAware for VsanSiteTakeoverConfig {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanSiteTakeoverConfig)
     }
 }
 
@@ -15733,6 +16219,18 @@ impl DataTypeAware for VStorageObject {
     }
 }
 
+impl DataTypeAware for VStorageObjectAttachResult {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VStorageObjectAttachResult)
+    }
+}
+
+impl DataTypeAware for VStorageObjectAttachSpec {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VStorageObjectAttachSpec)
+    }
+}
+
 impl DataTypeAware for VStorageObjectSnapshot {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VStorageObjectSnapshot)
@@ -15802,6 +16300,12 @@ impl DataTypeAware for LocalizableMessage {
 impl DataTypeAware for LocalizedMethodFault {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::LocalizedMethodFault)
+    }
+}
+
+impl DataTypeAware for AuthenticationRequiredChallenge {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::AuthenticationRequiredChallenge)
     }
 }
 
@@ -16003,6 +16507,12 @@ impl DataTypeAware for MoTypesEnum {
     }
 }
 
+impl DataTypeAware for DpDiskAlreadyClaimedReasonEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for DpInvalidProtectionReasonEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -16040,6 +16550,12 @@ impl DataTypeAware for DpSyncTypeEnum {
 }
 
 impl DataTypeAware for DpVSphereDataProtectionCapabilitiesEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for DpVSphereDataProtectionCapabilities90U1Enum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
     }
@@ -16693,6 +17209,24 @@ impl DataTypeAware for ResourceConfigSpecScaleSharesBehaviorEnum {
     }
 }
 
+impl DataTypeAware for SearchIndexPredicateArrayOperatorEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for SearchIndexPredicateComparisonOperatorEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for SearchIndexQuerySpecResourceTypeEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for VMotionCompatibilityTypeEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -17083,6 +17617,12 @@ impl DataTypeAware for VsanCapabilityType90Enum {
     }
 }
 
+impl DataTypeAware for VsanCapabilityType91Enum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for VsanClusterHealthActionIdEnumEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -17095,7 +17635,19 @@ impl DataTypeAware for VsanClusterHealthCategoryEnumEnum {
     }
 }
 
+impl DataTypeAware for VsanComponentStatesEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for VsanDatastoreTypeEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for VsanHciMeshDitEncryptionIssueEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
     }
@@ -17233,6 +17785,24 @@ impl DataTypeAware for QuerySelectionNameTypeEnum {
     }
 }
 
+impl DataTypeAware for CnsSyncVolumeModeEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for CnsUnregisterTargetVolumeTypeEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for CnsVolumeBackingTypeEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for CnsVolumeTypeEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -17318,6 +17888,12 @@ impl DataTypeAware for HostDistributedVirtualSwitchManagerFailoverStageEnum {
 }
 
 impl DataTypeAware for DistributedVirtualSwitchHostMemberHostComponentStateEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for DistributedVirtualSwitchHostMemberHostPerfNicOffloadStateStatusEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
     }
@@ -17695,6 +18271,12 @@ impl DataTypeAware for HostBiosInfoFirmwareTypeEnum {
     }
 }
 
+impl DataTypeAware for HostCapabilityDrtmTypesEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for HostCapabilityFtUnsupportedReasonEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -17726,6 +18308,12 @@ impl DataTypeAware for HostCertificateManagerCertificateInfoCertificateStatusEnu
 }
 
 impl DataTypeAware for HostCertificateManagerCertificateKindEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for HostCertificateManagerCryptoAlgorithmEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
     }
@@ -18182,6 +18770,12 @@ impl DataTypeAware for HostPatchManagerIntegrityStatusEnum {
 }
 
 impl DataTypeAware for HostPatchManagerReasonEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for HostPciPassthruInfoDirectPathDeviceModeEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
     }
@@ -18871,6 +19465,12 @@ impl DataTypeAware for GuestOsDescriptorFirmwareTypeEnum {
     }
 }
 
+impl DataTypeAware for VirtualMachineGuestArchitectureEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for VirtualMachineGuestOsFamilyEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -19003,6 +19603,18 @@ impl DataTypeAware for VirtualMachineVirtualPMemSnapshotModeEnum {
     }
 }
 
+impl DataTypeAware for VmPlacementPolicyVmPlacementPolicyStrictnessEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for VmPlacementPolicyVmPlacementPolicyTopologyEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for VirtualMachineWindowsQuiesceSpecVssBackupContextEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -19082,6 +19694,12 @@ impl DataTypeAware for VirtualDiskDeltaDiskFormatEnum {
 }
 
 impl DataTypeAware for VirtualDiskDeltaDiskFormatVariantEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for VirtualDiskDiskChainBrokenIssueEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
     }
@@ -19321,6 +19939,12 @@ impl DataTypeAware for VimVsanMountPrecheckTypeEnum {
     }
 }
 
+impl DataTypeAware for VimVsanMountPrecheckTypeDitEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for VsanPerfsvcRemediateActionEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -19363,6 +19987,12 @@ impl DataTypeAware for VsanResourceCheckStatusTypeEnum {
     }
 }
 
+impl DataTypeAware for VsanSiteMaintenanceStateEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for VsanSnapshotCreatorEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -19400,6 +20030,12 @@ impl DataTypeAware for VsanConfigTypeEnum {
 }
 
 impl DataTypeAware for VsanDiskCompatibilityTypeEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for VimVsanVsanHciMeshConfigLimitsEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
     }
@@ -19693,6 +20329,24 @@ impl DataTypeAware for VslmVStorageObjectControlFlagEnum {
     }
 }
 
+impl DataTypeAware for VslmVsoPostRelocateChangeMetadataOperationEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for AuthenticationRequiredAuthenticationSchemeEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
+impl DataTypeAware for AuthenticationRequiredErrorTypeEnum {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Str
+    }
+}
+
 impl DataTypeAware for PropertyChangeOpEnum {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Str
@@ -19936,6 +20590,12 @@ impl DataTypeAware for Box<dyn super::traits::PbmPlacementMatchingResourcesTrait
 impl DataTypeAware for Box<dyn super::traits::PbmPlacementRequirementTrait> {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::PbmPlacementRequirement)
+    }
+}
+
+impl DataTypeAware for Box<dyn super::traits::PbmPlacementCapabilityProfileRequirementTrait> {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::PbmPlacementCapabilityProfileRequirement)
     }
 }
 
@@ -21115,6 +21775,12 @@ impl DataTypeAware for Box<dyn super::traits::VirtualMachineVirtualDeviceGroupsD
     }
 }
 
+impl DataTypeAware for Box<dyn super::traits::VmPlacementPolicyTrait> {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VmPlacementPolicy)
+    }
+}
+
 impl DataTypeAware for Box<dyn super::traits::CustomizationIdentitySettingsTrait> {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::CustomizationIdentitySettings)
@@ -21439,6 +22105,12 @@ impl DataTypeAware for Box<dyn super::traits::VsanResourceCheckComponentResultTr
     }
 }
 
+impl DataTypeAware for Box<dyn super::traits::VsanResourceCheckVsanResultTrait> {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanResourceCheckVsanResult)
+    }
+}
+
 impl DataTypeAware for Box<dyn super::traits::VsanMountPrecheckItemTrait> {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanMountPrecheckItem)
@@ -21460,6 +22132,12 @@ impl DataTypeAware for Box<dyn super::traits::VsanRemoteVcInfoTrait> {
 impl DataTypeAware for Box<dyn super::traits::VsanResourceCheckTaskDetailsTrait> {
     fn data_type() -> ApiFieldType {
         ApiFieldType::Object(StructType::VsanResourceCheckTaskDetails)
+    }
+}
+
+impl DataTypeAware for Box<dyn super::traits::VsanVbossConfigTrait> {
+    fn data_type() -> ApiFieldType {
+        ApiFieldType::Object(StructType::VsanVbossConfig)
     }
 }
 

@@ -65,7 +65,7 @@ graph TD
 1. **Build API Definitions** (in-memory)
    - Parses OpenAPI specification
    - Generates managed objects, methods, data structures, enumerations, and traits
-   - Input: `vim_build/data/vi_json_openapi_specification_v9_0_0_0_24798170.json`
+   - Input: `vim_build/data/vi_json_openapi_specification_v9_1_0_0.json`
 
 2. **Collect Examples** (in-memory)
    - Scans code examples directory

@@ -63,7 +63,7 @@ impl EamObject {
     ///
     /// A possibly empty array of issue keys for the issues that were not found on the
     /// entity. This can happen if <code>resolve</code> is called with issue keys that were
-    /// resolved just prior to calling <code>resolve</code> or if an issue is currenly not resolvable.
+    /// resolved just prior to calling <code>resolve</code> or if an issue is currently not resolvable.
     pub async fn resolve(&self, issue_key: &[i32]) -> Result<Option<Vec<i32>>> {
         let input = ResolveRequestType {issue_key, };
         let bytes_opt = self.client.invoke_optional("eam", "EamObject", &self.mo_id, "Resolve", Some(&input)).await?;

@@ -283,7 +283,7 @@ impl Agency {
     ///
     /// A possibly empty array of issue keys for the issues that were not found on the
     /// entity. This can happen if <code>resolve</code> is called with issue keys that were
-    /// resolved just prior to calling <code>resolve</code> or if an issue is currenly not resolvable.
+    /// resolved just prior to calling <code>resolve</code> or if an issue is currently not resolvable.
     pub async fn resolve(&self, issue_key: &[i32]) -> Result<Option<Vec<i32>>> {
         let input = ResolveRequestType {issue_key, };
         let bytes_opt = self.client.invoke_optional("eam", "Agency", &self.mo_id, "Resolve", Some(&input)).await?;
@@ -370,7 +370,7 @@ impl Agency {
     /// folder where the VMs to be deployed.
     /// 
     /// ***EamInvalidUrl***: Thrown if either the agent virtual machine URL or VIB URL
-    /// cannot be parsed or if the resource refered to cannot be
+    /// cannot be parsed or if the resource referred to cannot be
     /// downloaded.
     pub async fn update(&self, config: &crate::types::structs::AgencyConfigInfo) -> Result<()> {
         let input = UpdateRequestType {config, };

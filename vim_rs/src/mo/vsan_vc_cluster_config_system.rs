@@ -30,6 +30,30 @@ impl VsanVcClusterConfigSystem {
             mo_id: mo_id.to_string(),
         }
     }
+    /// Get Actual RAID used in vSAN ESA cluster.
+    /// 
+    /// ***Required privileges:*** System.Read
+    ///
+    /// ## Parameters:
+    ///
+    /// ### cluster
+    /// The target cluster.
+    /// 
+    /// Refers instance of *ClusterComputeResource*.
+    ///
+    /// ## Returns:
+    ///
+    /// Information of RAID type actually used in the cluster.
+    /// Or, None if the cluster does not support Auto Policy or failed
+    /// to get RAID information.
+    pub async fn vsan_get_cluster_raid_info(&self, cluster: &crate::types::structs::ManagedObjectReference) -> Result<Option<crate::types::structs::VsanAutoRaidInfo>> {
+        let input = VsanGetClusterRaidInfoRequestType {cluster, };
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterConfigSystem", &self.mo_id, "VsanGetClusterRAIDInfo", Some(&input)).await?;
+        match bytes_opt {
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal(self.client.transport(), b)?)),
+            None => Ok(None),
+        }
+    }
     /// Get total raw capacity in bytes for all disks claimed in a vSAN cluster.
     /// 
     /// In the case of ESA, that includes all disks in the storage pool. In the case
@@ -107,6 +131,23 @@ impl VsanVcClusterConfigSystem {
         let bytes = self.client.invoke("vsan", "VsanVcClusterConfigSystem", &self.mo_id, "VsanClusterGetConfig", Some(&input)).await?;
         let result: crate::types::structs::VsanConfigInfoEx = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
+    }
+    /// Returns configuration limits and supported values.
+    /// 
+    /// This API is useful to determine
+    /// limits supported for a particular vSphere version.
+    /// 
+    /// ***Required privileges:*** System.Read
+    ///
+    /// ## Returns:
+    ///
+    /// KeyValue pairs with configuration limits
+    pub async fn vsan_get_configuration_limits(&self) -> Result<Option<Vec<crate::types::structs::KeyAnyValue>>> {
+        let bytes_opt = self.client.invoke_optional("vsan", "VsanVcClusterConfigSystem", &self.mo_id, "VsanGetConfigurationLimits", None).await?;
+        match bytes_opt {
+            Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
+            None => Ok(None),
+        }
     }
     /// Get vSAN runtime stats of all hosts reside in specified cluster.
     /// 
@@ -382,6 +423,32 @@ impl VsanVcClusterConfigSystem {
         match bytes_opt {
             Some(ref b) => Ok(Some(crate::core::client::unmarshal_array(self.client.transport(), b)?)),
             None => Ok(None),
+        }
+    }
+}
+struct VsanGetClusterRaidInfoRequestType<'a> {
+    cluster: &'a crate::types::structs::ManagedObjectReference,
+}
+
+impl<'a> miniserde::Serialize for VsanGetClusterRaidInfoRequestType<'a> {
+    fn begin(&self) -> miniserde::ser::Fragment<'_> {
+        miniserde::ser::Fragment::Map(Box::new(VsanGetClusterRaidInfoRequestTypeSer { data: self, seq: 0 }))
+    }
+}
+
+struct VsanGetClusterRaidInfoRequestTypeSer<'b, 'a> {
+    data: &'b VsanGetClusterRaidInfoRequestType<'a>,
+    seq: usize,
+}
+
+impl<'b, 'a> miniserde::ser::Map for VsanGetClusterRaidInfoRequestTypeSer<'b, 'a> {
+    fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
+        let seq = self.seq;
+        self.seq += 1;
+        match seq {
+            0 => return Some((std::borrow::Cow::Borrowed("_typeName"), &"VsanGetClusterRAIDInfoRequestType")),
+            1 => return Some((std::borrow::Cow::Borrowed("cluster"), &self.data.cluster as &dyn miniserde::Serialize)),
+            _ => return None,
         }
     }
 }

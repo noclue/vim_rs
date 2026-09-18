@@ -367,7 +367,7 @@ impl VirtualDiskManager {
     /// Import an unmanaged-snapshot from Virtual-Volume(VVol) enabled
     /// Storage Array.
     /// 
-    /// Storage Array may support users to take snapshots indepedent of
+    /// Storage Array may support users to take snapshots independent of
     /// VMware stack. Such copies or snapshots are known as
     /// 'Unmanaged-Snapshots'.
     /// We are providing an ability to end-users to import such
@@ -499,7 +499,7 @@ impl VirtualDiskManager {
     /// Refers instance of *Datacenter*.
     ///
     /// ### force
-    /// If true, overwrite any indentically named disk at the destination.
+    /// If true, overwrite any identically named disk at the destination.
     /// If not specified, it is assumed to be false
     ///
     /// ### profile

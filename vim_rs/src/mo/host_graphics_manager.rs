@@ -109,7 +109,7 @@ impl HostGraphicsManager {
             None => Ok(None),
         }
     }
-    /// Array of shared passthru GPU capablities.
+    /// Array of shared passthru GPU capabilities.
     /// 
     /// See also *HostSharedGpuCapabilities*.
     /// 

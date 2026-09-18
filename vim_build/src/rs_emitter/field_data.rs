@@ -137,9 +137,9 @@ pub(crate) fn get_type_fields(class: &str) -> Result<&'static phf::Map<&'static 
     
     fn emit_field_maps(&mut self, field_data: &IndexMap<String, IndexMap<String, FieldData>>) -> Result<()> {
         // Emit static map using phf_codegen
-        let mut structs = phf_codegen::Map::new();
+        let mut struct_entries: Vec<(String, String)> = Vec::new();
         for (class_name, fields) in field_data.iter() {
-            let mut field_details = phf_codegen::Map::new();
+            let mut field_entries: Vec<(String, String)> = Vec::new();
             for (field_name, field) in fields {
                 let field_decl = self.tdf.to_rust_field_type(&field.data_type)?;
                 let is_optional = if field.is_optional { "true" } else { "false" };
@@ -163,11 +163,22 @@ pub(crate) fn get_type_fields(class: &str) -> Result<&'static phf::Map<&'static 
                     },
                     _ => self.lookup_enum_processing_type(&field.data_type)?,
                 };
-                field_details.entry(to_field_name(field_name), &format!(
-                    "NodeData {{ type_decl: \"{}\", type_name: \"{}\", is_optional: {}, processing_type: FieldProcessingType::{}, path_segment: \"{}\", doc: {} }},",
-                    field_decl, type_name, is_optional, processing_type, field_name, esc(&field.description)));
+                field_entries.push((
+                    to_field_name(field_name),
+                    format!(
+                        "NodeData {{ type_decl: \"{}\", type_name: \"{}\", is_optional: {}, processing_type: FieldProcessingType::{}, path_segment: \"{}\", doc: {} }},",
+                        field_decl, type_name, is_optional, processing_type, field_name, esc(&field.description)),
+                ));
             }
-            structs.entry(class_name, &format!("{}", field_details.build()));
+            let mut field_details = phf_codegen::Map::new();
+            for (field_key, field_value) in &field_entries {
+                field_details.entry(field_key, field_value);
+            }
+            struct_entries.push((class_name.clone(), format!("{}", field_details.build())));
+        }
+        let mut structs = phf_codegen::Map::new();
+        for (class_key, class_value) in &struct_entries {
+            structs.entry(class_key, class_value);
         }
         self.printer.println(&format!("static CLASS_FIELDS: phf::Map<&'static str, phf::Map<&'static str, NodeData>> = {};", structs.build()))?;
         Ok(())

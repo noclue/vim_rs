@@ -2,6 +2,8 @@
 
 A Model Context Protocol (MCP) server that gives AI coding assistants comprehensive access to the **vSphere API for Rust** — enabling semantic search, property exploration, and intelligent code generation for [vim_rs](https://github.com/noclue/vim_rs).
 
+The embedded API database is built from the **vSphere 9.1.0.0** VI/JSON OpenAPI specification (`vim_build/data/vi_json_openapi_specification_v9_1_0_0.json`), aligned with `vim_rs` **0.6.0**.
+
 ## Quick Usage
 
 Once configured, your AI assistant can:

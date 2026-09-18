@@ -324,7 +324,7 @@ impl CryptoManagerKmip {
     /// 0x02. check the VMs which use that key.
     /// 0x04. check the hosts using this key as host key.
     /// 0x08. Check 3rd party program which use that key.
-    /// Other bits - reserved and will be igonred.
+    /// Other bits - reserved and will be ignored.
     ///
     /// ## Returns:
     ///
@@ -473,7 +473,7 @@ impl CryptoManagerKmip {
         let result: String = crate::core::client::unmarshal(self.client.transport(), &bytes)?;
         Ok(result)
     }
-    /// Get the server certficate.
+    /// Get the server certificate.
     /// 
     /// In the case of error, an empty
     /// certificate string is returned.
@@ -677,7 +677,7 @@ impl CryptoManagerKmip {
         let input = UploadClientCertRequestType {cluster, certificate, private_key, };
         self.client.invoke_void("", "CryptoManagerKmip", &self.mo_id, "UploadClientCert", Some(&input)).await
     }
-    /// Upload a server certficate.
+    /// Upload a server certificate.
     /// 
     /// ***Required privileges:*** Cryptographer.ManageKeyServers
     ///
