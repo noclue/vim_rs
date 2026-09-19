@@ -184,7 +184,7 @@ pub async fn invoke_tool(
             let mut output_text = String::new();
             
             for content in &result.content {
-                // Content is Annotated<RawContent>, extract text if it's a text content
+                // ContentBlock is the MCP 2025-11-25 content union
                 if let Some(text_content) = content.as_text() {
                     output_text.push_str(&text_content.text);
                     output_text.push('\n');
