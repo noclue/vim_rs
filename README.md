@@ -2,10 +2,6 @@
 
 Rust interface to the VMware vSphere VIM APIs, using the VI JSON API by default and an optional experimental SOAP/XML transport for direct ESXi connectivity.
 
-> ### ✨ **vSphere 9.1.0.0** — supported in **vim_rs 0.6.0**
->
-> **Fresh off the spec:** bindings regenerated from the 9.1.0.0 VI/JSON OpenAPI definition—new types, new methods, MCP tooling in sync. Point your `Cargo.toml` at `0.6.0` and you're on the latest API surface. See [`CHANGELOG.md`](CHANGELOG.md) for breaking changes (including new `EventFilterSpec` fields).
-
 * **Fully Asynchronous**: Built on tokio runtime for efficient non-blocking operations
 * **Type-Safe**: Comprehensive Rust types for the vSphere API objects
 * **Macro System**: Simplify property retrieval and monitoring with vim_retrievable and vim_updatable macros
@@ -50,6 +46,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
      // Now you can use the client for API calls
 
+     client.close().await?;
      Ok(())
 }
 ``` 

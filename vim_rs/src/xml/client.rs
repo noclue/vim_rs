@@ -1,4 +1,5 @@
 use std::borrow::Cow;
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::time::Instant;
 
 use bytes::Bytes;
@@ -8,7 +9,9 @@ use crate::core::client::WireLoggingMode;
 use crate::core::wire_log;
 use miniserde::ser::{Fragment, Map as SerMap, Serialize};
 
-use crate::core::client::{BoxFuture, Error, PropertyValue, Result, Transport, VimClient};
+use crate::core::client::{
+    drop_logout_on_runtime, BoxFuture, Error, PropertyValue, Result, Transport, VimClient,
+};
 use crate::types::enums::MoTypesEnum;
 use crate::types::structs::{
     ManagedObjectReference, MethodFault, ObjectSpec, PropertyFilterSpec, PropertySpec,
@@ -245,6 +248,7 @@ pub(crate) struct SoapClient {
     api_release: String,
     service_content: Option<ServiceContent>,
     wire_logging: WireLoggingMode,
+    session_ended: AtomicBool,
 }
 
 impl SoapClient {
@@ -264,6 +268,7 @@ impl SoapClient {
             api_release: api_release.to_string(),
             service_content: None,
             wire_logging,
+            session_ended: AtomicBool::new(false),
         }
     }
 
@@ -523,6 +528,98 @@ impl SoapClient {
         let val = prop_set.into_iter().next().unwrap().val;
         Ok(Some(val))
     }
+
+    async fn close_session(&self) -> Result<()> {
+        if self
+            .session_ended
+            .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
+            .is_err()
+        {
+            return Ok(());
+        }
+        self.logout_session().await
+    }
+
+    async fn logout_session(&self) -> Result<()> {
+        let Some(ref sc) = self.service_content else {
+            return Ok(());
+        };
+        let Some(ref sm) = sc.session_manager else {
+            debug!("No session manager. Skipping logout.");
+            return Ok(());
+        };
+        let sm_value = sm.value.clone();
+        let method_xml = build_soap_method_xml("Logout", "SessionManager", &sm_value, None);
+        let soap_body = super::soap::envelope(&method_xml);
+        if self.wire_logging.is_enabled() {
+            let mode_l = wire_log::wire_mode_label(self.wire_logging, "SessionManager");
+            let msg = format!(
+                "wire=soap mode={} phase=request kind=logout mo=SessionManager id={} method=Logout endpoint={} body_bytes={} body_logging=denylisted",
+                mode_l,
+                sm_value,
+                self.endpoint,
+                soap_body.len()
+            );
+            wire_log::log_soap_line(self.wire_logging, "SessionManager", false, &msg);
+        }
+        let started = Instant::now();
+        match self
+            .http_client
+            .post(&self.endpoint)
+            .header("Content-Type", CONTENT_TYPE)
+            .header("SOAPAction", SOAP_ACTION)
+            .header("User-Agent", &self.user_agent)
+            .body(soap_body)
+            .send()
+            .await
+        {
+            Ok(resp) => {
+                let status = resp.status();
+                let body = resp.text().await.unwrap_or_default();
+                let dur = started.elapsed();
+                if self.wire_logging.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(self.wire_logging, "SessionManager");
+                    let http_note = if status.is_success() {
+                        ""
+                    } else {
+                        " error=http_failure"
+                    };
+                    let msg = format!(
+                        "wire=soap mode={} phase=response kind=logout mo=SessionManager id={} method=Logout status={} body_bytes={} duration_ms={} body_logging=denylisted{}",
+                        mode_l,
+                        sm_value,
+                        status.as_u16(),
+                        body.len(),
+                        dur.as_millis(),
+                        http_note
+                    );
+                    wire_log::log_soap_line(self.wire_logging, "SessionManager", false, &msg);
+                }
+                if status.is_success() {
+                    debug!("SOAP session logged out successfully");
+                    Ok(())
+                } else {
+                    warn!("SOAP logout failed (HTTP {})", status);
+                    Err(Error::ParseError(format!("Logout HTTP {}", status.as_u16())))
+                }
+            }
+            Err(e) => {
+                if self.wire_logging.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(self.wire_logging, "SessionManager");
+                    let msg = format!(
+                        "wire=soap mode={} phase=response kind=logout mo=SessionManager id={} method=Logout error=transport duration_ms={} body_logging=denylisted detail={}",
+                        mode_l,
+                        sm_value,
+                        started.elapsed().as_millis(),
+                        e
+                    );
+                    wire_log::log_soap_line(self.wire_logging, "SessionManager", false, &msg);
+                }
+                warn!("SOAP logout request failed: {}", e);
+                Err(Error::ReqwestError(e))
+            }
+        }
+    }
 }
 
 impl VimClient for SoapClient {
@@ -630,94 +727,27 @@ impl VimClient for SoapClient {
             Ok(maybe.map(PropertyValue::Parsed))
         })
     }
+
+    fn close<'a>(&'a self) -> BoxFuture<'a, Result<()>> {
+        Box::pin(async { self.close_session().await })
+    }
 }
 
 impl Drop for SoapClient {
     fn drop(&mut self) {
         debug!("Disposing SOAP client.");
-        let Some(ref sc) = self.service_content else {
-            return;
-        };
-        let Some(ref sm) = sc.session_manager else {
-            debug!("No session manager. Skipping logout.");
-            return;
-        };
-        let sm_value = sm.value.clone();
-        let http_client = self.http_client.clone();
-        let endpoint = self.endpoint.clone();
-        let user_agent = self.user_agent.clone();
-        let wire_logging = self.wire_logging;
-
-        tokio::task::block_in_place(|| {
-            tokio::runtime::Handle::current().block_on(async move {
-                let method_xml = build_soap_method_xml("Logout", "SessionManager", &sm_value, None);
-                let soap_body = super::soap::envelope(&method_xml);
-                if wire_logging.is_enabled() {
-                    let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
-                    let msg = format!(
-                        "wire=soap mode={} phase=request kind=logout mo=SessionManager id={} method=Logout endpoint={} body_bytes={} body_logging=denylisted",
-                        mode_l,
-                        sm_value,
-                        endpoint,
-                        soap_body.len()
-                    );
-                    wire_log::log_soap_line(wire_logging, "SessionManager", false, &msg);
-                }
-                let started = Instant::now();
-                match http_client
-                    .post(&endpoint)
-                    .header("Content-Type", CONTENT_TYPE)
-                    .header("SOAPAction", SOAP_ACTION)
-                    .header("User-Agent", &user_agent)
-                    .body(soap_body)
-                    .send()
-                    .await
-                {
-                    Ok(resp) => {
-                        let status = resp.status();
-                        let body = resp.text().await.unwrap_or_default();
-                        let dur = started.elapsed();
-                        if wire_logging.is_enabled() {
-                            let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
-                            let http_note = if status.is_success() {
-                                ""
-                            } else {
-                                " error=http_failure"
-                            };
-                            let msg = format!(
-                                "wire=soap mode={} phase=response kind=logout mo=SessionManager id={} method=Logout status={} body_bytes={} duration_ms={} body_logging=denylisted{}",
-                                mode_l,
-                                sm_value,
-                                status.as_u16(),
-                                body.len(),
-                                dur.as_millis(),
-                                http_note
-                            );
-                            wire_log::log_soap_line(wire_logging, "SessionManager", false, &msg);
-                        }
-                        if status.is_success() {
-                            debug!("SOAP session logged out successfully");
-                        } else {
-                            warn!("SOAP logout failed (HTTP {})", status);
-                        }
-                    }
-                    Err(e) => {
-                        if wire_logging.is_enabled() {
-                            let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
-                            let msg = format!(
-                                "wire=soap mode={} phase=response kind=logout mo=SessionManager id={} method=Logout error=transport duration_ms={} body_logging=denylisted detail={}",
-                                mode_l,
-                                sm_value,
-                                started.elapsed().as_millis(),
-                                e
-                            );
-                            wire_log::log_soap_line(wire_logging, "SessionManager", false, &msg);
-                        }
-                        warn!("SOAP logout request failed: {}", e);
-                    }
-                }
+        let should_attempt = self
+            .service_content
+            .as_ref()
+            .and_then(|sc| sc.session_manager.as_ref())
+            .is_some();
+        if let Some(handle) = drop_logout_on_runtime(&self.session_ended, should_attempt) {
+            tokio::task::block_in_place(|| {
+                handle.block_on(async {
+                    let _ = self.logout_session().await;
+                });
             });
-        });
+        }
     }
 }
 
@@ -797,6 +827,7 @@ pub(crate) fn soap_test_client_for_logout_drop(
             crate::core::client::test_service_content_with_session_manager_for_tests(),
         ),
         wire_logging: WireLoggingMode::Summary,
+        session_ended: std::sync::atomic::AtomicBool::new(false),
     }
 }
 

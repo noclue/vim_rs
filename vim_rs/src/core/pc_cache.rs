@@ -340,7 +340,8 @@ struct CacheRecord {
 /// caches. The CacheManager is also responsible for cleaning up the filters and caches when
 /// no longer needed.
 ///
-/// Use the `destroy` method to clean up all caches and filters.
+/// Use the `destroy` method to clean up all caches and filters, then
+/// [`crate::core::client::VimClient::close`] to end the vSphere session.
 pub struct CacheManager {
     client: Arc<dyn VimClient>,
     property_collector: PropertyCollector,
@@ -560,6 +561,9 @@ impl CacheManager {
     }
 
     /// Remove all caches. This is used to clean up all caches that are no longer needed.
+    ///
+    /// After `destroy`, call [`crate::core::client::VimClient::close`] to end the vSphere session.
+    /// `destroy` does not log out.
     pub async fn destroy(&mut self) -> Result<()> {
         let had_caches = !self.caches.is_empty();
         for (filter_id, cache_rec) in self.caches.iter() {

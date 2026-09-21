@@ -46,5 +46,6 @@ async fn main() -> anyhow::Result<()> {
         miniserde::json::to_string(&permissions)
     );
 
+    client.close().await?;
     Ok(())
 }

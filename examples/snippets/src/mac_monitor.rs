@@ -280,8 +280,10 @@ async fn main() -> Result<()> {
 
     let listener = Box::new(VmChangePrinter {});
     let listener = Box::new(VMMacCache::new(listener));
-    let mut detector = VmChangeDetector::new(listener, client).await?;
+    let mut detector = VmChangeDetector::new(listener, client.clone()).await?;
     detector.monitor(30).await?;
+    drop(detector);
+    client.close().await?;
 
     Ok(())
 }

@@ -191,5 +191,6 @@ async fn main() -> Result<()> {
         }
         //break;
     }
+    client.close().await?;
     Ok(())
 }

@@ -114,10 +114,8 @@
 
 use anyhow::{Context, Result};
 use log::info;
-use tokio::time::sleep;
 use vim_rs::types::convert::CastInto as _;
 use std::env;
-use std::time::Duration;
 use snippets::connect;
 use vim_rs::vim_retrievable;
 use vim_rs::core::tasks::TaskTracker;
@@ -217,6 +215,7 @@ async fn toggle_wol() -> Result<()> {
 
     if nic_count == 0 {
         info!("No ethernet network adapters found on VM");
+        client.close().await?;
         return Ok(());
     }
 
@@ -250,6 +249,7 @@ async fn toggle_wol() -> Result<()> {
     info!("✅ Task completed successfully");
     info!("Successfully toggled Wake-on-LAN for {} NIC(s)", nic_count);
 
+    client.close().await?;
     Ok(())
 }
 
@@ -259,8 +259,6 @@ async fn main() -> Result<()> {
     dotenvy::dotenv().ok();
     env_logger::init();
     toggle_wol().await?;
-    // Yield to run async drop cleanup
-    sleep(Duration::from_millis(100)).await;
 
     Ok(())
 }

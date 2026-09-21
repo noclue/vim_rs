@@ -49,6 +49,7 @@ async fn main() -> Result<()> {
         .await;
     ratatui::restore();
     cache_manager.borrow_mut().destroy().await?;
+    client.close().await?;
     app_result
 }
 

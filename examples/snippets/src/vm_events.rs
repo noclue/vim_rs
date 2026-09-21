@@ -80,5 +80,6 @@ async fn main() -> anyhow::Result<()> {
     }
 
     manager.destroy().await?;
+    client.close().await?;
     Ok(())
 }

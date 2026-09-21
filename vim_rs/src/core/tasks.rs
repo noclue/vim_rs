@@ -11,6 +11,10 @@
 //! - Completing the caller’s `oneshot` when the task reaches a terminal state, and removing the
 //!   task from the view.
 //!
+//! When the application is done, call [`TaskTracker::shutdown`] to stop waiters, then
+//! [`crate::core::client::VimClient::close`] on the session. `TaskTracker` does not close the
+//! client.
+//!
 //! ## Results and narrowing
 //!
 //! `TaskInfo.result` in the vSphere API is `Option<VimAny>`:
@@ -97,6 +101,9 @@ impl TaskTracker {
     ///
     /// After shutdown, new `wait_any` calls will start a fresh background loop.
     /// If no background loop is running, this is a no-op.
+    ///
+    /// This does not log out of vSphere. After waiters are stopped, call
+    /// [`crate::core::client::VimClient::close`] on the client.
     pub async fn shutdown(&self) {
         let shutdown_tx = {
             let mut state = self.state.write().await;

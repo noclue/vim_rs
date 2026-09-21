@@ -22,11 +22,12 @@ async fn main() -> anyhow::Result<()> {
     let raw = env::var("MO_REF").context("MO_REF e.g. VirtualMachine:vm-42")?;
     let (_t, id) = raw.split_once(':').context("MO_REF must be Type:id")?;
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
-    let n = VirtualMachine::new(client, id.trim())
+    let n = VirtualMachine::new(client.clone(), id.trim())
         .disabled_method()
         .await?
         .map(|m| m.len())
         .unwrap_or(0);
     println!("{n}");
+    client.close().await?;
     Ok(())
 }

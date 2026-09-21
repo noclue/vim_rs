@@ -4,7 +4,9 @@
 
 **Input**: Feature specification from `specs/004-client-close/spec.md`
 
-**Note**: Filled by `/speckit-plan`. Workflow: `.specify/templates/plan-template.md`.
+**Note**: Filled by `/speckit-plan`. Workflow: `.specify/templates/plan-template.md`. Re-run 2026-09-21: Phase 0–1 artifacts unchanged (no new unknowns). `tasks.md` already exists from `/speckit-tasks`.
+
+**Spec-quality checklist**: `checklists/requirements.md` leaves two “no implementation details” boxes open on purpose (library session API is the subject matter). That is **not** a constitution-gate failure. `/speckit-implement` will ask before proceeding unless those boxes are accepted as exceptions.
 
 ## Summary
 

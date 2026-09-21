@@ -22,9 +22,7 @@
 
 use anyhow::{Context, Result};
 use log::info;
-use tokio::time::sleep;
 use std::env;
-use std::time::Duration;
 use snippets::connect;
 use vim_rs::mo::{SearchIndex, VirtualMachine};
 use vim_rs::core::tasks::TaskTracker;
@@ -83,6 +81,7 @@ async fn rename_vm() -> Result<()> {
     let updated_name = vm.name().await?;
     info!("Verified new VM name: {}", updated_name);
 
+    client.close().await?;
     Ok(())
 }
 
@@ -92,7 +91,5 @@ async fn main() -> Result<()> {
     env_logger::init();
 
     rename_vm().await?;
-    // Yield to run async drop cleanup
-    sleep(Duration::from_millis(10)).await;
     Ok(())
 }

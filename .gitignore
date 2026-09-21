@@ -8,6 +8,11 @@ mcp/build-embeddings/.fastembed_cache
 .zed
 .env
 
+# Rust artifacts
+*.rs.bk
+*.rlib
+*.prof*
+
 # MCP model cache (fastembed downloads)
 mcp/data/model_cache/
 

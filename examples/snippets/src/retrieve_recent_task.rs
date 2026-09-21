@@ -52,5 +52,6 @@ async fn main() -> anyhow::Result<()> {
         info!("Task: {:?}", task);
     }
 
+    client.close().await?;
     Ok(())
 }

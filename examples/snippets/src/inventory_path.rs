@@ -282,7 +282,7 @@ async fn main() -> Result<()> {
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
     info!("Connected to {}", client.service_content().about.full_name);
 
-    let path = inventory_path_batch(client, start.clone()).await?;
+    let path = inventory_path_batch(client.clone(), start.clone()).await?;
     info!(
         "Inventory path of {}:{}: {}",
         start.r#type.as_str(),
@@ -290,5 +290,6 @@ async fn main() -> Result<()> {
         path
     );
     println!("{}", path);
+    client.close().await?;
     Ok(())
 }

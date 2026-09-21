@@ -105,5 +105,6 @@ async fn main() -> Result<()> {
         .await?;
 
     info!("VM Config Option: {:?}", cfg_option);
+    client.close().await?;
     Ok(())
 }

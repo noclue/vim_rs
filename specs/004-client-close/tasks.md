@@ -25,8 +25,8 @@
 
 **Purpose**: Confirm 0.6.1 compatible landing; no new Cargo feature.
 
-- [ ] T001 Review [contracts/README.md](./contracts/README.md) against current `Drop` in `vim_rs/src/core/client.rs` and `vim_rs/src/xml/client.rs`
-- [ ] T002 Confirm `vim_rs/Cargo.toml` stays without a logout-on-drop feature and keeps `tokio` `rt-multi-thread` (needed for 0.6.x Drop fallback)
+- [X] T001 Review [contracts/README.md](./contracts/README.md) against current `Drop` in `vim_rs/src/core/client.rs` and `vim_rs/src/xml/client.rs`
+- [X] T002 Confirm `vim_rs/Cargo.toml` stays without a logout-on-drop feature and keeps `tokio` `rt-multi-thread` (needed for 0.6.x Drop fallback)
 
 ---
 
@@ -36,11 +36,11 @@
 
 **⚠️ CRITICAL**: No user story work until this phase completes.
 
-- [ ] T003 Add `session_ended: AtomicBool` to `JsonClient` and every `JsonClient { ... }` construction site in `vim_rs/src/core/client.rs` (`build_json` bootstrap/json, `test_json_client_wire_transport`, `test_json_client_http_origin`)
-- [ ] T004 [P] Add `session_ended: AtomicBool` to `SoapClient`, `SoapClient::new`, and `soap_test_client_for_logout_drop` in `vim_rs/src/xml/client.rs`
-- [ ] T005 Extract `async fn logout_session` from JSON `Drop` HTTP in `vim_rs/src/core/client.rs`; `Drop` still uses `block_in_place` + `block_on(logout_session)` (0.6.0 behavior)
-- [ ] T006 [P] Extract `async fn logout_session` from SOAP `Drop` HTTP in `vim_rs/src/xml/client.rs`; `Drop` still uses `block_in_place` + `block_on(logout_session)`
-- [ ] T007 Run `cargo check -p vim_rs --all-features` after T003–T006 in `vim_rs/src/core/client.rs` and `vim_rs/src/xml/client.rs`
+- [X] T003 Add `session_ended: AtomicBool` to `JsonClient` and every `JsonClient { ... }` construction site in `vim_rs/src/core/client.rs` (`build_json` bootstrap/json, `test_json_client_wire_transport`, `test_json_client_http_origin`)
+- [X] T004 [P] Add `session_ended: AtomicBool` to `SoapClient`, `SoapClient::new`, and `soap_test_client_for_logout_drop` in `vim_rs/src/xml/client.rs`
+- [X] T005 Extract `async fn logout_session` from JSON `Drop` HTTP in `vim_rs/src/core/client.rs`; `Drop` still uses `block_in_place` + `block_on(logout_session)` (0.6.0 behavior)
+- [X] T006 [P] Extract `async fn logout_session` from SOAP `Drop` HTTP in `vim_rs/src/xml/client.rs`; `Drop` still uses `block_in_place` + `block_on(logout_session)`
+- [X] T007 Run `cargo check -p vim_rs --all-features` after T003–T006 in `vim_rs/src/core/client.rs` and `vim_rs/src/xml/client.rs`
 
 **Checkpoint**: Crate compiles; logout HTTP is one async function per transport; Drop still blocks on multi-thread.
 
@@ -56,17 +56,17 @@
 
 > Write these first; they fail until T011–T014 land.
 
-- [ ] T008 [US1] Add JSON `close` wire tests (HTTP success, non-success, transport error) in `wire_logging_transport_tests` in `vim_rs/src/core/client.rs`
-- [ ] T009 [US1] Add SOAP `close` wire tests (`#[cfg(feature = "xml")]`) in `wire_logging_transport_tests` in `vim_rs/src/core/client.rs`
-- [ ] T010 [US1] Add tests for close-twice, close with an extra live `Arc` clone, and close-then-drop (exactly one Logout) in `vim_rs/src/core/client.rs`
+- [X] T008 [US1] Add JSON `close` wire tests (HTTP success, non-success, transport error) in `wire_logging_transport_tests` in `vim_rs/src/core/client.rs`
+- [X] T009 [US1] Add SOAP `close` wire tests (`#[cfg(feature = "xml")]`) in `wire_logging_transport_tests` in `vim_rs/src/core/client.rs`
+- [X] T010 [US1] Add tests for close-twice, close with an extra live `Arc` clone, and close-then-drop (exactly one Logout) in `vim_rs/src/core/client.rs`
 
 ### Implementation for User Story 1
 
-- [ ] T011 [US1] Add `VimClient::close` default no-op (`Box::pin(async { Ok(()) })`) plus rustdoc in `vim_rs/src/core/client.rs`
-- [ ] T012 [US1] Add inherent `Client::close(&self)` and override `impl VimClient for Client` to forward to `inner` (must not use the default) in `vim_rs/src/core/client.rs`
-- [ ] T013 [US1] Implement `JsonClient` `close`: CAS `session_ended`, `logout_session` while the session key is still set, then `take()` the key; `Drop` returns immediately if `session_ended` in `vim_rs/src/core/client.rs`
-- [ ] T014 [P] [US1] Implement `SoapClient` `close`: CAS `session_ended`, `logout_session`; `Drop` returns immediately if `session_ended` in `vim_rs/src/xml/client.rs`
-- [ ] T015 [US1] Run `cargo test -p vim_rs` (and `--features xml` / `--all-features` for SOAP close tests); confirm `vim_rs/tests/support/mock_vim_client.rs` needs no `close` method (SC-001, SC-004)
+- [X] T011 [US1] Add `VimClient::close` default no-op (`Box::pin(async { Ok(()) })`) plus rustdoc in `vim_rs/src/core/client.rs`
+- [X] T012 [US1] Add inherent `Client::close(&self)` and override `impl VimClient for Client` to forward to `inner` (must not use the default) in `vim_rs/src/core/client.rs`
+- [X] T013 [US1] Implement `JsonClient` `close`: CAS `session_ended`, `logout_session` while the session key is still set, then `take()` the key; `Drop` returns immediately if `session_ended` in `vim_rs/src/core/client.rs`
+- [X] T014 [P] [US1] Implement `SoapClient` `close`: CAS `session_ended`, `logout_session`; `Drop` returns immediately if `session_ended` in `vim_rs/src/xml/client.rs`
+- [X] T015 [US1] Run `cargo test -p vim_rs` (and `--features xml` / `--all-features` for SOAP close tests); confirm `vim_rs/tests/support/mock_vim_client.rs` needs no `close` method (SC-001, SC-004)
 
 **Checkpoint**: `close` works on `Arc<Client>` and `Arc<dyn VimClient>`; idempotent; mocks compile.
 
@@ -80,10 +80,10 @@
 
 ### Implementation for User Story 2
 
-- [ ] T016 [US2] Confirm `JsonClient` `Drop` still `block_in_place` + `logout_session` when `!session_ended` and a session exists in `vim_rs/src/core/client.rs`
-- [ ] T017 [P] [US2] Confirm `SoapClient` `Drop` still `block_in_place` + `logout_session` when `!session_ended` and a session exists in `vim_rs/src/xml/client.rs`
-- [ ] T018 [US2] Run `json_drop_logout_emits_wire_lines_on_http_success`, non-success, transport, and SOAP equivalents in `vim_rs/src/core/client.rs` (SC-002)
-- [ ] T019 [US2] Document destructor logout as a 0.6.x compatibility fallback to be removed in 0.7.0 on `Client` and `VimClient` rustdoc in `vim_rs/src/core/client.rs`
+- [X] T016 [US2] Confirm `JsonClient` `Drop` still `block_in_place` + `logout_session` when `!session_ended` and a session exists in `vim_rs/src/core/client.rs`
+- [X] T017 [P] [US2] Confirm `SoapClient` `Drop` still `block_in_place` + `logout_session` when `!session_ended` and a session exists in `vim_rs/src/xml/client.rs`
+- [X] T018 [US2] Run `json_drop_logout_emits_wire_lines_on_http_success`, non-success, transport, and SOAP equivalents in `vim_rs/src/core/client.rs` (SC-002)
+- [X] T019 [US2] Document destructor logout as a 0.6.x compatibility fallback to be removed in 0.7.0 on `Client` and `VimClient` rustdoc in `vim_rs/src/core/client.rs`
 
 **Checkpoint**: Unchanged multi-thread Drop logout; rustdoc points at `close`.
 
@@ -97,15 +97,15 @@
 
 ### Tests for User Story 3
 
-- [ ] T020 [US3] Add `#[tokio::test(flavor = "current_thread")]` Drop-without-close does not panic (and emits warn if practical) in `vim_rs/src/core/client.rs`
-- [ ] T021 [US3] Add `current_thread` close-then-drop silent test (JSON; SOAP if `xml`) in `vim_rs/src/core/client.rs`
+- [X] T020 [US3] Add `#[tokio::test(flavor = "current_thread")]` Drop-without-close does not panic (and emits warn if practical) in `vim_rs/src/core/client.rs`
+- [X] T021 [US3] Add `current_thread` close-then-drop silent test (JSON; SOAP if `xml`) in `vim_rs/src/core/client.rs`
 
 ### Implementation for User Story 3
 
-- [ ] T022 [US3] Add `pub(crate)` Drop runtime helper (`Handle::try_current`, `RuntimeFlavor::MultiThread` vs `CurrentThread` vs none) in `vim_rs/src/core/client.rs`
-- [ ] T023 [US3] Switch `JsonClient` `Drop` to the helper: multi-thread claims `session_ended` and `block_on(logout_session)`; otherwise `warn!` and return in `vim_rs/src/core/client.rs`
-- [ ] T024 [P] [US3] Switch `SoapClient` `Drop` to the same helper in `vim_rs/src/xml/client.rs`
-- [ ] T025 [US3] Run the `current_thread` tests in `vim_rs/src/core/client.rs` (SC-003); re-run US2 Drop tests to confirm multi-thread still logs out
+- [X] T022 [US3] Add `pub(crate)` Drop runtime helper (`Handle::try_current`, `RuntimeFlavor::MultiThread` vs `CurrentThread` vs none) in `vim_rs/src/core/client.rs`
+- [X] T023 [US3] Switch `JsonClient` `Drop` to the helper: multi-thread claims `session_ended` and `block_on(logout_session)`; otherwise `warn!` and return in `vim_rs/src/core/client.rs`
+- [X] T024 [P] [US3] Switch `SoapClient` `Drop` to the same helper in `vim_rs/src/xml/client.rs`
+- [X] T025 [US3] Run the `current_thread` tests in `vim_rs/src/core/client.rs` (SC-003); re-run US2 Drop tests to confirm multi-thread still logs out
 
 **Checkpoint**: `current_thread` Drop does not panic; multi-thread Drop logout still works.
 
@@ -119,17 +119,17 @@
 
 ### Implementation for User Story 4
 
-- [ ] T026 [P] [US4] Rewrite Drop/logout section to `close` + 0.6.x fallback in `vim_rs/docs/CLIENT.md`
-- [ ] T027 [P] [US4] Add `client.close().await?` to the connect sample in `README.md`
-- [ ] T028 [P] [US4] Add `close` to the crate-level sample in `vim_rs/src/lib.rs`
-- [ ] T029 [P] [US4] Add `[Unreleased]` **Added** `close` and **Deprecated** destructor logout (remove in 0.7.0) in `CHANGELOG.md` — no Breaking (SC-006)
-- [ ] T030 [P] [US4] Document shutdown-then-close (no new API) in `vim_rs/src/core/tasks.rs`
-- [ ] T031 [P] [US4] Document destroy/cancel-wait-then-close (no new API) in `vim_rs/src/core/pc_cache.rs`
-- [ ] T032 [US4] Call `client.close().await?` and remove yield-for-drop `sleep` in `examples/snippets/src/vm_rename.rs`
-- [ ] T033 [P] [US4] Call `client.close().await?` and remove yield-for-drop `sleep` in `examples/snippets/src/vm_toggle_wol.rs`
-- [ ] T034 [US4] Call `client.close().await?` on shutdown in remaining snippet binaries under `examples/snippets/src/`: `dynamic_property_fetch.rs`, `env_browser.rs`, `eventster.rs`, `inventory_path.rs`, `mac_monitor.rs`, `perf_metrics.rs`, `print_vm_addresses.rs`, `property_collector.rs`, `retrieve_ds_hosts.rs`, `retrieve_host_info.rs`, `retrieve_recent_task.rs`, `root_objects.rs`, `vm_disabled_method_len.rs`, `vm_events.rs`, `vm_ip.rs`
-- [ ] T035 [P] [US4] After `cache_manager.destroy()`, call `client.close().await?` in `examples/vtui/src/main.rs`
-- [ ] T036 [US4] Confirm `rg "Yield to run async drop" examples/snippets` is empty and snippet mains call `close` (SC-005)
+- [X] T026 [P] [US4] Rewrite Drop/logout section to `close` + 0.6.x fallback in `vim_rs/docs/CLIENT.md`
+- [X] T027 [P] [US4] Add `client.close().await?` to the connect sample in `README.md`
+- [X] T028 [P] [US4] Add `close` to the crate-level sample in `vim_rs/src/lib.rs`
+- [X] T029 [P] [US4] Add `[Unreleased]` **Added** `close` and **Deprecated** destructor logout (remove in 0.7.0) in `CHANGELOG.md` — no Breaking (SC-006)
+- [X] T030 [P] [US4] Document shutdown-then-close (no new API) in `vim_rs/src/core/tasks.rs`
+- [X] T031 [P] [US4] Document destroy/cancel-wait-then-close (no new API) in `vim_rs/src/core/pc_cache.rs`
+- [X] T032 [US4] Call `client.close().await?` and remove yield-for-drop `sleep` in `examples/snippets/src/vm_rename.rs`
+- [X] T033 [P] [US4] Call `client.close().await?` and remove yield-for-drop `sleep` in `examples/snippets/src/vm_toggle_wol.rs`
+- [X] T034 [US4] Call `client.close().await?` on shutdown in remaining snippet binaries under `examples/snippets/src/`: `dynamic_property_fetch.rs`, `env_browser.rs`, `eventster.rs`, `inventory_path.rs`, `mac_monitor.rs`, `perf_metrics.rs`, `print_vm_addresses.rs`, `property_collector.rs`, `retrieve_ds_hosts.rs`, `retrieve_host_info.rs`, `retrieve_recent_task.rs`, `root_objects.rs`, `vm_disabled_method_len.rs`, `vm_events.rs`, `vm_ip.rs`
+- [X] T035 [P] [US4] After `cache_manager.destroy()`, call `client.close().await?` in `examples/vtui/src/main.rs`
+- [X] T036 [US4] Confirm `rg "Yield to run async drop" examples/snippets` is empty and snippet mains call `close` (SC-005)
 
 **Checkpoint**: Docs and in-tree examples teach `close`; sleeps gone.
 
@@ -139,10 +139,10 @@
 
 **Purpose**: Full test matrix and quickstart DoD. Version bump is a release step, not required in the implementation PR.
 
-- [ ] T037 Run `cargo test -p vim_rs` from repo root
-- [ ] T038 Run `cargo test -p vim_rs --all-features` from repo root
-- [ ] T039 Walk definition of done in `specs/004-client-close/quickstart.md`
-- [ ] T040 Leave `vim_rs` version at `0.6.0` in `vim_rs/Cargo.toml` unless this PR is the 0.6.1 release; keep the 0.6.1 note in `CHANGELOG.md` only
+- [X] T037 Run `cargo test -p vim_rs` from repo root
+- [X] T038 Run `cargo test -p vim_rs --all-features` from repo root
+- [X] T039 Walk definition of done in `specs/004-client-close/quickstart.md`
+- [X] T040 Leave `vim_rs` version at `0.6.0` in `vim_rs/Cargo.toml` unless this PR is the 0.6.1 release; keep the 0.6.1 note in `CHANGELOG.md` only
 
 ---
 
