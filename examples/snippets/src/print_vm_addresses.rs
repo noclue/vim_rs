@@ -77,5 +77,6 @@ async fn main() -> anyhow::Result<()> {
             vm.name
         );
     }
+    client.close().await?;
     Ok(())
 }

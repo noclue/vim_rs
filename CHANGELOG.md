@@ -19,6 +19,19 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Added
+
+- **`Client::close` / `VimClient::close`**: non-consuming, idempotent session logout. Safe with live
+  `Arc` clones; a second `close` is `Ok` and does not send another Logout. Built-in JSON and SOAP
+  clients (and the `Client` facade) perform Logout; mock `VimClient` impls keep the default no-op.
+
+### Deprecated
+
+- **Destructor logout** on the last inner JSON/SOAP handle is a 0.6.x compatibility fallback on the
+  **multi-thread** Tokio runtime only. On `current_thread` (and with no Tokio handle) Drop warns
+  instead of panicking. Call `close().await` at shutdown. Destructor logout will be **removed in
+  0.7.0**.
+
 ## [0.6.0] - 2026-06-26
 
 > **Breaking minor release.** Bindings regenerated from the vSphere **9.1.0.0** VI/JSON

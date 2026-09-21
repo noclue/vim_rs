@@ -19,9 +19,10 @@
 //!         .insecure(true) // For self-signed certs
 //!         .build()
 //!         .await?;
-//! 
+//!
 //!     // Now you can use the client for API calls
-//! 
+//!
+//!     client.close().await?;
 //!     Ok(())
 //! }
 //! ```

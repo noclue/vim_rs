@@ -57,5 +57,6 @@ async fn main() -> anyhow::Result<()> {
         );
     }
 
+    client.close().await?;
     Ok(())
 }

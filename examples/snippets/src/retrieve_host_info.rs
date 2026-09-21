@@ -54,5 +54,6 @@ async fn main() -> Result<()> {
         );
     }
 
+    client.close().await?;
     Ok(())
 }

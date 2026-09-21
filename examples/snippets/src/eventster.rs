@@ -118,11 +118,13 @@ async fn main() -> Result<()> {
     let client = connect(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION")).await?;
 
     let Some(event_manager_moref) = client.service_content().event_manager.clone() else {
+        let _ = client.close().await;
         return Err(Error::msg("No event manager found"));
     };
     let event_manager = EventManager::new(client.clone(), &event_manager_moref.value);
 
     dump_events(client.clone(), &event_manager).await?;
 
+    client.close().await?;
     Ok(())
 }

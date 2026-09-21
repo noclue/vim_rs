@@ -61,16 +61,20 @@ The public `Client` **also** implements `VimClient` by delegating to its `inner:
 
 ---
 
-## 5. Drop and logout
+## 5. Close and logout
 
-The **facade** `Client` has **no** `Drop` implementation.
+Call **`client.close().await`** to end the vSphere session. `close` is non-consuming and idempotent: live `Arc` clones of the handle are fine; a second `close` is `Ok` and does not send another Logout.
 
-Logout runs when the **last** `Arc` to the **inner** transport client is dropped:
+The **facade** `Client` has **no** `Drop` implementation. Logout from the destructor is a **0.6.x compatibility fallback**:
 
 - **JSON client (`JsonClient`, crate-private)**: `SessionManager.Logout` over the VI JSON API.
 - **SOAP client (`SoapClient`, crate-private)**: SOAP `Logout`.
 
-Dropping `Arc<Client>` only drops the facade shell; the inner `Arc<dyn VimClient>` is decremented. When that count hits zero, the concrete type’s `Drop` runs.
+That fallback runs only on a **multi-thread** Tokio runtime when `close` was never called and the last inner `Arc` is dropped. On a `current_thread` runtime (or with no Tokio handle), Drop **warns** and does not panic. Destructor logout will be **removed in 0.7.0** — always call `close`.
+
+Dropping `Arc<Client>` only drops the facade shell; the inner `Arc<dyn VimClient>` is decremented. When that count hits zero, the concrete type’s `Drop` runs (0.6.x fallback above).
+
+Stop PropertyCollector waiters (`Monitor::cancel_wait`, `TaskTracker::shutdown`) and `CacheManager::destroy().await` **before** `close`.
 
 ---
 

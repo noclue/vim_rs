@@ -52,6 +52,7 @@ async fn main() -> Result<()> {
             Some(moref) => Some(moref),
             None => {
                 error!("No object found at inventory path '{}'", inv_path);
+                client.close().await?;
                 return Ok(());
             }
         };
@@ -74,5 +75,6 @@ async fn main() -> Result<()> {
         error!("Could not retrieve VM properties. The VM might have been deleted.");
     }
 
+    client.close().await?;
     Ok(())
 }

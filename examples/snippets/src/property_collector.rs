@@ -126,5 +126,6 @@ async fn main() -> Result<()> {
         let alarm = alarm_manager.get_alarm(Some(&entity)).await?;
         debug!("Alarms for {} are: {:?}", entity.value, alarm);
     }
+    client.close().await?;
     Ok(())
 }

@@ -1,3 +1,4 @@
+use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::time::Instant;
 
@@ -202,6 +203,53 @@ pub trait VimClient: Send + Sync {
         mo_id: &'a str,
         property: &'a str,
     ) -> BoxFuture<'a, Result<Option<PropertyValue>>>;
+
+    /// End the vSphere session if one is active.
+    ///
+    /// Non-consuming and **idempotent**: other clones of the handle may still exist. A second
+    /// `close` is `Ok` and does not send another Logout. Prefer this over destructor logout.
+    ///
+    /// In 0.6.x, dropping the last inner transport handle still logs out on the **multi-thread**
+    /// Tokio runtime if `close` was never called. On a `current_thread` runtime that fallback
+    /// only emits a warning (it panics in 0.6.0). Destructor logout will be removed in **0.7.0**.
+    ///
+    /// Built-in JSON and SOAP clients override this. The default is a no-op so mocks compile
+    /// without a `close` method.
+    fn close(&self) -> BoxFuture<'_, Result<()>> {
+        Box::pin(async { Ok(()) })
+    }
+}
+
+/// 0.6.x destructor logout: `block_in_place` on the multi-thread runtime only.
+///
+/// Returns a Tokio handle when the caller should `block_in_place(|| handle.block_on(logout))`.
+/// `current_thread` / no runtime: warn and return `None` (do not panic). Claims `session_ended`
+/// before returning the handle so a racing `close` does not send a second Logout.
+pub(crate) fn drop_logout_on_runtime(
+    session_ended: &AtomicBool,
+    should_attempt: bool,
+) -> Option<tokio::runtime::Handle> {
+    if !should_attempt || session_ended.load(Ordering::Acquire) {
+        return None;
+    }
+    match tokio::runtime::Handle::try_current() {
+        Ok(handle) if handle.runtime_flavor() == tokio::runtime::RuntimeFlavor::MultiThread => {
+            if session_ended
+                .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
+                .is_err()
+            {
+                return None;
+            }
+            Some(handle)
+        }
+        _ => {
+            warn!(
+                "VimClient dropped with an active session; call Client::close().await to log out. \
+                 Destructor logout is a 0.6.x multi-thread fallback and will be removed in 0.7.0."
+            );
+            None
+        }
+    }
 }
 
 /// Deserialize response bytes according to the transport format.
@@ -642,6 +690,7 @@ impl ClientBuilder {
             user_agent: user_agent.clone(),
             service_content: None,
             wire_logging: wire_logging,
+            session_ended: AtomicBool::new(false),
         });
 
         let service_instance = mo::ServiceInstance::new(bootstrap.clone(), SERVICE_INSTANCE_MOID);
@@ -658,6 +707,7 @@ impl ClientBuilder {
             user_agent: user_agent.clone(),
             service_content: Some(content),
             wire_logging: wire_logging,
+            session_ended: AtomicBool::new(false),
         });
 
         if let (Some(ref sm_id), Some(ref user_name), Some(ref password)) = (sm_id, self.user_name, self.password) {
@@ -789,10 +839,12 @@ impl ClientBuilder {
 }
 
 /// User-facing session handle: **only** the public methods that existed on `Client` in vim_rs **0.4.0**
-/// (`service_content`, `api_release`, `fetch_property`), independent of wire format.
+/// (`service_content`, `api_release`, `fetch_property`), plus [`Client::close`] (0.6.1).
 ///
 /// Internally holds an [`Arc`] to a [`VimClient`] implementation (crate-private JSON or SOAP
-/// client). Logout runs when the last strong reference to that inner client is dropped.
+/// client). Call [`Client::close`] to end the session. If `close` is never called, 0.6.x still
+/// logs out when the last strong reference to the inner client is dropped on a **multi-thread**
+/// Tokio runtime (removed in 0.7.0).
 pub struct Client {
     inner: Arc<dyn VimClient>,
 }
@@ -830,6 +882,11 @@ impl Client {
             Error::ParseError(format!("property {property} was empty"))
         })?;
         extract_property(pv)
+    }
+
+    /// End the vSphere session. Non-consuming and idempotent; see [`VimClient::close`].
+    pub async fn close(&self) -> Result<()> {
+        self.inner.close().await
     }
 }
 
@@ -890,6 +947,10 @@ impl VimClient for Client {
         self.inner
             .fetch_property_raw(svc, mo_type, mo_id, property)
     }
+
+    fn close(&self) -> BoxFuture<'_, Result<()>> {
+        self.inner.close()
+    }
 }
 
 pub(crate) struct JsonWireCtx<'a> {
@@ -917,11 +978,13 @@ pub(crate) struct JsonClient {
     user_agent: String,
     service_content: Option<ServiceContent>,
     wire_logging: WireLoggingMode,
+    session_ended: AtomicBool,
 }
 
 /// VI JSON API implementation (Hello + `/sdk/vim25/{release}`). Crate-private; users hold [`Client`].
 ///
-/// Manages the session key header and logs out when the last [`Arc`] to this value is dropped.
+/// Manages the session key header. Call [`VimClient::close`] to log out; dropping the last [`Arc`]
+/// still logs out on a multi-thread Tokio runtime in 0.6.x (removed in 0.7.0).
 impl JsonClient {
     pub(crate) fn service_content(&self) -> &ServiceContent {
         self.service_content.as_ref().expect("JsonClient missing ServiceContent")
@@ -1129,6 +1192,120 @@ impl JsonClient {
             return Err(Error::MethodFault(fault));
         }
         Ok(res)
+    }
+
+    async fn close_session(&self) -> Result<()> {
+        if self
+            .session_ended
+            .compare_exchange(false, true, Ordering::AcqRel, Ordering::Acquire)
+            .is_err()
+        {
+            return Ok(());
+        }
+        let result = self.logout_session().await;
+        self.session_key.write().await.take();
+        result
+    }
+
+    async fn logout_session(&self) -> Result<()> {
+        debug!("Terminating VIM session as needed.");
+        let Some(sm_id) = self.service_content.as_ref().and_then(|content| {
+            content
+                .session_manager
+                .as_ref()
+                .map(|moid| moid.value.clone())
+        }) else {
+            debug!("No session manager found. Skipping logout.");
+            return Ok(());
+        };
+        let key = { self.session_key.read().await.clone() };
+        let Some(key) = key else {
+            debug!("No session key present. Skipping logout.");
+            return Ok(());
+        };
+        debug!("Session is present. Sending logout request...");
+
+        let path = format!(
+            "{base_url}/SessionManager/{moId}/Logout",
+            base_url = self.base_url,
+            moId = sm_id
+        );
+        let wire_logging = self.wire_logging;
+        if wire_logging.is_enabled() {
+            let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
+            let msg = format!(
+                "wire=json mode={} phase=request kind=logout mo=SessionManager id={} method=Logout path={} body_bytes=0 body_logging=denylisted",
+                mode_l, sm_id, path
+            );
+            wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
+        }
+        let req = self.http_client.post(&path).header(AUTHN_HEADER, key);
+        let started = Instant::now();
+        match req.send().await {
+            Ok(resp) => {
+                let status = resp.status();
+                let body = resp.text().await.unwrap_or_default();
+                let dur = started.elapsed();
+                if wire_logging.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
+                    let http_note = if status.is_success() {
+                        ""
+                    } else {
+                        " error=http_failure"
+                    };
+                    let msg = format!(
+                        "wire=json mode={} phase=response kind=logout mo=SessionManager id={} method=Logout status={} body_bytes={} duration_ms={} body_logging=denylisted{}",
+                        mode_l,
+                        sm_id,
+                        status.as_u16(),
+                        body.len(),
+                        dur.as_millis(),
+                        http_note
+                    );
+                    wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
+                }
+                if status.is_success() {
+                    debug!("Session logged out successfully");
+                    Ok(())
+                } else {
+                    match miniserde::json::from_str::<structs::MethodFault>(&body) {
+                        Ok(fault) => {
+                            warn!(
+                                "Failed to logout session(HTTP code: {}). MethodFault: {:?}",
+                                status, fault
+                            );
+                            Err(Error::MethodFault(fault))
+                        }
+                        Err(_) => {
+                            warn!(
+                                "Failed to logout session(HTTP code: {}). Cannot parse MethodFault: {}",
+                                status,
+                                &body[..body.len().min(200)]
+                            );
+                            Err(Error::ParseError(format!(
+                                "Logout HTTP {}",
+                                status.as_u16()
+                            )))
+                        }
+                    }
+                }
+            }
+            Err(e) => {
+                if wire_logging.is_enabled() {
+                    let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
+                    let msg = format!(
+                        "wire=json mode={} phase=response kind=logout mo=SessionManager id={} method=Logout error=transport duration_ms={} body_logging=denylisted detail={}",
+                        mode_l,
+                        sm_id,
+                        started.elapsed().as_millis(),
+                        e
+                    );
+                    wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
+                }
+                warn!("Failed to logout session. Cannot execute logout request: {}", e);
+                Err(Error::ReqwestError(e))
+            }
+        }
     }
 }
 
@@ -1460,106 +1637,41 @@ impl VimClient for JsonClient {
             }
         })
     }
+
+    fn close<'a>(&'a self) -> Pin<Box<dyn Future<Output = Result<()>> + Send + 'a>> {
+        Box::pin(async { self.close_session().await })
+    }
 }
 
 
 /// Log out the JSON session when the last strong reference to this [`JsonClient`] is dropped.
+///
+/// On a multi-thread Tokio runtime this is a 0.6.x compatibility fallback. Prefer
+/// [`Client::close`] / [`VimClient::close`]. Destructor logout will be removed in 0.7.0.
 impl Drop for JsonClient {
     fn drop(&mut self) {
         debug!("Disposing VIM client.");
-
-        let session_key = Arc::clone(&self.session_key);
-        let http_client = &self.http_client.clone();
-        let base_url = self.base_url.clone();
-        let wire_logging = self.wire_logging;
-
-        let sm_id = self.service_content.as_ref().and_then(|content| content.session_manager.as_ref().map(|moid| moid.value.clone()));
-        let sm_id = match sm_id {
-            Some(id) => id,
-            None => {
-                debug!("No session manager found. Skipping logout.");
-                return;
-            },
-        };
-
-        tokio::task::block_in_place(|| {
-            tokio::runtime::Handle::current().block_on(async move {
-                debug!("Terminating VIM session as needed.");
-                let key = {
-                    let session_key = session_key.read().await;
-                    session_key.clone()
-                };
-                let Some(key) = key else {
-                    debug!("No session key present. Skipping logout.");
-                    return;
-                };
-                debug!("Session is present. Sending logout request...");
-
-                let path = format!("{base_url}/SessionManager/{moId}/Logout",
-                                    base_url = base_url,
-                                    moId = sm_id);
-                if wire_logging.is_enabled() {
-                    let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
-                    let msg = format!(
-                        "wire=json mode={} phase=request kind=logout mo=SessionManager id={} method=Logout path={} body_bytes=0 body_logging=denylisted",
-                        mode_l,
-                        sm_id,
-                        path
-                    );
-                    wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
-                }
-                let req = http_client.post(&path)
-                                        .header(AUTHN_HEADER, key);
-                let started = Instant::now();
-                match req.send().await {
-                    Ok(resp) => {
-                        let status = resp.status();
-                        let body = resp.text().await.unwrap_or_default();
-                        let dur = started.elapsed();
-                        if wire_logging.is_enabled() {
-                            let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
-                            let http_note = if status.is_success() {
-                                ""
-                            } else {
-                                " error=http_failure"
-                            };
-                            let msg = format!(
-                                "wire=json mode={} phase=response kind=logout mo=SessionManager id={} method=Logout status={} body_bytes={} duration_ms={} body_logging=denylisted{}",
-                                mode_l,
-                                sm_id,
-                                status.as_u16(),
-                                body.len(),
-                                dur.as_millis(),
-                                http_note
-                            );
-                            wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
-                        }
-                        if status.is_success() {
-                            debug!("Session logged out successfully");
-                        } else {
-                            match miniserde::json::from_str::<structs::MethodFault>(&body) {
-                                Ok(fault) => warn!("Failed to logout session(HTTP code: {}). MethodFault: {:?}", status, fault),
-                                Err(_) => warn!("Failed to logout session(HTTP code: {}). Cannot parse MethodFault: {}", status, &body[..body.len().min(200)]),
-                            }
-                        }
-                    }
-                    Err(e) => {
-                        if wire_logging.is_enabled() {
-                            let mode_l = wire_log::wire_mode_label(wire_logging, "SessionManager");
-                            let msg = format!(
-                                "wire=json mode={} phase=response kind=logout mo=SessionManager id={} method=Logout error=transport duration_ms={} body_logging=denylisted detail={}",
-                                mode_l,
-                                sm_id,
-                                started.elapsed().as_millis(),
-                                e
-                            );
-                            wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
-                        }
-                        warn!("Failed to logout session. Cannot execute logout request: {}", e);
-                    }
-                }
+        let has_session_manager = self
+            .service_content
+            .as_ref()
+            .and_then(|content| content.session_manager.as_ref())
+            .is_some();
+        let has_session_key = self
+            .session_key
+            .try_read()
+            .map(|guard| guard.is_some())
+            .unwrap_or(true);
+        if let Some(handle) = drop_logout_on_runtime(
+            &self.session_ended,
+            has_session_manager && has_session_key,
+        ) {
+            tokio::task::block_in_place(|| {
+                handle.block_on(async {
+                    let _ = self.logout_session().await;
+                    self.session_key.write().await.take();
+                });
             });
-        });
+        }
     }
 }
 
@@ -1756,6 +1868,7 @@ pub(crate) fn test_json_client_wire_transport() -> Arc<JsonClient> {
         user_agent: "wire-transport-test".to_string(),
         service_content: Some(test_minimal_service_content_for_tests()),
         wire_logging: WireLoggingMode::Summary,
+        session_ended: AtomicBool::new(false),
     })
 }
 
@@ -1802,13 +1915,14 @@ pub(crate) fn test_json_client_http_origin(
         user_agent: "wire-http-test".to_string(),
         service_content: Some(test_service_content_with_session_manager_for_tests()),
         wire_logging: WireLoggingMode::Summary,
+        session_ended: AtomicBool::new(false),
     })
 }
 
-/// Wire logging integration tests: transport failures, HTTP error responses (`log_json_http_error`), and
-/// logout-on-`Drop` paths (JSON + SOAP). Uses a multi-threaded Tokio runtime for every async test because
-/// `JsonClient` / `SoapClient` `Drop` uses `block_in_place` + `block_on`. Serializes tests that share the
-/// global `log` sink and a localhost HTTP stub on a background OS thread for deterministic responses.
+/// Wire logging integration tests: transport failures, HTTP error responses (`log_json_http_error`),
+/// logout-on-`Drop` (multi-thread), and explicit [`VimClient::close`] (JSON + SOAP). Multi-thread
+/// tests use `block_in_place` in Drop; `current_thread` tests assert Drop does not panic. Serializes
+/// tests that share the global `log` sink and a localhost HTTP stub on a background OS thread.
 #[cfg(test)]
 mod wire_logging_transport_tests {
     use std::sync::{Mutex, Once};
@@ -2288,5 +2402,291 @@ mod wire_logging_transport_tests {
             out.contains("kind=logout") && out.contains("error=transport"),
             "{out}"
         );
+    }
+
+    fn logout_request_count(out: &str) -> usize {
+        out.lines()
+            .filter(|l| l.contains("kind=logout") && l.contains("phase=request"))
+            .count()
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_close_emits_wire_lines_on_http_success() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-close-ok".into()));
+        jc.close().await.expect("close success");
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(out.contains("kind=logout") && out.contains("phase=request"), "{out}");
+        assert!(
+            out.contains("status=200") && !out.contains("error=http_failure"),
+            "{out}"
+        );
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_close_emits_wire_lines_on_http_non_success() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(503, b"x");
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-close-bad".into()));
+        let err = jc.close().await;
+        assert!(err.is_err(), "expected logout HTTP error, got {err:?}");
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(
+            out.contains("kind=logout") && out.contains("error=http_failure"),
+            "{out}"
+        );
+        assert!(out.contains("status=503"), "{out}");
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_close_emits_wire_transport_line() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let origin = format!("http://{}", super::TEST_WIRE_DEAD_ADDR);
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-close-tr".into()));
+        let err = jc.close().await;
+        assert!(err.is_err(), "expected logout transport error, got {err:?}");
+        let out = joined_wire_output();
+        assert!(
+            out.contains("kind=logout") && out.contains("error=transport"),
+            "{out}"
+        );
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_close_twice_sends_one_logout() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-close-2".into()));
+        jc.close().await.expect("first close");
+        jc.close().await.expect("second close");
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert_eq!(logout_request_count(&out), 1, "{out}");
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_close_with_live_clone_sends_one_logout() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-close-arc".into()));
+        let extra = jc.clone();
+        jc.close().await.expect("close with clone");
+        drop(jc);
+        drop(extra);
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert_eq!(logout_request_count(&out), 1, "{out}");
+    }
+
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn json_close_then_drop_sends_one_logout() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-close-drop".into()));
+        jc.close().await.expect("close");
+        drop(jc);
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert_eq!(logout_request_count(&out), 1, "{out}");
+    }
+
+    #[tokio::test(flavor = "current_thread")]
+    async fn json_drop_on_current_thread_does_not_panic() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let origin = format!("http://{}", super::TEST_WIRE_DEAD_ADDR);
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-ct-drop".into()));
+        drop(jc);
+        let out = joined_wire_output();
+        assert!(
+            !out.contains("kind=logout"),
+            "current_thread Drop must not Logout: {out}"
+        );
+    }
+
+    #[tokio::test(flavor = "current_thread")]
+    async fn json_close_then_drop_on_current_thread_is_silent() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let jc = super::test_json_client_http_origin(&origin, Some("sk-ct-close".into()));
+        jc.close().await.expect("close");
+        drop(jc);
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert_eq!(logout_request_count(&out), 1, "{out}");
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn soap_close_emits_wire_on_http_success() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let endpoint = format!("{}/sdk", origin.trim_end_matches('/'));
+        let soap = crate::xml::client::soap_test_client_for_logout_drop(
+            reqwest::Client::builder()
+                .timeout(std::time::Duration::from_secs(5))
+                .build()
+                .unwrap(),
+            endpoint,
+        );
+        soap.close().await.expect("soap close");
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(
+            out.contains("wire=soap")
+                && out.contains("kind=logout")
+                && out.contains("status=200")
+                && !out.contains("error=http_failure"),
+            "{out}"
+        );
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn soap_close_emits_wire_on_http_non_success() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(502, b"err");
+        let endpoint = format!("{}/sdk", origin.trim_end_matches('/'));
+        let soap = crate::xml::client::soap_test_client_for_logout_drop(
+            reqwest::Client::builder()
+                .timeout(std::time::Duration::from_secs(5))
+                .build()
+                .unwrap(),
+            endpoint,
+        );
+        let err = soap.close().await;
+        assert!(err.is_err(), "expected soap logout HTTP error, got {err:?}");
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert!(
+            out.contains("error=http_failure") && out.contains("status=502"),
+            "{out}"
+        );
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn soap_close_emits_wire_transport_line() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let endpoint = format!("http://{}/sdk", super::TEST_WIRE_DEAD_ADDR);
+        let soap = crate::xml::client::soap_test_client_for_logout_drop(
+            reqwest::Client::builder()
+                .timeout(std::time::Duration::from_secs(2))
+                .build()
+                .unwrap(),
+            endpoint,
+        );
+        let err = soap.close().await;
+        assert!(err.is_err(), "expected soap logout transport error, got {err:?}");
+        let out = joined_wire_output();
+        assert!(
+            out.contains("kind=logout") && out.contains("error=transport"),
+            "{out}"
+        );
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
+    async fn soap_close_twice_sends_one_logout() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let endpoint = format!("{}/sdk", origin.trim_end_matches('/'));
+        let soap = std::sync::Arc::new(crate::xml::client::soap_test_client_for_logout_drop(
+            reqwest::Client::builder()
+                .timeout(std::time::Duration::from_secs(5))
+                .build()
+                .unwrap(),
+            endpoint,
+        ));
+        soap.close().await.expect("first soap close");
+        soap.close().await.expect("second soap close");
+        drop(soap);
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert_eq!(logout_request_count(&out), 1, "{out}");
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "current_thread")]
+    async fn soap_drop_on_current_thread_does_not_panic() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let endpoint = format!("http://{}/sdk", super::TEST_WIRE_DEAD_ADDR);
+        let soap = crate::xml::client::soap_test_client_for_logout_drop(
+            reqwest::Client::builder()
+                .timeout(std::time::Duration::from_secs(2))
+                .build()
+                .unwrap(),
+            endpoint,
+        );
+        drop(soap);
+        let out = joined_wire_output();
+        assert!(
+            !out.contains("kind=logout"),
+            "current_thread SOAP Drop must not Logout: {out}"
+        );
+    }
+
+    #[cfg(feature = "xml")]
+    #[tokio::test(flavor = "current_thread")]
+    async fn soap_close_then_drop_on_current_thread_is_silent() {
+        let _serial = SERIAL.lock().expect("serial");
+        init_wire_capture();
+        clear_wire_lines();
+
+        let (origin, stub) = spawn_http_stub_once(200, b"");
+        let endpoint = format!("{}/sdk", origin.trim_end_matches('/'));
+        let soap = crate::xml::client::soap_test_client_for_logout_drop(
+            reqwest::Client::builder()
+                .timeout(std::time::Duration::from_secs(5))
+                .build()
+                .unwrap(),
+            endpoint,
+        );
+        soap.close().await.expect("soap close");
+        drop(soap);
+        stub.join().expect("stub thread");
+        let out = joined_wire_output();
+        assert_eq!(logout_request_count(&out), 1, "{out}");
     }
 }

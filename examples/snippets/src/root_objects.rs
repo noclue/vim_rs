@@ -64,5 +64,6 @@ async fn main() -> anyhow::Result<()> {
             .await?
             .vasa_api_version
     );
+    client.close().await?;
     Ok(())
 }
