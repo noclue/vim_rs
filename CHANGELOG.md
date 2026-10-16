@@ -19,6 +19,10 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.6.1] - 2026-10-17
+
+> Compatible patch on the 0.6.0 bindings. Adds explicit session close, deprecates destructor logout (removed in 0.7.0), and updates the optional XML stack to quick-xml 0.42 (MSRV **1.86** for the `xml` feature).
+
 ### Added
 
 - **`Client::close` / `VimClient::close`**: non-consuming, idempotent session logout. Safe with live
