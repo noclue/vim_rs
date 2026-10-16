@@ -7,6 +7,10 @@ mcp/build-embeddings/.fastembed_cache
 .idea
 .zed
 .env
+.env*
+Thumbs.db
+*.tmp
+*.swp
 
 # Rust artifacts
 *.rs.bk

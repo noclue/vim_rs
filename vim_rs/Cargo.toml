@@ -2,6 +2,8 @@
 name = "vim_rs"
 version = "0.6.0"
 edition = "2021"
+# quick-xml 0.42 (`xml` feature) requires Rust 1.86.
+rust-version = "1.86"
 authors = ["Kiril Karaatanasov <karaatanasov@gmail.com>"]
 license = "Apache-2.0"
 description = "Rust Bindings for the VMware by Broadcom vCenter VI JSON API"
@@ -37,7 +39,7 @@ env_logger = "0.11"
 indexmap = "2.9"
 log = "0.4"
 miniserde = "0.1"
-quick-xml = { version = "0.40", optional = true }
+quick-xml = { version = "0.42", optional = true }
 reqwest = { version = "0.13", default-features = false }
 thiserror = "2.0"
 tokio = { version = "1.44", features = ["rt-multi-thread", "macros", "sync"] }

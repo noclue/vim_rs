@@ -103,18 +103,24 @@ fn extract_soap_fault(body: &str) -> Option<String> {
 
     loop {
         match reader.read_event() {
-            Ok(Event::Start(e)) => {
-                let name_bytes = e.name();
-                let name = std::str::from_utf8(name_bytes.as_ref()).unwrap_or("");
-                if name == "faultstring" {
-                    in_faultstring = true;
-                }
+            Ok(Event::Start(e)) if e.name().local_name().as_ref() == "faultstring" => {
+                in_faultstring = true;
             }
             Ok(Event::Text(e)) if in_faultstring => {
-                if let Ok(s) = std::str::from_utf8(&e) {
-                    faultstring.push_str(s);
-                }
+                faultstring.push_str(e.as_ref());
             }
+            Ok(Event::CData(e)) if in_faultstring => {
+                faultstring.push_str(e.as_ref());
+            }
+            Ok(Event::GeneralRef(r)) if in_faultstring => match super::de::resolve_entity(&r) {
+                Ok(text) => faultstring.push_str(&text),
+                // Unknown entity: keep it verbatim rather than drop the message.
+                Err(_) => {
+                    faultstring.push('&');
+                    faultstring.push_str(r.as_ref());
+                    faultstring.push(';');
+                }
+            },
             Ok(Event::End(_)) if in_faultstring => {
                 return Some(faultstring);
             }
@@ -163,10 +169,8 @@ fn extract_soap_method_fault(body: &str) -> Option<MethodFault> {
         let before = reader.buffer_position() as usize;
         match reader.read_event() {
             Ok(Event::Start(e)) => {
-                let local = e.name().local_name();
-                let local_str = std::str::from_utf8(local.as_ref()).unwrap_or("");
                 if !in_detail {
-                    if local_str == "detail" {
+                    if e.name().local_name().as_ref() == "detail" {
                         in_detail = true;
                     }
                 } else {
@@ -862,6 +866,21 @@ mod fault_extraction_tests {
 <soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/"><soapenv:Body><soapenv:Fault><faultcode>ServerFaultCode</faultcode><faultstring>boom</faultstring></soapenv:Fault></soapenv:Body></soapenv:Envelope>"#;
         assert!(extract_soap_method_fault(body).is_none());
         assert_eq!(extract_soap_fault(body).as_deref(), Some("boom"));
+    }
+
+    #[test]
+    fn faultstring_resolves_entity_references() {
+        let body = r#"<soapenv:Envelope xmlns:soapenv="x"><soapenv:Body><soapenv:Fault><faultcode>ServerFaultCode</faultcode><faultstring>Cannot complete &apos;login&apos;: A &amp; B &lt;x&gt; &#65;&#x42; &bogus;</faultstring></soapenv:Fault></soapenv:Body></soapenv:Envelope>"#;
+        assert_eq!(
+            extract_soap_fault(body).as_deref(),
+            Some("Cannot complete 'login': A & B <x> AB &bogus;")
+        );
+    }
+
+    #[test]
+    fn faultstring_matches_namespace_prefixed_element() {
+        let body = r#"<soapenv:Envelope xmlns:soapenv="x"><soapenv:Body><soapenv:Fault><soapenv:faultcode>Client</soapenv:faultcode><soapenv:faultstring>Unauthorized</soapenv:faultstring></soapenv:Fault></soapenv:Body></soapenv:Envelope>"#;
+        assert_eq!(extract_soap_fault(body).as_deref(), Some("Unauthorized"));
     }
 
     #[test]
