@@ -32,6 +32,29 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
   instead of panicking. Call `close().await` at shutdown. Destructor logout will be **removed in
   0.7.0**.
 
+### Dependencies
+
+| Package | From | To | Where |
+|---------|------|-----|-------|
+| `quick-xml` | 0.40.1 | **0.42.0** | `vim_rs` (`xml` feature) and `examples` |
+| `rmcp` | 3.4.0 | **3.5.1** | `mcp/server` (`rmcp-macros` follows; declaration stays `"3.4"`) |
+| `anyhow` | 1.0.103 | **1.0.104** | `examples` and `mcp` (same release in both lockfiles) |
+
+Other third-party libraries moved to the newest crates.io releases still allowed by current declarations across the `vim_rs`, `vim_macros`, `vim_build`, `openapi30`, `tls_rustls_only`, `examples`, and `mcp` lockfiles.
+
+**Minimum supported Rust version is now 1.86** (declared via `rust-version` in `vim_rs/Cargo.toml`), required by quick-xml 0.42 for the `xml` feature (0.40 required 1.79).
+
+**SOAP requests now preserve carriage returns.** quick-xml 0.42's `escape` (used in `vim_rs/src/xml/ser.rs`) emits `\r` as `&#13;`, so the server stores it instead of normalizing it away during XML parsing. A string such as `"line1\r\nline2"` sent over the XML transport (e.g. a VM annotation) was previously stored as `"line1\nline2"` and is now stored verbatim, matching what the JSON transport sends. Strings without `\r` are unaffected.
+
+### Fixed
+
+- **SOAP fault messages** (`Error::SoapFault`) no longer drop escaped characters: entity and character references in `<faultstring>` (`&amp;`, `&apos;`, `&lt;`, `&#65;`, …) are now resolved instead of silently removed.
+- A namespace-prefixed `<soapenv:faultstring>` is now recognized, so such faults surface as `SoapFault` rather than `ParseError`.
+
+### Security
+
+- **quick-xml 0.42.0** fixes unbounded nesting and namespace-depth handling present in 0.40.1 through 0.41.0. The optional XML transport parses server-supplied SOAP, so the fix applies to the `xml` feature.
+
 ## [0.6.0] - 2026-06-26
 
 > **Breaking minor release.** Bindings regenerated from the vSphere **9.1.0.0** VI/JSON

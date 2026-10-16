@@ -106,7 +106,7 @@ fn finish_map_or_tolerate(
 // ============================================================================
 
 /// W3C [XML Schema instance namespace](https://www.w3.org/TR/xmlschema-1/#Instance_NS).
-const XML_SCHEMA_INSTANCE_NS: &[u8] = b"http://www.w3.org/2001/XMLSchema-instance";
+const XML_SCHEMA_INSTANCE_NS: &str = "http://www.w3.org/2001/XMLSchema-instance";
 
 /// One attribute on a start tag, with namespace resolution for the type discriminator.
 struct XmlAttr {
@@ -140,15 +140,15 @@ fn is_xmlns_attr(name: &str) -> bool {
 
 /// Resolve `Event::GeneralRef` payload (text between `&` and `;`).
 /// Covers predefined entities and numeric character references `&#...;` / `&#x...;`.
-fn resolve_entity(r: &BytesRef<'_>) -> Result<Cow<'static, str>> {
+pub(crate) fn resolve_entity(r: &BytesRef<'_>) -> Result<Cow<'static, str>> {
     let raw = r.as_ref();
     match raw {
-        b"amp" => Ok(Cow::Borrowed("&")),
-        b"lt" => Ok(Cow::Borrowed("<")),
-        b"gt" => Ok(Cow::Borrowed(">")),
-        b"quot" => Ok(Cow::Borrowed("\"")),
-        b"apos" => Ok(Cow::Borrowed("'")),
-        _ if raw.first() == Some(&b'#') => {
+        "amp" => Ok(Cow::Borrowed("&")),
+        "lt" => Ok(Cow::Borrowed("<")),
+        "gt" => Ok(Cow::Borrowed(">")),
+        "quot" => Ok(Cow::Borrowed("\"")),
+        "apos" => Ok(Cow::Borrowed("'")),
+        _ if raw.starts_with('#') => {
             let ch = parse_numeric_char_ref(&raw[1..])?;
             Ok(Cow::Owned(ch.to_string()))
         }
@@ -157,22 +157,20 @@ fn resolve_entity(r: &BytesRef<'_>) -> Result<Cow<'static, str>> {
 }
 
 /// Parse XML numeric char ref body after `#` (e.g. `65`, `x41`).
-fn parse_numeric_char_ref(body: &[u8]) -> Result<char> {
+fn parse_numeric_char_ref(body: &str) -> Result<char> {
     if body.is_empty() {
         return Err(Error);
     }
-    let code = if let Some(hex) = body.strip_prefix(b"x").or_else(|| body.strip_prefix(b"X")) {
+    let code = if let Some(hex) = body.strip_prefix('x').or_else(|| body.strip_prefix('X')) {
         if hex.is_empty() {
             return Err(Error);
         }
-        let s = std::str::from_utf8(hex).map_err(|_| Error)?;
-        u32::from_str_radix(s, 16).map_err(|_| Error)?
+        u32::from_str_radix(hex, 16).map_err(|_| Error)?
     } else {
-        let s = std::str::from_utf8(body).map_err(|_| Error)?;
-        if !s.bytes().all(|b| b.is_ascii_digit()) {
+        if !body.bytes().all(|b| b.is_ascii_digit()) {
             return Err(Error);
         }
-        s.parse::<u32>().map_err(|_| Error)?
+        body.parse::<u32>().map_err(|_| Error)?
     };
     char::from_u32(code).ok_or(Error)
 }
@@ -182,9 +180,7 @@ fn extract_attrs(resolver: &NamespaceResolver, start: &BytesStart<'_>) -> Result
         .attributes()
         .map(|a| {
             let a = a.map_err(|_| Error)?;
-            let raw_name = std::str::from_utf8(a.key.as_ref())
-                .map_err(|_| Error)?
-                .to_string();
+            let raw_name = a.key.as_ref().to_string();
             let value = a
                 .normalized_value(quick_xml::XmlVersion::Implicit1_0)
                 .map_err(|_| Error)?
@@ -195,11 +191,11 @@ fn extract_attrs(resolver: &NamespaceResolver, start: &BytesStart<'_>) -> Result
             } else {
                 match resolver.resolve_attribute(a.key) {
                     (ResolveResult::Bound(ns), local) => {
-                        local.as_ref() == b"type" && ns.0 == XML_SCHEMA_INSTANCE_NS
+                        local.as_ref() == "type" && ns.0 == XML_SCHEMA_INSTANCE_NS
                     }
                     // No `xmlns:xsi` in scope (common in small fixtures): accept conventional `xsi:type`.
                     (ResolveResult::Unknown(_), local) => {
-                        local.as_ref() == b"type" && raw_name == "xsi:type"
+                        local.as_ref() == "type" && raw_name == "xsi:type"
                     }
                     _ => false,
                 }
@@ -209,10 +205,10 @@ fn extract_attrs(resolver: &NamespaceResolver, start: &BytesStart<'_>) -> Result
             } else {
                 match resolver.resolve_attribute(a.key) {
                     (ResolveResult::Bound(ns), local) => {
-                        local.as_ref() == b"nil" && ns.0 == XML_SCHEMA_INSTANCE_NS
+                        local.as_ref() == "nil" && ns.0 == XML_SCHEMA_INSTANCE_NS
                     }
                     (ResolveResult::Unknown(_), local) => {
-                        local.as_ref() == b"nil" && raw_name == "xsi:nil"
+                        local.as_ref() == "nil" && raw_name == "xsi:nil"
                     }
                     _ => false,
                 }
@@ -233,9 +229,7 @@ fn wire_local_name(full: &str) -> &str {
 }
 
 fn local_tag_name(start: &BytesStart<'_>) -> Result<String> {
-    std::str::from_utf8(start.name().local_name().as_ref())
-        .map_err(|_| Error)
-        .map(String::from)
+    Ok(start.name().local_name().as_ref().to_string())
 }
 
 fn nil_truthy(value: &str) -> bool {
@@ -361,9 +355,7 @@ fn parse_float_trimmed(text: &str) -> Result<f64> {
 }
 
 pub(crate) fn start_name(start: &BytesStart<'_>) -> Result<String> {
-    std::str::from_utf8(start.name().as_ref())
-        .map_err(|_| Error)
-        .map(String::from)
+    Ok(start.name().as_ref().to_string())
 }
 
 /// Deserialize an XML string into any miniserde Deserialize type.
@@ -519,9 +511,9 @@ fn accumulate_text(
 ) -> Result<Option<(BytesStart<'static>, bool)>> {
     loop {
         match reader.read_event().map_err(|_| Error)? {
-            Event::Text(e) => text.push_str(&e.decode().map_err(|_| Error)?),
+            Event::Text(e) => text.push_str(e.as_ref()),
             Event::GeneralRef(r) => text.push_str(&resolve_entity(&r)?),
-            Event::CData(e) => text.push_str(std::str::from_utf8(&e).map_err(|_| Error)?),
+            Event::CData(e) => text.push_str(e.as_ref()),
             Event::Start(e) => return Ok(Some((e.into_owned(), false))),
             Event::Empty(e) => return Ok(Some((e.into_owned(), true))),
             Event::End(_) => return Ok(None),
