@@ -69,7 +69,7 @@ With **`default-features = false`**, `ClientBuilder::new` requires `(server, req
 **VI/JSON only** (vCenter JSON API; sessions use the `vmware-api-session-id` header — no HTTP cookies):
 
 ```toml
-vim_rs = { version = "0.5", default-features = false }
+vim_rs = { version = "0.6", default-features = false }
 reqwest = { version = "0.13", default-features = false, features = ["rustls"] }
 # Often useful (reqwest defaults when default-client is on): "charset", "http2", "system-proxy"
 ```
@@ -88,7 +88,7 @@ let client = ClientBuilder::new("vcenter.example.com", http)
 **SOAP/XML** (ESXi or `TransportMode::Soap` / `Auto`; enable `vim_rs` **`xml`** and reqwest **`cookies`**, and call `.cookie_store(true)` on your client):
 
 ```toml
-vim_rs = { version = "0.5", default-features = false, features = ["xml"] }
+vim_rs = { version = "0.6", default-features = false, features = ["xml"] }
 reqwest = { version = "0.13", default-features = false, features = ["rustls", "cookies", "charset", "http2", "system-proxy"] }
 ```
 
@@ -145,7 +145,7 @@ feature that must be enabled explicitly and then selected through `ClientBuilder
 Enable the feature in `Cargo.toml`:
 
 ```toml
-vim_rs = { version = "0.5", features = ["xml"] }
+vim_rs = { version = "0.6", features = ["xml"] }
 ```
 
 Use `TransportMode::Auto` when the target may be either vCenter or ESXi:
@@ -221,7 +221,7 @@ are optional and only matter when you target vcsim over XML.
    same module. Enable with:
 
    ```toml
-   vim_rs = { version = "0.5", features = ["xml", "vcsim_compat"] }
+   vim_rs = { version = "0.6", features = ["xml", "vcsim_compat"] }
    ```
 
 2. **Macro path suffix `?`:** In `vim_retrievable!` and `vim_updatable!`, a trailing `?` after the
@@ -595,7 +595,7 @@ In our example above, we check if the event is `EventEx` or `ExtendedEvent` to a
 To simplify construction of vim_rs types, enable the opt-in `defaults` feature:
 
 ```toml
-vim_rs = { version = "0.5", features = ["defaults"] }
+vim_rs = { version = "0.6", features = ["defaults"] }
 ```
 
 This provides `Default` implementations for all structs, enums, and trait objects, enabling struct update syntax:
