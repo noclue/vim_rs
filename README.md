@@ -1,681 +1,85 @@
-# VMware vSphere API Client for Rust
+# vim-rs
 
-Rust interface to the VMware vSphere VIM APIs, using the VI JSON API by default and an optional experimental SOAP/XML transport for direct ESXi connectivity.
+Rust client for the VMware vSphere API. Async, type-safe bindings for the VI JSON API, plus an optional experimental SOAP/XML transport when you need to talk to ESXi directly.
 
-* **Fully Asynchronous**: Built on tokio runtime for efficient non-blocking operations
-* **Type-Safe**: Comprehensive Rust types for the vSphere API objects
-* **Macro System**: Simplify property retrieval and monitoring with vim_retrievable and vim_updatable macros
-* **Hybrid Type System**: Intelligently combines traits and enums to balance type safety with performance
-* **Documented**: The original VIM documentation rendered inline as rustdoc
-* **Examples**: A set of examples demonstrating use of the APIs to get you started quickly
+The vSphere API is huge: a deep object model, thousands of types, and a property collector that expects you to name every field you want back. vim-rs turns that surface into a Rust library — generated types with the original VIM documentation in rustdoc, a small session client, and macros that turn property paths into structs.
 
-See [`CHANGELOG.md`](CHANGELOG.md) for release notes and breaking changes.
+[![How to Fit an Elephant in a Rusty Refrigerator — EuroRust 2025](https://img.youtube.com/vi/C87GIl1n8v4/hqdefault.jpg)](https://www.youtube.com/watch?v=C87GIl1n8v4)
 
-## 🤖 Supercharge your AI Assistant
+**[How to Fit an Elephant in a Rusty Refrigerator](https://www.youtube.com/watch?v=C87GIl1n8v4)** — Kiril Karaatanasov, EuroRust 2025. How this binding is generated, and the compromises that keep a model this large compilable.
 
-> Sonnet 4.5: "The MCP server doesn't just provide documentation—it provides understanding as a service. Semantic search + complete examples + common mistakes = AI that writes correct code on the first try."
-
-> Gemini 3.0 Pro: "The tools ... solved the hardest problem in vSphere development: Discovery. ... With them, I got the structure right on the second try."
-
-The vSphere API is massive and deeply nested. We provide a **Model Context Protocol (MCP)** server that gives agents like **Claude Desktop** and **Cursor** semantic understanding of the `vim_rs` codebase.
-
-With the MCP server, your AI assistant can:
-* **Semantic Search**: Find API methods using natural language (e.g., "How do I power on a VM?").
-* **Explore Properties**: Navigate the complex property paths (e.g., `summary.quick_stats.overall_cpu_usage`) without hallucinating.
-* **Get Examples**: Retrieve relevant usage examples for specific types.
-
-👉 **[Get Started with the vim_rs MCP Server](https://github.com/noclue/vim_rs/tree/main/mcp)**  
-*(Currently requires manual build from source. See instructions in the link.)*
-
-## Connecting to vCenter
-
-To set up a connection, use a statement like the following:
+## Start here
 
 ```rust
 use vim_rs::core::ClientBuilder;
 
 #[tokio::main]
 async fn main() -> Result<(), Box<dyn std::error::Error>> {
-    // Create a client with username and password
     let client = ClientBuilder::new("vcenter.example.com")
         .basic_authn("administrator@vsphere.local", "password")
         .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
-        .insecure(true) // For self-signed certs
+        .insecure(true) // self-signed certificates
         .build()
         .await?;
 
-     // Now you can use the client for API calls
-
-     client.close().await?;
-     Ok(())
-}
-``` 
-`.app_details` describes your application as to be able to identify and troubleshoot sessions from the vCenter UI or SessionManager API.
-
-You can add `insecure()` to your builder configuration to bypass TLS checks for both hostname and certificate.
-
-One can set a preconfigured `reqwest` client through the builder's `http_client()` method to reuse connections and TLS settings without disabling default features. The `vim_rs` client abstraction is cheap, but the `reqwest` HTTP client is not.
-
-The `client` above is an `Arc` around the actual client object. Use `.clone()` to pass it around.
-
-If the above goes well, you have a connection to the vCenter server with an initialized session and retrieved service content.
-
-### TLS backend and opting out of the default HTTP client
-
-By default, `vim_rs` enables the **`default-client`** feature, which enables `reqwest/default` (**rustls** for TLS on reqwest 0.13 — not OpenSSL — plus `charset`, `http2`, and `system-proxy`). To pick your own TLS stack (for example **native-tls**/OpenSSL, or rustls with **ring** instead of the default aws-lc-rs provider), use `default-features = false` and pass a `reqwest::Client` to `ClientBuilder::new(server, client)`.
-
-With **`default-features = false`**, `ClientBuilder::new` requires `(server, reqwest::Client)`; `insecure()` and `http_client()` are not on the builder — configure TLS and proxies on your `reqwest` client instead. For self-signed certs, use `danger_accept_invalid_certs` and `danger_accept_invalid_hostnames` on the reqwest builder (same effect as turnkey `.insecure(true)`).
-
-**VI/JSON only** (vCenter JSON API; sessions use the `vmware-api-session-id` header — no HTTP cookies):
-
-```toml
-vim_rs = { version = "0.6", default-features = false }
-reqwest = { version = "0.13", default-features = false, features = ["rustls"] }
-# Often useful (reqwest defaults when default-client is on): "charset", "http2", "system-proxy"
-```
-
-```rust
-use vim_rs::core::ClientBuilder;
-
-let http = reqwest::Client::builder().build()?;
-let client = ClientBuilder::new("vcenter.example.com", http)
-    .basic_authn("administrator@vsphere.local", "password")
-    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
-    .build()
-    .await?;
-```
-
-**SOAP/XML** (ESXi or `TransportMode::Soap` / `Auto`; enable `vim_rs` **`xml`** and reqwest **`cookies`**, and call `.cookie_store(true)` on your client):
-
-```toml
-vim_rs = { version = "0.6", default-features = false, features = ["xml"] }
-reqwest = { version = "0.13", default-features = false, features = ["rustls", "cookies", "charset", "http2", "system-proxy"] }
-```
-
-```rust
-use vim_rs::core::ClientBuilder;
-use vim_rs::core::client::TransportMode;
-
-let http = reqwest::Client::builder().cookie_store(true).build()?;
-let client = ClientBuilder::new("esxi.example.com", http)
-    .basic_authn("root", "password")
-    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
-    .transport(TransportMode::Soap)
-    .build()
-    .await?;
-```
-
-See [`tls_rustls_only`](tls_rustls_only) for an OpenSSL-free dependency graph using `rustls-no-provider` plus a separate `rustls` crate with the **ring** provider (instead of `features = ["rustls"]` alone).
-
-To check for OpenSSL in the graph, run `cargo tree -i openssl-sys` from your crate directory. **No `openssl-sys` in the tree is the expected good outcome** — Cargo prints `error: package ID specification 'openssl-sys' did not match any packages` and exits with code 101. That message is not a failed build; it means the inverse query found nothing. If `openssl-sys` were present, you would see a tree rooted at that package instead.
-
-### Wire logging (transport diagnostics)
-
-For troubleshooting HTTP/SOAP request and response traffic, enable **wire logging** on the builder. It is **off by default** and uses dedicated log targets so you can filter transport lines separately from the rest of your application.
-
-```rust
-use vim_rs::core::ClientBuilder;
-use vim_rs::WireLoggingMode;
-
-let client = ClientBuilder::new("vcenter.example.com")
-    .basic_authn("administrator@vsphere.local", "password")
-    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
-    .wire_logging(WireLoggingMode::Summary)
-    .build()
-    .await?;
-```
-
-- **`WireLoggingMode::Off`** — no dedicated wire lines (default).
-- **`WireLoggingMode::Summary`** — metadata only (paths, sizes, HTTP status, duration) at `log::Level::Debug`. Use this first when diagnosing failures.
-- **`WireLoggingMode::Detailed`** — may include full bodies at `log::Level::Trace` for non-session traffic. **`SessionManager`** calls (login, logout, session APIs) never log bodies; they stay summary-only by design.
-
-Wire records use targets **`vim_rs::wire::json`** (VI JSON) and **`vim_rs::wire::soap`** (SOAP/XML). Prefer **target-scoped** filters instead of enabling global `trace` for the whole crate, for example:
-
-- `RUST_LOG=vim_rs::wire::json=debug`
-- `RUST_LOG=vim_rs::wire::soap=debug`
-- `RUST_LOG=vim_rs::wire::json=trace` (detailed JSON bodies, where allowed)
-
-Detailed wire logs can be large; use them for short-lived troubleshooting only.
-
-## Optional XML transport
-
-The default transport is VI JSON and behaves like `0.4.0`. XML support is an **optional, experimental**
-feature that must be enabled explicitly and then selected through `ClientBuilder::transport()`.
-
-Enable the feature in `Cargo.toml`:
-
-```toml
-vim_rs = { version = "0.6", features = ["xml"] }
-```
-
-Use `TransportMode::Auto` when the target may be either vCenter or ESXi:
-
-```rust
-use vim_rs::core::ClientBuilder;
-use vim_rs::core::client::TransportMode;
-
-let client = ClientBuilder::new("vc-or-esxi.example.com")
-    .basic_authn("root", "password")
-    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
-    .insecure(true)
-    .transport(TransportMode::Auto)
-    .build()
-    .await?;
-```
-
-Use `TransportMode::Soap` when you know you need direct SOAP/XML, for example against ESXi:
-
-```rust
-use vim_rs::core::ClientBuilder;
-use vim_rs::core::client::TransportMode;
-
-let client = ClientBuilder::new("esxi.example.com")
-    .basic_authn("root", "password")
-    .app_details(env!("CARGO_PKG_NAME"), env!("CARGO_PKG_VERSION"))
-    .insecure(true)
-    .transport(TransportMode::Soap)
-    .build()
-    .await?;
-```
-
-Important caveats:
-
-- XML transport currently works only for the core VIM APIs.
-- Other APIs such as VSAN, SPBM/PBM, SMS, VSLM, and EAM currently return errors over XML.
-- XML support is experimental. If a call fails, use **wire logging** (`.wire_logging(WireLoggingMode::Summary)` or `Detailed`) and filter `vim_rs::wire::soap` / `vim_rs::wire::json` (see *Wire logging* above). For other library diagnostics, you can still raise the log level for `vim_rs` modules as needed.
-- Enabling the `xml` feature increases release binary size by about 500 KB and increases debug build times by about 30-40%.
-- Disabling the `xml` feature restores `0.4.0` transport behavior, build times, and executable size characteristics.
-
-### XML transport caveats
-
-When XML transport is used, vim_rs does **not** use the Hello System API to negotiate the API
-release. Instead, it starts from the release used to build `vim_rs`.
-
-- If the remote server is older than `vim_rs`, it will use the server's latest supported release.
-- If the remote server is newer than `vim_rs`, it falls back to the `vim_rs` release automatically.
-- As a consequence, `client.api_release()` is **not** a reliable capability probe when XML transport is active.
-- To make decisions about remote capabilities, use `client.service_content().about.api_version` instead.
-
-One additional deserialization caveat applies when the `xml` feature is enabled: if you manually
-deserialize polymorphic JSON payloads, the `_typeName` key must appear before subtype-specific
-fields or deserialization can fail.
-
-Managed-object **property reads** over SOAP use `RetrievePropertiesEx` internally: the server
-response is parsed once into `VimAny`, and generated getters (e.g. `VirtualMachine::disabled_method`)
-narrow to the concrete Rust type without an extra XML encode/decode round-trip.
-
-When you work with `VimAny` or `ValueElements` yourself, use `VimAny::into_any()` or
-`ValueElements::into_any()` and `downcast` to recover a concrete `T` instead of matching every
-variant by hand.
-
-### govc vcsim compatibility
-
-The [`govc`](https://github.com/vmware/govmomi) **vcsim** tool is useful for local integration
-tests. Its SOAP/XML output differs from production vCenter/ESXi in several ways; the items below
-are optional and only matter when you target vcsim over XML.
-
-1. **`vcsim_compat` Cargo feature** (requires `xml`): enables tolerant client-internal SOAP
-   unmarshalling so malformed or incomplete elements (for example `HostConfigInfo.optionDef`
-   without `optionType`) can be dropped instead of failing the whole response. For explicit,
-   scoped parsing you can also use `vim_rs::xml::de::from_xml_with` and related helpers from the
-   same module. Enable with:
-
-   ```toml
-   vim_rs = { version = "0.6", features = ["xml", "vcsim_compat"] }
-   ```
-
-2. **Macro path suffix `?`:** In `vim_retrievable!` and `vim_updatable!`, a trailing `?` after the
-   property path string forces `Option<T>` even when the OpenAPI spec marks the property as
-   required—for example `effective_cpu = "summary.effective_cpu"?`. Simulators (and occasionally
-   real hosts) omit fields the spec calls mandatory; without `?`, `TryFrom` can fail and whole rows
-   are skipped during retrieval or cache updates.
-
-3. **`CacheManager::set_cancel_wait_on_filter_change(true)`:** vcsim often does **not** inject
-   newly registered property filters into an already-running `WaitForUpdatesEx` long poll the way
-   production servers do, so dynamic `add_cache` / `remove_cache` can look “stuck” until the wait
-   times out. When this policy is enabled, filter topology changes issue a best-effort
-   `CancelWaitForUpdates` so the next `Monitor::wait_updates` iteration picks up new filters. It
-   defaults to **`false`**; turn it on for vcsim-driven tests. Production vCenter/ESXi typically do
-   not need it.
-
-## Obtaining Stub for the APIs
-The VIM API is a remote object-oriented API. The functionality is organized in methods of managed objects.
-
-To set up a remote stub to a management object, one needs a connection, an object type, and an object identifier.
-
-For example, to get a handle to stub for the default `PropertyCollector`, the following code does the trick:
-
-```rust
-let content = client.service_content();
-let property_collector = PropertyCollector::new(client.clone(), &content.property_collector.value);
-```
-
-The `service_content` is a structure that contains references to the root managed objects in the vCenter server. Note that the `PropertyCollector` is always present in the service content. Other objects may be optional, and a check is to be made if the reference is set.
-
-## Invoking APIs
-This is simple and intuitive once you have a remote stub from the above step.
-
-The VIM API has properties and methods. Both are exposed in the stubs. Properties are essentially remote methods that receive no parameters.
-
-```rust
-// Invoke a method
-let events = collector.read_next_events(10).await?;
-
-// Fetch a property value
-let vms = view.view().await?;
-```
-
-In the examples above, `collector` is an instance of `PropertyCollector`, and `view` is an instance of a `View` like `ContainerView`.
-
-## Property Retrieval with Macros
-
-Two powerful macros simplify working with vSphere properties. They are available directly from `vim_rs` (no separate `vim_macros` dependency needed):
-
-### One-time Property Retrieval with `vim_retrievable`
-
-Define structures that map to vSphere object properties and retrieve them with a single call:
-
-```rust
-use vim_rs::vim_retrievable;
-use vim_rs::core::pc_retrieve::ObjectRetriever;
-
-// Define a struct mapping to HostSystem properties
-vim_retrievable!(
-    struct Host: HostSystem {
-        name = "name",
-        power_state = "runtime.power_state",
-        connected = "runtime.connection_state",
-        cpu_usage = "summary.quick_stats.overall_cpu_usage",
-        memory_usage = "summary.quick_stats.overall_memory_usage",
-        uptime = "summary.quick_stats.uptime",
-    }
-);
-
-async fn print_hosts(client: &Client) -> Result<()> {
-   // Create a retriever using the client
-   let retriever = ObjectRetriever::new(client.clone())?;
-
-   // Retrieve all hosts with their properties in a single API call
-   let hosts: Vec<Host> = retriever
-           .retrieve_objects_from_container(&client.service_content().root_folder)
-           .await?;
-
-   // Work with strongly-typed host objects
-   for host in hosts {
-      println!("Host {} is {:?}", host.name, host.power_state);
-   }
-
-   Ok(())
-}
-```
-
-The retriever can also load a **single** managed object by reference with
-[`ObjectRetriever::retrieve_object`](https://docs.rs/vim_rs/latest/vim_rs/core/pc_retrieve/struct.ObjectRetriever.html#method.retrieve_object):
-no `ContainerView` / `ListView` is created, so one-off lookups avoid extra view lifecycle and teardown.
-
-```rust
-// After defining `Host` with `vim_retrievable!` as above
-let host_moref: ManagedObjectReference = /* ... */;
-let one: Option<Host> = retriever.retrieve_object(&host_moref).await?;
-```
-
-The object retriever also allows pulling objects from a list of identifiers through
-`retrieve_objects_from_list`.
-
-When you point SOAP/XML at **govc vcsim** (or other quirky producers), see
-[*govc vcsim compatibility*](#govc-vcsim-compatibility) for optional macro path syntax (`?`),
-the `vcsim_compat` feature, and `CacheManager` wait behavior.
-
-### Continuous Property Monitoring with `vim_updatable`
-
-Stay up to date with local inventory replica using `PropertyCollector::wait_for_updates_ex`:
-
-```rust
-vim_updatable!(
-    struct VmDetails: VirtualMachine {
-        name = "name",
-        power_state = "runtime.power_state",
-    }
-);
-
-impl Display for VmDetails {
-   fn fmt(&self, f: &mut Formatter<'_>) -> std::fmt::Result {
-      write!(
-         f,
-         "VM ({}): {} with power state: {:?}", self.id.value, self.name, self.power_state
-      )
-   }
-}
-
-struct ChangeListener {}
-
-impl ObjectCacheListener<VmDetails> for ChangeListener {
-   fn on_new(&mut self, obj: &VmDetails) -> CacheAction {
-      info!("New VM: {}", obj);
-      CacheAction::Keep
-   }
-
-   fn on_update(&mut self, obj: &VmDetails) -> CacheAction {
-      info!("VM updated: {}", obj);
-      CacheAction::Keep
-   }
-
-   fn on_remove(&mut self, obj: VmDetails) {
-      info!("VM removed: {}", obj);
-   }
-}
-
-async fn monitor_vms(client: &Arc<Client>) -> Result<(), Error> {
-   let cache = Box::new(ObjectCache::new_with_listener(Box::new(ChangeListener {})));
-   let mut manager = CacheManager::new(client.clone())?;
-   let mut monitor = manager.create_monitor()?;
-
-   manager.add_container_cache(cache, &client.service_content().root_folder).await?;
-
-   let start = Instant::now();
-   loop {
-      let updates = monitor.wait_updates(10).await?;
-      if let Some(updates) = updates {
-         manager.apply_updates(updates)?;
-      } 
-      if start.elapsed().as_secs() > 60 {
-         break;
-      }
-   }
-
-   manager.destroy().await?;
-   Ok(())
-}
-```
-
-For **govc vcsim**, call `manager.set_cancel_wait_on_filter_change(true)` before the wait loop when
-you add or remove caches while `wait_updates` is long-polling; see
-[govc vcsim compatibility](#govc-vcsim-compatibility).
-
-`CacheManager` provides `add_list_cache` method to monitor a predefined list of objects.
-
-## Awaiting Task Completion
-
-Many vSphere operations are asynchronous and return a `Task` managed object reference (via methods ending in `*_Task`). The `TaskTracker` provides an efficient way to wait for these tasks to complete using the PropertyCollector.
-
-### Basic Usage
-
-```rust
-use vim_rs::core::tasks::TaskTracker;
-use vim_rs::mo::VirtualMachine;
-
-async fn rename_vm(client: Arc<Client>, vm_ref: ManagedObjectReference, new_name: &str) -> Result<()> {
-    // Create a TaskTracker (reuse for multiple tasks)
-    let task_tracker = TaskTracker::new(client.clone());
-    
-    // Create a VirtualMachine proxy and call a *_Task method
-    let vm = VirtualMachine::new(client.clone(), &vm_ref.value);
-    let task_ref = vm.rename_task(new_name).await?;
-    
-    // Wait for the task to complete
-    task_tracker.wait::<()>(task_ref).await?;
-    
+    client.close().await?;
     Ok(())
 }
 ```
 
-### Two APIs for Task Results
+The [crate guide](vim_rs/README.md) is the developer walkthrough: your own TLS stack, property retrieval and monitoring, tasks, and the XML transport. API reference is on [docs.rs](https://docs.rs/vim_rs). Release notes are in [`CHANGELOG.md`](CHANGELOG.md). Runnable programs are in [`examples/`](examples/README.md).
 
-`TaskTracker` provides two methods for awaiting task completion:
+## What you get
 
-**1. `wait::<T>()` - Convenient with Deserialization**
+- **Async** client on Tokio, shared as `Arc<Client>`
+- **Generated types** for the vSphere 9.1 VI JSON API, with VIM docs rendered as rustdoc
+- **`vim_retrievable!` and `vim_updatable!`** for one-shot reads and a local inventory cache
+- **`TaskTracker`** for `*_Task` methods, via PropertyCollector
+- **Hybrid type system** — traits where the inheritance is deep, enums where the branching is wide
+- **MCP server** so a coding agent can search the API instead of guessing property paths
 
-Use when you know the expected result type. The result is automatically deserialized using the active transport (`miniserde` for JSON, SOAP/XML when XML transport is selected):
+## Features
 
-```rust
-// For tasks that return no value (like rename, power operations)
-task_tracker.wait::<()>(task_ref).await?;
+| Feature | Default | Cost |
+|---------|---------|------|
+| `default-client` | on | Builds a `reqwest` client with **rustls** (reqwest 0.13). Turn it off to bring your own TLS stack. |
+| `xml` | off | Experimental SOAP/XML transport. About **+500 KB** on a release binary and about **+30–40%** debug build time. |
+| `defaults` | off | `Default` for generated types, so struct-update syntax works. Adds a large amount of generated code and compile time. |
+| `vcsim_compat` | off | Tolerant SOAP parsing for [govc vcsim](https://github.com/vmware/govmomi). Requires `xml`. |
 
-// For tasks that return a ManagedObjectReference (like create VM)
-let vm_ref: ManagedObjectReference = task_tracker.wait(task_ref).await?;
-```
+How to enable each one, and the XML and vcsim caveats, is in the [crate guide](vim_rs/README.md).
 
-**2. `wait_any()` - Zero-Allocation Path**
+SOAP/XML covers the core VIM API. VSAN, SPBM/PBM, SMS, VSLM, and EAM stay on VI/JSON. XML does not negotiate the API release through the Hello call; use `client.service_content().about.api_version` when the server’s capabilities matter. Full write-up: [XML transport](vim_rs/README.md#optional-xml-transport).
 
-Use when you want to avoid JSON conversion overhead and work with `VimAny` directly:
+## MCP server
 
-```rust
-let result: Option<VimAny> = task_tracker.wait_any(task_ref).await?;
-match result {
-    None => println!("Task completed with no return value"),
-    Some(VimAny::Value(v)) => println!("Primitive result: {:?}", v),
-    Some(VimAny::Object(o)) => println!("Object result: {:?}", o.data_type()),
-}
-```
+> Sonnet 4.5: "The MCP server doesn't just provide documentation—it provides understanding as a service. Semantic search + complete examples + common mistakes = AI that writes correct code on the first try."
 
-### Key Points
+> Gemini 3.0 Pro: "The tools ... solved the hardest problem in vSphere development: Discovery. ... With them, I got the structure right on the second try."
 
-- **Create once, reuse**: Create a `TaskTracker` per `Client` and reuse it for multiple tasks.
-- **Efficient monitoring**: Uses PropertyCollector with a shared `ListView` to track tasks with minimal overhead.
-- **Automatic cleanup**: Tasks are automatically removed from tracking when they reach a terminal state.
-- **Error handling**: Failed tasks return an `Error::TaskFailed` containing the `MethodFault` details.
-- **Background loop**: The monitoring loop starts lazily on the first `wait_any()` call and stops when all tasks complete.
+The API is deeply nested. The [MCP server](mcp/README.md) gives agents such as Claude Desktop and Cursor a semantic index of `vim_rs`:
 
-See [`examples/snippets/src/vm_rename.rs`](examples/snippets/src/vm_rename.rs) for a complete working example.
+- **Search** in natural language ("How do I power on a VM?")
+- **Walk property paths** such as `summary.quick_stats.overall_cpu_usage` without inventing fields
+- **Pull examples** for a specific type
 
-## Client abstraction used by managed-object stubs
+Build it from source: [mcp/README.md](mcp/README.md).
 
-Managed-object stubs in `vim_rs::mo` accept an `Arc<dyn VimClient>` internally. The concrete
-[`Client`](vim_rs/src/core/client.rs) implements this trait. Most callers can pass `client.clone()`.
+## Layout
 
-## Working with Polymorphic Types
-The VIM API is conceptualized as a classic object-oriented API, much like the Java or C++ standard libraries. It has a root `Any` object from which all other objects descend. There is `DataObject` that is the root for all data structures. There is also `MethodFault` that is the root for all error types.
+| Path | Role |
+|------|------|
+| [`vim_rs`](vim_rs/README.md) | The library. This is the crates.io package. |
+| [`vim_macros`](vim_macros/README.md) | `vim_retrievable!` and `vim_updatable!`. Re-exported by `vim_rs`. |
+| [`vim_build`](vim_rs/docs/REPOSITORY.md#generating-bindings) | Generates `vim_rs` from the VI JSON OpenAPI spec. |
+| [`openapi30`](vim_rs/docs/REPOSITORY.md#crates) | OpenAPI 3.0 parser used by the generator, including VIM inheritance via `allOf`. |
+| [`examples`](examples/README.md) | Snippets and the `vtui` inventory browser. |
+| [`mcp`](mcp/README.md) | MCP server and the tools that build its API database. |
 
-This object-oriented design is not native to Rust. There are two principal approaches in Rust to dealing with such situations - traits and enums. Enums are easy to deal with in Rust and are extremely powerful and very safe. Unfortunately, expressing the VIM API solely in enums produces very hard-to-use abstractions of many deeply nested enum definitions that are hard to work with. Traits solve some of the usability challenges while dramatically increasing the work for the Rust compiler, which is not famous for fast performance. So the `vim_rs` library takes a hybrid approach. The often deep and complex hierarchy of the `DataObject` and `MethodFault` are represented with traits. The shallow and big inventory of boxed arrays and primitive data types used with the property collector and other dynamic APIs leverage enums with the synthetic `ValueElements` types. `ValueElements::as_str()` returns the VIM API type name (e.g., `"string"`, `"ArrayOfManagedObjectReference"`) for type discrimination and logging. The VIM `Any` type is renamed to `VimAny` and is also represented as an `enum`.
+Design notes — type system, client architecture, generator, XML deserializer — are in [`vim_rs/docs`](vim_rs/docs/README.md).
 
-Working with the trait system is a bit more complex. 
+Bindings are generated. To regenerate them or to ingest a newer OpenAPI spec (watch `DatastoreAccessible_enum`: the values must stay the strings `"True"` and `"False"`), see [Repository and code generation](vim_rs/docs/REPOSITORY.md).
 
-Let's look into the details.
+## License
 
-### Data Structs
-
-Firstly, for every structure type from the VIM API, we have a corresponding Rust struct type. The library uses **compositional inheritance** where child types contain their parent as a field and implement `Deref`/`DerefMut` for seamless field access.
-
-For example, a network card could be described with the `VirtualE1000` structure:
-
-```rust
-pub struct VirtualE1000 {
-    // Parent field - contains all VirtualEthernetCard fields (which contains VirtualDevice fields)
-    pub virtual_ethernet_card_: VirtualEthernetCard,
-}
-
-impl Deref for VirtualE1000 {
-    type Target = VirtualEthernetCard;
-    fn deref(&self) -> &Self::Target { &self.virtual_ethernet_card_ }
-}
-
-impl DerefMut for VirtualE1000 {
-    fn deref_mut(&mut self) -> &mut Self::Target { &mut self.virtual_ethernet_card_ }
-}
-```
-
-Thanks to Deref coercion, you can access fields from the entire inheritance chain directly:
-
-```rust
-let e1000: &VirtualE1000 = /* ... */;
-let key: i32 = e1000.key;                    // From VirtualDevice (grandparent)
-let mac: &Option<String> = &e1000.mac_address; // From VirtualEthernetCard (parent)
-```
-
-For reference, the parent `VirtualEthernetCard` structure looks like:
-
-```rust
-pub struct VirtualEthernetCard {
-    pub virtual_device_: VirtualDevice,      // Parent field
-    pub address_type: Option<String>,
-    pub mac_address: Option<String>,
-    pub wake_on_lan_enabled: Option<bool>,
-    // ... other fields
-}
-```
-
-Let's look at some details. Fields optional in the API use Rust `Option` (e.g., `Option<i32>`) while required fields require a valid value (e.g., `i32`). Arrays are expressed as Rust `Vec`. For fields that have children or can form a cycle, `Box` indirection is used. For fields of polymorphic types, i.e., those that have children, a `dyn *Trait` type is used, which refers to a trait type implemented by all alternative structures (`Option<Box<dyn DescriptionTrait>>`).
-
-Structure types support `miniserde` JSON serialization and deserialization as well as debug print.
-
-### Traits
-
-Traits are generated for VIM structure types that have children types. The traits for a given type are implemented by all of its descendants. This allows the API to take in and return all possible types in a given field, i.e., casting an object to a trait its type implements is trivial in Rust.
-
-In the Rust language unlike Java, Go, and C++ there is no straightforward mechanism to upcast or downcast trait objects into other trait objects or concrete structure types. To make these possible, the `vim_rs` crate provides utilities.
-
-For casting to concrete structure types, all traits in the VIM API have `AsAny` trait bound. `AsAny` allows conversion of a reference or `Box` to a reference to `&dyn Any` or `&Box<dyn Any>`. Further, a developer can use `Any` or `Box` methods to attempt fallible conversion to the target type. For example, converting a `VirtualDeviceTrait` reference to a `VirtualE1000` structure is done as follows (unwrap should be replaced with appropriate handling):
-
-```rust
-let e1000 = vd[0].as_any_ref().downcast_ref::<VirtualE1000>().unwrap();
-```
-
-Sometimes we want to convert from one trait to another. For example, if we want to read the MAC address of any network card device in a VM, we need to convert `VirtualDeviceTrait` into `VirtualEthernetCardTrait`. There are 2 options provided with the `CastInto` trait. One option is to convert to `Box`, and the other is to convert a borrowed reference.
-
-In the examples below, we see how to convert `Box<dyn VirtualDevice>` into a reference and `Box` respectively:
-
-```rust
-let eth: &dyn VirtualEthernetCardTrait = vd.as_ref().into_ref().unwrap();
-
-let eth: Box<dyn VirtualEthernetCardTrait> = vd.into_box().unwrap();
-```
-
-As Rust `TryInto` mirrors the `TryFrom` trait, `CastInto` has a mirror `CastFrom` trait.
-
-Child structs access parent fields through Deref coercion. For example, `VirtualE1000` contains a `virtual_ethernet_card_` field and implements `Deref<Target = VirtualEthernetCard>`, which in turn derefs to `VirtualDevice`. This allows direct field access:
-
-```rust
-// Direct field access through Deref chain
-let key: i32 = device.key;                           // From VirtualDevice
-let mac: &Option<String> = &eth_card.mac_address;    // From VirtualEthernetCard
-let backing = &device.backing;                        // From VirtualDevice
-```
-
-This compositional model provides the same ergonomic access as the previous expanded-fields approach while significantly reducing generated code size.
-The new model supports both read and mutation operations and is thus much
-easier when an update is required.
-
-For more details on design decisions and performance considerations, please see the FAQ section below.
-
-### Pruned Types
-
-As discussed, the VIM API is big and has a deep inheritance hierarchy. To limit the size of the library, a number of optimizations and compromises are made. One specific optimization has a direct impact on the programming model. The descendant data types of `MethodFault` and `Event` types are not generated (See [PRUNED_TYPES](vim_build/src/main.rs)). This reduces the generated code and compilation times significantly at the cost of some utility.
-
-The `MethodFault` type represents errors that can occur when invoking VIM API methods, and the `Event` type represents events that occur in the vCenter server.
-
-The `MethodFault` and `Event` types do not have traits, and no descendant types are generated. Instead, both types receive 2 additional members:
-
-* `type_: Option<StructType>` - holding the discriminator value, e.g., `EventEx`, `NotFound`, etc.
-* `extra_fields_: HashMap<String, miniserde::json::Value>` - holding any data fields that are not present in the base type, e.g., `eventTypeId`.
-
-Note that `extra_fields_` content uses the API native names in camelCase convention instead of the Rust-friendly names used throughout `vim_rs`.
-
-Below is a snippet on how to decode the semantic event type using `type_name_` and `extra_fields_`:
-
-```rust
-fn get_event_type_id(event: &Event) -> String {
-    let Some(type_) = event.type_ else {
-        return "Event".to_string();
-    };
-    if type_.child_of(StructType::EventEx) || type_.child_of(StructType::ExtendedEvent) {
-        if let Some(event_type_id) = event.extra_fields_["eventTypeId"].as_str() {
-            return event_type_id.to_string();
-        }
-    }
-    type_.as_str().to_string()
-}
-```
-
-Note that `StructType` implements the `child_of` method, allowing to check if a type is the same or a descendant of another.
-
-In our example above, we check if the event is `EventEx` or `ExtendedEvent` to access the `eventTypeId` field.
-
-## Optional `defaults` Feature
-
-To simplify construction of vim_rs types, enable the opt-in `defaults` feature:
-
-```toml
-vim_rs = { version = "0.6", features = ["defaults"] }
-```
-
-This provides `Default` implementations for all structs, enums, and trait objects, enabling struct update syntax:
-
-```rust
-// Without defaults: dozens of explicit None fields
-// With defaults: concise construction
-let config_spec = VirtualMachineConfigSpec {
-    device_change: Some(device_changes),
-    ..Default::default()
-};
-```
-
-See [`examples/snippets/src/vm_toggle_wol.rs`](examples/snippets/src/vm_toggle_wol.rs) for a complete example.
-
-Sometimes one will want to convert part of the dynamic-like objects into proper binding. For example, the `managedObject` in the `ExtendedEvent` can be read into `ManagedObjectReference` as follows:
-
-```rust
-use vim_rs::types::mini_helpers::from_value;
-
-let value = event.extra_fields_["managedObject"].clone();
-let managed_object: ManagedObjectReference = from_value(value)?;
-```
-
-# Repo Topology & Maintenance
-
-There are a few crates:
-
-1. `vim_rs` - the library code for calling the VIM API. Contains data types and stubs for the VIM API.
-2. `vim_build` - a code generation tool that reads VI-JSON OpenAPI specs and turns them into library code.
-3. `examples` - small programs demonstrating the use of the VIM API.
-4. `openapi30` - an indigenous OpenAPI 3.0.x data library used to load the OpenAPI docs. In addition to the base OpenAPI syntax, it allows for documentation strings on fields when those refer to other defined types in the spec. The library has some rudimentary validation logic. I tried to use ready OpenAPI Rust crates, and none had sufficient maturity. In some of the crates, data elements would be missing. In others, the model is tailored to a specific flavor of OpenAPI, making the use of VIM tedious, e.g., for lacking support around inheritance via `allOf`.
-
-## Generating Bindings
-
-To generate new `vim` content, run `vim_build/src/main`.
-
-## Updating the OpenAPI Specification
-
-The OpenAPI specification is held in `vim_build/data`. The current binding target is **vSphere API 9.1.0.0**, canonical input file `vi_json_openapi_specification_v9_1_0_0.json`.
-
-We use a JSON conversion of the original specification because `DatastoreAccessible_enum` with values `True` and `False` is ambiguously rendered in YAML, i.e., as per the YAML specs, the values are interpreted as boolean constants and not strings.
-
-To add a newer version of the OpenAPI spec, use a tool like `yq` to convert to JSON, e.g., `yq -o=json eval vi-json.yaml > vi_json_openapi_specification_v9_1_0_0.json`. On Windows, ensure the output is **UTF-8** (not UTF-16 from shell redirects). Review if `DatastoreAccessible_enum` values are rendered as boolean flags or strings. The correct way is to have Strings - `True` and `False`.
-
-## `vim_rs` Structure
-
-The `vim_rs` crate has a few packages worth understanding:
-
-1. `core` - `client.rs` contains an API client abstraction that manages the session header. `helpers.rs` is a utility to process base64 encoded values in JSON as `u8` arrays.
-2. `mo` - contains bindings for the individual managed object types. Managed object types in VIM have all the remote invocation endpoints. All the objects in `mo` require a `Client` to make HTTP calls.
-3. `types` - contains the definitions of the VIM data types. It is a bit unwieldy and is the main culprit for slow compilation and large executable size (40MB+ when optimized for size).
-    * `structs.rs` has all the struct types and is the big monstrosity.
-    * `defaults.rs` (with `defaults` feature) provides `Default` implementations for all types.
-    * `traits.rs` defines trait types for all VIM types that have children. In addition, there is logic for cross-trait conversion and JSON serialization.
-    * `enums.rs` contains all enum definitions.
-    * `struct_enum.rs` is an enum with all struct types that allows for relatively efficient type comparison operations.
-    * `vim_object_trait.rs` implements a common trait for all VIM data types.
-    * `deserialize.rs` and `dyn_serialize.rs` provide logic for polymorphic JSON serialization and deserialization, i.e., trait types.
-    * `boxed_types.rs` is an enum used for all boxed types, i.e., arrays of a given type used in any placeholder and primitives.
-    * `as_any.rs`, `vim_any.rs`, and `convert.rs` define utility types that are agnostic of code generation.
-
-## `vim_build` Structure
-
-The generator has three packages:
-
-1. `vim_model` - contains an API model that is closer to the Rust semantics and logic to convert OpenAPI 3.0.x. The `loader.rs` converts the OpenAPI model to the Rust-like model.
-2. `rs_emitter` - contains code generation logic reading from `vim_model` and rendering the actual Rust code for the `vim` crate.
-3. `printer.rs` provides a basic wrapper on an output stream for code generation.
-
-## FAQ
-
-**Why aren’t standard traits like `PartialEq`, `Eq`, `Hash`, and `Clone` implemented on VIM struct types?**  
-Because including these traits across the extensive VIM data model would greatly increase compilation time and binary size. We decided to implement only the essentials to keep build times and executable sizes under control. `Default` is available as an opt-in feature (see Optional `defaults` Feature above).
-
-**What are the expected compilation times for vim-tests?**  
-On a good machine, the first-time compilation of vim-tests can take between 2 and 5 minutes, with subsequent compilations (especially from within an IDE) taking about a minute.
-
-**Why does the design use a hybrid approach with both traits and enums?**  
-The VIM API is inherently polymorphic, and while enums are safe and idiomatic in Rust, using only enums would lead to unwieldy type definitions. The hybrid approach—with traits for the deep hierarchical parts and enums for simpler aspects—strikes a balance between performance and usability.
-
-**Why does ESX authentication fail?**  
-For SOAP/XML against ESXi, enable the `vim_rs` **`xml`** feature, enable reqwest's **`cookies`** feature, and call `.cookie_store(true)` on `reqwest::Client::builder()` before `build()`. VI/JSON to vCenter does not use HTTP cookies. If you opted out of `default-client`, you must supply the configured client to `ClientBuilder::new(server, http_client)`.
+Apache-2.0. See [LICENSE](LICENSE).

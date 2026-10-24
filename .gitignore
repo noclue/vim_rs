@@ -8,6 +8,7 @@ mcp/build-embeddings/.fastembed_cache
 .zed
 .env
 .env*
+*.env
 Thumbs.db
 *.tmp
 *.swp
