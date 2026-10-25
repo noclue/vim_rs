@@ -54,7 +54,9 @@ A `.env` file in the working directory is loaded automatically by the shared `sn
 | `inventory_path` | Resolve inventory path from `MO_REF`. Uses **One** `RetrievePropertiesEx` (govmomi `mo.Ancestors` shape). Prints path to stdout. |
 | `vm_disabled_method_len` | Generated `VirtualMachine::disabled_method` for `MO_REF`: single-property fetch without PropertyCollector; **JSON** or **SOAP** (`VIM_PROTOCOL`). |
 | `mac_monitor` | `WaitForUpdates`-style cache: track VM NIC MACs and guest IPs (~30s demo). |
-| `perf_metrics` | `PerformanceManager`: counter map, container view of VMs, per-VM stats sample. |
+| `perf_metrics` | `vim_rs::perf`: container view of VMs, latest realtime sample of every available counter. |
+| `perf_metrics_manual` | The same walk written against `PerformanceManager` directly (counter map, per-VM provider summary, downcasts). Compare with `perf_metrics`. |
+| `perf_vm_usage` | Typed query of `cpu.usage.average` and `mem.consumed.average` for every VM in a container view. Prints a 15-character column table. |
 | `print_vm_addresses` | All VMs: guest net vs hardware NICs (`vim_retrievable!`). |
 | `property_collector` | Manual `PropertyCollector` + `ContainerView` for VM names; optional `AlarmManager` sample. |
 | `retrieve_ds_hosts` | Hosts mounted on a datastore (`vim_retrievable!`). |

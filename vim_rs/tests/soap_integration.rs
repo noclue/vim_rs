@@ -14,8 +14,7 @@ use vim_rs::core::client::{ClientBuilder, TransportMode, VimClient};
 use vim_rs::mo::{PropertyCollector, SessionManager};
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::{
-    ObjectSpec, PropertyFilterSpec, PropertySpec, RetrieveOptions,
-    SelectionSpec, TraversalSpec,
+    ObjectSpec, PropertyFilterSpec, PropertySpec, RetrieveOptions, SelectionSpec, TraversalSpec,
 };
 
 fn server() -> String {
@@ -51,7 +50,10 @@ async fn soap_builder_login_logout() {
 
     let sm = sc.session_manager.as_ref().expect("sessionManager");
     let sm_proxy = SessionManager::new(client.clone(), &sm.value);
-    let session = sm_proxy.current_session().await.expect("current_session failed");
+    let session = sm_proxy
+        .current_session()
+        .await
+        .expect("current_session failed");
     assert!(session.is_some(), "expected an active session");
     eprintln!("Session user: {}", session.unwrap().user_name);
 
@@ -134,14 +136,19 @@ async fn soap_property_collector_vm_list() {
         report_missing_objects_in_results: None,
     };
 
-    let options = RetrieveOptions { max_objects: Some(100) };
+    let options = RetrieveOptions {
+        max_objects: Some(100),
+    };
     let result = pc
         .retrieve_properties_ex(&[spec], &options)
         .await
         .expect("RetrievePropertiesEx failed")
         .expect("RetrievePropertiesEx returned None");
 
-    eprintln!("Found {} VMs via SOAP PropertyCollector", result.objects.len());
+    eprintln!(
+        "Found {} VMs via SOAP PropertyCollector",
+        result.objects.len()
+    );
     for oc in &result.objects {
         if let Some(ref ps) = oc.prop_set {
             for dp in ps {

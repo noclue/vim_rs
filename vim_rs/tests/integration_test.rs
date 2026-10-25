@@ -42,10 +42,7 @@ fn test_ethernet_box() {
     let vd: Box<dyn VirtualDeviceTrait> = miniserde::json::from_str(&s).unwrap();
     assert_eq!(vd.key, 1000);
     let eth: Box<dyn VirtualEthernetCardTrait> = vd.into_box().unwrap();
-    assert_eq!(
-        eth.mac_address,
-        Some("00:50:56:aa:bb:cc".to_string())
-    );
+    assert_eq!(eth.mac_address, Some("00:50:56:aa:bb:cc".to_string()));
     info!("{:?}", eth);
 }
 
@@ -56,10 +53,7 @@ fn test_ethernet_ref() {
     let vd: &dyn VirtualDeviceTrait = e1000;
     assert_eq!(vd.key, 1000);
     let eth: &dyn VirtualEthernetCardTrait = vd.into_ref().unwrap();
-    assert_eq!(
-        eth.mac_address,
-        Some("00:50:56:aa:bb:cc".to_string())
-    );
+    assert_eq!(eth.mac_address, Some("00:50:56:aa:bb:cc".to_string()));
     info!("{:?}", eth);
 }
 

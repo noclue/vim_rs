@@ -91,6 +91,9 @@
 //! | `xml` | off | Experimental SOAP/XML. About +500 KB release binary size and +30–40% debug build time. Core VIM only. |
 //! | `defaults` | off | `Default` for generated types. Large extra generated source and compile time. |
 //! | `vcsim_compat` | off | Tolerant SOAP parsing for govc vcsim. Requires `xml`. |
+//! | `perf` | off | `vim_rs::perf`: named performance queries and the generated counter catalog. |
+//! | `perf-chrono` | off | `Timestamp` ↔ `chrono::DateTime<Utc>`. Enables `perf`. |
+//! | `perf-polars` | off | `PerfResult::to_dataframe`. Enables `perf`. Polars 0.55 is outside the `vim_rs` semver. |
 //!
 //! XML does not negotiate the API release via Hello. Use
 //! `client.service_content().about.api_version` when server capabilities matter.
@@ -116,6 +119,9 @@ pub use core::WireLoggingMode;
 pub mod types;
 
 pub mod mo;
+
+#[cfg(feature = "perf")]
+pub mod perf;
 
 #[cfg(feature = "xml")]
 pub mod xml;

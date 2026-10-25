@@ -19,6 +19,14 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+### Breaking
+
+- `vim_rs::core::client::Error` is `Clone`. `MethodFault` holds `Arc<MethodFault>` and `ReqwestError` holds `Arc<reqwest::Error>`. Constructing either variant or moving the payload out now uses that `Arc`. Field access such as `fault.type_` and `error.status()` is unchanged through `Deref`. Cloning shares the original fault and transport error. This is incompatible with `^0.6.1`, so the performance release is **0.7.0**, not a compatible 0.6.2.
+
+### Added
+
+- `vim_rs::perf` for 0.7.0: named, unit-scaled `PerformanceManager` queries (`PerfClient`, prepared and composite queries, generated counter constants). The module is behind the `perf` feature, off by default, so a normal build does not compile it and gains no required dependencies. `perf-chrono` and `perf-polars` enable `perf` and stay off by default. Polars is pinned to the 0.55 minor and is outside the `vim_rs` semver.
+
 ## [0.6.1] - 2026-10-17
 
 > Compatible patch on the 0.6.0 bindings. Adds explicit session close, deprecates destructor logout (removed in 0.7.0), and updates the optional XML stack to quick-xml 0.42 (MSRV **1.86** for the `xml` feature).

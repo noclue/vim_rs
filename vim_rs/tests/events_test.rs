@@ -33,7 +33,7 @@ fn read_next_events_fixture_deserializes_all() {
 #[test]
 fn unmarshal_array_soap_events_fixture() {
     let xml = EVENTS_XML;
-    let events: Vec<Event> = unmarshal_array(Transport::Soap, xml.as_bytes())
-        .expect("SOAP repeated returnval list");
+    let events: Vec<Event> =
+        unmarshal_array(Transport::Soap, xml.as_bytes()).expect("SOAP repeated returnval list");
     assert_eq!(events.len(), 2);
 }

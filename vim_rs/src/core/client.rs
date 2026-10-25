@@ -2,18 +2,18 @@ use std::sync::atomic::{AtomicBool, Ordering};
 use std::sync::Arc;
 use std::time::Instant;
 
-use tokio::sync::RwLock;
 use super::super::types::structs;
 use super::wire_log;
-use log::{warn, debug, trace};
+use log::{debug, trace, warn};
+use tokio::sync::RwLock;
 
-use bytes::Bytes;
-use std::future::Future;
-use std::pin::Pin;
-use std::ffi::OsStr;
 use crate::mo;
 use crate::types::struct_enum::StructType;
 use crate::types::structs::{ManagedObjectReference, ServiceContent};
+use bytes::Bytes;
+use std::ffi::OsStr;
+use std::future::Future;
+use std::pin::Pin;
 
 const LIB_NAME: &str = env!("CARGO_PKG_NAME");
 const LIB_VERSION: &str = env!("CARGO_PKG_VERSION");
@@ -32,7 +32,7 @@ const AUTHN_HEADER: &str = "vmware-api-session-id";
 
 const SERVICE_INSTANCE_MOID: &str = "ServiceInstance";
 
-#[derive(Debug, thiserror::Error)]
+#[derive(Debug, Clone, thiserror::Error)]
 pub enum Error {
     /// A typed vSphere API fault returned by the server.
     ///
@@ -41,11 +41,23 @@ pub enum Error {
     /// (e.g. `RequestCanceled`, `InvalidLogin`, `VAppPropertyFault`). For
     /// JSON transport this is produced when the error body deserializes as
     /// a `MethodFault`. Envelope-level SOAP errors that are *not* part of
-    /// the vSphere type hierarchy are surfaced as [`Error::SoapFault`].
+    /// the vSphere type hierarchy are surfaced as [`Error::ParseError`].
+    ///
+    /// The fault is reference-counted, so tasks that share one error keep the
+    /// original fault instead of copying the body. The payload is an [`Arc`],
+    /// which is incompatible with `^0.6.1` callers that take a
+    /// [`structs::MethodFault`] by value. Field access such as `fault.type_`
+    /// is unchanged.
     #[error("MethodFault: {0:?}")]
-    MethodFault(structs::MethodFault),
+    MethodFault(Arc<structs::MethodFault>),
+    /// HTTP or transport failure from the underlying client.
+    ///
+    /// The error is reference-counted, so [`Error`] can be cloned and tasks
+    /// that share one error keep the original `reqwest::Error`. The payload
+    /// is an [`Arc`]. Methods such as `error.status()` are unchanged through
+    /// `Deref`.
     #[error("Reqwest error: {0}")]
-    ReqwestError(#[from] reqwest::Error),
+    ReqwestError(#[source] Arc<reqwest::Error>),
     /// A parse error returned by the server.
     ///
     /// This is produced when the server's response is not valid XML or JSON.
@@ -65,6 +77,12 @@ pub type VimError = Error;
 
 pub type Result<T> = std::result::Result<T, Error>;
 
+impl From<reqwest::Error> for Error {
+    fn from(err: reqwest::Error) -> Self {
+        Error::ReqwestError(Arc::new(err))
+    }
+}
+
 /// Returns `true` if `err` is a `RequestCanceled` SOAP fault (for example after
 /// [`crate::mo::PropertyCollector::cancel_wait_for_updates`]).
 #[must_use]
@@ -80,16 +98,24 @@ mod is_request_canceled_tests {
     use super::{is_request_canceled_error, Error};
     use crate::types::struct_enum::StructType;
     use crate::types::structs::MethodFault;
+    use std::sync::Arc;
 
     #[test]
     fn detects_request_canceled_fault() {
-        let err = Error::MethodFault(MethodFault {
+        let err = Error::MethodFault(Arc::new(MethodFault {
             fault_cause: None,
             fault_message: None,
             type_: Some(StructType::RequestCanceled),
             extra_fields_: Default::default(),
-        });
+        }));
         assert!(is_request_canceled_error(&err));
+        let cloned = err.clone();
+        match (err, cloned) {
+            (Error::MethodFault(original), Error::MethodFault(shared)) => {
+                assert!(Arc::ptr_eq(&original, &shared));
+            }
+            _ => panic!("expected MethodFault"),
+        }
     }
 
     #[test]
@@ -124,8 +150,7 @@ pub enum PropertyValue {
 pub fn extract_property<T: miniserde::Deserialize + 'static>(pv: PropertyValue) -> Result<T> {
     match pv {
         PropertyValue::Json(bytes) => {
-            let text = std::str::from_utf8(&bytes)
-                .map_err(|e| Error::ParseError(e.to_string()))?;
+            let text = std::str::from_utf8(&bytes).map_err(|e| Error::ParseError(e.to_string()))?;
             miniserde::json::from_str(text).map_err(|_| {
                 Error::ParseError(format!(
                     "JSON property decode failed for {}",
@@ -134,16 +159,12 @@ pub fn extract_property<T: miniserde::Deserialize + 'static>(pv: PropertyValue) 
             })
         }
         #[cfg(feature = "xml")]
-        PropertyValue::Parsed(any) => any
-            .into_any()
-            .downcast::<T>()
-            .map(|b| *b)
-            .map_err(|_| {
-                Error::ParseError(format!(
-                    "SOAP property type mismatch for {}",
-                    std::any::type_name::<T>()
-                ))
-            }),
+        PropertyValue::Parsed(any) => any.into_any().downcast::<T>().map(|b| *b).map_err(|_| {
+            Error::ParseError(format!(
+                "SOAP property type mismatch for {}",
+                std::any::type_name::<T>()
+            ))
+        }),
     }
 }
 
@@ -258,12 +279,14 @@ pub(crate) fn drop_logout_on_runtime(
 /// without breaking object-safety of `VimClient`.
 #[cfg(not(feature = "xml"))]
 pub fn unmarshal<T: miniserde::Deserialize>(transport: Transport, bytes: &[u8]) -> Result<T> {
-    let text = std::str::from_utf8(bytes)
-        .map_err(|e| Error::ParseError(e.to_string()))?;
+    let text = std::str::from_utf8(bytes).map_err(|e| Error::ParseError(e.to_string()))?;
     match transport {
-        Transport::Json => miniserde::json::from_str(text)
-            .map_err(|_| Error::ParseError(format!(
-                "JSON deserialization failed for {}", std::any::type_name::<T>()))),
+        Transport::Json => miniserde::json::from_str(text).map_err(|_| {
+            Error::ParseError(format!(
+                "JSON deserialization failed for {}",
+                std::any::type_name::<T>()
+            ))
+        }),
     }
 }
 
@@ -276,18 +299,22 @@ pub fn unmarshal<T>(transport: Transport, bytes: &[u8]) -> Result<T>
 where
     T: miniserde::Deserialize + crate::types::data_type_aware::DataTypeAware,
 {
-    let text = std::str::from_utf8(bytes)
-        .map_err(|e| Error::ParseError(e.to_string()))?;
+    let text = std::str::from_utf8(bytes).map_err(|e| Error::ParseError(e.to_string()))?;
     match transport {
-        Transport::Json => miniserde::json::from_str(text)
-            .map_err(|_| Error::ParseError(format!(
-                "JSON deserialization failed for {}", std::any::type_name::<T>()))),
-        Transport::Soap => {
-            crate::xml::soap::vim_response_internal(text)
-                .or_else(|_| crate::xml::de::from_xml_internal(text))
-                .map_err(|_| Error::ParseError(format!(
-                    "XML deserialization failed for {}", std::any::type_name::<T>())))
-        },
+        Transport::Json => miniserde::json::from_str(text).map_err(|_| {
+            Error::ParseError(format!(
+                "JSON deserialization failed for {}",
+                std::any::type_name::<T>()
+            ))
+        }),
+        Transport::Soap => crate::xml::soap::vim_response_internal(text)
+            .or_else(|_| crate::xml::de::from_xml_internal(text))
+            .map_err(|_| {
+                Error::ParseError(format!(
+                    "XML deserialization failed for {}",
+                    std::any::type_name::<T>()
+                ))
+            }),
     }
 }
 
@@ -303,8 +330,7 @@ pub fn unmarshal_array<U: miniserde::Deserialize>(
     transport: Transport,
     bytes: &[u8],
 ) -> Result<Vec<U>> {
-    let text = std::str::from_utf8(bytes)
-        .map_err(|e| Error::ParseError(e.to_string()))?;
+    let text = std::str::from_utf8(bytes).map_err(|e| Error::ParseError(e.to_string()))?;
     match transport {
         Transport::Json => miniserde::json::from_str(text).map_err(|_| {
             Error::ParseError(format!(
@@ -320,8 +346,7 @@ pub fn unmarshal_array<U>(transport: Transport, bytes: &[u8]) -> Result<Vec<U>>
 where
     U: miniserde::Deserialize + crate::types::data_type_aware::DataTypeAware,
 {
-    let text = std::str::from_utf8(bytes)
-        .map_err(|e| Error::ParseError(e.to_string()))?;
+    let text = std::str::from_utf8(bytes).map_err(|e| Error::ParseError(e.to_string()))?;
     match transport {
         Transport::Json => miniserde::json::from_str(text).map_err(|_| {
             Error::ParseError(format!(
@@ -510,7 +535,6 @@ impl ClientBuilder {
 }
 
 impl ClientBuilder {
-
     /// Opt-in transport logging on dedicated log targets (`vim_rs::wire::json`, `vim_rs::wire::soap`).
     ///
     /// Defaults to [`WireLoggingMode::Off`]. Summary records use [`log::Level::Debug`]; full bodies in
@@ -609,12 +633,19 @@ impl ClientBuilder {
         let api_release = match self.api_release {
             Some(release) => release,
             None => {
-                let releases = self.compatible_api_releases
-                    .unwrap_or_else(|| COMPATIBLE_API_RELEASES.iter().map(|s| s.to_string()).collect());
+                let releases = self.compatible_api_releases.unwrap_or_else(|| {
+                    COMPATIBLE_API_RELEASES
+                        .iter()
+                        .map(|s| s.to_string())
+                        .collect()
+                });
                 let spec = HelloSpec {
                     api_releases: &releases,
                 };
-                let path = format!("https://{}/api/vcenter/system?action=hello", self.server_address);
+                let path = format!(
+                    "https://{}/api/vcenter/system?action=hello",
+                    self.server_address
+                );
                 let json_body = miniserde::json::to_string(&spec);
                 let started = Instant::now();
                 if wire_logging.is_enabled() {
@@ -627,7 +658,8 @@ impl ClientBuilder {
                     );
                     wire_log::log_json_line(wire_logging, "", false, &msg);
                 }
-                let req = http_client.post(&path)
+                let req = http_client
+                    .post(&path)
                     .header("Content-Type", "application/json")
                     .header("User-Agent", &user_agent)
                     .body(json_body);
@@ -640,13 +672,13 @@ impl ClientBuilder {
                             started.elapsed(),
                             &e,
                         );
-                        return Err(Error::ReqwestError(e));
+                        return Err(Error::from(e));
                     }
                 };
                 let status = res.status();
                 // Same classification as `Response::error_for_status()` (4xx/5xx → reqwest::Error).
                 let http_err = res.error_for_status_ref().err();
-                let body = res.text().await.map_err(Error::ReqwestError)?;
+                let body = res.text().await.map_err(Error::from)?;
                 let elapsed = started.elapsed();
                 if wire_logging.is_enabled() {
                     let mode_l = wire_log::wire_mode_label(wire_logging, "");
@@ -665,7 +697,7 @@ impl ClientBuilder {
                     wire_log::log_json_line(wire_logging, "", detailed, &msg);
                 }
                 if let Some(e) = http_err {
-                    return Err(Error::ReqwestError(e));
+                    return Err(Error::from(e));
                 }
                 let result: HelloResult = miniserde::json::from_str(&body)
                     .map_err(|_| Error::ParseError("Failed to parse HelloResult".to_string()))?;
@@ -677,7 +709,7 @@ impl ClientBuilder {
                 }
                 debug!("Negotiated API release: {}", api_release);
                 api_release
-            },
+            }
         };
 
         let base_url = format!("https://{}/sdk/vim25/{}", self.server_address, api_release);
@@ -695,10 +727,16 @@ impl ClientBuilder {
 
         let service_instance = mo::ServiceInstance::new(bootstrap.clone(), SERVICE_INSTANCE_MOID);
         let content = service_instance.content().await?;
-        debug!("ServiceInstance content obtained from: {}", content.about.full_name);
+        debug!(
+            "ServiceInstance content obtained from: {}",
+            content.about.full_name
+        );
         trace!("ServiceInstance content: {:?}", content);
 
-        let sm_id = content.session_manager.as_ref().map(|moid| moid.value.clone());
+        let sm_id = content
+            .session_manager
+            .as_ref()
+            .map(|moid| moid.value.clone());
         let json = Arc::new(JsonClient {
             http_client: http_client.clone(),
             session_key: session_key.clone(),
@@ -710,9 +748,13 @@ impl ClientBuilder {
             session_ended: AtomicBool::new(false),
         });
 
-        if let (Some(ref sm_id), Some(ref user_name), Some(ref password)) = (sm_id, self.user_name, self.password) {
+        if let (Some(ref sm_id), Some(ref user_name), Some(ref password)) =
+            (sm_id, self.user_name, self.password)
+        {
             let sm = mo::SessionManager::new(json.clone(), sm_id);
-            let session = sm.login(user_name, password, self.locale.as_deref()).await?;
+            let session = sm
+                .login(user_name, password, self.locale.as_deref())
+                .await?;
             debug!("Session created for: {:?}", session.user_name);
         }
         Ok(Arc::new(Client { inner: json }))
@@ -738,12 +780,20 @@ impl ClientBuilder {
         );
         soap.bootstrap().await?;
 
-        let sm_id = soap.service_content().session_manager.as_ref().map(|m| m.value.clone());
+        let sm_id = soap
+            .service_content()
+            .session_manager
+            .as_ref()
+            .map(|m| m.value.clone());
         let soap = Arc::new(soap);
 
-        if let (Some(ref sm_id), Some(ref user_name), Some(ref password)) = (sm_id, self.user_name, self.password) {
+        if let (Some(ref sm_id), Some(ref user_name), Some(ref password)) =
+            (sm_id, self.user_name, self.password)
+        {
             let sm = mo::SessionManager::new(soap.clone(), sm_id);
-            let session = sm.login(user_name, password, self.locale.as_deref()).await?;
+            let session = sm
+                .login(user_name, password, self.locale.as_deref())
+                .await?;
             debug!("SOAP session created for: {:?}", session.user_name);
         }
         Ok(Arc::new(Client { inner: soap }))
@@ -759,10 +809,19 @@ impl ClientBuilder {
         #[cfg(not(feature = "default-client"))]
         let http_client_for_probe = obtain_http_client(self.http_client.clone())?;
 
-        let releases = self.compatible_api_releases.clone()
-            .unwrap_or_else(|| COMPATIBLE_API_RELEASES.iter().map(|s| s.to_string()).collect());
-        let hello_url = format!("https://{}/api/vcenter/system?action=hello", self.server_address);
-        let spec = HelloSpec { api_releases: &releases };
+        let releases = self.compatible_api_releases.clone().unwrap_or_else(|| {
+            COMPATIBLE_API_RELEASES
+                .iter()
+                .map(|s| s.to_string())
+                .collect()
+        });
+        let hello_url = format!(
+            "https://{}/api/vcenter/system?action=hello",
+            self.server_address
+        );
+        let spec = HelloSpec {
+            api_releases: &releases,
+        };
         let json_body = miniserde::json::to_string(&spec);
         let started = Instant::now();
         if wl.is_enabled() {
@@ -878,9 +937,8 @@ impl Client {
             .inner
             .fetch_property_raw("", type_name, id, property)
             .await?;
-        let pv = pv_opt.ok_or_else(|| {
-            Error::ParseError(format!("property {property} was empty"))
-        })?;
+        let pv =
+            pv_opt.ok_or_else(|| Error::ParseError(format!("property {property} was empty")))?;
         extract_property(pv)
     }
 
@@ -934,7 +992,8 @@ impl VimClient for Client {
         method_name: &'a str,
         params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<()>> {
-        self.inner.invoke_void(svc, mo_type, mo_id, method_name, params)
+        self.inner
+            .invoke_void(svc, mo_type, mo_id, method_name, params)
     }
 
     fn fetch_property_raw<'a>(
@@ -944,8 +1003,7 @@ impl VimClient for Client {
         mo_id: &'a str,
         property: &'a str,
     ) -> BoxFuture<'a, Result<Option<PropertyValue>>> {
-        self.inner
-            .fetch_property_raw(svc, mo_type, mo_id, property)
+        self.inner.fetch_property_raw(svc, mo_type, mo_id, property)
     }
 
     fn close(&self) -> BoxFuture<'_, Result<()>> {
@@ -987,23 +1045,23 @@ pub(crate) struct JsonClient {
 /// still logs out on a multi-thread Tokio runtime in 0.6.x (removed in 0.7.0).
 impl JsonClient {
     pub(crate) fn service_content(&self) -> &ServiceContent {
-        self.service_content.as_ref().expect("JsonClient missing ServiceContent")
+        self.service_content
+            .as_ref()
+            .expect("JsonClient missing ServiceContent")
     }
 
     pub(crate) fn api_release(&self) -> String {
         self.api_release.clone()
     }
 
-    fn get_request(&self, path: &str) -> reqwest::RequestBuilder
-    {
+    fn get_request(&self, path: &str) -> reqwest::RequestBuilder {
         debug!("GET request: {}", path);
         let url = format!("{}{}", self.base_url, path);
         self.http_client.get(&url)
     }
 
     /// Prepare POST request without a body
-    pub(crate) fn post_bare(&self, path: &str) -> reqwest::RequestBuilder
-    {
+    pub(crate) fn post_bare(&self, path: &str) -> reqwest::RequestBuilder {
         debug!("POST request (void): {}", path);
         let url = format!("{}{}", self.base_url, path);
         self.http_client.post(&url)
@@ -1113,7 +1171,7 @@ impl JsonClient {
                         );
                     }
                 }
-                return Err(Error::ReqwestError(e));
+                return Err(Error::from(e));
             }
         };
         let res = self
@@ -1163,7 +1221,13 @@ impl JsonClient {
         ctx: Option<&JsonWireCtx<'_>>,
     ) -> Result<reqwest::Response> {
         if res.status().is_success() && res.headers().contains_key(AUTHN_HEADER) {
-            let session_key = res.headers().get(AUTHN_HEADER).unwrap().to_str().map_err(|_| Error::MissingOrInvalidSessionKey)?.to_string();
+            let session_key = res
+                .headers()
+                .get(AUTHN_HEADER)
+                .unwrap()
+                .to_str()
+                .map_err(|_| Error::MissingOrInvalidSessionKey)?
+                .to_string();
             let mut key_holder = self.session_key.write().await;
             *key_holder = Some(session_key);
         }
@@ -1187,9 +1251,13 @@ impl JsonClient {
                     );
                 }
             }
-            let fault: structs::MethodFault = miniserde::json::from_str(&body)
-                .map_err(|_| Error::ParseError(format!("Failed to parse MethodFault from error response: {}", &body[..body.len().min(200)])))?;
-            return Err(Error::MethodFault(fault));
+            let fault: structs::MethodFault = miniserde::json::from_str(&body).map_err(|_| {
+                Error::ParseError(format!(
+                    "Failed to parse MethodFault from error response: {}",
+                    &body[..body.len().min(200)]
+                ))
+            })?;
+            return Err(Error::MethodFault(Arc::new(fault)));
         }
         Ok(res)
     }
@@ -1274,7 +1342,7 @@ impl JsonClient {
                                 "Failed to logout session(HTTP code: {}). MethodFault: {:?}",
                                 status, fault
                             );
-                            Err(Error::MethodFault(fault))
+                            Err(Error::MethodFault(Arc::new(fault)))
                         }
                         Err(_) => {
                             warn!(
@@ -1302,8 +1370,11 @@ impl JsonClient {
                     );
                     wire_log::log_json_line(wire_logging, "SessionManager", false, &msg);
                 }
-                warn!("Failed to logout session. Cannot execute logout request: {}", e);
-                Err(Error::ReqwestError(e))
+                warn!(
+                    "Failed to logout session. Cannot execute logout request: {}",
+                    e
+                );
+                Err(Error::from(e))
             }
         }
     }
@@ -1357,7 +1428,7 @@ impl VimClient for JsonClient {
                         started.elapsed(),
                         &e,
                     );
-                    return Err(Error::ReqwestError(e));
+                    return Err(Error::from(e));
                 }
             };
             let res = self
@@ -1444,7 +1515,7 @@ impl VimClient for JsonClient {
                         started.elapsed(),
                         &e,
                     );
-                    return Err(Error::ReqwestError(e));
+                    return Err(Error::from(e));
                 }
             };
             let res = self
@@ -1581,7 +1652,7 @@ impl VimClient for JsonClient {
                         started.elapsed(),
                         &e,
                     );
-                    return Err(Error::ReqwestError(e));
+                    return Err(Error::from(e));
                 }
             };
             let res = self
@@ -1643,7 +1714,6 @@ impl VimClient for JsonClient {
     }
 }
 
-
 /// Log out the JSON session when the last strong reference to this [`JsonClient`] is dropped.
 ///
 /// On a multi-thread Tokio runtime this is a 0.6.x compatibility fallback. Prefer
@@ -1661,10 +1731,9 @@ impl Drop for JsonClient {
             .try_read()
             .map(|guard| guard.is_some())
             .unwrap_or(true);
-        if let Some(handle) = drop_logout_on_runtime(
-            &self.session_ended,
-            has_session_manager && has_session_key,
-        ) {
+        if let Some(handle) =
+            drop_logout_on_runtime(&self.session_ended, has_session_manager && has_session_key)
+        {
             tokio::task::block_in_place(|| {
                 handle.block_on(async {
                     let _ = self.logout_session().await;
@@ -1713,7 +1782,6 @@ fn get_executable_name() -> Option<String> {
         .map(|s| s.to_owned())
 }
 
-
 /// The Hello System API request. This is not full-fledged binding but a simple request to
 /// negotiate the API release version.
 /// See [Hello System](https://developer.broadcom.com/xapis/vsphere-automation-api/latest/vcenter/api/vcenter/system__action=hello/post/index)
@@ -1737,7 +1805,10 @@ struct HelloSpecSerializer<'a> {
 impl miniserde::ser::Map for HelloSpecSerializer<'_> {
     fn next(&mut self) -> Option<(std::borrow::Cow<'_, str>, &dyn miniserde::Serialize)> {
         let result = match self.seq {
-            0 => Some((std::borrow::Cow::Borrowed("api_releases"), &self.data.api_releases as &dyn miniserde::Serialize)),
+            0 => Some((
+                std::borrow::Cow::Borrowed("api_releases"),
+                &self.data.api_releases as &dyn miniserde::Serialize,
+            )),
             _ => None,
         };
         self.seq += 1;
@@ -1931,8 +2002,8 @@ mod wire_logging_transport_tests {
 
     use super::super::wire_log;
     use super::{
-        test_dead_port_http_client, test_json_client_wire_transport, ClientBuilder, Error, JsonClient,
-        VimClient, WireLoggingMode, TEST_WIRE_DEAD_ADDR,
+        test_dead_port_http_client, test_json_client_wire_transport, ClientBuilder, Error,
+        JsonClient, VimClient, WireLoggingMode, TEST_WIRE_DEAD_ADDR,
     };
     use miniserde::Serialize;
 
@@ -2017,10 +2088,20 @@ mod wire_logging_transport_tests {
             .wire_logging(WireLoggingMode::Summary)
             .build()
             .await;
+        let hello_err = match hello_err.as_ref() {
+            Err(err) => err,
+            Ok(_) => panic!("expected transport error from hello"),
+        };
+        let cloned = hello_err.clone();
+        match (hello_err, &cloned) {
+            (Error::ReqwestError(original), Error::ReqwestError(shared)) => {
+                assert!(std::sync::Arc::ptr_eq(original, shared));
+            }
+            _ => panic!("expected ReqwestError, got {hello_err:?}"),
+        }
         assert!(
-            matches!(hello_err.as_ref(), Err(Error::ReqwestError(_))),
-            "expected transport error from hello, got {:?}",
-            hello_err.as_ref().err()
+            std::error::Error::source(hello_err).is_some(),
+            "transport error must expose the reqwest error as its source"
         );
         let out = joined_wire_output();
         assert!(
@@ -2116,7 +2197,10 @@ mod wire_logging_transport_tests {
         let err = JsonClient::execute_void(jc.as_ref(), req, Some(ctx), started).await;
         assert!(matches!(err, Err(Error::ReqwestError(_))));
         let out = joined_wire_output();
-        assert!(out.contains("method=Destroy") && out.contains("error=transport"), "{out}");
+        assert!(
+            out.contains("method=Destroy") && out.contains("error=transport"),
+            "{out}"
+        );
     }
 
     #[cfg(feature = "xml")]
@@ -2198,7 +2282,10 @@ mod wire_logging_transport_tests {
         assert!(matches!(err, Err(Error::MethodFault(_))));
         stub.join().expect("stub thread");
         let out = joined_wire_output();
-        assert!(out.contains("phase=request") && out.contains("method=SomeMethod"), "{out}");
+        assert!(
+            out.contains("phase=request") && out.contains("method=SomeMethod"),
+            "{out}"
+        );
         assert!(
             out.contains("status=500") && out.contains("phase=response"),
             "expected log_json_http_error-style line: {out}"
@@ -2219,7 +2306,10 @@ mod wire_logging_transport_tests {
         assert!(matches!(err, Err(Error::MethodFault(_))));
         stub.join().expect("stub thread");
         let out = joined_wire_output();
-        assert!(out.contains("property=name") && out.contains("status=403"), "{out}");
+        assert!(
+            out.contains("property=name") && out.contains("status=403"),
+            "{out}"
+        );
     }
 
     #[tokio::test(flavor = "multi_thread", worker_threads = 4)]
@@ -2233,7 +2323,10 @@ mod wire_logging_transport_tests {
         drop(jc);
         stub.join().expect("stub thread");
         let out = joined_wire_output();
-        assert!(out.contains("kind=logout") && out.contains("phase=request"), "{out}");
+        assert!(
+            out.contains("kind=logout") && out.contains("phase=request"),
+            "{out}"
+        );
         assert!(
             out.contains("status=200") && !out.contains("error=http_failure"),
             "{out}"
@@ -2421,7 +2514,10 @@ mod wire_logging_transport_tests {
         jc.close().await.expect("close success");
         stub.join().expect("stub thread");
         let out = joined_wire_output();
-        assert!(out.contains("kind=logout") && out.contains("phase=request"), "{out}");
+        assert!(
+            out.contains("kind=logout") && out.contains("phase=request"),
+            "{out}"
+        );
         assert!(
             out.contains("status=200") && !out.contains("error=http_failure"),
             "{out}"
@@ -2612,7 +2708,10 @@ mod wire_logging_transport_tests {
             endpoint,
         );
         let err = soap.close().await;
-        assert!(err.is_err(), "expected soap logout transport error, got {err:?}");
+        assert!(
+            err.is_err(),
+            "expected soap logout transport error, got {err:?}"
+        );
         let out = joined_wire_output();
         assert!(
             out.contains("kind=logout") && out.contains("error=transport"),

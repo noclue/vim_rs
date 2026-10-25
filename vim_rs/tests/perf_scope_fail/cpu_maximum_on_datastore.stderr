@@ -1,0 +1,18 @@
+error[E0277]: metric scope `vim_rs::perf::entity::Scope<true, true, true, false, false, false>` does not include `vim_rs::mo::Datastore` in the vCenter 8.0.3 catalog
+  --> tests/perf_scope_fail/cpu_maximum_on_datastore.rs:11:29
+   |
+11 |     rejects::<Datastore, _, _>(USAGE_MAXIMUM);
+   |                             ^ the trait `Admits<vim_rs::mo::Datastore>` is not implemented for `vim_rs::perf::entity::Scope<true, true, true, false, false, false>`
+   |
+   = note: if this counter is a Tier-3b inferred counter, call `metric.with_scope::<AnyEntity>()` or `.metric_unchecked(metric)`
+help: the trait `Admits<vim_rs::mo::Datastore>` is implemented for `vim_rs::perf::entity::Scope<VM, HOST, CLUSTER, RP, true, DC>`
+  --> src/perf/typed.rs
+   |
+   | / impl<const VM: bool, const HOST: bool, const CLUSTER: bool, const RP: bool, const DC: bool>
+   | |     Admits<crate::mo::Datastore> for Scope<VM, HOST, CLUSTER, RP, true, DC>
+   | |___________________________________________________________________________^
+note: required by a bound in `rejects`
+  --> tests/perf_scope_fail/cpu_maximum_on_datastore.rs:8:58
+   |
+ 8 | fn rejects<K: EntityKind, D: Dimension, S: EntityScope + Admits<K>>(_: Metric<D, S>) {}
+   |                                                          ^^^^^^^^^ required by this bound in `rejects`

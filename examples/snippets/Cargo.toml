@@ -23,6 +23,14 @@ name = "perf_metrics"
 path = "src/perf_metrics.rs"
 
 [[bin]]
+name = "perf_metrics_manual"
+path = "src/perf_metrics_manual.rs"
+
+[[bin]]
+name = "perf_vm_usage"
+path = "src/perf_vm_usage.rs"
+
+[[bin]]
 name = "mac_monitor"
 path = "src/mac_monitor.rs"
 
@@ -80,6 +88,6 @@ chrono = "0.4"
 env_logger = "0.11"
 log = "0.4"
 tokio = { version = "1.44", features = ["macros"] }
-vim_rs = { version = "0.6.1", path = "../../vim_rs", features = ["defaults", "xml"] }
+vim_rs = { version = "0.6.1", path = "../../vim_rs", features = ["defaults", "xml", "perf"] }
 miniserde = "0.1"
 dotenvy = "0.15"

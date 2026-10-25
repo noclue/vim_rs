@@ -47,12 +47,8 @@ fn narrow_vim_any_object_to_trait_box() {
     // Trait narrowing without JSON: VimAny::Object(Box<dyn VimObjectTrait>) -> Box<dyn VirtualEthernetCardTrait>
     let eth: Box<dyn VirtualEthernetCardTrait> = obj.into_box().expect("trait cast should work");
     assert_eq!(eth.key, 1000);
-    assert_eq!(
-        eth.mac_address,
-        Some("00:50:56:aa:bb:cc".to_string())
-    );
+    assert_eq!(eth.mac_address, Some("00:50:56:aa:bb:cc".to_string()));
 }
-
 
 fn create_virtual_e1000() -> VirtualE1000 {
     VirtualE1000 {

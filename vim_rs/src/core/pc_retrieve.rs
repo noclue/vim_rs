@@ -53,7 +53,10 @@ impl ObjectRetriever {
     /// resolving the property paths to the correct Rust types. The macro also generates the
     /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
     /// [`ObjectRetriever`] API.
-    pub async fn retrieve_objects_from_container<T: Retrievable>(&self, container: &ManagedObjectReference) -> Result<Vec<T>>
+    pub async fn retrieve_objects_from_container<T: Retrievable>(
+        &self,
+        container: &ManagedObjectReference,
+    ) -> Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
@@ -73,7 +76,10 @@ impl ObjectRetriever {
     /// resolving the property paths to the correct Rust types. The macro also generates the
     /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
     /// [`ObjectRetriever`] API.
-    pub async fn retrieve_objects_from_list<T: Retrievable>(&self, objs: &[ManagedObjectReference]) -> Result<Vec<T>>
+    pub async fn retrieve_objects_from_list<T: Retrievable>(
+        &self,
+        objs: &[ManagedObjectReference],
+    ) -> Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
@@ -83,31 +89,50 @@ impl ObjectRetriever {
 
     /// Retrieves objects of type T from the specified view. The view is destroyed after the
     /// retrieval is complete.
-    async fn retrieve_objects_from_view<T: Retrievable>(&self, view_moref: &ManagedObjectReference)-> Result<Vec<T>>
+    async fn retrieve_objects_from_view<T: Retrievable>(
+        &self,
+        view_moref: &ManagedObjectReference,
+    ) -> Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
         let object_set = obj_spec_for_view(view_moref.clone());
         let res = self.retrieve_objects(object_set).await;
-        if let Err(e) = self.client
-                .invoke_void("", view_moref.r#type.as_str(), &view_moref.value, "DestroyView", None)
-                .await {
-            error!("Error destroying view {}:{}: {:?}", view_moref.r#type.as_str(), view_moref.value, e);
+        if let Err(e) = self
+            .client
+            .invoke_void(
+                "",
+                view_moref.r#type.as_str(),
+                &view_moref.value,
+                "DestroyView",
+                None,
+            )
+            .await
+        {
+            error!(
+                "Error destroying view {}:{}: {:?}",
+                view_moref.r#type.as_str(),
+                view_moref.value,
+                e
+            );
         };
         res
     }
 
     /// Retrieves a single object of type T from the specified managed object reference.
     /// This makes only a sinlge call to the PropertyCollector and does not use a view.
-    /// Thus it is more efficent than retrieving a vector with single element using 
+    /// Thus it is more efficent than retrieving a vector with single element using
     /// `retrieve_objects_from_list`.
-    /// 
+    ///
     /// Use the `vim_macros::vim_retrievable` macro to easily map PropertyCollector property
     /// paths to Rust objects. This macro generates a struct with the specified properties by
     /// resolving the property paths to the correct Rust types. The macro also generates the
     /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
     /// [`ObjectRetriever`] API.
-    pub async fn retrieve_object<T: Retrievable>(&self, obj: &ManagedObjectReference) -> Result<Option<T>>
+    pub async fn retrieve_object<T: Retrievable>(
+        &self,
+        obj: &ManagedObjectReference,
+    ) -> Result<Option<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
@@ -130,7 +155,10 @@ impl ObjectRetriever {
     /// resolving the property paths to the correct Rust types. The macro also generates the
     /// [`Retrievable`] trait implementation for the struct, allowing it to be used with the
     /// [`ObjectRetriever`] API.
-    pub async fn retrieve_objects<T: Retrievable>(&self, object_set: Vec<ObjectSpec>) -> Result<Vec<T>>
+    pub async fn retrieve_objects<T: Retrievable>(
+        &self,
+        object_set: Vec<ObjectSpec>,
+    ) -> Result<Vec<T>>
     where
         <T as TryFrom<crate::types::structs::ObjectContent>>::Error: BoxableError,
     {
@@ -154,8 +182,10 @@ impl ObjectRetriever {
         };
         loop {
             for obj in res.objects {
-                vms.push(obj.try_into().map_err(|e| -> Error { Error::from(Box::new(e) as Box<dyn std::error::Error + Send + Sync>) })?);
-            };
+                vms.push(obj.try_into().map_err(|e| -> Error {
+                    Error::from(Box::new(e) as Box<dyn std::error::Error + Send + Sync>)
+                })?);
+            }
             // Check for more results
             let Some(token) = res.token else {
                 break;

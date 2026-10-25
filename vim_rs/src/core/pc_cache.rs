@@ -1,8 +1,3 @@
-use indexmap::IndexMap;
-use std::ops::Index;
-use std::sync::{Arc, RwLock, Mutex};
-use std::time::{Duration, Instant};
-use log::{debug, error, trace, warn};
 use crate::core::client::VimClient;
 use crate::core::error::{Error, Result};
 use crate::core::pc_helpers::{self, BoxableError, Queriable};
@@ -12,6 +7,11 @@ use crate::types::structs::{
     ManagedObjectReference, ObjectSpec, ObjectUpdate, PropertyFilterSpec, PropertyFilterUpdate,
     PropertySpec, WaitOptions,
 };
+use indexmap::IndexMap;
+use log::{debug, error, trace, warn};
+use std::ops::Index;
+use std::sync::{Arc, Mutex, RwLock};
+use std::time::{Duration, Instant};
 
 /// A trait for objects that can be retrieved and continuously updated using the `PropertyCollector`
 /// API.
@@ -56,7 +56,10 @@ impl<T: Cache> Cache for ReadWriteCacheProxy<T> {
             Ok(guard) => guard.prop_spec(),
             Err(e) => {
                 error!("Failed to acquire read lock: {}", e);
-                return Err(Error::lock_poisoned(format!("Failed to acquire read lock: {}", e)));
+                return Err(Error::lock_poisoned(format!(
+                    "Failed to acquire read lock: {}",
+                    e
+                )));
             }
         }
     }
@@ -64,7 +67,10 @@ impl<T: Cache> Cache for ReadWriteCacheProxy<T> {
     fn process_update(&mut self, updates: Vec<ObjectUpdate>) -> Result<()> {
         match self.cache.write() {
             Ok(mut guard) => guard.process_update(updates),
-            Err(e) => Err(Error::lock_poisoned(format!("Failed to acquire write lock: {}", e))),
+            Err(e) => Err(Error::lock_poisoned(format!(
+                "Failed to acquire write lock: {}",
+                e
+            ))),
         }
     }
 }
@@ -294,7 +300,10 @@ where
 
                                 if action == CacheAction::Evict {
                                     if let Some(obj) = self.cache.shift_remove(&id) {
-                                        debug!("Evicting '{}' object from cache (listener requested)", id);
+                                        debug!(
+                                            "Evicting '{}' object from cache (listener requested)",
+                                            id
+                                        );
                                         self.notify_remove(obj);
                                     }
                                 }
@@ -445,7 +454,9 @@ impl CacheManager {
 
     /// Create a new Monitor with the same PropertyCollector as the CacheManager.
     pub fn create_monitor(&self) -> Result<Monitor> {
-        Ok(Monitor::new_with_property_collector(self.property_collector.clone())?)
+        Ok(Monitor::new_with_property_collector(
+            self.property_collector.clone(),
+        )?)
     }
 
     /// Add an object cache for a specific type of object in a given container like Folder, Datacenter, etc.
@@ -454,10 +465,10 @@ impl CacheManager {
         cache: Box<dyn Cache + Send + Sync>,
         container: &ManagedObjectReference,
     ) -> Result<ManagedObjectReference> {
-        let view = self.view_manager.create_container_view(container,
-                                                           Some(&[cache.prop_spec()?.r#type.clone()]),
-                                                           true,
-        ).await?;
+        let view = self
+            .view_manager
+            .create_container_view(container, Some(&[cache.prop_spec()?.r#type.clone()]), true)
+            .await?;
 
         let res = self
             .add_cache(cache, pc_helpers::obj_spec_for_view(view.clone()))
@@ -532,8 +543,10 @@ impl CacheManager {
             if let Some(cache_rec) = self.caches.get_mut(&filter_id) {
                 if let Some(object_update) = update.object_set {
                     let object_count = object_update.len();
-                    let object_ids: Vec<String> =
-                        object_update.iter().map(|obj| obj.obj.value.clone()).collect();
+                    let object_ids: Vec<String> = object_update
+                        .iter()
+                        .map(|obj| obj.obj.value.clone())
+                        .collect();
                     debug!(
                         "CacheManager::apply_updates dispatching filter={} object_count={} object_ids={:?}",
                         filter_id,
@@ -583,10 +596,23 @@ impl CacheManager {
             error!("Error destroying property filter {}: {:?}", filter_id, e);
         };
         if let Some(ref view_moref) = cache_rec.view {
-            if let Err(e) = self.client
-                    .invoke_void("", view_moref.r#type.as_str(), &view_moref.value, "DestroyView", None)
-                    .await {
-                error!("Error destroying view {}:{}: {:?}", view_moref.r#type.as_str(), view_moref.value, e);
+            if let Err(e) = self
+                .client
+                .invoke_void(
+                    "",
+                    view_moref.r#type.as_str(),
+                    &view_moref.value,
+                    "DestroyView",
+                    None,
+                )
+                .await
+            {
+                error!(
+                    "Error destroying view {}:{}: {:?}",
+                    view_moref.r#type.as_str(),
+                    view_moref.value,
+                    e
+                );
             };
         }
     }
@@ -679,8 +705,10 @@ impl Monitor {
     /// of repeated absorbed cancels. Returning `Ok(None)` signals natural timeout
     /// (either because the server returned no updates or because the deadline was reached
     /// before another attempt could complete usefully).
-    pub async fn wait_updates(&mut self, delay_s: i32) -> Result<Option<Vec<PropertyFilterUpdate>>>
-    {
+    pub async fn wait_updates(
+        &mut self,
+        delay_s: i32,
+    ) -> Result<Option<Vec<PropertyFilterUpdate>>> {
         let started = Instant::now();
         let total_budget = if delay_s > 0 {
             Some(Duration::from_secs(delay_s as u64))

@@ -31,6 +31,15 @@ xml = ["dep:quick-xml", "reqwest/cookies"]
 # exact semantics and for the corresponding opt-in entry points
 # (`from_xml_with`, `vim_response_with`) that do not require this feature.
 vcsim_compat = ["xml"]
+# Named performance queries (`vim_rs::perf`), including the generated counter
+# catalog. Off by default so a normal library build does not compile them.
+perf = []
+# `Timestamp` conversions to `chrono::DateTime<Utc>`. Off by default.
+perf-chrono = ["perf", "dep:chrono"]
+# `PerfResult::to_dataframe`. Off by default and outside the vim_rs semver
+# guarantee: a later patch may bump the polars 0.x minor. Use `rows()` for a
+# stable schema.
+perf-polars = ["perf", "dep:polars"]
 
 [dependencies]
 base64 = "0.22"
@@ -45,6 +54,8 @@ thiserror = "2.0"
 tokio = { version = "1.44", features = ["rt-multi-thread", "macros", "sync"] }
 vim_macros = { version = "0.6.1", path = "../vim_macros" }
 phf = "0.14"
+chrono = { version = "0.4", optional = true, default-features = false, features = ["std"] }
+polars = { version = "0.55", optional = true, default-features = false }
 
 [build-dependencies]
 rustc_version = "0.4"
@@ -54,6 +65,7 @@ doctest = false
 
 [dev-dependencies]
 criterion = { version = "0.8", features = ["html_reports"] }
+trybuild = "1"
 
 [[bench]]
 name = "miniserde_bench"

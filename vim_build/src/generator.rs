@@ -25,6 +25,8 @@ pub enum Error {
     Emit(#[from] rs_emitter::errors::Error),
     #[error("VimModelError: {0}")]
     VimModel(#[from] vim_model::Error),
+    #[error(transparent)]
+    PerfCatalog(#[from] crate::perf_metrics::Error),
 }
 
 type Result<T> = std::result::Result<T, Error>;
@@ -46,6 +48,9 @@ pub fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path, pruned_ty
     generate_field_data(&vim_model, &*root_folder.join("vim_macros/src/field_data.rs"))?;
     // Also generate field_data.rs for the MCP server
     generate_field_data(&vim_model, &*root_folder.join("mcp/server/src/field_data.rs"))?;
+    let catalog = vi_json_spec_path.with_file_name("perf-catalog.json");
+    let metrics = root_folder.join("vim_rs/src/perf/metrics.rs");
+    crate::perf_metrics::emit_perf_metrics(&catalog, &metrics)?;
     Ok(())
 }
 

@@ -78,7 +78,10 @@ fn vcsim_option_def_without_option_type_strict_vs_tolerant() {
 
     // Strict: errors out because required optionType is missing.
     let strict: Result<OptionDef, _> = from_xml(xml);
-    assert!(strict.is_err(), "strict from_xml must reject missing optionType");
+    assert!(
+        strict.is_err(),
+        "strict from_xml must reject missing optionType"
+    );
 
     // Tolerant at the *same* scope as the element: the build() error is
     // swallowed, which means the output slot stays `None` and from_xml
@@ -89,8 +92,12 @@ fn vcsim_option_def_without_option_type_strict_vs_tolerant() {
     // effect is meaningful only when the failing element is nested inside
     // a parent (Vec or Option<...>) that can absorb the drop — which is
     // precisely the HostConfigInfo.option_def situation.
-    let tolerant_top: Result<OptionDef, _> =
-        from_xml_with(xml, DeserializeOptions { tolerate_build_errors: true });
+    let tolerant_top: Result<OptionDef, _> = from_xml_with(
+        xml,
+        DeserializeOptions {
+            tolerate_build_errors: true,
+        },
+    );
     assert!(
         tolerant_top.is_err(),
         "tolerant mode at the root still has no value to return"
@@ -157,7 +164,10 @@ fn vcsim_xml_struct_val_storage_summary_ok_with_vcsim_prefix() {
             let s = s.expect("VirtualMachineStorageSummary object");
             assert_eq!(s.committed, 234);
         }
-        other => panic!("expected VimAny::Object(VirtualMachineStorageSummary), got {:?}", other),
+        other => panic!(
+            "expected VimAny::Object(VirtualMachineStorageSummary), got {:?}",
+            other
+        ),
     }
 }
 
@@ -171,6 +181,9 @@ fn vcsim_xml_struct_val_storage_summary_ok_with_vcenter_xsi() {
             let s = s.expect("VirtualMachineStorageSummary object");
             assert_eq!(s.committed, 234);
         }
-        other => panic!("expected VimAny::Object(VirtualMachineStorageSummary), got {:?}", other),
+        other => panic!(
+            "expected VimAny::Object(VirtualMachineStorageSummary), got {:?}",
+            other
+        ),
     }
 }

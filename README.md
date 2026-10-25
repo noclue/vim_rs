@@ -46,6 +46,9 @@ The [crate guide](vim_rs/README.md) is the developer walkthrough: your own TLS s
 | `xml` | off | Experimental SOAP/XML transport. About **+500 KB** on a release binary and about **+30–40%** debug build time. |
 | `defaults` | off | `Default` for generated types, so struct-update syntax works. Adds a large amount of generated code and compile time. |
 | `vcsim_compat` | off | Tolerant SOAP parsing for [govc vcsim](https://github.com/vmware/govmomi). Requires `xml`. |
+| `perf` | off | `vim_rs::perf`: named performance queries and the generated counter catalog. Leave it off to skip that compile. |
+| `perf-chrono` | off | `Timestamp` ↔ `chrono::DateTime<Utc>`. Enables `perf`. |
+| `perf-polars` | off | `PerfResult::to_dataframe`. Enables `perf`. Polars stays on 0.55 and is outside the `vim_rs` semver. |
 
 How to enable each one, and the XML and vcsim caveats, is in the [crate guide](vim_rs/README.md).
 

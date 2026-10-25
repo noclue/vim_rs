@@ -50,20 +50,20 @@
 //! }
 //! ```
 
+use crate::types::mini_helpers::from_value;
+use log::{debug, error};
 use std::collections::HashMap;
 use std::sync::Arc;
-use tokio::sync::{RwLock, oneshot, mpsc};
-use log::{debug, error};
-use crate::types::mini_helpers::from_value;
+use tokio::sync::{mpsc, oneshot, RwLock};
 
 use crate::core::client::VimClientHandle;
 use crate::core::error::{Error, Result};
+use crate::core::pc_cache::{CacheAction, CacheManager, ObjectCache, ObjectCacheListener};
 use crate::mo::{ListView, ViewManager};
+use crate::types::enums::{MoTypesEnum, TaskInfoStateEnum};
 use crate::types::structs::ManagedObjectReference;
-use crate::types::enums::{TaskInfoStateEnum, MoTypesEnum};
 use crate::types::vim_any::VimAny;
 use vim_macros::vim_updatable;
-use crate::core::pc_cache::{CacheAction, CacheManager, ObjectCache, ObjectCacheListener};
 
 #[derive(Clone)]
 /// Tracks vSphere `Task` objects to completion using the PropertyCollector.
@@ -115,8 +115,7 @@ impl TaskTracker {
         }
     }
 
-
-    /// Wait for a task and return its result as a `VimAny`. This is the most efficient way to get 
+    /// Wait for a task and return its result as a `VimAny`. This is the most efficient way to get
     /// the result of a task with only one conversion from JSON to VimAny.
     ///
     /// - `Ok(None)` means the task succeeded but did not return a value.
@@ -130,7 +129,11 @@ impl TaskTracker {
             let mut state = self.state.write().await;
 
             if state.list_view.is_none() {
-                let view_manager = self.client.service_content().view_manager.as_ref()
+                let view_manager = self
+                    .client
+                    .service_content()
+                    .view_manager
+                    .as_ref()
                     .ok_or_else(|| Error::internal("ViewManager not available".to_string()))?;
                 let vm = ViewManager::new(self.client.clone(), &view_manager.value);
                 let lv_mor = vm.create_list_view(Some(&[])).await?;
@@ -138,7 +141,7 @@ impl TaskTracker {
                 state.list_view_mor = Some(lv_mor);
             }
 
-            // Insert the task into the pending tasks map, so background loop does not exit 
+            // Insert the task into the pending tasks map, so background loop does not exit
             // prematurely. We may need to start background loop and create list view before we can
             // add the task to the list view.
             // Do ONLY after the list view is created, so we do not leak the map entry in case of
@@ -161,12 +164,15 @@ impl TaskTracker {
                             state.shutdown_signal = None;
                             let lv = state.list_view.take();
                             state.list_view_mor = None;
-                            let pending: Vec<_> = state.pending_tasks.drain().map(|(_, tx)| tx).collect();
+                            let pending: Vec<_> =
+                                state.pending_tasks.drain().map(|(_, tx)| tx).collect();
                             (lv, pending)
                         };
                         // Notify pending tasks outside the lock to avoid deadlock
                         for tx in pending_to_notify {
-                            let _ = tx.send(Err(Error::internal("TaskTracker loop terminated.".to_string())));
+                            let _ = tx.send(Err(Error::internal(
+                                "TaskTracker loop terminated.".to_string(),
+                            )));
                         }
                         // Destroy the list view outside the lock
                         if let Some(lv) = list_view_to_destroy {
@@ -180,7 +186,10 @@ impl TaskTracker {
             state.list_view.as_ref().unwrap().clone()
         };
 
-        if let Err(e) = list_view.modify_list_view(Some(&[task.clone()]), Some(&[])).await {
+        if let Err(e) = list_view
+            .modify_list_view(Some(&[task.clone()]), Some(&[]))
+            .await
+        {
             let mut state = self.state.write().await;
             state.pending_tasks.remove(&task_id);
             return Err(e.into());
@@ -197,30 +206,39 @@ impl TaskTracker {
     /// This is useful when you know the expected result type (e.g. `()` for tasks that return no
     /// value), but it is not a zero-allocation path. Prefer [`TaskTracker::wait_any`] if you want
     /// to avoid JSON conversion and handle `VimAny` directly.
-    pub async fn wait<T: miniserde::Deserialize + 'static>(&self, task: ManagedObjectReference) -> Result<T> {
+    pub async fn wait<T: miniserde::Deserialize + 'static>(
+        &self,
+        task: ManagedObjectReference,
+    ) -> Result<T> {
         let val_opt = self.wait_value(task).await?;
 
         match val_opt {
             Some(val) => {
                 let result: T = from_value(&val)?;
                 Ok(result)
-            },
+            }
             None => {
-                let result: T = miniserde::json::from_str("null")
-                    .map_err(|_| Error::internal("Failed to deserialize null into target type".to_string()))?;
+                let result: T = miniserde::json::from_str("null").map_err(|_| {
+                    Error::internal("Failed to deserialize null into target type".to_string())
+                })?;
                 Ok(result)
             }
         }
     }
 
-    async fn wait_value(&self, task: ManagedObjectReference) -> Result<Option<miniserde::json::Value>> {
+    async fn wait_value(
+        &self,
+        task: ManagedObjectReference,
+    ) -> Result<Option<miniserde::json::Value>> {
         let any_opt = self.wait_any(task).await?;
         match any_opt {
             None => Ok(None),
             Some(any) => {
                 let json_str = miniserde::json::to_string(&any);
-                let val: miniserde::json::Value = miniserde::json::from_str(&json_str)
-                    .map_err(|_| Error::internal("Failed to roundtrip VimAny to json::Value".to_string()))?;
+                let val: miniserde::json::Value =
+                    miniserde::json::from_str(&json_str).map_err(|_| {
+                        Error::internal("Failed to roundtrip VimAny to json::Value".to_string())
+                    })?;
                 Ok(Some(val))
             }
         }
@@ -229,7 +247,13 @@ impl TaskTracker {
     async fn background_loop(&self, mut shutdown_rx: oneshot::Receiver<()>) -> Result<()> {
         let (list_view_mor, list_view) = {
             let state = self.state.read().await;
-            let mor = state.list_view_mor.as_ref().ok_or_else(|| Error::internal("ListView MOR is None in background loop".to_string()))?.clone();
+            let mor = state
+                .list_view_mor
+                .as_ref()
+                .ok_or_else(|| {
+                    Error::internal("ListView MOR is None in background loop".to_string())
+                })?
+                .clone();
             let lv = state.list_view.as_ref().unwrap().clone();
             (mor, lv)
         };
@@ -239,7 +263,7 @@ impl TaskTracker {
 
         let (comp_tx, mut comp_rx) = mpsc::unbounded_channel();
         let listener = TaskListener { tx: comp_tx };
-        
+
         let obj_spec = obj_spec_for_view(list_view_mor);
 
         let cache = ObjectCache::new_with_listener(Box::new(listener));
@@ -247,7 +271,7 @@ impl TaskTracker {
 
         loop {
             let wait_future = monitor.wait_updates(10);
-            
+
             tokio::select! {
                 _ = &mut shutdown_rx => {
                     debug!("Shutdown signal received");
@@ -268,7 +292,7 @@ impl TaskTracker {
                     }
                 }
             }
-            
+
             // Atomically check if empty AND mark as not running to prevent race with new wait_any calls.
             // This ensures that any new wait_any arriving during shutdown will see is_running=false
             // and spawn a fresh loop instead of adding to a dying one.
@@ -296,7 +320,7 @@ impl TaskTracker {
                 return Ok(());
             }
         }
-        
+
         // This path is reached only on shutdown signal (not empty exit).
         // Do cleanup atomically: extract pending tasks and list view, then notify waiters outside the lock.
         debug!("Shutdown signal path: cleaning up");
@@ -309,42 +333,51 @@ impl TaskTracker {
             let pending: Vec<_> = state.pending_tasks.drain().map(|(_, tx)| tx).collect();
             (lv, pending)
         };
-        
+
         // Notify all pending tasks that we're shutting down BEFORE destroying the manager.
         // This ensures waiters receive the proper shutdown error even if manager.destroy() fails.
         for tx in pending_to_notify {
-            let _ = tx.send(Err(Error::internal("TaskTracker shutdown requested".to_string())));
+            let _ = tx.send(Err(Error::internal(
+                "TaskTracker shutdown requested".to_string(),
+            )));
         }
-        
+
         // Destroy manager (cancels PropertyCollector filter)
         manager.destroy().await?;
-        
+
         // Destroy list view last
         if let Some(lv) = list_view_to_destroy {
             let _ = lv.destroy_view().await;
         }
-        
+
         Ok(())
     }
 
-    async fn complete_task(&self, list_view: &ListView, task_id: String, final_result: Result<Option<VimAny>>) {
-
+    async fn complete_task(
+        &self,
+        list_view: &ListView,
+        task_id: String,
+        final_result: Result<Option<VimAny>>,
+    ) {
         let tx_opt = {
             let mut state = self.state.write().await;
             state.pending_tasks.remove(&task_id)
         };
 
         if let Some(tx) = tx_opt {
-             let _ = tx.send(final_result);
+            let _ = tx.send(final_result);
         }
 
-        let task_mor = ManagedObjectReference { 
-            r#type: MoTypesEnum::Task, 
-            value: task_id 
+        let task_mor = ManagedObjectReference {
+            r#type: MoTypesEnum::Task,
+            value: task_id,
         };
-        
-        if let Err(e) = list_view.modify_list_view(Some(&[]), Some(&[task_mor])).await {
-             error!("Failed to remove completed task from ListView: {}", e);
+
+        if let Err(e) = list_view
+            .modify_list_view(Some(&[]), Some(&[task_mor]))
+            .await
+        {
+            error!("Failed to remove completed task from ListView: {}", e);
         }
     }
 }
@@ -356,7 +389,7 @@ vim_updatable!(
     }
 );
 
-use crate::core::pc_helpers::{obj_spec_for_view};
+use crate::core::pc_helpers::obj_spec_for_view;
 
 /// Shared state for the TaskTracker. This is used to store the list view, the list view MOR,
 /// the pending tasks, and the shutdown signal.
@@ -370,7 +403,7 @@ struct SharedState {
 }
 
 /// TaskListener is used to listen for TaskUpdate objects and check if the task is complete.
-/// 
+///
 /// It is used to send the result of the task to the caller.
 struct TaskListener {
     tx: mpsc::UnboundedSender<(String, Result<Option<VimAny>>)>,
@@ -413,13 +446,11 @@ impl TaskListener {
         let task_id = task.id.value.clone();
 
         let result: Option<Result<Option<VimAny>>> = match task.info.state {
-            TaskInfoStateEnum::Success => {
-                Some(Ok(task.info.result))
-            }
+            TaskInfoStateEnum::Success => Some(Ok(task.info.result)),
             TaskInfoStateEnum::Error => {
                 if task.info.cancelled {
                     Some(Err(Error::task_cancelled()))
-                } else {                    
+                } else {
                     match task.info.error {
                         None => Some(Err(Error::internal(
                             "Task failed but no error detail returned".to_string(),
@@ -432,9 +463,13 @@ impl TaskListener {
                 if task.info.cancelled {
                     Some(Err(Error::task_cancelled()))
                 } else {
-                    error!("Task {} removed from cache in unexpected state {:?}", task_id, task.info.state);
+                    error!(
+                        "Task {} removed from cache in unexpected state {:?}",
+                        task_id, task.info.state
+                    );
                     Some(Err(Error::internal(format!(
-                        "Task removed in unexpected state: {:?}", task.info.state
+                        "Task removed in unexpected state: {:?}",
+                        task.info.state
                     ))))
                 }
             }
@@ -445,4 +480,3 @@ impl TaskListener {
         }
     }
 }
-

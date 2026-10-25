@@ -14,10 +14,9 @@
 /// metadata (`from_xml`, SOAP helpers). Diagnostics on decode failures may be logged at **debug** level on the
 /// **`vim_rs::wire::soap`** target (`log` crate); public [`Result`] errors remain unit-style.
 pub(crate) mod client;
-pub mod soap;
-pub mod ser;
 pub mod de;
-
+pub mod ser;
+pub mod soap;
 
 #[cfg(all(test, feature = "xml"))]
 mod tests {
@@ -26,7 +25,9 @@ mod tests {
     use crate::types::boxed_types::ValueElements;
     use crate::types::enums::{ManagedEntityStatusEnum, MoTypesEnum};
     use crate::types::struct_enum::StructType;
-    use crate::types::structs::{Event, ManagedObjectReference, MethodFault, RetrieveResult, UpdateSet};
+    use crate::types::structs::{
+        Event, ManagedObjectReference, MethodFault, RetrieveResult, UpdateSet,
+    };
     use crate::types::vim_any::VimAny;
     use miniserde::json::{Number, Value};
 
@@ -422,8 +423,10 @@ mod tests {
         if let Some(Value::Array(arr)) = args {
             assert_eq!(arr.len(), 1);
         } else {
-            panic!("single arguments element should still be Array, got {:?}", args);
+            panic!(
+                "single arguments element should still be Array, got {:?}",
+                args
+            );
         }
     }
-
 }

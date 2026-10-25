@@ -1,12 +1,12 @@
 pub mod client;
-pub(crate) mod wire_log;
 pub mod error;
 pub(crate) mod helpers;
-pub mod pc_helpers;
 pub mod pc_cache;
+pub mod pc_helpers;
 pub mod pc_retrieve;
-pub mod tasks;
 mod root_objects;
+pub mod tasks;
+pub(crate) mod wire_log;
 
 pub use client::Client;
 pub use client::ClientBuilder;

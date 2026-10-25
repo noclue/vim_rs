@@ -8,8 +8,8 @@ use bytes::Bytes;
 use tokio::sync::mpsc;
 
 use vim_rs::core::client::{BoxFuture, Error, PropertyValue, Result, Transport, VimClient};
-use vim_rs::types::structs::ServiceContent;
 use vim_rs::types::enums::MoTypesEnum;
+use vim_rs::types::structs::ServiceContent;
 
 #[derive(Debug, Clone, Copy)]
 pub enum HttpVerb {
@@ -102,7 +102,11 @@ impl MockVimClient {
         )
     }
 
-    pub fn block_modify_list_view_call(&self, call_index_1_based: usize, gate: Arc<tokio::sync::Notify>) {
+    pub fn block_modify_list_view_call(
+        &self,
+        call_index_1_based: usize,
+        gate: Arc<tokio::sync::Notify>,
+    ) {
         *self.block_modify_list_view_at.lock().unwrap() = Some((call_index_1_based, gate));
     }
 
@@ -135,7 +139,7 @@ impl MockVimClient {
         self.record(verb, path);
         if path.contains("/CreateListView") && path.starts_with("/ViewManager/") {
             self.bump(|c| c.create_list_view += 1);
-            
+
             // Check if we should fail this call
             let should_fail = {
                 let mut behavior = self.create_list_view_behavior.lock().unwrap();
@@ -147,11 +151,13 @@ impl MockVimClient {
                     }
                 }
             };
-            
+
             if should_fail {
-                return Err(Error::ParseError("Simulated CreateListView failure".to_string()));
+                return Err(Error::ParseError(
+                    "Simulated CreateListView failure".to_string(),
+                ));
             }
-            
+
             let mor = vim_rs::types::structs::ManagedObjectReference {
                 r#type: MoTypesEnum::ListView,
                 value: "listview-1".to_string(),
@@ -166,7 +172,9 @@ impl MockVimClient {
             };
             return Ok(Bytes::from(miniserde::json::to_string(&mor).into_bytes()));
         }
-        Err(Error::ParseError(format!("MockVimClient: unhandled invoke path: {path}")))
+        Err(Error::ParseError(format!(
+            "MockVimClient: unhandled invoke path: {path}"
+        )))
     }
 
     async fn handle_option_bytes(&self, verb: HttpVerb, path: &str) -> Result<Option<Bytes>> {
@@ -227,9 +235,7 @@ impl VimClient for MockVimClient {
         _params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<Bytes>> {
         let path = vi_json_path(svc, mo_type, mo_id, method_name);
-        Box::pin(async move {
-            self.handle_bytes(HttpVerb::Post, &path).await
-        })
+        Box::pin(async move { self.handle_bytes(HttpVerb::Post, &path).await })
     }
 
     fn invoke_optional<'a>(
@@ -241,9 +247,7 @@ impl VimClient for MockVimClient {
         _params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<Option<Bytes>>> {
         let path = vi_json_path(svc, mo_type, mo_id, method_name);
-        Box::pin(async move {
-            self.handle_option_bytes(HttpVerb::Post, &path).await
-        })
+        Box::pin(async move { self.handle_option_bytes(HttpVerb::Post, &path).await })
     }
 
     fn invoke_void<'a>(
@@ -255,9 +259,7 @@ impl VimClient for MockVimClient {
         _params: Option<&'a (dyn miniserde::Serialize + Send + Sync)>,
     ) -> BoxFuture<'a, Result<()>> {
         let path = vi_json_path(svc, mo_type, mo_id, method_name);
-        Box::pin(async move {
-            self.handle_void(HttpVerb::Post, &path).await
-        })
+        Box::pin(async move { self.handle_void(HttpVerb::Post, &path).await })
     }
 
     fn fetch_property_raw<'a>(

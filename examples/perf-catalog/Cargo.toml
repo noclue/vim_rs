@@ -1,0 +1,28 @@
+[package]
+name = "perf-catalog"
+version = "0.1.0"
+edition = "2021"
+publish = false
+description = "Read-only vSphere performance catalog dump and query probes"
+
+[lib]
+path = "src/lib.rs"
+
+[[bin]]
+name = "perf-catalog-dump"
+path = "src/bin/dump.rs"
+
+[[bin]]
+name = "perf-catalog-probe"
+path = "src/bin/probe.rs"
+
+[dependencies]
+anyhow = "1.0"
+chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }
+env_logger = "0.11"
+log = "0.4"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+tokio = { version = "1.44", features = ["macros", "rt-multi-thread"] }
+vim_rs = { path = "../../vim_rs", features = ["xml"] }
+miniserde = "0.1"

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+  <soapenv:Body>
+    <QueryPerfResponse xmlns="urn:vim25">
+      <returnval xsi:type="PerfEntityMetric">
+        <entity type="VirtualMachine">vm-1001</entity>
+        <sampleInfo><timestamp>2026-10-24T10:48:20Z</timestamp><interval>20</interval></sampleInfo><sampleInfo><timestamp>2026-10-24T10:48:40Z</timestamp><interval>20</interval></sampleInfo><sampleInfo><timestamp>2026-10-24T10:49:00Z</timestamp><interval>20</interval></sampleInfo><sampleInfo><timestamp>2026-10-24T10:49:20Z</timestamp><interval>20</interval></sampleInfo><sampleInfo><timestamp>2026-10-24T10:49:40Z</timestamp><interval>20</interval></sampleInfo>
+        <value xsi:type="PerfMetricIntSeries"><id><counterId>2</counterId><instance></instance></id><value>48</value><value>117</value><value>37</value><value>45</value><value>34</value></value><value xsi:type="PerfMetricIntSeries"><id><counterId>6</counterId><instance></instance></id><value>47</value><value>113</value><value>36</value><value>43</value><value>33</value></value><value xsi:type="PerfMetricIntSeries"><id><counterId>24</counterId><instance></instance></id><value>2399</value><value>2399</value><value>1799</value><value>1799</value><value>1799</value></value><value xsi:type="PerfMetricIntSeries"><id><counterId>98</counterId><instance></instance></id><value>1787904</value><value>1794048</value><value>1794048</value><value>1794048</value><value>1794048</value></value>
+      </returnval>
+    </QueryPerfResponse>
+  </soapenv:Body>
+</soapenv:Envelope>

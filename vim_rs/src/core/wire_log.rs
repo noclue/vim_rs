@@ -254,7 +254,10 @@ mod tests {
             body_logging_note(WireLoggingMode::Detailed, "SessionManager"),
             Some("body_logging=denylisted")
         );
-        assert_eq!(body_logging_note(WireLoggingMode::Summary, "SessionManager"), None);
+        assert_eq!(
+            body_logging_note(WireLoggingMode::Summary, "SessionManager"),
+            None
+        );
     }
 
     #[test]
@@ -264,5 +267,4 @@ mod tests {
             "summary"
         );
     }
-
 }

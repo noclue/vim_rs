@@ -1,4 +1,5 @@
 mod generator;
+mod perf_metrics;
 mod printer;
 pub mod rs_emitter;
 mod vim_model;

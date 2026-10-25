@@ -1,5 +1,14 @@
 use crate::core::client::VimClientHandle;
-use crate::mo::{CnsVolumeManager, EsxAgentManager, PbmServiceInstance, ServiceInstance, SmsServiceInstance, VimClusterVsanVcDiskManagementSystem, VimClusterVsanVcStretchedClusterSystem, VsanCapabilitySystem, VsanClusterPowerSystem, VsanDiagnosticsSystem, VsanFileServiceSystem, VsanIoInsightManager, VsanIscsiTargetSystem, VsanMassCollector, VsanObjectSystem, VsanPerformanceManager, VsanPhoneHomeSystem, VsanRemoteDatastoreSystem, VsanResourceCheckSystem, VsanSpaceReportSystem, VsanUpgradeSystemEx, VsanVcClusterConfigSystem, VsanVcClusterHealthSystem, VsanVcsaDeployerSystem, VsanVdsSystem, VsanVumSystem, VslmServiceInstance};
+use crate::mo::{
+    CnsVolumeManager, EsxAgentManager, PbmServiceInstance, ServiceInstance, SmsServiceInstance,
+    VimClusterVsanVcDiskManagementSystem, VimClusterVsanVcStretchedClusterSystem,
+    VsanCapabilitySystem, VsanClusterPowerSystem, VsanDiagnosticsSystem, VsanFileServiceSystem,
+    VsanIoInsightManager, VsanIscsiTargetSystem, VsanMassCollector, VsanObjectSystem,
+    VsanPerformanceManager, VsanPhoneHomeSystem, VsanRemoteDatastoreSystem,
+    VsanResourceCheckSystem, VsanSpaceReportSystem, VsanUpgradeSystemEx, VsanVcClusterConfigSystem,
+    VsanVcClusterHealthSystem, VsanVcsaDeployerSystem, VsanVdsSystem, VsanVumSystem,
+    VslmServiceInstance,
+};
 
 /// RootObjects provides access to the root objects of the Virtual Infrastructure JSON API.
 pub struct RootObjects {
@@ -49,7 +58,6 @@ impl RootObjects {
     pub fn vsan_object_catalog(&self) -> VsanObjectCatalog {
         VsanObjectCatalog::new(self.client.clone())
     }
-
 }
 
 /// The VsanObjectCatalog struct provides methods to access the well vSAN managed objects on vCenter.
@@ -70,8 +78,10 @@ impl VsanObjectCatalog {
     /// Returns the vSAN disk management system for managing disk groups including all-flash disk
     /// support and detailed group information.
     pub fn disk_management_system(&self) -> VimClusterVsanVcDiskManagementSystem {
-        VimClusterVsanVcDiskManagementSystem::new(self.client.clone(),
-                                                  "vsan-disk-management-system")
+        VimClusterVsanVcDiskManagementSystem::new(
+            self.client.clone(),
+            "vsan-disk-management-system",
+        )
     }
 
     /// vSAN stretched Cluster is a specific configuration implemented in
@@ -86,8 +96,10 @@ impl VsanObjectCatalog {
     /// active/active data-sites. This connectivity can be via low bandwidth/high
     /// latency links.
     pub fn stretched_cluster_system(&self) -> VimClusterVsanVcStretchedClusterSystem {
-        VimClusterVsanVcStretchedClusterSystem::new(self.client.clone(),
-                                                        "vsan-stretched-cluster-system")
+        VimClusterVsanVcStretchedClusterSystem::new(
+            self.client.clone(),
+            "vsan-stretched-cluster-system",
+        )
     }
 
     /// Comprehensive way to manage vSAN cluster configuration in below areas:
@@ -133,7 +145,6 @@ impl VsanObjectCatalog {
     pub fn upgrade_system_ex(&self) -> VsanUpgradeSystemEx {
         VsanUpgradeSystemEx::new(self.client.clone(), "vsan-upgrade-systemex")
     }
-
 
     /// This managed object type provides the service interface to report the
     /// vSAN cluster space usage information including the space overview, the
@@ -198,7 +209,6 @@ impl VsanObjectCatalog {
     pub fn cluster_resource_check_system(&self) -> VsanResourceCheckSystem {
         VsanResourceCheckSystem::new(self.client.clone(), "vsan-cluster-resource-check-system")
     }
-
 
     /// This is the interface for managing the lifecycle of volumes that are consumed
     /// by containers or pods, in case of Kubernetes.

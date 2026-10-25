@@ -1,0 +1,49 @@
+[
+  {
+    "_typeName": "PerfEntityMetricCSV",
+    "entity": {
+      "_typeName": "ManagedObjectReference",
+      "type": "VirtualMachine",
+      "value": "vm-1001"
+    },
+    "sampleInfoCSV": "20,2026-10-24T10:48:20Z,20,2026-10-24T10:48:40Z,20,2026-10-24T10:49:00Z,20,2026-10-24T10:49:20Z,20,2026-10-24T10:49:40Z",
+    "value": [
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 2,
+          "instance": ""
+        },
+        "value": "48,117,37,45,34"
+      },
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 6,
+          "instance": ""
+        },
+        "value": "47,113,36,43,33"
+      },
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 24,
+          "instance": ""
+        },
+        "value": "2399,2399,1799,1799,1799"
+      },
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 98,
+          "instance": ""
+        },
+        "value": "1787904,1794048,1794048,1794048,1794048"
+      }
+    ]
+  }
+]

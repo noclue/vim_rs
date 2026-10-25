@@ -1,6 +1,6 @@
 use criterion::{black_box, criterion_group, criterion_main, Criterion};
 use vim_rs::types::boxed_types::ValueElements;
-use vim_rs::types::structs::{VirtualDevice, VirtualE1000, VirtualEthernetCard, MethodFault};
+use vim_rs::types::structs::{MethodFault, VirtualDevice, VirtualE1000, VirtualEthernetCard};
 use vim_rs::types::traits::VirtualEthernetCardTrait;
 
 const JSON_VAPP_PROPERTY_FAULT: &str = r#"{
@@ -68,11 +68,10 @@ fn create_vapp_property_fault() -> MethodFault {
     miniserde::json::from_str(JSON_VAPP_PROPERTY_FAULT).unwrap()
 }
 
-
 // Benchmark: Plain structure (e1000) serialization
 fn bench_e1000_serialize(c: &mut Criterion) {
     let e1000 = create_virtual_e1000();
-    
+
     c.bench_function("e1000_serialize", |b| {
         b.iter(|| {
             let json = miniserde::json::to_string(black_box(&e1000));
@@ -84,7 +83,7 @@ fn bench_e1000_serialize(c: &mut Criterion) {
 // Benchmark: Plain structure (e1000) deserialization
 fn bench_e1000_deserialize(c: &mut Criterion) {
     let json = r#"{"_typeName":"VirtualE1000","key":1000,"address_type":"Generated","mac_address":"00:50:56:aa:bb:cc","wake_on_lan_enabled":true,"upt_compatibility_enabled":false}"#;
-    
+
     c.bench_function("e1000_deserialize", |b| {
         b.iter(|| {
             let e1000: VirtualE1000 = miniserde::json::from_str(black_box(json)).unwrap();
@@ -96,7 +95,7 @@ fn bench_e1000_deserialize(c: &mut Criterion) {
 // Benchmark: Purged type (VAppPropertyFault) serialization
 fn bench_vapp_property_fault_serialize(c: &mut Criterion) {
     let vapp_property_fault = create_vapp_property_fault();
-    
+
     c.bench_function("vapp_property_fault_serialize", |b| {
         b.iter(|| {
             let json = miniserde::json::to_string(black_box(&vapp_property_fault));
@@ -109,7 +108,8 @@ fn bench_vapp_property_fault_serialize(c: &mut Criterion) {
 fn bench_vapp_property_fault_deserialize(c: &mut Criterion) {
     c.bench_function("vapp_property_fault_deserialize", |b| {
         b.iter(|| {
-            let vapp_property_fault: MethodFault = miniserde::json::from_str(black_box(JSON_VAPP_PROPERTY_FAULT)).unwrap();
+            let vapp_property_fault: MethodFault =
+                miniserde::json::from_str(black_box(JSON_VAPP_PROPERTY_FAULT)).unwrap();
             black_box(vapp_property_fault);
         });
     });
@@ -119,7 +119,7 @@ fn bench_vapp_property_fault_deserialize(c: &mut Criterion) {
 fn bench_polymorphic_serialize(c: &mut Criterion) {
     let e1000 = create_virtual_e1000();
     let trait_ref: &dyn VirtualEthernetCardTrait = &e1000;
-    
+
     c.bench_function("polymorphic_e1000_serialize", |b| {
         b.iter(|| {
             let json = miniserde::json::to_string(black_box(trait_ref));
@@ -131,10 +131,11 @@ fn bench_polymorphic_serialize(c: &mut Criterion) {
 // Benchmark: Polymorphic deserialization (into Box<dyn VirtualEthernetCardTrait>)
 fn bench_polymorphic_deserialize(c: &mut Criterion) {
     let json = r#"{"_typeName":"VirtualE1000","key":1000,"address_type":"Generated","mac_address":"00:50:56:aa:bb:cc","wake_on_lan_enabled":true,"upt_compatibility_enabled":false}"#;
-    
+
     c.bench_function("polymorphic_e1000_deserialize", |b| {
         b.iter(|| {
-            let e1000: Box<dyn VirtualEthernetCardTrait> = miniserde::json::from_str(black_box(json)).unwrap();
+            let e1000: Box<dyn VirtualEthernetCardTrait> =
+                miniserde::json::from_str(black_box(json)).unwrap();
             black_box(e1000);
         });
     });
@@ -143,7 +144,7 @@ fn bench_polymorphic_deserialize(c: &mut Criterion) {
 // Benchmark: Round-trip serialization for each pattern
 fn bench_roundtrip(c: &mut Criterion) {
     let mut group = c.benchmark_group("roundtrip");
-    
+
     // VirtualE1000 roundtrip (plain struct)
     group.bench_function("e1000", |b| {
         let e1000 = create_virtual_e1000();
@@ -153,7 +154,7 @@ fn bench_roundtrip(c: &mut Criterion) {
             black_box(recovered);
         });
     });
-    
+
     // MethodFault roundtrip (purged type)
     group.bench_function("method_fault", |b| {
         let fault = create_vapp_property_fault();
@@ -163,18 +164,19 @@ fn bench_roundtrip(c: &mut Criterion) {
             black_box(recovered);
         });
     });
-    
+
     // Polymorphic roundtrip (VirtualE1000 via VirtualEthernetCardTrait)
     group.bench_function("polymorphic_e1000", |b| {
         let e1000 = create_virtual_e1000();
         b.iter(|| {
             let trait_ref: &dyn VirtualEthernetCardTrait = black_box(&e1000);
             let json = miniserde::json::to_string(trait_ref);
-            let recovered: Box<dyn VirtualEthernetCardTrait> = miniserde::json::from_str(&json).unwrap();
+            let recovered: Box<dyn VirtualEthernetCardTrait> =
+                miniserde::json::from_str(&json).unwrap();
             black_box(recovered);
         });
     });
-    
+
     group.finish();
 }
 
@@ -185,7 +187,7 @@ fn bench_array_deserialize(c: &mut Criterion) {
         {"_typeName":"VirtualE1000","key":1001,"address_type":"Generated","mac_address":"00:50:56:aa:bb:dd","wake_on_lan_enabled":false},
         {"_typeName":"VirtualE1000","key":1002,"address_type":"Manual","mac_address":"00:50:56:aa:bb:ee","wake_on_lan_enabled":true}
     ]}"#;
-    
+
     c.bench_function("array_of_virtual_ethernet_card_deserialize", |b| {
         b.iter(|| {
             let value: ValueElements = miniserde::json::from_str(black_box(json)).unwrap();

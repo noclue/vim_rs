@@ -31,10 +31,10 @@
 //! }
 //! ```
 
+use super::client;
+use crate::types::structs::MethodFault;
 use std::fmt;
 use thiserror::Error;
-use crate::types::structs::MethodFault;
-use super::client;
 
 /// Result type alias for PropertyCollector and Task operations.
 pub type Result<T> = std::result::Result<T, Error>;
@@ -247,7 +247,10 @@ impl std::error::Error for Error {
 
 impl From<client::Error> for Error {
     fn from(e: client::Error) -> Self {
-        Error::new(ErrorKind::RemoteCommunication, ErrorSource::RemoteCommunication(e))
+        Error::new(
+            ErrorKind::RemoteCommunication,
+            ErrorSource::RemoteCommunication(e),
+        )
     }
 }
 
@@ -259,9 +262,9 @@ impl From<Box<dyn std::error::Error + Send + Sync>> for Error {
 
 impl From<miniserde::Error> for Error {
     fn from(_e: miniserde::Error) -> Self {
-        Error::new(ErrorKind::Internal, ErrorSource::Internal("miniserde deserialization error".to_string()))
+        Error::new(
+            ErrorKind::Internal,
+            ErrorSource::Internal("miniserde deserialization error".to_string()),
+        )
     }
 }
-
-
-

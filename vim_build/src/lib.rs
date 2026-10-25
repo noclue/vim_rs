@@ -2,6 +2,7 @@ pub mod vim_model;
 pub mod generator;
 pub mod rs_emitter;
 pub mod printer;
+pub mod perf_metrics;
 
 // Re-export commonly used items
 pub use generator::load_openapi;

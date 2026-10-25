@@ -1,5 +1,6 @@
 use std::borrow::Cow;
 use std::sync::atomic::{AtomicBool, Ordering};
+use std::sync::Arc;
 use std::time::Instant;
 
 use bytes::Bytes;
@@ -229,7 +230,7 @@ fn extract_soap_method_fault(body: &str) -> Option<MethodFault> {
 /// operators can tell apart bootstrap failures from ordinary method calls.
 fn soap_error_from_body(body: &str, status: reqwest::StatusCode, context: &str) -> Error {
     if let Some(fault) = extract_soap_method_fault(body) {
-        return Error::MethodFault(fault);
+        return Error::MethodFault(Arc::new(fault));
     }
     if let Some(faultstring) = extract_soap_fault(body) {
         return Error::ParseError(faultstring);
@@ -310,11 +311,11 @@ impl SoapClient {
                         &e,
                     );
                 }
-                return Err(Error::ReqwestError(e));
+                return Err(Error::from(e));
             }
         };
         let status = resp.status();
-        let body = resp.text().await.map_err(Error::ReqwestError)?;
+        let body = resp.text().await.map_err(Error::from)?;
         if self.wire_logging.is_enabled() {
             let mode_l = wire_log::wire_mode_label(self.wire_logging, "ServiceInstance");
             let mut msg = format!(
@@ -415,11 +416,11 @@ impl SoapClient {
                         &e,
                     );
                 }
-                return Err(Error::ReqwestError(e));
+                return Err(Error::from(e));
             }
         };
         let status = resp.status();
-        let body = resp.text().await.map_err(Error::ReqwestError)?;
+        let body = resp.text().await.map_err(Error::from)?;
         if self.wire_logging.is_enabled() {
             let mode_l = wire_log::wire_mode_label(self.wire_logging, mo_type);
             let deny = wire_log::body_logging_note(self.wire_logging, mo_type);
@@ -604,7 +605,10 @@ impl SoapClient {
                     Ok(())
                 } else {
                     warn!("SOAP logout failed (HTTP {})", status);
-                    Err(Error::ParseError(format!("Logout HTTP {}", status.as_u16())))
+                    Err(Error::ParseError(format!(
+                        "Logout HTTP {}",
+                        status.as_u16()
+                    )))
                 }
             }
             Err(e) => {
@@ -620,7 +624,7 @@ impl SoapClient {
                     wire_log::log_soap_line(self.wire_logging, "SessionManager", false, &msg);
                 }
                 warn!("SOAP logout request failed: {}", e);
-                Err(Error::ReqwestError(e))
+                Err(Error::from(e))
             }
         }
     }

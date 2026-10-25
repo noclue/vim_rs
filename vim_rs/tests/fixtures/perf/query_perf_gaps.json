@@ -1,0 +1,89 @@
+[
+  {
+    "_typeName": "PerfEntityMetricCSV",
+    "entity": {
+      "_typeName": "ManagedObjectReference",
+      "type": "VirtualMachine",
+      "value": "vm-1001"
+    },
+    "sampleInfoCSV": "20,2026-10-24T10:36:00Z,20,2026-10-24T10:36:20Z,20,2026-10-24T10:36:40Z,20,2026-10-24T10:37:00Z",
+    "value": [
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 2,
+          "instance": ""
+        },
+        "value": "38,41,-1,-1"
+      },
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 6,
+          "instance": ""
+        },
+        "value": "420,410,-1,-1"
+      },
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 12,
+          "instance": ""
+        },
+        "value": "1000,1000,-1,-1"
+      },
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 12,
+          "instance": "0"
+        },
+        "value": "1000,1000,-1,-1"
+      }
+    ]
+  },
+  {
+    "_typeName": "PerfEntityMetricCSV",
+    "entity": {
+      "_typeName": "ManagedObjectReference",
+      "type": "VirtualMachine",
+      "value": "vm-1002"
+    },
+    "sampleInfoCSV": "20,2026-10-24T10:36:00Z,20,2026-10-24T10:36:20Z,20,2026-10-24T10:36:40Z",
+    "value": [
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 2,
+          "instance": ""
+        },
+        "value": "100,-1,300"
+      }
+    ]
+  },
+  {
+    "_typeName": "PerfEntityMetricCSV",
+    "entity": {
+      "_typeName": "ManagedObjectReference",
+      "type": "VirtualMachine",
+      "value": "vm-1003"
+    },
+    "sampleInfoCSV": "20,2026-10-24T10:48:20Z,300,2026-10-24T10:48:40Z",
+    "value": [
+      {
+        "_typeName": "PerfMetricSeriesCSV",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 2,
+          "instance": ""
+        },
+        "value": "1,2"
+      }
+    ]
+  }
+]

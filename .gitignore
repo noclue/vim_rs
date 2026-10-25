@@ -21,6 +21,9 @@ Thumbs.db
 # MCP model cache (fastembed downloads)
 mcp/data/model_cache/
 
+# Performance catalog PoC output (credentials never belong here; catalogs are local)
+examples/perf-catalog/out/
+
 # Log files - contain runtime data, IPs, and debug output
 *.log
 **/logs/*.log

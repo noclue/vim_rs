@@ -1,0 +1,89 @@
+{
+  "_typeName": "PerfCompositeMetric",
+  "entity": {
+    "_typeName": "PerfEntityMetric",
+    "entity": {
+      "_typeName": "ManagedObjectReference",
+      "type": "HostSystem",
+      "value": "host-1001"
+    },
+    "sampleInfo": [
+      {
+        "_typeName": "PerfSampleInfo",
+        "timestamp": "2026-10-24T10:48:20Z",
+        "interval": 20
+      }
+    ],
+    "value": [
+      {
+        "_typeName": "PerfMetricIntSeries",
+        "id": {
+          "_typeName": "PerfMetricId",
+          "counterId": 2,
+          "instance": ""
+        },
+        "value": [
+          10
+        ]
+      }
+    ]
+  },
+  "childEntity": [
+    {
+      "_typeName": "PerfEntityMetric",
+      "entity": {
+        "_typeName": "ManagedObjectReference",
+        "type": "VirtualMachine",
+        "value": "vm-1001"
+      },
+      "sampleInfo": [
+        {
+          "_typeName": "PerfSampleInfo",
+          "timestamp": "2026-10-24T10:48:20Z",
+          "interval": 20
+        }
+      ],
+      "value": [
+        {
+          "_typeName": "PerfMetricIntSeries",
+          "id": {
+            "_typeName": "PerfMetricId",
+            "counterId": 2,
+            "instance": ""
+          },
+          "value": [
+            20
+          ]
+        }
+      ]
+    },
+    {
+      "_typeName": "PerfEntityMetric",
+      "entity": {
+        "_typeName": "ManagedObjectReference",
+        "type": "VirtualMachine",
+        "value": "vm-1002"
+      },
+      "sampleInfo": [
+        {
+          "_typeName": "PerfSampleInfo",
+          "timestamp": "2026-10-24T10:48:20Z",
+          "interval": 20
+        }
+      ],
+      "value": [
+        {
+          "_typeName": "PerfMetricIntSeries",
+          "id": {
+            "_typeName": "PerfMetricId",
+            "counterId": 2,
+            "instance": ""
+          },
+          "value": [
+            30
+          ]
+        }
+      ]
+    }
+  ]
+}
