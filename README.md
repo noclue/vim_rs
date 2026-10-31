@@ -72,8 +72,8 @@ Build it from source: [mcp/README.md](mcp/README.md).
 
 | Path | Role |
 |------|------|
-| [`vim_rs`](vim_rs/README.md) | The library. This is the crates.io package. |
-| [`vim_macros`](vim_macros/README.md) | `vim_retrievable!` and `vim_updatable!`. Re-exported by `vim_rs`. |
+| [`vim_rs`](vim_rs/README.md) | The library, **0.7.0**. This is the crates.io package. |
+| [`vim_macros`](vim_macros/README.md) | `vim_retrievable!` and `vim_updatable!`, **0.7.0**. Re-exported by `vim_rs`. |
 | [`vim_build`](vim_rs/docs/REPOSITORY.md#generating-bindings) | Generates `vim_rs` from the VI JSON OpenAPI spec. |
 | [`openapi30`](vim_rs/docs/REPOSITORY.md#crates) | OpenAPI 3.0 parser used by the generator, including VIM inheritance via `allOf`. |
 | [`examples`](examples/README.md) | Snippets and the `vtui` inventory browser. |

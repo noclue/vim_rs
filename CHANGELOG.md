@@ -19,15 +19,57 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 
 ## [Unreleased]
 
+## [0.7.0] - 2026-10-31
+
+> **Breaking minor release.** `vim_rs::core::client::Error` is `Clone`, which `^0.6.1` callers that take a `MethodFault` or `reqwest::Error` by value cannot accept. This release adds opt-in performance queries (`vim_rs::perf`). Bindings stay on vSphere API **9.1.0.0**. MSRV stays **1.86**. `vim_macros` **0.7.0** is the matching release; the macros are unchanged. Destructor logout, which 0.6.1 scheduled for removal here, is unchanged.
+
 ### Breaking
 
-- `vim_rs::core::client::Error` is `Clone`. `MethodFault` holds `Arc<MethodFault>` and `ReqwestError` holds `Arc<reqwest::Error>`. Constructing either variant or moving the payload out now uses that `Arc`. Field access such as `fault.type_` and `error.status()` is unchanged through `Deref`. Cloning shares the original fault and transport error. This is incompatible with `^0.6.1`, so the performance release is **0.7.0**, not a compatible 0.6.2.
+- `vim_rs::core::client::Error` is `Clone`. `MethodFault` holds `Arc<MethodFault>` and `ReqwestError` holds `Arc<reqwest::Error>`. Constructing either variant or moving the payload out now uses that `Arc`. Field access such as `fault.type_` and `error.status()` is unchanged through `Deref`. Cloning shares the original fault and transport error.
 
 ### Added
 
-- `vim_rs::perf` for 0.7.0: named, unit-scaled `PerformanceManager` queries (`PerfClient`, prepared and composite queries, generated counter constants). The module is behind the `perf` feature, off by default, so a normal build does not compile it and gains no required dependencies. `perf-chrono` and `perf-polars` enable `perf` and stay off by default. Polars is pinned to the 0.55 minor and is outside the `vim_rs` semver.
+- `vim_rs::perf`: named, unit-scaled `PerformanceManager` queries (`PerfClient`, prepared and composite queries, generated counter constants). Enable Cargo feature `perf`. It is off by default, so a normal build does not compile the module and gains no required dependencies.
+- `perf-chrono` adds `Timestamp` ↔ `chrono::DateTime<Utc>`. `perf-polars` adds `PerfResult::to_dataframe`. Both enable `perf` and stay off by default. Polars is pinned to the 0.55 minor and is outside the `vim_rs` semver. Use `rows()` for a stable schema.
 - Public read-only `vim_build::perf_metrics::plan_counters`, `PlanTier`, and `PlannedCounter`. The metrics emitter calls this planner. `vim_build` is linked from the data pipeline only. It is not linked into `vim_mcp_server`.
-- Generated counter constants carry the catalog description and an availability marker (`· vCenter and ESX` or `· vCenter only`). Constant names, types, and `by_entity` re-exports are unchanged. Look up counters in `vim_rs/src/perf/metrics.rs`; they are not in the MCP vector index.
+- Generated counter constants carry the catalog description and an availability marker (`· vCenter and ESX` or `· vCenter only`). Constant names, types, and `by_entity` re-exports are unchanged. Look up counters in `vim_rs/src/perf/metrics.rs`. Those descriptions are rustdoc. They are not documents in the MCP vector index, and the rustdoc text does not change the cost of a default `vim_rs` build.
+- The MCP starter guide and example dependency templates use `vim_rs` **0.7**. A template adds `features = ["perf"]` only when the example imports `vim_rs::perf`. Publish the updated MCP server after `vim_rs` 0.7.0 is on crates.io.
+
+### Changed
+
+- The crates.io readme is [`vim_rs/README.md`](vim_rs/README.md). The repository [`README.md`](README.md) is the project overview.
+- **Destructor logout was not removed.** 0.6.1 deprecated it and scheduled removal for this release. It still logs out on a multi-thread Tokio runtime when `close` was never called, and it still warns on `current_thread` (and when no Tokio handle is present). Call `client.close().await` at shutdown.
+
+### Dependencies
+
+| Package | Version | Where |
+|---------|---------|-------|
+| `vim_macros` | **0.7.0** | `vim_rs` (was 0.6.1; macro behavior unchanged) |
+| `chrono` | 0.4 | `vim_rs`, optional (`perf-chrono`) |
+| `polars` | 0.55 | `vim_rs`, optional (`perf-polars`); outside the `vim_rs` semver |
+
+MSRV remains **1.86**.
+
+### Security
+
+`vim_rs` and `vim_macros` gained no direct dependencies. `bincode`, `paste`, `pulldown-cmark`, `webpki-roots`, and the leftover `h2` 0.3 line are MCP-only. `rustls-webpki` and `webpki-root-certs` also moved in the `vim_rs`, `examples`, and `tls_rustls_only` locks, where reqwest and rustls pull them in.
+
+| Package | From | To | Where |
+|---------|------|-----|-------|
+| `rustls-webpki` | 0.103.15 (scaffold 0.103.13) | **0.103.16** | `vim_rs`, `examples`, `tls_rustls_only`, `mcp`, eval scaffold |
+| `webpki-root-certs` | 1.0.9 | **1.0.11** | same locks |
+| `webpki-roots` | 1.0.9 | **1.0.11** | `mcp` |
+| `pulldown-cmark` | 0.13.4 | **0.13.6** | MCP `web-ui` |
+| `h2` | 0.4.15 | **0.4.20** | eval scaffold (other locks were already 0.4.20) |
+| `actix-web` | 4.17.0 | **4.18.1** | `mcp` |
+| `actix-http` | 3.19.0 | **3.20.0** | `mcp` |
+
+- **rustls-webpki 0.103.16** rejects certificate paths that use the distrusted emSign intermediates (RUSTSEC-2026-0382).
+- **webpki-root-certs** and **webpki-roots 1.0.11** drop those emSign roots (RUSTSEC-2026-0383, RUSTSEC-2026-0381).
+- **pulldown-cmark 0.13.6** fixes exponential event growth when wikilinks are enabled (RUSTSEC-2026-0414). That option is off by default.
+- **h2 0.4.20** includes the empty-DATA-frame limit (RUSTSEC-2026-0258, patched in 0.4.16). The optional MCP `web-ui` feature still links **h2 0.3.27** through `actix-http` 3.20. That is the newest 0.3 release, and the fix is only published on the 0.4 line.
+- **bincode** stays at 1.3.3 and 2.0.1. It serializes `mcp/data/api_database.bin`. RUSTSEC-2025-0141 marks the crate unmaintained and lists no patched release. 3.0.0 is still the placeholder that does not compile. 1.3.3 is only the `api_database` size-breakdown example.
+- **paste** stays at 1.0.15. RUSTSEC-2024-0436 marks it unmaintained and lists no patched release. fastembed pulls it in through `tokenizers` and `image`. Nothing in this repo calls it.
 
 ## [0.6.1] - 2026-10-17
 

@@ -23,6 +23,7 @@ The repository root is a Cargo workspace for the library and its generator. `exa
 | `mo` | One stub per managed object. Methods and properties are remote calls. Every stub holds `Arc<dyn VimClient>`. |
 | `types` | Generated data model. This is most of the compile time and of the optimized binary size. |
 | `xml` | SOAP transport and the XML deserializer. Compiled with the `xml` feature. |
+| `perf` | Named performance queries and the generated counter catalog. Compiled with the `perf` feature. |
 
 Inside `types/`:
 

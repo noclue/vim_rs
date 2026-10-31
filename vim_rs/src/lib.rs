@@ -38,9 +38,9 @@
 //! that uses **rustls**. To supply your own TLS stack, set
 //! `default-features = false` and call `ClientBuilder::new(server, http_client)`.
 //!
-//! Call [`Client::close`](core::client::Client::close) at shutdown. Destructor
-//! logout is a 0.6.x fallback on the multi-thread Tokio runtime and will be
-//! removed in 0.7.0.
+//! Call [`Client::close`](core::client::Client::close) at shutdown. If `close`
+//! was never called, dropping the last inner handle still logs out on a
+//! multi-thread Tokio runtime and warns on `current_thread`.
 //!
 //! ## Managed objects
 //!

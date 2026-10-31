@@ -5,7 +5,7 @@
 This page is the user guide. The project overview and the EuroRust 2025 talk are in the [repository README](https://github.com/noclue/vim_rs/blob/main/README.md). Why the types look the way they do is in [vim_rs/docs](https://github.com/noclue/vim_rs/tree/main/vim_rs/docs). Release notes are in [CHANGELOG.md](https://github.com/noclue/vim_rs/blob/main/CHANGELOG.md).
 
 ```toml
-vim_rs = "0.6"
+vim_rs = "0.7"
 ```
 
 ## Connect
@@ -36,7 +36,7 @@ async fn main() -> Result<(), Box<dyn std::error::Error>> {
 
 Call `client.close().await` when the session should end. `close` is non-consuming and idempotent: other `Arc` clones may still exist, and a second `close` returns `Ok` without sending another Logout.
 
-Destructor logout is a **0.6.x compatibility fallback**. It runs only on a multi-thread Tokio runtime, when `close` was never called, as the last inner handle drops. On a `current_thread` runtime it logs a warning. It will be **removed in 0.7.0**. Stop PropertyCollector waiters and destroy caches before `close`. Details: [CLIENT.md](https://github.com/noclue/vim_rs/blob/main/vim_rs/docs/CLIENT.md).
+If `close` was never called, dropping the last inner handle still logs out on a multi-thread Tokio runtime. On a `current_thread` runtime it logs a warning and does not log out. Stop PropertyCollector waiters and destroy caches before `close`. Details: [CLIENT.md](https://github.com/noclue/vim_rs/blob/main/vim_rs/docs/CLIENT.md).
 
 ## TLS and your own HTTP client
 
@@ -49,7 +49,7 @@ With **`default-features = false`**, `ClientBuilder::new` takes `(server, reqwes
 **VI/JSON only** (vCenter; the session is the `vmware-api-session-id` header, no HTTP cookies):
 
 ```toml
-vim_rs = { version = "0.6", default-features = false }
+vim_rs = { version = "0.7", default-features = false }
 reqwest = { version = "0.13", default-features = false, features = ["rustls"] }
 # Often useful, and present when default-client is on: "charset", "http2", "system-proxy"
 ```
@@ -68,7 +68,7 @@ let client = ClientBuilder::new("vcenter.example.com", http)
 **SOAP/XML** needs the `vim_rs` **`xml`** feature, reqwest **`cookies`**, and `.cookie_store(true)`:
 
 ```toml
-vim_rs = { version = "0.6", default-features = false, features = ["xml"] }
+vim_rs = { version = "0.7", default-features = false, features = ["xml"] }
 reqwest = { version = "0.13", default-features = false, features = ["rustls", "cookies", "charset", "http2", "system-proxy"] }
 ```
 
@@ -303,7 +303,7 @@ A full program: [`examples/snippets/src/vm_rename.rs`](https://github.com/noclue
 The default transport is VI JSON. XML is off unless you enable it and select it on the builder.
 
 ```toml
-vim_rs = { version = "0.6", features = ["xml"] }
+vim_rs = { version = "0.7", features = ["xml"] }
 ```
 
 `TransportMode::Auto` probes and works for either vCenter or ESXi:
@@ -364,7 +364,7 @@ The SOAP client and the schema-guided deserializer are described in [CLIENT.md](
 1. **`vcsim_compat`** (requires `xml`) drops malformed or incomplete elements during client SOAP unmarshalling instead of failing the whole response — for example `HostConfigInfo.optionDef` without `optionType`. For a single parse, `vim_rs::xml::de::from_xml_with` and the helpers next to it do the same without the feature.
 
    ```toml
-   vim_rs = { version = "0.6", features = ["xml", "vcsim_compat"] }
+   vim_rs = { version = "0.7", features = ["xml", "vcsim_compat"] }
    ```
 
 2. **Path suffix `?`** on `vim_retrievable!` / `vim_updatable!` forces `Option<T>` for a property the spec marks required. See [one-shot retrieval](#one-shot-retrieval).
@@ -374,7 +374,7 @@ The SOAP client and the schema-guided deserializer are described in [CLIENT.md](
 ## `defaults`
 
 ```toml
-vim_rs = { version = "0.6", features = ["defaults"] }
+vim_rs = { version = "0.7", features = ["defaults"] }
 ```
 
 This generates `Default` for structs, enums, and trait objects, which makes update specs writable with struct-update syntax:

@@ -25,7 +25,7 @@ displays the VMs in a terminal window using the Ratatui library.
 
 ## Installation
 
-Ensure you have Rust 1.85 installed.
+Ensure you have Rust 1.86 installed.
 
 Then configure vTUI via environment variables **or** a local `.env` file.
 

@@ -230,9 +230,9 @@ pub trait VimClient: Send + Sync {
     /// Non-consuming and **idempotent**: other clones of the handle may still exist. A second
     /// `close` is `Ok` and does not send another Logout. Prefer this over destructor logout.
     ///
-    /// In 0.6.x, dropping the last inner transport handle still logs out on the **multi-thread**
+    /// Dropping the last inner transport handle still logs out on the **multi-thread**
     /// Tokio runtime if `close` was never called. On a `current_thread` runtime that fallback
-    /// only emits a warning (it panics in 0.6.0). Destructor logout will be removed in **0.7.0**.
+    /// only emits a warning (it panics in 0.6.0).
     ///
     /// Built-in JSON and SOAP clients override this. The default is a no-op so mocks compile
     /// without a `close` method.
@@ -241,7 +241,7 @@ pub trait VimClient: Send + Sync {
     }
 }
 
-/// 0.6.x destructor logout: `block_in_place` on the multi-thread runtime only.
+/// Destructor logout: `block_in_place` on the multi-thread runtime only.
 ///
 /// Returns a Tokio handle when the caller should `block_in_place(|| handle.block_on(logout))`.
 /// `current_thread` / no runtime: warn and return `None` (do not panic). Claims `session_ended`
@@ -266,7 +266,7 @@ pub(crate) fn drop_logout_on_runtime(
         _ => {
             warn!(
                 "VimClient dropped with an active session; call Client::close().await to log out. \
-                 Destructor logout is a 0.6.x multi-thread fallback and will be removed in 0.7.0."
+                 Destructor logout runs only on a multi-thread Tokio runtime."
             );
             None
         }
@@ -901,9 +901,9 @@ impl ClientBuilder {
 /// (`service_content`, `api_release`, `fetch_property`), plus [`Client::close`] (0.6.1).
 ///
 /// Internally holds an [`Arc`] to a [`VimClient`] implementation (crate-private JSON or SOAP
-/// client). Call [`Client::close`] to end the session. If `close` is never called, 0.6.x still
-/// logs out when the last strong reference to the inner client is dropped on a **multi-thread**
-/// Tokio runtime (removed in 0.7.0).
+/// client). Call [`Client::close`] to end the session. If `close` is never called, dropping
+/// the last strong reference to the inner client still logs out on a **multi-thread**
+/// Tokio runtime. On `current_thread` that path warns and does not log out.
 pub struct Client {
     inner: Arc<dyn VimClient>,
 }
@@ -1042,7 +1042,7 @@ pub(crate) struct JsonClient {
 /// VI JSON API implementation (Hello + `/sdk/vim25/{release}`). Crate-private; users hold [`Client`].
 ///
 /// Manages the session key header. Call [`VimClient::close`] to log out; dropping the last [`Arc`]
-/// still logs out on a multi-thread Tokio runtime in 0.6.x (removed in 0.7.0).
+/// still logs out on a multi-thread Tokio runtime. On `current_thread` that path warns.
 impl JsonClient {
     pub(crate) fn service_content(&self) -> &ServiceContent {
         self.service_content
@@ -1716,8 +1716,8 @@ impl VimClient for JsonClient {
 
 /// Log out the JSON session when the last strong reference to this [`JsonClient`] is dropped.
 ///
-/// On a multi-thread Tokio runtime this is a 0.6.x compatibility fallback. Prefer
-/// [`Client::close`] / [`VimClient::close`]. Destructor logout will be removed in 0.7.0.
+/// On a multi-thread Tokio runtime this logs out when `close` was never called. Prefer
+/// [`Client::close`] / [`VimClient::close`]. On `current_thread` the destructor warns.
 impl Drop for JsonClient {
     fn drop(&mut self) {
         debug!("Disposing VIM client.");

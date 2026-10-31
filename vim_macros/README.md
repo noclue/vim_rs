@@ -2,6 +2,12 @@
 
 Procedural macros for simplified VMware vSphere property retrieval and monitoring.
 
+`vim_rs` re-exports `vim_retrievable!` and `vim_updatable!`. Depend on this crate directly only when you want the macros without the client.
+
+```toml
+vim_macros = "0.7"
+```
+
 ## Property Retrieval with Macros
 
 The library provides two powerful macros to simplify property retrieval and monitoring:
