@@ -1,4 +1,9 @@
-//! Hand-rolled `PerformanceManager` sample.
+//! Legacy: hand-rolled `PerformanceManager` sample (contrast with `perf_metrics`).
+//!
+//! This is what `perf_metrics` replaced. It shows the work `vim_rs::perf` does
+//! (counter-id maps, interval choice, decoding, unit scaling) and is the direct
+//! `PerformanceManager` path for callers who cannot or prefer not to enable `perf`.
+//! New code uses `PerfClient`.
 //!
 //! This is the program `perf_metrics` replaced. Same inventory walk: a container
 //! view of virtual machines, then one realtime sample of every available counter.
@@ -32,7 +37,6 @@
 //!
 //! Inspired by the PyVmomi sample
 //! [vm_perf_example.py](https://github.com/vmware/pyvmomi-community-samples/blob/ec890d5286c966ddd8fe48f4eedda2e20620610f/samples/vm_perf_example.py).
-
 
 use std::collections::HashMap;
 use std::env;
@@ -81,9 +85,7 @@ async fn main() -> Result<()> {
         let rollup = counter.rollup_type.as_str();
         let counter_name = format!(
             "{}.{}.{}",
-            counter.group_info.key,
-            counter.name_info.key,
-            rollup
+            counter.group_info.key, counter.name_info.key, rollup
         );
         counter_info.insert(counter.key, counter_name);
     }

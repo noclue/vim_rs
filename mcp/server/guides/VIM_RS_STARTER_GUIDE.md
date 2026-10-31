@@ -1,6 +1,6 @@
 # vim_rs Workflow Guide for LLMs
 
-**How to use this file:** Skim **Steps 1–4** first (connection → calls → retrieval → tasks). Treat **Step 3.5+** (polymorphism, Deref), **Navigation paths**, **MCP tools**, and **Anti-patterns** as lookup sections—do not load them all unless the task needs them.
+**How to use this file:** Skim **Steps 1–4** first (connection → calls → retrieval → tasks). Treat **Step 3.5+** (polymorphism, Deref), **Step 5** (performance metrics; feature `perf`), **Navigation paths**, **MCP tools**, and **Anti-patterns** as lookup sections—do not load them all unless the task needs them.
 
 ## Overview
 
@@ -71,7 +71,7 @@ async fn main() -> Result<()> {
 **Dependencies needed:**
 ```toml
 [dependencies]
-vim_rs = "0.5"
+vim_rs = "0.7"
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
@@ -90,7 +90,7 @@ Enable XML only when the target requires it, most notably for direct ESXi connec
 
 ```toml
 [dependencies]
-vim_rs = { version = "0.6", features = ["xml"] }
+vim_rs = { version = "0.7", features = ["xml"] }
 anyhow = "1.0"
 tokio = { version = "1.0", features = ["full"] }
 env_logger = "0.11"
@@ -152,7 +152,7 @@ Use this when integration tests target **[govc vcsim](https://github.com/vmware/
 1. **`vcsim_compat` feature** (requires `xml`): enables tolerant client-internal SOAP unmarshalling so incomplete XML fragments (for example `HostConfigInfo.optionDef` without `optionType`) can be dropped instead of failing the entire response. Scoped helpers such as `vim_rs::xml::de::from_xml_with` exist for explicit control.
 
    ```toml
-   vim_rs = { version = "0.6", features = ["xml", "vcsim_compat"] }
+   vim_rs = { version = "0.7", features = ["xml", "vcsim_compat"] }
    ```
 
 2. **Macro path suffix `?`:** In `vim_retrievable!` and `vim_updatable!`, append `?` to the **quoted** property path string to force `Option<T>` even when the OpenAPI spec marks the property as required—for example `effective_cpu = "summary.quick_stats.overall_cpu_usage"?`. vcsim (and occasionally real hosts) omit “required” fields; without `?`, `TryFrom` fails and whole rows are dropped during retrieval or cache updates.
@@ -413,7 +413,7 @@ let spec = VirtualDeviceConfigSpec {
 
 Enable the `defaults` feature in your `Cargo.toml`:
 ```toml
-vim_rs = { version = "0.6", features = ["defaults"] }
+vim_rs = { version = "0.7", features = ["defaults"] }
 ```
 
 Then use `..Default::default()` to fill in optional fields:
@@ -475,6 +475,34 @@ task_tracker.wait::<()>(task_ref).await?;
 
 Property accessors (e.g. `vm.name().await?`) are **not** tasks—no `TaskTracker`.
 
+## Step 5: Performance metrics (feature `perf`)
+
+Requires `features = ["perf"]`. Do not hand-roll `query_perf`, counter-id maps, or a historical `max_sample`.
+
+To choose a counter, search `vim_rs/src/perf/metrics.rs` for the group and the name. Each constant is documented as `` `group.name.rollup` `` plus the catalog's plain-language description (`rg "balloon driver" vim_rs/src/perf/metrics.rs`). Use that `group.name.rollup` string, or the Rust constant beside it. The numeric id is assigned by the host you are connected to and is not in this file.
+
+| Workflow | Example id |
+|---|---|
+| One-shot snapshot | `example::perf_metrics` |
+| Live monitor / sparklines | `example::perf_vm_usage` |
+| Historical rollups | `example::perf_historical` |
+| Incremental export | `example::perf_export` |
+| Raw API, no `perf` feature | `example::perf_metrics_manual` |
+
+Raw versus scaled: wire integers versus `Percent`, `Bytes`, `Seconds`. Gaps: `last()` skips trailing gaps, `last_slot()` is the current slot, `window::<N>()` / `rows()` / `filter_new` keep gaps as absence. Scopes are `Metric<D, S>`. Prefer `by_entity` and `typed_entities`. Tier 3b is absent from `by_entity`: widen with `.with_scope::<AnyEntity>()` or `.metric_unchecked()`.
+
+```rust
+let mut ticker = tokio::time::interval(perf.realtime_refresh_rate(&vms[0]).await?);
+ticker.set_missed_tick_behavior(tokio::time::MissedTickBehavior::Skip);
+loop {
+    ticker.tick().await;
+    match query.fetch_incremental(&vms, &watermark).await {
+        Ok(res) => { /* watermark.filter_new(&res) */ }
+        Err(err) => { log::error!("{err}"); }
+    }
+}
+```
+
 ## Anti-patterns (dense checklist)
 
 | Wrong | Right |
@@ -486,6 +514,11 @@ Property accessors (e.g. `vm.name().await?`) are **not** tasks—no `TaskTracker
 | `#[tokio::main]` missing / `async` missing in `main` | `#[tokio::main] async fn main` |
 | `match device` as if devices were enums | **Step 3.5** — `CastInto` + `VirtualEthernetCardTrait` for NICs |
 | `*_Task` without `TaskTracker::wait` | Step 4 |
+| `PerformanceManager::query_perf` plus a hand-built counter-id map | `vim_rs::perf::PerfClient` (Step 5) |
+| `vim_rs = "0.7"` and `use vim_rs::perf` | `vim_rs = { version = "0.7", features = ["perf"] }` |
+| `max_sample` / `latest(n)` to bound a historical query | `.between` / `.since_ago` plus `.time_chunk` |
+| `last()` as a dashboard’s current value | `last_slot()` |
+| `?` on the fetch inside a poll loop | `match`, log, and `MissedTickBehavior::Skip` |
 | New `TaskTracker` inside hot loops | One tracker, many `wait` calls |
 | `enum.into()` / `From` for enum → `&str` | **`.as_str()`** on enums and `ValueElements` |
 | `TraversalSpec` without parent field | **Step 3.6** — `selection_spec_: SelectionSpec { ... }` |

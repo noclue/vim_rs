@@ -1,4 +1,21 @@
-//! Query builders and the interval / packing / fetch engine.
+//! Query builders and the interval, packing, and fetch engine behind [`crate::perf::PerfClient`].
+//!
+//! Five builders share the counter, instance, and interval methods:
+//!
+//! * [`PerfQuery`] stores its entities. [`PerfQuery::fetch`] consumes it.
+//! * [`PreparedQueryBuilder`] stores the spec only. [`PreparedQuery`] takes the
+//!   entity list on each fetch and caches counter-id resolution until
+//!   [`crate::perf::PerfClient::refresh_registry`] replaces the catalog.
+//! * [`TypedPerfQuery`] is a [`PerfQuery`] locked to one [`crate::perf::typed::EntityKind`].
+//!   [`TypedPerfQuery::metric`] requires [`crate::perf::typed::Admits`].
+//! * [`CompositeQuery`] is one `QueryPerfComposite` call for a host and the
+//!   children the server returns. It does not chunk, and it always uses normal format.
+//! * [`PerfBatch`] is several groups. Each group has its own objects, counters,
+//!   and interval. [`PerfBatch::fetch`] packs them into `QueryPerf`.
+//!
+//! Wire `start_time` is exclusive and `end_time` is inclusive. The client sends
+//! the instants it was given. Historical queries omit `max_sample`. Realtime
+//! `latest(n)` sends it. A raw sample below `0` is a gap.
 
 use std::collections::{HashMap, HashSet};
 use std::marker::PhantomData;
@@ -119,34 +136,67 @@ impl QuerySpec {
     }
 }
 
-/// One-shot performance query.
+/// One-shot `QueryPerf`.
+///
+/// Entities are stored here and may mix managed-object kinds. Every entity
+/// uses this builder’s counters, interval, and window. [`PerfBatch`] gives
+/// each group its own counters and interval, then packs those specs into
+/// `QueryPerf`. [`Self::fetch`] consumes the builder and does not cache
+/// counter resolution. [`Self::typed_entities`] replaces the entity list and
+/// continues as a [`TypedPerfQuery`].
 pub struct PerfQuery {
     client: PerfClient,
     pub(crate) spec: QuerySpec,
     entities: Vec<ManagedObjectReference>,
 }
 
-/// Builder for a reusable query. `build` does not talk to the server.
+/// Spec for a query that will be fetched more than once.
+///
+/// [`Self::build`] does not call the server. This builder has `since_ago` and
+/// no absolute `since` or `between`; those bounds are [`PreparedQuery::fetch_since`].
+/// `since_ago` is stored and subtracted from the clock at fetch time.
 pub struct PreparedQueryBuilder {
     client: PerfClient,
     spec: QuerySpec,
 }
 
-/// A query resolved again whenever the counter registry generation changes.
+/// A built spec plus a cache of resolved counter ids.
+///
+/// The cache is reused while [`crate::perf::CounterRegistry`] keeps the same
+/// generation. [`Self::fetch`] takes the objects for that call, so the inventory
+/// can change between ticks. This type does not sleep; the caller owns the timer.
 pub struct PreparedQuery {
     client: PerfClient,
     spec: QuerySpec,
     cache: Mutex<Option<CachedResolve>>,
 }
 
-/// Host plus the children `QueryPerfComposite` returns.
+/// One `QueryPerfComposite` call: a host and the children the server includes.
+///
+/// The host must be a `HostSystem`. [`Self::fetch`] checks that before any RPC
+/// and returns [`crate::perf::PerfError::EntityKindMismatch`] otherwise.
+/// [`crate::perf::CompositePerfResult::host`] is `None` when the server omits
+/// the host. [`crate::perf::CompositePerfResult::children`] contains only the
+/// entities the server returned, so a powered-off virtual machine that is not
+/// a child of the host is absent.
+///
+/// The call is a single RPC in normal format. [`Self::format`], [`Self::chunk_size`],
+/// [`Self::time_chunk`], [`Self::concurrency`], and [`Self::all_available`] do not
+/// change that. [`Self::latest`] truncates each decoded series after the call;
+/// `max_sample` is not sent.
 pub struct CompositeQuery {
     client: PerfClient,
     host: ManagedObjectReference,
     spec: QuerySpec,
 }
 
-/// Typed one-shot query. `metric` only accepts scopes that include `K`.
+/// One-shot query locked to entity kind `K`.
+///
+/// Produced by [`PerfQuery::typed_entity`] or [`PerfQuery::typed_entities`],
+/// which discard any entities already added. Further entities must be `K`.
+/// [`Self::metric`] compiles only when the counter scope [`crate::perf::typed::Admits`] `K`.
+/// [`Self::metric_unchecked`] skips that check for a counter outside the generated scope.
+/// [`Self::fetch`] consumes the builder, like [`PerfQuery::fetch`].
 pub struct TypedPerfQuery<K: EntityKind> {
     client: PerfClient,
     spec: QuerySpec,
@@ -157,63 +207,120 @@ pub struct TypedPerfQuery<K: EntityKind> {
 macro_rules! common_methods {
     ($($head:tt)*) => {
         $($head)* {
-            /// Default device instance for later [`Self::metric`] calls. `metric_with_instance` wins.
+            /// Default device instance for later [`Self::metric`] and [`Self::metric_by_name`] calls.
+            ///
+            /// [`Instance::Aggregate`] is the empty wire string, [`Instance::All`] is `"*"`,
+            /// and [`Instance::Named`] is one device key such as `naa.…` or `vmnic0`.
+            /// [`Self::metric_with_instance`] stores its own instance and ignores this default.
             pub fn instances(mut self, instance: Instance) -> Self {
                 self.spec.default_instance = instance;
                 self
             }
-            /// Sampling interval. The default is [`Interval::Auto`].
+            /// Sampling period. The default is [`Interval::Auto`].
+            ///
+            /// Presets such as [`Interval::PAST_DAY`] are periods in seconds, not
+            /// `PerfInterval.key`. `Auto` uses realtime when that provider supports
+            /// it and the start lies inside the last hour; otherwise it uses the
+            /// finest enabled historical period that covers the window.
             pub fn interval(mut self, interval: Interval) -> Self {
                 self.spec.interval = interval;
                 self
             }
             /// Start at `now - ago` on each fetch.
+            ///
+            /// On a [`PreparedQuery`] the subtraction happens when [`PreparedQuery::fetch`]
+            /// runs, not when the query was built.
             pub fn since_ago(mut self, ago: Duration) -> Self {
                 self.spec.time = TimeBound::SinceAgo(ago);
                 self
             }
-            /// Keep the newest `n` samples. Historical queries still omit `max_sample` on the wire.
+            /// Keep the newest `n` samples. `n <= 0` clears the limit.
+            ///
+            /// Realtime `QueryPerf` sends `max_sample` and leaves the time fields unset
+            /// when no window was set. A realtime window is sent as given, and
+            /// `max_sample` is added only when `latest` is also set. Historical queries
+            /// omit `max_sample` and the decoded series is truncated to `n`.
+            /// [`PreparedQuery::fetch_since`] and [`PreparedQuery::fetch_incremental`]
+            /// omit `max_sample` and do not truncate. [`CompositeQuery::fetch`] also
+            /// omits `max_sample` and truncates after decode. Without a window, a realtime
+            /// composite asks for the last `(n + 2)` periods, and never less than five minutes.
             pub fn latest(mut self, n: i32) -> Self {
                 self.spec.latest = (n > 0).then_some(n);
                 self
             }
-            /// Wire format. [`WireFormat::Auto`] is CSV, except JSON `latest(1)`, which is normal.
+            /// Wire format of `QueryPerf` samples.
+            ///
+            /// [`WireFormat::Auto`] sends CSV. On JSON, `latest(1)` sends normal format
+            /// instead. With the `xml` feature, SOAP always sends CSV.
+            /// [`CompositeQuery::fetch`] always sends normal format.
             pub fn format(mut self, format: WireFormat) -> Self {
                 self.spec.format = format;
                 self
             }
-            /// Maximum metric ids in one `QueryPerf` call. Values below 1 become 1.
+            /// Maximum metric ids in one `QueryPerf` call. The default is 256. Values below 1 become 1.
+            ///
+            /// Entities are packed in request order until that budget is full, so a host
+            /// and a virtual machine can share a round trip. [`CompositeQuery::fetch`]
+            /// is one RPC and ignores this limit. On a [`PerfBatch`], set the budget
+            /// with [`PerfBatch::chunk_size`]; the group builder’s value is not used.
             pub fn chunk_size(mut self, n: usize) -> Self {
                 self.spec.chunk_size = n.max(1);
                 self
             }
-            /// Split a historical window into slices of at most `window`. Ignored for realtime.
+            /// Split a historical window into slices of at most `window`.
+            ///
+            /// Realtime ignores this. A zero window is ignored. Each slice is its own
+            /// spec: `start_time` is exclusive and `end_time` is inclusive.
+            /// [`CompositeQuery::fetch`] does not slice.
             pub fn time_chunk(mut self, window: Duration) -> Self {
                 self.spec.time_chunk = Some(window);
                 self
             }
-            /// How many `QueryPerf` calls run at once. Values below 1 become 1.
+            /// How many `QueryPerf` calls run at once. The default is 4. Values below 1 become 1.
+            ///
+            /// [`CompositeQuery::fetch`] is a single call.
             pub fn concurrency(mut self, n: usize) -> Self {
                 self.spec.concurrency = n.max(1);
                 self
             }
-            /// Ask the server which metrics exist for each object.
+            /// Query every counter the server lists for each object.
+            ///
+            /// Named counters from [`Self::metric`] or [`Self::metric_by_name`] are dropped,
+            /// and the fetch records [`crate::perf::PerfWarning::ExplicitMetricsIgnored`].
+            /// An object with no available ids becomes [`crate::perf::EntityStatus::NoMetricsAvailable`]
+            /// and is not sent. [`CompositeQuery`] does not query availability; name its counters.
+            ///
+            /// The list comes from `QueryAvailablePerfMetric` with no begin or end, so it is the
+            /// object's current counters and devices at that interval, not those of the query
+            /// window. A historical window can miss a device that has since been removed. The
+            /// list is cached per object and interval until [`crate::perf::PerfClient::refresh_registry`].
             pub fn all_available(mut self) -> Self {
                 self.spec.all_available = true;
                 self
             }
-            /// Availability filter. With no explicit metrics this queries every counter in these groups.
-            /// Combined with `.metric` or `.metric_by_name` and without `.all_available()`, the filter is ignored and the fetch records [`PerfWarning::GroupsIgnored`](crate::perf::PerfWarning::GroupsIgnored).
+            /// Availability filter. Group names are catalog groups such as `"cpu"` and `"mem"`.
+            ///
+            /// With no explicit metrics this queries every counter in these groups.
+            /// Combined with [`Self::metric`] or [`Self::metric_by_name`] and without
+            /// [`Self::all_available`], the filter is ignored and the fetch records
+            /// [`crate::perf::PerfWarning::GroupsIgnored`].
+            ///
+            /// Uses the same availability list as [`Self::all_available`], which does not
+            /// depend on the query window.
             pub fn groups(mut self, groups: &[&str]) -> Self {
                 self.spec.groups = groups.iter().map(|group| (*group).to_string()).collect();
                 self
             }
-            /// A `group.name.rollup` string. Rate is preferred when several stats kinds exist.
+            /// One `group.name.rollup` string, such as `cpu.usage.average`.
+            ///
+            /// When several stats kinds share that name, the rate counter is preferred.
+            /// An unknown name is dropped with [`crate::perf::PerfWarning::CounterNotOnServer`].
+            /// The fetch fails with [`crate::perf::PerfError::UnknownCounter`] when nothing remains.
             pub fn metric_by_name(mut self, name: &str) -> Self {
                 self.spec.names.push(name.to_string());
                 self
             }
-            /// Several `group.name.rollup` strings.
+            /// Several `group.name.rollup` strings. See [`Self::metric_by_name`].
             pub fn metrics_by_name(mut self, names: &[&str]) -> Self {
                 self.spec.names.extend(names.iter().map(|name| (*name).to_string()));
                 self
@@ -225,12 +332,20 @@ macro_rules! common_methods {
 macro_rules! metric_methods {
     ($($head:tt)*) => {
         $($head)* {
-            /// Counter to query. The default instance is applied at fetch.
+            /// Counter to query. The [`Self::instances`] default is applied when the query is fetched.
+            ///
+            /// The scope parameter does not filter objects on this builder. A counter
+            /// whose scope excludes an entity is still sent; a missing series records
+            /// [`crate::perf::PerfWarning::ScopeMismatch`]. [`TypedPerfQuery::metric`]
+            /// rejects that mismatch at compile time.
             pub fn metric<D: Dimension, S: EntityScope>(mut self, metric: Metric<D, S>) -> Self {
                 self.spec.push(metric, None);
                 self
             }
-            /// Counter plus a device instance that ignores [`Self::instances`].
+            /// Counter plus a device instance. This instance ignores [`Self::instances`].
+            ///
+            /// [`Instance::All`] requests the aggregate series and every device. Read
+            /// the devices back with [`crate::perf::result::EntitySeries::devices`].
             pub fn metric_with_instance<D: Dimension, S: EntityScope>(
                 mut self,
                 metric: Metric<D, S>,
@@ -246,12 +361,16 @@ macro_rules! metric_methods {
 macro_rules! absolute_time {
     ($($head:tt)*) => {
         $($head)* {
-            /// Start at `start` and end at fetch time.
+            /// Exclusive start. The end is the time of the fetch.
+            ///
+            /// [`PreparedQueryBuilder`] has no absolute start. Use [`PreparedQuery::fetch_since`].
             pub fn since(mut self, start: SystemTime) -> Self {
                 self.spec.time = TimeBound::Since(start);
                 self
             }
-            /// Inclusive end, exclusive start, both absolute.
+            /// Exclusive start and inclusive end. The instants are sent unchanged.
+            ///
+            /// `start > end` fails the fetch with [`crate::perf::PerfError::InvalidTimeRange`].
             pub fn between(mut self, start: SystemTime, end: SystemTime) -> Self {
                 self.spec.time = TimeBound::Between { start, end };
                 self
@@ -270,23 +389,32 @@ impl PerfQuery {
     }
 
     /// Append one managed object.
+    ///
+    /// Kinds may be mixed. They share `QueryPerf` calls until [`Self::chunk_size`] is reached.
     pub fn entity(mut self, entity: &ManagedObjectReference) -> Self {
         self.entities.push(entity.clone());
         self
     }
 
     /// Replace the object list.
+    ///
+    /// Order is the order of [`crate::perf::PerfResult::entities`].
     pub fn entities(mut self, entities: &[ManagedObjectReference]) -> Self {
         self.entities = entities.to_vec();
         self
     }
 
-    /// Replace the entity list with one typed object and continue as a typed query.
+    /// Replace the entity list with one typed object and continue as a [`TypedPerfQuery`].
+    ///
+    /// Any objects already added with [`Self::entity`] are discarded.
     pub fn typed_entity<K: EntityKind>(self, entity: Entity<K>) -> TypedPerfQuery<K> {
         self.typed_entities(std::slice::from_ref(&entity))
     }
 
-    /// Replace the entity list with typed objects of one kind and continue as a typed query.
+    /// Replace the entity list with typed objects of one kind and continue as a [`TypedPerfQuery`].
+    ///
+    /// Further [`TypedPerfQuery::entity`] calls must use that same kind. Any objects
+    /// already added are discarded.
     pub fn typed_entities<K: EntityKind>(self, entities: &[Entity<K>]) -> TypedPerfQuery<K> {
         TypedPerfQuery {
             client: self.client,
@@ -299,7 +427,11 @@ impl PerfQuery {
         }
     }
 
-    /// Run the query.
+    /// Resolve counters, probe provider support per kind, and run `QueryPerf`.
+    ///
+    /// Every requested object is in the result. An object the server omits is
+    /// [`crate::perf::EntityStatus::NoSamples`]. The builder is consumed and counter
+    /// resolution is not cached; use [`PreparedQuery`] to poll.
     pub async fn fetch(self) -> Result<PerfResult, PerfError> {
         execute(
             &self.client,
@@ -323,7 +455,10 @@ impl PreparedQueryBuilder {
         }
     }
 
-    /// Freeze the builder. Metric names are resolved on fetch.
+    /// Freeze the spec.
+    ///
+    /// Metric names are resolved on the first fetch and reused until
+    /// [`crate::perf::PerfClient::refresh_registry`] replaces the catalog.
     pub fn build(self) -> PreparedQuery {
         PreparedQuery {
             client: self.client,
@@ -336,12 +471,15 @@ common_methods!(impl PreparedQueryBuilder);
 metric_methods!(impl PreparedQueryBuilder);
 
 impl PreparedQuery {
-    /// Client that owns the registry and caches.
+    /// Client that owns the registry, provider-cap cache, and availability cache.
     pub fn client(&self) -> &PerfClient {
         &self.client
     }
 
-    /// Fetch `entities`. `since_ago` is applied now, not when the query was built.
+    /// Fetch `entities` with the built interval and window.
+    ///
+    /// `since_ago` is subtracted from the clock on this call, not when the query
+    /// was built. The object list may differ from the previous tick.
     pub async fn fetch(
         &self,
         entities: &[ManagedObjectReference],
@@ -356,7 +494,10 @@ impl PreparedQuery {
         .await
     }
 
-    /// One start for every object. Omits `max_sample` and does not truncate `latest`.
+    /// One exclusive start for every object. Overrides `since_ago`.
+    ///
+    /// Omits `max_sample` and does not truncate [`PreparedQueryBuilder::latest`].
+    /// The end is the time of this fetch.
     pub async fn fetch_since(
         &self,
         entities: &[ManagedObjectReference],
@@ -372,7 +513,14 @@ impl PreparedQuery {
         .await
     }
 
-    /// Per-object start from `watermark`. Does not modify the watermark.
+    /// Per-object start from [`crate::perf::SampleWatermark::entity_high_water`].
+    /// Does not modify `watermark`.
+    ///
+    /// That instant is the earliest mark across the object's series, so a series
+    /// that is ahead is queried again from the slower series. Those repeats are
+    /// duplicates. [`crate::perf::SampleWatermark::filter_new`] keeps rows strictly
+    /// newer than each series' own mark. An object with a mark omits `max_sample`.
+    /// An object with no mark uses the built window and `latest`.
     pub async fn fetch_incremental(
         &self,
         entities: &[ManagedObjectReference],
@@ -406,7 +554,10 @@ impl CompositeQuery {
         }
     }
 
-    /// Fetch the host and the children the server returns.
+    /// Run `QueryPerfComposite`.
+    ///
+    /// A host whose type is not `HostSystem` returns
+    /// [`crate::perf::PerfError::EntityKindMismatch`] and does not call the server.
     pub async fn fetch(self) -> Result<crate::perf::result::CompositePerfResult, PerfError> {
         if self.host.r#type != MoTypesEnum::HostSystem {
             return Err(PerfError::EntityKindMismatch {
@@ -428,7 +579,7 @@ impl<K: EntityKind> TypedPerfQuery<K> {
         self
     }
 
-    /// Replace the object list.
+    /// Replace the object list. Every element is already kind `K`.
     pub fn entities(mut self, entities: &[Entity<K>]) -> Self {
         self.entities = entities
             .iter()
@@ -438,6 +589,11 @@ impl<K: EntityKind> TypedPerfQuery<K> {
     }
 
     /// Counter whose scope includes `K`.
+    ///
+    /// A scope that does not [`crate::perf::typed::Admits`] `K` fails to compile.
+    /// The diagnostic names the scope and the kind. Widen a Tier 3b counter with
+    /// [`Metric::with_scope`](crate::perf::metric::Metric::with_scope) or pass it to
+    /// [`Self::metric_unchecked`].
     pub fn metric<D: Dimension, S: EntityScope>(mut self, metric: Metric<D, S>) -> Self
     where
         S: Admits<K>,
@@ -446,7 +602,7 @@ impl<K: EntityKind> TypedPerfQuery<K> {
         self
     }
 
-    /// Scoped counter with an explicit instance.
+    /// [`Self::metric`] plus a device instance. This instance ignores [`Self::instances`].
     pub fn metric_with_instance<D: Dimension, S: EntityScope>(
         mut self,
         metric: Metric<D, S>,
@@ -459,13 +615,17 @@ impl<K: EntityKind> TypedPerfQuery<K> {
         self
     }
 
-    /// Counter without the scope check.
+    /// Counter without the [`crate::perf::typed::Admits`] check.
+    ///
+    /// The counter is still sent. A missing series records
+    /// [`crate::perf::PerfWarning::ScopeMismatch`] when the compiled scope excludes
+    /// this entity's kind.
     pub fn metric_unchecked<D: Dimension, S: EntityScope>(mut self, metric: Metric<D, S>) -> Self {
         self.spec.push(metric, None);
         self
     }
 
-    /// Unchecked counter with an explicit instance.
+    /// [`Self::metric_unchecked`] plus a device instance.
     pub fn metric_with_instance_unchecked<D: Dimension, S: EntityScope>(
         mut self,
         metric: Metric<D, S>,
@@ -475,7 +635,9 @@ impl<K: EntityKind> TypedPerfQuery<K> {
         self
     }
 
-    /// Run the query.
+    /// Resolve counters and run `QueryPerf` for the stored `K` objects.
+    ///
+    /// Consumed, like [`PerfQuery::fetch`]. Counter resolution is not cached.
     pub async fn fetch(self) -> Result<PerfResult, PerfError> {
         execute(
             &self.client,
@@ -489,6 +651,131 @@ impl<K: EntityKind> TypedPerfQuery<K> {
 }
 common_methods!(impl<K: EntityKind> TypedPerfQuery<K>);
 absolute_time!(impl<K: EntityKind> TypedPerfQuery<K>);
+
+struct BatchGroup {
+    spec: QuerySpec,
+    entities: Vec<ManagedObjectReference>,
+}
+
+impl PerfQuery {
+    fn into_group(self) -> BatchGroup {
+        BatchGroup {
+            spec: self.spec,
+            entities: self.entities,
+        }
+    }
+}
+
+impl<K: EntityKind> TypedPerfQuery<K> {
+    fn into_group(self) -> BatchGroup {
+        BatchGroup {
+            spec: self.spec,
+            entities: self.entities,
+        }
+    }
+}
+
+/// Several `QueryPerf` groups in one fetch.
+///
+/// Each group has its own objects, counters, interval, and time window.
+/// [`Self::fetch`] plans the groups separately, then packs one `PerfQuerySpec`
+/// per object into as few `QueryPerf` calls as [`Self::chunk_size`] allows.
+/// An object that appears in more than one group keeps every counter. Its
+/// samples share one timestamp grid. `latest` truncates that grid only when
+/// every group that names the object sets the same limit. Those groups must
+/// resolve to the same sampling period for that object, otherwise [`Self::fetch`]
+/// fails with [`PerfError::MixedIntervals`] before any `QueryPerf` call.
+///
+/// [`Self::format`], [`Self::chunk_size`], and [`Self::concurrency`] apply to
+/// the whole batch. The same methods on a group builder are ignored.
+/// [`PerfQuery::time_chunk`] on a group still slices that group’s window.
+/// [`WireFormat::Auto`] sends CSV, including when a group uses `latest(1)`.
+pub struct PerfBatch {
+    client: PerfClient,
+    groups: Vec<BatchGroup>,
+    format: WireFormat,
+    chunk_size: usize,
+    concurrency: usize,
+}
+
+impl PerfBatch {
+    pub(crate) fn new(client: PerfClient) -> Self {
+        let defaults = QuerySpec::default();
+        Self {
+            client,
+            groups: Vec::new(),
+            format: defaults.format,
+            chunk_size: defaults.chunk_size,
+            concurrency: defaults.concurrency,
+        }
+    }
+
+    /// Add a group built from a [`PerfQuery`].
+    ///
+    /// The closure receives an empty query. Return it after setting objects,
+    /// counters, and the interval. [`PerfQuery::format`], [`PerfQuery::chunk_size`],
+    /// and [`PerfQuery::concurrency`] do not affect the batch.
+    pub fn group(mut self, build: impl FnOnce(PerfQuery) -> PerfQuery) -> Self {
+        self.groups
+            .push(build(PerfQuery::new(self.client.clone())).into_group());
+        self
+    }
+
+    /// Add a group locked to one managed-object kind.
+    ///
+    /// [`TypedPerfQuery::metric`] accepts a counter only when its scope includes
+    /// that kind. The closure receives an empty [`PerfQuery`]; call
+    /// [`PerfQuery::typed_entity`] or [`PerfQuery::typed_entities`] and return
+    /// the typed query. Format, chunk size, and concurrency set inside the
+    /// closure are ignored.
+    pub fn typed_group<K: EntityKind>(
+        mut self,
+        build: impl FnOnce(PerfQuery) -> TypedPerfQuery<K>,
+    ) -> Self {
+        self.groups
+            .push(build(PerfQuery::new(self.client.clone())).into_group());
+        self
+    }
+
+    /// Wire format for every group. [`WireFormat::Auto`] sends CSV.
+    pub fn format(mut self, format: WireFormat) -> Self {
+        self.format = format;
+        self
+    }
+
+    /// Maximum metric ids in one `QueryPerf` call. The default is 256. Values below 1 become 1.
+    ///
+    /// Specs from every group are packed in group order, then object order.
+    pub fn chunk_size(mut self, n: usize) -> Self {
+        self.chunk_size = n.max(1);
+        self
+    }
+
+    /// How many `QueryPerf` calls run at once. The default is 4. Values below 1 become 1.
+    ///
+    /// Availability lookups for `.all_available()` and `.groups()` use this limit too.
+    pub fn concurrency(mut self, n: usize) -> Self {
+        self.concurrency = n.max(1);
+        self
+    }
+
+    /// Plan every group and run `QueryPerf`.
+    ///
+    /// An empty batch, or a group with no objects, returns
+    /// [`crate::perf::PerfError::NoEntities`]. A group with no counters returns
+    /// [`crate::perf::PerfError::NoMetrics`]. The result lists each object once,
+    /// in the order groups and objects were added.
+    pub async fn fetch(self) -> Result<PerfResult, PerfError> {
+        execute_batch(
+            &self.client,
+            &self.groups,
+            self.format,
+            self.chunk_size,
+            self.concurrency,
+        )
+        .await
+    }
+}
 
 /// Inputs for one object in [`plan_intervals`].
 #[doc(hidden)]
@@ -744,9 +1031,16 @@ fn historical_query(
     length: i32,
     latest: Option<i32>,
     now: SystemTime,
-    warnings: Vec<PerfWarning>,
+    mut warnings: Vec<PerfWarning>,
 ) -> PlannedQuery {
     let has_window = case.start.is_some() || case.end.is_some();
+    if let Some(start) = case.start.filter(|start| !covers(*start, now, length)) {
+        warnings.push(PerfWarning::HistoricalWindowTooOld {
+            requested_start: Timestamp(start),
+            interval_secs: period,
+            retention_secs: length,
+        });
+    }
     let (start, end, truncate) = if has_window {
         let truncate = if case.incremental {
             None
@@ -759,7 +1053,7 @@ fn historical_query(
             .saturating_add(2)
             .saturating_mul(period.max(0) as u64);
         (
-            Some(sub_secs(now, cushion)),
+            Some(sub_duration(now, Duration::from_secs(cushion))),
             Some(now),
             if case.incremental {
                 None
@@ -768,7 +1062,11 @@ fn historical_query(
             },
         )
     } else {
-        (Some(sub_secs(now, length.max(0) as u64)), Some(now), None)
+        (
+            Some(sub_duration(now, Duration::from_secs(length.max(0) as u64))),
+            Some(now),
+            None,
+        )
     };
     PlannedQuery {
         interval_id: period,
@@ -831,11 +1129,6 @@ fn older_than_hour(start: SystemTime, now: SystemTime) -> bool {
     }
 }
 
-fn sub_secs(now: SystemTime, secs: u64) -> SystemTime {
-    now.checked_sub(Duration::from_secs(secs))
-        .unwrap_or(SystemTime::UNIX_EPOCH)
-}
-
 struct EntityWindow {
     start: Option<SystemTime>,
     end: Option<SystemTime>,
@@ -889,6 +1182,9 @@ fn window_for(
     }
 }
 
+/// Smallest realtime window a composite `latest(n)` asks for, in seconds.
+const COMPOSITE_MIN_CUSHION_SECS: u64 = 300;
+
 fn sub_duration(now: SystemTime, ago: Duration) -> SystemTime {
     now.checked_sub(ago).unwrap_or(SystemTime::UNIX_EPOCH)
 }
@@ -903,22 +1199,146 @@ pub(crate) async fn execute(
     if entities.is_empty() {
         return Err(PerfError::NoEntities);
     }
-    let entities = dedupe_entities(entities);
-    let entities = entities.as_slice();
     let now = client.now();
     let registry = client.registry().await?;
+    let planned = plan_group(
+        client,
+        &registry,
+        spec,
+        entities,
+        window,
+        cache,
+        spec.concurrency,
+        now,
+    )
+    .await?;
+    if !planned.queried && !planned.probe_failed {
+        return Err(PerfError::NoSupportedEntities);
+    }
+    let format = choose_format(spec.format, client.transport(), spec.latest);
+    finish(
+        client,
+        &registry,
+        planned,
+        spec.chunk_size,
+        spec.concurrency,
+        format,
+        now,
+    )
+    .await
+}
+
+async fn execute_batch(
+    client: &PerfClient,
+    groups: &[BatchGroup],
+    format: WireFormat,
+    chunk_size: usize,
+    concurrency: usize,
+) -> Result<PerfResult, PerfError> {
+    if groups.is_empty() || groups.iter().any(|group| group.entities.is_empty()) {
+        return Err(PerfError::NoEntities);
+    }
+    for group in groups {
+        spec_has_selector(&group.spec)?;
+    }
+    let now = client.now();
+    let registry = client.registry().await?;
+    let mut planned = GroupPlan::default();
+    let mut seen = HashSet::new();
+    for group in groups {
+        let group_plan = plan_group(
+            client,
+            &registry,
+            &group.spec,
+            &group.entities,
+            WindowOverride::FromSpec,
+            None,
+            concurrency,
+            now,
+        )
+        .await?;
+        planned.queried |= group_plan.queried;
+        planned.probe_failed |= group_plan.probe_failed;
+        planned.warnings.extend(group_plan.warnings);
+        for entity in group_plan.entities {
+            if seen.insert(entity.clone()) {
+                planned.entities.push(entity);
+            }
+        }
+        for (entity, status) in group_plan.preset {
+            planned.preset.entry(entity).or_insert(status);
+        }
+        planned.work.extend(group_plan.work);
+    }
+    reject_mixed_intervals(&planned.work)?;
+    if !planned.queried && !planned.probe_failed {
+        return Err(PerfError::NoSupportedEntities);
+    }
+    finish(
+        client,
+        &registry,
+        planned,
+        chunk_size,
+        concurrency,
+        choose_batch_format(format),
+        now,
+    )
+    .await
+}
+
+fn spec_has_selector(spec: &QuerySpec) -> Result<(), PerfError> {
     let available_mode = spec.all_available
         || (spec.metrics.is_empty() && spec.names.is_empty() && !spec.groups.is_empty());
     if !available_mode && spec.metrics.is_empty() && spec.names.is_empty() {
         return Err(PerfError::NoMetrics);
     }
+    Ok(())
+}
+
+struct GroupPlan {
+    entities: Vec<ManagedObjectReference>,
+    work: Vec<EntityWork>,
+    preset: IndexMap<ManagedObjectReference, EntityStatus>,
+    warnings: Vec<PerfWarning>,
+    queried: bool,
+    probe_failed: bool,
+}
+
+impl Default for GroupPlan {
+    fn default() -> Self {
+        Self {
+            entities: Vec::new(),
+            work: Vec::new(),
+            preset: IndexMap::new(),
+            warnings: Vec::new(),
+            queried: false,
+            probe_failed: false,
+        }
+    }
+}
+
+async fn plan_group(
+    client: &PerfClient,
+    registry: &Arc<CounterRegistry>,
+    spec: &QuerySpec,
+    entities: &[ManagedObjectReference],
+    window: WindowOverride,
+    cache: Option<&Mutex<Option<CachedResolve>>>,
+    concurrency: usize,
+    now: SystemTime,
+) -> Result<GroupPlan, PerfError> {
+    let entities = dedupe_entities(entities);
+    let entities = entities.as_slice();
+    spec_has_selector(spec)?;
+    let available_mode = spec.all_available
+        || (spec.metrics.is_empty() && spec.names.is_empty() && !spec.groups.is_empty());
     let (shared_resolved, shared_ids, cached_warnings) = if available_mode {
         (Arc::from([]), Arc::from([]), Arc::from([]))
     } else {
-        resolve_explicit(spec, &registry, cache)?
+        resolve_explicit(spec, registry, cache)?
     };
     let mut warnings: Vec<PerfWarning> = cached_warnings.to_vec();
-    note_ignored_selectors(spec, &registry, &mut warnings);
+    note_ignored_selectors(spec, registry, &mut warnings);
     let probe = client.probe(entities).await?;
     let mut cases = Vec::new();
     for entity in entities {
@@ -955,19 +1375,15 @@ pub(crate) async fn execute(
         spec.latest,
         now,
     )?;
-    let any_query = planned
+    let queried = planned
         .iter()
         .any(|item| matches!(item.decision, EntityDecision::Query(_)));
-    if !any_query && probe.failed.is_empty() {
-        return Err(PerfError::NoSupportedEntities);
-    }
     for item in &planned {
         if let EntityDecision::Query(query) = &item.decision {
             warnings.extend(query.warnings.clone());
         }
     }
 
-    let format = choose_format(spec.format, client.transport(), spec.latest);
     let mut available = if available_mode {
         let jobs = planned
             .iter()
@@ -976,7 +1392,7 @@ pub(crate) async fn execute(
                 EntityDecision::Unsupported(_) => None,
             })
             .collect();
-        fetch_available(client, jobs, spec.concurrency).await?
+        fetch_available(client, jobs, concurrency).await?
     } else {
         HashMap::new()
     };
@@ -1010,7 +1426,7 @@ pub(crate) async fn execute(
                             continue;
                         }
                         Ok(Some(ids)) => {
-                            let ids = filter_groups(&registry, ids, &spec.groups);
+                            let ids = filter_groups(registry, ids, &spec.groups);
                             if ids.is_empty() {
                                 preset_status
                                     .insert(item.entity.clone(), EntityStatus::NoMetricsAvailable);
@@ -1036,65 +1452,94 @@ pub(crate) async fn execute(
                     wire_ids,
                     resolved,
                     query: query.clone_bounds(open),
+                    time_chunk: spec.time_chunk,
                 });
             }
         }
     }
     dedup_warnings(&mut warnings);
-    if work.is_empty() {
+    Ok(GroupPlan {
+        entities: entities.to_vec(),
+        work,
+        preset: preset_status,
+        warnings,
+        queried,
+        probe_failed: !probe.failed.is_empty(),
+    })
+}
+
+async fn finish(
+    client: &PerfClient,
+    registry: &Arc<CounterRegistry>,
+    mut planned: GroupPlan,
+    chunk_size: usize,
+    concurrency: usize,
+    format: &str,
+    now: SystemTime,
+) -> Result<PerfResult, PerfError> {
+    for item in &planned.work {
+        planned.preset.shift_remove(&item.entity);
+    }
+    let mut warnings = planned.warnings;
+    if planned.work.is_empty() {
+        dedup_warnings(&mut warnings);
         return Ok(assemble(
-            entities,
-            preset_status,
+            &planned.entities,
+            planned.preset,
             IndexMap::new(),
-            &registry,
+            registry,
             now,
             warnings,
         ));
     }
-    let chunks = pack_work(&work, spec.chunk_size, spec.time_chunk, format);
-    let fetched = run_chunks(client, chunks, spec.concurrency).await?;
+    let chunks = pack_work(&planned.work, chunk_size, format);
+    let fetched = run_chunks(client, chunks, concurrency).await?;
     let mut series_by_entity = IndexMap::new();
     let mut payloads = fetched.payloads;
-    for entity_work in &work {
-        if !fetched.succeeded.contains(&entity_work.entity) {
+    // One object can have work from several batch groups. Group it once.
+    let mut work_by_entity: IndexMap<&ManagedObjectReference, Vec<&EntityWork>> = IndexMap::new();
+    for item in &planned.work {
+        work_by_entity.entry(&item.entity).or_default().push(item);
+    }
+    for (entity, items) in work_by_entity {
+        if !fetched.succeeded.contains(entity) {
             continue;
         }
-        let raw = payloads
-            .shift_remove(&entity_work.entity)
-            .unwrap_or_default();
+        let raw = payloads.shift_remove(entity).unwrap_or_default();
         if raw.is_empty() {
-            series_by_entity.insert(entity_work.entity.clone(), None);
+            series_by_entity.insert(entity.clone(), None);
             continue;
         }
         let decoded = decode_metrics(
             raw,
-            &registry,
-            std::slice::from_ref(&entity_work.entity),
-            Some(entity_work.query.interval_id),
+            registry,
+            std::slice::from_ref(entity),
+            Some(items[0].query.interval_id),
             now,
         );
         let mut decoded = match decoded {
             Ok(decoded) => decoded,
             Err(err) if is_fatal_perf(&err) => return Err(err),
             Err(err) => {
-                preset_status.insert(
-                    entity_work.entity.clone(),
-                    EntityStatus::Failed(Arc::new(err)),
-                );
+                planned
+                    .preset
+                    .insert(entity.clone(), EntityStatus::Failed(Arc::new(err)));
                 continue;
             }
         };
         warnings.extend(std::mem::take(&mut decoded.warnings));
         let mut series = decoded.into_entities().next();
         if let Some(series) = series.as_mut() {
-            if let Some(n) = entity_work.query.truncate_newest {
+            if let Some(n) = agreed_truncate(&items) {
                 truncate_newest(series, n);
             }
-            if let Some(metrics) = &entity_work.resolved {
-                scope_warnings(series, metrics, &mut warnings);
+            for item in &items {
+                if let Some(metrics) = &item.resolved {
+                    scope_warnings(series, metrics, &mut warnings);
+                }
             }
         }
-        series_by_entity.insert(entity_work.entity.clone(), series);
+        series_by_entity.insert(entity.clone(), series);
     }
     for (entity, err) in fetched.failed {
         if fetched.succeeded.contains(&entity) {
@@ -1103,18 +1548,47 @@ pub(crate) async fn execute(
                 message: err.to_string(),
             });
         } else {
-            preset_status.insert(entity, EntityStatus::Failed(err));
+            planned.preset.insert(entity, EntityStatus::Failed(err));
         }
     }
     dedup_warnings(&mut warnings);
     Ok(assemble(
-        entities,
-        preset_status,
+        &planned.entities,
+        planned.preset,
         series_by_entity,
-        &registry,
+        registry,
         now,
         warnings,
     ))
+}
+
+/// One object in several batch groups must resolve to one period. Its samples share
+/// one grid and one `interval_secs`, so a second period cannot be represented.
+fn reject_mixed_intervals(work: &[EntityWork]) -> Result<(), PerfError> {
+    let mut period: HashMap<&ManagedObjectReference, i32> = HashMap::new();
+    for item in work {
+        let first = *period.entry(&item.entity).or_insert(item.query.interval_id);
+        if first != item.query.interval_id {
+            return Err(PerfError::MixedIntervals {
+                entity: item.entity.clone(),
+                first_secs: first,
+                second_secs: item.query.interval_id,
+            });
+        }
+    }
+    Ok(())
+}
+
+/// `latest` applies to a shared object only when every group agrees.
+fn agreed_truncate(items: &[&EntityWork]) -> Option<usize> {
+    let mut limit = None;
+    for item in items {
+        match item.query.truncate_newest {
+            Some(n) if limit.is_none() || limit == Some(n) => limit = Some(n),
+            _ => return None,
+        }
+    }
+    limit
 }
 
 async fn fetch_available(
@@ -1194,6 +1668,7 @@ struct EntityWork {
     wire_ids: Arc<[PerfMetricId]>,
     resolved: Option<Arc<[ResolvedMetric]>>,
     query: PlannedQuery,
+    time_chunk: Option<Duration>,
 }
 
 impl PlannedQuery {
@@ -1469,6 +1944,15 @@ fn scope_warnings(
     }
 }
 
+/// [`WireFormat::Auto`] is CSV. Groups in one batch may disagree on `latest(1)`,
+/// which is the only case where [`choose_format`] would send normal JSON.
+fn choose_batch_format(format: WireFormat) -> &'static str {
+    match format {
+        WireFormat::Normal => PerfFormatEnum::Normal.as_str(),
+        WireFormat::Csv | WireFormat::Auto => PerfFormatEnum::Csv.as_str(),
+    }
+}
+
 fn choose_format(format: WireFormat, transport: Transport, latest: Option<i32>) -> &'static str {
     match format {
         WireFormat::Normal => PerfFormatEnum::Normal.as_str(),
@@ -1493,15 +1977,10 @@ struct Chunk {
     members: Vec<ManagedObjectReference>,
 }
 
-fn pack_work(
-    work: &[EntityWork],
-    chunk_size: usize,
-    time_chunk: Option<Duration>,
-    format: &str,
-) -> Vec<Chunk> {
+fn pack_work(work: &[EntityWork], chunk_size: usize, format: &str) -> Vec<Chunk> {
     let mut slices = Vec::new();
     for item in work {
-        for (start, end) in slices_for(&item.query, time_chunk) {
+        for (start, end) in slices_for(&item.query, item.time_chunk) {
             slices.push(SliceWork {
                 entity: item.entity.clone(),
                 wire_ids: Arc::clone(&item.wire_ids),
@@ -1673,13 +2152,24 @@ async fn run_chunks(
     };
     let mut chunk_errors: Vec<(usize, Arc<PerfError>)> = Vec::new();
     for (index, chunk_members, result) in pending {
+        // A payload of an unknown subtype has no object to file it under. It fails
+        // the chunk as a parse error.
+        let result = result.and_then(|payload| {
+            payload
+                .unwrap_or_default()
+                .into_iter()
+                .map(|sample| match decode::entity_of(sample.as_ref()) {
+                    Some(entity) => Ok((entity.clone(), sample)),
+                    None => Err(client::Error::ParseError(decode::UNKNOWN_PAYLOAD.into())),
+                })
+                .collect::<Result<Vec<_>, _>>()
+        });
         match result {
-            Ok(payload) => {
+            Ok(samples) => {
                 for member in &chunk_members {
                     gather.succeeded.insert(member.clone());
                 }
-                for sample in payload.unwrap_or_default() {
-                    let entity = entity_of(&sample);
+                for (entity, sample) in samples {
                     gather.payloads.entry(entity).or_default().push(sample);
                 }
             }
@@ -1702,28 +2192,6 @@ async fn run_chunks(
     Ok(gather)
 }
 
-fn entity_of(sample: &Box<dyn PerfEntityMetricBaseTrait>) -> ManagedObjectReference {
-    use crate::types::structs::{PerfEntityMetric, PerfEntityMetricCsv};
-    if let Some(metric) = sample
-        .as_ref()
-        .as_any_ref()
-        .downcast_ref::<PerfEntityMetric>()
-    {
-        return metric.entity.clone();
-    }
-    if let Some(metric) = sample
-        .as_ref()
-        .as_any_ref()
-        .downcast_ref::<PerfEntityMetricCsv>()
-    {
-        return metric.entity.clone();
-    }
-    ManagedObjectReference {
-        r#type: MoTypesEnum::VirtualMachine,
-        value: String::new(),
-    }
-}
-
 fn assemble(
     requested: &[ManagedObjectReference],
     preset: IndexMap<ManagedObjectReference, EntityStatus>,
@@ -1734,24 +2202,7 @@ fn assemble(
 ) -> PerfResult {
     let mut entities = IndexMap::new();
     for entity in requested {
-        let decoded = series.shift_remove(entity);
-        if decoded.is_none() {
-            if let Some(status) = preset.get(entity) {
-                entities.insert(
-                    entity.clone(),
-                    EntitySeries::new(
-                        entity.clone(),
-                        status.clone(),
-                        Arc::from([]),
-                        0,
-                        Vec::new(),
-                        Arc::clone(registry),
-                    ),
-                );
-                continue;
-            }
-        }
-        match decoded {
+        match series.shift_remove(entity) {
             Some(Some(decoded)) => {
                 entities.insert(entity.clone(), decoded);
             }
@@ -1846,9 +2297,22 @@ async fn execute_composite(
         query.interval_id,
         &mut warnings,
     );
+    // `max_sample` is invalid on QueryPerfComposite. Realtime latest-N without a window
+    // bounds the start instead, so the server does not return the whole retained hour.
+    // The floor keeps a few minutes of slack for skew between the local and server clocks.
+    let start = match (query.start, spec.latest.filter(|n| *n > 0)) {
+        (None, Some(n)) if query.realtime => {
+            let cushion = (n as u64)
+                .saturating_add(2)
+                .saturating_mul(query.interval_id.max(0) as u64)
+                .max(COMPOSITE_MIN_CUSHION_SECS);
+            Some(sub_duration(now, Duration::from_secs(cushion)))
+        }
+        (start, _) => start,
+    };
     let spec_wire = PerfQuerySpec {
         entity: host.clone(),
-        start_time: query.start.map(|ts| Timestamp(ts).to_rfc3339_utc()),
+        start_time: start.map(|ts| Timestamp(ts).to_rfc3339_utc()),
         end_time: query.end.map(|ts| Timestamp(ts).to_rfc3339_utc()),
         max_sample: None,
         metric_id: Some(owned_metric_ids(&metrics)),

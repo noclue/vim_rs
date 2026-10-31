@@ -41,6 +41,7 @@ Optional / example-specific:
 | `VM_INVENTORY_PATH` | `vm_ip`, `vm_rename`, `vm_toggle_wol` — inventory path to a VM |
 | `NEW_VM_NAME` | `vm_rename` — new display name |
 | `MO_REF` | `inventory_path`, `vm_disabled_method_len` — managed object as `Type:id` (only the first `:` separates type from id; e.g. `VirtualMachine:vm-42`) |
+| `PERF_TICKS` | `perf_export`, `perf_vm_usage` — number of realtime ticks (default 3) |
 
 A `.env` file in the working directory is loaded automatically by the shared `snippets::connect` helper when present.
 
@@ -54,7 +55,12 @@ A `.env` file in the working directory is loaded automatically by the shared `sn
 | `inventory_path` | Resolve inventory path from `MO_REF`. Uses **One** `RetrievePropertiesEx` (govmomi `mo.Ancestors` shape). Prints path to stdout. |
 | `vm_disabled_method_len` | Generated `VirtualMachine::disabled_method` for `MO_REF`: single-property fetch without PropertyCollector; **JSON** or **SOAP** (`VIM_PROTOCOL`). |
 | `mac_monitor` | `WaitForUpdates`-style cache: track VM NIC MACs and guest IPs (~30s demo). |
-| `perf_metrics` | `vim_rs::perf`: container view of VMs, latest realtime sample of every available counter. |
+| `perf_batch` | One `QueryPerf` batch: virtual-machine CPU and host memory, each kind in its own typed group. |
+| `perf_export` | Incremental realtime VM export with a per-entity watermark. Refreshes inventory every other tick. |
+| `perf_historical` | Past-day 5-minute `cpu.usage.average` and `mem.consumed.average` for every VM, printed as CSV rows. |
+| `perf_host_disks` | Latest realtime throughput, IOPS, and latency for every disk on every host. |
+| `perf_memory` | `QueryPerfComposite` per host: host memory plus the virtual machines on that host. |
+| `perf_metrics` | `vim_rs::perf`: `vim_retrievable!` list of VMs, latest realtime sample of every available counter. |
 | `perf_metrics_manual` | The same walk written against `PerformanceManager` directly (counter map, per-VM provider summary, downcasts). Compare with `perf_metrics`. |
 | `perf_vm_usage` | Typed query of `cpu.usage.average` and `mem.consumed.average` for every VM in a container view. Prints a 15-character column table. |
 | `print_vm_addresses` | All VMs: guest net vs hardware NICs (`vim_retrievable!`). |

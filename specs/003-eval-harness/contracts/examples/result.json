@@ -1,0 +1,15 @@
+{
+  "problem": "pc01_vm_power_and_host",
+  "arm": "A",
+  "repeat": 1,
+  "compiled": true,
+  "retrieval_pass": true,
+  "failure_class": null,
+  "tamper": false,
+  "turns": 12,
+  "tool_calls": 8,
+  "vim_rs_tool_calls": null,
+  "tokens_in": 4500,
+  "tokens_out": 900,
+  "wall_s": 45.2
+}

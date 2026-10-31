@@ -1,0 +1,18 @@
+id: pc02_vm_name_num_cpu
+pillar: propcollector
+mo_type: VirtualMachine
+goal: |
+  For each virtual machine, retrieve its inventory name and configured
+  number of virtual CPUs.
+contract: |
+  vim_retrievable!(struct Target: VirtualMachine {
+      name = "<path>",
+      num_cpu = "<path>",
+  });
+fixtures:
+  - file: pc02_a.json
+    expected: '[{"name":"app-tier-7","num_cpu":8}]'
+  - file: pc02_b.json
+    expected: '[{"name":"cache-01","num_cpu":4},{"name":"cache-02","num_cpu":16}]'
+notes: |
+  Verified paths: name, config.hardware.num_cpu -> config.hardware.numCPU

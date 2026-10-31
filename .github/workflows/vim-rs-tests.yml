@@ -29,6 +29,10 @@ jobs:
             features: ""
           - label: xml
             features: "--features xml"
+          - label: perf
+            features: "--features perf,perf-chrono,perf-polars"
+          - label: perf-xml
+            features: "--features perf,xml"
     steps:
       - uses: actions/checkout@v4
 

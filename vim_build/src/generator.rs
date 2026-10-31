@@ -50,7 +50,8 @@ pub fn emit_vim_bindings(vi_json_spec_path: &Path, root_folder: &Path, pruned_ty
     generate_field_data(&vim_model, &*root_folder.join("mcp/server/src/field_data.rs"))?;
     let catalog = vi_json_spec_path.with_file_name("perf-catalog.json");
     let metrics = root_folder.join("vim_rs/src/perf/metrics.rs");
-    crate::perf_metrics::emit_perf_metrics(&catalog, &metrics)?;
+    let esxi_catalog = vi_json_spec_path.with_file_name("esxi-perf-catalog.json");
+    crate::perf_metrics::emit_perf_metrics(&catalog, &esxi_catalog, &metrics)?;
     Ok(())
 }
 

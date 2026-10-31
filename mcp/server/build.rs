@@ -149,8 +149,10 @@ fn find_rust_sources_recursive(dir: &Path, sources: &mut Vec<PathBuf>) {
         let file_name = path.file_name().and_then(|n| n.to_str()).unwrap_or("");
 
         // Skip build artifacts and hidden directories
-        if file_name == "target" 
+        if file_name == "target"
             || file_name == ".git"
+            || file_name == "perf-catalog"
+            || file_name == "vtui"
             || file_name.starts_with('.')
             || file_name == "Cargo.lock"
         {

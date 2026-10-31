@@ -1,0 +1,1 @@
+{"_typeName":"RetrieveResult","objects":[{"_typeName":"ObjectContent","obj":{"_typeName":"ManagedObjectReference","type":"VirtualMachine","value":"vm-201"},"propSet":[{"_typeName":"DynamicProperty","name":"name","val":{"_typeName":"string","_value":"app-tier-7"}},{"_typeName":"DynamicProperty","name":"config.hardware.numCPU","val":{"_typeName":"int","_value":8}}]}]}

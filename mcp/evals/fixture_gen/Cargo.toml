@@ -1,0 +1,17 @@
+[package]
+name = "fixture_gen"
+version = "0.1.0"
+edition = "2021"
+publish = false
+
+# Host-only oracle writer. Not part of the agent scaffold, so it is never
+# copied into the eval image or a run's work tree.
+[workspace]
+
+[[bin]]
+name = "fixture_gen"
+path = "src/main.rs"
+
+[dependencies]
+vim_rs = "0.5.0"
+miniserde = "0.1"

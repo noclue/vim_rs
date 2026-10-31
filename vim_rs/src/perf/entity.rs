@@ -79,6 +79,8 @@ pub type VmOnly = Scope<true, false, false, false, false, false>;
 pub type HostOnly = Scope<false, true, false, false, false, false>;
 /// Virtual machine or host.
 pub type VmOrHost = Scope<true, true, false, false, false, false>;
+/// Cluster only.
+pub type ClusterOnly = Scope<false, false, true, false, false, false>;
 /// Host or cluster.
 pub type HostCluster = Scope<false, true, true, false, false, false>;
 /// Virtual machine, host, or cluster.

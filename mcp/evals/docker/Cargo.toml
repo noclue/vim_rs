@@ -1,0 +1,5 @@
+# Minimal workspace for eval Containerfile — builds vim_mcp_server only.
+# Full mcp/Cargo.toml lists data_processing members that require vim_build at repo root.
+[workspace]
+members = ["server"]
+resolver = "2"

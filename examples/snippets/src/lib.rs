@@ -28,7 +28,12 @@ pub async fn connect(app_name: &str, app_version: &str) -> Result<Arc<Client>> {
         "auto" => TransportMode::Auto,
         "json" => TransportMode::Json,
         "soap" => TransportMode::Soap,
-        _ => return Err(anyhow::anyhow!("Invalid protocol: {}. Valid values are 'auto', 'json', or 'soap'. Default is 'auto'.", protocol)),
+        _ => {
+            return Err(anyhow::anyhow!(
+                "Invalid protocol: {}. Valid values are 'auto', 'json', or 'soap'. Default is 'auto'.",
+                protocol
+            ));
+        }
     };
 
     let client = ClientBuilder::new(vc_server.as_str())

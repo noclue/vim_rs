@@ -1,0 +1,21 @@
+id: pf02_vm_electricity_turn_query
+pillar: performance
+mo_type: VirtualMachine
+goal: |
+  Build one performance query for these virtual machines. Include how much
+  electricity this virtual machine is using, and how long it sits waiting
+  for a turn on the processor even though the processor chart is not full.
+  Sample every 5 minutes across the past day.
+contract: |
+  async fn solve(client: PerfClient, vm_ids: &[&str]) -> PerfQuery
+  Interval::PAST_DAY. A typed metric or a group.name.rollup string are both
+  fine. Return the query. Do not fetch it.
+fixtures:
+  - file: pf02_a.json
+    expected: '{"counters":[12,164],"entities":["vm-1"],"interval":300,"window_secs":86400}'
+  - file: pf02_b.json
+    expected: '{"counters":[12,164],"entities":["vm-2","vm-9"],"interval":300,"window_secs":86400}'
+notes: |
+  Wire counters are power.power.average (164) and cpu.ready.summation (12).
+  The prompt avoids those names. Nearby decoys in the mock catalog are
+  cpu.usage.average (2) and cpu.readiness.average (453).

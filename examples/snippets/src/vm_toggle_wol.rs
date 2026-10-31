@@ -114,17 +114,15 @@
 
 use anyhow::{Context, Result};
 use log::info;
-use vim_rs::types::convert::CastInto as _;
-use std::env;
 use snippets::connect;
-use vim_rs::vim_retrievable;
+use std::env;
 use vim_rs::core::tasks::TaskTracker;
 use vim_rs::mo::{SearchIndex, VirtualMachine};
+use vim_rs::types::convert::CastInto as _;
 use vim_rs::types::enums::VirtualDeviceConfigSpecOperationEnum;
-use vim_rs::types::structs::{
-    VirtualDeviceConfigSpec, VirtualMachineConfigSpec,
-};
+use vim_rs::types::structs::{VirtualDeviceConfigSpec, VirtualMachineConfigSpec};
 use vim_rs::types::traits::{VirtualDeviceTrait, VirtualEthernetCardTrait};
+use vim_rs::vim_retrievable;
 
 vim_retrievable!(
     struct Vm: VirtualMachine {
@@ -132,8 +130,6 @@ vim_retrievable!(
         devices = "config.hardware.device",
     }
 );
-
-
 
 async fn toggle_wol() -> Result<()> {
     // Connect to vCenter
@@ -189,7 +185,7 @@ async fn toggle_wol() -> Result<()> {
 
     // Drain the devices vector to take ownership of each device
     for device in devices.drain(..) {
-        let Ok(mut eth) : Result<Box<dyn VirtualEthernetCardTrait>,_> = device.into_box() else{
+        let Ok(mut eth): Result<Box<dyn VirtualEthernetCardTrait>, _> = device.into_box() else {
             continue;
         };
 
@@ -200,9 +196,15 @@ async fn toggle_wol() -> Result<()> {
 
         let type_: &'static str = device.data_type().into();
         if current_wol {
-            info!("Wake-on-LAN will be disabled for the {} adapter with key {}", type_, device.key);
+            info!(
+                "Wake-on-LAN will be disabled for the {} adapter with key {}",
+                type_, device.key
+            );
         } else {
-            info!("Wake-on-LAN will be enabled for the {} adapter with key {}", type_, device.key);
+            info!(
+                "Wake-on-LAN will be enabled for the {} adapter with key {}",
+                type_, device.key
+            );
         }
 
         device_changes.push(VirtualDeviceConfigSpec {
@@ -252,7 +254,6 @@ async fn toggle_wol() -> Result<()> {
     client.close().await?;
     Ok(())
 }
-
 
 #[tokio::main]
 async fn main() -> Result<()> {

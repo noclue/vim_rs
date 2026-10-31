@@ -1,0 +1,55 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/noclue/vim_rs/specs/003-eval-harness/contracts/problem.schema.json",
+  "title": "EvalProblem",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["id", "pillar", "goal", "contract", "fixtures"],
+  "properties": {
+    "id": {
+      "type": "string",
+      "pattern": "^pc[0-9]{2}_[a-z0-9_]+$"
+    },
+    "pillar": {
+      "type": "string",
+      "const": "propcollector"
+    },
+    "goal": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Natural language task; must not reveal correct VIM path spellings."
+    },
+    "contract": {
+      "type": "string",
+      "minLength": 1,
+      "description": "Pinned vim_retrievable! stub with path placeholders only."
+    },
+    "fixtures": {
+      "type": "array",
+      "minItems": 2,
+      "items": {
+        "type": "object",
+        "additionalProperties": false,
+        "required": ["file", "expected"],
+        "properties": {
+          "file": {
+            "type": "string",
+            "description": "Path relative to mcp/evals/fixtures/"
+          },
+          "expected": {
+            "type": "array",
+            "minItems": 1,
+            "items": {
+              "type": "object",
+              "description": "One retrieved object extract; keys match contract field names."
+            }
+          }
+        }
+      }
+    },
+    "notes": {
+      "type": "string",
+      "description": "Grader-only; verified correct paths. Never copied into agent workspace."
+    }
+  }
+}

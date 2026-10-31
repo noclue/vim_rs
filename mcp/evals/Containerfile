@@ -1,0 +1,89 @@
+# Eval harness image: warmed vim_rs, Goose CLI, MCP server (Arm B).
+#
+# Build from repo root:
+#   podman build -t vim-rs-eval -f mcp/evals/Containerfile .
+#
+# If the linker is killed (signal 9 / OOM), raise Podman VM memory first, e.g.:
+#   podman machine stop && podman machine set --memory 8192 && podman machine start
+#
+# Prerequisites (host):
+#   - mcp/data/api_database.bin (cargo run -p data-transformer --release from mcp/)
+#   - Recommended: mcp/data/model_cache/ so Arm B `search` works offline
+
+ARG RUST_VERSION=1.95
+# Pin a real release tag from https://github.com/aaif-goose/goose/releases
+ARG GOOSE_VERSION=v1.45.0
+
+# --- MCP server (Linux binary for Arm B) ---
+FROM docker.io/library/rust:${RUST_VERSION} AS mcp_build
+WORKDIR /src/mcp
+
+# Cap parallelism to reduce peak RAM during compile/link
+ENV CARGO_BUILD_JOBS=1
+
+# Minimal workspace (server only — no data_processing / vim_build deps)
+COPY mcp/evals/docker/Cargo.toml ./Cargo.toml
+COPY mcp/server ./server
+COPY mcp/api_database ./api_database
+COPY mcp/data ./data
+
+# Stdio MCP without compile-time model embedding (avoids OOM linking the build
+# script's fastembed stack). Runtime loads from VIM_MCP_MODEL_CACHE.
+# Skip web UI for a smaller eval image.
+RUN cargo build --release -p vim_mcp_server --no-default-features
+
+# --- Eval runtime image ---
+FROM docker.io/library/rust:${RUST_VERSION}
+ARG GOOSE_VERSION
+
+# The target dir stays outside /work: the runner mounts the sealed tree over
+# /work, which would hide /work/target and force every agent run to recompile
+# vim_rs. Job count is capped only for this warm build, not for later agent
+# compiles.
+ENV CARGO_TARGET_DIR=/opt/eval-target
+
+# Scaffold path-depends on the in-tree crate (`../../../vim_rs` from `/work`,
+# which stays at `/vim_rs` because `..` does not climb past the filesystem root).
+# `vim_rs` itself path-depends on `../vim_macros`.
+COPY vim_macros /vim_macros
+COPY vim_rs /vim_rs
+
+COPY --from=mcp_build /src/mcp/target/release/vim_mcp_server /opt/vim_mcp_server
+# Model cache for Arm B semantic search (host copy; empty dir is ok if unused)
+COPY mcp/data/model_cache /opt/vim_mcp_model_cache
+
+# Scaffold only. Problems, fixtures, and reference solutions stay on the host
+# and are never copied into the image. The agent can read the container
+# filesystem, so those files must not be on it.
+COPY mcp/evals/scaffold /eval/scaffold-canonical
+
+RUN cp -r /eval/scaffold-canonical /work
+
+WORKDIR /work
+RUN CARGO_BUILD_JOBS=1 cargo fetch && CARGO_BUILD_JOBS=1 cargo build --bin eval_scaffold
+
+# Goose CLI — fail the build if download/install fails (do not swallow 404s)
+# Archive members are `./goose` (not bare `goose`), so extract the whole tarball.
+RUN set -eux; \
+    arch="$(uname -m)"; \
+    case "$arch" in \
+      aarch64|arm64) arch=aarch64 ;; \
+      x86_64|amd64) arch=x86_64 ;; \
+      *) echo "unsupported arch: $arch"; exit 1 ;; \
+    esac; \
+    url="https://github.com/aaif-goose/goose/releases/download/${GOOSE_VERSION}/goose-${arch}-unknown-linux-gnu.tar.gz"; \
+    curl -fsSL "$url" -o /tmp/goose.tgz; \
+    tar -xzf /tmp/goose.tgz -C /usr/local/bin; \
+    chmod +x /usr/local/bin/goose; \
+    rm -f /tmp/goose.tgz; \
+    command -v goose; \
+    goose --version; \
+    goose run --help | grep -E 'output-format|no-session'
+
+ENV GOOSE_MODE=auto \
+    GOOSE_DISABLE_SESSION_NAMING=true \
+    GOOSE_MAX_TURNS=40 \
+    CARGO_NET_OFFLINE=true \
+    VIM_MCP_MODEL_CACHE=/opt/vim_mcp_model_cache
+
+WORKDIR /work

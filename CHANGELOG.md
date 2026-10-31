@@ -26,6 +26,8 @@ The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.1.0/).
 ### Added
 
 - `vim_rs::perf` for 0.7.0: named, unit-scaled `PerformanceManager` queries (`PerfClient`, prepared and composite queries, generated counter constants). The module is behind the `perf` feature, off by default, so a normal build does not compile it and gains no required dependencies. `perf-chrono` and `perf-polars` enable `perf` and stay off by default. Polars is pinned to the 0.55 minor and is outside the `vim_rs` semver.
+- Public read-only `vim_build::perf_metrics::plan_counters`, `PlanTier`, and `PlannedCounter`. The metrics emitter calls this planner. `vim_build` is linked from the data pipeline only. It is not linked into `vim_mcp_server`.
+- Generated counter constants carry the catalog description and an availability marker (`· vCenter and ESX` or `· vCenter only`). Constant names, types, and `by_entity` re-exports are unchanged. Look up counters in `vim_rs/src/perf/metrics.rs`; they are not in the MCP vector index.
 
 ## [0.6.1] - 2026-10-17
 

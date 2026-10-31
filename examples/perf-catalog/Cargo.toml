@@ -16,6 +16,10 @@ path = "src/bin/dump.rs"
 name = "perf-catalog-probe"
 path = "src/bin/probe.rs"
 
+[[bin]]
+name = "perf-catalog-compute-resource"
+path = "src/bin/compute_resource.rs"
+
 [dependencies]
 anyhow = "1.0"
 chrono = { version = "0.4", default-features = false, features = ["clock", "std"] }

@@ -296,7 +296,10 @@ impl CounterRegistry {
         let stats_lower = raw.stats.to_ascii_lowercase();
         self.by_id.insert(def.id, Arc::clone(&def));
         let qualified: Arc<str> = format!("{}\0{stats_lower}", def.name.full).into();
-        self.by_qualified.insert(qualified, Arc::clone(&def));
+        // A server that lists one name and stats kind twice keeps the first, as the bare lookup does.
+        self.by_qualified
+            .entry(qualified)
+            .or_insert_with(|| Arc::clone(&def));
         prefer_rate(&mut self.by_full_str, &mut self.ambiguous, def);
     }
 }
@@ -333,6 +336,8 @@ fn prefer_rate(
             map.insert(full, def);
         }
         Some(existing) if existing.stats.as_str() == "rate" => {}
+        // Same name and stats kind listed twice is not a stats-kind ambiguity.
+        Some(existing) if existing.stats == def.stats => {}
         Some(_) if def.stats.as_str() == "rate" => {
             map.insert(full, def);
         }

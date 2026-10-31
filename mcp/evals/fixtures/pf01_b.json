@@ -1,0 +1,20 @@
+{
+  "objects": [
+    {"obj": {"type": "VirtualMachine", "value": "vm-2"}},
+    {"obj": {"type": "VirtualMachine", "value": "vm-9"}}
+  ],
+  "perf": {
+    "providers": {
+      "VirtualMachine": {"current_supported": true, "summary_supported": true, "refresh_rate": 20}
+    },
+    "intervals": [
+      {"key": 1, "sampling_period": 300, "name": "Past day", "length": 86400, "level": 4, "enabled": true}
+    ],
+    "samples": [
+      {"entity": "vm-2", "counter": "mem.vmmemctl.average", "instance": "", "offset_secs": 300, "raw": 100},
+      {"entity": "vm-2", "counter": "cpu.costop.summation", "instance": "", "offset_secs": 300, "raw": 8},
+      {"entity": "vm-9", "counter": "mem.vmmemctl.average", "instance": "", "offset_secs": 300, "raw": 1},
+      {"entity": "vm-9", "counter": "cpu.costop.summation", "instance": "", "offset_secs": 300, "raw": 1}
+    ]
+  }
+}

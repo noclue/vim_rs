@@ -65,6 +65,39 @@ fn uneven() -> vim_rs::perf::PerfResult {
     decode_metrics(raw, &registry(), &[], None, UNIX_EPOCH).unwrap()
 }
 
+/// A later poll where `cpu.usage` (counter 2) is gone and only counter 6 reports.
+fn only_usagemhz() -> vim_rs::perf::PerfResult {
+    let json = r#"[
+        {
+            "_typeName": "PerfEntityMetric",
+            "entity": {"_typeName": "ManagedObjectReference", "type": "VirtualMachine", "value": "vm-1"},
+            "sampleInfo": [
+                {"_typeName": "PerfSampleInfo", "timestamp": "2026-10-24T10:00:40Z", "interval": 20}
+            ],
+            "value": [
+                {"_typeName": "PerfMetricIntSeries", "id": {"_typeName": "PerfMetricId", "counterId": 6, "instance": ""}, "value": [11]}
+            ]
+        }
+    ]"#;
+    let raw: Vec<Box<dyn PerfEntityMetricBaseTrait>> =
+        unmarshal_array(Transport::Json, json.as_bytes()).unwrap();
+    decode_metrics(raw, &registry(), &[], None, UNIX_EPOCH).unwrap()
+}
+
+#[test]
+fn series_that_stops_reporting_does_not_pin_high_water() {
+    let mut marks = SampleWatermark::new();
+    let first = uneven();
+    marks.filter_new(&first).for_each(drop);
+    let stale = marks.entity_high_water(&vm("vm-1")).unwrap();
+
+    let second = only_usagemhz();
+    assert_eq!(marks.filter_new(&second).count(), 1);
+    let advanced = marks.entity_high_water(&vm("vm-1")).unwrap();
+    assert!(advanced > stale);
+    assert_eq!(advanced, second.rows().next().unwrap().ts);
+}
+
 #[test]
 fn rows_and_filter_new_skip_gaps_and_marks_update_eagerly() {
     let result = uneven();

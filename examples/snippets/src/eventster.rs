@@ -25,9 +25,9 @@
 use anyhow::{Error, Result};
 use chrono::{Duration as ChronoDuration, Utc};
 use log::info;
+use snippets::connect;
 use std::{env, sync::Arc};
 use tokio::time::sleep;
-use snippets::connect;
 use vim_rs::core::client::Client;
 use vim_rs::mo::EventManager;
 use vim_rs::types::struct_enum::StructType;

@@ -91,5 +91,5 @@ pub use super::engine::{
     plan_intervals, EntityDecision, IntervalCase, PlannedEntity, PlannedQuery,
 };
 pub use super::engine::{
-    CompositeQuery, PerfQuery, PreparedQuery, PreparedQueryBuilder, TypedPerfQuery,
+    CompositeQuery, PerfBatch, PerfQuery, PreparedQuery, PreparedQueryBuilder, TypedPerfQuery,
 };

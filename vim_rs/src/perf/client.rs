@@ -63,17 +63,33 @@ impl PerfClient {
         })
     }
 
-    /// One-shot query builder.
+    /// One-shot [`super::query::PerfQuery`].
+    ///
+    /// Entities are stored on the builder. [`super::query::PerfQuery::fetch`] consumes it.
     pub fn query(&self) -> super::query::PerfQuery {
         super::query::PerfQuery::new(self.clone())
     }
 
-    /// Reusable query. [`super::query::PreparedQueryBuilder::build`] does not call the server.
+    /// Reusable [`super::query::PreparedQueryBuilder`].
+    ///
+    /// [`super::query::PreparedQueryBuilder::build`] does not call the server.
+    /// Pass the objects for each tick to [`super::query::PreparedQuery::fetch`].
     pub fn prepare(&self) -> super::query::PreparedQueryBuilder {
         super::query::PreparedQueryBuilder::new(self.clone())
     }
 
-    /// Host-and-children query. The host type is checked when the query is fetched.
+    /// Several groups in one [`super::query::PerfBatch`].
+    ///
+    /// Each group supplies its own objects, counters, and interval.
+    /// [`super::query::PerfBatch::fetch`] packs them into `QueryPerf`.
+    pub fn batch(&self) -> super::query::PerfBatch {
+        super::query::PerfBatch::new(self.clone())
+    }
+
+    /// [`super::query::CompositeQuery`] for one host.
+    ///
+    /// [`super::query::CompositeQuery::fetch`] checks that `host` is a `HostSystem`
+    /// before any RPC, then returns that host and the children the server includes.
     pub fn composite(&self, host: &ManagedObjectReference) -> super::query::CompositeQuery {
         super::query::CompositeQuery::new(self.clone(), host.clone())
     }
@@ -89,11 +105,20 @@ impl PerfClient {
         Ok(registry)
     }
 
-    /// Replace the cached catalog. The new registry has a new generation.
+    /// Reload all server metadata. The new registry has a new generation.
+    ///
+    /// Also drops the cached provider capabilities and the per-object availability lists that
+    /// [`super::query::PerfQuery::groups`] and [`super::query::PerfQuery::all_available`] use.
+    /// Those lists ignore the query window and are otherwise kept for the life of the client,
+    /// so a disk or NIC added later, or counters enabled by a higher statistics level, show up
+    /// only after this call.
+    /// A long-running poller calls it on the same schedule as its inventory refresh.
     pub async fn refresh_registry(&self) -> Result<Arc<CounterRegistry>, PerfError> {
         let mut guard = self.inner.registry.lock().await;
         let registry = Arc::new(self.load_registry().await?);
         *guard = Some(Arc::clone(&registry));
+        self.caps_lock().clear();
+        self.avail_lock().clear();
         Ok(registry)
     }
 
@@ -257,13 +282,13 @@ impl PerfClient {
                         kind: kind.clone(),
                         done: false,
                     };
-                    let outcome = scan_provider(self, &entities).await;
+                    let outcome = scan_provider(self, &kind, &entities).await;
                     match &outcome {
                         Ok(KindProbe::Ready(caps)) => {
                             self.caps_lock().insert(kind.clone(), *caps);
                             self.finish_probe(&kind, ProbeNotice::Ready(*caps), &mut guard);
                         }
-                        Ok(KindProbe::Failed(_)) => {
+                        Ok(KindProbe::NotProvider | KindProbe::Failed(_)) => {
                             self.finish_probe(&kind, ProbeNotice::Miss, &mut guard);
                         }
                         Err(_) => {
@@ -286,6 +311,9 @@ impl PerfClient {
 
     /// Full availability list for `(entity, interval)`. `None` when the server returned nothing;
     /// that result is not cached.
+    ///
+    /// Sends no begin or end, and the key has no window. A window in the key would miss on
+    /// every `since_ago` tick.
     pub(crate) async fn available_metrics(
         &self,
         entity: &ManagedObjectReference,
@@ -404,8 +432,35 @@ enum ProbeRole {
 
 enum KindProbe {
     Ready(ProviderCaps),
+    /// Every object answered `InvalidArgument`, but the kind is in [`KNOWN_PROVIDERS`].
+    /// Treated as "not a provider" for this call only and never cached.
+    NotProvider,
     Failed(IndexMap<ManagedObjectReference, Arc<PerfError>>),
 }
+
+/// Kinds that are performance providers on vCenter. vCenter answers `InvalidArgument`
+/// for a moref that does not exist, so there an `InvalidArgument` never caches one of
+/// these as "not a provider".
+const KNOWN_PROVIDERS: [MoTypesEnum; 8] = [
+    MoTypesEnum::VirtualMachine,
+    MoTypesEnum::HostSystem,
+    MoTypesEnum::Datastore,
+    MoTypesEnum::ResourcePool,
+    MoTypesEnum::ClusterComputeResource,
+    MoTypesEnum::Datacenter,
+    MoTypesEnum::VirtualApp,
+    MoTypesEnum::StoragePod,
+];
+
+/// Kinds ESXi answers with `InvalidArgument` because it does not collect for them.
+/// On ESXi the first such answer is cached, so a fetch over many datastores probes once.
+const ESXI_NON_PROVIDERS: [MoTypesEnum; 2] = [MoTypesEnum::Datastore, MoTypesEnum::Datacenter];
+
+const NOT_A_PROVIDER: ProviderCaps = ProviderCaps {
+    current_supported: false,
+    summary_supported: false,
+    refresh_rate: None,
+};
 
 struct InflightGuard {
     client: PerfClient,
@@ -425,11 +480,22 @@ impl Drop for InflightGuard {
     }
 }
 
+/// Probe objects of one kind until one answers.
+///
+/// vCenter answers `InvalidArgument` both for a kind that is not a provider and for a
+/// moref that does not exist, so one `InvalidArgument` is not proof about the kind.
+/// The kind is "not a provider" only when every object returned `InvalidArgument`,
+/// and that is cached only for kinds outside [`KNOWN_PROVIDERS`]. On ESXi, one
+/// `InvalidArgument` for a kind in [`ESXI_NON_PROVIDERS`] is cached at once.
 async fn scan_provider(
     client: &PerfClient,
+    kind: &MoTypesEnum,
     entities: &[ManagedObjectReference],
 ) -> Result<KindProbe, PerfError> {
+    let esxi_non_provider = client.inner.client.service_content().about.api_type == "HostAgent"
+        && ESXI_NON_PROVIDERS.contains(kind);
     let mut failed = IndexMap::new();
+    let mut invalid_argument = 0;
     for entity in entities {
         match client
             .inner
@@ -444,18 +510,23 @@ async fn scan_provider(
                     refresh_rate: summary.refresh_rate,
                 }));
             }
-            Err(err) if is_invalid_argument(&err) => {
-                return Ok(KindProbe::Ready(ProviderCaps {
-                    current_supported: false,
-                    summary_supported: false,
-                    refresh_rate: None,
-                }));
-            }
             Err(err) if is_fatal(&err) => return Err(err.into()),
+            Err(err) if esxi_non_provider && is_invalid_argument(&err) => {
+                return Ok(KindProbe::Ready(NOT_A_PROVIDER));
+            }
             Err(err) => {
+                if is_invalid_argument(&err) {
+                    invalid_argument += 1;
+                }
                 failed.insert(entity.clone(), Arc::new(PerfError::from(err)));
             }
         }
+    }
+    if !entities.is_empty() && invalid_argument == entities.len() {
+        if KNOWN_PROVIDERS.contains(kind) {
+            return Ok(KindProbe::NotProvider);
+        }
+        return Ok(KindProbe::Ready(NOT_A_PROVIDER));
     }
     Ok(KindProbe::Failed(failed))
 }

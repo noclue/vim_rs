@@ -119,16 +119,21 @@ pub struct PerfMockClient {
 #[allow(dead_code)]
 impl PerfMockClient {
     pub fn new() -> Arc<Self> {
-        Self::build(true)
+        Self::build(true, "VirtualCenter")
+    }
+
+    /// Same mock, but `about.apiType` reports a standalone ESXi host.
+    pub fn esxi() -> Arc<Self> {
+        Self::build(true, "HostAgent")
     }
 
     pub fn without_perf_manager() -> Arc<Self> {
-        Self::build(false)
+        Self::build(false, "VirtualCenter")
     }
 
-    fn build(has_manager: bool) -> Arc<Self> {
+    fn build(has_manager: bool, api_type: &str) -> Arc<Self> {
         Arc::new(Self {
-            service_content: service_content(has_manager),
+            service_content: service_content(has_manager, api_type),
             state: Mutex::new(State {
                 counters: vcenter_counters(),
                 intervals: vcenter_intervals(),
@@ -594,7 +599,7 @@ fn injected_error(injected: Injected) -> Error {
     }
 }
 
-fn service_content(has_manager: bool) -> ServiceContent {
+fn service_content(has_manager: bool, api_type: &str) -> ServiceContent {
     let manager = if has_manager {
         r#","perfManager":{"_typeName":"ManagedObjectReference","type":"PerformanceManager","value":"PerfMgr"}"#
     } else {
@@ -610,7 +615,7 @@ fn service_content(has_manager: bool) -> ServiceContent {
         "about":{{
             "_typeName":"AboutInfo",
             "name":"n","fullName":"f","vendor":"v","version":"1","build":"b",
-            "osType":"o","productLineId":"p","apiType":"VirtualCenter","apiVersion":"9.0.0.0"
+            "osType":"o","productLineId":"p","apiType":"{api_type}","apiVersion":"9.0.0.0"
         }}
     }}"#
     );

@@ -7,7 +7,7 @@ use std::sync::Arc;
 use vim_rs::core::client::{unmarshal, Transport, VimClientHandle};
 use vim_rs::perf::decode::decode_composite;
 use vim_rs::perf::registry::CounterRegistry;
-use vim_rs::perf::{EntityStatus, PerfClient, PerfError};
+use vim_rs::perf::{EntityStatus, PerfClient, PerfError, Timestamp};
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::{ManagedObjectReference, PerfCompositeMetric};
 
@@ -124,4 +124,35 @@ async fn composite_latest_truncates_without_sending_max_sample() {
     assert_eq!(host_series.series[0].values, vec![3]);
     let child = result.children.values().next().expect("child");
     assert_eq!(child.series[0].values, vec![3]);
+}
+
+#[tokio::test]
+async fn composite_realtime_latest_bounds_the_start() {
+    let mock = PerfMockClient::new();
+    let now = std::time::SystemTime::UNIX_EPOCH + std::time::Duration::from_secs(1_700_000_000);
+    mock.set_clock(now);
+    let handle: VimClientHandle = mock.clone();
+    let perf = PerfClient::new(handle).unwrap();
+    perf.set_clock(now);
+    let host = ManagedObjectReference {
+        r#type: MoTypesEnum::HostSystem,
+        value: "host-1".into(),
+    };
+    let fetch = |n| {
+        perf.composite(&host)
+            .metric_by_name("cpu.usage.average")
+            .interval(vim_rs::perf::Interval::Realtime)
+            .latest(n)
+            .fetch()
+    };
+    fetch(1).await.unwrap();
+    fetch(30).await.unwrap();
+    let starts: Vec<_> = mock
+        .composites()
+        .iter()
+        .map(|spec| spec.start.clone().expect("start sent"))
+        .collect();
+    let ago = |secs| Timestamp(now - std::time::Duration::from_secs(secs)).to_rfc3339_utc();
+    // n = 1 hits the five-minute floor; n = 30 needs 32 periods of 20 seconds.
+    assert_eq!(starts, vec![ago(300), ago(32 * 20)]);
 }

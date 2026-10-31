@@ -1,13 +1,57 @@
-//! Generated from `vim_build/data/perf-catalog.json`. Do not edit.
+//! Generated from vim_build/data/perf-catalog.json (vCenter 8.0.3) and
+//! vim_build/data/esxi-perf-catalog.json (ESXi 8.0.3 availability). Do not edit.
 //!
-//! Counter constants and per-kind re-exports. Scopes come from the catalog
-//! availability rows and the tier 3a / 3b tables.
+//! Each constant is one performance counter. The comment above it reads:
+//!
+//! ```text
+//! {catalog summary}
+//! `group.name.rollup` · {unit} · {vCenter and ESX | vCenter only}
+//! Level: {1-4 | unset}, Per-device level: {1-4 | unset} · Tier: {how Types was chosen}
+//! Types: {managed object types}
+//! ```
+//!
+//! The host assigns the numeric counter id ([`PerfCounterInfo.key`][counter-info]).
+//! This file names a counter by `group.name.rollup`.
+//!
+//! **Level** is the lowest vCenter statistics collection level (1-4) that stores
+//! the aggregate series. A historical interval stores counters at its collection
+//! level and every lower level. The four built-in intervals collect at level 1
+//! until that interval is raised, so `Level: 4` is stored only at collection
+//! level 4.
+//!
+//! **Per-device level** is the lowest collection level that stores the same
+//! counter split by device, such as `vmnic0` or `scsi0:0`. `Per-device level: 4`
+//! means that split is stored only when the interval's collection level is 4.
+//! The per-device level is equal to Level or higher: collecting the device
+//! series includes the aggregate. `unset` means the catalog left that level empty.
+//!
+//! **Rollup** is the last part of the name (`average`, `maximum`, `minimum`,
+//! `latest`, `summation`, or `none`). The `StatsKind` on the constant is
+//! `absolute` (a point-in-time value), `delta` (change since the previous sample),
+//! or `rate`.
+//!
+//! **Unit** is the catalog unit. `percent (hundredths)` counts hundredths of a
+//! percent: 10000 is 100%.
+//!
+//! **vCenter and ESX** means the counter is in both catalogs. **vCenter only**
+//! means the counter appears in the vCenter catalog alone.
+//!
+//! **Tier** is this crate's note on how **Types** was chosen. `Direct (1)` was
+//! seen on sample entities. `Sibling Rollup (2)` was copied from another rollup
+//! of the same group and name. `Group Union (3a)` is the group's combined set.
+//! `Inferred (3b)` is a guess for a group with no samples. [`by_entity`] re-exports
+//! Direct, Sibling Rollup, and Group Union. `ResourcePool` includes `VirtualApp`.
+//!
+//! [counter-info]: https://developer.broadcom.com/xapis/vsphere-web-services-api/latest/vim.PerformanceManager.CounterInfo.html
 
 pub mod cluster_services {
     use super::super::*;
 
-    /// `clusterServices.clusterDrsScore.latest` (key 276) · percent (hundredths) · level 1, per_device_level 1 · Tier 3a: Host, VM
-    pub const CLUSTER_DRS_SCORE_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
+    /// DRS score of the cluster
+    /// `clusterServices.clusterDrsScore.latest` · percent (hundredths) · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Known Scope (3k)
+    /// Types: ClusterComputeResource
+    pub const CLUSTER_DRS_SCORE_LATEST: Metric<Ratio, ClusterOnly> = Metric::new(
         "clusterServices",
         "clusterDrsScore",
         Rollup::Latest,
@@ -17,7 +61,10 @@ pub mod cluster_services {
         false,
     );
 
-    /// `clusterServices.cpufairness.latest` (key 226) · number · level 1, per_device_level 3 · Tier 1: Host
+    /// Fairness of distributed CPU resource allocation
+    /// `clusterServices.cpufairness.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const CPUFAIRNESS_LATEST: Metric<Count, HostOnly> = Metric::new(
         "clusterServices",
         "cpufairness",
@@ -28,8 +75,11 @@ pub mod cluster_services {
         false,
     );
 
-    /// `clusterServices.effectivecpu.average` (key 272) · megaHertz · level 1, per_device_level 3 · Tier 3a: Host, VM
-    pub const EFFECTIVECPU_AVERAGE: Metric<Frequency, VmOrHost> = Metric::new(
+    /// Total available CPU resources of all hosts within a cluster
+    /// `clusterServices.effectivecpu.average` · megaHertz · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Known Scope (3k)
+    /// Types: ClusterComputeResource
+    pub const EFFECTIVECPU_AVERAGE: Metric<Frequency, ClusterOnly> = Metric::new(
         "clusterServices",
         "effectivecpu",
         Rollup::Average,
@@ -39,8 +89,11 @@ pub mod cluster_services {
         false,
     );
 
-    /// `clusterServices.effectivemem.average` (key 273) · megaBytes · level 1, per_device_level 3 · Tier 3a: Host, VM
-    pub const EFFECTIVEMEM_AVERAGE: Metric<Memory, VmOrHost> = Metric::new(
+    /// Total amount of machine memory of all hosts in the cluster that is available for use for virtual machine memory and overhead memory
+    /// `clusterServices.effectivemem.average` · megaBytes · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Known Scope (3k)
+    /// Types: ClusterComputeResource
+    pub const EFFECTIVEMEM_AVERAGE: Metric<Memory, ClusterOnly> = Metric::new(
         "clusterServices",
         "effectivemem",
         Rollup::Average,
@@ -50,8 +103,11 @@ pub mod cluster_services {
         false,
     );
 
-    /// `clusterServices.failover.latest` (key 277) · number · level 1, per_device_level 3 · Tier 3a: Host, VM
-    pub const FAILOVER_LATEST: Metric<Count, VmOrHost> = Metric::new(
+    /// vSphere HA number of failures that can be tolerated
+    /// `clusterServices.failover.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Known Scope (3k)
+    /// Types: ClusterComputeResource
+    pub const FAILOVER_LATEST: Metric<Count, ClusterOnly> = Metric::new(
         "clusterServices",
         "failover",
         Rollup::Latest,
@@ -61,7 +117,10 @@ pub mod cluster_services {
         false,
     );
 
-    /// `clusterServices.memfairness.latest` (key 227) · number · level 1, per_device_level 3 · Tier 1: Host
+    /// Aggregate available memory resources of all the hosts within a cluster
+    /// `clusterServices.memfairness.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const MEMFAIRNESS_LATEST: Metric<Count, HostOnly> = Metric::new(
         "clusterServices",
         "memfairness",
@@ -72,7 +131,10 @@ pub mod cluster_services {
         false,
     );
 
-    /// `clusterServices.vmDrsScore.latest` (key 225) · percent (hundredths) · level 1, per_device_level 1 · Tier 1: VM
+    /// DRS score of the virtual machine
+    /// `clusterServices.vmDrsScore.latest` · percent (hundredths) · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const VM_DRS_SCORE_LATEST: Metric<Ratio, VmOnly> = Metric::new(
         "clusterServices",
         "vmDrsScore",
@@ -87,7 +149,10 @@ pub mod cluster_services {
 pub mod cpu {
     use super::super::*;
 
-    /// `cpu.cache.l3.occupancy.average` (key 365) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// The amount of L3 cache the VM uses
+    /// `cpu.cache.l3.occupancy.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CACHE_L3_OCCUPANCY_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "cpu",
         "cache.l3.occupancy",
@@ -98,7 +163,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.capacity.contention.average` (key 19) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Percent of time the VM is unable to run because it is contending for access to the physical CPU(s)
+    /// `cpu.capacity.contention.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_CONTENTION_AVERAGE: Metric<Ratio, ComputeScope> = Metric::new(
         "cpu",
         "capacity.contention",
@@ -109,7 +177,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.capacity.demand.average` (key 18) · megaHertz · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// The amount of CPU resources a VM would use if there were no CPU contention
+    /// `cpu.capacity.demand.average` · megaHertz · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_DEMAND_AVERAGE: Metric<Frequency, ComputeScope> = Metric::new(
         "cpu",
         "capacity.demand",
@@ -120,7 +191,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.capacity.entitlement.average` (key 16) · megaHertz · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// CPU resources devoted by the ESXi scheduler to the virtual machines and resource pools
+    /// `cpu.capacity.entitlement.average` · megaHertz · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_ENTITLEMENT_AVERAGE: Metric<Frequency, ComputeScope> = Metric::new(
         "cpu",
         "capacity.entitlement",
@@ -131,7 +205,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.capacity.provisioned.average` (key 15) · megaHertz · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Capacity in MHz of the physical CPU cores
+    /// `cpu.capacity.provisioned.average` · megaHertz · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_PROVISIONED_AVERAGE: Metric<Frequency, ComputeScope> = Metric::new(
         "cpu",
         "capacity.provisioned",
@@ -142,7 +219,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.capacity.usage.average` (key 17) · megaHertz · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// CPU usage as a percent during the interval
+    /// `cpu.capacity.usage.average` · megaHertz · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_AVERAGE: Metric<Frequency, ComputeScope> = Metric::new(
         "cpu",
         "capacity.usage",
@@ -153,7 +233,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.corecount.contention.average` (key 22) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Time the VM vCPU is ready to run, but is unable to run due to co-scheduling constraints
+    /// `cpu.corecount.contention.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CORECOUNT_CONTENTION_AVERAGE: Metric<Ratio, ComputeScope> = Metric::new(
         "cpu",
         "corecount.contention",
@@ -164,7 +247,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.corecount.provisioned.average` (key 20) · number · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// The number of virtual processors provisioned to the entity
+    /// `cpu.corecount.provisioned.average` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CORECOUNT_PROVISIONED_AVERAGE: Metric<Count, ComputeScope> = Metric::new(
         "cpu",
         "corecount.provisioned",
@@ -175,7 +261,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.corecount.provisioned.latest` (key 364) · number · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// The number of virtual processors provisioned to the entity
+    /// `cpu.corecount.provisioned.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CORECOUNT_PROVISIONED_LATEST: Metric<Count, ComputeScope> = Metric::new(
         "cpu",
         "corecount.provisioned",
@@ -186,7 +275,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.corecount.usage.average` (key 21) · number · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// The number of virtual processors running on the host
+    /// `cpu.corecount.usage.average` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CORECOUNT_USAGE_AVERAGE: Metric<Count, ComputeScope> = Metric::new(
         "cpu",
         "corecount.usage",
@@ -197,7 +289,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.corecount.usage.latest` (key 366) · number · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// The number of virtual processors running on the host
+    /// `cpu.corecount.usage.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CORECOUNT_USAGE_LATEST: Metric<Count, ComputeScope> = Metric::new(
         "cpu",
         "corecount.usage",
@@ -208,7 +303,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.coreUtilization.average` (key 441) · percent (hundredths) · level 2, per_device_level 3 · Tier 1: Host
+    /// CPU utilization of the corresponding core (if hyper-threading is enabled) as a percentage during the interval (A core is utilized if either or both of its logical CPUs are utilized)
+    /// `cpu.coreUtilization.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const CORE_UTILIZATION_AVERAGE: Metric<Ratio, HostOnly> = Metric::new(
         "cpu",
         "coreUtilization",
@@ -219,7 +317,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.coreUtilization.maximum` (key 442) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Host
+    /// CPU utilization of the corresponding core (if hyper-threading is enabled) as a percentage during the interval (A core is utilized if either or both of its logical CPUs are utilized)
+    /// `cpu.coreUtilization.maximum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const CORE_UTILIZATION_MAXIMUM: Metric<Ratio, HostOnly> = Metric::new(
         "cpu",
         "coreUtilization",
@@ -230,7 +331,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.coreUtilization.minimum` (key 443) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Host
+    /// CPU utilization of the corresponding core (if hyper-threading is enabled) as a percentage during the interval (A core is utilized if either or both of its logical CPUs are utilized)
+    /// `cpu.coreUtilization.minimum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const CORE_UTILIZATION_MINIMUM: Metric<Ratio, HostOnly> = Metric::new(
         "cpu",
         "coreUtilization",
@@ -241,7 +345,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.coreUtilization.none` (key 440) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Host
+    /// CPU utilization of the corresponding core (if hyper-threading is enabled) as a percentage during the interval (A core is utilized if either or both of its logical CPUs are utilized)
+    /// `cpu.coreUtilization.none` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const CORE_UTILIZATION_NONE: Metric<Ratio, HostOnly> = Metric::new(
         "cpu",
         "coreUtilization",
@@ -252,7 +359,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.costop.summation` (key 448) · millisecond · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Time the virtual machine is ready to run, but is unable to run due to co-scheduling constraints
+    /// `cpu.costop.summation` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const COSTOP_SUMMATION: Metric<Time, VmOrHost> = Metric::new(
         "cpu",
         "costop",
@@ -263,7 +373,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.cpuentitlement.latest` (key 223) · megaHertz · level 2, per_device_level 3 · Tier 1: Pool, VM
+    /// Amount of CPU resources allocated to the virtual machine or resource pool, based on the total cluster capacity and the resource configuration of the resource hierarchy
+    /// `cpu.cpuentitlement.latest` · megaHertz · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ResourcePool, VirtualMachine
     pub const CPUENTITLEMENT_LATEST: Metric<Frequency, VmOrPool> = Metric::new(
         "cpu",
         "cpuentitlement",
@@ -274,7 +387,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.demand.average` (key 447) · megaHertz · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// The amount of CPU resources a virtual machine would use if there were no CPU contention or CPU limit
+    /// `cpu.demand.average` · megaHertz · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const DEMAND_AVERAGE: Metric<Frequency, VmOrHost> = Metric::new(
         "cpu",
         "demand",
@@ -285,7 +401,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.demandEntitlementRatio.latest` (key 452) · percent (hundredths) · level 4, per_device_level 4 · Tier 1: VM
+    /// CPU resource entitlement to CPU demand ratio (in percents)
+    /// `cpu.demandEntitlementRatio.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const DEMAND_ENTITLEMENT_RATIO_LATEST: Metric<Ratio, VmOnly> = Metric::new(
         "cpu",
         "demandEntitlementRatio",
@@ -296,7 +415,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.entitlement.latest` (key 446) · megaHertz · level 2, per_device_level 3 · Tier 1: VM
+    /// CPU resources devoted by the ESX scheduler
+    /// `cpu.entitlement.latest` · megaHertz · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const ENTITLEMENT_LATEST: Metric<Frequency, VmOnly> = Metric::new(
         "cpu",
         "entitlement",
@@ -307,7 +429,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.idle.summation` (key 13) · millisecond · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Total time that the CPU spent in an idle state
+    /// `cpu.idle.summation` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const IDLE_SUMMATION: Metric<Time, VmOrHost> = Metric::new(
         "cpu",
         "idle",
@@ -318,7 +443,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.latency.average` (key 445) · percent (hundredths) · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Percent of time the virtual machine is unable to run because it is contending for access to the physical CPU(s)
+    /// `cpu.latency.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const LATENCY_AVERAGE: Metric<Ratio, VmOrHost> = Metric::new(
         "cpu",
         "latency",
@@ -329,7 +457,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.load.avg15min.latest` (key 369) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// CPU load average over the past 15 minutes, sampled on every 6 seconds
+    /// `cpu.load.avg15min.latest` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const LOAD_AVG15MIN_LATEST: Metric<Ratio, ComputeScope> = Metric::new(
         "cpu",
         "load.avg15min",
@@ -340,7 +471,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.load.avg1min.latest` (key 367) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// CPU load average over the past 1 minute, sampled on every 6 seconds
+    /// `cpu.load.avg1min.latest` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const LOAD_AVG1MIN_LATEST: Metric<Ratio, ComputeScope> = Metric::new(
         "cpu",
         "load.avg1min",
@@ -351,7 +485,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.load.avg5min.latest` (key 368) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// CPU load average over the past 5 minutes, sampled on every 6 seconds
+    /// `cpu.load.avg5min.latest` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const LOAD_AVG5MIN_LATEST: Metric<Ratio, ComputeScope> = Metric::new(
         "cpu",
         "load.avg5min",
@@ -362,7 +499,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.maxlimited.summation` (key 449) · millisecond · level 2, per_device_level 3 · Tier 1: VM
+    /// Time the virtual machine is ready to run, but is not run due to maxing out its CPU limit setting
+    /// `cpu.maxlimited.summation` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const MAXLIMITED_SUMMATION: Metric<Time, VmOnly> = Metric::new(
         "cpu",
         "maxlimited",
@@ -373,7 +513,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.overlap.summation` (key 450) · millisecond · level 3, per_device_level 3 · Tier 1: VM
+    /// Time the virtual machine was interrupted to perform system services on behalf of itself or other virtual machines
+    /// `cpu.overlap.summation` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const OVERLAP_SUMMATION: Metric<Time, VmOnly> = Metric::new(
         "cpu",
         "overlap",
@@ -384,7 +527,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.partnerBusyTime.average` (key 362) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// The percentage HT partner usage per physical CPU
+    /// `cpu.partnerBusyTime.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const PARTNER_BUSY_TIME_AVERAGE: Metric<Ratio, ComputeScope> = Metric::new(
         "cpu",
         "partnerBusyTime",
@@ -395,7 +541,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.readiness.average` (key 453) · percent (hundredths) · level 4, per_device_level 4 · Tier 1: Host, VM
+    /// Percentage of time that the virtual machine was ready, but could not get scheduled to run on the physical CPU
+    /// `cpu.readiness.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const READINESS_AVERAGE: Metric<Ratio, VmOrHost> = Metric::new(
         "cpu",
         "readiness",
@@ -406,7 +555,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.ready.summation` (key 12) · millisecond · level 1, per_device_level 3 · Tier 1: Host, VM
+    /// Time that the virtual machine was ready, but could not get scheduled to run on the physical CPU during last measurement interval
+    /// `cpu.ready.summation` · millisecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const READY_SUMMATION: Metric<Time, VmOrHost> = Metric::new(
         "cpu",
         "ready",
@@ -417,7 +569,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.reservedCapacity.average` (key 9) · megaHertz · level 2, per_device_level 3 · Tier 1: Cluster, Host
+    /// Total CPU capacity reserved by virtual machines
+    /// `cpu.reservedCapacity.average` · megaHertz · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem
     pub const RESERVED_CAPACITY_AVERAGE: Metric<Frequency, HostCluster> = Metric::new(
         "cpu",
         "reservedCapacity",
@@ -428,7 +583,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.run.summation` (key 451) · millisecond · level 2, per_device_level 3 · Tier 1: VM
+    /// Time the virtual machine is scheduled to run
+    /// `cpu.run.summation` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const RUN_SUMMATION: Metric<Time, VmOnly> = Metric::new(
         "cpu",
         "run",
@@ -439,7 +597,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.swapwait.summation` (key 436) · millisecond · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU time spent waiting for swap-in
+    /// `cpu.swapwait.summation` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPWAIT_SUMMATION: Metric<Time, VmOrHost> = Metric::new(
         "cpu",
         "swapwait",
@@ -450,7 +611,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.system.summation` (key 10) · millisecond · level 3, per_device_level 3 · Tier 1: VM
+    /// Amount of time spent on system processes on each virtual CPU in the virtual machine
+    /// `cpu.system.summation` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const SYSTEM_SUMMATION: Metric<Time, VmOnly> = Metric::new(
         "cpu",
         "system",
@@ -461,7 +625,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.totalmhz.average` (key 274) · megaHertz · level 1, per_device_level 3 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total amount of CPU resources of all hosts in the cluster
+    /// `cpu.totalmhz.average` · megaHertz · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const TOTALMHZ_AVERAGE: Metric<Frequency, ComputeScope> = Metric::new(
         "cpu",
         "totalmhz",
@@ -472,7 +639,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.totalCapacity.average` (key 444) · megaHertz · level 2, per_device_level 3 · Tier 1: Host
+    /// Total CPU capacity reserved by and available for virtual machines
+    /// `cpu.totalCapacity.average` · megaHertz · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const TOTAL_CAPACITY_AVERAGE: Metric<Frequency, HostOnly> = Metric::new(
         "cpu",
         "totalCapacity",
@@ -483,7 +653,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.usagemhz.average` (key 6) · megaHertz · level 1, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// CPU usage in megahertz during the interval
+    /// `cpu.usagemhz.average` · megaHertz · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const USAGEMHZ_AVERAGE: Metric<Frequency, ComputeScope> = Metric::new(
         "cpu",
         "usagemhz",
@@ -494,7 +667,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.usagemhz.maximum` (key 8) · megaHertz · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// CPU usage in megahertz during the interval
+    /// `cpu.usagemhz.maximum` · megaHertz · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const USAGEMHZ_MAXIMUM: Metric<Frequency, ComputeScope> = Metric::new(
         "cpu",
         "usagemhz",
@@ -505,7 +681,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.usagemhz.minimum` (key 7) · megaHertz · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// CPU usage in megahertz during the interval
+    /// `cpu.usagemhz.minimum` · megaHertz · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const USAGEMHZ_MINIMUM: Metric<Frequency, ComputeScope> = Metric::new(
         "cpu",
         "usagemhz",
@@ -516,7 +695,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.usagemhz.none` (key 5) · megaHertz · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// CPU usage in megahertz during the interval
+    /// `cpu.usagemhz.none` · megaHertz · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const USAGEMHZ_NONE: Metric<Frequency, ComputeScope> = Metric::new(
         "cpu",
         "usagemhz",
@@ -527,7 +709,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.usage.average` (key 2) · percent (hundredths) · level 1, per_device_level 3 · Tier 1: Cluster, Host, VM
+    /// CPU usage as a percentage during the interval
+    /// `cpu.usage.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, VirtualMachine
     pub const USAGE_AVERAGE: Metric<Ratio, VmHostCluster> = Metric::new(
         "cpu",
         "usage",
@@ -538,7 +723,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.usage.maximum` (key 4) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Cluster, Host, VM
+    /// CPU usage as a percentage during the interval
+    /// `cpu.usage.maximum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, VirtualMachine
     pub const USAGE_MAXIMUM: Metric<Ratio, VmHostCluster> = Metric::new(
         "cpu",
         "usage",
@@ -549,7 +737,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.usage.minimum` (key 3) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Cluster, Host, VM
+    /// CPU usage as a percentage during the interval
+    /// `cpu.usage.minimum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, VirtualMachine
     pub const USAGE_MINIMUM: Metric<Ratio, VmHostCluster> = Metric::new(
         "cpu",
         "usage",
@@ -560,7 +751,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.usage.none` (key 1) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Cluster, Host, VM
+    /// CPU usage as a percentage during the interval
+    /// `cpu.usage.none` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, VirtualMachine
     pub const USAGE_NONE: Metric<Ratio, VmHostCluster> = Metric::new(
         "cpu",
         "usage",
@@ -571,7 +765,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.usage.vcpus.average` (key 454) · percent (hundredths) · level 4, per_device_level 4 · Tier 1: VM
+    /// Virtual CPU usage as a percentage during the interval
+    /// `cpu.usage.vcpus.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const USAGE_VCPUS_AVERAGE: Metric<Ratio, VmOnly> = Metric::new(
         "cpu",
         "usage.vcpus",
@@ -582,7 +779,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.used.summation` (key 14) · millisecond · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Total CPU usage
+    /// `cpu.used.summation` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const USED_SUMMATION: Metric<Time, VmOrHost> = Metric::new(
         "cpu",
         "used",
@@ -593,7 +793,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.utilization.average` (key 363) · percent (hundredths) · level 2, per_device_level 3 · Tier 1: Host
+    /// CPU utilization as a percentage during the interval (CPU usage and CPU utilization might be different due to power management technologies or hyper-threading)
+    /// `cpu.utilization.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const UTILIZATION_AVERAGE: Metric<Ratio, HostOnly> = Metric::new(
         "cpu",
         "utilization",
@@ -604,7 +807,10 @@ pub mod cpu {
         true,
     );
 
-    /// `cpu.utilization.maximum` (key 438) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Host
+    /// CPU utilization as a percentage during the interval (CPU usage and CPU utilization might be different due to power management technologies or hyper-threading)
+    /// `cpu.utilization.maximum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const UTILIZATION_MAXIMUM: Metric<Ratio, HostOnly> = Metric::new(
         "cpu",
         "utilization",
@@ -615,7 +821,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.utilization.minimum` (key 439) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Host
+    /// CPU utilization as a percentage during the interval (CPU usage and CPU utilization might be different due to power management technologies or hyper-threading)
+    /// `cpu.utilization.minimum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const UTILIZATION_MINIMUM: Metric<Ratio, HostOnly> = Metric::new(
         "cpu",
         "utilization",
@@ -626,7 +835,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.utilization.none` (key 437) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Host
+    /// CPU utilization as a percentage during the interval (CPU usage and CPU utilization might be different due to power management technologies or hyper-threading)
+    /// `cpu.utilization.none` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const UTILIZATION_NONE: Metric<Ratio, HostOnly> = Metric::new(
         "cpu",
         "utilization",
@@ -637,7 +849,10 @@ pub mod cpu {
         false,
     );
 
-    /// `cpu.wait.summation` (key 11) · millisecond · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Total CPU time spent in wait state
+    /// `cpu.wait.summation` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const WAIT_SUMMATION: Metric<Time, VmOrHost> = Metric::new(
         "cpu",
         "wait",
@@ -652,7 +867,9 @@ pub mod cpu {
 pub mod datastore {
     use super::super::*;
 
-    /// `datastore.busResets.summation` (key 196) · number · level 2, per_device_level 2 · Tier 3a: Datastore, Host, VM
+    /// `datastore.busResets.summation` · number · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const BUS_RESETS_SUMMATION: Metric<Count, DatastoreVmHost> = Metric::new(
         "datastore",
         "busResets",
@@ -663,7 +880,9 @@ pub mod datastore {
         false,
     );
 
-    /// `datastore.commandsAborted.summation` (key 197) · number · level 2, per_device_level 2 · Tier 3a: Datastore, Host, VM
+    /// `datastore.commandsAborted.summation` · number · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const COMMANDS_ABORTED_SUMMATION: Metric<Count, DatastoreVmHost> = Metric::new(
         "datastore",
         "commandsAborted",
@@ -674,7 +893,10 @@ pub mod datastore {
         false,
     );
 
-    /// `datastore.datastoreIops.average` (key 192) · number · level 1, per_device_level 3 · Tier 1: Host
+    /// Storage I/O Control aggregated IOPS
+    /// `datastore.datastoreIops.average` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_IOPS_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreIops",
@@ -685,7 +907,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreMaxQueueDepth.latest` (key 584) · number · level 1, per_device_level 3 · Tier 1: Host
+    /// Storage I/O Control datastore maximum queue depth
+    /// `datastore.datastoreMaxQueueDepth.latest` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_MAX_QUEUE_DEPTH_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreMaxQueueDepth",
@@ -696,7 +921,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreNormalReadLatency.latest` (key 353) · number · level 2, per_device_level 2 · Tier 1: Host
+    /// Storage DRS datastore normalized read latency
+    /// `datastore.datastoreNormalReadLatency.latest` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_NORMAL_READ_LATENCY_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreNormalReadLatency",
@@ -707,7 +935,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreNormalWriteLatency.latest` (key 354) · number · level 2, per_device_level 2 · Tier 1: Host
+    /// Storage DRS datastore normalized write latency
+    /// `datastore.datastoreNormalWriteLatency.latest` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_NORMAL_WRITE_LATENCY_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreNormalWriteLatency",
@@ -718,7 +949,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreReadBytes.latest` (key 347) · number · level 2, per_device_level 2 · Tier 1: Host
+    /// Storage DRS datastore bytes read
+    /// `datastore.datastoreReadBytes.latest` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_READ_BYTES_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreReadBytes",
@@ -729,7 +963,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreReadIops.latest` (key 349) · number · level 1, per_device_level 3 · Tier 1: Host
+    /// Storage DRS datastore read I/O rate
+    /// `datastore.datastoreReadIops.latest` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_READ_IOPS_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreReadIops",
@@ -740,7 +977,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreReadLoadMetric.latest` (key 355) · number · level 4, per_device_level 4 · Tier 1: Host
+    /// Storage DRS datastore metric for read workload model
+    /// `datastore.datastoreReadLoadMetric.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_READ_LOAD_METRIC_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreReadLoadMetric",
@@ -751,7 +991,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreReadOIO.latest` (key 351) · number · level 1, per_device_level 3 · Tier 1: Host
+    /// Storage DRS datastore outstanding read requests
+    /// `datastore.datastoreReadOIO.latest` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_READ_OIO_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreReadOIO",
@@ -762,7 +1005,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreVMObservedLatency.latest` (key 357) · microsecond · level 1, per_device_level 3 · Tier 1: Host
+    /// The average datastore latency as seen by virtual machines
+    /// `datastore.datastoreVMObservedLatency.latest` · microsecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_VMOBSERVED_LATENCY_LATEST: Metric<Time, HostOnly> = Metric::new(
         "datastore",
         "datastoreVMObservedLatency",
@@ -773,7 +1019,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreWriteBytes.latest` (key 348) · number · level 2, per_device_level 2 · Tier 1: Host
+    /// Storage DRS datastore bytes written
+    /// `datastore.datastoreWriteBytes.latest` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_WRITE_BYTES_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreWriteBytes",
@@ -784,7 +1033,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreWriteIops.latest` (key 350) · number · level 1, per_device_level 3 · Tier 1: Host
+    /// Storage DRS datastore write I/O rate
+    /// `datastore.datastoreWriteIops.latest` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_WRITE_IOPS_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreWriteIops",
@@ -795,7 +1047,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreWriteLoadMetric.latest` (key 356) · number · level 4, per_device_level 4 · Tier 1: Host
+    /// Storage DRS datastore metric for write workload model
+    /// `datastore.datastoreWriteLoadMetric.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_WRITE_LOAD_METRIC_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreWriteLoadMetric",
@@ -806,7 +1061,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.datastoreWriteOIO.latest` (key 352) · number · level 1, per_device_level 3 · Tier 1: Host
+    /// Storage DRS datastore outstanding write requests
+    /// `datastore.datastoreWriteOIO.latest` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DATASTORE_WRITE_OIO_LATEST: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "datastoreWriteOIO",
@@ -817,7 +1075,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.maxTotalLatency.latest` (key 191) · millisecond · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Highest latency value across all datastores used by the host
+    /// `datastore.maxTotalLatency.latest` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const MAX_TOTAL_LATENCY_LATEST: Metric<Time, VmOrHost> = Metric::new(
         "datastore",
         "maxTotalLatency",
@@ -828,7 +1089,10 @@ pub mod datastore {
         false,
     );
 
-    /// `datastore.numberReadAveraged.average` (key 185) · number · level 1, per_device_level 3 · Tier 1: Datastore, Host, VM
+    /// Average number of read commands issued per second to the datastore during the collection interval
+    /// `datastore.numberReadAveraged.average` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const NUMBER_READ_AVERAGED_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "datastore",
         "numberReadAveraged",
@@ -839,7 +1103,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.numberWriteAveraged.average` (key 186) · number · level 1, per_device_level 3 · Tier 1: Datastore, Host, VM
+    /// Average number of write commands issued per second to the datastore during the collection interval
+    /// `datastore.numberWriteAveraged.average` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const NUMBER_WRITE_AVERAGED_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "datastore",
         "numberWriteAveraged",
@@ -850,7 +1117,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.read.average` (key 187) · kiloBytesPerSecond · level 2, per_device_level 2 · Tier 1: Datastore, Host, VM
+    /// Rate of reading data from the datastore
+    /// `datastore.read.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_AVERAGE: Metric<Throughput, DatastoreVmHost> = Metric::new(
         "datastore",
         "read",
@@ -861,7 +1131,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.siocActiveTimePercentage.average` (key 198) · percent (hundredths) · level 1, per_device_level 3 · Tier 1: Host
+    /// Percentage of time Storage I/O Control actively controlled datastore latency
+    /// `datastore.siocActiveTimePercentage.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const SIOC_ACTIVE_TIME_PERCENTAGE_AVERAGE: Metric<Ratio, HostOnly> = Metric::new(
         "datastore",
         "siocActiveTimePercentage",
@@ -872,7 +1145,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.sizeNormalizedDatastoreLatency.average` (key 193) · microsecond · level 1, per_device_level 3 · Tier 1: Host
+    /// Storage I/O Control size-normalized I/O latency
+    /// `datastore.sizeNormalizedDatastoreLatency.average` · microsecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const SIZE_NORMALIZED_DATASTORE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "datastore",
         "sizeNormalizedDatastoreLatency",
@@ -883,7 +1159,9 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.throughput.contention.average` (key 195) · millisecond · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// `datastore.throughput.contention.average` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const THROUGHPUT_CONTENTION_AVERAGE: Metric<Time, DatastoreVmHost> = Metric::new(
         "datastore",
         "throughput.contention",
@@ -894,7 +1172,9 @@ pub mod datastore {
         false,
     );
 
-    /// `datastore.throughput.usage.average` (key 194) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// `datastore.throughput.usage.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const THROUGHPUT_USAGE_AVERAGE: Metric<Throughput, DatastoreVmHost> = Metric::new(
         "datastore",
         "throughput.usage",
@@ -905,7 +1185,10 @@ pub mod datastore {
         false,
     );
 
-    /// `datastore.totalReadLatency.average` (key 189) · millisecond · level 1, per_device_level 3 · Tier 1: Host, VM
+    /// The average time a read from the datastore takes
+    /// `datastore.totalReadLatency.average` · millisecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const TOTAL_READ_LATENCY_AVERAGE: Metric<Time, VmOrHost> = Metric::new(
         "datastore",
         "totalReadLatency",
@@ -916,7 +1199,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.totalWriteLatency.average` (key 190) · millisecond · level 1, per_device_level 3 · Tier 1: Host, VM
+    /// The average time a write to the datastore takes
+    /// `datastore.totalWriteLatency.average` · millisecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const TOTAL_WRITE_LATENCY_AVERAGE: Metric<Time, VmOrHost> = Metric::new(
         "datastore",
         "totalWriteLatency",
@@ -927,7 +1213,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.unmapIOs.summation` (key 586) · number · level 4, per_device_level 4 · Tier 1: Host
+    /// Number of unmap IOs issued
+    /// `datastore.unmapIOs.summation` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const UNMAP_IOS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "datastore",
         "unmapIOs",
@@ -938,7 +1227,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.unmapSize.summation` (key 585) · megaBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Unmapped size in MB
+    /// `datastore.unmapSize.summation` · megaBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const UNMAP_SIZE_SUMMATION: Metric<Memory, HostOnly> = Metric::new(
         "datastore",
         "unmapSize",
@@ -949,7 +1241,10 @@ pub mod datastore {
         true,
     );
 
-    /// `datastore.vmfs.apdCount.latest` (key 948) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total apd timeout events received on the VMFS volume
+    /// `datastore.vmfs.apdCount.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const VMFS_APD_COUNT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "datastore",
         "vmfs.apdCount",
@@ -960,7 +1255,10 @@ pub mod datastore {
         false,
     );
 
-    /// `datastore.vmfs.apdState.latest` (key 947) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Current APD state of the VMFS volume
+    /// `datastore.vmfs.apdState.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const VMFS_APD_STATE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "datastore",
         "vmfs.apdState",
@@ -971,7 +1269,10 @@ pub mod datastore {
         false,
     );
 
-    /// `datastore.vmfs.cancelledTxn.latest` (key 946) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total cancelled journal transactions on VMFS volume
+    /// `datastore.vmfs.cancelledTxn.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const VMFS_CANCELLED_TXN_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "datastore",
         "vmfs.cancelledTxn",
@@ -982,7 +1283,10 @@ pub mod datastore {
         false,
     );
 
-    /// `datastore.vmfs.totalTxn.latest` (key 945) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total journal transactions on VMFS volume
+    /// `datastore.vmfs.totalTxn.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const VMFS_TOTAL_TXN_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "datastore",
         "vmfs.totalTxn",
@@ -993,7 +1297,10 @@ pub mod datastore {
         false,
     );
 
-    /// `datastore.write.average` (key 188) · kiloBytesPerSecond · level 2, per_device_level 2 · Tier 1: Datastore, Host, VM
+    /// Rate of writing data to the datastore
+    /// `datastore.write.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_AVERAGE: Metric<Throughput, DatastoreVmHost> = Metric::new(
         "datastore",
         "write",
@@ -1008,7 +1315,10 @@ pub mod datastore {
 pub mod disk {
     use super::super::*;
 
-    /// `disk.actualused.latest` (key 282) · megaBytes · level 2, per_device_level 3 · Tier 3a: Datastore, Host, VM
+    /// Amount of disk actually used on the datastore
+    /// `disk.actualused.latest` · megaBytes · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const ACTUALUSED_LATEST: Metric<Memory, DatastoreVmHost> = Metric::new(
         "disk",
         "actualused",
@@ -1019,7 +1329,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.busResets.summation` (key 142) · number · level 2, per_device_level 3 · Tier 1: Datastore, Host, VM
+    /// Number of Storage-bus reset commands issued during the collection interval
+    /// `disk.busResets.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const BUS_RESETS_SUMMATION: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "busResets",
@@ -1030,7 +1343,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.capacity.contention.average` (key 286) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// The amount of storage capacity overcommitment for the entity, measured in percent.
+    /// `disk.capacity.contention.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CAPACITY_CONTENTION_AVERAGE: Metric<Ratio, DatastoreVmHost> = Metric::new(
         "disk",
         "capacity.contention",
@@ -1041,7 +1357,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.capacity.latest` (key 280) · kiloBytes · level 1, per_device_level 3 · Tier 1: Datastore
+    /// Configured size of the datastore
+    /// `disk.capacity.latest` · kiloBytes · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: Datastore
     pub const CAPACITY_LATEST: Metric<Memory, DatastoreOnly> = Metric::new(
         "disk",
         "capacity",
@@ -1052,7 +1371,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.capacity.provisioned.average` (key 284) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Virtual disk: The maximum capacity size of the virtual disk. Virtual machine: The provisioned size of all virtual disks plus snapshot files and the swap file, if the VM is running. Datastore: The maximum capacity of the datastore. POD: The maximum capacity of all datastores in the POD.
+    /// `disk.capacity.provisioned.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CAPACITY_PROVISIONED_AVERAGE: Metric<Memory, DatastoreVmHost> = Metric::new(
         "disk",
         "capacity.provisioned",
@@ -1063,7 +1385,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.capacity.usage.average` (key 285) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// The amount of storage capacity currently being consumed by the entity or on the entity.
+    /// `disk.capacity.usage.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CAPACITY_USAGE_AVERAGE: Metric<Memory, DatastoreVmHost> = Metric::new(
         "disk",
         "capacity.usage",
@@ -1074,7 +1399,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.commandsAborted.summation` (key 141) · number · level 2, per_device_level 3 · Tier 1: Datastore, Host, VM
+    /// Number of Storage commands aborted during the collection interval
+    /// `disk.commandsAborted.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const COMMANDS_ABORTED_SUMMATION: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "commandsAborted",
@@ -1085,7 +1413,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.commands.active.latest` (key 908) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Number of active commands on the disk
+    /// `disk.commands.active.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const COMMANDS_ACTIVE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "commands.active",
@@ -1096,7 +1427,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.commandsAveraged.average` (key 509) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Average number of Storage commands issued per second during the collection interval
+    /// `disk.commandsAveraged.average` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const COMMANDS_AVERAGED_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "disk",
         "commandsAveraged",
@@ -1107,7 +1441,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.commands.failed.latest` (key 906) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Number of failed commands on the disk
+    /// `disk.commands.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const COMMANDS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "commands.failed",
@@ -1118,7 +1455,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.commands.queued.latest` (key 907) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Number of queued commands on the disk
+    /// `disk.commands.queued.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const COMMANDS_QUEUED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "commands.queued",
@@ -1129,7 +1469,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.commands.success.latest` (key 905) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Number of successful commands on the disk
+    /// `disk.commands.success.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const COMMANDS_SUCCESS_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "commands.success",
@@ -1140,7 +1483,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.commands.summation` (key 496) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Number of Storage commands issued during the collection interval
+    /// `disk.commands.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const COMMANDS_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "disk",
         "commands",
@@ -1151,7 +1497,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.deltaused.latest` (key 283) · kiloBytes · level 2, per_device_level 3 · Tier 3a: Datastore, Host, VM
+    /// Storage overhead of a virtual machine or a datastore due to delta disk backings
+    /// `disk.deltaused.latest` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DELTAUSED_LATEST: Metric<Memory, DatastoreVmHost> = Metric::new(
         "disk",
         "deltaused",
@@ -1162,7 +1511,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.deviceLatency.average` (key 505) · millisecond · level 1, per_device_level 3 · Tier 1: Host
+    /// Average amount of time, in milliseconds, to complete a Storage command from the physical device
+    /// `disk.deviceLatency.average` · millisecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DEVICE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "deviceLatency",
@@ -1173,7 +1525,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.deviceReadLatency.average` (key 497) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time, in milliseconds, to read from the physical device
+    /// `disk.deviceReadLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DEVICE_READ_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "deviceReadLatency",
@@ -1184,7 +1539,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.deviceWriteLatency.average` (key 501) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time, in milliseconds, to write to the physical device
+    /// `disk.deviceWriteLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const DEVICE_WRITE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "deviceWriteLatency",
@@ -1195,7 +1553,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.kernelLatency.average` (key 506) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time, in milliseconds, spent by VMkernel to process each Storage command
+    /// `disk.kernelLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const KERNEL_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "kernelLatency",
@@ -1206,7 +1567,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.kernelReadLatency.average` (key 498) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time, in milliseconds, spent by VMkernel to process each Storage read command
+    /// `disk.kernelReadLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const KERNEL_READ_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "kernelReadLatency",
@@ -1217,7 +1581,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.kernelWriteLatency.average` (key 502) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time, in milliseconds, spent by VMkernel to process each Storage write command
+    /// `disk.kernelWriteLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const KERNEL_WRITE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "kernelWriteLatency",
@@ -1228,7 +1595,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.latency.davg.latest` (key 926) · microsecond · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Average time, in microseconds, spent by Device to process each Storage command
+    /// `disk.latency.davg.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const LATENCY_DAVG_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "disk",
         "latency.davg",
@@ -1239,7 +1609,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.latency.gavg.latest` (key 928) · microsecond · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Average time, in microseconds, spent by Guest to process each Storage command
+    /// `disk.latency.gavg.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const LATENCY_GAVG_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "disk",
         "latency.gavg",
@@ -1250,7 +1623,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.latency.kavg.latest` (key 927) · microsecond · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Average time, in microseconds, spent by kernel to process each Storage command
+    /// `disk.latency.kavg.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const LATENCY_KAVG_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "disk",
         "latency.kavg",
@@ -1261,7 +1637,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.latency.qavg.latest` (key 925) · microsecond · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Average time, in microseconds, spent by Queue to process each Storage command
+    /// `disk.latency.qavg.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const LATENCY_QAVG_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "disk",
         "latency.qavg",
@@ -1272,7 +1651,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.maxQueueDepth.average` (key 508) · number · level 1, per_device_level 3 · Tier 1: Host
+    /// Maximum queue depth
+    /// `disk.maxQueueDepth.average` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const MAX_QUEUE_DEPTH_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "disk",
         "maxQueueDepth",
@@ -1283,7 +1665,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.maxTotalLatency.latest` (key 140) · millisecond · level 1, per_device_level 3 · Tier 1: Host, VM
+    /// Highest latency value across all disks used by the host
+    /// `disk.maxTotalLatency.latest` · millisecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const MAX_TOTAL_LATENCY_LATEST: Metric<Time, VmOrHost> = Metric::new(
         "disk",
         "maxTotalLatency",
@@ -1294,7 +1679,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.numberReadAveraged.average` (key 143) · number · level 1, per_device_level 3 · Tier 1: Datastore, Host, VM
+    /// Average number of disk reads per second during the collection interval
+    /// `disk.numberReadAveraged.average` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const NUMBER_READ_AVERAGED_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "numberReadAveraged",
@@ -1305,7 +1693,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.numberRead.summation` (key 135) · number · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Number of disk reads during the collection interval
+    /// `disk.numberRead.summation` · number · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const NUMBER_READ_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "disk",
         "numberRead",
@@ -1316,7 +1707,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.numberWriteAveraged.average` (key 144) · number · level 1, per_device_level 3 · Tier 1: Datastore, Host, VM
+    /// Average number of disk writes per second during the collection interval
+    /// `disk.numberWriteAveraged.average` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const NUMBER_WRITE_AVERAGED_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "numberWriteAveraged",
@@ -1327,7 +1721,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.numberWrite.summation` (key 136) · number · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Number of disk writes during the collection interval
+    /// `disk.numberWrite.summation` · number · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const NUMBER_WRITE_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "disk",
         "numberWrite",
@@ -1338,7 +1735,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.provisioned.latest` (key 279) · kiloBytes · level 1, per_device_level 1 · Tier 1: Datastore, VM
+    /// Amount of storage set aside for use by a datastore or a virtual machine
+    /// `disk.provisioned.latest` · kiloBytes · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Direct (1)
+    /// Types: Datastore, VirtualMachine
     pub const PROVISIONED_LATEST: Metric<Memory, DatastoreVm> = Metric::new(
         "disk",
         "provisioned",
@@ -1349,7 +1749,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.queueLatency.average` (key 507) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time spent in the VMkernel queue, per Storage command, during the collection interval
+    /// `disk.queueLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const QUEUE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "queueLatency",
@@ -1360,7 +1763,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.queueReadLatency.average` (key 500) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time spent in the VMkernel queue, per Storage read command, during the collection interval
+    /// `disk.queueReadLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const QUEUE_READ_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "queueReadLatency",
@@ -1371,7 +1777,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.queueWriteLatency.average` (key 504) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time spent in the VMkernel queue, per Storage write command, during the collection interval
+    /// `disk.queueWriteLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const QUEUE_WRITE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "queueWriteLatency",
@@ -1382,7 +1791,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.read.average` (key 137) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Datastore, Host, VM
+    /// Average number of kilobytes read from the disk each second during the collection interval
+    /// `disk.read.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_AVERAGE: Metric<Throughput, DatastoreVmHost> = Metric::new(
         "disk",
         "read",
@@ -1393,7 +1805,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.readFailed.latest` (key 902) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Number of failed reads on the disk
+    /// `disk.readFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "readFailed",
@@ -1404,7 +1819,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.read.latest` (key 901) · number · level 4, per_device_level 4 · Tier 2: Datastore, Host, VM
+    /// Average number of kilobytes read from the disk each second during the collection interval
+    /// `disk.read.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "read",
@@ -1415,7 +1833,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.scsiReservationCnflctsPct.average` (key 358) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Number of Storage reservation conflicts for the LUN as a percent of total commands during the collection interval
+    /// `disk.scsiReservationCnflctsPct.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const SCSI_RESERVATION_CNFLCTS_PCT_AVERAGE: Metric<Ratio, DatastoreVmHost> = Metric::new(
         "disk",
         "scsiReservationCnflctsPct",
@@ -1426,7 +1847,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.scsiReservationCnflctsPct.average` (key 148) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Number of Storage reservation conflicts for the LUN as a percent of total commands during the collection interval
+    /// `disk.scsiReservationCnflctsPct.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const SCSI_RESERVATION_CNFLCTS_PCT_AVERAGE_ABSOLUTE: Metric<Ratio, DatastoreVmHost> =
         Metric::new(
             "disk",
@@ -1438,7 +1862,10 @@ pub mod disk {
             false,
         );
 
-    /// `disk.scsiReservationConflicts.summation` (key 147) · number · level 2, per_device_level 2 · Tier 1: Host, VM
+    /// Number of Storage reservation conflicts for the LUN during the collection interval
+    /// `disk.scsiReservationConflicts.summation` · number · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const SCSI_RESERVATION_CONFLICTS_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "disk",
         "scsiReservationConflicts",
@@ -1449,7 +1876,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.state.latest` (key 909) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Current state of device
+    /// `disk.state.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const STATE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "state",
@@ -1460,7 +1890,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.throughput.contention.average` (key 146) · millisecond · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Average amount of time for an I/O operation to complete successfully
+    /// `disk.throughput.contention.average` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const THROUGHPUT_CONTENTION_AVERAGE: Metric<Time, DatastoreVmHost> = Metric::new(
         "disk",
         "throughput.contention",
@@ -1471,7 +1904,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.throughput.usage.average` (key 145) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Aggregated disk I/O rate, including the rates for all virtual machines running on the host during the collection interval
+    /// `disk.throughput.usage.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const THROUGHPUT_USAGE_AVERAGE: Metric<Throughput, DatastoreVmHost> = Metric::new(
         "disk",
         "throughput.usage",
@@ -1482,7 +1918,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.abortFailed.latest` (key 912) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of failed aborts on a disk
+    /// `disk.TM.abortFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_ABORT_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.abortFailed",
@@ -1493,7 +1932,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.abort.latest` (key 910) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of aborts on a disk
+    /// `disk.TM.abort.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_ABORT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.abort",
@@ -1504,7 +1946,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.abortRetry.latest` (key 911) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of aborts retries on a disk
+    /// `disk.TM.abortRetry.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_ABORT_RETRY_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.abortRetry",
@@ -1515,7 +1960,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.busResetFailed.latest` (key 924) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of failed bus-resets
+    /// `disk.TM.busResetFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_BUS_RESET_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.busResetFailed",
@@ -1526,7 +1974,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.busReset.latest` (key 922) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of bus resets
+    /// `disk.TM.busReset.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_BUS_RESET_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.busReset",
@@ -1537,7 +1988,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.busResetRetry.latest` (key 923) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of bus-reset retries
+    /// `disk.TM.busResetRetry.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_BUS_RESET_RETRY_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.busResetRetry",
@@ -1548,7 +2002,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.deviceResetFailed.latest` (key 921) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of failed device-resets
+    /// `disk.TM.deviceResetFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_DEVICE_RESET_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.deviceResetFailed",
@@ -1559,7 +2016,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.deviceReset.latest` (key 919) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of device resets
+    /// `disk.TM.deviceReset.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_DEVICE_RESET_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.deviceReset",
@@ -1570,7 +2030,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.deviceResetRetry.latest` (key 920) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of device-reset retries
+    /// `disk.TM.deviceResetRetry.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_DEVICE_RESET_RETRY_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.deviceResetRetry",
@@ -1581,7 +2044,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.lunResetFailed.latest` (key 918) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of failed lun-resets
+    /// `disk.TM.lunResetFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_LUN_RESET_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.lunResetFailed",
@@ -1592,7 +2058,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.lunReset.latest` (key 916) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of lun resets
+    /// `disk.TM.lunReset.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_LUN_RESET_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.lunReset",
@@ -1603,7 +2072,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.lunResetRetry.latest` (key 917) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of lun-reset retries
+    /// `disk.TM.lunResetRetry.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_LUN_RESET_RETRY_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.lunResetRetry",
@@ -1614,7 +2086,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.virtResetFailed.latest` (key 915) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of failed virt-resets
+    /// `disk.TM.virtResetFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_VIRT_RESET_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.virtResetFailed",
@@ -1625,7 +2100,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.virtReset.latest` (key 913) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of virt resets
+    /// `disk.TM.virtReset.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_VIRT_RESET_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.virtReset",
@@ -1636,7 +2114,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.TM.virtResetRetry.latest` (key 914) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Total number of virt-reset retries
+    /// `disk.TM.virtResetRetry.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TM_VIRT_RESET_RETRY_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "TM.virtResetRetry",
@@ -1647,7 +2128,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.totalLatency.average` (key 139) · millisecond · level 3, per_device_level 3 · Tier 1: Host
+    /// Average amount of time taken during the collection interval to process a Storage command issued by the guest OS to the virtual machine
+    /// `disk.totalLatency.average` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const TOTAL_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "totalLatency",
@@ -1658,7 +2142,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.totalReadLatency.average` (key 499) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time taken during the collection interval to process a Storage read command issued from the guest OS to the virtual machine
+    /// `disk.totalReadLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const TOTAL_READ_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "totalReadLatency",
@@ -1669,7 +2156,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.totalWriteLatency.average` (key 503) · millisecond · level 2, per_device_level 3 · Tier 1: Host
+    /// Average amount of time taken during the collection interval to process a Storage write command issued by the guest OS to the virtual machine
+    /// `disk.totalWriteLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const TOTAL_WRITE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "disk",
         "totalWriteLatency",
@@ -1680,7 +2170,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.unshared.latest` (key 281) · kiloBytes · level 1, per_device_level 1 · Tier 1: VM
+    /// Amount of space associated exclusively with a virtual machine
+    /// `disk.unshared.latest` · kiloBytes · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const UNSHARED_LATEST: Metric<Memory, VmOnly> = Metric::new(
         "disk",
         "unshared",
@@ -1691,7 +2184,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.usage.average` (key 132) · kiloBytesPerSecond · level 1, per_device_level 3 · Tier 1: Host, VM
+    /// Aggregated disk I/O rate. For hosts, this metric includes the rates for all virtual machines running on the host during the collection interval.
+    /// `disk.usage.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const USAGE_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "disk",
         "usage",
@@ -1702,7 +2198,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.usage.maximum` (key 134) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Aggregated disk I/O rate. For hosts, this metric includes the rates for all virtual machines running on the host during the collection interval.
+    /// `disk.usage.maximum` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const USAGE_MAXIMUM: Metric<Throughput, VmOrHost> = Metric::new(
         "disk",
         "usage",
@@ -1713,7 +2212,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.usage.minimum` (key 133) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Aggregated disk I/O rate. For hosts, this metric includes the rates for all virtual machines running on the host during the collection interval.
+    /// `disk.usage.minimum` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const USAGE_MINIMUM: Metric<Throughput, VmOrHost> = Metric::new(
         "disk",
         "usage",
@@ -1724,7 +2226,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.usage.none` (key 131) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Aggregated disk I/O rate. For hosts, this metric includes the rates for all virtual machines running on the host during the collection interval.
+    /// `disk.usage.none` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const USAGE_NONE: Metric<Throughput, VmOrHost> = Metric::new(
         "disk",
         "usage",
@@ -1735,7 +2240,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.used.latest` (key 278) · kiloBytes · level 1, per_device_level 1 · Tier 1: Datastore, VM
+    /// Amount of space actually used by the virtual machine or the datastore
+    /// `disk.used.latest` · kiloBytes · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Direct (1)
+    /// Types: Datastore, VirtualMachine
     pub const USED_LATEST: Metric<Memory, DatastoreVm> = Metric::new(
         "disk",
         "used",
@@ -1746,7 +2254,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.write.average` (key 138) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Datastore, Host, VM
+    /// Average number of kilobytes written to disk each second during the collection interval
+    /// `disk.write.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_AVERAGE: Metric<Throughput, DatastoreVmHost> = Metric::new(
         "disk",
         "write",
@@ -1757,7 +2268,10 @@ pub mod disk {
         true,
     );
 
-    /// `disk.writeFailed.latest` (key 904) · number · level 4, per_device_level 4 · Tier 3a: Datastore, Host, VM
+    /// Number of failed writes on the disk
+    /// `disk.writeFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "writeFailed",
@@ -1768,7 +2282,10 @@ pub mod disk {
         false,
     );
 
-    /// `disk.write.latest` (key 903) · number · level 4, per_device_level 4 · Tier 2: Datastore, Host, VM
+    /// Average number of kilobytes written to disk each second during the collection interval
+    /// `disk.write.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "disk",
         "write",
@@ -1783,7 +2300,10 @@ pub mod disk {
 pub mod gpu {
     use super::super::*;
 
-    /// `gpu.mem.reserved.gb.latest` (key 1018) · gigaBytes · level 3, per_device_level 3 · Tier 3a: Cluster, Pool
+    /// The amount of GPU memory reserved in gigabytes
+    /// `gpu.mem.reserved.gb.latest` · gigaBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_RESERVED_GB_LATEST: Metric<Memory, ClusterPool> = Metric::new(
         "gpu",
         "mem.reserved.gb",
@@ -1794,7 +2314,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.reserved.latest` (key 1014) · kiloBytes · level 1, per_device_level 3 · Tier 1: Cluster, Pool
+    /// The amount of GPU memory reserved in kilobytes
+    /// `gpu.mem.reserved.latest` · kiloBytes · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_RESERVED_LATEST: Metric<Memory, ClusterPool> = Metric::new(
         "gpu",
         "mem.reserved",
@@ -1805,7 +2328,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.total.gb.latest` (key 1019) · gigaBytes · level 3, per_device_level 3 · Tier 3a: Cluster, Pool
+    /// The total amount of GPU memory in gigabytes
+    /// `gpu.mem.total.gb.latest` · gigaBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_TOTAL_GB_LATEST: Metric<Memory, ClusterPool> = Metric::new(
         "gpu",
         "mem.total.gb",
@@ -1816,7 +2342,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.total.latest` (key 1016) · kiloBytes · level 1, per_device_level 3 · Tier 1: Cluster, Pool
+    /// The total amount of GPU memory in kilobytes
+    /// `gpu.mem.total.latest` · kiloBytes · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_TOTAL_LATEST: Metric<Memory, ClusterPool> = Metric::new(
         "gpu",
         "mem.total",
@@ -1827,7 +2356,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.usage.average` (key 622) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Pool
+    /// The amount of GPU memory used in percentages of the total available
+    /// `gpu.mem.usage.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_USAGE_AVERAGE: Metric<Ratio, ClusterPool> = Metric::new(
         "gpu",
         "mem.usage",
@@ -1838,7 +2370,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.usage.maximum` (key 623) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Pool
+    /// The amount of GPU memory used in percentages of the total available
+    /// `gpu.mem.usage.maximum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_USAGE_MAXIMUM: Metric<Ratio, ClusterPool> = Metric::new(
         "gpu",
         "mem.usage",
@@ -1849,7 +2384,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.usage.minimum` (key 624) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Pool
+    /// The amount of GPU memory used in percentages of the total available
+    /// `gpu.mem.usage.minimum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_USAGE_MINIMUM: Metric<Ratio, ClusterPool> = Metric::new(
         "gpu",
         "mem.usage",
@@ -1860,7 +2398,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.usage.none` (key 621) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Pool
+    /// The amount of GPU memory used in percentages of the total available
+    /// `gpu.mem.usage.none` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_USAGE_NONE: Metric<Ratio, ClusterPool> = Metric::new(
         "gpu",
         "mem.usage",
@@ -1871,7 +2412,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.used.average` (key 618) · kiloBytes · level 1, per_device_level 3 · Tier 1: Cluster, Pool
+    /// The amount of GPU memory used in kilobytes
+    /// `gpu.mem.used.average` · kiloBytes · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_USED_AVERAGE: Metric<Memory, ClusterPool> = Metric::new(
         "gpu",
         "mem.used",
@@ -1882,7 +2426,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.used.gb.latest` (key 1017) · gigaBytes · level 3, per_device_level 3 · Tier 3a: Cluster, Pool
+    /// The amount of GPU memory used in gigabytes
+    /// `gpu.mem.used.gb.latest` · gigaBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_USED_GB_LATEST: Metric<Memory, ClusterPool> = Metric::new(
         "gpu",
         "mem.used.gb",
@@ -1893,7 +2440,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.used.maximum` (key 619) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Pool
+    /// The amount of GPU memory used in kilobytes
+    /// `gpu.mem.used.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_USED_MAXIMUM: Metric<Memory, ClusterPool> = Metric::new(
         "gpu",
         "mem.used",
@@ -1904,7 +2454,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.used.minimum` (key 620) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Pool
+    /// The amount of GPU memory used in kilobytes
+    /// `gpu.mem.used.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_USED_MINIMUM: Metric<Memory, ClusterPool> = Metric::new(
         "gpu",
         "mem.used",
@@ -1915,7 +2468,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.mem.used.none` (key 617) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Pool
+    /// The amount of GPU memory used in kilobytes
+    /// `gpu.mem.used.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const MEM_USED_NONE: Metric<Memory, ClusterPool> = Metric::new(
         "gpu",
         "mem.used",
@@ -1926,7 +2482,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.power.used.latest` (key 1015) · watt · level 1, per_device_level 3 · Tier 1: Cluster, Pool
+    /// The power used by a GPU in watts
+    /// `gpu.power.used.latest` · watt · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const POWER_USED_LATEST: Metric<Power, ClusterPool> = Metric::new(
         "gpu",
         "power.used",
@@ -1937,7 +2496,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.temperature.average` (key 625) · celsius · level 1, per_device_level 3 · Tier 1: Cluster, Pool
+    /// The temperature of a GPU in degrees celsius
+    /// `gpu.temperature.average` · celsius · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const TEMPERATURE_AVERAGE: Metric<Temperature, ClusterPool> = Metric::new(
         "gpu",
         "temperature",
@@ -1948,7 +2510,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.utilization.average` (key 614) · percent (hundredths) · level 1, per_device_level 3 · Tier 1: Cluster, Pool
+    /// The compute utilization of a GPU in percentages
+    /// `gpu.utilization.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const UTILIZATION_AVERAGE: Metric<Ratio, ClusterPool> = Metric::new(
         "gpu",
         "utilization",
@@ -1959,7 +2524,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.utilization.maximum` (key 615) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Cluster, Pool
+    /// The compute utilization of a GPU in percentages
+    /// `gpu.utilization.maximum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const UTILIZATION_MAXIMUM: Metric<Ratio, ClusterPool> = Metric::new(
         "gpu",
         "utilization",
@@ -1970,7 +2538,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.utilization.minimum` (key 616) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Cluster, Pool
+    /// The compute utilization of a GPU in percentages
+    /// `gpu.utilization.minimum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const UTILIZATION_MINIMUM: Metric<Ratio, ClusterPool> = Metric::new(
         "gpu",
         "utilization",
@@ -1981,7 +2552,10 @@ pub mod gpu {
         false,
     );
 
-    /// `gpu.utilization.none` (key 613) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Cluster, Pool
+    /// The compute utilization of a GPU in percentages
+    /// `gpu.utilization.none` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, ResourcePool
     pub const UTILIZATION_NONE: Metric<Ratio, ClusterPool> = Metric::new(
         "gpu",
         "utilization",
@@ -1996,7 +2570,10 @@ pub mod gpu {
 pub mod hbr {
     use super::super::*;
 
-    /// `hbr.hbrDiskReadLatency.average` (key 591) · millisecond · level 4, per_device_level 4 · Tier 1: Host
+    /// Average disk read latency seen by vSphere Replication
+    /// `hbr.hbrDiskReadLatency.average` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const HBR_DISK_READ_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "hbr",
         "hbrDiskReadLatency",
@@ -2007,7 +2584,10 @@ pub mod hbr {
         false,
     );
 
-    /// `hbr.hbrDiskStallLatency.average` (key 592) · millisecond · level 4, per_device_level 4 · Tier 1: Host
+    /// Average guest I/O stall introduced by vSphere Replication
+    /// `hbr.hbrDiskStallLatency.average` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const HBR_DISK_STALL_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "hbr",
         "hbrDiskStallLatency",
@@ -2018,7 +2598,10 @@ pub mod hbr {
         false,
     );
 
-    /// `hbr.hbrDiskTransferBytes.average` (key 595) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Host
+    /// Average amount of data in KB successfully transferred per disk
+    /// `hbr.hbrDiskTransferBytes.average` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const HBR_DISK_TRANSFER_BYTES_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "hbr",
         "hbrDiskTransferBytes",
@@ -2029,7 +2612,10 @@ pub mod hbr {
         false,
     );
 
-    /// `hbr.hbrDiskTransferIdle.average` (key 594) · millisecond · level 4, per_device_level 4 · Tier 3a: Host
+    /// Average amount of idle time per disk
+    /// `hbr.hbrDiskTransferIdle.average` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const HBR_DISK_TRANSFER_IDLE_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "hbr",
         "hbrDiskTransferIdle",
@@ -2040,7 +2626,10 @@ pub mod hbr {
         false,
     );
 
-    /// `hbr.hbrDiskTransferSuccess.average` (key 593) · millisecond · level 4, per_device_level 4 · Tier 3a: Host
+    /// Average amount of successful transfer time per disk
+    /// `hbr.hbrDiskTransferSuccess.average` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const HBR_DISK_TRANSFER_SUCCESS_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "hbr",
         "hbrDiskTransferSuccess",
@@ -2051,7 +2640,10 @@ pub mod hbr {
         false,
     );
 
-    /// `hbr.hbrNetLatency.average` (key 590) · millisecond · level 4, per_device_level 4 · Tier 3a: Host
+    /// Average network latency seen by vSphere Replication
+    /// `hbr.hbrNetLatency.average` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const HBR_NET_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "hbr",
         "hbrNetLatency",
@@ -2062,7 +2654,10 @@ pub mod hbr {
         false,
     );
 
-    /// `hbr.hbrNetRx.average` (key 588) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 1: Host
+    /// Average amount of data received per second
+    /// `hbr.hbrNetRx.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const HBR_NET_RX_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "hbr",
         "hbrNetRx",
@@ -2073,7 +2668,10 @@ pub mod hbr {
         false,
     );
 
-    /// `hbr.hbrNetTx.average` (key 589) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 1: Host
+    /// Average amount of data transmitted per second
+    /// `hbr.hbrNetTx.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const HBR_NET_TX_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "hbr",
         "hbrNetTx",
@@ -2084,7 +2682,10 @@ pub mod hbr {
         false,
     );
 
-    /// `hbr.hbrNumVms.average` (key 587) · number · level 4, per_device_level 4 · Tier 1: Host
+    /// Current number of replicated virtual machines
+    /// `hbr.hbrNumVms.average` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const HBR_NUM_VMS_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "hbr",
         "hbrNumVms",
@@ -2095,7 +2696,10 @@ pub mod hbr {
         false,
     );
 
-    /// `hbr.vms.latest` (key 402) · number · level 4, per_device_level 4 · Tier 3a: Host
+    /// Current number of replicated virtual machines
+    /// `hbr.vms.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const VMS_LATEST: Metric<Count, HostOnly> = Metric::new(
         "hbr",
         "vms",
@@ -2110,7 +2714,10 @@ pub mod hbr {
 pub mod lwd {
     use super::super::*;
 
-    /// `lwd.numSnapshots.latest` (key 408) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host, VM
+    /// Number of Lightweight Delta (LWD) snapshots taken
+    /// `lwd.numSnapshots.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem, VirtualMachine
     pub const NUM_SNAPSHOTS_LATEST: Metric<Count, VmOrHost> = Metric::new(
         "lwd",
         "numSnapshots",
@@ -2125,7 +2732,10 @@ pub mod lwd {
 pub mod management_agent {
     use super::super::*;
 
-    /// `managementAgent.cpuUsage.average` (key 569) · megaHertz · level 3, per_device_level 3 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Amount of Service Console CPU usage
+    /// `managementAgent.cpuUsage.average` · megaHertz · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const CPU_USAGE_AVERAGE: Metric<Frequency, HostOnly> = Metric::new(
         "managementAgent",
         "cpuUsage",
@@ -2136,7 +2746,10 @@ pub mod management_agent {
         false,
     );
 
-    /// `managementAgent.memUsed.average` (key 567) · kiloBytes · level 3, per_device_level 3 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Amount of total configured memory that is available for use
+    /// `managementAgent.memUsed.average` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const MEM_USED_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "managementAgent",
         "memUsed",
@@ -2147,7 +2760,10 @@ pub mod management_agent {
         false,
     );
 
-    /// `managementAgent.swapIn.average` (key 88) · kiloBytesPerSecond · level 3, per_device_level 3 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Amount of memory that is swapped in for the Service Console
+    /// `managementAgent.swapIn.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SWAP_IN_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "managementAgent",
         "swapIn",
@@ -2158,7 +2774,10 @@ pub mod management_agent {
         false,
     );
 
-    /// `managementAgent.swapOut.average` (key 87) · kiloBytesPerSecond · level 3, per_device_level 3 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Amount of memory that is swapped out for the Service Console
+    /// `managementAgent.swapOut.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SWAP_OUT_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "managementAgent",
         "swapOut",
@@ -2169,7 +2788,10 @@ pub mod management_agent {
         false,
     );
 
-    /// `managementAgent.swapUsed.average` (key 568) · kiloBytes · level 3, per_device_level 3 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Sum of the memory swapped by all powered-on virtual machines on the host
+    /// `managementAgent.swapUsed.average` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SWAP_USED_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "managementAgent",
         "swapUsed",
@@ -2184,7 +2806,10 @@ pub mod management_agent {
 pub mod mem {
     use super::super::*;
 
-    /// `mem.activewrite.average` (key 467) · kiloBytes · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Amount of guest physical memory that is being actively written by guest. Activeness is estimated by ESXi
+    /// `mem.activewrite.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const ACTIVEWRITE_AVERAGE: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "activewrite",
@@ -2195,7 +2820,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.active.average` (key 33) · kiloBytes · level 2, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory that is being actively read or written by guest. Activeness is estimated by ESXi
+    /// `mem.active.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ACTIVE_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "active",
@@ -2206,7 +2834,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.active.maximum` (key 35) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory that is being actively read or written by guest. Activeness is estimated by ESXi
+    /// `mem.active.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ACTIVE_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "active",
@@ -2217,7 +2848,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.active.minimum` (key 34) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory that is being actively read or written by guest. Activeness is estimated by ESXi
+    /// `mem.active.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ACTIVE_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "active",
@@ -2228,7 +2862,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.active.none` (key 32) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory that is being actively read or written by guest. Activeness is estimated by ESXi
+    /// `mem.active.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ACTIVE_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "active",
@@ -2239,7 +2876,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.bandwidth.read.latest` (key 124) · kiloBytesPerSecond · level 2, per_device_level 2 · Tier 3a: Cluster, Host, Pool, VM
+    /// Current read bandwidth of this memory type
+    /// `mem.bandwidth.read.latest` · kiloBytesPerSecond · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const BANDWIDTH_READ_LATEST: Metric<Throughput, ComputeScope> = Metric::new(
         "mem",
         "bandwidth.read",
@@ -2250,7 +2890,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.bandwidth.total.latest` (key 126) · kiloBytesPerSecond · level 1, per_device_level 1 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total read and write bandwidth of this memory type
+    /// `mem.bandwidth.total.latest` · kiloBytesPerSecond · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const BANDWIDTH_TOTAL_LATEST: Metric<Throughput, ComputeScope> = Metric::new(
         "mem",
         "bandwidth.total",
@@ -2261,7 +2904,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.bandwidth.write.latest` (key 125) · kiloBytesPerSecond · level 2, per_device_level 2 · Tier 3a: Cluster, Host, Pool, VM
+    /// Current write bandwidth of this memory type
+    /// `mem.bandwidth.write.latest` · kiloBytesPerSecond · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const BANDWIDTH_WRITE_LATEST: Metric<Throughput, ComputeScope> = Metric::new(
         "mem",
         "bandwidth.write",
@@ -2272,7 +2918,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.active.latest` (key 802) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Per tier active memory. This value is expressed in megabytes
+    /// `mem.capacity.active.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_ACTIVE_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.active",
@@ -2283,7 +2932,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.consumed.latest` (key 801) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Per tier consumed memory. This value is expressed in megabytes
+    /// `mem.capacity.consumed.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_CONSUMED_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.consumed",
@@ -2294,7 +2946,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.contention.average` (key 112) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Percentage of time VMs are waiting to access swapped, compressed or ballooned memory
+    /// `mem.capacity.contention.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_CONTENTION_AVERAGE: Metric<Ratio, ComputeScope> = Metric::new(
         "mem",
         "capacity.contention",
@@ -2305,7 +2960,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.entitlement.average` (key 109) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of host physical memory the VM is entitled to, as determined by the ESXi scheduler
+    /// `mem.capacity.entitlement.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_ENTITLEMENT_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.entitlement",
@@ -2316,7 +2974,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.overhead.average` (key 394) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of Overhead memory actively used
+    /// `mem.capacity.overhead.average` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_OVERHEAD_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.overhead",
@@ -2327,7 +2988,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.overheadResv.average` (key 395) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of OverheadResv memory
+    /// `mem.capacity.overheadResv.average` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_OVERHEAD_RESV_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.overheadResv",
@@ -2338,7 +3002,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.provisioned.average` (key 108) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total amount of memory available to the host
+    /// `mem.capacity.provisioned.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_PROVISIONED_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.provisioned",
@@ -2349,7 +3016,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.provisioned.latest` (key 370) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total amount of memory available to the host
+    /// `mem.capacity.provisioned.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_PROVISIONED_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.provisioned",
@@ -2360,7 +3030,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.usable.average` (key 110) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of physical memory available for use by virtual machines on this host
+    /// `mem.capacity.usable.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USABLE_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.usable",
@@ -2371,7 +3044,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.usage.average` (key 111) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of physical memory actively used
+    /// `mem.capacity.usage.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.usage",
@@ -2382,7 +3058,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.usage.userworld.average` (key 116) · kiloBytes · level 2, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.capacity.usage.userworld.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_USERWORLD_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.usage.userworld",
@@ -2393,7 +3071,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.usage.vmkOvrhd.average` (key 115) · kiloBytes · level 2, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.capacity.usage.vmkOvrhd.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_VMK_OVRHD_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.usage.vmkOvrhd",
@@ -2404,7 +3084,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.usage.vm.average` (key 113) · kiloBytes · level 2, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.capacity.usage.vm.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_VM_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.usage.vm",
@@ -2415,7 +3097,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.capacity.usage.vmOvrhd.average` (key 114) · kiloBytes · level 2, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.capacity.usage.vmOvrhd.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_VM_OVRHD_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "capacity.usage.vmOvrhd",
@@ -2426,7 +3110,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.compressed.average` (key 105) · kiloBytes · level 2, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Guest physical memory pages that have undergone memory compression
+    /// `mem.compressed.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const COMPRESSED_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "compressed",
@@ -2437,7 +3124,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.compressionRate.average` (key 106) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Rate of guest physical memory page compression by ESXi
+    /// `mem.compressionRate.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const COMPRESSION_RATE_AVERAGE: Metric<Throughput, ComputeScope> = Metric::new(
         "mem",
         "compressionRate",
@@ -2448,7 +3138,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.consumed.average` (key 98) · kiloBytes · level 1, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Amount of host physical memory consumed for backing up guest physical memory pages
+    /// `mem.consumed.average` · kiloBytes · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CONSUMED_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "consumed",
@@ -2459,7 +3152,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.consumed.maximum` (key 100) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of host physical memory consumed for backing up guest physical memory pages
+    /// `mem.consumed.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CONSUMED_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "consumed",
@@ -2470,7 +3166,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.consumed.minimum` (key 99) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of host physical memory consumed for backing up guest physical memory pages
+    /// `mem.consumed.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CONSUMED_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "consumed",
@@ -2481,7 +3180,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.consumed.none` (key 97) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of host physical memory consumed for backing up guest physical memory pages
+    /// `mem.consumed.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CONSUMED_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "consumed",
@@ -2492,7 +3194,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.consumed.userworlds.average` (key 123) · kiloBytes · level 2, per_device_level 4 · Tier 1: Host
+    /// Amount of physical memory consumed by userworlds on this host
+    /// `mem.consumed.userworlds.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const CONSUMED_USERWORLDS_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "consumed.userworlds",
@@ -2503,7 +3208,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.consumed.vms.average` (key 122) · kiloBytes · level 2, per_device_level 4 · Tier 1: Host
+    /// Amount of physical memory consumed by VMs on this host
+    /// `mem.consumed.vms.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const CONSUMED_VMS_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "consumed.vms",
@@ -2514,7 +3222,10 @@ pub mod mem {
         true,
     );
 
-    /// `mem.decompressionRate.average` (key 107) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Rate of guest physical memory decompression
+    /// `mem.decompressionRate.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const DECOMPRESSION_RATE_AVERAGE: Metric<Throughput, ComputeScope> = Metric::new(
         "mem",
         "decompressionRate",
@@ -2525,7 +3236,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.entitlement.average` (key 473) · kiloBytes · level 2, per_device_level 3 · Tier 1: VM
+    /// Amount of host physical memory the virtual machine deserves, as determined by ESXi
+    /// `mem.entitlement.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const ENTITLEMENT_AVERAGE: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "entitlement",
@@ -2536,7 +3250,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.granted.average` (key 29) · kiloBytes · level 2, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Amount of host physical memory or physical memory that is mapped for a virtual machine or a host
+    /// `mem.granted.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const GRANTED_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "granted",
@@ -2547,7 +3264,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.granted.maximum` (key 31) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of host physical memory or physical memory that is mapped for a virtual machine or a host
+    /// `mem.granted.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const GRANTED_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "granted",
@@ -2558,7 +3278,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.granted.minimum` (key 30) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of host physical memory or physical memory that is mapped for a virtual machine or a host
+    /// `mem.granted.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const GRANTED_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "granted",
@@ -2569,7 +3292,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.granted.none` (key 28) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of host physical memory or physical memory that is mapped for a virtual machine or a host
+    /// `mem.granted.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const GRANTED_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "granted",
@@ -2580,7 +3306,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.health.reservationState.latest` (key 393) · number · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Memory reservation health state, 2->Red, 1->Green
+    /// `mem.health.reservationState.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const HEALTH_RESERVATION_STATE_LATEST: Metric<Count, ComputeScope> = Metric::new(
         "mem",
         "health.reservationState",
@@ -2591,7 +3320,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.heapfree.average` (key 65) · kiloBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Free address space in the heap of ESXi. This is less than or equal to Heap
+    /// `mem.heapfree.average` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const HEAPFREE_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "heapfree",
@@ -2602,7 +3334,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.heapfree.maximum` (key 67) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Free address space in the heap of ESXi. This is less than or equal to Heap
+    /// `mem.heapfree.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const HEAPFREE_MAXIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "heapfree",
@@ -2613,7 +3348,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.heapfree.minimum` (key 66) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Free address space in the heap of ESXi. This is less than or equal to Heap
+    /// `mem.heapfree.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const HEAPFREE_MINIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "heapfree",
@@ -2624,7 +3362,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.heapfree.none` (key 64) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Free address space in the heap of ESXi. This is less than or equal to Heap
+    /// `mem.heapfree.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const HEAPFREE_NONE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "heapfree",
@@ -2635,7 +3376,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.heap.average` (key 61) · kiloBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Virtual address space of ESXi that is dedicated to its heap
+    /// `mem.heap.average` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const HEAP_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "heap",
@@ -2646,7 +3390,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.heap.maximum` (key 63) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Virtual address space of ESXi that is dedicated to its heap
+    /// `mem.heap.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const HEAP_MAXIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "heap",
@@ -2657,7 +3404,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.heap.minimum` (key 62) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Virtual address space of ESXi that is dedicated to its heap
+    /// `mem.heap.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const HEAP_MINIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "heap",
@@ -2668,7 +3418,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.heap.none` (key 60) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Virtual address space of ESXi that is dedicated to its heap
+    /// `mem.heap.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const HEAP_NONE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "heap",
@@ -2679,7 +3432,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.kernel.managed.latest` (key 378) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total amount of machine memory managed by VMkernel
+    /// `mem.kernel.managed.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const KERNEL_MANAGED_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "kernel.managed",
@@ -2690,7 +3446,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.kernel.minfree.latest` (key 379) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Mininum amount of machine memory that VMkernel likes to keep free
+    /// `mem.kernel.minfree.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const KERNEL_MINFREE_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "kernel.minfree",
@@ -2701,7 +3460,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.kernel.unreserved.latest` (key 380) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of machine memory that is currently unreserved
+    /// `mem.kernel.unreserved.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const KERNEL_UNRESERVED_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "kernel.unreserved",
@@ -2712,7 +3474,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.latency.average` (key 472) · percent (hundredths) · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Percentage of time the virtual machine spent waiting to swap in or decompress guest physical memory
+    /// `mem.latency.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const LATENCY_AVERAGE: Metric<Ratio, VmOrHost> = Metric::new(
         "mem",
         "latency",
@@ -2723,7 +3488,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.latency.read.latest` (key 129) · nanosecond · level 3, per_device_level 3 · Tier 3a: Cluster, Host, Pool, VM
+    /// Get the current read latency of this memory type
+    /// `mem.latency.read.latest` · nanosecond · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const LATENCY_READ_LATEST: Metric<Time, ComputeScope> = Metric::new(
         "mem",
         "latency.read",
@@ -2734,7 +3502,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.latency.write.latest` (key 130) · nanosecond · level 3, per_device_level 3 · Tier 3a: Cluster, Host, Pool, VM
+    /// Get the current write latency of this memory type
+    /// `mem.latency.write.latest` · nanosecond · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const LATENCY_WRITE_LATEST: Metric<Time, ComputeScope> = Metric::new(
         "mem",
         "latency.write",
@@ -2745,7 +3516,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapIn.average` (key 483) · kiloBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Amount of guest physical memory swapped in from host cache
+    /// `mem.llSwapIn.average` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const LL_SWAP_IN_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "llSwapIn",
@@ -2756,7 +3530,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapIn.maximum` (key 484) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of guest physical memory swapped in from host cache
+    /// `mem.llSwapIn.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const LL_SWAP_IN_MAXIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "llSwapIn",
@@ -2767,7 +3544,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapIn.minimum` (key 485) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of guest physical memory swapped in from host cache
+    /// `mem.llSwapIn.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const LL_SWAP_IN_MINIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "llSwapIn",
@@ -2778,7 +3558,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapIn.none` (key 482) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of guest physical memory swapped in from host cache
+    /// `mem.llSwapIn.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const LL_SWAP_IN_NONE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "llSwapIn",
@@ -2789,7 +3572,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapInRate.average` (key 476) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Rate at which guest physical memory is swapped in from the host swap cache
+    /// `mem.llSwapInRate.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const LL_SWAP_IN_RATE_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "mem",
         "llSwapInRate",
@@ -2800,7 +3586,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapOut.average` (key 487) · kiloBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Amount of guest physical memory swapped out to the host swap cache
+    /// `mem.llSwapOut.average` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const LL_SWAP_OUT_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "llSwapOut",
@@ -2811,7 +3600,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapOut.maximum` (key 488) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of guest physical memory swapped out to the host swap cache
+    /// `mem.llSwapOut.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const LL_SWAP_OUT_MAXIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "llSwapOut",
@@ -2822,7 +3614,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapOut.minimum` (key 489) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of guest physical memory swapped out to the host swap cache
+    /// `mem.llSwapOut.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const LL_SWAP_OUT_MINIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "llSwapOut",
@@ -2833,7 +3628,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapOut.none` (key 486) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of guest physical memory swapped out to the host swap cache
+    /// `mem.llSwapOut.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const LL_SWAP_OUT_NONE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "llSwapOut",
@@ -2844,7 +3642,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapOutRate.average` (key 477) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Rate at which guest physical memory is swapped out to the host swap cache
+    /// `mem.llSwapOutRate.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const LL_SWAP_OUT_RATE_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "mem",
         "llSwapOutRate",
@@ -2855,7 +3656,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapUsed.average` (key 479) · kiloBytes · level 4, per_device_level 4 · Tier 1: Host, VM
+    /// Storage space consumed on the host swap cache for storing swapped guest physical memory pages
+    /// `mem.llSwapUsed.average` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const LL_SWAP_USED_AVERAGE: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "llSwapUsed",
@@ -2866,7 +3670,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapUsed.maximum` (key 480) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Storage space consumed on the host swap cache for storing swapped guest physical memory pages
+    /// `mem.llSwapUsed.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const LL_SWAP_USED_MAXIMUM: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "llSwapUsed",
@@ -2877,7 +3684,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapUsed.minimum` (key 481) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Storage space consumed on the host swap cache for storing swapped guest physical memory pages
+    /// `mem.llSwapUsed.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const LL_SWAP_USED_MINIMUM: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "llSwapUsed",
@@ -2888,7 +3698,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.llSwapUsed.none` (key 475) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Storage space consumed on the host swap cache for storing swapped guest physical memory pages
+    /// `mem.llSwapUsed.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const LL_SWAP_USED_NONE: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "llSwapUsed",
@@ -2899,7 +3712,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.lowfreethreshold.average` (key 474) · kiloBytes · level 2, per_device_level 3 · Tier 1: Host
+    /// Threshold of free host physical memory below which ESXi will begin actively reclaiming memory from virtual machines by swapping, compression and ballooning
+    /// `mem.lowfreethreshold.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const LOWFREETHRESHOLD_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "lowfreethreshold",
@@ -2910,7 +3726,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.memctl.current.latest` (key 390) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total amount of physical memory reclaimed using the vmmemctl modules
+    /// `mem.memctl.current.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const MEMCTL_CURRENT_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "memctl.current",
@@ -2921,7 +3740,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.memctl.max.latest` (key 392) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Maximum amount of physical memory ESXi can reclaim using the vmmemctl modules
+    /// `mem.memctl.max.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const MEMCTL_MAX_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "memctl.max",
@@ -2932,7 +3754,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.memctl.target.latest` (key 391) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total amount of physical memory ESXi would like to reclaim using the vmmemctl modules
+    /// `mem.memctl.target.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const MEMCTL_TARGET_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "memctl.target",
@@ -2943,7 +3768,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.mementitlement.latest` (key 224) · megaBytes · level 2, per_device_level 3 · Tier 1: Pool, VM
+    /// Memory allocation as calculated by the VMkernel scheduler based on current estimated demand and reservation, limit, and shares policies set for all virtual machines and resource pools in the host or cluster
+    /// `mem.mementitlement.latest` · megaBytes · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ResourcePool, VirtualMachine
     pub const MEMENTITLEMENT_LATEST: Metric<Memory, VmOrPool> = Metric::new(
         "mem",
         "mementitlement",
@@ -2954,7 +3782,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.missrate.latest` (key 128) · percent (hundredths) · level 2, per_device_level 2 · Tier 3a: Cluster, Host, Pool, VM
+    /// Get the current miss rate of this memory type
+    /// `mem.missrate.latest` · percent (hundredths) · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const MISSRATE_LATEST: Metric<Ratio, ComputeScope> = Metric::new(
         "mem",
         "missrate",
@@ -2965,7 +3796,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.overcommit.avg15min.latest` (key 374) · number · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Ratio of total requested memory and the managed memory minus 1 over the past 15 minutes
+    /// `mem.overcommit.avg15min.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const OVERCOMMIT_AVG15MIN_LATEST: Metric<Count, ComputeScope> = Metric::new(
         "mem",
         "overcommit.avg15min",
@@ -2976,7 +3810,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.overcommit.avg1min.latest` (key 372) · number · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Ratio of total requested memory and the managed memory minus 1 over the past 1 minute
+    /// `mem.overcommit.avg1min.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const OVERCOMMIT_AVG1MIN_LATEST: Metric<Count, ComputeScope> = Metric::new(
         "mem",
         "overcommit.avg1min",
@@ -2987,7 +3824,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.overcommit.avg5min.latest` (key 373) · number · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Ratio of total requested memory and the managed memory minus 1 over the past 5 minutes
+    /// `mem.overcommit.avg5min.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const OVERCOMMIT_AVG5MIN_LATEST: Metric<Count, ComputeScope> = Metric::new(
         "mem",
         "overcommit.avg5min",
@@ -2998,7 +3838,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.overhead.average` (key 102) · kiloBytes · level 1, per_device_level 1 · Tier 1: Cluster, Host, Pool, VM
+    /// Host physical memory consumed by ESXi data structures for running the virtual machines
+    /// `mem.overhead.average` · kiloBytes · vCenter and ESX
+    /// Level: 1, Per-device level: 1 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const OVERHEAD_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "overhead",
@@ -3009,7 +3852,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.overhead.maximum` (key 104) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Host physical memory consumed by ESXi data structures for running the virtual machines
+    /// `mem.overhead.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const OVERHEAD_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "overhead",
@@ -3020,7 +3866,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.overheadMax.average` (key 468) · kiloBytes · level 2, per_device_level 3 · Tier 1: VM
+    /// Host physical memory reserved by ESXi, for its data structures, for running the virtual machine
+    /// `mem.overheadMax.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const OVERHEAD_MAX_AVERAGE: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "overheadMax",
@@ -3031,7 +3880,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.overhead.minimum` (key 103) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Host physical memory consumed by ESXi data structures for running the virtual machines
+    /// `mem.overhead.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const OVERHEAD_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "overhead",
@@ -3042,7 +3894,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.overhead.none` (key 101) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Host physical memory consumed by ESXi data structures for running the virtual machines
+    /// `mem.overhead.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const OVERHEAD_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "overhead",
@@ -3053,7 +3908,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.overheadTouched.average` (key 478) · kiloBytes · level 4, per_device_level 4 · Tier 1: VM
+    /// Estimate of the host physical memory, from Overhead consumed, that is actively read or written to by ESXi
+    /// `mem.overheadTouched.average` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const OVERHEAD_TOUCHED_AVERAGE: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "overheadTouched",
@@ -3064,7 +3922,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.physical.free.latest` (key 377) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of machine memory that is free on the ESXi host
+    /// `mem.physical.free.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const PHYSICAL_FREE_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "physical.free",
@@ -3075,7 +3936,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.physical.total.latest` (key 375) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total amount of machine memory on the ESXi host
+    /// `mem.physical.total.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const PHYSICAL_TOTAL_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "physical.total",
@@ -3086,7 +3950,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.physical.user.latest` (key 376) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of machine memory being used by everything other than VMkernel
+    /// `mem.physical.user.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const PHYSICAL_USER_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "physical.user",
@@ -3097,7 +3964,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.pshare.common.latest` (key 382) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of machine memory that is common across World(s)
+    /// `mem.pshare.common.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const PSHARE_COMMON_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "pshare.common",
@@ -3108,7 +3978,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.pshare.shared.latest` (key 381) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of physical memory that is being shared
+    /// `mem.pshare.shared.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const PSHARE_SHARED_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "pshare.shared",
@@ -3119,7 +3992,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.pshare.sharedSave.latest` (key 383) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Amount of machine memory saved due to page-sharing
+    /// `mem.pshare.sharedSave.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const PSHARE_SHARED_SAVE_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "pshare.sharedSave",
@@ -3130,7 +4006,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.reservedCapacity.average` (key 27) · megaBytes · level 2, per_device_level 3 · Tier 1: Cluster, Host
+    /// Memory reservation consumed by powered-on virtual machines
+    /// `mem.reservedCapacity.average` · megaBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem
     pub const RESERVED_CAPACITY_AVERAGE: Metric<Memory, HostCluster> = Metric::new(
         "mem",
         "reservedCapacity",
@@ -3141,7 +4020,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.reservedCapacityPct.average` (key 121) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Percent of memory that has been reserved either through VMkernel use, by userworlds or due to VM memory reservations
+    /// `mem.reservedCapacityPct.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const RESERVED_CAPACITY_PCT_AVERAGE: Metric<Ratio, ComputeScope> = Metric::new(
         "mem",
         "reservedCapacityPct",
@@ -3152,7 +4034,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.reservedCapacityPct.latest` (key 371) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Percent of memory that has been reserved either through VMkernel use, by userworlds or due to VM memory reservations
+    /// `mem.reservedCapacityPct.latest` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const RESERVED_CAPACITY_PCT_LATEST: Metric<Ratio, ComputeScope> = Metric::new(
         "mem",
         "reservedCapacityPct",
@@ -3163,7 +4048,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.reservedCapacity.userworld.average` (key 120) · kiloBytes · level 2, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.reservedCapacity.userworld.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const RESERVED_CAPACITY_USERWORLD_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "reservedCapacity.userworld",
@@ -3174,7 +4061,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.reservedCapacity.vmkOvrhd.average` (key 119) · kiloBytes · level 2, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.reservedCapacity.vmkOvrhd.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const RESERVED_CAPACITY_VMK_OVRHD_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "reservedCapacity.vmkOvrhd",
@@ -3185,7 +4074,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.reservedCapacity.vm.average` (key 117) · kiloBytes · level 2, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.reservedCapacity.vm.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const RESERVED_CAPACITY_VM_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "reservedCapacity.vm",
@@ -3196,7 +4087,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.reservedCapacity.vmOvhd.average` (key 118) · kiloBytes · level 2, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.reservedCapacity.vmOvhd.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const RESERVED_CAPACITY_VM_OVHD_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "reservedCapacity.vmOvhd",
@@ -3207,7 +4100,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.sharedcommon.average` (key 57) · kiloBytes · level 2, per_device_level 3 · Tier 1: Host
+    /// Amount of host physical memory that backs shared guest physical memory (Shared)
+    /// `mem.sharedcommon.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const SHAREDCOMMON_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "sharedcommon",
@@ -3218,7 +4114,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.sharedcommon.maximum` (key 59) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of host physical memory that backs shared guest physical memory (Shared)
+    /// `mem.sharedcommon.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const SHAREDCOMMON_MAXIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "sharedcommon",
@@ -3229,7 +4128,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.sharedcommon.minimum` (key 58) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of host physical memory that backs shared guest physical memory (Shared)
+    /// `mem.sharedcommon.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const SHAREDCOMMON_MINIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "sharedcommon",
@@ -3240,7 +4142,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.sharedcommon.none` (key 56) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of host physical memory that backs shared guest physical memory (Shared)
+    /// `mem.sharedcommon.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const SHAREDCOMMON_NONE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "sharedcommon",
@@ -3251,7 +4156,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.shared.average` (key 37) · kiloBytes · level 2, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory that is shared within a single virtual machine or across virtual machines
+    /// `mem.shared.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SHARED_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "shared",
@@ -3262,7 +4170,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.shared.maximum` (key 39) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory that is shared within a single virtual machine or across virtual machines
+    /// `mem.shared.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SHARED_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "shared",
@@ -3273,7 +4184,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.shared.minimum` (key 38) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory that is shared within a single virtual machine or across virtual machines
+    /// `mem.shared.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SHARED_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "shared",
@@ -3284,7 +4198,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.shared.none` (key 36) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory that is shared within a single virtual machine or across virtual machines
+    /// `mem.shared.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SHARED_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "shared",
@@ -3295,7 +4212,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.state.latest` (key 68) · number · level 2, per_device_level 3 · Tier 1: Host
+    /// Current memory availability state of ESXi. Possible values are high, clear, soft, hard, low. The state value determines the techniques used for memory reclamation from virtual machines
+    /// `mem.state.latest` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const STATE_LATEST: Metric<Count, HostOnly> = Metric::new(
         "mem",
         "state",
@@ -3306,7 +4226,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapin.average` (key 456) · kiloBytes · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Amount of guest physical memory that is swapped in from the swap space since the virtual machine has been powered on. This value is less than or equal to the 'Swap out' counter
+    /// `mem.swapin.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPIN_AVERAGE: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "swapin",
@@ -3317,7 +4240,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapin.maximum` (key 457) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Amount of guest physical memory that is swapped in from the swap space since the virtual machine has been powered on. This value is less than or equal to the 'Swap out' counter
+    /// `mem.swapin.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPIN_MAXIMUM: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "swapin",
@@ -3328,7 +4254,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapin.minimum` (key 458) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Amount of guest physical memory that is swapped in from the swap space since the virtual machine has been powered on. This value is less than or equal to the 'Swap out' counter
+    /// `mem.swapin.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPIN_MINIMUM: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "swapin",
@@ -3339,7 +4268,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapin.none` (key 455) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Amount of guest physical memory that is swapped in from the swap space since the virtual machine has been powered on. This value is less than or equal to the 'Swap out' counter
+    /// `mem.swapin.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPIN_NONE: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "swapin",
@@ -3350,7 +4282,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapinRate.average` (key 85) · kiloBytesPerSecond · level 1, per_device_level 3 · Tier 1: Host, VM
+    /// Rate at which guest physical memory is swapped in from the swap space
+    /// `mem.swapinRate.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPIN_RATE_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "mem",
         "swapinRate",
@@ -3361,7 +4296,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapout.average` (key 460) · kiloBytes · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Amount of guest physical memory that is swapped out from the virtual machine to its swap space since it has been powered on.
+    /// `mem.swapout.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPOUT_AVERAGE: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "swapout",
@@ -3372,7 +4310,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapout.maximum` (key 461) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Amount of guest physical memory that is swapped out from the virtual machine to its swap space since it has been powered on.
+    /// `mem.swapout.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPOUT_MAXIMUM: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "swapout",
@@ -3383,7 +4324,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapout.minimum` (key 462) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Amount of guest physical memory that is swapped out from the virtual machine to its swap space since it has been powered on.
+    /// `mem.swapout.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPOUT_MINIMUM: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "swapout",
@@ -3394,7 +4338,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapout.none` (key 459) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Amount of guest physical memory that is swapped out from the virtual machine to its swap space since it has been powered on.
+    /// `mem.swapout.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPOUT_NONE: Metric<Memory, VmOrHost> = Metric::new(
         "mem",
         "swapout",
@@ -3405,7 +4352,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapoutRate.average` (key 86) · kiloBytesPerSecond · level 1, per_device_level 3 · Tier 1: Host, VM
+    /// Rate at which guest physical memory is swapped out to the swap space
+    /// `mem.swapoutRate.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const SWAPOUT_RATE_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "mem",
         "swapoutRate",
@@ -3416,7 +4366,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapped.average` (key 70) · kiloBytes · level 2, per_device_level 3 · Tier 1: Pool, VM
+    /// Amount of guest physical memory that is swapped out to the swap space
+    /// `mem.swapped.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ResourcePool, VirtualMachine
     pub const SWAPPED_AVERAGE: Metric<Memory, VmOrPool> = Metric::new(
         "mem",
         "swapped",
@@ -3427,7 +4380,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapped.maximum` (key 72) · kiloBytes · level 4, per_device_level 4 · Tier 2: Pool, VM
+    /// Amount of guest physical memory that is swapped out to the swap space
+    /// `mem.swapped.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ResourcePool, VirtualMachine
     pub const SWAPPED_MAXIMUM: Metric<Memory, VmOrPool> = Metric::new(
         "mem",
         "swapped",
@@ -3438,7 +4394,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapped.minimum` (key 71) · kiloBytes · level 4, per_device_level 4 · Tier 2: Pool, VM
+    /// Amount of guest physical memory that is swapped out to the swap space
+    /// `mem.swapped.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ResourcePool, VirtualMachine
     pub const SWAPPED_MINIMUM: Metric<Memory, VmOrPool> = Metric::new(
         "mem",
         "swapped",
@@ -3449,7 +4408,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapped.none` (key 69) · kiloBytes · level 4, per_device_level 4 · Tier 2: Pool, VM
+    /// Amount of guest physical memory that is swapped out to the swap space
+    /// `mem.swapped.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ResourcePool, VirtualMachine
     pub const SWAPPED_NONE: Metric<Memory, VmOrPool> = Metric::new(
         "mem",
         "swapped",
@@ -3460,7 +4422,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swaptarget.average` (key 74) · kiloBytes · level 2, per_device_level 3 · Tier 1: VM
+    /// Amount of memory that ESXi needs to reclaim by swapping
+    /// `mem.swaptarget.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const SWAPTARGET_AVERAGE: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "swaptarget",
@@ -3471,7 +4436,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swaptarget.maximum` (key 76) · kiloBytes · level 4, per_device_level 4 · Tier 2: VM
+    /// Amount of memory that ESXi needs to reclaim by swapping
+    /// `mem.swaptarget.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: VirtualMachine
     pub const SWAPTARGET_MAXIMUM: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "swaptarget",
@@ -3482,7 +4450,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swaptarget.minimum` (key 75) · kiloBytes · level 4, per_device_level 4 · Tier 2: VM
+    /// Amount of memory that ESXi needs to reclaim by swapping
+    /// `mem.swaptarget.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: VirtualMachine
     pub const SWAPTARGET_MINIMUM: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "swaptarget",
@@ -3493,7 +4464,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swaptarget.none` (key 73) · kiloBytes · level 4, per_device_level 4 · Tier 2: VM
+    /// Amount of memory that ESXi needs to reclaim by swapping
+    /// `mem.swaptarget.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: VirtualMachine
     pub const SWAPTARGET_NONE: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "swaptarget",
@@ -3504,7 +4478,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapunreserved.average` (key 53) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapunreserved.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAPUNRESERVED_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapunreserved",
@@ -3515,7 +4491,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapunreserved.maximum` (key 55) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapunreserved.maximum` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAPUNRESERVED_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapunreserved",
@@ -3526,7 +4504,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapunreserved.minimum` (key 54) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapunreserved.minimum` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAPUNRESERVED_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapunreserved",
@@ -3537,7 +4517,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapunreserved.none` (key 52) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapunreserved.none` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAPUNRESERVED_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapunreserved",
@@ -3548,7 +4530,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapused.average` (key 49) · kiloBytes · level 2, per_device_level 3 · Tier 1: Cluster, Host
+    /// Swap storage space consumed
+    /// `mem.swapused.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem
     pub const SWAPUSED_AVERAGE: Metric<Memory, HostCluster> = Metric::new(
         "mem",
         "swapused",
@@ -3559,7 +4544,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapused.maximum` (key 51) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host
+    /// Swap storage space consumed
+    /// `mem.swapused.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem
     pub const SWAPUSED_MAXIMUM: Metric<Memory, HostCluster> = Metric::new(
         "mem",
         "swapused",
@@ -3570,7 +4558,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapused.minimum` (key 50) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host
+    /// Swap storage space consumed
+    /// `mem.swapused.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem
     pub const SWAPUSED_MINIMUM: Metric<Memory, HostCluster> = Metric::new(
         "mem",
         "swapused",
@@ -3581,7 +4572,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapused.none` (key 48) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host
+    /// Swap storage space consumed
+    /// `mem.swapused.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem
     pub const SWAPUSED_NONE: Metric<Memory, HostCluster> = Metric::new(
         "mem",
         "swapused",
@@ -3592,7 +4586,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swap.current.latest` (key 384) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Current swap usage
+    /// `mem.swap.current.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_CURRENT_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swap.current",
@@ -3603,7 +4600,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapIn.average` (key 78) · kiloBytes · level 2, per_device_level 3 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapIn.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_IN_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapIn",
@@ -3614,7 +4613,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapIn.maximum` (key 80) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapIn.maximum` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_IN_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapIn",
@@ -3625,7 +4626,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapIn.minimum` (key 79) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapIn.minimum` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_IN_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapIn",
@@ -3636,7 +4639,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapIn.none` (key 77) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapIn.none` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_IN_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapIn",
@@ -3647,7 +4652,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapOut.average` (key 82) · kiloBytes · level 2, per_device_level 3 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapOut.average` · kiloBytes · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_OUT_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapOut",
@@ -3658,7 +4665,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapOut.maximum` (key 84) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapOut.maximum` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_OUT_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapOut",
@@ -3669,7 +4678,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapOut.minimum` (key 83) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapOut.minimum` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_OUT_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapOut",
@@ -3680,7 +4691,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swapOut.none` (key 81) · kiloBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.swapOut.none` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_OUT_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swapOut",
@@ -3691,7 +4704,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swap.readrate.average` (key 386) · megaBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Rate at which memory is swapped in by ESXi from disk
+    /// `mem.swap.readrate.average` · megaBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_READRATE_AVERAGE: Metric<Throughput, ComputeScope> = Metric::new(
         "mem",
         "swap.readrate",
@@ -3702,7 +4718,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swap.target.latest` (key 385) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Where ESXi expects the reclaimed memory using swapping and compression to be
+    /// `mem.swap.target.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_TARGET_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "swap.target",
@@ -3713,7 +4732,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.swap.writerate.average` (key 387) · megaBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Rate at which memory is swapped to disk by the ESXi
+    /// `mem.swap.writerate.average` · megaBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const SWAP_WRITERATE_AVERAGE: Metric<Throughput, ComputeScope> = Metric::new(
         "mem",
         "swap.writerate",
@@ -3724,7 +4746,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.sysUsage.average` (key 464) · kiloBytes · level 2, per_device_level 3 · Tier 1: Host
+    /// Amount of host physical memory consumed by VMkernel
+    /// `mem.sysUsage.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const SYS_USAGE_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "sysUsage",
@@ -3735,7 +4760,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.sysUsage.maximum` (key 465) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of host physical memory consumed by VMkernel
+    /// `mem.sysUsage.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const SYS_USAGE_MAXIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "sysUsage",
@@ -3746,7 +4774,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.sysUsage.minimum` (key 466) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of host physical memory consumed by VMkernel
+    /// `mem.sysUsage.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const SYS_USAGE_MINIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "sysUsage",
@@ -3757,7 +4788,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.sysUsage.none` (key 463) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of host physical memory consumed by VMkernel
+    /// `mem.sysUsage.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const SYS_USAGE_NONE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "sysUsage",
@@ -3768,7 +4802,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.totalmb.average` (key 275) · megaBytes · level 1, per_device_level 3 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total amount of host physical memory of all hosts in the cluster that is available for virtual machine memory (physical memory for use by the guest OS) and virtual machine overhead memory
+    /// `mem.totalmb.average` · megaBytes · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const TOTALMB_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "totalmb",
@@ -3779,7 +4816,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.totalCapacity.average` (key 469) · megaBytes · level 2, per_device_level 3 · Tier 1: Host
+    /// Total reservation, available and consumed, for powered-on virtual machines
+    /// `mem.totalCapacity.average` · megaBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const TOTAL_CAPACITY_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "totalCapacity",
@@ -3790,7 +4830,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.unreserved.average` (key 45) · kiloBytes · level 2, per_device_level 3 · Tier 1: Host
+    /// Amount by which reservation can be raised
+    /// `mem.unreserved.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const UNRESERVED_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "unreserved",
@@ -3801,7 +4844,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.unreserved.maximum` (key 47) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount by which reservation can be raised
+    /// `mem.unreserved.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const UNRESERVED_MAXIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "unreserved",
@@ -3812,7 +4858,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.unreserved.minimum` (key 46) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount by which reservation can be raised
+    /// `mem.unreserved.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const UNRESERVED_MINIMUM: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "unreserved",
@@ -3823,7 +4872,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.unreserved.none` (key 44) · kiloBytes · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount by which reservation can be raised
+    /// `mem.unreserved.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const UNRESERVED_NONE: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "unreserved",
@@ -3834,7 +4886,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.usage.average` (key 24) · percent (hundredths) · level 1, per_device_level 3 · Tier 1: Cluster, Host, VM
+    /// Percentage of host physical memory that has been consumed
+    /// `mem.usage.average` · percent (hundredths) · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, VirtualMachine
     pub const USAGE_AVERAGE: Metric<Ratio, VmHostCluster> = Metric::new(
         "mem",
         "usage",
@@ -3845,7 +4900,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.usage.maximum` (key 26) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Cluster, Host, VM
+    /// Percentage of host physical memory that has been consumed
+    /// `mem.usage.maximum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, VirtualMachine
     pub const USAGE_MAXIMUM: Metric<Ratio, VmHostCluster> = Metric::new(
         "mem",
         "usage",
@@ -3856,7 +4914,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.usage.minimum` (key 25) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Cluster, Host, VM
+    /// Percentage of host physical memory that has been consumed
+    /// `mem.usage.minimum` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, VirtualMachine
     pub const USAGE_MINIMUM: Metric<Ratio, VmHostCluster> = Metric::new(
         "mem",
         "usage",
@@ -3867,7 +4928,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.usage.none` (key 23) · percent (hundredths) · level 4, per_device_level 4 · Tier 2: Cluster, Host, VM
+    /// Percentage of host physical memory that has been consumed
+    /// `mem.usage.none` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, VirtualMachine
     pub const USAGE_NONE: Metric<Ratio, VmHostCluster> = Metric::new(
         "mem",
         "usage",
@@ -3878,7 +4942,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmfs.pbc.capMissRatio.latest` (key 495) · percent (hundredths) · level 4, per_device_level 4 · Tier 1: Host
+    /// Trailing average of the ratio of capacity misses to compulsory misses for the VMFS PB Cache
+    /// `mem.vmfs.pbc.capMissRatio.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const VMFS_PBC_CAP_MISS_RATIO_LATEST: Metric<Ratio, HostOnly> = Metric::new(
         "mem",
         "vmfs.pbc.capMissRatio",
@@ -3889,7 +4956,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmfs.pbc.overhead.latest` (key 494) · kiloBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Amount of VMFS heap used by the VMFS PB Cache
+    /// `mem.vmfs.pbc.overhead.latest` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const VMFS_PBC_OVERHEAD_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "vmfs.pbc.overhead",
@@ -3900,7 +4970,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmfs.pbc.size.latest` (key 490) · megaBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Space used for holding VMFS Pointer Blocks in memory
+    /// `mem.vmfs.pbc.size.latest` · megaBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const VMFS_PBC_SIZE_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "vmfs.pbc.size",
@@ -3911,7 +4984,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmfs.pbc.sizeMax.latest` (key 491) · megaBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Maximum size the VMFS Pointer Block Cache can grow to
+    /// `mem.vmfs.pbc.sizeMax.latest` · megaBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const VMFS_PBC_SIZE_MAX_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "vmfs.pbc.sizeMax",
@@ -3922,7 +4998,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmfs.pbc.workingSet.latest` (key 492) · teraBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Amount of file blocks whose addresses are cached in the VMFS PB Cache
+    /// `mem.vmfs.pbc.workingSet.latest` · teraBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const VMFS_PBC_WORKING_SET_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "vmfs.pbc.workingSet",
@@ -3933,7 +5012,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmfs.pbc.workingSetMax.latest` (key 493) · teraBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Maximum amount of file blocks whose addresses are cached in the VMFS PB Cache
+    /// `mem.vmfs.pbc.workingSetMax.latest` · teraBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const VMFS_PBC_WORKING_SET_MAX_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "mem",
         "vmfs.pbc.workingSetMax",
@@ -3944,7 +5026,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmmemctltarget.average` (key 94) · kiloBytes · level 2, per_device_level 3 · Tier 1: VM
+    /// Desired amount of guest physical memory the balloon driver needs to reclaim, as determined by ESXi
+    /// `mem.vmmemctltarget.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const VMMEMCTLTARGET_AVERAGE: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "vmmemctltarget",
@@ -3955,7 +5040,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmmemctltarget.maximum` (key 96) · kiloBytes · level 4, per_device_level 4 · Tier 2: VM
+    /// Desired amount of guest physical memory the balloon driver needs to reclaim, as determined by ESXi
+    /// `mem.vmmemctltarget.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: VirtualMachine
     pub const VMMEMCTLTARGET_MAXIMUM: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "vmmemctltarget",
@@ -3966,7 +5054,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmmemctltarget.minimum` (key 95) · kiloBytes · level 4, per_device_level 4 · Tier 2: VM
+    /// Desired amount of guest physical memory the balloon driver needs to reclaim, as determined by ESXi
+    /// `mem.vmmemctltarget.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: VirtualMachine
     pub const VMMEMCTLTARGET_MINIMUM: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "vmmemctltarget",
@@ -3977,7 +5068,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmmemctltarget.none` (key 93) · kiloBytes · level 4, per_device_level 4 · Tier 2: VM
+    /// Desired amount of guest physical memory the balloon driver needs to reclaim, as determined by ESXi
+    /// `mem.vmmemctltarget.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: VirtualMachine
     pub const VMMEMCTLTARGET_NONE: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "vmmemctltarget",
@@ -3988,7 +5082,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmmemctl.average` (key 90) · kiloBytes · level 1, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory reclaimed from the virtual machine by the balloon driver in the guest
+    /// `mem.vmmemctl.average` · kiloBytes · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const VMMEMCTL_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "vmmemctl",
@@ -3999,7 +5096,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmmemctl.maximum` (key 92) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory reclaimed from the virtual machine by the balloon driver in the guest
+    /// `mem.vmmemctl.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const VMMEMCTL_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "vmmemctl",
@@ -4010,7 +5110,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmmemctl.minimum` (key 91) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory reclaimed from the virtual machine by the balloon driver in the guest
+    /// `mem.vmmemctl.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const VMMEMCTL_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "vmmemctl",
@@ -4021,7 +5124,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vmmemctl.none` (key 89) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Amount of guest physical memory reclaimed from the virtual machine by the balloon driver in the guest
+    /// `mem.vmmemctl.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const VMMEMCTL_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "vmmemctl",
@@ -4032,7 +5138,9 @@ pub mod mem {
         false,
     );
 
-    /// `mem.vm.bandwidth.read.latest` (key 127) · kiloBytesPerSecond · level 2, per_device_level 2 · Tier 3a: Cluster, Host, Pool, VM
+    /// `mem.vm.bandwidth.read.latest` · kiloBytesPerSecond · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const VM_BANDWIDTH_READ_LATEST: Metric<Throughput, ComputeScope> = Metric::new(
         "mem",
         "vm.bandwidth.read",
@@ -4043,7 +5151,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.zero.average` (key 41) · kiloBytes · level 2, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Guest physical memory pages whose content is 0x00
+    /// `mem.zero.average` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ZERO_AVERAGE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "zero",
@@ -4054,7 +5165,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.zero.maximum` (key 43) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Guest physical memory pages whose content is 0x00
+    /// `mem.zero.maximum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ZERO_MAXIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "zero",
@@ -4065,7 +5179,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.zero.minimum` (key 42) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Guest physical memory pages whose content is 0x00
+    /// `mem.zero.minimum` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ZERO_MINIMUM: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "zero",
@@ -4076,7 +5193,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.zero.none` (key 40) · kiloBytes · level 4, per_device_level 4 · Tier 2: Cluster, Host, Pool, VM
+    /// Guest physical memory pages whose content is 0x00
+    /// `mem.zero.none` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ZERO_NONE: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "zero",
@@ -4087,7 +5207,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.zipped.latest` (key 470) · kiloBytes · level 2, per_device_level 3 · Tier 1: VM
+    /// Amount of guest physical memory pages compressed by ESXi
+    /// `mem.zipped.latest` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const ZIPPED_LATEST: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "zipped",
@@ -4098,7 +5221,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.zipSaved.latest` (key 471) · kiloBytes · level 2, per_device_level 3 · Tier 1: VM
+    /// Host physical memory, reclaimed from a virtual machine, by memory compression. This value is less than the value of 'Compressed' memory
+    /// `mem.zipSaved.latest` · kiloBytes · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const ZIPSAVED_LATEST: Metric<Memory, VmOnly> = Metric::new(
         "mem",
         "zipSaved",
@@ -4109,7 +5235,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.zip.saved.latest` (key 389) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Saved memory by compression
+    /// `mem.zip.saved.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ZIP_SAVED_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "zip.saved",
@@ -4120,7 +5249,10 @@ pub mod mem {
         false,
     );
 
-    /// `mem.zip.zipped.latest` (key 388) · megaBytes · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Total compressed physical memory
+    /// `mem.zip.zipped.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const ZIP_ZIPPED_LATEST: Metric<Memory, ComputeScope> = Metric::new(
         "mem",
         "zip.zipped",
@@ -4135,7 +5267,10 @@ pub mod mem {
 pub mod net {
     use super::super::*;
 
-    /// `net.broadcastRx.summation` (key 514) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Number of broadcast packets received during the sampling interval
+    /// `net.broadcastRx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const BROADCAST_RX_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "broadcastRx",
@@ -4146,7 +5281,10 @@ pub mod net {
         true,
     );
 
-    /// `net.broadcastTx.summation` (key 515) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Number of broadcast packets transmitted during the sampling interval
+    /// `net.broadcastTx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const BROADCAST_TX_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "broadcastTx",
@@ -4157,7 +5295,10 @@ pub mod net {
         true,
     );
 
-    /// `net.bytesRx.average` (key 512) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Average amount of data received per second
+    /// `net.bytesRx.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const BYTES_RX_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "bytesRx",
@@ -4168,7 +5309,10 @@ pub mod net {
         true,
     );
 
-    /// `net.bytesTx.average` (key 513) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Average amount of data transmitted per second
+    /// `net.bytesTx.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const BYTES_TX_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "bytesTx",
@@ -4179,7 +5323,10 @@ pub mod net {
         true,
     );
 
-    /// `net.droppedRx.summation` (key 510) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Number of receives dropped
+    /// `net.droppedRx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const DROPPED_RX_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "droppedRx",
@@ -4190,7 +5337,10 @@ pub mod net {
         true,
     );
 
-    /// `net.droppedTx.summation` (key 511) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Number of transmits dropped
+    /// `net.droppedTx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const DROPPED_TX_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "droppedTx",
@@ -4201,7 +5351,10 @@ pub mod net {
         true,
     );
 
-    /// `net.errorsRx.summation` (key 518) · number · level 2, per_device_level 3 · Tier 1: Host
+    /// Number of packets with errors received during the sampling interval
+    /// `net.errorsRx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const ERRORS_RX_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "net",
         "errorsRx",
@@ -4212,7 +5365,10 @@ pub mod net {
         true,
     );
 
-    /// `net.errorsTx.summation` (key 519) · number · level 2, per_device_level 3 · Tier 1: Host
+    /// Number of packets with errors transmitted during the sampling interval
+    /// `net.errorsTx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const ERRORS_TX_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "net",
         "errorsTx",
@@ -4223,7 +5379,10 @@ pub mod net {
         true,
     );
 
-    /// `net.latency.hbr.outbound.latest` (key 407) · millisecond · level 4, per_device_level 4 · Tier 3a: Host, VM
+    /// Average latency seen by vSphere Replication
+    /// `net.latency.hbr.outbound.latest` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const LATENCY_HBR_OUTBOUND_LATEST: Metric<Time, VmOrHost> = Metric::new(
         "net",
         "latency.hbr.outbound",
@@ -4234,7 +5393,10 @@ pub mod net {
         false,
     );
 
-    /// `net.multicastRx.summation` (key 516) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Number of multicast packets received during the sampling interval
+    /// `net.multicastRx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const MULTICAST_RX_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "multicastRx",
@@ -4245,7 +5407,10 @@ pub mod net {
         true,
     );
 
-    /// `net.multicastTx.summation` (key 517) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Number of multicast packets transmitted during the sampling interval
+    /// `net.multicastTx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const MULTICAST_TX_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "multicastTx",
@@ -4256,7 +5421,10 @@ pub mod net {
         true,
     );
 
-    /// `net.packetsRx.summation` (key 153) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Number of packets received during the interval
+    /// `net.packetsRx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const PACKETS_RX_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "packetsRx",
@@ -4267,7 +5435,10 @@ pub mod net {
         true,
     );
 
-    /// `net.packetsTx.summation` (key 154) · number · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Number of packets transmitted during the interval
+    /// `net.packetsTx.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const PACKETS_TX_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "packetsTx",
@@ -4278,7 +5449,10 @@ pub mod net {
         true,
     );
 
-    /// `net.pnicBytesRx.average` (key 521) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 1: VM
+    /// Average amount of data received per second by a pNic
+    /// `net.pnicBytesRx.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const PNIC_BYTES_RX_AVERAGE: Metric<Throughput, VmOnly> = Metric::new(
         "net",
         "pnicBytesRx",
@@ -4289,7 +5463,10 @@ pub mod net {
         true,
     );
 
-    /// `net.pnicBytesTx.average` (key 522) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 1: VM
+    /// Average amount of data transmitted per second through a pNic
+    /// `net.pnicBytesTx.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const PNIC_BYTES_TX_AVERAGE: Metric<Throughput, VmOnly> = Metric::new(
         "net",
         "pnicBytesTx",
@@ -4300,7 +5477,10 @@ pub mod net {
         true,
     );
 
-    /// `net.received.average` (key 155) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Average rate at which data was received during the interval
+    /// `net.received.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const RECEIVED_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "received",
@@ -4311,7 +5491,10 @@ pub mod net {
         true,
     );
 
-    /// `net.throughput.contention.summation` (key 160) · number · level 4, per_device_level 4 · Tier 3a: Host, VM
+    /// The aggregate network droppped packets for the host
+    /// `net.throughput.contention.summation` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_CONTENTION_SUMMATION: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.contention",
@@ -4322,7 +5505,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.droppedRx.average` (key 235) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Count of dropped received packets for this VDS
+    /// `net.throughput.droppedRx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_DROPPED_RX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.droppedRx",
@@ -4333,7 +5519,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.droppedTx.average` (key 234) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Count of dropped transmitted packets for this VDS
+    /// `net.throughput.droppedTx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_DROPPED_TX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.droppedTx",
@@ -4344,7 +5533,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.hbr.inbound.average` (key 403) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Host, VM
+    /// Average amount of data received per second
+    /// `net.throughput.hbr.inbound.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_HBR_INBOUND_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.hbr.inbound",
@@ -4355,7 +5547,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.hbr.outbound.average` (key 404) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Host, VM
+    /// Average amount of data transmitted per second
+    /// `net.throughput.hbr.outbound.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_HBR_OUTBOUND_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.hbr.outbound",
@@ -4366,7 +5561,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.packetsPerSec.average` (key 161) · number · level 4, per_device_level 4 · Tier 3a: Host, VM
+    /// Average rate of packets received and transmitted per second
+    /// `net.throughput.packetsPerSec.average` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_PACKETS_PER_SEC_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.packetsPerSec",
@@ -4377,7 +5575,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.pktsRx.average` (key 231) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of received packets for this vDS
+    /// `net.throughput.pktsRx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_PKTS_RX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.pktsRx",
@@ -4388,7 +5589,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.pktsRxBroadcast.average` (key 233) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of received Broadcast packets for this VDS
+    /// `net.throughput.pktsRxBroadcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_PKTS_RX_BROADCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.pktsRxBroadcast",
@@ -4399,7 +5603,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.pktsRxMulticast.average` (key 232) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of received Multicast packets for this VDS
+    /// `net.throughput.pktsRxMulticast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_PKTS_RX_MULTICAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.pktsRxMulticast",
@@ -4410,7 +5617,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.pktsTx.average` (key 228) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of transmitted packets for this VDS
+    /// `net.throughput.pktsTx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_PKTS_TX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.pktsTx",
@@ -4421,7 +5631,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.pktsTxBroadcast.average` (key 230) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of transmitted Broadcast packets for this VDS
+    /// `net.throughput.pktsTxBroadcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_PKTS_TX_BROADCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.pktsTxBroadcast",
@@ -4432,7 +5645,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.pktsTxMulticast.average` (key 229) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of transmitted Multicast packets for this VDS
+    /// `net.throughput.pktsTxMulticast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_PKTS_TX_MULTICAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.pktsTxMulticast",
@@ -4443,7 +5659,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.provisioned.average` (key 157) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Host, VM
+    /// The maximum network bandwidth for the host
+    /// `net.throughput.provisioned.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_PROVISIONED_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.provisioned",
@@ -4454,7 +5673,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.usable.average` (key 158) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Host, VM
+    /// The current available network bandwidth for the host
+    /// `net.throughput.usable.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_USABLE_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.usable",
@@ -4465,7 +5687,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.usage.average` (key 159) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Host, VM
+    /// The current network bandwidth usage for the host
+    /// `net.throughput.usage.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_USAGE_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.usage",
@@ -4476,7 +5701,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.usage.ft.average` (key 215) · kiloBytesPerSecond · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Average pNic I/O rate for FT
+    /// `net.throughput.usage.ft.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_USAGE_FT_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.usage.ft",
@@ -4487,7 +5715,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.usage.hbr.average` (key 217) · kiloBytesPerSecond · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Average pNic I/O rate for HBR
+    /// `net.throughput.usage.hbr.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_USAGE_HBR_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.usage.hbr",
@@ -4498,7 +5729,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.usage.iscsi.average` (key 216) · kiloBytesPerSecond · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Average pNic I/O rate for iSCSI
+    /// `net.throughput.usage.iscsi.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_USAGE_ISCSI_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.usage.iscsi",
@@ -4509,7 +5743,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.usage.nfs.average` (key 213) · kiloBytesPerSecond · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Average pNic I/O rate for NFS
+    /// `net.throughput.usage.nfs.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_USAGE_NFS_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.usage.nfs",
@@ -4520,7 +5757,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.usage.vmotion.average` (key 214) · kiloBytesPerSecond · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Average pNic I/O rate for vMotion
+    /// `net.throughput.usage.vmotion.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_USAGE_VMOTION_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.usage.vmotion",
@@ -4531,7 +5771,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.usage.vm.average` (key 212) · kiloBytesPerSecond · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Average pNic I/O rate for VMs
+    /// `net.throughput.usage.vm.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_USAGE_VM_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "throughput.usage.vm",
@@ -4542,7 +5785,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.droppedRx.average` (key 243) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Count of dropped received packets for this DVPort
+    /// `net.throughput.vds.droppedRx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_DROPPED_RX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.droppedRx",
@@ -4553,7 +5799,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.droppedTx.average` (key 242) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Count of dropped transmitted packets for this DVPort
+    /// `net.throughput.vds.droppedTx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_DROPPED_TX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.droppedTx",
@@ -4564,7 +5813,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.lagDropRx.average` (key 251) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Count of dropped received packets for this LAG
+    /// `net.throughput.vds.lagDropRx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_LAG_DROP_RX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.lagDropRx",
@@ -4575,7 +5827,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.lagDropTx.average` (key 250) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Count of dropped transmitted packets for this LAG
+    /// `net.throughput.vds.lagDropTx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_LAG_DROP_TX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.lagDropTx",
@@ -4586,7 +5841,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.lagRx.average` (key 247) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of received packets for this LAG
+    /// `net.throughput.vds.lagRx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_LAG_RX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.lagRx",
@@ -4597,7 +5855,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.lagRxBcast.average` (key 249) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of received Broadcast packets for this LAG
+    /// `net.throughput.vds.lagRxBcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_LAG_RX_BCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.lagRxBcast",
@@ -4608,7 +5869,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.lagRxMcast.average` (key 248) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of received multicast packets for this LAG
+    /// `net.throughput.vds.lagRxMcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_LAG_RX_MCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.lagRxMcast",
@@ -4619,7 +5883,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.lagTx.average` (key 244) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of transmitted packets for this LAG
+    /// `net.throughput.vds.lagTx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_LAG_TX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.lagTx",
@@ -4630,7 +5897,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.lagTxBcast.average` (key 246) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of transmitted Broadcast packets for this LAG
+    /// `net.throughput.vds.lagTxBcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_LAG_TX_BCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.lagTxBcast",
@@ -4641,7 +5911,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.lagTxMcast.average` (key 245) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of transmitted Multicast packets for this LAG
+    /// `net.throughput.vds.lagTxMcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_LAG_TX_MCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.lagTxMcast",
@@ -4652,7 +5925,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.pktsRx.average` (key 239) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of received packets for this DVPort
+    /// `net.throughput.vds.pktsRx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_PKTS_RX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.pktsRx",
@@ -4663,7 +5939,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.pktsRxBcast.average` (key 241) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of received broadcast packets for this DVPort
+    /// `net.throughput.vds.pktsRxBcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_PKTS_RX_BCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.pktsRxBcast",
@@ -4674,7 +5953,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.pktsRxMcast.average` (key 240) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of received multicast packets for this DVPort
+    /// `net.throughput.vds.pktsRxMcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_PKTS_RX_MCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.pktsRxMcast",
@@ -4685,7 +5967,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.pktsTx.average` (key 236) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of transmitted packets for this DVPort
+    /// `net.throughput.vds.pktsTx.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_PKTS_TX_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.pktsTx",
@@ -4696,7 +5981,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.pktsTxBcast.average` (key 238) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of transmitted broadcast packets for this DVPort
+    /// `net.throughput.vds.pktsTxBcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_PKTS_TX_BCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.pktsTxBcast",
@@ -4707,7 +5995,10 @@ pub mod net {
         false,
     );
 
-    /// `net.throughput.vds.pktsTxMcast.average` (key 237) · number · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// The rate of transmitted multicast packets for this DVPort
+    /// `net.throughput.vds.pktsTxMcast.average` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const THROUGHPUT_VDS_PKTS_TX_MCAST_AVERAGE: Metric<Count, VmOrHost> = Metric::new(
         "net",
         "throughput.vds.pktsTxMcast",
@@ -4718,7 +6009,10 @@ pub mod net {
         false,
     );
 
-    /// `net.transmitted.average` (key 156) · kiloBytesPerSecond · level 2, per_device_level 3 · Tier 1: Host, VM
+    /// Average rate at which data was transmitted during the interval
+    /// `net.transmitted.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const TRANSMITTED_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "transmitted",
@@ -4729,7 +6023,10 @@ pub mod net {
         true,
     );
 
-    /// `net.unknownProtos.summation` (key 520) · number · level 2, per_device_level 3 · Tier 1: Host
+    /// Number of frames with unknown protocol received during the sampling interval
+    /// `net.unknownProtos.summation` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const UNKNOWN_PROTOS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "net",
         "unknownProtos",
@@ -4740,7 +6037,10 @@ pub mod net {
         true,
     );
 
-    /// `net.usage.average` (key 150) · kiloBytesPerSecond · level 1, per_device_level 3 · Tier 1: Host, VM
+    /// Network utilization (combined transmit-rates and receive-rates) during the interval
+    /// `net.usage.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const USAGE_AVERAGE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "usage",
@@ -4751,7 +6051,10 @@ pub mod net {
         true,
     );
 
-    /// `net.usage.maximum` (key 152) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Network utilization (combined transmit-rates and receive-rates) during the interval
+    /// `net.usage.maximum` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const USAGE_MAXIMUM: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "usage",
@@ -4762,7 +6065,10 @@ pub mod net {
         false,
     );
 
-    /// `net.usage.minimum` (key 151) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Network utilization (combined transmit-rates and receive-rates) during the interval
+    /// `net.usage.minimum` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const USAGE_MINIMUM: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "usage",
@@ -4773,7 +6079,10 @@ pub mod net {
         false,
     );
 
-    /// `net.usage.none` (key 149) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 2: Host, VM
+    /// Network utilization (combined transmit-rates and receive-rates) during the interval
+    /// `net.usage.none` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem, VirtualMachine
     pub const USAGE_NONE: Metric<Throughput, VmOrHost> = Metric::new(
         "net",
         "usage",
@@ -4788,7 +6097,10 @@ pub mod net {
 pub mod nfs {
     use super::super::*;
 
-    /// `nfs.apdState.latest` (key 932) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// APD state of the nfs volume
+    /// `nfs.apdState.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const APD_STATE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "nfs",
         "apdState",
@@ -4799,7 +6111,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.createFailed.latest` (key 943) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total create calls failed on NFS volume
+    /// `nfs.createFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CREATE_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "nfs",
         "createFailed",
@@ -4810,7 +6125,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.ioRequestsQueued.latest` (key 941) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total IO requests queued in NFS volume
+    /// `nfs.ioRequestsQueued.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const IO_REQUESTS_QUEUED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "nfs",
         "ioRequestsQueued",
@@ -4821,7 +6139,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.readsFailed.latest` (key 936) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total reads failed on NFS volume
+    /// `nfs.readsFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "nfs",
         "readsFailed",
@@ -4832,7 +6153,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.readIssueTime.latest` (key 933) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative read issue time on NFS volume
+    /// `nfs.readIssueTime.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_ISSUE_TIME_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "nfs",
         "readIssueTime",
@@ -4843,7 +6167,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.readTime.latest` (key 939) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative readTime on NFS volume
+    /// `nfs.readTime.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_TIME_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "nfs",
         "readTime",
@@ -4854,7 +6181,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.socketBufferFull.latest` (key 944) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Number of times we hit into socket buffer out of space condition for NFS volume
+    /// `nfs.socketBufferFull.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const SOCKET_BUFFER_FULL_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "nfs",
         "socketBufferFull",
@@ -4865,7 +6195,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.totalCreate.latest` (key 942) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total create calls on NFS volume
+    /// `nfs.totalCreate.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TOTAL_CREATE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "nfs",
         "totalCreate",
@@ -4876,7 +6209,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.totalReads.latest` (key 935) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total reads on NFS volume
+    /// `nfs.totalReads.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TOTAL_READS_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "nfs",
         "totalReads",
@@ -4887,7 +6223,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.totalWrites.latest` (key 937) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total writes on NFS volume
+    /// `nfs.totalWrites.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const TOTAL_WRITES_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "nfs",
         "totalWrites",
@@ -4898,7 +6237,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.writesFailed.latest` (key 938) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total writes failed on NFS volume
+    /// `nfs.writesFailed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITES_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "nfs",
         "writesFailed",
@@ -4909,7 +6251,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.writeIssueTime.latest` (key 934) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative write issue time on NFS volume
+    /// `nfs.writeIssueTime.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_ISSUE_TIME_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "nfs",
         "writeIssueTime",
@@ -4920,7 +6265,10 @@ pub mod nfs {
         false,
     );
 
-    /// `nfs.writeTime.latest` (key 940) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative writeTime on NFS volume
+    /// `nfs.writeTime.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_TIME_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "nfs",
         "writeTime",
@@ -4935,7 +6283,10 @@ pub mod nfs {
 pub mod pmem {
     use super::super::*;
 
-    /// `pmem.available.reservation.latest` (key 626) · megaBytes · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host, VM
+    /// Persistent memory available reservation on a host.
+    /// `pmem.available.reservation.latest` · megaBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem, VirtualMachine
     pub const AVAILABLE_RESERVATION_LATEST: Metric<Memory, VmOrHost> = Metric::new(
         "pmem",
         "available.reservation",
@@ -4946,7 +6297,10 @@ pub mod pmem {
         false,
     );
 
-    /// `pmem.drsmanaged.reservation.latest` (key 627) · megaBytes · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host, VM
+    /// Persistent memory reservation managed by DRS on a host.
+    /// `pmem.drsmanaged.reservation.latest` · megaBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem, VirtualMachine
     pub const DRSMANAGED_RESERVATION_LATEST: Metric<Memory, VmOrHost> = Metric::new(
         "pmem",
         "drsmanaged.reservation",
@@ -4961,7 +6315,10 @@ pub mod pmem {
 pub mod power {
     use super::super::*;
 
-    /// `power.capacity.usable.average` (key 218) · watt · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Current maximum allowed power usage
+    /// `power.capacity.usable.average` · watt · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USABLE_AVERAGE: Metric<Power, ComputeScope> = Metric::new(
         "power",
         "capacity.usable",
@@ -4972,7 +6329,10 @@ pub mod power {
         false,
     );
 
-    /// `power.capacity.usage.average` (key 219) · watt · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Current power usage
+    /// `power.capacity.usage.average` · watt · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_AVERAGE: Metric<Power, ComputeScope> = Metric::new(
         "power",
         "capacity.usage",
@@ -4983,7 +6343,10 @@ pub mod power {
         false,
     );
 
-    /// `power.capacity.usageCpu.average` (key 929) · watt · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Current CPU power usage
+    /// `power.capacity.usageCpu.average` · watt · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_CPU_AVERAGE: Metric<Power, ComputeScope> = Metric::new(
         "power",
         "capacity.usageCpu",
@@ -4994,7 +6357,10 @@ pub mod power {
         false,
     );
 
-    /// `power.capacity.usageIdle.average` (key 220) · watt · level 2, per_device_level 3 · Tier 1: Host
+    /// Power usage due to host idleness
+    /// `power.capacity.usageIdle.average` · watt · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const CAPACITY_USAGE_IDLE_AVERAGE: Metric<Power, HostOnly> = Metric::new(
         "power",
         "capacity.usageIdle",
@@ -5005,7 +6371,10 @@ pub mod power {
         false,
     );
 
-    /// `power.capacity.usageMem.average` (key 930) · watt · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Current memory power usage
+    /// `power.capacity.usageMem.average` · watt · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_MEM_AVERAGE: Metric<Power, ComputeScope> = Metric::new(
         "power",
         "capacity.usageMem",
@@ -5016,7 +6385,10 @@ pub mod power {
         false,
     );
 
-    /// `power.capacity.usageOther.average` (key 931) · watt · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Current other power usage
+    /// `power.capacity.usageOther.average` · watt · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_OTHER_AVERAGE: Metric<Power, ComputeScope> = Metric::new(
         "power",
         "capacity.usageOther",
@@ -5027,7 +6399,10 @@ pub mod power {
         false,
     );
 
-    /// `power.capacity.usagePct.average` (key 167) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Cluster, Host, Pool, VM
+    /// Current power usage as a percentage of maximum allowed power
+    /// `power.capacity.usagePct.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const CAPACITY_USAGE_PCT_AVERAGE: Metric<Ratio, ComputeScope> = Metric::new(
         "power",
         "capacity.usagePct",
@@ -5038,7 +6413,10 @@ pub mod power {
         false,
     );
 
-    /// `power.capacity.usageStatic.average` (key 701) · watt · level 2, per_device_level 3 · Tier 1: VM
+    /// Static power usage of VM
+    /// `power.capacity.usageStatic.average` · watt · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const CAPACITY_USAGE_STATIC_AVERAGE: Metric<Power, VmOnly> = Metric::new(
         "power",
         "capacity.usageStatic",
@@ -5049,7 +6427,10 @@ pub mod power {
         false,
     );
 
-    /// `power.capacity.usageSystem.average` (key 221) · watt · level 2, per_device_level 3 · Tier 1: Host
+    /// Power usage due to non-VM activities
+    /// `power.capacity.usageSystem.average` · watt · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const CAPACITY_USAGE_SYSTEM_AVERAGE: Metric<Power, HostOnly> = Metric::new(
         "power",
         "capacity.usageSystem",
@@ -5060,7 +6441,10 @@ pub mod power {
         false,
     );
 
-    /// `power.capacity.usageVm.average` (key 222) · watt · level 2, per_device_level 3 · Tier 1: Host
+    /// Power usage due to VM workloads
+    /// `power.capacity.usageVm.average` · watt · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const CAPACITY_USAGE_VM_AVERAGE: Metric<Power, HostOnly> = Metric::new(
         "power",
         "capacity.usageVm",
@@ -5071,7 +6455,10 @@ pub mod power {
         false,
     );
 
-    /// `power.energy.summation` (key 166) · joule · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Total energy used since last stats reset
+    /// `power.energy.summation` · joule · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const ENERGY_SUMMATION: Metric<Energy, VmOrHost> = Metric::new(
         "power",
         "energy",
@@ -5082,7 +6469,10 @@ pub mod power {
         false,
     );
 
-    /// `power.power.average` (key 164) · watt · level 2, per_device_level 3 · Tier 1: Cluster, Host, Pool, VM
+    /// Current power usage
+    /// `power.power.average` · watt · vCenter and ESX
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, HostSystem, ResourcePool, VirtualMachine
     pub const POWER_AVERAGE: Metric<Power, ComputeScope> = Metric::new(
         "power",
         "power",
@@ -5093,7 +6483,10 @@ pub mod power {
         false,
     );
 
-    /// `power.powerCap.average` (key 165) · watt · level 3, per_device_level 3 · Tier 1: Host
+    /// Maximum allowed power usage
+    /// `power.powerCap.average` · watt · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const POWER_CAP_AVERAGE: Metric<Power, HostOnly> = Metric::new(
         "power",
         "powerCap",
@@ -5108,7 +6501,10 @@ pub mod power {
 pub mod rescpu {
     use super::super::*;
 
-    /// `rescpu.actav15.latest` (key 556) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU active average over 15 minutes
+    /// `rescpu.actav15.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const ACTAV15_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "actav15",
@@ -5119,7 +6515,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.actav1.latest` (key 346) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU active average over 1 minute
+    /// `rescpu.actav1.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const ACTAV1_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "actav1",
@@ -5130,7 +6529,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.actav5.latest` (key 553) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU active average over 5 minutes
+    /// `rescpu.actav5.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const ACTAV5_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "actav5",
@@ -5141,7 +6543,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.actpk15.latest` (key 557) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU active peak over 15 minutes
+    /// `rescpu.actpk15.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const ACTPK15_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "actpk15",
@@ -5152,7 +6557,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.actpk1.latest` (key 551) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU active peak over 1 minute
+    /// `rescpu.actpk1.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const ACTPK1_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "actpk1",
@@ -5163,7 +6571,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.actpk5.latest` (key 554) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU active peak over 5 minutes
+    /// `rescpu.actpk5.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const ACTPK5_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "actpk5",
@@ -5174,7 +6585,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.maxLimited15.latest` (key 564) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Amount of CPU resources over the limit that were refused, average over 15 minutes
+    /// `rescpu.maxLimited15.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const MAX_LIMITED15_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "maxLimited15",
@@ -5185,7 +6599,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.maxLimited1.latest` (key 560) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Amount of CPU resources over the limit that were refused, average over 1 minute
+    /// `rescpu.maxLimited1.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const MAX_LIMITED1_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "maxLimited1",
@@ -5196,7 +6613,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.maxLimited5.latest` (key 562) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Amount of CPU resources over the limit that were refused, average over 5 minutes
+    /// `rescpu.maxLimited5.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const MAX_LIMITED5_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "maxLimited5",
@@ -5207,7 +6627,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.runav15.latest` (key 558) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU running average over 15 minutes
+    /// `rescpu.runav15.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const RUNAV15_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "runav15",
@@ -5218,7 +6641,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.runav1.latest` (key 552) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU running average over 1 minute
+    /// `rescpu.runav1.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const RUNAV1_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "runav1",
@@ -5229,7 +6655,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.runav5.latest` (key 555) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU running average over 5 minutes
+    /// `rescpu.runav5.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const RUNAV5_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "runav5",
@@ -5240,7 +6669,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.runpk15.latest` (key 563) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU running peak over 15 minutes
+    /// `rescpu.runpk15.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const RUNPK15_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "runpk15",
@@ -5251,7 +6683,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.runpk1.latest` (key 559) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU running peak over 1 minute
+    /// `rescpu.runpk1.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const RUNPK1_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "runpk1",
@@ -5262,7 +6697,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.runpk5.latest` (key 561) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// CPU running peak over 5 minutes
+    /// `rescpu.runpk5.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const RUNPK5_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "rescpu",
         "runpk5",
@@ -5273,7 +6711,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.sampleCount.latest` (key 565) · number · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Group CPU sample count
+    /// `rescpu.sampleCount.latest` · number · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const SAMPLE_COUNT_LATEST: Metric<Count, VmOrHost> = Metric::new(
         "rescpu",
         "sampleCount",
@@ -5284,7 +6725,10 @@ pub mod rescpu {
         false,
     );
 
-    /// `rescpu.samplePeriod.latest` (key 566) · millisecond · level 3, per_device_level 3 · Tier 1: Host, VM
+    /// Group CPU sample period
+    /// `rescpu.samplePeriod.latest` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const SAMPLE_PERIOD_LATEST: Metric<Time, VmOrHost> = Metric::new(
         "rescpu",
         "samplePeriod",
@@ -5299,7 +6743,10 @@ pub mod rescpu {
 pub mod storage_adapter {
     use super::super::*;
 
-    /// `storageAdapter.commandsAveraged.average` (key 168) · number · level 2, per_device_level 2 · Tier 1: Host
+    /// Average number of commands issued per second by the storage adapter during the collection interval
+    /// `storageAdapter.commandsAveraged.average` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const COMMANDS_AVERAGED_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "storageAdapter",
         "commandsAveraged",
@@ -5310,7 +6757,10 @@ pub mod storage_adapter {
         true,
     );
 
-    /// `storageAdapter.maxTotalLatency.latest` (key 175) · millisecond · level 3, per_device_level 3 · Tier 1: Host
+    /// Highest latency value across all storage adapters used by the host
+    /// `storageAdapter.maxTotalLatency.latest` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const MAX_TOTAL_LATENCY_LATEST: Metric<Time, HostOnly> = Metric::new(
         "storageAdapter",
         "maxTotalLatency",
@@ -5321,7 +6771,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.numberReadAveraged.average` (key 169) · number · level 2, per_device_level 2 · Tier 1: Host
+    /// Average number of read commands issued per second by the storage adapter during the collection interval
+    /// `storageAdapter.numberReadAveraged.average` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const NUMBER_READ_AVERAGED_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "storageAdapter",
         "numberReadAveraged",
@@ -5332,7 +6785,10 @@ pub mod storage_adapter {
         true,
     );
 
-    /// `storageAdapter.numberWriteAveraged.average` (key 170) · number · level 2, per_device_level 2 · Tier 1: Host
+    /// Average number of write commands issued per second by the storage adapter during the collection interval
+    /// `storageAdapter.numberWriteAveraged.average` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const NUMBER_WRITE_AVERAGED_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "storageAdapter",
         "numberWriteAveraged",
@@ -5343,7 +6799,10 @@ pub mod storage_adapter {
         true,
     );
 
-    /// `storageAdapter.OIOsPct.average` (key 177) · percent (hundredths) · level 4, per_device_level 4 · Tier 3a: Host
+    /// The percent of I/Os that have been issued but have not yet completed
+    /// `storageAdapter.OIOsPct.average` · percent (hundredths) · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const OIOS_PCT_AVERAGE: Metric<Ratio, HostOnly> = Metric::new(
         "storageAdapter",
         "OIOsPct",
@@ -5354,7 +6813,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.outstandingIOs.average` (key 204) · number · level 2, per_device_level 2 · Tier 3a: Host
+    /// The number of I/Os that have been issued but have not yet completed
+    /// `storageAdapter.outstandingIOs.average` · number · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const OUTSTANDING_IOS_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "storageAdapter",
         "outstandingIOs",
@@ -5365,7 +6827,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.outstandingIOs.latest` (key 359) · number · level 4, per_device_level 4 · Tier 3a: Host
+    /// The number of I/Os that have been issued but have not yet completed
+    /// `storageAdapter.outstandingIOs.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const OUTSTANDING_IOS_LATEST: Metric<Count, HostOnly> = Metric::new(
         "storageAdapter",
         "outstandingIOs",
@@ -5376,7 +6841,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.queued.average` (key 205) · number · level 2, per_device_level 2 · Tier 3a: Host
+    /// The current number of I/Os that are waiting to be issued
+    /// `storageAdapter.queued.average` · number · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const QUEUED_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "storageAdapter",
         "queued",
@@ -5387,7 +6855,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.queued.latest` (key 360) · number · level 4, per_device_level 4 · Tier 3a: Host
+    /// The current number of I/Os that are waiting to be issued
+    /// `storageAdapter.queued.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const QUEUED_LATEST: Metric<Count, HostOnly> = Metric::new(
         "storageAdapter",
         "queued",
@@ -5398,7 +6869,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.queueDepth.average` (key 206) · number · level 2, per_device_level 2 · Tier 3a: Host
+    /// The maximum number of I/Os that can be outstanding at a given time
+    /// `storageAdapter.queueDepth.average` · number · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const QUEUE_DEPTH_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "storageAdapter",
         "queueDepth",
@@ -5409,7 +6883,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.queueDepth.latest` (key 361) · number · level 4, per_device_level 4 · Tier 3a: Host
+    /// The maximum number of I/Os that can be outstanding at a given time
+    /// `storageAdapter.queueDepth.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const QUEUE_DEPTH_LATEST: Metric<Count, HostOnly> = Metric::new(
         "storageAdapter",
         "queueDepth",
@@ -5420,7 +6897,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.queueLatency.average` (key 207) · millisecond · level 2, per_device_level 2 · Tier 1: Host
+    /// Average amount of time spent in the VMkernel queue, per Storage command, during the collection interval
+    /// `storageAdapter.queueLatency.average` · millisecond · vCenter only
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const QUEUE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "storageAdapter",
         "queueLatency",
@@ -5431,7 +6911,10 @@ pub mod storage_adapter {
         true,
     );
 
-    /// `storageAdapter.read.average` (key 171) · kiloBytesPerSecond · level 2, per_device_level 2 · Tier 1: Host
+    /// Rate of reading data by the storage adapter
+    /// `storageAdapter.read.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const READ_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "storageAdapter",
         "read",
@@ -5442,7 +6925,10 @@ pub mod storage_adapter {
         true,
     );
 
-    /// `storageAdapter.throughput.cont.average` (key 176) · millisecond · level 4, per_device_level 4 · Tier 3a: Host
+    /// Average amount of time for an I/O operation to complete successfully
+    /// `storageAdapter.throughput.cont.average` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const THROUGHPUT_CONT_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "storageAdapter",
         "throughput.cont",
@@ -5453,7 +6939,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.throughput.usag.average` (key 208) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Host
+    /// The storage adapter's I/O rate
+    /// `storageAdapter.throughput.usag.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const THROUGHPUT_USAG_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "storageAdapter",
         "throughput.usag",
@@ -5464,7 +6953,10 @@ pub mod storage_adapter {
         false,
     );
 
-    /// `storageAdapter.totalReadLatency.average` (key 173) · millisecond · level 2, per_device_level 2 · Tier 1: Host
+    /// The average time a read by the storage adapter takes
+    /// `storageAdapter.totalReadLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const TOTAL_READ_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "storageAdapter",
         "totalReadLatency",
@@ -5475,7 +6967,10 @@ pub mod storage_adapter {
         true,
     );
 
-    /// `storageAdapter.totalWriteLatency.average` (key 174) · millisecond · level 2, per_device_level 2 · Tier 1: Host
+    /// The average time a write by the storage adapter takes
+    /// `storageAdapter.totalWriteLatency.average` · millisecond · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const TOTAL_WRITE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "storageAdapter",
         "totalWriteLatency",
@@ -5486,7 +6981,10 @@ pub mod storage_adapter {
         true,
     );
 
-    /// `storageAdapter.write.average` (key 172) · kiloBytesPerSecond · level 2, per_device_level 2 · Tier 1: Host
+    /// Rate of writing data by the storage adapter
+    /// `storageAdapter.write.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const WRITE_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "storageAdapter",
         "write",
@@ -5501,7 +6999,10 @@ pub mod storage_adapter {
 pub mod storage_path {
     use super::super::*;
 
-    /// `storagePath.busResets.summation` (key 209) · number · level 2, per_device_level 3 · Tier 1: Host
+    /// Number of Storage-bus reset commands issued during the collection interval
+    /// `storagePath.busResets.summation` · number · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const BUS_RESETS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "storagePath",
         "busResets",
@@ -5512,7 +7013,10 @@ pub mod storage_path {
         true,
     );
 
-    /// `storagePath.commandsAborted.summation` (key 210) · number · level 2, per_device_level 3 · Tier 1: Host
+    /// Number of Storage commands terminated during the collection interval
+    /// `storagePath.commandsAborted.summation` · number · vCenter only
+    /// Level: 2, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const COMMANDS_ABORTED_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "storagePath",
         "commandsAborted",
@@ -5523,7 +7027,10 @@ pub mod storage_path {
         true,
     );
 
-    /// `storagePath.commandsAveraged.average` (key 570) · number · level 3, per_device_level 3 · Tier 1: Host
+    /// Average number of commands issued per second on the storage path during the collection interval
+    /// `storagePath.commandsAveraged.average` · number · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const COMMANDS_AVERAGED_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "storagePath",
         "commandsAveraged",
@@ -5534,7 +7041,10 @@ pub mod storage_path {
         true,
     );
 
-    /// `storagePath.maxTotalLatency.latest` (key 200) · millisecond · level 3, per_device_level 3 · Tier 1: Host
+    /// Highest latency value across all storage paths used by the host
+    /// `storagePath.maxTotalLatency.latest` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const MAX_TOTAL_LATENCY_LATEST: Metric<Time, HostOnly> = Metric::new(
         "storagePath",
         "maxTotalLatency",
@@ -5545,7 +7055,10 @@ pub mod storage_path {
         false,
     );
 
-    /// `storagePath.numberReadAveraged.average` (key 571) · number · level 3, per_device_level 3 · Tier 1: Host
+    /// Average number of read commands issued per second on the storage path during the collection interval
+    /// `storagePath.numberReadAveraged.average` · number · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const NUMBER_READ_AVERAGED_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "storagePath",
         "numberReadAveraged",
@@ -5556,7 +7069,10 @@ pub mod storage_path {
         true,
     );
 
-    /// `storagePath.numberWriteAveraged.average` (key 572) · number · level 3, per_device_level 3 · Tier 1: Host
+    /// Average number of write commands issued per second on the storage path during the collection interval
+    /// `storagePath.numberWriteAveraged.average` · number · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const NUMBER_WRITE_AVERAGED_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "storagePath",
         "numberWriteAveraged",
@@ -5567,7 +7083,10 @@ pub mod storage_path {
         true,
     );
 
-    /// `storagePath.read.average` (key 573) · kiloBytesPerSecond · level 3, per_device_level 3 · Tier 1: Host
+    /// Rate of reading data on the storage path
+    /// `storagePath.read.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const READ_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "storagePath",
         "read",
@@ -5578,7 +7097,10 @@ pub mod storage_path {
         true,
     );
 
-    /// `storagePath.throughput.cont.average` (key 199) · millisecond · level 4, per_device_level 4 · Tier 3a: Host
+    /// Average amount of time for an I/O operation to complete successfully
+    /// `storagePath.throughput.cont.average` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const THROUGHPUT_CONT_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "storagePath",
         "throughput.cont",
@@ -5589,7 +7111,10 @@ pub mod storage_path {
         false,
     );
 
-    /// `storagePath.throughput.usage.average` (key 211) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: Host
+    /// Storage path I/O rate
+    /// `storagePath.throughput.usage.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: HostSystem
     pub const THROUGHPUT_USAGE_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "storagePath",
         "throughput.usage",
@@ -5600,7 +7125,10 @@ pub mod storage_path {
         false,
     );
 
-    /// `storagePath.totalReadLatency.average` (key 575) · millisecond · level 3, per_device_level 3 · Tier 1: Host
+    /// The average time a read issued on the storage path takes
+    /// `storagePath.totalReadLatency.average` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const TOTAL_READ_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "storagePath",
         "totalReadLatency",
@@ -5611,7 +7139,10 @@ pub mod storage_path {
         true,
     );
 
-    /// `storagePath.totalWriteLatency.average` (key 576) · millisecond · level 3, per_device_level 3 · Tier 1: Host
+    /// The average time a write issued on the storage path takes
+    /// `storagePath.totalWriteLatency.average` · millisecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const TOTAL_WRITE_LATENCY_AVERAGE: Metric<Time, HostOnly> = Metric::new(
         "storagePath",
         "totalWriteLatency",
@@ -5622,7 +7153,10 @@ pub mod storage_path {
         true,
     );
 
-    /// `storagePath.write.average` (key 574) · kiloBytesPerSecond · level 3, per_device_level 3 · Tier 1: Host
+    /// Rate of writing data on the storage path
+    /// `storagePath.write.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const WRITE_AVERAGE: Metric<Throughput, HostOnly> = Metric::new(
         "storagePath",
         "write",
@@ -5637,7 +7171,10 @@ pub mod storage_path {
 pub mod sys {
     use super::super::*;
 
-    /// `sys.diskUsage.latest` (key 524) · percent (hundredths) · level 3, per_device_level 3 · Tier 3a: Host, VM
+    /// Amount of disk space usage for each mount point
+    /// `sys.diskUsage.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Group Union (3a)
+    /// Types: HostSystem, VirtualMachine
     pub const DISK_USAGE_LATEST: Metric<Ratio, VmOrHost> = Metric::new(
         "sys",
         "diskUsage",
@@ -5648,7 +7185,10 @@ pub mod sys {
         false,
     );
 
-    /// `sys.heartbeat.latest` (key 523) · number · level 4, per_device_level 4 · Tier 1: VM
+    /// Number of heartbeats issued per virtual machine during the interval
+    /// `sys.heartbeat.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const HEARTBEAT_LATEST: Metric<Count, VmOnly> = Metric::new(
         "sys",
         "heartbeat",
@@ -5659,7 +7199,10 @@ pub mod sys {
         false,
     );
 
-    /// `sys.heartbeat.summation` (key 163) · number · level 1, per_device_level 3 · Tier 2: VM
+    /// Number of heartbeats issued per virtual machine during the interval
+    /// `sys.heartbeat.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Sibling Rollup (2)
+    /// Types: VirtualMachine
     pub const HEARTBEAT_SUMMATION: Metric<Count, VmOnly> = Metric::new(
         "sys",
         "heartbeat",
@@ -5670,7 +7213,10 @@ pub mod sys {
         false,
     );
 
-    /// `sys.osUptime.latest` (key 548) · second · level 4, per_device_level 4 · Tier 1: VM
+    /// Total time elapsed, in seconds, since last operating system boot-up
+    /// `sys.osUptime.latest` · second · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const OS_UPTIME_LATEST: Metric<Time, VmOnly> = Metric::new(
         "sys",
         "osUptime",
@@ -5681,7 +7227,10 @@ pub mod sys {
         false,
     );
 
-    /// `sys.resourceCpuAct1.latest` (key 537) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host
+    /// CPU active average over 1 minute of the system resource group
+    /// `sys.resourceCpuAct1.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_ACT1_LATEST: Metric<Ratio, HostOnly> = Metric::new(
         "sys",
         "resourceCpuAct1",
@@ -5692,7 +7241,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuAct5.latest` (key 540) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host
+    /// CPU active average over 5 minutes of the system resource group
+    /// `sys.resourceCpuAct5.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_ACT5_LATEST: Metric<Ratio, HostOnly> = Metric::new(
         "sys",
         "resourceCpuAct5",
@@ -5703,7 +7255,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuAllocMax.latest` (key 543) · megaHertz · level 3, per_device_level 3 · Tier 1: Host
+    /// CPU allocation limit (in MHz) of the system resource group
+    /// `sys.resourceCpuAllocMax.latest` · megaHertz · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_ALLOC_MAX_LATEST: Metric<Frequency, HostOnly> = Metric::new(
         "sys",
         "resourceCpuAllocMax",
@@ -5714,7 +7269,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuAllocMin.latest` (key 542) · megaHertz · level 3, per_device_level 3 · Tier 1: Host
+    /// CPU allocation reservation (in MHz) of the system resource group
+    /// `sys.resourceCpuAllocMin.latest` · megaHertz · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_ALLOC_MIN_LATEST: Metric<Frequency, HostOnly> = Metric::new(
         "sys",
         "resourceCpuAllocMin",
@@ -5725,7 +7283,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuAllocShares.latest` (key 544) · number · level 3, per_device_level 3 · Tier 1: Host
+    /// CPU allocation shares of the system resource group
+    /// `sys.resourceCpuAllocShares.latest` · number · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_ALLOC_SHARES_LATEST: Metric<Count, HostOnly> = Metric::new(
         "sys",
         "resourceCpuAllocShares",
@@ -5736,7 +7297,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuMaxLimited1.latest` (key 538) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host
+    /// CPU maximum limited over 1 minute of the system resource group
+    /// `sys.resourceCpuMaxLimited1.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_MAX_LIMITED1_LATEST: Metric<Ratio, HostOnly> = Metric::new(
         "sys",
         "resourceCpuMaxLimited1",
@@ -5747,7 +7311,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuMaxLimited5.latest` (key 541) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host
+    /// CPU maximum limited over 5 minutes of the system resource group
+    /// `sys.resourceCpuMaxLimited5.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_MAX_LIMITED5_LATEST: Metric<Ratio, HostOnly> = Metric::new(
         "sys",
         "resourceCpuMaxLimited5",
@@ -5758,7 +7325,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuRun1.latest` (key 536) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host
+    /// CPU running average over 1 minute of the system resource group
+    /// `sys.resourceCpuRun1.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_RUN1_LATEST: Metric<Ratio, HostOnly> = Metric::new(
         "sys",
         "resourceCpuRun1",
@@ -5769,7 +7339,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuRun5.latest` (key 539) · percent (hundredths) · level 3, per_device_level 3 · Tier 1: Host
+    /// CPU running average over 5 minutes of the system resource group
+    /// `sys.resourceCpuRun5.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_RUN5_LATEST: Metric<Ratio, HostOnly> = Metric::new(
         "sys",
         "resourceCpuRun5",
@@ -5780,7 +7353,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuUsage.average` (key 526) · megaHertz · level 3, per_device_level 3 · Tier 1: Host
+    /// Amount of CPU used by the Service Console and other applications during the interval
+    /// `sys.resourceCpuUsage.average` · megaHertz · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_USAGE_AVERAGE: Metric<Frequency, HostOnly> = Metric::new(
         "sys",
         "resourceCpuUsage",
@@ -5791,7 +7367,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceCpuUsage.maximum` (key 527) · megaHertz · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of CPU used by the Service Console and other applications during the interval
+    /// `sys.resourceCpuUsage.maximum` · megaHertz · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_USAGE_MAXIMUM: Metric<Frequency, HostOnly> = Metric::new(
         "sys",
         "resourceCpuUsage",
@@ -5802,7 +7381,10 @@ pub mod sys {
         false,
     );
 
-    /// `sys.resourceCpuUsage.minimum` (key 528) · megaHertz · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of CPU used by the Service Console and other applications during the interval
+    /// `sys.resourceCpuUsage.minimum` · megaHertz · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_USAGE_MINIMUM: Metric<Frequency, HostOnly> = Metric::new(
         "sys",
         "resourceCpuUsage",
@@ -5813,7 +7395,10 @@ pub mod sys {
         false,
     );
 
-    /// `sys.resourceCpuUsage.none` (key 525) · megaHertz · level 4, per_device_level 4 · Tier 2: Host
+    /// Amount of CPU used by the Service Console and other applications during the interval
+    /// `sys.resourceCpuUsage.none` · megaHertz · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Sibling Rollup (2)
+    /// Types: HostSystem
     pub const RESOURCE_CPU_USAGE_NONE: Metric<Frequency, HostOnly> = Metric::new(
         "sys",
         "resourceCpuUsage",
@@ -5824,7 +7409,10 @@ pub mod sys {
         false,
     );
 
-    /// `sys.resourceFdUsage.latest` (key 550) · number · level 4, per_device_level 4 · Tier 1: Host
+    /// Number of file descriptors used by the system resource group
+    /// `sys.resourceFdUsage.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_FD_USAGE_LATEST: Metric<Count, HostOnly> = Metric::new(
         "sys",
         "resourceFdUsage",
@@ -5835,7 +7423,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemAllocMax.latest` (key 546) · kiloBytes · level 3, per_device_level 3 · Tier 1: Host
+    /// Memory allocation limit (in KB) of the system resource group
+    /// `sys.resourceMemAllocMax.latest` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_ALLOC_MAX_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemAllocMax",
@@ -5846,7 +7437,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemAllocMin.latest` (key 545) · kiloBytes · level 3, per_device_level 3 · Tier 1: Host
+    /// Memory allocation reservation (in KB) of the system resource group
+    /// `sys.resourceMemAllocMin.latest` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_ALLOC_MIN_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemAllocMin",
@@ -5857,7 +7451,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemAllocShares.latest` (key 547) · number · level 3, per_device_level 3 · Tier 1: Host
+    /// Memory allocation shares of the system resource group
+    /// `sys.resourceMemAllocShares.latest` · number · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_ALLOC_SHARES_LATEST: Metric<Count, HostOnly> = Metric::new(
         "sys",
         "resourceMemAllocShares",
@@ -5868,7 +7465,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemConsumed.latest` (key 549) · kiloBytes · level 4, per_device_level 4 · Tier 1: Host
+    /// Memory consumed by the system resource group
+    /// `sys.resourceMemConsumed.latest` · kiloBytes · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_CONSUMED_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemConsumed",
@@ -5879,7 +7479,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemCow.latest` (key 534) · kiloBytes · level 3, per_device_level 3 · Tier 1: Host
+    /// Memory shared by the system resource group
+    /// `sys.resourceMemCow.latest` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_COW_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemCow",
@@ -5890,7 +7493,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemMapped.latest` (key 530) · kiloBytes · level 3, per_device_level 3 · Tier 1: Host
+    /// Memory mapped by the system resource group
+    /// `sys.resourceMemMapped.latest` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_MAPPED_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemMapped",
@@ -5901,7 +7507,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemOverhead.latest` (key 533) · kiloBytes · level 3, per_device_level 3 · Tier 1: Host
+    /// Overhead memory consumed by the system resource group
+    /// `sys.resourceMemOverhead.latest` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_OVERHEAD_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemOverhead",
@@ -5912,7 +7521,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemShared.latest` (key 531) · kiloBytes · level 3, per_device_level 3 · Tier 1: Host
+    /// Memory saved due to sharing by the system resource group
+    /// `sys.resourceMemShared.latest` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_SHARED_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemShared",
@@ -5923,7 +7535,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemSwapped.latest` (key 532) · kiloBytes · level 3, per_device_level 3 · Tier 1: Host
+    /// Memory swapped out by the system resource group
+    /// `sys.resourceMemSwapped.latest` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_SWAPPED_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemSwapped",
@@ -5934,7 +7549,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemTouched.latest` (key 529) · kiloBytes · level 3, per_device_level 3 · Tier 1: Host
+    /// Memory touched by the system resource group
+    /// `sys.resourceMemTouched.latest` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_TOUCHED_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemTouched",
@@ -5945,7 +7563,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.resourceMemZero.latest` (key 535) · kiloBytes · level 3, per_device_level 3 · Tier 1: Host
+    /// Zero filled memory used by the system resource group
+    /// `sys.resourceMemZero.latest` · kiloBytes · vCenter and ESX
+    /// Level: 3, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem
     pub const RESOURCE_MEM_ZERO_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "sys",
         "resourceMemZero",
@@ -5956,7 +7577,10 @@ pub mod sys {
         true,
     );
 
-    /// `sys.uptime.latest` (key 162) · second · level 1, per_device_level 3 · Tier 1: Host, VM
+    /// Total time elapsed, in seconds, since last system startup
+    /// `sys.uptime.latest` · second · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: HostSystem, VirtualMachine
     pub const UPTIME_LATEST: Metric<Time, VmOrHost> = Metric::new(
         "sys",
         "uptime",
@@ -5971,7 +7595,10 @@ pub mod sys {
 pub mod vc_debug_info {
     use super::super::*;
 
-    /// `vcDebugInfo.activationlatencystats.maximum` (key 287) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The latency of an activation operation in vCenter Server
+    /// `vcDebugInfo.activationlatencystats.maximum` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const ACTIVATIONLATENCYSTATS_MAXIMUM: Metric<Time, HostOnly> = Metric::new(
         "vcDebugInfo",
         "activationlatencystats",
@@ -5982,7 +7609,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.activationlatencystats.minimum` (key 288) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The latency of an activation operation in vCenter Server
+    /// `vcDebugInfo.activationlatencystats.minimum` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const ACTIVATIONLATENCYSTATS_MINIMUM: Metric<Time, HostOnly> = Metric::new(
         "vcDebugInfo",
         "activationlatencystats",
@@ -5993,7 +7623,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.activationlatencystats.summation` (key 289) · millisecond · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The latency of an activation operation in vCenter Server
+    /// `vcDebugInfo.activationlatencystats.summation` · millisecond · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const ACTIVATIONLATENCYSTATS_SUMMATION: Metric<Time, HostOnly> = Metric::new(
         "vcDebugInfo",
         "activationlatencystats",
@@ -6004,7 +7637,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.activationstats.maximum` (key 290) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Activation operations in vCenter Server
+    /// `vcDebugInfo.activationstats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const ACTIVATIONSTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "activationstats",
@@ -6015,7 +7651,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.activationstats.minimum` (key 291) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Activation operations in vCenter Server
+    /// `vcDebugInfo.activationstats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const ACTIVATIONSTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "activationstats",
@@ -6026,7 +7665,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.activationstats.summation` (key 292) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Activation operations in vCenter Server
+    /// `vcDebugInfo.activationstats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const ACTIVATIONSTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "activationstats",
@@ -6037,7 +7679,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.hostsynclatencystats.maximum` (key 300) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The latency of a host sync operation in vCenter Server
+    /// `vcDebugInfo.hostsynclatencystats.maximum` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const HOSTSYNCLATENCYSTATS_MAXIMUM: Metric<Time, HostOnly> = Metric::new(
         "vcDebugInfo",
         "hostsynclatencystats",
@@ -6048,7 +7693,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.hostsynclatencystats.minimum` (key 301) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The latency of a host sync operation in vCenter Server
+    /// `vcDebugInfo.hostsynclatencystats.minimum` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const HOSTSYNCLATENCYSTATS_MINIMUM: Metric<Time, HostOnly> = Metric::new(
         "vcDebugInfo",
         "hostsynclatencystats",
@@ -6059,7 +7707,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.hostsynclatencystats.summation` (key 302) · millisecond · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The latency of a host sync operation in vCenter Server
+    /// `vcDebugInfo.hostsynclatencystats.summation` · millisecond · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const HOSTSYNCLATENCYSTATS_SUMMATION: Metric<Time, HostOnly> = Metric::new(
         "vcDebugInfo",
         "hostsynclatencystats",
@@ -6070,7 +7721,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.hostsyncstats.maximum` (key 303) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The number of host sync operations in vCenter Server
+    /// `vcDebugInfo.hostsyncstats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const HOSTSYNCSTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "hostsyncstats",
@@ -6081,7 +7735,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.hostsyncstats.minimum` (key 304) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The number of host sync operations in vCenter Server
+    /// `vcDebugInfo.hostsyncstats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const HOSTSYNCSTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "hostsyncstats",
@@ -6092,7 +7749,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.hostsyncstats.summation` (key 305) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The number of host sync operations in vCenter Server
+    /// `vcDebugInfo.hostsyncstats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const HOSTSYNCSTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "hostsyncstats",
@@ -6103,7 +7763,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.inventorystats.maximum` (key 306) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter Server inventory statistics
+    /// `vcDebugInfo.inventorystats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const INVENTORYSTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "inventorystats",
@@ -6114,7 +7777,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.inventorystats.minimum` (key 307) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter Server inventory statistics
+    /// `vcDebugInfo.inventorystats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const INVENTORYSTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "inventorystats",
@@ -6125,7 +7791,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.inventorystats.summation` (key 308) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter Server inventory statistics
+    /// `vcDebugInfo.inventorystats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const INVENTORYSTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "inventorystats",
@@ -6136,7 +7805,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.lockstats.maximum` (key 309) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter Server locking statistics
+    /// `vcDebugInfo.lockstats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const LOCKSTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "lockstats",
@@ -6147,7 +7819,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.lockstats.minimum` (key 310) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter Server locking statistics
+    /// `vcDebugInfo.lockstats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const LOCKSTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "lockstats",
@@ -6158,7 +7833,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.lockstats.summation` (key 311) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter Server locking statistics
+    /// `vcDebugInfo.lockstats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const LOCKSTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "lockstats",
@@ -6169,7 +7847,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.lrostats.maximum` (key 312) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter Server LRO statistics
+    /// `vcDebugInfo.lrostats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const LROSTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "lrostats",
@@ -6180,7 +7861,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.lrostats.minimum` (key 313) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter Server LRO statistics
+    /// `vcDebugInfo.lrostats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const LROSTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "lrostats",
@@ -6191,7 +7875,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.lrostats.summation` (key 314) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter Server LRO statistics
+    /// `vcDebugInfo.lrostats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const LROSTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "lrostats",
@@ -6202,7 +7889,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.miscstats.maximum` (key 315) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Miscellaneous statistics
+    /// `vcDebugInfo.miscstats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const MISCSTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "miscstats",
@@ -6213,7 +7903,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.miscstats.minimum` (key 316) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Miscellaneous statistics
+    /// `vcDebugInfo.miscstats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const MISCSTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "miscstats",
@@ -6224,7 +7917,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.miscstats.summation` (key 317) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Miscellaneous statistics
+    /// `vcDebugInfo.miscstats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const MISCSTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "miscstats",
@@ -6235,7 +7931,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.morefregstats.maximum` (key 318) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Managed object reference counts in vCenter Server
+    /// `vcDebugInfo.morefregstats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const MOREFREGSTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "morefregstats",
@@ -6246,7 +7945,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.morefregstats.minimum` (key 319) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Managed object reference counts in vCenter Server
+    /// `vcDebugInfo.morefregstats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const MOREFREGSTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "morefregstats",
@@ -6257,7 +7959,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.morefregstats.summation` (key 320) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Managed object reference counts in vCenter Server
+    /// `vcDebugInfo.morefregstats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const MOREFREGSTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "morefregstats",
@@ -6268,7 +7973,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.scoreboard.maximum` (key 327) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Object counts in vCenter Server
+    /// `vcDebugInfo.scoreboard.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SCOREBOARD_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "scoreboard",
@@ -6279,7 +7987,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.scoreboard.minimum` (key 328) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Object counts in vCenter Server
+    /// `vcDebugInfo.scoreboard.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SCOREBOARD_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "scoreboard",
@@ -6290,7 +8001,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.scoreboard.summation` (key 329) · number · level 3, per_device_level 3 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Object counts in vCenter Server
+    /// `vcDebugInfo.scoreboard.summation` · number · vCenter only
+    /// Level: 3, Per-device level: 3 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SCOREBOARD_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "scoreboard",
@@ -6301,7 +8015,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.sessionstats.maximum` (key 330) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The statistics of client sessions connected to vCenter Server
+    /// `vcDebugInfo.sessionstats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SESSIONSTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "sessionstats",
@@ -6312,7 +8029,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.sessionstats.minimum` (key 331) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The statistics of client sessions connected to vCenter Server
+    /// `vcDebugInfo.sessionstats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SESSIONSTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "sessionstats",
@@ -6323,7 +8043,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.sessionstats.summation` (key 332) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The statistics of client sessions connected to vCenter Server
+    /// `vcDebugInfo.sessionstats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SESSIONSTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "sessionstats",
@@ -6334,7 +8057,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.systemstats.maximum` (key 334) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The statistics of vCenter Server as a running system such as thread statistics and heap statistics
+    /// `vcDebugInfo.systemstats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SYSTEMSTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "systemstats",
@@ -6345,7 +8071,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.systemstats.minimum` (key 335) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The statistics of vCenter Server as a running system such as thread statistics and heap statistics
+    /// `vcDebugInfo.systemstats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SYSTEMSTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "systemstats",
@@ -6356,7 +8085,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.systemstats.summation` (key 336) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// The statistics of vCenter Server as a running system such as thread statistics and heap statistics
+    /// `vcDebugInfo.systemstats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SYSTEMSTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "systemstats",
@@ -6367,7 +8099,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.vcservicestats.maximum` (key 338) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter service statistics such as events, alarms, and tasks
+    /// `vcDebugInfo.vcservicestats.maximum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const VCSERVICESTATS_MAXIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "vcservicestats",
@@ -6378,7 +8113,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.vcservicestats.minimum` (key 339) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter service statistics such as events, alarms, and tasks
+    /// `vcDebugInfo.vcservicestats.minimum` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const VCSERVICESTATS_MINIMUM: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "vcservicestats",
@@ -6389,7 +8127,10 @@ pub mod vc_debug_info {
         false,
     );
 
-    /// `vcDebugInfo.vcservicestats.summation` (key 340) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// vCenter service statistics such as events, alarms, and tasks
+    /// `vcDebugInfo.vcservicestats.summation` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const VCSERVICESTATS_SUMMATION: Metric<Count, HostOnly> = Metric::new(
         "vcDebugInfo",
         "vcservicestats",
@@ -6404,7 +8145,10 @@ pub mod vc_debug_info {
 pub mod vc_resources {
     use super::super::*;
 
-    /// `vcResources.buffersz.average` (key 293) · kiloBytes · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Total size of in-memory cache of blocks (buffer cache) read in from block devices (i.e., disk devices) on the system where vCenter Server is running
+    /// `vcResources.buffersz.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const BUFFERSZ_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "vcResources",
         "buffersz",
@@ -6415,7 +8159,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.cachesz.average` (key 294) · kiloBytes · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Total size of in-memory caches of pages (page cache) for files from on-disk and in-memory filesystems on the system where vCenter Server is running
+    /// `vcResources.cachesz.average` · kiloBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const CACHESZ_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "vcResources",
         "cachesz",
@@ -6426,7 +8173,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.ctxswitchesrate.average` (key 295) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Number of context switches per second on the system where vCenter Server is running
+    /// `vcResources.ctxswitchesrate.average` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const CTXSWITCHESRATE_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "vcResources",
         "ctxswitchesrate",
@@ -6437,7 +8187,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.diskreadsectorrate.average` (key 296) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Disk sectors read per second over last sampling interval (typically 60 seconds) on the system where vCenter Server is running
+    /// `vcResources.diskreadsectorrate.average` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const DISKREADSECTORRATE_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "vcResources",
         "diskreadsectorrate",
@@ -6448,7 +8201,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.diskreadsrate.average` (key 297) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Number of disk reads per second on the system where vCenter Server is running
+    /// `vcResources.diskreadsrate.average` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const DISKREADSRATE_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "vcResources",
         "diskreadsrate",
@@ -6459,7 +8215,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.diskwritesectorrate.average` (key 298) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Disk sectors written per second over last sampling interval (typically 60 seconds) on the system where vCenter Server is running
+    /// `vcResources.diskwritesectorrate.average` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const DISKWRITESECTORRATE_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "vcResources",
         "diskwritesectorrate",
@@ -6470,7 +8229,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.diskwritesrate.average` (key 299) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Number of disk writes per second on the system where vCenter Server is running
+    /// `vcResources.diskwritesrate.average` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const DISKWRITESRATE_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "vcResources",
         "diskwritesrate",
@@ -6481,7 +8243,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.packetrecvrate.average` (key 321) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Rate of the number of total packets received per second on the system where vCenter Server is running
+    /// `vcResources.packetrecvrate.average` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const PACKETRECVRATE_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "vcResources",
         "packetrecvrate",
@@ -6492,7 +8257,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.packetsentrate.average` (key 322) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Number of total packets sent per second on the system where vCenter Server is running
+    /// `vcResources.packetsentrate.average` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const PACKETSENTRATE_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "vcResources",
         "packetsentrate",
@@ -6503,7 +8271,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.pagefaultrate.average` (key 324) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Number of page faults per second on the system where vCenter Server is running
+    /// `vcResources.pagefaultrate.average` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const PAGEFAULTRATE_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "vcResources",
         "pagefaultrate",
@@ -6514,7 +8285,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.physicalmemusage.average` (key 325) · kiloBytes · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Physical memory used by vCenter
+    /// `vcResources.physicalmemusage.average` · kiloBytes · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const PHYSICALMEMUSAGE_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "vcResources",
         "physicalmemusage",
@@ -6525,7 +8299,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.priviledgedcpuusage.average` (key 326) · percent (hundredths) · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// CPU used by vCenter Server in privileged mode
+    /// `vcResources.priviledgedcpuusage.average` · percent (hundredths) · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const PRIVILEDGEDCPUUSAGE_AVERAGE: Metric<Ratio, HostOnly> = Metric::new(
         "vcResources",
         "priviledgedcpuusage",
@@ -6536,7 +8313,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.syscallsrate.average` (key 333) · number · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Number of systems calls made per second on the system where vCenter Server is running
+    /// `vcResources.syscallsrate.average` · number · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SYSCALLSRATE_AVERAGE: Metric<Count, HostOnly> = Metric::new(
         "vcResources",
         "syscallsrate",
@@ -6547,7 +8327,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.systemcpuusage.average` (key 323) · percent (hundredths) · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Total system CPU used on the system where vCenter Server in running
+    /// `vcResources.systemcpuusage.average` · percent (hundredths) · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const SYSTEMCPUUSAGE_AVERAGE: Metric<Ratio, HostOnly> = Metric::new(
         "vcResources",
         "systemcpuusage",
@@ -6558,7 +8341,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.usercpuusage.average` (key 337) · percent (hundredths) · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// CPU used by vCenter Server in user mode
+    /// `vcResources.usercpuusage.average` · percent (hundredths) · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const USERCPUUSAGE_AVERAGE: Metric<Ratio, HostOnly> = Metric::new(
         "vcResources",
         "usercpuusage",
@@ -6569,7 +8355,10 @@ pub mod vc_resources {
         false,
     );
 
-    /// `vcResources.virtualmemusage.average` (key 341) · kiloBytes · level 1, per_device_level 1 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Virtual memory used by vCenter Server
+    /// `vcResources.virtualmemusage.average` · kiloBytes · vCenter only
+    /// Level: 1, Per-device level: 1 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const VIRTUALMEMUSAGE_AVERAGE: Metric<Memory, HostOnly> = Metric::new(
         "vcResources",
         "virtualmemusage",
@@ -6584,7 +8373,10 @@ pub mod vc_resources {
 pub mod vflash_module {
     use super::super::*;
 
-    /// `vflashModule.numActiveVMDKs.latest` (key 596) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// Number of caches controlled by the virtual flash module
+    /// `vflashModule.numActiveVMDKs.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const NUM_ACTIVE_VMDKS_LATEST: Metric<Count, HostOnly> = Metric::new(
         "vflashModule",
         "numActiveVMDKs",
@@ -6599,7 +8391,10 @@ pub mod vflash_module {
 pub mod virtual_disk {
     use super::super::*;
 
-    /// `virtualDisk.busResets.summation` (key 203) · number · level 2, per_device_level 4 · Tier 1: VM
+    /// Number of resets to a virtual disk
+    /// `virtualDisk.busResets.summation` · number · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const BUS_RESETS_SUMMATION: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "busResets",
@@ -6610,7 +8405,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.commandsAborted.summation` (key 202) · number · level 2, per_device_level 4 · Tier 1: VM
+    /// Number of terminations to a virtual disk
+    /// `virtualDisk.commandsAborted.summation` · number · vCenter only
+    /// Level: 2, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const COMMANDS_ABORTED_SUMMATION: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "commandsAborted",
@@ -6621,7 +8419,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.hbr.readLatencyMS.latest` (key 405) · millisecond · level 4, per_device_level 4 · Tier 3a: VM
+    /// Average disk read latency seen by vSphere Replication
+    /// `virtualDisk.hbr.readLatencyMS.latest` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: VirtualMachine
     pub const HBR_READ_LATENCY_MS_LATEST: Metric<Time, VmOnly> = Metric::new(
         "virtualDisk",
         "hbr.readLatencyMS",
@@ -6632,7 +8433,10 @@ pub mod virtual_disk {
         false,
     );
 
-    /// `virtualDisk.hbr.stallLatencyMS.latest` (key 406) · millisecond · level 4, per_device_level 4 · Tier 3a: VM
+    /// Average guest I/O stall introduced by vSphere Replication
+    /// `virtualDisk.hbr.stallLatencyMS.latest` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: VirtualMachine
     pub const HBR_STALL_LATENCY_MS_LATEST: Metric<Time, VmOnly> = Metric::new(
         "virtualDisk",
         "hbr.stallLatencyMS",
@@ -6643,7 +8447,10 @@ pub mod virtual_disk {
         false,
     );
 
-    /// `virtualDisk.largeSeeks.latest` (key 581) · number · level 4, per_device_level 4 · Tier 1: VM
+    /// Number of seeks during the interval that were greater than 8192 LBNs apart
+    /// `virtualDisk.largeSeeks.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const LARGE_SEEKS_LATEST: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "largeSeeks",
@@ -6654,7 +8461,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.mediumSeeks.latest` (key 580) · number · level 4, per_device_level 4 · Tier 1: VM
+    /// Number of seeks during the interval that were between 64 and 8192 LBNs apart
+    /// `virtualDisk.mediumSeeks.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const MEDIUM_SEEKS_LATEST: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "mediumSeeks",
@@ -6665,7 +8475,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.numberReadAveraged.average` (key 178) · number · level 1, per_device_level 3 · Tier 1: VM
+    /// Average number of read commands issued per second to the virtual disk during the collection interval
+    /// `virtualDisk.numberReadAveraged.average` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const NUMBER_READ_AVERAGED_AVERAGE: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "numberReadAveraged",
@@ -6676,7 +8489,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.numberWriteAveraged.average` (key 179) · number · level 1, per_device_level 3 · Tier 1: VM
+    /// Average number of write commands issued per second to the virtual disk during the collection interval
+    /// `virtualDisk.numberWriteAveraged.average` · number · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const NUMBER_WRITE_AVERAGED_AVERAGE: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "numberWriteAveraged",
@@ -6687,7 +8503,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.read.average` (key 180) · kiloBytesPerSecond · level 2, per_device_level 2 · Tier 1: VM
+    /// Rate of reading data from the virtual disk
+    /// `virtualDisk.read.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const READ_AVERAGE: Metric<Throughput, VmOnly> = Metric::new(
         "virtualDisk",
         "read",
@@ -6698,7 +8517,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.readIOSize.latest` (key 577) · number · level 4, per_device_level 4 · Tier 1: VM
+    /// Average read request size in bytes
+    /// `virtualDisk.readIOSize.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const READ_IOSIZE_LATEST: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "readIOSize",
@@ -6709,7 +8531,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.readLatencyUS.latest` (key 582) · microsecond · level 4, per_device_level 4 · Tier 1: VM
+    /// Read latency in microseconds
+    /// `virtualDisk.readLatencyUS.latest` · microsecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const READ_LATENCY_US_LATEST: Metric<Time, VmOnly> = Metric::new(
         "virtualDisk",
         "readLatencyUS",
@@ -6720,7 +8545,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.readLoadMetric.latest` (key 344) · number · level 2, per_device_level 2 · Tier 1: VM
+    /// Storage DRS virtual disk metric for the read workload model
+    /// `virtualDisk.readLoadMetric.latest` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const READ_LOAD_METRIC_LATEST: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "readLoadMetric",
@@ -6731,7 +8559,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.readOIO.latest` (key 342) · number · level 2, per_device_level 2 · Tier 1: VM
+    /// Average number of outstanding read requests to the virtual disk during the collection interval
+    /// `virtualDisk.readOIO.latest` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const READ_OIO_LATEST: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "readOIO",
@@ -6742,7 +8573,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.smallSeeks.latest` (key 579) · number · level 4, per_device_level 4 · Tier 1: VM
+    /// Number of seeks during the interval that were less than 64 LBNs apart
+    /// `virtualDisk.smallSeeks.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const SMALL_SEEKS_LATEST: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "smallSeeks",
@@ -6753,7 +8587,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.throughput.cont.average` (key 184) · millisecond · level 4, per_device_level 4 · Tier 3a: VM
+    /// Average amount of time for an I/O operation to complete successfully
+    /// `virtualDisk.throughput.cont.average` · millisecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: VirtualMachine
     pub const THROUGHPUT_CONT_AVERAGE: Metric<Time, VmOnly> = Metric::new(
         "virtualDisk",
         "throughput.cont",
@@ -6764,7 +8601,10 @@ pub mod virtual_disk {
         false,
     );
 
-    /// `virtualDisk.throughput.usage.average` (key 201) · kiloBytesPerSecond · level 4, per_device_level 4 · Tier 3a: VM
+    /// Virtual disk I/O rate
+    /// `virtualDisk.throughput.usage.average` · kiloBytesPerSecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Group Union (3a)
+    /// Types: VirtualMachine
     pub const THROUGHPUT_USAGE_AVERAGE: Metric<Throughput, VmOnly> = Metric::new(
         "virtualDisk",
         "throughput.usage",
@@ -6775,7 +8615,10 @@ pub mod virtual_disk {
         false,
     );
 
-    /// `virtualDisk.totalReadLatency.average` (key 182) · millisecond · level 1, per_device_level 3 · Tier 1: VM
+    /// The average time a read from the virtual disk takes
+    /// `virtualDisk.totalReadLatency.average` · millisecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const TOTAL_READ_LATENCY_AVERAGE: Metric<Time, VmOnly> = Metric::new(
         "virtualDisk",
         "totalReadLatency",
@@ -6786,7 +8629,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.totalWriteLatency.average` (key 183) · millisecond · level 1, per_device_level 3 · Tier 1: VM
+    /// The average time a write to the virtual disk takes
+    /// `virtualDisk.totalWriteLatency.average` · millisecond · vCenter and ESX
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const TOTAL_WRITE_LATENCY_AVERAGE: Metric<Time, VmOnly> = Metric::new(
         "virtualDisk",
         "totalWriteLatency",
@@ -6797,7 +8643,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.write.average` (key 181) · kiloBytesPerSecond · level 2, per_device_level 2 · Tier 1: VM
+    /// Rate of writing data to the virtual disk
+    /// `virtualDisk.write.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const WRITE_AVERAGE: Metric<Throughput, VmOnly> = Metric::new(
         "virtualDisk",
         "write",
@@ -6808,7 +8657,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.writeIOSize.latest` (key 578) · number · level 4, per_device_level 4 · Tier 1: VM
+    /// Average write request size in bytes
+    /// `virtualDisk.writeIOSize.latest` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const WRITE_IOSIZE_LATEST: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "writeIOSize",
@@ -6819,7 +8671,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.writeLatencyUS.latest` (key 583) · microsecond · level 4, per_device_level 4 · Tier 1: VM
+    /// Write latency in microseconds
+    /// `virtualDisk.writeLatencyUS.latest` · microsecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const WRITE_LATENCY_US_LATEST: Metric<Time, VmOnly> = Metric::new(
         "virtualDisk",
         "writeLatencyUS",
@@ -6830,7 +8685,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.writeLoadMetric.latest` (key 345) · number · level 2, per_device_level 2 · Tier 1: VM
+    /// Storage DRS virtual disk metric for the write workload model
+    /// `virtualDisk.writeLoadMetric.latest` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const WRITE_LOAD_METRIC_LATEST: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "writeLoadMetric",
@@ -6841,7 +8699,10 @@ pub mod virtual_disk {
         true,
     );
 
-    /// `virtualDisk.writeOIO.latest` (key 343) · number · level 2, per_device_level 2 · Tier 1: VM
+    /// Average number of outstanding write requests to the virtual disk during the collection interval
+    /// `virtualDisk.writeOIO.latest` · number · vCenter and ESX
+    /// Level: 2, Per-device level: 2 · Tier: Direct (1)
+    /// Types: VirtualMachine
     pub const WRITE_OIO_LATEST: Metric<Count, VmOnly> = Metric::new(
         "virtualDisk",
         "writeOIO",
@@ -6856,7 +8717,10 @@ pub mod virtual_disk {
 pub mod vmop {
     use super::super::*;
 
-    /// `vmop.numChangeDS.latest` (key 267) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of datastore change operations for powered-off and suspended virtual machines
+    /// `vmop.numChangeDS.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_CHANGE_DS_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numChangeDS",
@@ -6867,7 +8731,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numChangeHostDS.latest` (key 268) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of host and datastore change operations for powered-off and suspended virtual machines
+    /// `vmop.numChangeHostDS.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_CHANGE_HOST_DS_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numChangeHostDS",
@@ -6878,7 +8745,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numChangeHost.latest` (key 266) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of host change operations for powered-off and suspended VMs
+    /// `vmop.numChangeHost.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_CHANGE_HOST_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numChangeHost",
@@ -6889,7 +8759,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numClone.latest` (key 264) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine clone operations
+    /// `vmop.numClone.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_CLONE_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numClone",
@@ -6900,7 +8773,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numCreate.latest` (key 259) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine create operations
+    /// `vmop.numCreate.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_CREATE_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numCreate",
@@ -6911,7 +8787,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numDeploy.latest` (key 265) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine template deploy operations
+    /// `vmop.numDeploy.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_DEPLOY_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numDeploy",
@@ -6922,7 +8801,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numDestroy.latest` (key 260) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine delete operations
+    /// `vmop.numDestroy.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_DESTROY_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numDestroy",
@@ -6933,7 +8815,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numPoweroff.latest` (key 253) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine power off operations
+    /// `vmop.numPoweroff.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_POWEROFF_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numPoweroff",
@@ -6944,7 +8829,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numPoweron.latest` (key 252) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine power on operations
+    /// `vmop.numPoweron.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_POWERON_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numPoweron",
@@ -6955,7 +8843,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numRebootGuest.latest` (key 256) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine guest reboot operations
+    /// `vmop.numRebootGuest.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_REBOOT_GUEST_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numRebootGuest",
@@ -6966,7 +8857,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numReconfigure.latest` (key 263) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine reconfigure operations
+    /// `vmop.numReconfigure.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_RECONFIGURE_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numReconfigure",
@@ -6977,7 +8871,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numRegister.latest` (key 261) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine register operations
+    /// `vmop.numRegister.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_REGISTER_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numRegister",
@@ -6988,7 +8885,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numReset.latest` (key 255) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine reset operations
+    /// `vmop.numReset.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_RESET_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numReset",
@@ -6999,7 +8899,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numShutdownGuest.latest` (key 258) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine guest shutdown operations
+    /// `vmop.numShutdownGuest.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_SHUTDOWN_GUEST_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numShutdownGuest",
@@ -7010,7 +8913,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numStandbyGuest.latest` (key 257) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine standby guest operations
+    /// `vmop.numStandbyGuest.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_STANDBY_GUEST_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numStandbyGuest",
@@ -7021,7 +8927,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numSuspend.latest` (key 254) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine suspend operations
+    /// `vmop.numSuspend.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_SUSPEND_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numSuspend",
@@ -7032,7 +8941,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numSVMotion.latest` (key 270) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of migrations with Storage vMotion (datastore change operations for powered-on VMs)
+    /// `vmop.numSVMotion.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_SVMOTION_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numSVMotion",
@@ -7043,7 +8955,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numUnregister.latest` (key 262) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of virtual machine unregister operations
+    /// `vmop.numUnregister.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_UNREGISTER_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numUnregister",
@@ -7054,7 +8969,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numVMotion.latest` (key 269) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of migrations with vMotion (host change operations for powered-on VMs)
+    /// `vmop.numVMotion.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_VMOTION_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numVMotion",
@@ -7065,7 +8983,10 @@ pub mod vmop {
         false,
     );
 
-    /// `vmop.numXVMotion.latest` (key 271) · number · level 1, per_device_level 3 · Tier 1: Cluster, Datacenter
+    /// Number of host and datastore change operations for powered-on and suspended virtual machines
+    /// `vmop.numXVMotion.latest` · number · vCenter only
+    /// Level: 1, Per-device level: 3 · Tier: Direct (1)
+    /// Types: ClusterComputeResource, Datacenter
     pub const NUM_XVMOTION_LATEST: Metric<Count, ClusterDc> = Metric::new(
         "vmop",
         "numXVMotion",
@@ -7080,7 +9001,9 @@ pub mod vmop {
 pub mod vmotion {
     use super::super::*;
 
-    /// `vmotion.downtime.latest` (key 397) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// `vmotion.downtime.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const DOWNTIME_LATEST: Metric<Time, HostOnly> = Metric::new(
         "vmotion",
         "downtime",
@@ -7091,7 +9014,9 @@ pub mod vmotion {
         false,
     );
 
-    /// `vmotion.dst.migration.time.latest` (key 400) · second · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// `vmotion.dst.migration.time.latest` · second · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const DST_MIGRATION_TIME_LATEST: Metric<Time, HostOnly> = Metric::new(
         "vmotion",
         "dst.migration.time",
@@ -7102,7 +9027,9 @@ pub mod vmotion {
         false,
     );
 
-    /// `vmotion.mem.sizemb.latest` (key 401) · megaBytes · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// `vmotion.mem.sizemb.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const MEM_SIZEMB_LATEST: Metric<Memory, HostOnly> = Metric::new(
         "vmotion",
         "mem.sizemb",
@@ -7113,7 +9040,9 @@ pub mod vmotion {
         false,
     );
 
-    /// `vmotion.precopy.time.latest` (key 398) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// `vmotion.precopy.time.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const PRECOPY_TIME_LATEST: Metric<Time, HostOnly> = Metric::new(
         "vmotion",
         "precopy.time",
@@ -7124,7 +9053,9 @@ pub mod vmotion {
         false,
     );
 
-    /// `vmotion.rtt.latest` (key 399) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// `vmotion.rtt.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const RTT_LATEST: Metric<Time, HostOnly> = Metric::new(
         "vmotion",
         "rtt",
@@ -7135,7 +9066,9 @@ pub mod vmotion {
         false,
     );
 
-    /// `vmotion.vmkernel.downtime.latest` (key 396) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Host
+    /// `vmotion.vmkernel.downtime.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: HostSystem
     pub const VMKERNEL_DOWNTIME_LATEST: Metric<Time, HostOnly> = Metric::new(
         "vmotion",
         "vmkernel.downtime",
@@ -7150,7 +9083,10 @@ pub mod vmotion {
 pub mod vmx {
     use super::super::*;
 
-    /// `vmx.cpuSpeed.latest` (key 413) · megaHertz · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// Actual clock speed of host CPU
+    /// `vmx.cpuSpeed.latest` · megaHertz · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const CPU_SPEED_LATEST: Metric<Frequency, VmOnly> = Metric::new(
         "vmx",
         "cpuSpeed",
@@ -7161,7 +9097,10 @@ pub mod vmx {
         false,
     );
 
-    /// `vmx.numVCPUs.latest` (key 409) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// Total count of virtual CPUs in VM
+    /// `vmx.numVCPUs.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const NUM_VCPUS_LATEST: Metric<Count, VmOnly> = Metric::new(
         "vmx",
         "numVCPUs",
@@ -7172,7 +9111,10 @@ pub mod vmx {
         false,
     );
 
-    /// `vmx.overheadMemSizeMax.latest` (key 415) · megaBytes · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// Maximum overhead heap memory usage since the VM started running
+    /// `vmx.overheadMemSizeMax.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const OVERHEAD_MEM_SIZE_MAX_LATEST: Metric<Memory, VmOnly> = Metric::new(
         "vmx",
         "overheadMemSizeMax",
@@ -7183,7 +9125,10 @@ pub mod vmx {
         false,
     );
 
-    /// `vmx.overheadMemSizeMin.latest` (key 414) · megaBytes · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// Minimum overhead heap memory usage since the VM started running
+    /// `vmx.overheadMemSizeMin.latest` · megaBytes · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const OVERHEAD_MEM_SIZE_MIN_LATEST: Metric<Memory, VmOnly> = Metric::new(
         "vmx",
         "overheadMemSizeMin",
@@ -7194,7 +9139,9 @@ pub mod vmx {
         false,
     );
 
-    /// `vmx.poll.itersPerS.latest` (key 1021) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// `vmx.poll.itersPerS.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const POLL_ITERS_PER_S_LATEST: Metric<Count, VmOnly> = Metric::new(
         "vmx",
         "poll.itersPerS",
@@ -7205,7 +9152,9 @@ pub mod vmx {
         false,
     );
 
-    /// `vmx.userRpc.opsPerS.latest` (key 1022) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// `vmx.userRpc.opsPerS.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const USER_RPC_OPS_PER_S_LATEST: Metric<Count, VmOnly> = Metric::new(
         "vmx",
         "userRpc.opsPerS",
@@ -7216,7 +9165,10 @@ pub mod vmx {
         false,
     );
 
-    /// `vmx.vcpusMhzMax.latest` (key 411) · megaHertz · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// Maximum clock speed of the vCPUs during last stats interval
+    /// `vmx.vcpusMhzMax.latest` · megaHertz · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const VCPUS_MHZ_MAX_LATEST: Metric<Frequency, VmOnly> = Metric::new(
         "vmx",
         "vcpusMhzMax",
@@ -7227,7 +9179,10 @@ pub mod vmx {
         false,
     );
 
-    /// `vmx.vcpusMhzMean.latest` (key 412) · megaHertz · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// Average clock speed of the vCPUs during last stats interval
+    /// `vmx.vcpusMhzMean.latest` · megaHertz · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const VCPUS_MHZ_MEAN_LATEST: Metric<Frequency, VmOnly> = Metric::new(
         "vmx",
         "vcpusMhzMean",
@@ -7238,7 +9193,10 @@ pub mod vmx {
         false,
     );
 
-    /// `vmx.vcpusMhzMin.latest` (key 410) · megaHertz · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// Minimum clock speed of the vCPUs during last stats interval
+    /// `vmx.vcpusMhzMin.latest` · megaHertz · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const VCPUS_MHZ_MIN_LATEST: Metric<Frequency, VmOnly> = Metric::new(
         "vmx",
         "vcpusMhzMin",
@@ -7249,7 +9207,9 @@ pub mod vmx {
         false,
     );
 
-    /// `vmx.vigor.opsTotal.latest` (key 1020) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · VM
+    /// `vmx.vigor.opsTotal.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: VirtualMachine
     pub const VIGOR_OPS_TOTAL_LATEST: Metric<Count, VmOnly> = Metric::new(
         "vmx",
         "vigor.opsTotal",
@@ -7264,7 +9224,10 @@ pub mod vmx {
 pub mod vsan_dom_obj {
     use super::super::*;
 
-    /// `vsanDomObj.readAvgLatency.average` (key 599) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Average read latency in ms
+    /// `vsanDomObj.readAvgLatency.average` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_AVG_LATENCY_AVERAGE: Metric<Time, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "readAvgLatency",
@@ -7275,7 +9238,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.readCacheHitRate.latest` (key 601) · percent (hundredths) · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cache hit rate percentage
+    /// `vsanDomObj.readCacheHitRate.latest` · percent (hundredths) · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_CACHE_HIT_RATE_LATEST: Metric<Ratio, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "readCacheHitRate",
@@ -7286,7 +9252,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.readCongestion.average` (key 602) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Read congestion
+    /// `vsanDomObj.readCongestion.average` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_CONGESTION_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "readCongestion",
@@ -7297,7 +9266,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.readIops.average` (key 597) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Read IOPS
+    /// `vsanDomObj.readIops.average` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_IOPS_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "readIops",
@@ -7308,7 +9280,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.readMaxLatency.latest` (key 600) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Max read latency in ms
+    /// `vsanDomObj.readMaxLatency.latest` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_MAX_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "readMaxLatency",
@@ -7319,7 +9294,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.readThroughput.average` (key 598) · kiloBytesPerSecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Read throughput in kBps
+    /// `vsanDomObj.readThroughput.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const READ_THROUGHPUT_AVERAGE: Metric<Throughput, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "readThroughput",
@@ -7330,7 +9308,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.recoveryWriteAvgLatency.average` (key 610) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Average recovery write latency in ms
+    /// `vsanDomObj.recoveryWriteAvgLatency.average` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const RECOVERY_WRITE_AVG_LATENCY_AVERAGE: Metric<Time, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "recoveryWriteAvgLatency",
@@ -7341,7 +9322,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.recoveryWriteCongestion.average` (key 612) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Recovery write congestion
+    /// `vsanDomObj.recoveryWriteCongestion.average` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const RECOVERY_WRITE_CONGESTION_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "recoveryWriteCongestion",
@@ -7352,7 +9336,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.recoveryWriteIops.average` (key 608) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Recovery write IOPS
+    /// `vsanDomObj.recoveryWriteIops.average` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const RECOVERY_WRITE_IOPS_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "recoveryWriteIops",
@@ -7363,7 +9350,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.recoveryWriteMaxLatency.latest` (key 611) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Max recovery write latency in ms
+    /// `vsanDomObj.recoveryWriteMaxLatency.latest` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const RECOVERY_WRITE_MAX_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "recoveryWriteMaxLatency",
@@ -7374,7 +9364,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.recoveryWriteThroughput.average` (key 609) · kiloBytesPerSecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Recovery write through-put in kBps
+    /// `vsanDomObj.recoveryWriteThroughput.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const RECOVERY_WRITE_THROUGHPUT_AVERAGE: Metric<Throughput, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "recoveryWriteThroughput",
@@ -7385,7 +9378,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.writeAvgLatency.average` (key 605) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Average write latency in ms
+    /// `vsanDomObj.writeAvgLatency.average` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_AVG_LATENCY_AVERAGE: Metric<Time, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "writeAvgLatency",
@@ -7396,7 +9392,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.writeCongestion.average` (key 607) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Write congestion
+    /// `vsanDomObj.writeCongestion.average` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_CONGESTION_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "writeCongestion",
@@ -7407,7 +9406,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.writeIops.average` (key 603) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Write IOPS
+    /// `vsanDomObj.writeIops.average` · number · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_IOPS_AVERAGE: Metric<Count, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "writeIops",
@@ -7418,7 +9420,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.writeMaxLatency.latest` (key 606) · millisecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Max write latency in ms
+    /// `vsanDomObj.writeMaxLatency.latest` · millisecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_MAX_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "writeMaxLatency",
@@ -7429,7 +9434,10 @@ pub mod vsan_dom_obj {
         false,
     );
 
-    /// `vsanDomObj.writeThroughput.average` (key 604) · kiloBytesPerSecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Write throughput in kBps
+    /// `vsanDomObj.writeThroughput.average` · kiloBytesPerSecond · vCenter and ESX
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const WRITE_THROUGHPUT_AVERAGE: Metric<Throughput, DatastoreVmHost> = Metric::new(
         "vsanDomObj",
         "writeThroughput",
@@ -7444,7 +9452,10 @@ pub mod vsan_dom_obj {
 pub mod vvol {
     use super::super::*;
 
-    /// `vvol.container.issue.latency.latest` (key 988) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of cmds that failed before issue by vVol Container
+    /// `vvol.container.issue.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_ISSUE_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.issue.latency",
@@ -7455,7 +9466,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.readsissued.failed.latest` (key 980) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// No. of read cmds issued by vVol Container that failed
+    /// `vvol.container.readsissued.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_READSISSUED_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.readsissued.failed",
@@ -7466,7 +9480,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.reads.done.latest` (key 974) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of read cmds done by vVol Container
+    /// `vvol.container.reads.done.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_READS_DONE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.reads.done",
@@ -7477,7 +9494,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.reads.failed.latest` (key 983) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of read cmds failed by vVol Container
+    /// `vvol.container.reads.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_READS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.reads.failed",
@@ -7488,7 +9508,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.reads.sent.latest` (key 977) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of read cmds sent by vVol Container
+    /// `vvol.container.reads.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_READS_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.reads.sent",
@@ -7499,7 +9522,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.read.latency.latest` (key 986) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of successful reads by vVol Container
+    /// `vvol.container.read.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_READ_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.read.latency",
@@ -7510,7 +9536,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.totalissued.failed.latest` (key 982) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds issued by vVol Container that failed
+    /// `vvol.container.totalissued.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_TOTALISSUED_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.totalissued.failed",
@@ -7521,7 +9550,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.total.done.latest` (key 976) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds done by vVol Container
+    /// `vvol.container.total.done.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_TOTAL_DONE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.total.done",
@@ -7532,7 +9564,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.total.failed.latest` (key 985) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds failed by vVol Container
+    /// `vvol.container.total.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_TOTAL_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.total.failed",
@@ -7543,7 +9578,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.total.latency.latest` (key 989) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of all issued cmds by vVol Container
+    /// `vvol.container.total.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_TOTAL_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.total.latency",
@@ -7554,7 +9592,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.total.sent.latest` (key 979) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds sent by vVol Container
+    /// `vvol.container.total.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_TOTAL_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.total.sent",
@@ -7565,7 +9606,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.writesissued.failed.latest` (key 981) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// No. of write cmds issued by vVol Container that failed
+    /// `vvol.container.writesissued.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_WRITESISSUED_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.writesissued.failed",
@@ -7576,7 +9620,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.writes.done.latest` (key 975) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of write cmds done by vVol Container
+    /// `vvol.container.writes.done.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_WRITES_DONE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.writes.done",
@@ -7587,7 +9634,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.writes.failed.latest` (key 984) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Container:Total no. of write cmds failed by vVol Container
+    /// `vvol.container.writes.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_WRITES_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.writes.failed",
@@ -7598,7 +9648,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.writes.sent.latest` (key 978) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of write cmds sent by vVol Container
+    /// `vvol.container.writes.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_WRITES_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.writes.sent",
@@ -7609,7 +9662,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.container.write.latency.latest` (key 987) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of successful writes by vVol Container
+    /// `vvol.container.write.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const CONTAINER_WRITE_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "container.write.latency",
@@ -7620,7 +9676,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.cancel.failed.latest` (key 1007) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cancel cmds failed by vVol Device
+    /// `vvol.device.cancel.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_CANCEL_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.cancel.failed",
@@ -7631,7 +9690,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.cancel.sent.latest` (key 1006) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cancel cmds sent by vVol Device
+    /// `vvol.device.cancel.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_CANCEL_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.cancel.sent",
@@ -7642,7 +9704,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.deviceresets.failed.latest` (key 1009) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of device reset cmds failed by vVol Device
+    /// `vvol.device.deviceresets.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_DEVICERESETS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.deviceresets.failed",
@@ -7653,7 +9718,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.deviceresets.sent.latest` (key 1008) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of device reset cmds sent by vVol Device
+    /// `vvol.device.deviceresets.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_DEVICERESETS_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.deviceresets.sent",
@@ -7664,7 +9732,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.issue.latency.latest` (key 1004) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of cmds that failed before issue by vVol Device
+    /// `vvol.device.issue.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_ISSUE_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.issue.latency",
@@ -7675,7 +9746,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.readsissued.failed.latest` (key 996) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// No. of read cmds issued by vVol Device that failed
+    /// `vvol.device.readsissued.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_READSISSUED_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.readsissued.failed",
@@ -7686,7 +9760,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.reads.done.latest` (key 990) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of read cmds done by vVol Device
+    /// `vvol.device.reads.done.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_READS_DONE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.reads.done",
@@ -7697,7 +9774,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.reads.failed.latest` (key 999) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of read cmds failed by vVol Device
+    /// `vvol.device.reads.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_READS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.reads.failed",
@@ -7708,7 +9788,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.reads.sent.latest` (key 993) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of read cmds sent by vVol Device
+    /// `vvol.device.reads.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_READS_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.reads.sent",
@@ -7719,7 +9802,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.read.latency.latest` (key 1002) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of successful reads by vVol Device
+    /// `vvol.device.read.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_READ_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.read.latency",
@@ -7730,7 +9816,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.resets.failed.latest` (key 1011) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of reset cmds failed by vVol Device
+    /// `vvol.device.resets.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_RESETS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.resets.failed",
@@ -7741,7 +9830,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.resets.sent.latest` (key 1010) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of reset cmds sent by vVol Device
+    /// `vvol.device.resets.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_RESETS_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.resets.sent",
@@ -7752,7 +9844,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.totalissued.failed.latest` (key 998) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds issued by vVol Device that failed
+    /// `vvol.device.totalissued.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_TOTALISSUED_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.totalissued.failed",
@@ -7763,7 +9858,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.total.done.latest` (key 992) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds done by vVol Device
+    /// `vvol.device.total.done.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_TOTAL_DONE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.total.done",
@@ -7774,7 +9872,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.total.failed.latest` (key 1001) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds failed by vVol Device
+    /// `vvol.device.total.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_TOTAL_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.total.failed",
@@ -7785,7 +9886,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.total.latency.latest` (key 1005) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of all issued cmds by vVol Device
+    /// `vvol.device.total.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_TOTAL_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.total.latency",
@@ -7796,7 +9900,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.total.sent.latest` (key 995) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds sent by vVol Device
+    /// `vvol.device.total.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_TOTAL_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.total.sent",
@@ -7807,7 +9914,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.unmaps.failed.latest` (key 1013) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of unmap cmds failed by vVol Device
+    /// `vvol.device.unmaps.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_UNMAPS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.unmaps.failed",
@@ -7818,7 +9928,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.unmaps.sent.latest` (key 1012) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of unmap cmds sent by vVol Device
+    /// `vvol.device.unmaps.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_UNMAPS_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.unmaps.sent",
@@ -7829,7 +9942,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.writesissued.failed.latest` (key 997) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// No. of write cmds issued by vVol Device that failed
+    /// `vvol.device.writesissued.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_WRITESISSUED_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.writesissued.failed",
@@ -7840,7 +9956,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.writes.done.latest` (key 991) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of write cmds done by vVol Device
+    /// `vvol.device.writes.done.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_WRITES_DONE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.writes.done",
@@ -7851,7 +9970,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.writes.failed.latest` (key 1000) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of write cmds failed by vVol Device
+    /// `vvol.device.writes.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_WRITES_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.writes.failed",
@@ -7862,7 +9984,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.writes.sent.latest` (key 994) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of write cmds sent by vVol Device
+    /// `vvol.device.writes.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_WRITES_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.writes.sent",
@@ -7873,7 +9998,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.device.write.latency.latest` (key 1003) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of successful writes by vVol Device
+    /// `vvol.device.write.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const DEVICE_WRITE_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "device.write.latency",
@@ -7884,7 +10012,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.cancel.failed.latest` (key 967) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cancel cmds failed on vVol PE
+    /// `vvol.pe.cancel.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_CANCEL_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.cancel.failed",
@@ -7895,7 +10026,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.cancel.sent.latest` (key 966) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cancel cmds sent on vVol PE
+    /// `vvol.pe.cancel.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_CANCEL_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.cancel.sent",
@@ -7906,7 +10040,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.deviceresets.failed.latest` (key 969) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of device reset cmds failed on vVol PE
+    /// `vvol.pe.deviceresets.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_DEVICERESETS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.deviceresets.failed",
@@ -7917,7 +10054,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.deviceresets.sent.latest` (key 968) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of device reset cmds sent on vVol PE
+    /// `vvol.pe.deviceresets.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_DEVICERESETS_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.deviceresets.sent",
@@ -7928,7 +10068,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.isaccessible.latest` (key 949) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// vVol PE is accessible
+    /// `vvol.pe.isaccessible.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_ISACCESSIBLE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.isaccessible",
@@ -7939,7 +10082,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.issue.latency.latest` (key 964) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of cmds that failed before issue on vVol PE
+    /// `vvol.pe.issue.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_ISSUE_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.issue.latency",
@@ -7950,7 +10096,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.readsissued.failed.latest` (key 956) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// No. of read cmds issued on vVol PE that failed
+    /// `vvol.pe.readsissued.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_READSISSUED_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.readsissued.failed",
@@ -7961,7 +10110,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.reads.done.latest` (key 950) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of read cmds done on vVol PE
+    /// `vvol.pe.reads.done.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_READS_DONE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.reads.done",
@@ -7972,7 +10124,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.reads.failed.latest` (key 959) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of read cmds failed on vVol PE
+    /// `vvol.pe.reads.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_READS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.reads.failed",
@@ -7983,7 +10138,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.reads.sent.latest` (key 953) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of read cmds sent on vVol PE
+    /// `vvol.pe.reads.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_READS_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.reads.sent",
@@ -7994,7 +10152,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.read.latency.latest` (key 962) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of successful reads on vVol PE
+    /// `vvol.pe.read.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_READ_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.read.latency",
@@ -8005,7 +10166,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.resets.failed.latest` (key 971) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of reset cmds failed on vVol PE
+    /// `vvol.pe.resets.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_RESETS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.resets.failed",
@@ -8016,7 +10180,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.resets.sent.latest` (key 970) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of reset cmds sent on vVol PE
+    /// `vvol.pe.resets.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_RESETS_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.resets.sent",
@@ -8027,7 +10194,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.totalissued.failed.latest` (key 958) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds issued on vVol PE that failed
+    /// `vvol.pe.totalissued.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_TOTALISSUED_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.totalissued.failed",
@@ -8038,7 +10208,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.total.done.latest` (key 952) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds done on vVol PE
+    /// `vvol.pe.total.done.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_TOTAL_DONE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.total.done",
@@ -8049,7 +10222,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.total.failed.latest` (key 961) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds failed on vVol PE
+    /// `vvol.pe.total.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_TOTAL_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.total.failed",
@@ -8060,7 +10236,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.total.latency.latest` (key 965) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of all issued cmds on vVol PE
+    /// `vvol.pe.total.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_TOTAL_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.total.latency",
@@ -8071,7 +10250,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.total.sent.latest` (key 955) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of cmds sent on vVol PE
+    /// `vvol.pe.total.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_TOTAL_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.total.sent",
@@ -8082,7 +10264,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.unmaps.failed.latest` (key 973) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of unmap cmds failed on vVol PE
+    /// `vvol.pe.unmaps.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_UNMAPS_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.unmaps.failed",
@@ -8093,7 +10278,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.unmaps.sent.latest` (key 972) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of unmap cmds sent on vVol PE
+    /// `vvol.pe.unmaps.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_UNMAPS_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.unmaps.sent",
@@ -8104,7 +10292,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.writesissued.failed.latest` (key 957) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// No. of write cmds issued on vVol PE that failed
+    /// `vvol.pe.writesissued.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_WRITESISSUED_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.writesissued.failed",
@@ -8115,7 +10306,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.writes.done.latest` (key 951) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of write cmds done on vVol PE
+    /// `vvol.pe.writes.done.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_WRITES_DONE_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.writes.done",
@@ -8126,7 +10320,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.writes.failed.latest` (key 960) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of write cmds failed on vVol PE
+    /// `vvol.pe.writes.failed.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_WRITES_FAILED_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.writes.failed",
@@ -8137,7 +10334,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.writes.sent.latest` (key 954) · number · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Total no. of write cmds sent on vVol PE
+    /// `vvol.pe.writes.sent.latest` · number · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_WRITES_SENT_LATEST: Metric<Count, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.writes.sent",
@@ -8148,7 +10348,10 @@ pub mod vvol {
         false,
     );
 
-    /// `vvol.pe.write.latency.latest` (key 963) · microsecond · level 4, per_device_level 4 · tier 3b: inferred scope (no active samples in lab dump) · Datastore, Host, VM
+    /// Cumulative latency of successful writes on vVol PE
+    /// `vvol.pe.write.latency.latest` · microsecond · vCenter only
+    /// Level: 4, Per-device level: 4 · Tier: Inferred (3b)
+    /// Types: Datastore, HostSystem, VirtualMachine
     pub const PE_WRITE_LATENCY_LATEST: Metric<Time, DatastoreVmHost> = Metric::new(
         "vvol",
         "pe.write.latency",
@@ -8163,10 +10366,6 @@ pub mod vvol {
 pub mod by_entity {
     pub mod virtual_machine {
         pub mod cluster_services {
-            pub use crate::perf::metrics::cluster_services::CLUSTER_DRS_SCORE_LATEST;
-            pub use crate::perf::metrics::cluster_services::EFFECTIVECPU_AVERAGE;
-            pub use crate::perf::metrics::cluster_services::EFFECTIVEMEM_AVERAGE;
-            pub use crate::perf::metrics::cluster_services::FAILOVER_LATEST;
             pub use crate::perf::metrics::cluster_services::VM_DRS_SCORE_LATEST;
         }
 
@@ -8555,11 +10754,7 @@ pub mod by_entity {
 
     pub mod host_system {
         pub mod cluster_services {
-            pub use crate::perf::metrics::cluster_services::CLUSTER_DRS_SCORE_LATEST;
             pub use crate::perf::metrics::cluster_services::CPUFAIRNESS_LATEST;
-            pub use crate::perf::metrics::cluster_services::EFFECTIVECPU_AVERAGE;
-            pub use crate::perf::metrics::cluster_services::EFFECTIVEMEM_AVERAGE;
-            pub use crate::perf::metrics::cluster_services::FAILOVER_LATEST;
             pub use crate::perf::metrics::cluster_services::MEMFAIRNESS_LATEST;
         }
 
@@ -9051,6 +11246,13 @@ pub mod by_entity {
     }
 
     pub mod cluster_compute_resource {
+        pub mod cluster_services {
+            pub use crate::perf::metrics::cluster_services::CLUSTER_DRS_SCORE_LATEST;
+            pub use crate::perf::metrics::cluster_services::EFFECTIVECPU_AVERAGE;
+            pub use crate::perf::metrics::cluster_services::EFFECTIVEMEM_AVERAGE;
+            pub use crate::perf::metrics::cluster_services::FAILOVER_LATEST;
+        }
+
         pub mod cpu {
             pub use crate::perf::metrics::cpu::CACHE_L3_OCCUPANCY_AVERAGE;
             pub use crate::perf::metrics::cpu::CAPACITY_CONTENTION_AVERAGE;

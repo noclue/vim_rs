@@ -15,6 +15,9 @@ mod private {
 }
 
 /// A managed-object kind that can be named in a typed performance query.
+///
+/// Sealed. Implemented for `VirtualMachine`, `HostSystem`, `ClusterComputeResource`,
+/// `ResourcePool`, `Datastore`, and `Datacenter`.
 pub trait EntityKind: private::Sealed + 'static {
     /// VIM managed-object type.
     const MO_TYPE: MoTypesEnum;
@@ -78,6 +81,10 @@ impl<const VM: bool, const HOST: bool, const CLUSTER: bool, const RP: bool, cons
 }
 
 /// A managed object whose type is `K`.
+///
+/// [`TryFrom<ManagedObjectReference>`](std::convert::TryFrom) fails with
+/// [`crate::perf::PerfError::EntityKindMismatch`] when `moref` is a different kind.
+/// Use an untyped [`crate::perf::PerfQuery`] for `VirtualApp`.
 pub struct Entity<K: EntityKind> {
     moref: ManagedObjectReference,
     _k: PhantomData<fn() -> K>,

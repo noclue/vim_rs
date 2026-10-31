@@ -9,8 +9,12 @@
 //! use vim_mcp_server::embedded_model::create_embedded_model;
 //! use fastembed::TextEmbedding;
 //!
-//! let model = create_embedded_model();
-//! let embedding = TextEmbedding::try_new_from_user_defined(model, Default::default())?;
+//! fn embed() -> Result<(), Box<dyn std::error::Error>> {
+//!     let model = create_embedded_model();
+//!     let _embedding = TextEmbedding::try_new_from_user_defined(model, Default::default())?;
+//!     Ok(())
+//! }
+//! embed().unwrap();
 //! ```
 
 use fastembed::{TokenizerFiles, UserDefinedEmbeddingModel};

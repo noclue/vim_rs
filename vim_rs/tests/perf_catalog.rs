@@ -1,15 +1,18 @@
 #![cfg(feature = "perf")]
 
 //! Generated catalog constants against the sanitized vCenter catalog.
+//!
+//! `metrics.rs` names counters by `group.name.rollup` only. Counter ids differ
+//! between endpoints, so ids are pinned against the fixture in a few named checks.
 
 use std::sync::Arc;
 
-use vim_rs::mo::{Datastore, VirtualMachine};
+use vim_rs::mo::{ClusterComputeResource, Datastore, VirtualMachine};
 use vim_rs::perf::entity::{EntityScope, MASK_ALL};
 use vim_rs::perf::metric::StatsKind;
 use vim_rs::perf::metrics::{cpu, disk, mem};
 use vim_rs::perf::registry::CounterRegistry;
-use vim_rs::perf::typed::Entity;
+use vim_rs::perf::typed::{Admits, Entity};
 use vim_rs::perf::units::Dimension;
 use vim_rs::perf::{Metric, PerfError};
 use vim_rs::types::enums::MoTypesEnum;
@@ -75,10 +78,23 @@ fn every_generated_constant_matches_the_catalog_and_is_not_any_entity() {
             .unwrap_or_else(|| {
                 panic!("missing catalog counter {}", item.full);
             });
-        assert_eq!(found.id.0, item.key, "{}", item.full);
+        assert_eq!(&*found.name.full, item.full);
         assert_ne!(item.mask, MASK_ALL, "{}", item.full);
         assert_ne!(item.mask, 0, "{}", item.full);
     }
+}
+
+fn admits_cluster<D: Dimension, S: EntityScope + Admits<ClusterComputeResource>>(_: Metric<D, S>) {}
+
+#[test]
+fn cluster_services_counters_are_cluster_scoped() {
+    use vim_rs::perf::metrics::by_entity::cluster_compute_resource::cluster_services;
+    // Compiles only if a typed cluster query accepts these constants.
+    admits_cluster(cluster_services::CLUSTER_DRS_SCORE_LATEST);
+    admits_cluster(cluster_services::EFFECTIVECPU_AVERAGE);
+    admits_cluster(cluster_services::EFFECTIVEMEM_AVERAGE);
+    admits_cluster(cluster_services::FAILOVER_LATEST);
+    assert_eq!(scope_of(cluster_services::EFFECTIVECPU_AVERAGE), 0x04);
 }
 
 #[test]
@@ -113,7 +129,6 @@ fn typed_entity_rejects_the_wrong_managed_object_type() {
 
 struct Parsed {
     full: String,
-    key: i32,
     stats: String,
     mask: u8,
 }
@@ -124,14 +139,12 @@ fn parse_consts(text: &str) -> Vec<Parsed> {
     let mut index = 0;
     while index < lines.len() {
         let line = lines[index].trim();
-        if let Some(rest) = line.strip_prefix("/// `") {
+        // Name line: /// `group.name.rollup` · unit · endpoints
+        if let Some(rest) = line
+            .strip_prefix("/// `")
+            .filter(|rest| rest.contains("` · "))
+        {
             let full = rest.split('`').next().unwrap_or("").to_string();
-            let key = rest
-                .split("(key ")
-                .nth(1)
-                .and_then(|tail| tail.split(')').next())
-                .and_then(|num| num.parse().ok())
-                .unwrap_or(-1);
             let mut scope = String::new();
             let mut stats = String::new();
             for follow in lines.iter().skip(index + 1).take(12) {
@@ -153,10 +166,9 @@ fn parse_consts(text: &str) -> Vec<Parsed> {
                     stats = kind.trim_end_matches([',', ')']).to_string();
                 }
             }
-            if key >= 0 && !stats.is_empty() {
+            if !stats.is_empty() {
                 out.push(Parsed {
                     full,
-                    key,
                     stats,
                     mask: scope_mask(&scope),
                 });
@@ -177,6 +189,7 @@ fn scope_mask(scope: &str) -> u8 {
         "VmOnly" => 0x01,
         "HostOnly" => 0x02,
         "VmOrHost" => 0x03,
+        "ClusterOnly" => 0x04,
         "HostCluster" => 0x06,
         "VmHostCluster" => 0x07,
         "VmOrPool" => 0x09,

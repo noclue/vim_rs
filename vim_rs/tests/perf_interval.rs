@@ -7,6 +7,7 @@ use std::time::{Duration, SystemTime};
 use vim_rs::perf::error::{PerfError, PerfWarning, UnsupportedReason};
 use vim_rs::perf::query::{plan_intervals, EntityDecision, Interval, IntervalCase};
 use vim_rs::perf::registry::ProviderCaps;
+use vim_rs::perf::Timestamp;
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::{ManagedObjectReference, PerfInterval};
 
@@ -136,6 +137,60 @@ fn past_day_uses_retention_and_omits_max_sample() {
     assert_eq!(query.start, Some(now - Duration::from_secs(86400)));
     assert_eq!(query.end, Some(now));
     assert!(query.max_sample.is_none());
+}
+
+#[test]
+fn historical_start_past_retention_still_queries_with_warning() {
+    let now = SystemTime::UNIX_EPOCH + Duration::from_secs(1_700_000_000);
+    let mut item = case(
+        moref(MoTypesEnum::VirtualMachine, "vm-1"),
+        caps(true, true, Some(20)),
+    );
+    let three_days = now - Duration::from_secs(3 * 86400);
+    item.start = Some(three_days);
+    let planned =
+        plan_intervals(&[item], &vcenter_intervals(), Interval::PAST_DAY, None, now).unwrap();
+    let query = planned_query(&planned[0]);
+    assert_eq!(query.interval_id, 300);
+    assert_eq!(query.start, Some(three_days));
+    assert_eq!(
+        query.warnings,
+        vec![PerfWarning::HistoricalWindowTooOld {
+            requested_start: Timestamp(three_days),
+            interval_secs: 300,
+            retention_secs: 86400,
+        }]
+    );
+
+    let mut exact = case(
+        moref(MoTypesEnum::VirtualMachine, "vm-1"),
+        caps(true, true, Some(20)),
+    );
+    exact.start = Some(now - Duration::from_secs(86400));
+    let planned =
+        plan_intervals(&[exact], &vcenter_intervals(), Interval::PAST_DAY, None, now).unwrap();
+    assert!(planned_query(&planned[0]).warnings.is_empty());
+}
+
+#[test]
+fn auto_start_past_every_retention_warns_on_the_coarsest_period() {
+    let now = SystemTime::UNIX_EPOCH + Duration::from_secs(1_700_000_000);
+    let mut item = case(
+        moref(MoTypesEnum::VirtualMachine, "vm-1"),
+        caps(true, true, Some(20)),
+    );
+    item.start = Some(now - Duration::from_secs(2 * 31536000));
+    let planned =
+        plan_intervals(&[item], &vcenter_intervals(), Interval::Auto, None, now).unwrap();
+    let query = planned_query(&planned[0]);
+    assert_eq!(query.interval_id, 86400);
+    assert!(query.warnings.iter().any(|warning| matches!(
+        warning,
+        PerfWarning::HistoricalWindowTooOld {
+            interval_secs: 86400,
+            ..
+        }
+    )));
 }
 
 #[test]

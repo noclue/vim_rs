@@ -7,9 +7,12 @@ use std::sync::Arc;
 use std::time::{Duration, SystemTime, UNIX_EPOCH};
 
 use vim_rs::core::client::{Error as ClientError, Transport, VimClientHandle};
+use vim_rs::mo::{HostSystem, VirtualMachine};
+use vim_rs::perf::metrics::by_entity::{host_system, virtual_machine};
+use vim_rs::perf::typed::Entity;
 use vim_rs::perf::{
     EntityStatus, HostOnly, Interval, Metric, PerfClient, PerfError, PerfWarning, Ratio, Rollup,
-    Timestamp, UnsupportedReason,
+    StatsKind, Timestamp, UnsupportedReason, WireFormat,
 };
 use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::struct_enum::StructType;
@@ -23,6 +26,13 @@ use perf_mock::{vcenter_counters, PerfMockClient};
 fn vm(id: &str) -> ManagedObjectReference {
     ManagedObjectReference {
         r#type: MoTypesEnum::VirtualMachine,
+        value: id.to_string(),
+    }
+}
+
+fn host(id: &str) -> ManagedObjectReference {
+    ManagedObjectReference {
+        r#type: MoTypesEnum::HostSystem,
         value: id.to_string(),
     }
 }
@@ -102,6 +112,200 @@ async fn packs_one_hundred_vms_into_two_calls() {
     let mut counts: Vec<_> = mock.queries().iter().map(|call| call.len()).collect();
     counts.sort_unstable();
     assert_eq!(counts, vec![36, 64]);
+}
+
+#[tokio::test]
+async fn batch_packs_vm_cpu_and_host_memory_into_one_call() {
+    let mock = PerfMockClient::new();
+    let perf = perf(&mock);
+    let vm_entity = Entity::<VirtualMachine>::try_from(vm("vm-1")).unwrap();
+    let host_entity = Entity::<HostSystem>::try_from(host("host-1")).unwrap();
+    let result = perf
+        .batch()
+        .typed_group(|query| {
+            query
+                .typed_entities(std::slice::from_ref(&vm_entity))
+                .metric(virtual_machine::cpu::USAGE_AVERAGE)
+                .interval(Interval::Realtime)
+                .latest(1)
+        })
+        .typed_group(|query| {
+            query
+                .typed_entities(std::slice::from_ref(&host_entity))
+                .metric(host_system::mem::USAGE_AVERAGE)
+                .interval(Interval::Realtime)
+                .latest(1)
+        })
+        .fetch()
+        .await
+        .unwrap();
+
+    let calls = mock.queries();
+    assert_eq!(calls.len(), 1);
+    assert_eq!(calls[0].len(), 2);
+    let vm_spec = calls[0].iter().find(|spec| spec.entity == "vm-1").unwrap();
+    let host_spec = calls[0]
+        .iter()
+        .find(|spec| spec.entity == "host-1")
+        .unwrap();
+    assert_eq!(vm_spec.counter_ids, vec![2]);
+    assert_eq!(host_spec.counter_ids, vec![24]);
+    assert_eq!(vm_spec.format.as_deref(), Some("csv"));
+    assert_eq!(host_spec.format.as_deref(), Some("csv"));
+    assert_eq!(vm_spec.entity_type, "VirtualMachine");
+    assert_eq!(host_spec.entity_type, "HostSystem");
+
+    let vm_series = result.entity(&vm("vm-1")).unwrap();
+    assert!(vm_series
+        .series(virtual_machine::cpu::USAGE_AVERAGE)
+        .is_some());
+    assert!(vm_series.series(host_system::mem::USAGE_AVERAGE).is_none());
+    let host_series = result.entity(&host("host-1")).unwrap();
+    assert!(host_series
+        .series(host_system::mem::USAGE_AVERAGE)
+        .is_some());
+    assert!(host_series
+        .series(virtual_machine::cpu::USAGE_AVERAGE)
+        .is_none());
+    let order: Vec<_> = result
+        .entities()
+        .map(|entity| entity.entity.value.clone())
+        .collect();
+    assert_eq!(order, vec!["vm-1".to_string(), "host-1".to_string()]);
+}
+
+#[tokio::test]
+async fn batch_chunk_size_overrides_the_group_builder() {
+    let mock = PerfMockClient::new();
+    let perf = perf(&mock);
+    perf.batch()
+        .group(|query| {
+            query
+                .entity(&vm("vm-1"))
+                .metric_by_name("cpu.usage.average")
+                .interval(Interval::Realtime)
+                .latest(1)
+                .chunk_size(64)
+        })
+        .group(|query| {
+            query
+                .entity(&host("host-1"))
+                .metric_by_name("mem.usage.average")
+                .interval(Interval::Realtime)
+                .latest(1)
+        })
+        .chunk_size(1)
+        .fetch()
+        .await
+        .unwrap();
+    assert_eq!(mock.queries().len(), 2);
+}
+
+#[tokio::test]
+async fn batch_merges_counters_when_one_object_is_in_two_groups() {
+    let mock = PerfMockClient::new();
+    let perf = perf(&mock);
+    let result = perf
+        .batch()
+        .group(|query| {
+            query
+                .entity(&vm("vm-1"))
+                .metric_by_name("cpu.usage.average")
+                .interval(Interval::Realtime)
+                .latest(1)
+        })
+        .group(|query| {
+            query
+                .entity(&vm("vm-1"))
+                .metric_by_name("mem.consumed.average")
+                .interval(Interval::Realtime)
+                .latest(1)
+        })
+        .fetch()
+        .await
+        .unwrap();
+    let calls = mock.queries();
+    assert_eq!(calls.len(), 1);
+    assert_eq!(calls[0].len(), 2);
+    assert!(calls[0].iter().all(|spec| spec.entity == "vm-1"));
+    let mut ids: Vec<i64> = calls[0]
+        .iter()
+        .flat_map(|spec| spec.counter_ids.clone())
+        .collect();
+    ids.sort_unstable();
+    assert_eq!(ids, vec![2, 98]);
+    let entity = result.entity(&vm("vm-1")).unwrap();
+    assert!(entity.series(virtual_machine::cpu::USAGE_AVERAGE).is_some());
+    assert!(entity
+        .series(virtual_machine::mem::CONSUMED_AVERAGE)
+        .is_some());
+    assert_eq!(result.entities().count(), 1);
+}
+
+#[tokio::test]
+async fn batch_rejects_one_object_at_two_intervals() {
+    let mock = PerfMockClient::new();
+    let perf = perf(&mock);
+    let err = perf
+        .batch()
+        .group(|query| {
+            query
+                .entity(&vm("vm-1"))
+                .metric_by_name("cpu.usage.average")
+                .interval(Interval::Realtime)
+                .latest(1)
+        })
+        .group(|query| {
+            query
+                .entities(&[vm("vm-2"), vm("vm-1")])
+                .metric_by_name("cpu.usage.average")
+                .interval(Interval::PAST_DAY)
+        })
+        .fetch()
+        .await
+        .unwrap_err();
+    assert!(matches!(
+        err,
+        PerfError::MixedIntervals { ref entity, first_secs: 20, second_secs: 300 }
+            if entity.value == "vm-1"
+    ));
+    assert!(mock.queries().is_empty());
+}
+
+#[tokio::test]
+async fn batch_can_force_normal_format() {
+    let mock = PerfMockClient::new();
+    mock.set_transport(Transport::Json);
+    let perf = perf(&mock);
+    perf.batch()
+        .group(|query| {
+            query
+                .entity(&vm("vm-1"))
+                .metric_by_name("cpu.usage.average")
+                .interval(Interval::Realtime)
+                .latest(1)
+        })
+        .format(WireFormat::Normal)
+        .fetch()
+        .await
+        .unwrap();
+    assert_eq!(mock.queries()[0][0].format.as_deref(), Some("normal"));
+}
+
+#[tokio::test]
+async fn empty_batch_is_no_entities() {
+    let mock = PerfMockClient::new();
+    let perf = perf(&mock);
+    let err = perf.batch().fetch().await.unwrap_err();
+    assert!(matches!(err, PerfError::NoEntities));
+    let err = perf
+        .batch()
+        .group(|query| query.metric_by_name("cpu.usage.average"))
+        .fetch()
+        .await
+        .unwrap_err();
+    assert!(matches!(err, PerfError::NoEntities));
+    assert!(mock.queries().is_empty());
 }
 
 #[tokio::test]
@@ -699,7 +903,7 @@ async fn provider_not_found_retries_the_next_entity_and_caches() {
 
 #[tokio::test]
 async fn esxi_vm_and_datastore_follow_provider_caps() {
-    let mock = PerfMockClient::new();
+    let mock = PerfMockClient::esxi();
     mock.set_intervals(Vec::new());
     mock.set_summary_provider("vm-1", true, false, Some(20));
     mock.set_summary_fault("ds-1", StructType::InvalidArgument);
@@ -749,6 +953,138 @@ async fn esxi_vm_and_datastore_follow_provider_caps() {
         .await
         .unwrap_err();
     assert!(matches!(err, PerfError::NoSupportedEntities));
+    // ESXi does not collect for datastores, so the first answer is cached.
+    assert_eq!(mock.summary_calls(), vec!["vm-1", "ds-1"]);
+}
+
+/// On ESXi one `InvalidArgument` settles the datastore kind, so a fetch over many
+/// datastores probes once instead of once per datastore on every fetch.
+#[tokio::test]
+async fn esxi_datastores_probe_once() {
+    let mock = PerfMockClient::esxi();
+    let ids = ["ds-1", "ds-2", "ds-3"];
+    for id in ids {
+        mock.set_summary_fault(id, StructType::InvalidArgument);
+    }
+    let perf = perf(&mock);
+    let datastores: Vec<_> = ids.iter().map(|id| datastore(id)).collect();
+    for _ in 0..2 {
+        let err = perf
+            .query()
+            .entities(&datastores)
+            .metric_by_name("cpu.usage.average")
+            .interval(Interval::Realtime)
+            .latest(1)
+            .fetch()
+            .await
+            .unwrap_err();
+        assert!(matches!(err, PerfError::NoSupportedEntities));
+    }
+    assert_eq!(mock.summary_calls(), vec!["ds-1"]);
+}
+
+/// vCenter answers `InvalidArgument` for a moref that does not exist. That must not
+/// mark the whole kind as "not a provider" when a later object of the kind answers.
+#[tokio::test]
+async fn invalid_argument_on_missing_entity_does_not_poison_kind() {
+    let mock = PerfMockClient::new();
+    mock.set_summary_fault("vm-gone", StructType::InvalidArgument);
+    mock.set_summary_provider("vm-1", true, true, Some(20));
+    let perf = perf(&mock);
+    let gone = vm("vm-gone");
+    let live = vm("vm-1");
+
+    let result = perf
+        .query()
+        .entities(&[gone.clone(), live.clone()])
+        .metric_by_name("cpu.usage.average")
+        .interval(Interval::Realtime)
+        .latest(1)
+        .fetch()
+        .await
+        .unwrap();
+    assert!(matches!(
+        result.entity(&live).unwrap().status,
+        EntityStatus::Ok
+    ));
+    assert_eq!(mock.summary_calls().len(), 2);
+
+    let again = perf
+        .query()
+        .entities(std::slice::from_ref(&live))
+        .metric_by_name("cpu.usage.average")
+        .interval(Interval::Realtime)
+        .latest(1)
+        .fetch()
+        .await
+        .unwrap();
+    assert!(matches!(
+        again.entity(&live).unwrap().status,
+        EntityStatus::Ok
+    ));
+    assert_eq!(mock.summary_calls().len(), 2);
+}
+
+/// A lone missing VM answers `InvalidArgument`. The call treats the kind as not a
+/// provider, but a known provider kind is never cached that way.
+#[tokio::test]
+async fn invalid_argument_never_caches_known_provider_kind() {
+    let mock = PerfMockClient::new();
+    mock.set_summary_fault("vm-gone", StructType::InvalidArgument);
+    mock.set_summary_provider("vm-1", true, true, Some(20));
+    let perf = perf(&mock);
+
+    let err = perf
+        .query()
+        .entity(&vm("vm-gone"))
+        .metric_by_name("cpu.usage.average")
+        .interval(Interval::Realtime)
+        .latest(1)
+        .fetch()
+        .await
+        .unwrap_err();
+    assert!(matches!(err, PerfError::NoSupportedEntities));
+
+    let live = vm("vm-1");
+    let result = perf
+        .query()
+        .entity(&live)
+        .metric_by_name("cpu.usage.average")
+        .interval(Interval::Realtime)
+        .latest(1)
+        .fetch()
+        .await
+        .unwrap();
+    assert!(matches!(
+        result.entity(&live).unwrap().status,
+        EntityStatus::Ok
+    ));
+    assert_eq!(mock.summary_calls(), vec!["vm-gone", "vm-1"]);
+}
+
+/// A kind outside the known providers is still cached as not a provider.
+#[tokio::test]
+async fn invalid_argument_caches_other_kinds() {
+    let mock = PerfMockClient::new();
+    mock.set_summary_fault("domain-s1", StructType::InvalidArgument);
+    let perf = perf(&mock);
+    let compute = ManagedObjectReference {
+        r#type: MoTypesEnum::ComputeResource,
+        value: "domain-s1".to_string(),
+    };
+    for _ in 0..2 {
+        let err = perf
+            .query()
+            .entity(&compute)
+            .metric_by_name("cpu.usage.average")
+            .interval(Interval::Realtime)
+            .latest(1)
+            .fetch()
+            .await
+            .unwrap_err();
+        assert!(matches!(err, PerfError::NoSupportedEntities));
+    }
+    assert_eq!(mock.summary_calls().len(), 1);
 }
 
 #[tokio::test]
@@ -874,6 +1210,29 @@ async fn empty_availability_is_not_cached() {
 }
 
 #[tokio::test]
+async fn refresh_registry_drops_availability_and_provider_caps() {
+    let mock = PerfMockClient::new();
+    let perf = perf(&mock);
+    let fetch = || {
+        perf.query()
+            .entity(&vm("vm-1"))
+            .all_available()
+            .interval(Interval::Realtime)
+            .latest(1)
+            .fetch()
+    };
+    fetch().await.unwrap();
+    fetch().await.unwrap();
+    assert_eq!(mock.available_calls(), ["vm-1"]);
+    assert_eq!(mock.summary_calls(), ["vm-1"]);
+
+    perf.refresh_registry().await.unwrap();
+    fetch().await.unwrap();
+    assert_eq!(mock.available_calls(), ["vm-1", "vm-1"]);
+    assert_eq!(mock.summary_calls(), ["vm-1", "vm-1"]);
+}
+
+#[tokio::test]
 async fn availability_cache_evicts_the_oldest_key() {
     let mock = PerfMockClient::new();
     let perf = perf(&mock);
@@ -938,6 +1297,29 @@ async fn refresh_registry_makes_the_next_prepared_fetch_resolve_again() {
     assert_ne!(generation, refreshed);
     let err = prepared.fetch(&[vm("vm-1")]).await.unwrap_err();
     assert!(matches!(err, PerfError::UnknownCounter(name) if name == "cpu.usage.average"));
+}
+
+/// A server that lists one `group.name.rollup` and stats kind twice resolves to
+/// the first key, by bare name and by qualified name alike.
+#[tokio::test]
+async fn duplicate_wire_counter_keeps_the_first_key() {
+    let mock = PerfMockClient::new();
+    let mut counters = vcenter_counters();
+    let mut duplicate = counters
+        .iter()
+        .find(|counter| counter.key == 98)
+        .unwrap()
+        .clone();
+    duplicate.key = 9098;
+    counters.push(duplicate);
+    mock.set_counters(counters);
+    let registry = perf(&mock).registry().await.unwrap();
+    let bare = registry.by_name("mem.consumed.average").unwrap();
+    assert_eq!(bare.id.0, 98);
+    let qualified = registry
+        .by_name_with_stats("mem.consumed.average", StatsKind::Absolute)
+        .unwrap();
+    assert_eq!(qualified.id.0, 98);
 }
 
 #[tokio::test]

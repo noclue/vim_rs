@@ -65,7 +65,6 @@ doctest = false
 
 [dev-dependencies]
 criterion = { version = "0.8", features = ["html_reports"] }
-trybuild = "1"
 
 [[bench]]
 name = "miniserde_bench"

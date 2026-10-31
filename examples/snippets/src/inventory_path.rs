@@ -24,8 +24,8 @@ use anyhow::{Context, Result};
 use log::info;
 use snippets::connect;
 use vim_rs::mo::PropertyCollector;
-use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::boxed_types::ValueElements;
+use vim_rs::types::enums::MoTypesEnum;
 use vim_rs::types::structs::{
     ManagedObjectReference, ObjectContent, ObjectSpec, PropertyFilterSpec, PropertySpec,
     RetrieveOptions, SelectionSpec, TraversalSpec,
@@ -41,8 +41,14 @@ fn parse_mo_ref(raw: &str) -> Result<ManagedObjectReference> {
         .context("MO_REF must contain a ':' (e.g. 'VirtualMachine:vm-41')")?;
     let t = type_part.trim();
     let v = value_part.trim();
-    anyhow::ensure!(!t.is_empty(), "MO_REF type segment (before ':') must not be empty");
-    anyhow::ensure!(!v.is_empty(), "MO_REF id segment (after first ':') must not be empty");
+    anyhow::ensure!(
+        !t.is_empty(),
+        "MO_REF type segment (before ':') must not be empty"
+    );
+    anyhow::ensure!(
+        !v.is_empty(),
+        "MO_REF id segment (after first ':') must not be empty"
+    );
     Ok(ManagedObjectReference {
         r#type: MoTypesEnum::from_str(t),
         value: v.to_string(),
@@ -216,7 +222,9 @@ async fn retrieve_ancestors_contents(
     Ok(collected)
 }
 
-fn build_map(contents: Vec<ObjectContent>) -> Result<HashMap<ManagedObjectReference, AncestorParsed>> {
+fn build_map(
+    contents: Vec<ObjectContent>,
+) -> Result<HashMap<ManagedObjectReference, AncestorParsed>> {
     let mut map = HashMap::with_capacity(contents.len());
     for oc in contents {
         let row = parse_object_content(&oc)?;

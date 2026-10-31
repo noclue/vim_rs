@@ -1,0 +1,19 @@
+id: pc01_vm_power_and_host
+pillar: propcollector
+mo_type: VirtualMachine
+goal: |
+  For each virtual machine, retrieve its current power state and the guest
+  operating system hostname reported by VMware Tools.
+contract: |
+  vim_retrievable!(struct Target: VirtualMachine {
+      power_state = "<path>",
+      guest_host = "<path>",
+  });
+fixtures:
+  - file: pc01_a.json
+    expected: '[{"power_state":"poweredOn","guest_host":"web01.eval"}]'
+  - file: pc01_b.json
+    expected: '[{"power_state":"poweredOff","guest_host":null},{"power_state":"poweredOn","guest_host":"db02.eval"}]'
+notes: |
+  Verified paths (grader-only): runtime.power_state -> runtime.powerState,
+  guest.host_name -> guest.hostName

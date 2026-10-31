@@ -388,6 +388,53 @@ let config_spec = VirtualMachineConfigSpec {
 
 The feature adds a large amount of generated code and compile time. A full example is [`examples/snippets/src/vm_toggle_wol.rs`](https://github.com/noclue/vim_rs/blob/main/examples/snippets/src/vm_toggle_wol.rs). Why `Default` is opt-in is in [TYPE_SYSTEM.md](https://github.com/noclue/vim_rs/blob/main/vim_rs/docs/TYPE_SYSTEM.md#defaults).
 
+## Performance metrics (`perf`)
+
+```toml
+vim_rs = { version = "0.7", features = ["perf"] }
+```
+
+`vim_rs::perf` queries `PerformanceManager` by counter name instead of numeric counter id, which differs between vCenter and ESXi. Values come back scaled to typed units such as `Percent`, `Bytes`, and `Frequency`. Generated constants in [`vim_rs::perf::metrics`](https://docs.rs/vim_rs/latest/vim_rs/perf/metrics/index.html) cover the vCenter 8.0.3 and ESXi 8.0.3 catalogs. `metrics::by_entity` lists only the counters that apply to one managed-object type.
+
+```rust
+use vim_rs::perf::metrics::by_entity::virtual_machine;
+use vim_rs::perf::{Interval, PerfClient};
+
+let perf = PerfClient::new(client.clone())?;
+let result = perf
+    .query()
+    .entities(&vm_morefs)
+    .metric(virtual_machine::cpu::USAGE_AVERAGE)
+    .metric(virtual_machine::mem::CONSUMED_AVERAGE)
+    .interval(Interval::Realtime)
+    .latest(1)
+    .fetch()
+    .await?;
+for entity in result.entities() {
+    if let Some(cpu) = entity
+        .series(virtual_machine::cpu::USAGE_AVERAGE)
+        .and_then(|series| series.scaled().last())
+    {
+        println!("{} cpu {}", entity.entity.value, cpu.value);
+    }
+}
+```
+
+- **Entity status.** Every requested object is in the result, so a row can be cleared. A powered-off VM or a deleted object comes back as `EntityStatus::NoSamples`, not as an error.
+- **Intervals.** `Interval::Realtime` is the 20-second, roughly one-hour realtime window. `Interval::PAST_DAY`, `PAST_WEEK`, `PAST_MONTH`, and `PAST_YEAR` are historical rollups. `Interval::Auto` picks one per object from its provider summary and the requested start time.
+- **Compile-time scopes.** `perf.query().typed_entities(&vms)`, with `vms` as `Entity<VirtualMachine>` values, returns a `TypedPerfQuery<VirtualMachine>` whose `metric` accepts only counters that apply to virtual machines.
+- **Polling.** `perf.prepare()` builds a `PreparedQuery` that resolves counters once and is fetched on every tick. The caller owns the timer. `fetch_incremental` with a `SampleWatermark` exports only new samples.
+- **Refreshing metadata.** The client caches the counter catalog, provider capabilities and the per-object availability lists behind `groups()` and `all_available()`. A long-running poller calls `perf.refresh_registry()` on the same schedule as its inventory refresh, so new disks, NICs and counters show up. The availability list is the object's current one, not that of the query window.
+- **Batching.** `perf.batch()` packs groups with different objects, counters, or intervals into as few `QueryPerf` calls as the 256-metric-id budget allows. An object in several groups must resolve to one interval.
+
+| Feature | Adds |
+|---|---|
+| `perf` | `vim_rs::perf` and the generated counter catalog. No new dependencies. |
+| `perf-chrono` | `Timestamp` ↔ `chrono::DateTime<Utc>`. Enables `perf`. |
+| `perf-polars` | `PerfResult::to_dataframe`. Enables `perf`. Polars is pinned to 0.55 and is outside the `vim_rs` semver. |
+
+Runnable examples are the `perf_*` programs in [examples/README.md](https://github.com/noclue/vim_rs/blob/main/examples/README.md). Testing a result or a query without a live server is in [PERF_TESTING.md](https://github.com/noclue/vim_rs/blob/main/vim_rs/docs/PERF_TESTING.md).
+
 ## Working with polymorphic values
 
 VIM inheritance is modeled with traits where the tree is deep, and with enums where the alternatives are a flat list. The rationale, the `Deref` parent-field layout, and the pruned `MethodFault` / `Event` trees are [TYPE_SYSTEM.md](https://github.com/noclue/vim_rs/blob/main/vim_rs/docs/TYPE_SYSTEM.md). The operations below are the ones application code actually performs.

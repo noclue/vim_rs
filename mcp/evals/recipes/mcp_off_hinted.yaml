@@ -1,0 +1,8 @@
+# Arm C (hinted baseline) — DEFERRED per FR-015 / research R7.
+# Uncomment and wire into run_matrix.sh only after clear A/B lift is observed.
+#
+# version: "1.0.0"
+# title: vim_rs eval (hinted baseline)
+# instructions: |
+#   ... identical to mcp_off.yaml plus one line:
+#   Property paths are awkward to derive from source alone; inspect carefully.

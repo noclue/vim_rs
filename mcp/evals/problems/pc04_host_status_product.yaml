@@ -1,0 +1,19 @@
+id: pc04_host_status_product
+pillar: propcollector
+mo_type: HostSystem
+goal: |
+  For each host, retrieve overall health status and the full product name
+  string from configuration summary.
+contract: |
+  vim_retrievable!(struct Target: HostSystem {
+      overall_status = "<path>",
+      product_name = "<path>",
+  });
+fixtures:
+  - file: pc04_a.json
+    expected: '[{"overall_status":"green","product_name":"VMware ESXi 8.0.2 build-22380479"}]'
+  - file: pc04_b.json
+    expected: '[{"overall_status":"yellow","product_name":"VMware ESXi 8.0.2 build-22380479"},{"overall_status":"green","product_name":"VMware ESXi 7.0.3 build-19193900"}]'
+notes: |
+  Verified paths: summary.overall_status -> summary.overallStatus,
+  summary.config.product.full_name -> summary.config.product.fullName

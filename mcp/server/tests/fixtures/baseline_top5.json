@@ -1,0 +1,106 @@
+{
+  "filter": "all",
+  "limit": 5,
+  "queries": [
+    {
+      "query": "power on a virtual machine",
+      "results": [
+        {
+          "id": "VirtualMachineCompatibilityChecker::check_power_on_task",
+          "rank": 1
+        },
+        {
+          "id": "Datacenter::power_on_multi_vm_task",
+          "rank": 2
+        },
+        {
+          "id": "VirtualMachine::power_off_vm_task",
+          "rank": 3
+        },
+        {
+          "id": "NoVmInVApp",
+          "rank": 4
+        },
+        {
+          "id": "AutoStartPowerInfo::key",
+          "rank": 5
+        }
+      ]
+    },
+    {
+      "query": "retrieve virtual machine mac address",
+      "results": [
+        {
+          "id": "HostVirtualNicSpec::mac",
+          "rank": 1
+        },
+        {
+          "id": "VmConfigFileEncryptionInfo",
+          "rank": 2
+        },
+        {
+          "id": "VmStaticMacConflictEvent",
+          "rank": 3
+        },
+        {
+          "id": "VirtualMachineGuestSummary",
+          "rank": 4
+        },
+        {
+          "id": "VirtualMachineSriovDevicePoolInfo",
+          "rank": 5
+        }
+      ]
+    },
+    {
+      "query": "vSphere task progress tracker",
+      "results": [
+        {
+          "id": "TaskInfo::progress_details",
+          "rank": 1
+        },
+        {
+          "id": "VslmTask",
+          "rank": 2
+        },
+        {
+          "id": "TaskManager::recent_task",
+          "rank": 3
+        },
+        {
+          "id": "example::eventster",
+          "rank": 4
+        },
+        {
+          "id": "VirtualMachineQuickStatsMemoryTierStats",
+          "rank": 5
+        }
+      ]
+    },
+    {
+      "query": "create snapshot of virtual machine",
+      "results": [
+        {
+          "id": "VirtualMachineSnapshot::vm",
+          "rank": 1
+        },
+        {
+          "id": "VirtualMachine::root_snapshot",
+          "rank": 2
+        },
+        {
+          "id": "VirtualMachine::create_snapshot_ex_task",
+          "rank": 3
+        },
+        {
+          "id": "HostVStorageObjectManager::host_v_storage_object_create_snapshot_task",
+          "rank": 4
+        },
+        {
+          "id": "VirtualMachine::create_screenshot_task",
+          "rank": 5
+        }
+      ]
+    }
+  ]
+}

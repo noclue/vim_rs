@@ -62,6 +62,9 @@ pub fn decode_metrics(
     };
     let mut entities = IndexMap::new();
     for moref in order {
+        if entities.contains_key(&moref) {
+            continue;
+        }
         let Some(payloads) = grouped.shift_remove(&moref) else {
             entities.insert(
                 moref.clone(),
@@ -144,6 +147,19 @@ fn parse_all(raw: Vec<Box<dyn PerfEntityMetricBaseTrait>>) -> Result<Vec<Incomin
     raw.into_iter().map(parse_one).collect()
 }
 
+pub(crate) const UNKNOWN_PAYLOAD: &str =
+    "QueryPerf entity was neither PerfEntityMetric nor PerfEntityMetricCSV";
+
+/// Object a `QueryPerf` payload belongs to, or `None` for any other subtype.
+pub(crate) fn entity_of(raw: &dyn PerfEntityMetricBaseTrait) -> Option<&ManagedObjectReference> {
+    let any = raw.as_any_ref();
+    if let Some(metric) = any.downcast_ref::<PerfEntityMetric>() {
+        return Some(&metric.entity);
+    }
+    any.downcast_ref::<PerfEntityMetricCsv>()
+        .map(|metric| &metric.entity)
+}
+
 fn parse_one(raw: Box<dyn PerfEntityMetricBaseTrait>) -> Result<Incoming, PerfError> {
     // Deref first. Calling `as_any_ref` on the `Box` downcasts to `Box<dyn _>`.
     if let Some(metric) = raw.as_ref().as_any_ref().downcast_ref::<PerfEntityMetric>() {
@@ -157,7 +173,7 @@ fn parse_one(raw: Box<dyn PerfEntityMetricBaseTrait>) -> Result<Incoming, PerfEr
         return parse_csv(metric);
     }
     Err(PerfError::Client(ClientError::ParseError(
-        "QueryPerf entity was neither PerfEntityMetric nor PerfEntityMetricCSV".into(),
+        UNKNOWN_PAYLOAD.into(),
     )))
 }
 

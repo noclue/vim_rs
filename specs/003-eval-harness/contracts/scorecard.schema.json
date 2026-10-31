@@ -1,0 +1,49 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/noclue/vim_rs/specs/003-eval-harness/contracts/scorecard.schema.json",
+  "title": "EvalScorecard",
+  "type": "object",
+  "additionalProperties": false,
+  "required": ["model", "n_repeats", "problems", "verdict"],
+  "properties": {
+    "model": { "type": "string" },
+    "n_repeats": { "type": "integer", "minimum": 1 },
+    "calibration": {
+      "type": "object",
+      "additionalProperties": true,
+      "description": "Models tried, tool-calling notes, or skip reason."
+    },
+    "problems": {
+      "type": "array",
+      "items": {
+        "type": "object",
+        "required": ["id", "arm_a", "arm_b"],
+        "properties": {
+          "id": { "type": "string" },
+          "arm_a": { "$ref": "#/$defs/armStats" },
+          "arm_b": { "$ref": "#/$defs/armStats" }
+        }
+      }
+    },
+    "verdict": {
+      "type": "string",
+      "enum": ["clear_lift", "inconclusive"]
+    },
+    "verdict_notes": { "type": "string" }
+  },
+  "$defs": {
+    "armStats": {
+      "type": "object",
+      "required": ["retrieval_pass_rate", "compile_rate"],
+      "properties": {
+        "retrieval_pass_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "compile_rate": { "type": "number", "minimum": 0, "maximum": 1 },
+        "mean_turns": { "type": ["number", "null"] },
+        "mean_tool_calls": { "type": ["number", "null"] },
+        "mean_tokens_in": { "type": ["number", "null"] },
+        "mean_tokens_out": { "type": ["number", "null"] },
+        "mean_wall_s": { "type": ["number", "null"] }
+      }
+    }
+  }
+}

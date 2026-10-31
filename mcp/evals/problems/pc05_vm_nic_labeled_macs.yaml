@@ -1,0 +1,36 @@
+id: pc05_vm_nic_labeled_macs
+pillar: propcollector
+mo_type: VirtualMachine
+goal: |
+  For each virtual machine, return the device label and MAC address of every
+  Ethernet network adapter, in device order. The hardware device list is
+  polymorphic and mixes network adapters of different kinds with non-network
+  devices (e.g. CD-ROMs). Include only Ethernet adapters. The device label is
+  the human-readable name shown for the device (e.g. "Network adapter 1").
+contract: |
+  // Fill the property path AND implement labeled_macs().
+  // devices is Vec<Box<dyn VirtualDeviceTrait>>. The MAC lives on the Ethernet
+  // adapter subtype; the label lives on the common/base device info. Only
+  // Ethernet adapters should appear in the output.
+  vim_retrievable!(struct Target: VirtualMachine {
+      devices = "<path>",
+  });
+
+  /// (device label, MAC) for each Ethernet adapter in `t.devices`, device order.
+  pub fn labeled_macs(t: &Target) -> Vec<(String, String)> {
+      todo!()
+  }
+fixtures:
+  - file: pc05_a.json
+    expected: '[{"labeled_macs":[["Network adapter 1","00:aa:11:22:33:44"]]}]'
+  - file: pc05_b.json
+    expected: '[{"labeled_macs":[["Network adapter 1","00:bb:22:33:44:55"]]},{"labeled_macs":[["Network adapter 1","00:cc:33:44:55:66"],["Network adapter 2","00:dd:44:55:66:77"]]}]'
+notes: |
+  Inherited-field-via-descendant-trait probe. Correct answer requires, per device:
+    cast  = CastInto::into_ref::<dyn VirtualEthernetCardTrait>()   (filter non-ethernet)
+    mac   = get_virtual_ethernet_card().mac_address  (or Deref: eth.mac_address)
+    label = get_virtual_device().device_info         (BASE field via supertrait)
+                .get_description().label              (device_info is Box<dyn DescriptionTrait>)
+  Two failure traps beyond pc03: (1) device_info lives on the *base* VirtualDevice,
+  reachable only through the supertrait, not on the ethernet card directly; (2)
+  device_info is itself polymorphic, needing a second trait hop (DescriptionTrait).

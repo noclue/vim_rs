@@ -1,0 +1,28 @@
+[package]
+name = "perf_scope_fail"
+version = "0.0.0"
+edition = "2021"
+publish = false
+
+[dependencies]
+vim_rs = { path = "../..", features = ["perf"] }
+
+[[bin]]
+name = "cpu_average_on_datastore"
+path = "cpu_average_on_datastore.rs"
+
+[[bin]]
+name = "cpu_maximum_on_datastore"
+path = "cpu_maximum_on_datastore.rs"
+
+[[bin]]
+name = "mem_average_on_datastore"
+path = "mem_average_on_datastore.rs"
+
+[[bin]]
+name = "disk_latency_on_vm"
+path = "disk_latency_on_vm.rs"
+
+[[bin]]
+name = "cpu_demand_on_vm"
+path = "cpu_demand_on_vm.rs"

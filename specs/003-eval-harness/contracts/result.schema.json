@@ -1,0 +1,41 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://github.com/noclue/vim_rs/specs/003-eval-harness/contracts/result.schema.json",
+  "title": "EvalRunResult",
+  "type": "object",
+  "additionalProperties": false,
+  "required": [
+    "problem",
+    "arm",
+    "repeat",
+    "compiled",
+    "retrieval_pass",
+    "failure_class",
+    "tamper"
+  ],
+  "properties": {
+    "problem": { "type": "string" },
+    "arm": { "type": "string", "enum": ["A", "B", "C"] },
+    "repeat": { "type": "integer", "minimum": 1 },
+    "compiled": { "type": "boolean" },
+    "retrieval_pass": { "type": "boolean" },
+    "failure_class": {
+      "type": ["string", "null"],
+      "enum": [
+        "compile_error",
+        "retrieval_fail",
+        "timeout",
+        "no_output",
+        "tamper",
+        null
+      ]
+    },
+    "tamper": { "type": "boolean" },
+    "turns": { "type": ["integer", "null"], "minimum": 0 },
+    "tool_calls": { "type": ["integer", "null"], "minimum": 0 },
+    "vim_rs_tool_calls": { "type": ["integer", "null"], "minimum": 0 },
+    "tokens_in": { "type": ["integer", "null"], "minimum": 0 },
+    "tokens_out": { "type": ["integer", "null"], "minimum": 0 },
+    "wall_s": { "type": ["number", "null"], "minimum": 0 }
+  }
+}

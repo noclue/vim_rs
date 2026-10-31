@@ -1,0 +1,37 @@
+version: "1.0.0"
+title: vim_rs eval (baseline)
+description: Complete the vim_retrievable! contract in src/solve.rs without MCP.
+instructions: |
+  You write Rust using the `vim_rs` crate (a vSphere API client). The project is in the
+  working directory. Complete `src/solve.rs` only: fill in the property-path strings in the
+  `vim_retrievable!` contract and implement any function stubs it contains.
+  Do not modify any file other than `src/solve.rs`. Do not mock the vSphere API, write
+  fixtures, or run the program. That is outside the test scope.
+  The only verification you should perform is `cargo build`.
+  Use whatever tools are available to find the correct VIM property paths.
+prompt: |
+  {{ goal }}
+
+  Complete exactly this contract (fill only the path strings):
+  {{ contract }}
+parameters:
+  - key: goal
+    input_type: string
+    requirement: required
+    description: task
+  - key: contract
+    input_type: string
+    requirement: required
+    description: struct to complete
+  - key: model
+    input_type: string
+    requirement: required
+    description: model id
+extensions:
+  - type: builtin
+    name: developer
+settings:
+  goose_provider: openrouter
+  goose_model: "{{ model }}"
+  temperature: 0
+  max_turns: 40

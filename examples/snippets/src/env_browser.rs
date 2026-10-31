@@ -28,8 +28,8 @@ use vim_rs::mo::{ComputeResource, EnvironmentBrowser};
 use anyhow::{Context, Result};
 use log::{error, info};
 use snippets::connect;
-use vim_rs::vim_retrievable;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
+use vim_rs::vim_retrievable;
 
 vim_retrievable!(
     struct Compute: ComputeResource {

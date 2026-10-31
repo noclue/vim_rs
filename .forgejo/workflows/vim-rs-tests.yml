@@ -1,0 +1,60 @@
+# Forgejo only. GitHub keeps using .github/workflows on ubuntu-latest.
+# Forgejo reads this directory first and does not queue the GitHub workflows.
+# The rust runner starts docker.io/library/rust:1-trixie, which has cargo and
+# git but not Node, so the checkout below is a plain git fetch.
+
+name: vim_rs tests
+
+on:
+  pull_request:
+    paths:
+      - "vim_rs/**"
+      - "vim_macros/**"
+      - "vim_build/**"
+      - "openapi30/**"
+      - ".forgejo/workflows/vim-rs-tests.yml"
+  push:
+    branches: [main]
+    paths:
+      - "vim_rs/**"
+      - "vim_macros/**"
+      - "vim_build/**"
+      - "openapi30/**"
+      - ".forgejo/workflows/vim-rs-tests.yml"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+  # vim_rs is large enough that `cargo test` at full debuginfo is SIGKILL'd
+  # on this runner. Line tables keep panic locations and stay within memory.
+  CARGO_PROFILE_DEV_DEBUG: "1"
+  CARGO_PROFILE_TEST_DEBUG: "1"
+  CARGO_INCREMENTAL: "0"
+  CARGO_BUILD_JOBS: "2"
+
+jobs:
+  test:
+    name: cargo test (main crates)
+    runs-on: rust-trixie-docker
+    steps:
+      - name: Install build tools and checkout
+        run: |
+          set -eu
+          apt-get update
+          apt-get install -y --no-install-recommends cmake ca-certificates git
+          rm -rf /var/lib/apt/lists/*
+          git init .
+          git remote add origin "${GITHUB_SERVER_URL}/${GITHUB_REPOSITORY}.git"
+          git fetch --depth 1 origin "${GITHUB_SHA}"
+          git checkout --detach FETCH_HEAD
+
+      - name: Test main crates
+        run: |
+          set -eu
+          cargo test --locked --manifest-path openapi30/Cargo.toml
+          cargo test --locked --manifest-path vim_macros/Cargo.toml
+          cargo test --locked --manifest-path vim_build/Cargo.toml
+          cargo test --locked --manifest-path vim_rs/Cargo.toml
+          cargo test --locked --manifest-path vim_rs/Cargo.toml --features xml
+          cargo test --locked --manifest-path vim_rs/Cargo.toml --features perf,xml
+          cargo test --locked --manifest-path vim_rs/Cargo.toml --features perf,perf-chrono,perf-polars

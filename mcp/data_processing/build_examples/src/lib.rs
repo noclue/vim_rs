@@ -20,18 +20,6 @@ pub fn collect_examples(examples_dir: &Path) -> Result<Vec<CodeExample>> {
 
     let mut examples = Vec::new();
 
-    // Dependency template for new projects
-    let dependencies_template = r#"[dependencies]
-vim_rs = "0.3"
-vim_macros = "0.3"
-tokio = { version = "1.44", features = ["macros"] }
-anyhow = "1.0"
-log = "0.4"
-env_logger = "0.11"
-
-# Optional: share connect() via a local library crate (see examples/snippets `lib.rs`)
-"#;
-
     // Scan for all .rs files in examples subdirectories
     for entry in WalkDir::new(examples_dir)
         .into_iter()
@@ -44,6 +32,7 @@ env_logger = "0.11"
         let p = path.to_string_lossy().replace('\\', "/");
         if p.contains("/snippets/src/lib.rs")
             || p.contains("/vtui/")
+            || p.contains("/perf-catalog/")
             || p.contains("/target/")
         {
             continue;
@@ -92,17 +81,38 @@ env_logger = "0.11"
                 | "vm_events"
         ) {
             "macro_usage"
+        } else if name.contains("perf") || name.contains("metric") {
+            "performance"
         } else if name.contains("property_collector") || source_code.contains("PropertyCollector") {
             "property_collector"
         } else if name.contains("event") {
             "events"
-        } else if name.contains("perf") || name.contains("metric") {
-            "performance"
         } else if name == "root_objects" || source_code.contains("ClientBuilder") {
             "connection"
         } else {
             "general"
         };
+
+        let uses_perf = source_code
+            .lines()
+            .any(|line| line.trim().starts_with("use vim_rs::perf"));
+        let vim_rs_dep = if uses_perf {
+            "vim_rs = { version = \"0.7\", features = [\"perf\"] }"
+        } else {
+            "vim_rs = \"0.7\""
+        };
+        let dependencies_template = format!(
+            r#"[dependencies]
+{vim_rs_dep}
+tokio = {{ version = "1.44", features = ["macros", "rt-multi-thread", "time"] }}
+anyhow = "1.0"
+log = "0.4"
+env_logger = "0.11"
+
+# vim_retrievable! / vim_updatable! are re-exported by vim_rs
+# Optional: share connect() via a local library crate (see examples/snippets `lib.rs`)
+"#
+        );
 
         let relative_path = path.strip_prefix(examples_dir)
             .unwrap_or(path)
@@ -146,4 +156,83 @@ pub fn build_examples(examples_dir: &Path, output_dir: &Path) -> Result<()> {
     info!("Example indexing complete!");
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+    use std::collections::BTreeMap;
+
+    #[test]
+    fn indexes_examples_without_unindexed_trees() {
+        let repo = Path::new(env!("CARGO_MANIFEST_DIR")).join("../../..");
+        let previous = std::env::current_dir().unwrap();
+        std::env::set_current_dir(&repo).unwrap();
+        let examples = collect_examples(Path::new("examples")).unwrap();
+        std::env::set_current_dir(previous).unwrap();
+
+        assert!(examples.iter().all(|example| {
+            let path = example.file_path.replace('\\', "/");
+            !path.contains("perf-catalog/") && !path.contains("vtui/")
+        }));
+
+        let by_name: BTreeMap<_, _> = examples
+            .iter()
+            .map(|example| (example.name.as_str(), example))
+            .collect();
+        for name in [
+            "perf_metrics",
+            "perf_metrics_manual",
+            "perf_vm_usage",
+            "perf_historical",
+            "perf_export",
+            "perf_host_disks",
+            "perf_memory",
+        ] {
+            assert_eq!(by_name[name].category, "performance", "{name}");
+        }
+        for name in [
+            "perf_metrics",
+            "perf_vm_usage",
+            "perf_historical",
+            "perf_export",
+            "perf_host_disks",
+            "perf_memory",
+        ] {
+            assert!(
+                by_name[name].dependencies.contains("features = [\"perf\"]"),
+                "{name}"
+            );
+        }
+        assert!(!by_name["perf_metrics_manual"]
+            .dependencies
+            .contains("features = [\"perf\"]"));
+
+        let expected = [
+            ("retrieve_host_info", "macro_usage"),
+            ("retrieve_ds_hosts", "macro_usage"),
+            ("print_vm_addresses", "macro_usage"),
+            ("retrieve_recent_task", "macro_usage"),
+            ("vm_events", "macro_usage"),
+            ("property_collector", "property_collector"),
+            ("inventory_path", "property_collector"),
+            ("mac_monitor", "property_collector"),
+            ("env_browser", "property_collector"),
+            ("vm_toggle_wol", "property_collector"),
+            ("vm_disabled_method_len", "property_collector"),
+            ("eventster", "events"),
+            ("root_objects", "connection"),
+            ("vm_ip", "general"),
+            ("vm_rename", "general"),
+            ("dynamic_property_fetch", "general"),
+        ];
+        assert_eq!(expected.len(), 16);
+        for (name, category) in expected {
+            assert_eq!(by_name[name].category, category, "{name}");
+            assert!(
+                !by_name[name].dependencies.contains("features = [\"perf\"]"),
+                "{name}"
+            );
+        }
+    }
 }

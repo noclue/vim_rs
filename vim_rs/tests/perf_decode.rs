@@ -67,6 +67,31 @@ fn values_of(json: &str) -> Vec<(i32, String, Vec<i64>)> {
 }
 
 #[test]
+fn duplicate_requested_entity_keeps_decoded_series() {
+    let first = decode_metrics(
+        load(NORMAL),
+        &registry(),
+        &[],
+        None,
+        std::time::SystemTime::UNIX_EPOCH,
+    )
+    .unwrap();
+    let entity = first.entities().next().unwrap().entity.clone();
+    let result = decode_metrics(
+        load(NORMAL),
+        &registry(),
+        &[entity.clone(), entity.clone()],
+        None,
+        std::time::SystemTime::UNIX_EPOCH,
+    )
+    .unwrap();
+    assert_eq!(result.entities().count(), 1);
+    let decoded = result.entity(&entity).unwrap();
+    assert!(matches!(decoded.status, EntityStatus::Ok));
+    assert!(!decoded.series.is_empty());
+}
+
+#[test]
 fn normal_and_csv_fixtures_match() {
     let mut csv = values_of(CSV);
     let mut normal = values_of(NORMAL);

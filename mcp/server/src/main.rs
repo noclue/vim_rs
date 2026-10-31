@@ -133,7 +133,7 @@ fn default_limit() -> usize {
 #[derive(Serialize, Deserialize, JsonSchema)]
 struct GetInput {
     /// Item ID to retrieve
-    #[schemars(description = "Item ID to retrieve. Examples: 'VirtualMachine' (managed object), 'VirtualMachine::power_on_vm_task' (method), 'VirtualHardware::device' (field), 'VirtualDevice' (struct), 'ManagedEntityStatus' (enum), 'VirtualDeviceTrait' (trait), 'example::connection_basic'")]
+    #[schemars(description = "Item ID to retrieve. Examples: 'VirtualMachine' (managed object), 'VirtualMachine::power_on_vm_task' (method), 'VirtualHardware::device' (field), 'VirtualDevice' (struct), 'ManagedEntityStatus' (enum), 'VirtualDeviceTrait' (trait), 'example::perf_metrics'")]
     id: String,
 }
 
@@ -258,11 +258,15 @@ impl McpServer {
             // When embed-model is disabled, load from cache directory
             #[cfg(not(feature = "embed-model"))]
             let result = {
-                let mcp_data_dir = std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
-                    .parent()
-                    .unwrap()
-                    .join("data");
-                let model_cache_dir = mcp_data_dir.join("model_cache");
+                let model_cache_dir = std::env::var("VIM_MCP_MODEL_CACHE")
+                    .map(std::path::PathBuf::from)
+                    .unwrap_or_else(|_| {
+                        std::path::PathBuf::from(env!("CARGO_MANIFEST_DIR"))
+                            .parent()
+                            .unwrap()
+                            .join("data")
+                            .join("model_cache")
+                    });
 
                 // Create cache directory if it doesn't exist
                 if !model_cache_dir.exists() {
@@ -340,9 +344,10 @@ impl McpServer {
             let mut suggestions = Vec::new();
             
             // Check for close matches in items
-            for item_id in self.api_db.items.keys().take(1000) {
-                if item_id.to_lowercase().contains(&id.to_lowercase()) 
-                   || id.to_lowercase().contains(&item_id.to_lowercase()) {
+            let id_lower = id.to_lowercase();
+            for item_id in self.api_db.items.keys() {
+                let item_lower = item_id.to_lowercase();
+                if item_lower.contains(&id_lower) || id_lower.contains(&item_lower) {
                     suggestions.push(format!("- `{}`", item_id));
                     if suggestions.len() >= 5 {
                         break;
@@ -365,7 +370,7 @@ impl McpServer {
                 - Field: `VirtualHardware::device`\n\
                 - Enum: `ManagedEntityStatus`\n\
                 - Trait: `VirtualDeviceTrait`\n\
-                - Example: `example::connection_basic`\n\n\
+                - Example: `example::perf_metrics`\n\n\
                 Use `search` to find valid IDs.",
                 id,
                 suggestions_text
@@ -688,7 +693,8 @@ impl ServerHandler for McpServer {
             - Field: 'VirtualHardware::device'\n\
             - Enum: 'ManagedEntityStatus'\n\
             - Trait: 'VirtualDeviceTrait'\n\
-            - Example: 'example::connection_basic'\n\n\
+            - Example: 'example::perf_metrics'\n\n\
+            Performance metrics are the `vim_rs::perf` module (`features = [\"perf\"]`). Counter descriptions live on the constants in `vim_rs::perf::metrics`.\n\n\
             PATH NOTATION (shown in search results):\n\
             - `::` = property/method on Managed Object, `.` = field access\n\
             - `?` = optional, `[*]` = array, `→` = downcast, `⇒` = trait cast\n\

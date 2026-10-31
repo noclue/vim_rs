@@ -24,6 +24,9 @@ mcp/data/model_cache/
 # Performance catalog PoC output (credentials never belong here; catalogs are local)
 examples/perf-catalog/out/
 
+# Eval harness outputs (traces, scorecards)
+mcp/evals/results/
+
 # Log files - contain runtime data, IPs, and debug output
 *.log
 **/logs/*.log

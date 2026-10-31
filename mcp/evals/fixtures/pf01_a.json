@@ -1,0 +1,17 @@
+{
+  "objects": [
+    {"obj": {"type": "VirtualMachine", "value": "vm-1"}}
+  ],
+  "perf": {
+    "providers": {
+      "VirtualMachine": {"current_supported": true, "summary_supported": true, "refresh_rate": 20}
+    },
+    "intervals": [
+      {"key": 1, "sampling_period": 300, "name": "Past day", "length": 86400, "level": 4, "enabled": true}
+    ],
+    "samples": [
+      {"entity": "vm-1", "counter": "mem.vmmemctl.average", "instance": "", "offset_secs": 300, "raw": 1536},
+      {"entity": "vm-1", "counter": "cpu.costop.summation", "instance": "", "offset_secs": 300, "raw": 40}
+    ]
+  }
+}

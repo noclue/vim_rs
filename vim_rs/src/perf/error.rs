@@ -59,6 +59,21 @@ pub enum PerfError {
     )]
     InvalidInterval(i32),
 
+    /// A [`crate::perf::PerfBatch`] resolved one object to two sampling periods.
+    ///
+    /// An object's samples share one timestamp grid and one `interval_secs`, so its
+    /// groups must resolve to the same interval. Fetch the other period separately.
+    #[error(
+        "object `{}:{}` resolved to sampling periods {first_secs}s and {second_secs}s in one batch",
+        entity.r#type.as_str(),
+        entity.value
+    )]
+    MixedIntervals {
+        entity: ManagedObjectReference,
+        first_secs: i32,
+        second_secs: i32,
+    },
+
     /// Transport, session, or other client failure.
     #[error(transparent)]
     Client(#[from] client::Error),
@@ -96,6 +111,13 @@ pub enum PerfWarning {
     },
     /// A realtime start is older than the retained hour. The query was still sent.
     RealtimeWindowTooOld { requested_start: Timestamp },
+    /// A historical start is older than the interval keeps samples. The query was still sent,
+    /// and the server returns only the retained part.
+    HistoricalWindowTooOld {
+        requested_start: Timestamp,
+        interval_secs: i32,
+        retention_secs: i32,
+    },
     /// A sample interval differed from the period that was requested.
     IntervalSubstituted {
         requested_secs: i32,

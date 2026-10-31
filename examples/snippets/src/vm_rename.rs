@@ -22,10 +22,10 @@
 
 use anyhow::{Context, Result};
 use log::info;
-use std::env;
 use snippets::connect;
-use vim_rs::mo::{SearchIndex, VirtualMachine};
+use std::env;
 use vim_rs::core::tasks::TaskTracker;
+use vim_rs::mo::{SearchIndex, VirtualMachine};
 
 async fn rename_vm() -> Result<()> {
     // Connect to vCenter

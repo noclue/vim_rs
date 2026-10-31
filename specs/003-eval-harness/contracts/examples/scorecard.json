@@ -1,0 +1,32 @@
+{
+  "model": "openrouter/anthropic/claude-sonnet-4",
+  "n_repeats": 3,
+  "calibration": {
+    "note": "Example only — replace with actual calibration notes."
+  },
+  "problems": [
+    {
+      "id": "pc01_vm_power_and_host",
+      "arm_a": {
+        "retrieval_pass_rate": 0.33,
+        "compile_rate": 1.0,
+        "mean_turns": 14.0,
+        "mean_tool_calls": 10.0,
+        "mean_tokens_in": 5000.0,
+        "mean_tokens_out": 1100.0,
+        "mean_wall_s": 52.0
+      },
+      "arm_b": {
+        "retrieval_pass_rate": 1.0,
+        "compile_rate": 1.0,
+        "mean_turns": 8.0,
+        "mean_tool_calls": 6.0,
+        "mean_tokens_in": 3200.0,
+        "mean_tokens_out": 700.0,
+        "mean_wall_s": 38.0
+      }
+    }
+  ],
+  "verdict": "inconclusive",
+  "verdict_notes": "pc01_vm_power_and_host: A=0.33 B=1.00"
+}

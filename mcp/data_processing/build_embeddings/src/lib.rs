@@ -9,9 +9,9 @@ use api_database::{ApiData, ApiItem};
 pub const EMBEDDING_MODEL: EmbeddingModel = EmbeddingModel::BGESmallENV15;
 
 #[cfg(feature = "cuda")]
-use ort::execution_providers::CUDAExecutionProvider;
+use ort::ep::CUDA;
 #[cfg(feature = "coreml")]
-use ort::execution_providers::{CoreMLExecutionProvider, coreml::{ModelFormat, ComputeUnits}};
+use ort::ep::{CoreML, coreml::{ComputeUnits, ModelFormat}};
 
 /// Generate embeddings for all items in ApiData.
 /// Returns a vector of embedding vectors, aligned with the items in ApiData.
@@ -53,7 +53,7 @@ pub fn generate_embeddings(api_data: &ApiData, model_cache_dir: &Path) -> Result
         #[cfg(feature = "cuda")]
         {
             info!("CUDA feature enabled - using GPU acceleration");
-            providers.push(CUDAExecutionProvider::default().build());
+            providers.push(CUDA::default().build());
         }
 
         #[cfg(feature = "coreml")]
@@ -65,7 +65,7 @@ pub fn generate_embeddings(api_data: &ApiData, model_cache_dir: &Path) -> Result
             // avoid segfaults from CoreML's dynamic-shape handling in transformer
             // models; CPU+GPU to sidestep ANE tensor shape restrictions.
             providers.push(
-                CoreMLExecutionProvider::default()
+                CoreML::default()
                     .with_model_format(ModelFormat::MLProgram)
                     .with_static_input_shapes(true)
                     .with_compute_units(ComputeUnits::CPUAndGPU)

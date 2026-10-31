@@ -22,3 +22,6 @@ serde_json = { version = "1.0", optional = true }
 default = []
 json = ["serde_json"]
 
+[dev-dependencies]
+bincode = "1.3"
+

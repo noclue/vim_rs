@@ -1,0 +1,22 @@
+id: pf01_vm_balloon_costop_query
+pillar: performance
+mo_type: VirtualMachine
+goal: |
+  Build one performance query for these virtual machines. Include the guest
+  memory the balloon driver has already reclaimed, and the time a
+  multi-processor virtual machine spends stalled because its processors were
+  not scheduled as a group. Sample every 5 minutes across the past day.
+contract: |
+  async fn solve(client: PerfClient, vm_ids: &[&str]) -> PerfQuery
+  Interval::PAST_DAY. A typed metric or a group.name.rollup string are both
+  fine. Return the query. Do not fetch it.
+fixtures:
+  - file: pf01_a.json
+    expected: '{"counters":[90,448],"entities":["vm-1"],"interval":300,"window_secs":86400}'
+  - file: pf01_b.json
+    expected: '{"counters":[90,448],"entities":["vm-2","vm-9"],"interval":300,"window_secs":86400}'
+notes: |
+  Wire counters are mem.vmmemctl.average (90) and cpu.costop.summation (448).
+  The prompt avoids those names. Nearby decoys in the mock catalog are
+  mem.vmmemctltarget.average (94), cpu.ready.summation (12),
+  cpu.wait.summation (11), and cpu.idle.summation (13).

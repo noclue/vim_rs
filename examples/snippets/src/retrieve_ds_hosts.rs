@@ -14,8 +14,8 @@
 
 use anyhow::Context;
 use log::info;
-use std::env;
 use snippets::connect;
+use std::env;
 use vim_rs::core::pc_retrieve::ObjectRetriever;
 use vim_rs::mo::Datastore;
 use vim_rs::vim_retrievable;
