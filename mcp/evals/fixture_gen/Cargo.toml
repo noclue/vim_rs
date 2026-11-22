@@ -2,6 +2,7 @@
 name = "fixture_gen"
 version = "0.1.0"
 edition = "2021"
+license = "Apache-2.0"
 publish = false
 
 # Host-only oracle writer. Not part of the agent scaffold, so it is never
