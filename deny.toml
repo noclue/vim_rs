@@ -1,0 +1,32 @@
+# Shared cargo-deny configuration for the vim-rs repository.
+#
+# This repository has multiple independent Cargo workspaces/crates rather than a
+# single root workspace. `cargo deny` automatically discovers this file when run
+# from any crate subdirectory (e.g. `cd vim_rs && cargo deny check licenses`),
+# or from the repo root with `--manifest-path`:
+#   cargo deny --manifest-path vim_rs/Cargo.toml --all-features check licenses
+#   cargo deny --manifest-path mcp/Cargo.toml --all-features check licenses
+
+[licenses]
+# Shared across multiple independent workspaces, so not every allowed license is
+# present in every crate's dependency graph.
+unused-allowed-license = "allow"
+allow = [
+    "MIT",
+    "Apache-2.0",
+    "Apache-2.0 WITH LLVM-exception",
+    "BSD-2-Clause",
+    "BSD-3-Clause",
+    "BSL-1.0",
+    "CDLA-Permissive-2.0",
+    "ISC",
+    "NCSA",
+    "Unicode-3.0",
+    "Zlib",
+]
+
+exceptions = [
+    # Weak file-level copyleft pulled transitively in mcp (via dirs/directories);
+    # safe to link into Apache-2.0 binaries.
+    { allow = ["MPL-2.0"], crate = "option-ext" },
+]

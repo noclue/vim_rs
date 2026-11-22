@@ -1,0 +1,51 @@
+name: cargo-deny
+
+on:
+  pull_request:
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "deny.toml"
+      - ".github/workflows/cargo-deny.yml"
+  push:
+    branches: [main]
+    paths:
+      - "**/Cargo.toml"
+      - "**/Cargo.lock"
+      - "deny.toml"
+      - ".github/workflows/cargo-deny.yml"
+  workflow_dispatch:
+
+env:
+  CARGO_TERM_COLOR: always
+
+jobs:
+  licenses:
+    name: cargo deny check licenses
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: dtolnay/rust-toolchain@stable
+
+      - uses: taiki-e/install-action@cargo-deny
+
+      - name: Check licenses across all crate roots
+        run: |
+          set -euo pipefail
+          for spec in \
+            "vim_rs/Cargo.toml:" \
+            "vim_rs/Cargo.toml:--all-features" \
+            "vim_macros/Cargo.toml:" \
+            "vim_build/Cargo.toml:" \
+            "openapi30/Cargo.toml:" \
+            "tls_rustls_only/Cargo.toml:" \
+            "examples/Cargo.toml:--all-features" \
+            "mcp/Cargo.toml:" \
+            "mcp/Cargo.toml:--all-features" \
+            "mcp/evals/scaffold/Cargo.toml:"; do
+            manifest="${spec%%:*}"
+            flags="${spec#*:}"
+            echo "=== $manifest $flags ==="
+            cargo deny --locked --manifest-path "$manifest" $flags check licenses
+          done
