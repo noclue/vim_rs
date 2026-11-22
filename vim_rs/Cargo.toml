@@ -69,3 +69,10 @@ criterion = { version = "0.8", features = ["html_reports"] }
 [[bench]]
 name = "miniserde_bench"
 harness = false
+
+# docs.rs builds default features only. `perf` is off by default, so the
+# reference omits `vim_rs::perf` unless the build is told to enable it.
+# `perf-chrono` and `perf-polars` stay off: chrono conversions and the
+# dataframe helper are small extras, and polars makes the docs build large.
+[package.metadata.docs.rs]
+features = ["perf"]
