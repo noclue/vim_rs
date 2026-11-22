@@ -21,4 +21,3 @@ check_keyword = "0.4"
 openapi30 = { path = "../openapi30" }
 log = "0.4"
 phf_codegen = "0.14"
-chrono = { version = "0.4", features = ["serde"] }
